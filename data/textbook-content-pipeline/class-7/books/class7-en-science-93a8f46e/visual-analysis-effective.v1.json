@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b021e14e86d8913e67d0fa39da378647d32412a6bbd7abfe2285a5f142a855be",
+  "raw_analysis_sha256": "92ab3be12c9d47f101b31ae25f189b5616125e28990003a3a22e9392471be45b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -5407,6 +5407,1192 @@
         "context_relation": "The page is likely intended for text insertion.",
         "limitations": [
           "The page is blank and requires content to be added."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aaf787214cfe6853c597f209",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for text insertion.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:20:55Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for text insertion.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e7c07ab1e4aa52b0060406f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:21:08Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "132fd14443b8f134071cfdbb",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:21:21Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7f4245bb922055de28c94f25",
+      "asset_sha256": "23ca02693f551804cbcef6ade309a19782d1d610884bcd8863f9a6cb990753d1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 15,
+      "asset_path": "page-0015.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of names and titles of various educational professionals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Paramananda Barman, Scientist and Associate Editor, NIScPR, CSIR, New Delhi",
+          "Pooja Gokhale Sinha, Assistant Professor, Sri Venkateswara College, University of Delhi, New Delhi",
+          "Pushpanjali Bhagat, Principal, Sarvodaya Kanya Vidyalaya, Pushp Vihar, New Delhi",
+          "Pushpa Tyagi, Former Head of Department (Physics), Sanskriti School, Chanakyapuri, New Delhi and Former PGT (Physics), Kendriya Vidyalaya, Delhi",
+          "Saket Bahuguna, Assistant Professor (Linguistics), Central Institute of Hindi, Delhi Centre, Ministry of Education, Government of India",
+          "Sanjay P. Sane, Professor, National Centre for Biological Sciences, TIFR, Bengaluru",
+          "Sanjeev Kumar, Professor, School of Sciences, Indira Gandhi National Open University, New Delhi",
+          "Santosh Gharpure, Professor, IIT Bombay, Mumbai",
+          "Satyajit Rath, Visiting Professor, Indian Institute of Science Education and Research, Pune",
+          "Savita Ladage, Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Sujata Bhargava, Former Professor, Savitribai Phule Pune University, Pune",
+          "Surendra Ghaskadbi, Former Scientist G, Agharkar Research Institute, Pune",
+          "V.B. Bhatia, Former Professor, Department of Physics and Astrophysics, University of Delhi, Delhi",
+          "Vijay Sarda, Former Associate Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "V.P. Srivastava, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Yukti Sharma, Professor, Department of Education (CIE), University of Delhi, Delhi"
+        ],
+        "concepts": [
+          "Educational professionals",
+          "Titles",
+          "Institutions",
+          "Departments",
+          "Educational roles"
+        ],
+        "context_relation": "List of educational professionals and their roles",
+        "limitations": [
+          "The list is incomplete, as it only shows names and titles of a few professionals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:24:51Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and titles of various educational professionals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Paramananda Barman, Scientist and Associate Editor, NIScPR, CSIR, New Delhi",
+          "Pooja Gokhale Sinha, Assistant Professor, Sri Venkateswara College, University of Delhi, New Delhi",
+          "Pushpanjali Bhagat, Principal, Sarvodaya Kanya Vidyalaya, Pushp Vihar, New Delhi",
+          "Pushpa Tyagi, Former Head of Department (Physics), Sanskriti School, Chanakyapuri, New Delhi and Former PGT (Physics), Kendriya Vidyalaya, Delhi",
+          "Saket Bahuguna, Assistant Professor (Linguistics), Central Institute of Hindi, Delhi Centre, Ministry of Education, Government of India",
+          "Sanjay P. Sane, Professor, National Centre for Biological Sciences, TIFR, Bengaluru",
+          "Sanjeev Kumar, Professor, School of Sciences, Indira Gandhi National Open University, New Delhi",
+          "Santosh Gharpure, Professor, IIT Bombay, Mumbai",
+          "Satyajit Rath, Visiting Professor, Indian Institute of Science Education and Research, Pune",
+          "Savita Ladage, Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Sujata Bhargava, Former Professor, Savitribai Phule Pune University, Pune",
+          "Surendra Ghaskadbi, Former Scientist G, Agharkar Research Institute, Pune",
+          "V.B. Bhatia, Former Professor, Department of Physics and Astrophysics, University of Delhi, Delhi",
+          "Vijay Sarda, Former Associate Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "V.P. Srivastava, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Yukti Sharma, Professor, Department of Education (CIE), University of Delhi, Delhi"
+        ],
+        "concepts": [
+          "Educational professionals",
+          "Titles",
+          "Institutions",
+          "Departments",
+          "Educational roles"
+        ],
+        "context_relation": "List of educational professionals and their roles",
+        "limitations": [
+          "The list is incomplete, as it only shows names and titles of a few professionals."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8580c0a73b71f9bafa5c78a",
+      "asset_sha256": "70489484f265580068eeff859bd8a306d82b3a94631dfec38f12f8812f4f4ee0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/70489484f265580068eeff859bd8a306d82b3a94631dfec38f12f8812f4f4ee0.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Constitution of India",
+          "Article 51A",
+          "Citizenship",
+          "National Flag",
+          "National Anthem",
+          "National Struggle for Freedom"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image or diagram is present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:26:09Z",
+      "effective_analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Constitution of India",
+          "Article 51A",
+          "Citizenship",
+          "National Flag",
+          "National Anthem",
+          "National Struggle for Freedom"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image or diagram is present."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f59a4224be4a5fa80d1d992a",
+      "asset_sha256": "a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties of citizens.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Citizenship",
+          "Constitution of India",
+          "National Flag",
+          "National Anthem"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:27:29Z",
+      "effective_analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties of citizens.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Citizenship",
+          "Constitution of India",
+          "National Flag",
+          "National Anthem"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8a7f57e4dae3f79e5e4277e2",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The visible text is incomplete and does not provide specific information about the content of the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:27:42Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The visible text is incomplete and does not provide specific information about the content of the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d92e53bf5a4d0b5e4d95a621",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:27:50Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ca1232ad61e2ae5fba31ab2a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:28:01Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f8138c23fa5637bf8b868570",
+      "asset_sha256": "60f1c5a358931e31d3a6f94fb60881cd87801d9add30eaeb5e3c73dceabdeda6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "page-0016.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook displaying the Constitution of India's Fundamental Duties.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;",
+          "(c) to uphold and protect the sovereignty, unity and integrity of India;",
+          "(d) to defend the country and render national service when called upon to do so;",
+          "(e) to promote harmony and the spirit of common brotherhood amongst all the people of India transcending religious, linguistic and regional or sectional diversities; to renounce practices derogatory to the dignity of women;",
+          "(f) to value and preserve the rich heritage of our composite culture;",
+          "(g) to protect and improve the natural environment including forests, lakes, rivers, wildlife and to have compassion for living creatures;",
+          "(h) to develop the scientific temper, humanism and the spirit of inquiry and reform;",
+          "(i) to safeguard public property and to abjure violence;",
+          "(j) to strive towards excellence in all spheres of individual and collective activity so that the nation constantly rises to higher levels of endeavour and achievement;",
+          "(k) who is a parent or guardian, to provide opportunities for education to his child or, as the case may be, ward between the age of six and fourteen years.",
+          "Note: The Article 51A containing Fundamental Duties was inserted by the Constitution (42nd Amendment) Act, 1976 (with effect from 3 January 1977).",
+          "(k) was inserted by the Constitution (86th Amendment) Act, 2002 (with effect from 1 April 2010)."
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Constitution of India",
+          "Article 51 A",
+          "National Flag",
+          "National Anthem",
+          "Sovereignty",
+          "Unity",
+          "Integrity",
+          "Harmony",
+          "Brotherhood",
+          "Heritage",
+          "Natural Environment",
+          "Scientific Temper",
+          "Humanism",
+          "Inquiry",
+          "Excellence",
+          "Education",
+          "Parent",
+          "Guardian",
+          "Ward"
+        ],
+        "context_relation": "The page provides a detailed list of Fundamental Duties as outlined in the Constitution of India.",
+        "limitations": [
+          "The page does not include any images or diagrams.",
+          "The page does not contain any interactive elements or multimedia content.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:31:42Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook displaying the Constitution of India's Fundamental Duties.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;",
+          "(c) to uphold and protect the sovereignty, unity and integrity of India;",
+          "(d) to defend the country and render national service when called upon to do so;",
+          "(e) to promote harmony and the spirit of common brotherhood amongst all the people of India transcending religious, linguistic and regional or sectional diversities; to renounce practices derogatory to the dignity of women;",
+          "(f) to value and preserve the rich heritage of our composite culture;",
+          "(g) to protect and improve the natural environment including forests, lakes, rivers, wildlife and to have compassion for living creatures;",
+          "(h) to develop the scientific temper, humanism and the spirit of inquiry and reform;",
+          "(i) to safeguard public property and to abjure violence;",
+          "(j) to strive towards excellence in all spheres of individual and collective activity so that the nation constantly rises to higher levels of endeavour and achievement;",
+          "(k) who is a parent or guardian, to provide opportunities for education to his child or, as the case may be, ward between the age of six and fourteen years.",
+          "Note: The Article 51A containing Fundamental Duties was inserted by the Constitution (42nd Amendment) Act, 1976 (with effect from 3 January 1977).",
+          "(k) was inserted by the Constitution (86th Amendment) Act, 2002 (with effect from 1 April 2010)."
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Constitution of India",
+          "Article 51 A",
+          "National Flag",
+          "National Anthem",
+          "Sovereignty",
+          "Unity",
+          "Integrity",
+          "Harmony",
+          "Brotherhood",
+          "Heritage",
+          "Natural Environment",
+          "Scientific Temper",
+          "Humanism",
+          "Inquiry",
+          "Excellence",
+          "Education",
+          "Parent",
+          "Guardian",
+          "Ward"
+        ],
+        "context_relation": "The page provides a detailed list of Fundamental Duties as outlined in the Constitution of India.",
+        "limitations": [
+          "The page does not include any images or diagrams.",
+          "The page does not contain any interactive elements or multimedia content.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b229a75462bb7152cbc2131d",
+      "asset_sha256": "3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific details about the rope or its context are provided in the visible text. The image is a standalone illustration without additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:31:51Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific details about the rope or its context are provided in the visible text. The image is a standalone illustration without additional context or information."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "91b802a2c485ba6c6f412e55",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific concepts or formulas are visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:31:59Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific concepts or formulas are visible in the image."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "951e41f9f65aae6540dfbfe4",
+      "asset_sha256": "41ce49ecb3b935916e5ef8453f38af045e7327bd16b155e051f17e8ba499d551",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/41ce49ecb3b935916e5ef8453f38af045e7327bd16b155e051f17e8ba499d551.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image is not a full page, but a cropped figure.",
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:33:09Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image is not a full page, but a cropped figure.",
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2960cb81f151385c22011ce6",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:33:18Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f0f860d121cb799d89c5765",
+      "asset_sha256": "dae8ffd8bef43ff873458537c1f6963d22f5f3e00306ae4937b8df5ccb5d103c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/dae8ffd8bef43ff873458537c1f6963d22f5f3e00306ae4937b8df5ccb5d103c.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with multiple loops.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements for the translation of NCF-SE 2023 perspectives into the textbook.",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:34:27Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with multiple loops.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements for the translation of NCF-SE 2023 perspectives into the textbook.",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f6a6a3e1c7f30921ba3af772",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific content or details are visible on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:34:39Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific content or details are visible on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d62193461bf5bff27694e390",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific content or details are visible on the page. The page is blank and serves as a placeholder for additional content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:34:48Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific content or details are visible on the page. The page is blank and serves as a placeholder for additional content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d084104f39e49e1d7caccd88",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:34:59Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "43c0939d965c75e1fce4787b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:35:11Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7e77f5e1b81e3b02b87ea819",
+      "asset_sha256": "8f88eb61add7178c9fe808f224094586005095684e6affed9ef54ad210dec16f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "page-0017.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e904eb84e607d05c01b9eca9",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgments and contributions from various individuals and departments.",
+        "limitations": [
+          "No specific content or information is visible on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:39:37Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgments and contributions from various individuals and departments.",
+        "limitations": [
+          "No specific content or information is visible on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1e176e2e70e26c49d8c76c83",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions from various individuals and departments",
+        "limitations": [
+          "No specific content or information is visible on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:39:46Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions from various individuals and departments",
+        "limitations": [
+          "No specific content or information is visible on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b4fb2abcfaf84b9fec41aa0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:39:58Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e4ae7fe5a2d72d9cb0fa50e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:40:10Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d33345cdd194208482598eea",
+      "asset_sha256": "3bfd69651c9d71c148a5217f1396aa42ed3ceed73bdf16aa34c5bf0b746fa981",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 18,
+      "asset_path": "page-0018.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and",
+          "administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar",
+          "Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar,",
+          "DTP Operators (Contractual); Ilma Nasir, Editor (Contractual), and",
+          "Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders",
+          "(Contractual), Publication Division, NCERT, New Delhi for giving this",
+          "manuscript a final shape.",
+          "xviii"
+        ],
+        "concepts": [
+          "Acknowledgment",
+          "Support",
+          "APC office",
+          "Administrative staff",
+          "DESM",
+          "NCERT",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "Acknowledgment for contributions and support in the publication process.",
+        "limitations": [
+          "No specific limitations are mentioned in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:43:28Z",
+      "effective_analysis": {
+        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and",
+          "administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar",
+          "Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar,",
+          "DTP Operators (Contractual); Ilma Nasir, Editor (Contractual), and",
+          "Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders",
+          "(Contractual), Publication Division, NCERT, New Delhi for giving this",
+          "manuscript a final shape.",
+          "xviii"
+        ],
+        "concepts": [
+          "Acknowledgment",
+          "Support",
+          "APC office",
+          "Administrative staff",
+          "DESM",
+          "NCERT",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "Acknowledgment for contributions and support in the publication process.",
+        "limitations": [
+          "No specific limitations are mentioned in the image."
         ]
       },
       "correction_status": "NONE"
