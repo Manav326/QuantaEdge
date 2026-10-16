@@ -58,3 +58,18 @@ This document records source-confirmed contracts and gaps before new schema work
 4. Design upload idempotency and download policy before adding Android video download UI.
 5. Implement durable native messaging only after confirming its membership/permission model against existing authorization helpers.
 6. Update the implementation plan journal at each milestone; keep all code changes on `main`, generated pipeline data only under `data/`, and wait for green CI before claiming a checkpoint passed.
+
+
+## Follow-up discovery — structured lesson/topic IDs (2026-10-16)
+
+The structured lesson runtime confirms that the topic/microtopic content is **not stored as rows in the legacy `lesson` table**. The API loads approved JSON artifacts from packaged `data/structured-lessons` files. Each artifact has a stable string `artifact_id`; its `topic.topic_id` is also a stable string inside the JSON. The database response tables V106/V107 key learner responses by `artifact_id` plus the exact artifact SHA-256, not by `lesson.id` or a numeric topic ID.
+
+Implications for resource linkage:
+
+- A resource attachment to a legacy lesson may use the real `lesson.id` FK.
+- A resource attachment to a structured lesson must use the stable `artifact_id` (and may record the corresponding topic ID as descriptive/index metadata); do not invent a numeric topic FK.
+- The API must validate a structured artifact through `StructuredLessonArtifactService.requirePublished(artifactId)` and verify that its class, subject and chapter match the selected canonical curriculum target. Draft/unreviewed artifacts must not become student-visible merely because a resource row is published.
+- The attachment contract should allow a chapter-level resource with neither lesson target, a legacy lesson target, or a structured artifact target, with mutually exclusive target checks and canonical subject/chapter validation.
+- The canonical resource record should not duplicate lesson JSON or modify the artifact's publication status. Preserve the exact artifact SHA/version semantics used by learner responses.
+
+This closes the main topic-ID ambiguity from the first audit pass and is required before writing the resource migration.
