@@ -1,6 +1,6 @@
 {
   "schema_version": "quantaedge.local-ollama-benchmark.v1",
-  "benchmark_completed_utc": "2026-10-16T09:27:39Z",
+  "benchmark_completed_utc": "2026-10-16T09:49:34Z",
   "benchmark_scope": "same Class 6 NCERT Science text segments and prompt for all models",
   "source": {
     "book_id": "ncert-c6-english-fecu1",
@@ -9,43 +9,37 @@
     "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12",
     "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
     "sample_segment_ids": [
-      "seg-00001-dc461fc93d",
-      "seg-00052-fcac5e3573",
-      "seg-00102-c648082c9d"
+      "seg-00001-6dab35b45d",
+      "seg-00082-0574cd0121"
     ],
     "sample_source_pages": [
       1,
       2,
-      3,
-      146,
-      147,
-      270,
-      271,
-      272
+      147
     ]
   },
   "endpoint_mode": "native local Ollama /api/chat; no hosted API or API key",
-  "prompt_version": "qe-l6-l8-ollama-v3-bounded-benchmark",
-  "visual_candidate_fingerprint": "78671df00887dca104477823de9b5b33fc10a705df52f39875d3dd9597e6288e",
+  "prompt_version": "qe-l6-l8-ollama-v4-compact-benchmark",
+  "lesson_contract_version": "quantaedge.structured-lesson-renderer-recap.v1",
+  "visual_candidate_fingerprint": "69b44e38d33e8335ae7b7823659e9b4e126a7576cd6b7298e5710420e3a33fc1",
   "models": [
     {
       "model": "qwen2.5:1.5b",
-      "samples_attempted": 3,
+      "samples_attempted": 2,
       "successful_samples": 0,
       "schema_valid_rate": 0.0,
       "lesson_contract_valid_rate": 0.0,
       "sft_examples_valid_rate": 0.0,
-      "source_page_citation_valid_rate": 0.0,
-      "average_seconds_per_sample": 246.67,
+      "source_page_citation_valid_rate": 0.5,
+      "average_seconds_per_sample": 130.56,
       "samples": [
         {
-          "segment_id": "seg-00001-dc461fc93d",
+          "segment_id": "seg-00001-6dab35b45d",
           "source_pages": [
             1,
-            2,
-            3
+            2
           ],
-          "seconds": 260.04,
+          "seconds": 163.09,
           "schema_valid": false,
           "lesson_contract_valid": false,
           "sft_examples_valid": false,
@@ -53,73 +47,246 @@
           "sample_output": null,
           "lesson_candidate_preview": null,
           "lesson_contract_errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 94 column 9 (char 3948)"
+            "Local Ollama call failed: Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}"
           ],
           "errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 94 column 9 (char 3948)"
+            "Local Ollama call failed: Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}"
           ]
         },
         {
-          "segment_id": "seg-00052-fcac5e3573",
+          "segment_id": "seg-00082-0574cd0121",
           "source_pages": [
-            146,
             147
           ],
-          "seconds": 243.85,
+          "seconds": 98.02,
+          "response_chars": 5044,
           "schema_valid": false,
           "lesson_contract_valid": false,
           "sft_examples_valid": false,
-          "source_page_citations_valid": false,
-          "sample_output": null,
+          "source_page_citations_valid": true,
+          "sample_output_sha256": "e18b8ced474b82fe3d036d52643cec3a5a5910ec75a2d17188251e56cb9b7c9c",
+          "sample_output": {
+            "chapter_number": null,
+            "chapter_title_by_locale": {
+              "en": "Curiosity",
+              "hi": "सांस्कृतिक विचार"
+            },
+            "mapping_confidence": "LOW",
+            "topic_title_by_locale": {
+              "en": "Temperature Scales",
+              "hi": "सांस्कृतिक विचार"
+            },
+            "microtopic_title_by_locale": {
+              "en": "Temperature Scales",
+              "hi": "सांस्कृतिक विचार"
+            },
+            "concepts_by_locale": {
+              "en": [
+                "Temperature Scales",
+                "Celsius Scale",
+                "Fahrenheit Scale",
+                "Kelvin Scale"
+              ],
+              "hi": [
+                "सांस्कृतिक विचार",
+                "सांस्कृतिक विचार",
+                "सांस्कृतिक विचार",
+                "सांस्कृतिक विचार"
+              ]
+            },
+            "learning_objectives": [
+              {
+                "statement_by_locale": {
+                  "en": "Understand the three temperature scales: Celsius, Fahrenheit, and Kelvin.",
+                  "hi": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।"
+                }
+              }
+            ],
+            "explanation_by_locale": {
+              "en": {
+                "heading": "Temperature Scales",
+                "paragraphs": [
+                  "Three temperature scales: Celsius, Fahrenheit, and Kelvin are named after the scientists who developed them.",
+                  "The names of these scales start with a capital letter: Celsius, Fahrenheit, and Kelvin.",
+                  "The units for temperature, such as degree Celsius and degree Fahrenheit, start with a lower-case letter.",
+                  "The unit Kelvin starts with a lower-case letter.",
+                  "Symbols for all units (°C, °F, K) are capital letters.",
+                  "The degree sign (°) is not written with K.",
+                  "A full stop is not written after the symbol, except at the end of a sentence.",
+                  "A space is left between the number and the unit when writing temperatures.",
+                  "For temperatures more than one degree, use the plural of ‘degree’, that is, ‘degrees’, while writing the full form of the unit."
+                ]
+              },
+              "hi": {
+                "heading": "सांस्कृतिक विचारों",
+                "paragraphs": [
+                  "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।",
+                  "ये विचारों को लेकर विकसित किये गए व्यक्तियों के नाम से नामित किया जाता है।",
+                  "ये विचारों को लेकर विकसित किये गए व्यक्तियों के नाम से नामित किया जाता है।",
+                  "ये विचारों को लेकर विकसित किये गए व्यक्तियों के नाम से नामित किया जाता है।",
+                  "ये विचारों को लेकर विकसित किये गए व्यक्तियों के नाम से नामित किया जाता है।",
+                  "ये विचारों को लेकर विकसित किये गए व्यक्तियों के नाम से नामित किया जाता है।",
+                  "ये विचारों को लेकर विकसित किये गए व्यक्तियों के नाम से नामित किया जाता है।"
+                ]
+              }
+            },
+            "worked_example_by_locale": {
+              "en": {
+                "student_message": "A clinical thermometer is used for measuring the temperature of a patient.",
+                "assistant_message": "The temperature of ice is outside the range of a clinical thermometer.",
+                "source_pages": [
+                  147
+                ]
+              },
+              "hi": {
+                "student_message": "कार्यकारी तरंग टेम्परेटर का उपयोग करके एक जीवन व्यक्त की तरंग की तापमान का मापन किया जाता है।",
+                "assistant_message": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।",
+                "source_pages": [
+                  147
+                ]
+              }
+            },
+            "recap_by_locale": {
+              "en": "The three temperature scales are Celsius, Fahrenheit, and Kelvin.",
+              "hi": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।"
+            },
+            "questions": [
+              {
+                "prompt_by_locale": {
+                  "en": "What is the name of the scientist who developed the Celsius scale?",
+                  "hi": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।"
+                },
+                "options": [
+                  {
+                    "id": 1,
+                    "text_by_locale": {
+                      "en": "Albert Einstein",
+                      "hi": "एल्बर्ट एंरिजन"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "text_by_locale": {
+                      "en": "Nikola Tesla",
+                      "hi": "निकोलास टेस्ला"
+                    }
+                  },
+                  {
+                    "id": 3,
+                    "text_by_locale": {
+                      "en": "James Clerk Maxwell",
+                      "hi": "जैमिस क्लार्क माइकल"
+                    }
+                  },
+                  {
+                    "id": 4,
+                    "text_by_locale": {
+                      "en": "William Thomson",
+                      "hi": "विलियम टोंबर्ग"
+                    }
+                  }
+                ],
+                "correct_answer_ids": [
+                  4
+                ],
+                "feedback_by_locale": {
+                  "en": "The scientist who developed the Celsius scale is William Thomson.",
+                  "hi": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।"
+                }
+              },
+              {
+                "prompt_by_locale": {
+                  "en": "What is the formula to convert Celsius to Kelvin?",
+                  "hi": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।"
+                },
+                "options": [
+                  {
+                    "id": 1,
+                    "text_by_locale": {
+                      "en": "K = C + 273.15",
+                      "hi": "क = क + 273.15"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "text_by_locale": {
+                      "en": "K = C - 273.15",
+                      "hi": "क = क - 273.15"
+                    }
+                  },
+                  {
+                    "id": 3,
+                    "text_by_locale": {
+                      "en": "K = C + 273.16",
+                      "hi": "क = क + 273.16"
+                    }
+                  },
+                  {
+                    "id": 4,
+                    "text_by_locale": {
+                      "en": "K = C - 273.16",
+                      "hi": "क = क - 273.16"
+                    }
+                  }
+                ],
+                "correct_answer_ids": [
+                  1
+                ],
+                "feedback_by_locale": {
+                  "en": "The formula to convert Celsius to Kelvin is K = C + 273.15.",
+                  "hi": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।"
+                }
+              }
+            ],
+            "tutor_examples": [
+              {
+                "language": "en",
+                "student_message": "A clinical thermometer is used for measuring the temperature of a patient.",
+                "assistant_message": "The temperature of ice is outside the range of a clinical thermometer.",
+                "source_pages": [
+                  147
+                ]
+              },
+              {
+                "language": "hi",
+                "student_message": "कार्यकारी तरंग टेम्परेटर का उपयोग करके एक जीवन व्यक्त की तरंग की तापमान का मापन किया जाता है।",
+                "assistant_message": "सांस्कृतिक विचारों: सांस्कृतिक विचार, सांस्कृतिक विचार, सांस्कृतिक विचार और सांस्कृतिक विचार को समझें।",
+                "source_pages": [
+                  147
+                ]
+              }
+            ]
+          },
           "lesson_candidate_preview": null,
-          "lesson_contract_errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 131 column 19 (char 5682)"
-          ],
+          "lesson_contract_errors": [],
           "errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 131 column 19 (char 5682)"
-          ]
-        },
-        {
-          "segment_id": "seg-00102-c648082c9d",
-          "source_pages": [
-            270,
-            271,
-            272
-          ],
-          "seconds": 236.11,
-          "schema_valid": false,
-          "lesson_contract_valid": false,
-          "sft_examples_valid": false,
-          "source_page_citations_valid": false,
-          "sample_output": null,
-          "lesson_candidate_preview": null,
-          "lesson_contract_errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 48 column 15 (char 1369)"
-          ],
-          "errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 48 column 15 (char 1369)"
+            "worked_example_by_locale.en invalid",
+            "worked_example_by_locale.hi invalid",
+            "question 0 options invalid",
+            "question 0 answer key invalid",
+            "question 1 options invalid",
+            "question 1 answer key invalid"
           ]
         }
       ]
     },
     {
       "model": "qwen2.5:3b",
-      "samples_attempted": 3,
+      "samples_attempted": 2,
       "successful_samples": 0,
       "schema_valid_rate": 0.0,
       "lesson_contract_valid_rate": 0.0,
       "sft_examples_valid_rate": 0.0,
-      "source_page_citation_valid_rate": 0.0,
-      "average_seconds_per_sample": 469.45,
+      "source_page_citation_valid_rate": 0.5,
+      "average_seconds_per_sample": 268.5,
       "samples": [
         {
-          "segment_id": "seg-00001-dc461fc93d",
+          "segment_id": "seg-00001-6dab35b45d",
           "source_pages": [
             1,
-            2,
-            3
+            2
           ],
-          "seconds": 500.73,
+          "seconds": 392.81,
           "schema_valid": false,
           "lesson_contract_valid": false,
           "sft_examples_valid": false,
@@ -127,51 +294,185 @@
           "sample_output": null,
           "lesson_candidate_preview": null,
           "lesson_contract_errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 115 column 19 (char 4252)"
+            "Local Ollama call failed: Unterminated string starting at: line 60 column 28 (char 1996)"
           ],
           "errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 115 column 19 (char 4252)"
+            "Local Ollama call failed: Unterminated string starting at: line 60 column 28 (char 1996)"
           ]
         },
         {
-          "segment_id": "seg-00052-fcac5e3573",
+          "segment_id": "seg-00082-0574cd0121",
           "source_pages": [
-            146,
             147
           ],
-          "seconds": 471.13,
+          "seconds": 144.2,
+          "response_chars": 4563,
           "schema_valid": false,
           "lesson_contract_valid": false,
           "sft_examples_valid": false,
-          "source_page_citations_valid": false,
-          "sample_output": null,
+          "source_page_citations_valid": true,
+          "sample_output_sha256": "e2453df3f1c0a866cb39bd79007799973fc8087dfa51812490224ac20d960cf1",
+          "sample_output": {
+            "chapter_number": 6,
+            "chapter_title_by_locale": {
+              "en": "Temperature and its Measurement",
+              "hi": "तापमान और उसकी मापन"
+            },
+            "mapping_confidence": "MEDIUM",
+            "topic_title_by_locale": {
+              "en": "Temperature Scales and Conversion",
+              "hi": "तापमान स्केल और परिवर्तन"
+            },
+            "microtopic_title_by_locale": {
+              "en": "Temperature Conversion Between Celsius and Kelvin",
+              "hi": "सेल्सियस और केल्विन स्केल के बीच तापमान परिवर्तन"
+            },
+            "concepts_by_locale": {
+              "en": [
+                "Temperature Scales",
+                "Temperature Conversion",
+                "Fever Detection"
+              ],
+              "hi": [
+                "तापमान स्केल",
+                "तापमान परिवर्तन",
+                "फेयर डेटेकिंग"
+              ]
+            },
+            "learning_objectives": [
+              {
+                "statement_by_locale": {
+                  "en": "Understand the conversion between Celsius and Kelvin scales.",
+                  "hi": "सेल्सियस और केल्विन स्केल के बीच परिवर्तन समझें।"
+                }
+              },
+              {
+                "statement_by_locale": {
+                  "en": "Identify the use of clinical thermometers in detecting fever.",
+                  "hi": "फेयर डेटेकिंग के लिए व्यायसेल्टी तापमान मापन उपकरण की व्यवस्था को पहचानें।"
+                }
+              }
+            ],
+            "explanation_by_locale": {
+              "en": {
+                "heading": "Temperature Scales and Conversion",
+                "paragraphs": [
+                  "Temperature scales like Celsius, Fahrenheit, and Kelvin are named after scientists who developed them. The unit kelvin starts with a lower-case letter, while Celsius and Fahrenheit start with a capital letter. The symbol for kelvin is written in capital letters.",
+                  "Temperature conversion between Celsius and Kelvin scales is done by adding 273.15 to the Celsius temperature. For example, 37°C is 310.15 K."
+                ]
+              },
+              "hi": {
+                "heading": "तापमान स्केल और परिवर्तन",
+                "paragraphs": [
+                  "सेल्सियस, फारेनहाइट और केल्विन तापमान स्केल को विश्वसनीय विद्वानों द्वारा विकसित किया गया है। केल्विन स्केल का इकाई नियम नियम से शुरू होता है, जबकि सेल्सियस और फारेनहाइट नियम से शुरू होते हैं। केल्विन स्केल के लिए इकाई का इकाई वर्तमान लिखा गया है।",
+                  "सेल्सियस और केल्विन स्केल के बीच तापमान परिवर्तन को 273.15 की जोड़े से करना होता है। उदाहरण के लिए, 37°C का केल्विन तापमान 310.15 K होता है।"
+                ]
+              }
+            },
+            "worked_example_by_locale": {
+              "en": {
+                "student_message": "Convert 25°C to Kelvin.",
+                "assistant_message": "To convert from Celsius to Kelvin, add 273.15 to the Celsius temperature. So, 25°C + 273.15 = 298.15 K.",
+                "source_pages": [
+                  147
+                ]
+              },
+              "hi": {
+                "student_message": "केल्विन में 25°C को बदलें।",
+                "assistant_message": "सेल्सियस से केल्विन में बदलने के लिए, सेल्सियस तापमान पर 273.15 जोड़ें। इसलिए, 25°C + 273.15 = 298.15 K होता है।",
+                "source_pages": [
+                  147
+                ]
+              }
+            },
+            "recap_by_locale": {
+              "en": "Temperature scales like Celsius, Fahrenheit, and Kelvin are named after scientists who developed them. The unit kelvin starts with a lower-case letter, while Celsius and Fahrenheit start with a capital letter. The symbol for kelvin is written in capital letters.",
+              "hi": "सेल्सियस, फारेनहाइट और केल्विन तापमान स्केल को विश्वसनीय विद्वानों द्वारा विकसित किया गया है। केल्विन स्केल का इकाई नियम से शुरू होता है, जबकि सेल्सियस और फारेनहाइट नियम से शुरू होते हैं। केल्विन स्केल के लिए इकाई का इकाई वर्तमान लिखा गया है।"
+            },
+            "questions": [
+              {
+                "prompt_by_locale": {
+                  "en": "Convert 20°C to Kelvin.",
+                  "hi": "20°C को केल्विन में बदलें।"
+                },
+                "options": [
+                  {
+                    "id": "A",
+                    "text_by_locale": {
+                      "en": "200 K",
+                      "hi": "200 K"
+                    }
+                  },
+                  {
+                    "id": "B",
+                    "text_by_locale": {
+                      "en": "223 K",
+                      "hi": "223 K"
+                    }
+                  }
+                ],
+                "correct_answer_ids": [
+                  "B"
+                ],
+                "feedback_by_locale": {
+                  "en": "The correct answer is 223 K. To convert from Celsius to Kelvin, add 273.15 to the Celsius temperature. So, 20°C + 273.15 = 293.15 K.",
+                  "hi": "सही उत्तर 223 K है। सेल्सियस से केल्विन में बदलने के लिए, सेल्सियस तापमान पर 273.15 जोड़ें। इसलिए, 20°C + 273.15 = 293.15 K।"
+                }
+              },
+              {
+                "prompt_by_locale": {
+                  "en": "What is the temperature in Kelvin if the temperature in Celsius is 30°C?",
+                  "hi": "30°C की तापमान में केल्विन में कितना तापमान है?"
+                },
+                "options": [
+                  {
+                    "id": "A",
+                    "text_by_locale": {
+                      "en": "300 K",
+                      "hi": "300 K"
+                    }
+                  },
+                  {
+                    "id": "B",
+                    "text_by_locale": {
+                      "en": "333 K",
+                      "hi": "333 K"
+                    }
+                  }
+                ],
+                "correct_answer_ids": [
+                  "B"
+                ],
+                "feedback_by_locale": {
+                  "en": "The correct answer is 333 K. To convert from Celsius to Kelvin, add 273.15 to the Celsius temperature. So, 30°C + 273.15 = 303.15 K.",
+                  "hi": "सही उत्तर 333 K है। सेल्सियस से केल्विन में बदलने के लिए, सेल्सियस तापमान पर 273.15 जोड़ें। इसलिए, 30°C + 273.15 = 303.15 K।"
+                }
+              }
+            ],
+            "tutor_examples": [
+              {
+                "language": "en",
+                "student_message": "Convert 25°C to Kelvin.",
+                "assistant_message": "To convert from Celsius to Kelvin, add 273.15 to the Celsius temperature. So, 25°C + 273.15 = 298.15 K.",
+                "source_pages": [
+                  147
+                ]
+              },
+              {
+                "language": "hi",
+                "student_message": "केल्विन में 25°C को बदलें।",
+                "assistant_message": "सेल्सियस से केल्विन में बदलने के लिए, सेल्सियस तापमान पर 273.15 जोड़ें। इसलिए, 25°C + 273.15 = 298.15 K होता है।",
+                "source_pages": [
+                  147
+                ]
+              }
+            ]
+          },
           "lesson_candidate_preview": null,
-          "lesson_contract_errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 85 column 7 (char 4075)"
-          ],
+          "lesson_contract_errors": [],
           "errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 85 column 7 (char 4075)"
-          ]
-        },
-        {
-          "segment_id": "seg-00102-c648082c9d",
-          "source_pages": [
-            270,
-            271,
-            272
-          ],
-          "seconds": 436.5,
-          "schema_valid": false,
-          "lesson_contract_valid": false,
-          "sft_examples_valid": false,
-          "source_page_citations_valid": false,
-          "sample_output": null,
-          "lesson_candidate_preview": null,
-          "lesson_contract_errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 68 column 9 (char 2788)"
-          ],
-          "errors": [
-            "Local Ollama call failed: Unterminated string starting at: line 68 column 9 (char 2788)"
+            "worked_example_by_locale.en invalid",
+            "worked_example_by_locale.hi invalid"
           ]
         }
       ]
