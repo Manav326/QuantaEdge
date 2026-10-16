@@ -121,9 +121,12 @@ def validate_artifact(lesson: Any, label: str = "<artifact>") -> list[str]:
     if not isinstance(lesson, dict):
         return [f"{label}: root must be a JSON object"]
 
-    for key in ("schema_version", "artifact_type"):
-        if lesson.get(key) != "quantaedge.structured-lesson.v1":
-            err(key, "must equal quantaedge.structured-lesson.v1")
+    if lesson.get("schema_version") != "quantaedge.structured-lesson.v1":
+        err("schema_version", "must equal quantaedge.structured-lesson.v1")
+    # artifact_type is an independent content classification (current files use
+    # values such as draft_lesson); the TypeScript contract requires a string.
+    if not nonempty(lesson.get("artifact_type")):
+        err("artifact_type", "required non-empty classification string")
     aid = lesson.get("artifact_id")
     if not nonempty(aid) or not ARTIFACT_ID_RE.fullmatch(str(aid)):
         err("artifact_id", "must fit DB varchar(120) and the current stable-ID pattern")
@@ -203,14 +206,20 @@ def validate_artifact(lesson: Any, label: str = "<artifact>") -> list[str]:
             err(path + ".text_by_locale", "requires bilingual heading/paragraph content")
         if btype == "recap":
             recap = block.get("content_by_locale")
-            if not isinstance(recap, dict) or any(
-                not isinstance(recap.get(locale), dict)
-                or not isinstance(recap[locale].get("key_takeaways"), list)
-                or not recap[locale]["key_takeaways"]
-                or any(not nonempty(v) for v in recap[locale]["key_takeaways"])
-                for locale in ("en", "hi")
-            ):
-                err(path + ".content_by_locale", "requires bilingual key_takeaways")
+            if not isinstance(recap, dict):
+                err(path + ".content_by_locale", "requires a bilingual en/hi recap payload")
+            else:
+                for locale in ("en", "hi"):
+                    value = recap.get(locale)
+                    valid = nonempty(value)
+                    if isinstance(value, list):
+                        valid = bool(value) and all(nonempty(item) for item in value)
+                    elif isinstance(value, dict):
+                        takeaways = value.get("key_takeaways", value.get("points"))
+                        valid = isinstance(takeaways, list) and bool(takeaways) and all(nonempty(item) for item in takeaways)
+                    if not valid:
+                        err(path + ".content_by_locale." + locale,
+                            "must be non-empty text, a list of points, or an object with key_takeaways/points")
         if btype == "image":
             asset = block.get("asset")
             if not isinstance(asset, dict):

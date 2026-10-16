@@ -113,6 +113,25 @@ fun StructuredLessonRenderer(
     }
 }
 
+/**
+ * Reads all recap payload shapes currently accepted by the Web contract:
+ * a localized string, an array of points, or an object with key_takeaways/points.
+ * Historical rich_text paragraphs remain rendered by their own block branch.
+ */
+internal fun recapTakeaways(block: JSONObject, locale: String): List<String> {
+    val content = block.optJSONObject("content_by_locale")
+    val selected = content?.opt(locale)
+    return when (selected) {
+        is JSONObject -> {
+            val points = selected.optJSONArray("key_takeaways") ?: selected.optJSONArray("points")
+            points.stringItems().filter { it.isNotBlank() }
+        }
+        is JSONArray -> selected.stringItems().filter { it.isNotBlank() }
+        is String -> selected.takeIf { it.isNotBlank() }?.let(::listOf) ?: emptyList()
+        else -> emptyList()
+    }
+}
+
 @Composable
 private fun StructuredExplainBlockView(
     block: JSONObject,
@@ -126,13 +145,17 @@ private fun StructuredExplainBlockView(
     val text = block.optJSONObject("text_by_locale")?.optJSONObject(locale) ?: JSONObject()
     val content = block.optJSONObject("content_by_locale")
     val title = text.optString("heading").ifBlank {
-        localized(content, locale).ifBlank { if (locale == "hi") "सीखें" else "Learn" }
+        if (type == "recap") {
+            if (locale == "hi") "दोहराएँ" else "Recap"
+        } else {
+            localized(content, locale).ifBlank { if (locale == "hi") "सीखें" else "Learn" }
+        }
     }
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             when (type) {
-                "rich_text", "recap" -> {
+                "rich_text" -> {
                     text.optJSONArray("paragraphs").stringItems().forEach {
                         LearningMathText(it, style = MaterialTheme.typography.bodyLarge)
                     }
@@ -140,6 +163,29 @@ private fun StructuredExplainBlockView(
                         Text(it, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
                     }
                     text.optString("callout").takeIf { it.isNotBlank() }?.let { Text(it) }
+                }
+                "recap" -> {
+                    val takeaways = recapTakeaways(block, locale)
+                    if (takeaways.isEmpty()) {
+                        Text(if (locale == "hi") "दोहराने के मुख्य बिंदु उपलब्ध नहीं हैं।" else "No recap points are available.")
+                    } else {
+                        takeaways.forEach { point ->
+                            Text("✓ $point", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                    val recapLocale = content?.optJSONObject(locale)
+                    val vocabulary = recapLocale?.optJSONArray("vocabulary").jsonObjects()
+                    if (vocabulary.isNotEmpty()) {
+                        Text(if (locale == "hi") "मुख्य शब्द" else "Key vocabulary",
+                            style = MaterialTheme.typography.titleSmall)
+                        vocabulary.forEach { item ->
+                            val term = item.optString("term")
+                            val meaning = item.optString("meaning")
+                            if (term.isNotBlank() || meaning.isNotBlank()) {
+                                Text(listOf(term, meaning).filter { it.isNotBlank() }.joinToString(" — "))
+                            }
+                        }
+                    }
                 }
                 "diagram" -> StructuredDiagramContent(block, locale)
                 "image" -> {

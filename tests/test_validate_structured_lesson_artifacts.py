@@ -59,6 +59,31 @@ class StructuredLessonArtifactTests(unittest.TestCase):
         artifact["generation_metadata"] = {"model": "local", "extra": {"kept": True}}
         self.assertEqual([], validate_artifact(artifact, "fixture.json"))
 
+    def test_existing_draft_lesson_artifact_type_and_localized_string_recap_are_valid(self):
+        artifact = sample_lesson()
+        artifact["artifact_type"] = "draft_lesson"
+        artifact["explain"]["blocks"].append({
+            "id": "block-recap",
+            "type": "recap",
+            "content_by_locale": bi(
+                "A measurement combines a number and a unit.",
+                "मापन संख्या और मात्रक को जोड़ता है।"
+            )
+        })
+        self.assertEqual([], validate_artifact(artifact, "existing-draft-shape.json"))
+
+    def test_recap_object_points_are_accepted_in_both_locales(self):
+        artifact = sample_lesson()
+        artifact["explain"]["blocks"].append({
+            "id": "block-recap",
+            "type": "recap",
+            "content_by_locale": {
+                "en": {"points": ["Observe carefully.", "Use evidence."]},
+                "hi": {"key_takeaways": ["ध्यान से देखें।", "प्रमाण का उपयोग करें।"]}
+            }
+        })
+        self.assertEqual([], validate_artifact(artifact, "recap-points-shape.json"))
+
     def test_activity_instruction_arrays_are_valid_in_the_existing_schema(self):
         artifact = sample_lesson()
         artifact["explain"]["blocks"][1] = {
