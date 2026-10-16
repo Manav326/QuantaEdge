@@ -63,7 +63,7 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
       "model":"qwen2.5vl:3b","prompt_version":"visual-analysis-prompt-v2","results":[raw_result],
       "human_review_required":True,"publication_allowed":False}
     write_json(raw_path,raw)
-    ledgerdir=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug"
+    ledgerdir=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug
     ledgerdir.mkdir(parents=True,exist_ok=True)
     effective_path=ledgerdir/"visual-analysis-effective.v1.json"
     effective_result={**raw_result,"effective_analysis":analysis,"correction_status":"NONE"}
