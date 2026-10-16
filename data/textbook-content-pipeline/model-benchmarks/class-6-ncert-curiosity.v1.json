@@ -1,0 +1,186 @@
+{
+  "schema_version": "quantaedge.local-ollama-benchmark.v1",
+  "benchmark_completed_utc": "2026-10-16T09:27:39Z",
+  "benchmark_scope": "same Class 6 NCERT Science text segments and prompt for all models",
+  "source": {
+    "book_id": "ncert-c6-english-fecu1",
+    "title": "Curiosity",
+    "edition": "Reprint 2026-27",
+    "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12",
+    "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+    "sample_segment_ids": [
+      "seg-00001-dc461fc93d",
+      "seg-00052-fcac5e3573",
+      "seg-00102-c648082c9d"
+    ],
+    "sample_source_pages": [
+      1,
+      2,
+      3,
+      146,
+      147,
+      270,
+      271,
+      272
+    ]
+  },
+  "endpoint_mode": "native local Ollama /api/chat; no hosted API or API key",
+  "prompt_version": "qe-l6-l8-ollama-v3-bounded-benchmark",
+  "visual_candidate_fingerprint": "78671df00887dca104477823de9b5b33fc10a705df52f39875d3dd9597e6288e",
+  "models": [
+    {
+      "model": "qwen2.5:1.5b",
+      "samples_attempted": 3,
+      "successful_samples": 0,
+      "schema_valid_rate": 0.0,
+      "lesson_contract_valid_rate": 0.0,
+      "sft_examples_valid_rate": 0.0,
+      "source_page_citation_valid_rate": 0.0,
+      "average_seconds_per_sample": 246.67,
+      "samples": [
+        {
+          "segment_id": "seg-00001-dc461fc93d",
+          "source_pages": [
+            1,
+            2,
+            3
+          ],
+          "seconds": 260.04,
+          "schema_valid": false,
+          "lesson_contract_valid": false,
+          "sft_examples_valid": false,
+          "source_page_citations_valid": false,
+          "sample_output": null,
+          "lesson_candidate_preview": null,
+          "lesson_contract_errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 94 column 9 (char 3948)"
+          ],
+          "errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 94 column 9 (char 3948)"
+          ]
+        },
+        {
+          "segment_id": "seg-00052-fcac5e3573",
+          "source_pages": [
+            146,
+            147
+          ],
+          "seconds": 243.85,
+          "schema_valid": false,
+          "lesson_contract_valid": false,
+          "sft_examples_valid": false,
+          "source_page_citations_valid": false,
+          "sample_output": null,
+          "lesson_candidate_preview": null,
+          "lesson_contract_errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 131 column 19 (char 5682)"
+          ],
+          "errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 131 column 19 (char 5682)"
+          ]
+        },
+        {
+          "segment_id": "seg-00102-c648082c9d",
+          "source_pages": [
+            270,
+            271,
+            272
+          ],
+          "seconds": 236.11,
+          "schema_valid": false,
+          "lesson_contract_valid": false,
+          "sft_examples_valid": false,
+          "source_page_citations_valid": false,
+          "sample_output": null,
+          "lesson_candidate_preview": null,
+          "lesson_contract_errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 48 column 15 (char 1369)"
+          ],
+          "errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 48 column 15 (char 1369)"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:3b",
+      "samples_attempted": 3,
+      "successful_samples": 0,
+      "schema_valid_rate": 0.0,
+      "lesson_contract_valid_rate": 0.0,
+      "sft_examples_valid_rate": 0.0,
+      "source_page_citation_valid_rate": 0.0,
+      "average_seconds_per_sample": 469.45,
+      "samples": [
+        {
+          "segment_id": "seg-00001-dc461fc93d",
+          "source_pages": [
+            1,
+            2,
+            3
+          ],
+          "seconds": 500.73,
+          "schema_valid": false,
+          "lesson_contract_valid": false,
+          "sft_examples_valid": false,
+          "source_page_citations_valid": false,
+          "sample_output": null,
+          "lesson_candidate_preview": null,
+          "lesson_contract_errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 115 column 19 (char 4252)"
+          ],
+          "errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 115 column 19 (char 4252)"
+          ]
+        },
+        {
+          "segment_id": "seg-00052-fcac5e3573",
+          "source_pages": [
+            146,
+            147
+          ],
+          "seconds": 471.13,
+          "schema_valid": false,
+          "lesson_contract_valid": false,
+          "sft_examples_valid": false,
+          "source_page_citations_valid": false,
+          "sample_output": null,
+          "lesson_candidate_preview": null,
+          "lesson_contract_errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 85 column 7 (char 4075)"
+          ],
+          "errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 85 column 7 (char 4075)"
+          ]
+        },
+        {
+          "segment_id": "seg-00102-c648082c9d",
+          "source_pages": [
+            270,
+            271,
+            272
+          ],
+          "seconds": 436.5,
+          "schema_valid": false,
+          "lesson_contract_valid": false,
+          "sft_examples_valid": false,
+          "source_page_citations_valid": false,
+          "sample_output": null,
+          "lesson_candidate_preview": null,
+          "lesson_contract_errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 68 column 9 (char 2788)"
+          ],
+          "errors": [
+            "Local Ollama call failed: Unterminated string starting at: line 68 column 9 (char 2788)"
+          ]
+        }
+      ]
+    }
+  ],
+  "selection_metric": "Review exact sample outputs plus schema validity, structured-lesson validity, page-citation validity and latency; no automatic winner.",
+  "production_model_selection": "PENDING_HUMAN_REVIEW",
+  "production_model": null,
+  "publication_allowed": false,
+  "student_delivery_allowed": false,
+  "human_review_required": true
+}
