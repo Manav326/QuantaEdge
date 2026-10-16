@@ -3606,6 +3606,34 @@ private fun StructuredLessonCatalogueScreen(
 }
 
 @Composable
+private fun TopicNavigationBar(
+    language: String,
+    showPrevious: Boolean,
+    showNext: Boolean,
+    onPrevious: () -> Unit,
+    onNext: () -> Unit
+) {
+    if (!showPrevious && !showNext) return
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        if (showPrevious) {
+            OutlinedButton(onClick = onPrevious, modifier = Modifier.weight(1f).height(40.dp)) {
+                Text(if (language == "hi") "← पिछला topic" else "← Previous topic",
+                    style = MaterialTheme.typography.labelMedium, maxLines = 1)
+            }
+        }
+        if (showNext) {
+            Button(onClick = onNext, modifier = Modifier.weight(1f).height(40.dp)) {
+                Text(if (language == "hi") "अगला topic →" else "Next topic →",
+                    style = MaterialTheme.typography.labelMedium, maxLines = 1)
+            }
+        }
+    }
+}
+
+@Composable
 private fun LessonScreen(
     lesson: JSONObject,
     language: String,
@@ -3619,7 +3647,11 @@ private fun LessonScreen(
     onAnswer: (JSONObject, String) -> Unit,
     onPractice: () -> Unit,
     onTutor: () -> Unit,
-    onTutorQuestion: (Long) -> Unit
+    onTutorQuestion: (Long) -> Unit,
+    hasPreviousTopic: Boolean,
+    hasNextTopic: Boolean,
+    onPreviousTopic: () -> Unit,
+    onNextTopic: () -> Unit
 ) {
     val lessonId = lesson.longAny("id", "lesson_id")
     val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
@@ -3665,11 +3697,22 @@ private fun LessonScreen(
                 else "Review the key ideas and check your understanding with practice."
             }, style = MaterialTheme.typography.bodyLarge)
         }
-        Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Button(onClick = onPractice, enabled = !busy && lessonId > 0, modifier = Modifier.weight(1f)) {
-                Text(if (language == "hi") "अभ्यास शुरू करें" else "Start practice")
+        TopicNavigationBar(
+            language = language,
+            showPrevious = hasPreviousTopic,
+            showNext = hasNextTopic,
+            onPrevious = onPreviousTopic,
+            onNext = onNextTopic
+        )
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = onPractice, enabled = !busy && lessonId > 0,
+                modifier = Modifier.weight(1f).height(40.dp)) {
+                Text(if (language == "hi") "अभ्यास शुरू करें" else "Start practice",
+                    style = MaterialTheme.typography.labelMedium)
             }
-            TextButton(onClick = onTutor, enabled = !busy && lessonId > 0) {
+            TextButton(onClick = onTutor, enabled = !busy && lessonId > 0,
+                modifier = Modifier.height(40.dp)) {
                 Text(if (language == "hi") "Tutor से पूछें" else "Ask tutor")
             }
         }
