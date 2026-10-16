@@ -821,7 +821,8 @@ def validate_lesson(x: dict[str,Any]) -> list[str]:
     if w.get("publication_allowed") is not False or w.get("human_review_required") is not True: e.append("publication gate invalid")
     return e
 
-def sft_records(source:dict[str,Any],seg:dict[str,Any],v:dict[str,Any],model:str)->list[dict[str,Any]]:
+def sft_records(source:dict[str,Any],seg:dict[str,Any],v:dict[str,Any],model:str,
+                layer5_visual_evidence:list[dict[str,Any]]|None=None)->list[dict[str,Any]]:
     chapter=v.get("chapter_number")
     group=f"chapter-{chapter}" if isinstance(chapter,int) else f"pages-{(min(seg['source_pages'])-1)//20:03d}"
     source_id=sha(source["source_url"]+"|"+source["source_pdf_sha256"])[:24]; rows=[]
@@ -832,7 +833,12 @@ def sft_records(source:dict[str,Any],seg:dict[str,Any],v:dict[str,Any],model:str
           "example_type":"tutor_dialogue","source_group_id":source["book_id"]+"|"+group,"source_id":source_id,
           "source_title":source["title"],"source_url":source["source_url"],"source_edition":source["edition"],
           "source_pdf_sha256":source["source_pdf_sha256"],"source_pages":sorted(set(ex["source_pages"])),
-          "generation_model":model,"prompt_version":PROMPT_VERSION,"review_status":"machine_validated_draft",
+          "generation_model":model,"prompt_version":PROMPT_VERSION,
+          "layer5_coverage_ledger_path":source.get("layer5_ledger_path"),
+          "layer5_coverage_ledger_sha256":source.get("layer5_ledger_sha256"),
+          "layer5_visual_evidence_asset_ids":[x["asset_id"] for x in (layer5_visual_evidence or [])],
+          "layer5_visual_evidence_count":len(layer5_visual_evidence or []),
+          "review_status":"machine_validated_draft",
           "rights_status":"pending_review","publication_allowed":False,"human_review_required":True}
         rows.append({"example_id":"qe-"+sha(json.dumps({"messages":messages,"metadata":meta},ensure_ascii=False,sort_keys=True))[:24],"messages":messages,"metadata":meta})
     return rows
@@ -1009,6 +1015,13 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
     source["visual_candidate_fingerprint"]=visual_fingerprint
+    report_source=report.get("source") if isinstance(report.get("source"),dict) else {}
+    if report_source.get("book_id")!=source["book_id"] or str(report_source.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]:
+        raise ValueError("Benchmark source book/PDF hash does not match this generation run.")
+    if report_source.get("layer5_coverage_ledger_sha256")!=layer5_sha:
+        raise ValueError("Benchmark Layer 5 evidence ledger hash does not match the current ledger; run a fresh benchmark.")
+    if report.get("visual_candidate_fingerprint")!=visual_fingerprint:
+        raise ValueError("Benchmark visual-candidate fingerprint is stale; run a fresh benchmark.")
     fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,
       "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
       "layer5_coverage_ledger_sha256":layer5_sha,"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
@@ -1057,7 +1070,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
                     lesson["workflow"]["generation_model"]=args.model
                     lesson_errors=validate_lesson(lesson)
                     if lesson_errors: raise ValueError("Lesson contract: "+"; ".join(lesson_errors[:12]))
-                records=sft_records(source,seg,value,args.model)
+                records=sft_records(source,seg,value,args.model,segment_layer5)
                 checkpoints[seg["segment_id"]]={"status":"COMPLETE","segment_sha256":seg["segment_sha256"],
                   "generated":value,"lesson":lesson,"sft_rows":records,"layer5_ledger_sha256":layer5_sha,
                   "layer5_visual_evidence_asset_ids":segment_layer5_ids,"elapsed_seconds":round(elapsed,2),
@@ -1150,11 +1163,12 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
             if sample.get("sample_output_sha256") and sample["sample_output_sha256"]!=value_sha:
                 raise ValueError(f"Raw output hash mismatch: {model_row['model']} / {segment_id}")
             schema_errors=validate_output(value,set(segment["source_pages"]),visuals_by_segment.get(segment_id,[]))
-            lesson=lesson_from(source,segment,value,visuals_by_segment.get(segment_id,[]),layer5_evidence_for_segment(layer5_by_page,segment)) if not schema_errors else None
+            segment_layer5=layer5_evidence_for_segment(layer5_by_page,segment)
+            lesson=lesson_from(source,segment,value,visuals_by_segment.get(segment_id,[]),segment_layer5) if not schema_errors else None
             lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not schema_errors else [])
             lesson_valid=(not schema_errors and lesson is not None and not lesson_errors)
             citations_valid=tutor_citations_valid(value,set(segment["source_pages"]))
-            sft_valid=(not schema_errors and len(sft_records(source,segment,value,model_row["model"]))>=2)
+            sft_valid=(not schema_errors and len(sft_records(source,segment,value,model_row["model"],segment_layer5))>=2)
             sample.update({"schema_valid":not schema_errors,"lesson_contract_valid":lesson_valid,
                 "sft_examples_valid":sft_valid,"source_page_citations_valid":citations_valid,
                 "sample_output_sha256":value_sha,"lesson_candidate_preview":lesson,
@@ -1214,7 +1228,8 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
                 lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not errs else [])
                 lesson_valid=(not errs and lesson is not None and not lesson_errors)
                 citations_valid=tutor_citations_valid(value,set(seg["source_pages"]))
-                sft_ok=not errs and len(sft_records(source,seg,value,model))>=2
+                segment_layer5=layer5_evidence_for_segment(layer5_by_page,seg)
+                sft_ok=not errs and len(sft_records(source,seg,value,model,segment_layer5))>=2
                 sample_output_sha=sha(json.dumps(value,ensure_ascii=False,sort_keys=True))
                 samples.append({"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"seconds":round(elapsed,2),
                   "response_chars":len(json.dumps(value,ensure_ascii=False)),

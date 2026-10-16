@@ -281,7 +281,8 @@ class LayersTests(unittest.TestCase):
             benchmark=root/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
             no_visual_fingerprint=sha("no-matching-visual-pack|"+book+"|"+pdfhash)
             write_json(benchmark,{"schema_version":"quantaedge.local-ollama-benchmark.v1",
-                "source":{"book_id":book,"source_pdf_sha256":pdfhash},
+                "source":{"book_id":book,"source_pdf_sha256":pdfhash,
+                    "layer5_coverage_ledger_sha256":__import__("hashlib").sha256(ledger.read_bytes()).hexdigest()},
                 "visual_candidate_fingerprint":no_visual_fingerprint,
                 "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
                 "prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,
@@ -312,6 +313,17 @@ class LayersTests(unittest.TestCase):
             lesson=json.loads(next((outdir/"lessons").glob("qe-lesson-*.json")).read_text(encoding="utf-8"))
             self.assertEqual(["asset-preview-1"],lesson["generation_metadata"]["layer5_visual_evidence_asset_ids"])
             self.assertEqual(ledger_sha,lesson["generation_metadata"]["layer5_coverage_ledger_sha256"])
+            with (outdir/"tutor-sft-candidates.jsonl").open(encoding="utf-8") as stream:
+                sft_row=json.loads(next(stream))
+            self.assertEqual(ledger_sha,sft_row["metadata"]["layer5_coverage_ledger_sha256"])
+            self.assertEqual(["asset-preview-1"],sft_row["metadata"]["layer5_visual_evidence_asset_ids"])
+            saved_benchmark=json.loads(benchmark.read_text(encoding="utf-8"))
+            stale_benchmark=json.loads(json.dumps(saved_benchmark))
+            stale_benchmark["source"]["layer5_coverage_ledger_sha256"]="0"*64
+            write_json(benchmark,stale_benchmark)
+            with self.assertRaisesRegex(ValueError,"Benchmark Layer 5 evidence ledger hash"):
+                run_layers(args,opener=open_)
+            write_json(benchmark,saved_benchmark)
             again=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"],"completed checkpoints must not call Ollama again")
             self.assertEqual(1,again["segments_completed"])
