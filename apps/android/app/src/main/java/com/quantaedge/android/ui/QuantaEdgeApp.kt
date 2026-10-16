@@ -1474,10 +1474,9 @@ fun QuantaEdgeApp() {
             val refreshedQuestion = refreshedPractice.optJSONArray("questions")?.objectItems()
                 ?.firstOrNull { it.longAny("id", "questionId", "question_id") == questionId }
             val isAnswered = refreshedQuestion?.optBoolean("answered") == true
-            val hasGrade = refreshedQuestion?.has("lastCorrect") == true && !refreshedQuestion.isNull("lastCorrect")
-            val grade = if (hasGrade) refreshedQuestion?.optBoolean("lastCorrect") else null
+            val hasGrade = refreshedQuestion?.let { it.has("lastCorrect") && !it.isNull("lastCorrect") } == true
             val attempts = refreshedQuestion?.optInt("attemptCount", 0) ?: 0
-            onSaved(isAnswered || (hasGrade && grade == null && attempts > 0))
+            onSaved(isAnswered || (!hasGrade && attempts > 0))
         }
     }
 
@@ -3840,9 +3839,9 @@ private fun PracticeScreen(
                 val hasLast = question.has("lastCorrect") && !question.isNull("lastCorrect")
                 val lastCorrect = if (hasLast) question.optBoolean("lastCorrect") else null
                 val attemptCount = question.optInt("attemptCount", 0)
-                val existing = answers[id] ?: ""
+                val existing = answers[id] ?: question.textAny("answer")
                 val answered = question.optBoolean("answered")
-                val canAdvance = answered || (hasLast && lastCorrect == null && attemptCount > 0)
+                val canAdvance = answered || (!hasLast && attemptCount > 0)
                 val statusMessage = when {
                     answered && lastCorrect == true -> if (language == "hi") "उत्तर सही है और सुरक्षित है।" else "Correct answer saved."
                     answered && lastCorrect == null -> if (language == "hi") "उत्तर सुरक्षित है; मूल्यांकन बाकी है।" else "Answer saved; review may still be pending."
