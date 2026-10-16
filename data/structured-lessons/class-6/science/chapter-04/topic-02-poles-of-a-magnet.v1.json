@@ -743,18 +743,13 @@
         "answer_guide_by_locale": {
           "en": {
             "key_points": [
-              [
-                "Each piece has both a North pole and a South pole.",
-                "हर टुकड़े में उत्तरी और दक्षिणी ध्रुव होते हैं।"
-              ]
+              "Each piece has both a North pole and a South pole."
             ],
             "sample_answer": "Each piece becomes a smaller magnet with both poles; breaking does not isolate one pole."
           },
           "hi": {
             "key_points": [
-              [
-                "हर टुकड़े में उत्तरी और दक्षिणी ध्रुव होते हैं।"
-              ]
+              "हर टुकड़े में उत्तरी और दक्षिणी ध्रुव होते हैं।"
             ],
             "sample_answer": "हर टुकड़ा दोनों ध्रुवों वाला छोटा चुंबक बनता है; तोड़ने से अकेला ध्रुव नहीं मिलता।"
           }
