@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "extractor_version": "quantaedge-pymupdf-text-v1",
-  "created_at_utc": "2026-10-16T03:37:52.470301+00:00",
+  "created_at_utc": "2026-10-16T03:49:59.902461+00:00",
   "bundle_file": "ncert-c8-hindi-hhgp1--whole-book.pdf.json",
   "asset_pdf_filename": "ncert-c8-hindi-hhgp1--whole-book.pdf",
   "asset_pdf_sha256": "ca323969838b3e9358befc3f44438e31044a078d204640e17d33044e8c7d6986",
