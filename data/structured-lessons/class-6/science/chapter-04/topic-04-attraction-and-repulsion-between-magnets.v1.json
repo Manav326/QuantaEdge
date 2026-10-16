@@ -733,18 +733,13 @@
         "answer_guide_by_locale": {
           "en": {
             "key_points": [
-              [
-                "Iron is attracted by either pole.",
-                "लोहा दोनों ध्रुवों से आकर्षित होता है।"
-              ]
+              "Iron is attracted by either pole."
             ],
             "sample_answer": "An iron bar is attracted by either pole, but two magnets repel when like poles face. Repulsion helps identify a magnet."
           },
           "hi": {
             "key_points": [
-              [
-                "लोहा दोनों ध्रुवों से आकर्षित होता है।"
-              ]
+              "लोहा दोनों ध्रुवों से आकर्षित होता है।"
             ],
             "sample_answer": "लोहे की छड़ दोनों ध्रुवों से आकर्षित होती है, लेकिन समान ध्रुव सामने होने पर दो चुंबक प्रतिकर्षित करते हैं। प्रतिकर्षण चुंबक पहचानने में मदद करता है।"
           }
