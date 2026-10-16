@@ -7,7 +7,7 @@ from unittest.mock import patch
 from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
-    PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
+    PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, bind_layer5_evidence_to_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
     validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag,
     write_json, write_jsonl, write_outputs, prompt_for, run as run_layers,
 )
@@ -547,18 +547,29 @@ class LayersTests(unittest.TestCase):
               "publication_allowed":False,"candidates":[{"candidate_id":"v3-image-testcandidate","candidate_kind":"embedded_image",
                 "source_book_id":book,"source_pdf_sha256":pdfhash,"source_pdf_page_number":1,
                 "source_asset_sha256":"a"*64,"heuristic_score":10,"review_status":"CANDIDATE_NEEDS_HUMAN_REVIEW",
-                "publication_allowed":False,"human_review_required":True,"page_text_context":"source page"}]})
+                "publication_allowed":False,"human_review_required":True,"page_text_context":"source page",
+                "occurrences":[{"asset_id":"asset-embedded-1","source_pdf_page_number":1,"asset_path":"assets/asset-1.png"}]}]})
             source={"book_id":book,"source_pdf_sha256":pdfhash,"source_url":"https://ncert.nic.in/x",
               "title":"Science","edition":"Reprint","class_no":6,"subject":"science","language":"en"}
             segment={"segment_id":"seg-1","sequence":1,"source_pages":[1]}
             attached,fingerprint=load_visual_candidates(repo,source,[segment])
             self.assertEqual(1,len(attached["seg-1"])); self.assertEqual(64,len(fingerprint))
-            lesson=lesson_from(source,segment,model_json([1]),attached["seg-1"])
+            l5_rows={1:[{"asset_id":"asset-embedded-1","source_pdf_sha256":pdfhash,"source_pdf_page_number":1,
+                "source_asset_sha256":"a"*64,"visual_type":"illustration","visual_summary":"A labelled leaf diagram",
+                "visible_text":["leaf"],"concepts":["plant parts"],"context_relation":"shown beside the paragraph",
+                "limitations":["Machine observation; verify manually"],"correction_status":"NONE","human_review_required":True,"publication_allowed":False}]}
+            with self.assertRaisesRegex(ValueError,"exact source-image occurrences"):
+                bind_layer5_evidence_to_visual_candidates(attached,{1:[{**l5_rows[1][0],"source_asset_sha256":"b"*64}]})
+            attached=bind_layer5_evidence_to_visual_candidates(attached,l5_rows)
+            self.assertEqual(["asset-embedded-1"],attached["seg-1"][0]["layer5_analysis_asset_ids"])
+            lesson=lesson_from({**source,"layer5_ledger_path":"ledger.json","layer5_ledger_sha256":"c"*64},segment,model_json([1]),attached["seg-1"])
             self.assertEqual([],validate_lesson(lesson))
             visual=next(b for b in lesson["explain"]["blocks"] if b["type"]=="image")
             self.assertFalse(visual["asset"]["publication_allowed"])
             self.assertFalse(visual["asset"]["student_renderable"])
             self.assertEqual(pdfhash,visual["asset"]["source_pdf_sha256"])
+            self.assertEqual(["asset-embedded-1"],visual["asset"]["source_inventory_asset_ids"])
+            self.assertEqual(["asset-embedded-1"],visual["asset"]["layer5_analysis_asset_ids"])
             self.assertTrue(visual["asset"]["url"].startswith("https://raw.githubusercontent.com/"))
 
     def test_visual_candidates_from_another_pdf_edition_are_not_attached(self):
