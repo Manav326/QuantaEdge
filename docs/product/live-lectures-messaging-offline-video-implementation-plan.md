@@ -87,3 +87,52 @@ The current architecture document records media under `APP_MEDIA_STORAGE_DIR` (d
 - Recording retention is permanent by default with authorized, auditable archive/removal only.
 - Web and Android parity and security tests pass; 100–500 broadcast behavior and chat load are measured.
 - Changes are on `main`, with required CI checks green; no media, secrets, or runtime data are committed.
+
+
+---
+
+## Implementation journal — 2026-10-16 (checkpoint 1)
+
+This journal is intentionally part of the repository contract. Update it in the same commit as meaningful implementation milestones so a fresh session can resume without relying on chat history.
+
+### Repository baseline
+
+- Branch: `main`
+- Baseline commit when this checkpoint began: `c02c8c7d19511d3ca1e6cd0a5f2f1bb7a2d387a8`
+- Plan file: `docs/product/live-lectures-messaging-offline-video-implementation-plan.md`
+- Work tracking: epic #65; tasks #58–#64.
+- Baseline CI run for the plan commit: [run 38931943122](https://github.com/Manav326/QuantaEdge/actions/runs/38931943122). At the time checked it was still `in_progress`; do not treat it as green until rechecked.
+
+### Audit findings confirmed from current `main`
+
+| Area | Existing contract | Confirmed gap / risk | Implementation consequence |
+|---|---|---|---|
+| Live session schema | V43 `learning_class_session` supports `CUSTOM`, `GOOGLE_MEET`, `ZOOM`, `MICROSOFT_TEAMS`, `OTHER`; has chapter and subject FKs, times/status, private join URL. | No YouTube Live provider value or explicit public broadcast reference contract in V43. | Add a forward-only migration; do not edit V43. Model public broadcast reference separately from private meeting URL; never expose private join URL in listing responses. |
+| Schedule visibility | `GET /api/v1/learning/live-classes` returns sessions whose end is within the last 60 days, with ordering/pagination and enrollment, approved teaching-assignment, employee-status and chapter-publication checks. | Query does not restrict scheduled sessions to the 24 hours before `starts_at`; it may expose future sessions much earlier. Its total-count query must use the same visibility predicate. | Introduce one consistent server-side visibility rule in item and count queries; add tests for just before/at/after the 24-hour boundary and already-started/live/completed sessions. |
+| Join authorization | `POST /api/v1/learning/live-classes/{sessionId}/join` checks student active status, class/subject enrollment, approved teacher assignment, teacher employment state, chapter publication, session status and private URL. It rejects starts more than 15 minutes away and ended sessions. | Existing 15-minute early join window is a separate rule from 24-hour listing visibility and must not be accidentally widened. Confirm provider-specific behavior for YouTube broadcast versus Meet. | Keep listing visibility and join eligibility independent; never rely on UI hiding alone. Test exact join boundaries and cancellation. |
+| Recording schema | V43 `recorded_class` supports one MP4/WebM/QuickTime recording row, max 524,288,000 bytes, SHA-256, draft/published/archived status, optional chapter and session links. | It is a recording-specific table, not a generic multi-resource catalogue; only three video MIME types and a hard 500 MiB limit. Lesson/micro-topic linkage and download policy are not represented here. | Add a provider-neutral resource model after verifying canonical lesson/topic IDs and existing resource tables. Preserve old recordings through compatible reads/migration/backfill; do not create a parallel video-only lesson field. Revisit upload size only with a storage/hosting cost and abuse-control rationale. |
+| Private media | `PrivateMediaStorageService` writes UUID-named files beneath `app.media.storage-dir` (default `/var/lib/quantaedge/media`), hashes content, validates basic MP4/WebM/MOV signatures, uses temporary `.part` files and atomic move where supported. It rejects files over 500 MiB. | This service accepts a multipart upload as one request; resumable upload, explicit upload idempotency, processing state and retry reconciliation are not established by this class. The default path alone does not prove production volume/backup configuration. | Reuse the storage abstraction; audit deployment/volume/backup next. Design upload session/chunk/checksum/idempotency before adding client-side retries. Never store media bytes in PostgreSQL or commit media to Git. |
+| Student replay authorization | `readableRecording` only returns a `PUBLISHED` recording when student is active, belongs to the matching class, and has active enrollment for the subject; chapter must be active/published. Streaming supports byte ranges and uses no-store/nosniff/noindex headers. Existing test covers out-of-scope denial and malformed range rejection. | No evidence yet of a permitted-download flag or distinct download authorization/attachment behavior. Session-to-recording relation is optional. | Extend authorization contract before download endpoints/UI. Add tests for stream and download authorization, private URL leakage, checksum/partial transfer behavior. |
+| Web | Student `ClassesClient.tsx` uses API-backed class listing, authorized join endpoint and recording playback/progress. Admin has a class-management page. | Need a complete pass through resource presentation, provider rendering, recording upload/status errors, and chat UX before modifying UI. | Build on existing pages and shared API contracts rather than a parallel route/system. |
+| Android | Existing Android implementation includes API-backed live/recorded class catalogue, authenticated in-app Media3 replay, session-cookie refresh, and playback progress. Existing docs confirm protected offline textbook assets, but that does not establish offline video downloads. | Offline video storage/download/resume/delete is not yet confirmed; public YouTube embedding and native chat parity remain to be audited. | Reuse the existing player/auth/navigation architecture; keep video bytes in app-private storage and verify offline playback after process/device restart. |
+| Messaging | Repository searches for `@MessageMapping` and `WebSocketMessageBrokerConfigurer` returned no matches; no direct evidence yet of an existing Spring WebSocket chat implementation. | Native classroom/private messaging has not been located in the inspected code. | Search the full repository for alternate WebSocket/SSE/notification infrastructure before deciding transport. Start with PostgreSQL durable message history and authorization; add broker only if actual deployment scale requires it. |
+
+### Current audit test evidence
+
+- `services/api/src/test/java/com/quantaedge/api/LearningClassControllerTest.java` exists and covers: early join rejection (15-minute gate), insecure URL rejection, class-management permission denial, attendance clock closure, unverified Meet link redaction, out-of-scope recording denial, and malformed byte-range rejection.
+- These are source-level test cases, not evidence that tests were executed during this checkpoint.
+- `V43__live_and_recorded_classes.sql` is already a migration. Never change it; introduce a new forward migration and keep schema changes compatible with existing data.
+- The baseline plan CI run was still in progress at last check. Recheck current `main` and CI before the next code write and after each implementation commit.
+
+### Next actions (resume here)
+
+1. Finish the contract audit before schema changes:
+   - inspect all V43 controller methods for upload, publish/archive, student list/stream/progress;
+   - inspect all migrations and existing content-resource/lesson/topic schemas to find the canonical FK targets;
+   - inspect admin/student web API contracts and components end-to-end;
+   - inspect Android player/data/repository implementation and search for any existing video download manager;
+   - inspect Docker/production deployment and backup configuration for the private media volume;
+   - search repository for WebSocket, SSE, notifications and any existing message tables.
+2. Add the detailed audit matrix and exact tests to issue #58; close it only when every contract is traced.
+3. Implement in small, direct-to-`main` commits in dependency order: multi-resource schema/API; 24-hour visibility/provider contract; reliable authorized recording ingestion; download policy and web/Android offline video; durable native messaging; admin/web/Android parity; security/load/cost/backup validation.
+4. Update this journal after every material change with commit SHA, changed files, migration IDs, test commands/results, workflow run links, unresolved risks and the exact next step. Never claim green CI or completed E2E without evidence.
