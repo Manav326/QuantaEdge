@@ -249,6 +249,20 @@ class LayersTests(unittest.TestCase):
             self.assertEqual("INCOMPLETE",report["overall_status"])
 
 
+
+    def test_recap_block_uses_the_existing_student_renderer_contract(self):
+        generated=model_json([1,2])
+        source={"book_id":"book","source_pdf_sha256":"a"*64,"source_url":"https://ncert.nic.in/x",
+            "title":"Science","edition":"Reprint","class_no":6,"subject":"science","language":"en"}
+        segment={"segment_id":"seg-recap","sequence":1,"source_pages":[1,2]}
+        lesson=lesson_from(source,segment,generated)
+        recap=next(block for block in lesson["explain"]["blocks"] if block["type"]=="recap")
+        self.assertNotIn("text_by_locale",recap)
+        self.assertEqual(generated["recap_by_locale"]["en"],recap["content_by_locale"]["en"]["key_takeaways"][0])
+        self.assertEqual(generated["recap_by_locale"]["hi"],recap["content_by_locale"]["hi"]["key_takeaways"][0])
+        self.assertEqual([],validate_lesson(lesson))
+
+
     def test_visual_candidates_are_hash_bound_and_preview_only(self):
         with tempfile.TemporaryDirectory() as temp:
             repo=Path(temp); book="book"; pdfhash="f"*64; slug="class6-en-science-test"

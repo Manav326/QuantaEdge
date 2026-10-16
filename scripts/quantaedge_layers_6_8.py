@@ -352,7 +352,7 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
     blocks.extend([
       {"id":aid+"-worked","type":"rich_text","order":len(blocks)+1,"objective_ids":objective_ids,"source_refs":refids,"text_by_locale":v["worked_example_by_locale"]},
       {"id":aid+"-recap","type":"recap","order":len(blocks)+2,"objective_ids":objective_ids,"source_refs":refids,
-       "text_by_locale":{"en":{"heading":"Recap","paragraphs":[v["recap_by_locale"]["en"]]},"hi":{"heading":"पुनरावृत्ति","paragraphs":[v["recap_by_locale"]["hi"]]}}},
+       "content_by_locale":{"en":{"key_takeaways":[v["recap_by_locale"]["en"]],"vocabulary":[]},"hi":{"key_takeaways":[v["recap_by_locale"]["hi"]],"vocabulary":[]}}},
     ])
     questions=[]
     for i,q in enumerate(v["questions"],1):
@@ -396,6 +396,17 @@ def validate_lesson(x: dict[str,Any]) -> list[str]:
                 or not localized(asset.get("caption_by_locale")) or not page_refs or
                 not set(b.get("source_refs",[])).intersection({r.get("id") or r.get("source_ref_id") for r in page_refs})):
                 e.append("review-only visual candidate has invalid provenance or publication gate")
+            continue
+        if b.get("type")=="recap":
+            recap=b.get("content_by_locale")
+            if not isinstance(recap,dict) or any(
+                not isinstance(recap.get(l),dict) or
+                not isinstance(recap[l].get("key_takeaways"),list) or
+                not recap[l]["key_takeaways"] or
+                any(not isinstance(p,str) or not p.strip() for p in recap[l]["key_takeaways"])
+                for l in ("en","hi")
+            ):
+                e.append("recap block needs bilingual content_by_locale.key_takeaways")
             continue
         tx=b.get("text_by_locale")
         if not isinstance(tx,dict) or any(not isinstance(tx.get(l),dict) or not tx[l].get("paragraphs") for l in ("en","hi")): e.append("block bilingual text invalid")
