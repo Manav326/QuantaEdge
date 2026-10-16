@@ -3435,41 +3435,87 @@ private fun LessonListScreen(
     onOpenLesson: (JSONObject) -> Unit,
     onOpenStructuredLessons: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 10.dp)) {
+    val initialIndex = lessons.indexOfFirst { it.optInt("progress_percent", 0) < 100 }
+        .let { if (it >= 0) it else (lessons.lastIndex).coerceAtLeast(0) }
+    var selectedIndex by rememberSaveable(subject, lessons.size) { mutableStateOf(initialIndex) }
+    LaunchedEffect(subject, lessons.size) {
+        if (lessons.isNotEmpty()) {
+            selectedIndex = lessons.indexOfFirst { it.optInt("progress_percent", 0) < 100 }
+                .let { if (it >= 0) it else lessons.lastIndex }
+        }
+    }
+    val safeIndex = selectedIndex.coerceIn(0, (lessons.lastIndex).coerceAtLeast(0))
+    val activeLesson = lessons.getOrNull(safeIndex)
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(localizedUiText(if (subject == "maths") "गणित" else "विज्ञान"), style = MaterialTheme.typography.headlineSmall)
-                Text(if (language == "hi") "प्रकाशित पाठ और प्रगति" else "Published lessons and progress",
+                Text(if (language == "hi") "एक समय में एक topic · आपकी प्रगति के अनुसार" else "One topic at a time · resumes from your progress",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
         }
-        OutlinedButton(onClick = onOpenStructuredLessons, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
+        OutlinedButton(onClick = onOpenStructuredLessons, enabled = !busy,
+            modifier = Modifier.fillMaxWidth().height(40.dp)) {
             Text(if (language == "hi") "Structured lessons खोलें" else "Open structured lessons")
         }
         if (lessons.isEmpty() && !busy) {
             EmptyState("अभी कोई पाठ उपलब्ध नहीं", "इस कक्षा और विषय के प्रकाशित पाठ सर्वर पर उपलब्ध होने पर वे यहाँ दिखेंगे।")
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
-                items(lessons) { item ->
-                    val progress = item.optInt("progress_percent", 0)
-                    Card(modifier = Modifier.fillMaxWidth().clickable { onOpenLesson(item) }) {
-                        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text(item.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                            Text(item.textAny("title").ifBlank { "पाठ" }, style = MaterialTheme.typography.titleMedium)
-                            Text(item.textAny("summary"), style = MaterialTheme.typography.bodyMedium)
-                            Text(localizedUiText("समय: ") + item.optInt("estimated_minutes", 0) + " मिनट  •  प्रगति: " + progress + "%",
-                                style = MaterialTheme.typography.bodySmall)
-                            LinearProgressIndicator(progress = { progress.coerceIn(0, 100) / 100f }, modifier = Modifier.fillMaxWidth())
-                            Text(localizedUiText("पाठ खोलें →"), color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
-                        }
+        } else if (busy && lessons.isEmpty()) {
+            Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else if (activeLesson != null) {
+            val progress = activeLesson.optInt("progress_percent", 0).coerceIn(0, 100)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()) {
+                Text(if (language == "hi") "Topic ${safeIndex + 1} / ${lessons.size}" else "Topic ${safeIndex + 1} of ${lessons.size}",
+                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                Text("$progress%", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+            }
+            LinearProgressIndicator(progress = { (safeIndex + 1).toFloat() / lessons.size.coerceAtLeast(1) },
+                modifier = Modifier.fillMaxWidth())
+            Card(modifier = Modifier.fillMaxWidth().weight(1f, fill = false)) {
+                Column(modifier = Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(activeLesson.textAny("chapter_name", "chapterName"),
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                    Text(activeLesson.textAny("title").ifBlank { "पाठ" },
+                        style = MaterialTheme.typography.headlineSmall)
+                    if (activeLesson.textAny("summary").isNotBlank()) {
+                        Text(activeLesson.textAny("summary"), style = MaterialTheme.typography.bodyMedium)
+                    }
+                    Text(localizedUiText("समय: ") + activeLesson.optInt("estimated_minutes", 0) + " मिनट",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    LinearProgressIndicator(progress = { progress / 100f }, modifier = Modifier.fillMaxWidth())
+                    Text(if (progress >= 100) {
+                        if (language == "hi") "पूरा हुआ · दोहराने के लिए खोलें" else "Completed · open to review"
+                    } else {
+                        if (language == "hi") "आपकी अगली सीख" else "Your current learning topic"
+                    }, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                    Button(onClick = { onOpenLesson(activeLesson) }, enabled = !busy,
+                        modifier = Modifier.fillMaxWidth().height(42.dp)) {
+                        Text(if (language == "hi") "पाठ जारी रखें" else "Continue lesson")
+                    }
+                }
+            }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (safeIndex > 0) {
+                    OutlinedButton(onClick = { selectedIndex = safeIndex - 1 }, enabled = !busy,
+                        modifier = Modifier.weight(1f).height(40.dp)) {
+                        Text(if (language == "hi") "← पिछला topic" else "← Previous")
+                    }
+                }
+                if (safeIndex < lessons.lastIndex) {
+                    OutlinedButton(onClick = { selectedIndex = safeIndex + 1 }, enabled = !busy,
+                        modifier = Modifier.weight(1f).height(40.dp)) {
+                        Text(if (language == "hi") "अगला topic →" else "Next topic →")
                     }
                 }
             }
         }
     }
 }
-
 
 @Composable
 private fun StructuredLessonCatalogueScreen(
@@ -3480,50 +3526,78 @@ private fun StructuredLessonCatalogueScreen(
     onOpenLesson: (JSONObject) -> Unit,
     onOpenLegacyLessons: () -> Unit
 ) {
+    fun completed(item: JSONObject): Boolean =
+        item.optBoolean("completed") || item.optBoolean("isCompleted") ||
+            item.optInt("progressPercent", item.optInt("progress_percent", 0)) >= 100
+    val initialIndex = items.indexOfFirst { !completed(it) }.let { if (it >= 0) it else (items.lastIndex).coerceAtLeast(0) }
+    var selectedIndex by rememberSaveable(items.size) { mutableStateOf(initialIndex) }
+    LaunchedEffect(items.size) {
+        if (items.isNotEmpty()) selectedIndex = items.indexOfFirst { !completed(it) }.let { if (it >= 0) it else items.lastIndex }
+    }
+    val safeIndex = selectedIndex.coerceIn(0, (items.lastIndex).coerceAtLeast(0))
+    val active = items.getOrNull(safeIndex)
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(if (language == "hi") "संरचित पाठ" else "Structured lessons", style = MaterialTheme.typography.headlineSmall)
-                Text(if (language == "hi") "समीक्षा और प्रकाशन स्वीकृत पाठ" else "Reviewed and published lessons",
+                Text(if (language == "hi") "एक topic पर ध्यान दें और क्रम से आगे बढ़ें" else "Focus on one topic and move through the sequence",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(if (language == "hi") "रिफ्रेश" else "Refresh") }
         }
-        OutlinedButton(onClick = onOpenLegacyLessons, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(onClick = onOpenLegacyLessons, enabled = !busy,
+            modifier = Modifier.fillMaxWidth().height(40.dp)) {
             Text(if (language == "hi") "Existing lessons पर लौटें" else "Return to existing lessons")
         }
-        if (busy) {
-            Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+        when {
+            busy && items.isEmpty() -> Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-        } else if (items.isEmpty()) {
-            EmptyState(
+            items.isEmpty() -> EmptyState(
                 if (language == "hi") "अभी कोई approved structured lesson उपलब्ध नहीं है" else "No approved structured lessons yet",
                 if (language == "hi") "Content, source, visual और bilingual review पूरा होने के बाद published lessons यहाँ दिखेंगे।"
                 else "Published lessons appear here only after content, source, visual and bilingual reviews are approved."
             )
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxSize()) {
-                items(items) { item ->
-                    Card(modifier = Modifier.fillMaxWidth().clickable { onOpenLesson(item) }) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text(item.optString("subjectCode").uppercase() + " · " +
-                                (if (language == "hi") "कक्षा " else "Class ") + item.optInt("classNumber"),
-                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                            Text(item.optString("title").ifBlank { if (language == "hi") "पाठ" else "Lesson" },
-                                style = MaterialTheme.typography.titleMedium)
-                            Text((if (language == "hi") "अध्याय " else "Chapter ") + item.optInt("chapterNumber") +
-                                ": " + item.optString("chapterTitle") + " · " +
-                                (if (language == "hi") "विषय " else "Topic ") + item.optInt("topicNumber"),
-                                style = MaterialTheme.typography.bodySmall)
-                            if (item.optInt("estimatedMinutes") > 0) {
-                                Text(item.optInt("estimatedMinutes").toString() + (if (language == "hi") " मिनट" else " min"),
-                                    style = MaterialTheme.typography.bodySmall)
-                            }
-                            Text(if (language == "hi") "Lesson खोलें →" else "Open lesson →",
-                                color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
+            active != null -> {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text(if (language == "hi") "Topic ${safeIndex + 1} / ${items.size}" else "Topic ${safeIndex + 1} of ${items.size}",
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                    Text(active.optString("subjectCode").uppercase() + " · " +
+                        (if (language == "hi") "कक्षा " else "Class ") + active.optInt("classNumber"),
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                }
+                LinearProgressIndicator(progress = { (safeIndex + 1).toFloat() / items.size.coerceAtLeast(1) },
+                    modifier = Modifier.fillMaxWidth())
+                Card(modifier = Modifier.fillMaxWidth().weight(1f, fill = false)) {
+                    Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text((if (language == "hi") "अध्याय " else "Chapter ") + active.optInt("chapterNumber") +
+                            ": " + active.optString("chapterTitle"),
+                            style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                        Text(active.optString("title").ifBlank { if (language == "hi") "पाठ" else "Lesson" },
+                            style = MaterialTheme.typography.headlineSmall)
+                        Text((if (language == "hi") "विषय " else "Topic ") + active.optInt("topicNumber"),
+                            style = MaterialTheme.typography.bodyMedium)
+                        if (active.optInt("estimatedMinutes") > 0) {
+                            Text(active.optInt("estimatedMinutes").toString() + (if (language == "hi") " मिनट" else " min"),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                         }
+                        Spacer(Modifier.height(4.dp))
+                        Button(onClick = { onOpenLesson(active) }, enabled = !busy,
+                            modifier = Modifier.fillMaxWidth().height(42.dp)) {
+                            Text(if (language == "hi") "पाठ जारी रखें" else "Continue lesson")
+                        }
+                    }
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (safeIndex > 0) OutlinedButton(onClick = { selectedIndex = safeIndex - 1 }, enabled = !busy,
+                        modifier = Modifier.weight(1f).height(40.dp)) {
+                        Text(if (language == "hi") "← पिछला topic" else "← Previous")
+                    }
+                    if (safeIndex < items.lastIndex) OutlinedButton(onClick = { selectedIndex = safeIndex + 1 }, enabled = !busy,
+                        modifier = Modifier.weight(1f).height(40.dp)) {
+                        Text(if (language == "hi") "अगला topic →" else "Next topic →")
                     }
                 }
             }
