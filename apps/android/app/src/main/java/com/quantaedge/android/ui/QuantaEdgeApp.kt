@@ -1451,7 +1451,7 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun savePracticeAnswer(question: JSONObject, answer: String) {
+    fun savePracticeAnswer(question: JSONObject, answer: String, onSaved: (Boolean) -> Unit = {}) {
         runTask {
             val questionId = question.longAny("id", "questionId", "question_id")
             val sessionId = practice.longAny("sessionId", "session_id")
@@ -1469,7 +1469,15 @@ fun QuantaEdgeApp() {
             feedbacks[questionId.toString()] = if (explanation.isNotBlank()) {
                 feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
             } else feedback
-            practice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId + "?language=" + learningContentLanguage)
+            val refreshedPractice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId + "?language=" + learningContentLanguage)
+            practice = refreshedPractice
+            val refreshedQuestion = refreshedPractice.optJSONArray("questions")?.objectItems()
+                ?.firstOrNull { it.longAny("id", "questionId", "question_id") == questionId }
+            val isAnswered = refreshedQuestion?.optBoolean("answered") == true
+            val hasGrade = refreshedQuestion?.has("lastCorrect") == true && !refreshedQuestion.isNull("lastCorrect")
+            val grade = if (hasGrade) refreshedQuestion?.optBoolean("lastCorrect") else null
+            val attempts = refreshedQuestion?.optInt("attemptCount", 0) ?: 0
+            onSaved(isAnswered || (hasGrade && grade == null && attempts > 0))
         }
     }
 
@@ -2655,7 +2663,7 @@ fun QuantaEdgeApp() {
                             answers[id] = value
                             if (value.isNotBlank()) feedbacks.remove(id)
                         },
-                        onAnswer = ::savePracticeAnswer,
+                        onAnswer = { question, answer, afterSaved -> savePracticeAnswer(question, answer, afterSaved) },
                         language = language,
                         onComplete = { route = AppRoute.LESSON },
                         onProgress = ::openProgress
@@ -3740,7 +3748,7 @@ private fun PracticeScreen(
     feedbacks: MutableMap<String, String>,
     busy: Boolean,
     onAnswerChange: (String, String) -> Unit,
-    onAnswer: (JSONObject, String) -> Unit,
+    onAnswer: (JSONObject, String, (Boolean) -> Unit) -> Unit,
     language: String,
     onComplete: () -> Unit,
     onProgress: () -> Unit
@@ -3865,45 +3873,52 @@ private fun PracticeScreen(
                         question = question,
                         answer = existing,
                         onAnswerChange = { onAnswerChange(id, it) },
-                        onSubmit = { onAnswer(question, existing) },
+                        onSubmit = { onAnswer(question, existing) {} },
                         locked = answered,
                         saving = busy,
                         feedback = feedbacks[id],
                         status = statusMessage,
-                        submitLabel = if (language == "hi") "उत्तर जमा करें" else "Submit answer"
+                        submitLabel = if (language == "hi") "उत्तर जमा करें" else "Submit answer",
+                        showSubmitButton = false
                     )
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (!canAdvance) {
-                        Text(
-                            if (lastCorrect == false) {
-                                if (language == "hi") "उत्तर सुधारकर फिर जमा करें।" else "Revise your answer and submit again."
-                            } else if (language == "hi") {
-                                "आगे बढ़ने से पहले उत्तर जमा करें।"
-                            } else {
-                                "Submit your answer before continuing."
-                            },
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    Button(
-                        onClick = { currentQuestionIndex = (safeIndex + 1).coerceAtMost(questions.size) },
-                        enabled = canAdvance && !busy,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(if (safeIndex == questions.lastIndex) {
-                            if (language == "hi") "नतीजे देखें →" else "See results →"
-                        } else {
-                            if (language == "hi") "अगला प्रश्न →" else "Next question →"
-                        })
-                    }
+                val canSkipEmpty = existing.isBlank() && lastCorrect != false
+                val primaryLabel = when {
+                    safeIndex == questions.lastIndex && existing.isNotBlank() && !answered ->
+                        if (language == "hi") "सहेजें और पूरा करें" else "Save & Finish"
+                    safeIndex == questions.lastIndex ->
+                        if (language == "hi") "अभ्यास पूरा करें" else "Finish practice"
+                    existing.isNotBlank() && !answered ->
+                        if (language == "hi") "सहेजें और आगे" else "Save & Next"
+                    else -> if (language == "hi") "अगला" else "Next"
                 }
+                CompactQuestionActions(
+                    language = language,
+                    showPrevious = safeIndex > 0,
+                    showPrimary = true,
+                    actionsEnabled = !busy,
+                    canSave = !busy && !answered && existing.isNotBlank(),
+                    canClear = !busy && !answered && existing.isNotBlank(),
+                    primaryLabel = primaryLabel,
+                    primaryEnabled = !busy && (canAdvance || existing.isNotBlank() || canSkipEmpty),
+                    onPrevious = { currentQuestionIndex = (safeIndex - 1).coerceAtLeast(0) },
+                    onSave = {
+                        if (!busy && !answered && existing.isNotBlank()) onAnswer(question, existing) {}
+                    },
+                    onClear = {
+                        if (!busy && !answered && existing.isNotBlank()) onAnswerChange(id, "")
+                    },
+                    onPrimary = {
+                        if (busy) return@CompactQuestionActions
+                        when {
+                            answered && canAdvance -> currentQuestionIndex = safeIndex + 1
+                            existing.isBlank() && canSkipEmpty -> currentQuestionIndex = safeIndex + 1
+                            existing.isNotBlank() && !answered -> onAnswer(question, existing) { allowed ->
+                                if (allowed) currentQuestionIndex = safeIndex + 1
+                            }
+                        }
+                    }
+                )
             }
             Text(
                 if (language == "hi") "सिर्फ स्वीकृत प्रश्न · आपके उत्तर सुरक्षित रूप से सहेजे जाते हैं।"
