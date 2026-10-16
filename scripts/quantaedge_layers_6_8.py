@@ -5,8 +5,8 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v6-layer5-evidence-bridge"
-LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v4"
+PROMPT_VERSION = "qe-l6-l8-ollama-v7-exact-visual-asset-crosswalk"
+LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v5"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -1131,7 +1131,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
       "max_context_chars":args.max_context_chars,"generation_parameters":{"temperature":0.1,"num_ctx":8192,"num_predict":3072}},sort_keys=True))
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
-    outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v4"
+    outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v5"
     cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger_path.parent/"layer-8-rag-corpus.v1.jsonl"
     if cpfile.exists():
         doc=read_json(cpfile)
@@ -1188,7 +1188,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
             print(json.dumps({"book_id":source["book_id"],"model":args.model,"calls_this_run":calls,
               "segments_completed":current["segments_completed"],"segments_total":current["segments_total"],"status":current["overall_status"]}))
     doc["segments"]=checkpoints; write_json(cpfile,doc)
-    result=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)))
+    result=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)),layer5_by_page)
     result["model_calls_this_run"]=calls; result["model_calls_budgeted_per_invocation"]=args.max_model_calls
     write_json(outdir/"layers-6-8-run-manifest.v1.json",result)
     if args.commit_checkpoints: checkpoint_git(repo,[outdir,rag],f"status(content): L6-8 {source['book_id']} ({result['overall_status']})")
