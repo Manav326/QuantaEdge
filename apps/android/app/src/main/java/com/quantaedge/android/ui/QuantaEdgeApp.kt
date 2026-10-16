@@ -596,6 +596,24 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun navigateLessonByOffset(offset: Int) {
+        if (offset == 0) return
+        if (structuredLessonMode) {
+            val currentIndex = structuredLessons.indexOfFirst { it.optString("artifactId") == structuredLessonArtifactId }
+            val targetIndex = currentIndex + offset
+            if (currentIndex >= 0 && targetIndex in structuredLessons.indices) {
+                openStructuredLesson(structuredLessons[targetIndex])
+            }
+        } else {
+            val currentId = lesson.longAny("id", "lesson_id")
+            val currentIndex = lessons.indexOfFirst { it.longAny("id", "lesson_id") == currentId }
+            val targetIndex = currentIndex + offset
+            if (currentIndex >= 0 && targetIndex in lessons.indices) {
+                openLesson(lessons[targetIndex])
+            }
+        }
+    }
+
     fun startPractice() {
         runTask {
             val lessonId = lesson.longAny("id", "lesson_id")
@@ -2541,7 +2559,9 @@ fun QuantaEdgeApp() {
                         onOpenLesson = ::openLesson,
                         onOpenStructuredLessons = ::openStructuredLessons
                     )
-                    AppRoute.LESSON -> if (structuredLessonMode) StructuredLessonRenderer(
+                    AppRoute.LESSON -> if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            StructuredLessonRenderer(
                         lesson = lesson,
                         language = learningLanguage,
                         studentMode = true,
@@ -2595,7 +2615,16 @@ fun QuantaEdgeApp() {
                                 }
                             }
                         }
-                    ) else LessonScreen(
+                            )
+                        }
+                        TopicNavigationBar(
+                            language = language,
+                            showPrevious = structuredLessons.indexOfFirst { it.optString("artifactId") == structuredLessonArtifactId } > 0,
+                            showNext = structuredLessons.indexOfFirst { it.optString("artifactId") == structuredLessonArtifactId } in 0 until (structuredLessons.lastIndex),
+                            onPrevious = { navigateLessonByOffset(-1) },
+                            onNext = { navigateLessonByOffset(1) }
+                        )
+                    } else LessonScreen(
                         lesson = lesson,
                         language = language,
                         tutorMinimized = tutorMinimized,
@@ -2611,7 +2640,11 @@ fun QuantaEdgeApp() {
                         onAnswer = ::saveLessonAnswer,
                         onPractice = ::startPractice,
                         onTutor = ::openTutor,
-                        onTutorQuestion = { questionId -> openTutorWithQuestion(questionId) }
+                        onTutorQuestion = { questionId -> openTutorWithQuestion(questionId) },
+                        hasPreviousTopic = lessons.indexOfFirst { it.longAny("id", "lesson_id") == lesson.longAny("id", "lesson_id") } > 0,
+                        hasNextTopic = lessons.indexOfFirst { it.longAny("id", "lesson_id") == lesson.longAny("id", "lesson_id") } in 0 until lessons.lastIndex,
+                        onPreviousTopic = { navigateLessonByOffset(-1) },
+                        onNextTopic = { navigateLessonByOffset(1) }
                     )
                     AppRoute.PRACTICE -> PracticeScreen(
                         practice = practice,
