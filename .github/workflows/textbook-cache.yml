@@ -7,6 +7,7 @@ on:
       - "scripts/textbook_registry.py"
       - ".github/workflows/textbook-cache.yml"
       - "tests/test_textbook_registry.py"
+      - "data/textbook-cache/repair-queue.json"
   workflow_dispatch:
     inputs:
       language:
@@ -134,9 +135,360 @@ jobs:
           workers="${INPUT_DOWNLOAD_WORKERS:-8}"
           batch_size="${INPUT_PUSH_BATCH_SIZE:-8}"
           retry_rounds="${INPUT_RETRY_ROUNDS:-5}"
-          args=(python scripts/textbook_registry.py publish --class-wise --language "$language" --download-workers "$workers" --push-batch-size "$batch_size" --retry-rounds "$retry_rounds" --image-prefix "ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')/quantaedge-textbooks")
+          owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          image_prefix="ghcr.io/$owner/quantaedge-textbooks"
+          repair_queue="data/textbook-cache/repair-queue.json"
+          queue_added="false"
+          if [ "$EVENT_NAME" = "push" ]; then
+            if jq -e '.head_commit.added[]? | select(. == "data/textbook-cache/repair-queue.json")' "$GITHUB_EVENT_PATH" >/dev/null; then
+              queue_added="true"
+            fi
+          fi
+          if [ "$EVENT_NAME" = "push" ] && [ "$queue_added" = "true" ] && [ -f "$repair_queue" ] && jq -e '.enabled == true and (.books | type == "array")' "$repair_queue" >/dev/null; then
+            echo "repair_only=true" >> "$GITHUB_OUTPUT"
+            echo "Running targeted NCERT repair queue. Each verified whole book is published to its existing class/medium :latest image before moving to the next title."
+            failures=0
+            while IFS=
+      - name: Pull selected class images and create optional browser-download ZIPs
+        if: steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        shell: bash
+        env:
+          INPUT_LANGUAGE: ${{ inputs.language }}
+          INPUT_CLASS_NO: ${{ inputs.class_no }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          language="$INPUT_LANGUAGE"
+          if [ -z "$language" ] || [ "$language" = "both" ]; then languages=(hindi english); else languages=("$language"); fi
+          class_no="${INPUT_CLASS_NO:-0}"
+          if [ "$class_no" = "0" ] || [ -z "$class_no" ]; then classes=(6 7 8 9 10 11 12); else classes=("$class_no"); fi
+          inv_root="$RUNNER_TEMP/textbook-inventory"
+          out_root="$RUNNER_TEMP/textbook-downloads"
+          mkdir -p "$inv_root" "$out_root"
+          failures=0
+          for grade in "${classes[@]}"; do
+            for medium in "${languages[@]}"; do
+              image="ghcr.io/$owner/quantaedge-textbooks-class-$grade-$medium:latest"
+              target="$inv_root/class-$grade/$medium"
+              echo "Pulling optional downloadable archive from $image"
+              if ! python scripts/textbook_registry.py pull --image "$image" --output-dir "$target"; then
+                echo "ARTIFACT_PULL_FAILED image=$image" | tee -a "$GITHUB_STEP_SUMMARY"
+                failures=1
+                continue
+              fi
+              python - "$target" "$out_root" "$grade" "$medium" <<'PY'
+          import hashlib, json, sys, zipfile
+          from pathlib import Path
+          source = Path(sys.argv[1])
+          out = Path(sys.argv[2])
+          grade = int(sys.argv[3])
+          medium = sys.argv[4]
+          index = json.loads((source / "index.json").read_text(encoding="utf-8"))
+          items = index.get("books", [])
+          statuses = index.get("download_status", {})
+          archive_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.zip"
+          included = []
+          absent = []
+          partial = []
+          incomplete_entries = []
+          valid_files = {}
+          def sha256_file(path):
+              digest = hashlib.sha256()
+              with path.open("rb") as handle:
+                  for block in iter(lambda: handle.read(1024 * 1024), b""):
+                      digest.update(block)
+              return digest.hexdigest()
+          export_index = json.loads(json.dumps(index))
+          export_items = export_index.get("books", [])
+          exported_item_by_id = {str(item.get("book_id", "")): item for item in export_items}
+          for item in items:
+              coverage = item.get("content_availability") or {}
+              coverage_status = str(coverage.get("status", "complete")).casefold()
+              method_partial = "partial" in str(item.get("download_method", "")).casefold()
+              is_partial = coverage_status == "partial" or method_partial
+              row = None
+              if coverage_status == "unavailable":
+                  row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "unavailable",
+                      "available_chapters": coverage.get("available_chapters", []),
+                      "missing_chapters": coverage.get("missing_chapters", []),
+                      "note": coverage.get("note") or "No usable PDF was available from official sources.",
+                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                  }
+                  incomplete_entries.append(row)
+                  continue
+              if is_partial:
+                  row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "partial",
+                      "available_chapters": coverage.get("available_chapters", []),
+                      "missing_chapters": coverage.get("missing_chapters", []),
+                      "note": coverage.get("note") or "PARTIAL PDF; review missing chapters before use.",
+                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                  }
+                  incomplete_entries.append(row)
+                  partial.append(row)
+              relative = Path(str(item.get("file", "")))
+              pdf = source / relative
+              expected_hash = str(item.get("sha256", "")).lower()
+              if (relative.is_absolute() or not relative.parts or ".." in relative.parts
+                      or not pdf.is_file() or len(expected_hash) != 64 or sha256_file(pdf) != expected_hash):
+                  missing_row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "file_missing_or_checksum_mismatch",
+                      "error": f"Indexed PDF is missing, unsafe, or failed SHA-256 verification: {relative}",
+                      "content_availability": coverage,
+                  }
+                  absent.append(missing_row)
+                  if row is not None:
+                      row["pdf_included"] = False
+                      row["pdf_error"] = missing_row["error"]
+              else:
+                  valid_files[str(item.get("book_id", ""))] = (pdf, relative, "partial" if is_partial else "complete")
+                  if row is not None:
+                      row["pdf_included"] = True
+                      row["download_path"] = "partial-books/" + str(item.get("book_id")) + ".pdf"
+                      exported_item_by_id[str(item.get("book_id", ""))]["file"] = row["download_path"]
+          unavailable = []
+          for book_id, status in statuses.items():
+              if not isinstance(status, dict):
+                  continue
+              state = str(status.get("status", ""))
+              coverage = status.get("content_availability") or {}
+              if state in ("failed", "retry_pending", "downloaded_pending_push") or coverage.get("status") == "unavailable":
+                  unavailable.append({
+                      "book_id": book_id, "title": status.get("title", book_id),
+                      "status": state or "unavailable", "last_error": status.get("last_error"),
+                      "content_availability": coverage, "source_url": status.get("source_url"),
+                  })
+          report = {
+              "schema_version": 1,
+              "image": index.get("registry", f"quantaedge-textbooks-class-{grade}-{medium}"),
+              "class": grade, "medium": medium, "registry_book_count": len(items),
+              "complete_books": sum(1 for _pdf, _relative, status in valid_files.values() if status == "complete"),
+              "partial_books": partial, "incomplete_book_entries_reported": incomplete_entries,
+              "unavailable_books": unavailable,
+              "indexed_files_missing_from_export": absent, "download_status": statuses,
+              "note": "ZIP includes verified complete textbooks and separately stored partial PDFs under partial-books/. Every partial book lists missing chapter numbers here and remains excluded from the complete student textbook catalogue.",
+          }
+          report_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.availability.json"
+          report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
+              archive.writestr("index.json", json.dumps(export_index, ensure_ascii=False, indent=2) + "\n")
+              archive.writestr("availability-report.json", json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+              for item in items:
+                  book_id = str(item.get("book_id", ""))
+                  if book_id not in valid_files:
+                      continue
+                  pdf, relative, status = valid_files[book_id]
+                  archive_path_in_zip = ("partial-books/" + book_id + ".pdf") if status == "partial" else relative.as_posix()
+                  archive.write(pdf, archive_path_in_zip)
+                  included.append(book_id)
+          complete_included = sum(1 for _pdf, _relative, status in valid_files.values() if status == "complete")
+          partial_included = sum(1 for _pdf, _relative, status in valid_files.values() if status == "partial")
+          print(f"DOWNLOAD_BUNDLE {archive_path.name} index_entries={len(items)} complete_pdfs_included={complete_included} partial_pdfs_included={partial_included} incomplete_entries_reported={len(incomplete_entries)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
+          print(f"AVAILABILITY_REPORT {report_path.name}")
+          PY
+            done
+          done
+          if [ "$failures" -ne 0 ]; then exit 1; fi
+
+      - name: Upload Class 6 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-6-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 6 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-6-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 7 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-7-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 7 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-7-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 8 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-8-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 8 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-8-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 9 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-9-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 9 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-9-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 10 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-10-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 10 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-10-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 11 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-11-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 11 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-11-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 12 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-12-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 12 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-12-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+\t' read -r grade medium code title; do
+              [ -n "$code" ] || continue
+              echo "::group::Repair Class $grade $medium — $title ($code)"
+              target_args=(python scripts/textbook_registry.py publish --class-wise --language "$medium" --class-no "$grade" --book-code "$code" --download-workers 1 --push-batch-size 1 --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
+              output_file="$RUNNER_TEMP/repair-class-$grade-$medium-$code.log"
+              set +e
+              "${target_args[@]}" 2>&1 | tee "$output_file"
+              command_status=${PIPESTATUS[0]}
+              set -e
+              if [ "$command_status" -ne 0 ] || ! grep -Fq '"content_incomplete": false' "$output_file"; then
+                echo "REPAIR_NOT_VERIFIED class=$grade medium=$medium code=$code; inspect the report above."
+                failures=1
+              else
+                echo "REPAIR_VERIFIED_AND_PUSHED class=$grade medium=$medium code=$code"
+              fi
+              echo "::endgroup::"
+            done < <(jq -r '.books[] | [.class_no, .language, .book_code, .title] | @tsv' "$repair_queue")
+            if [ "$failures" -ne 0 ]; then
+              echo "At least one requested textbook remains unresolved. Any books that passed validation were pushed individually to GHCR."
+              exit 1
+            fi
+            echo "All requested missing books were verified and pushed to their existing GHCR images."
+            exit 0
+          fi
+          echo "repair_only=false" >> "$GITHUB_OUTPUT"
+          args=(python scripts/textbook_registry.py publish --class-wise --language "$language" --download-workers "$workers" --push-batch-size "$batch_size" --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
           if [ "$class_no" != "0" ] && [ -n "$class_no" ]; then args+=(--class-no "$class_no"); fi
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "${INPUT_BOOK_CODE}" ]; then args+=(--book-code "$INPUT_BOOK_CODE"); fi
+          if [ -n "${INPUT_BOOK_CODE}" ]; then args+=(--book-code "$INPUT_BOOK_CODE"); fi
           if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_MAX_BOOKS" ] && [ "$INPUT_MAX_BOOKS" != "0" ]; then args+=(--max-books "$INPUT_MAX_BOOKS"); fi
           if [ "$INPUT_REFRESH" = "true" ]; then args+=(--refresh); fi
           "${args[@]}"

@@ -590,11 +590,17 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                     raise ValueError("The official NCERT whole-book bundle failed its declared-medium text check. "
                                      + language_problem)
                 detected_edition = detect_printed_edition(sampled_text)
-                if not detected_edition:
-                    raise ValueError(
-                        "Could not verify a dated printed edition/reprint imprint in the first pages of the PDF."
+                if detected_edition:
+                    book["edition"] = detected_edition
+                    book["edition_status"] = "VERIFIED_FROM_PDF_TEXT"
+                else:
+                    # A whole book from the official NCERT domain can be complete even when
+                    # its printed imprint is not present in extractable PDF text. Cache it
+                    # transparently for recovery, but keep downstream approval review-gated.
+                    book["edition"] = (
+                        "UNVERIFIED: official NCERT bundle; dated imprint not detected automatically"
                     )
-                book["edition"] = detected_edition
+                    book["edition_status"] = "REVIEW_REQUIRED"
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(merged_path, destination)
                 digest = sha256_file(destination)
@@ -609,8 +615,17 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                     "expected_pdf_count": expected_count,
                     "source_urls": [bundle_url],
                     "source_errors": source_errors[-6:],
+                    "edition_review_required": not bool(detected_edition),
                     "checked_at": now(),
-                    "note": "Every expected chapter was read and validated from one complete official NCERT book bundle. No standalone chapter URL fallback was used.",
+                    "note": (
+                        "Every expected chapter was read and validated from one complete official NCERT book bundle. "
+                        "No standalone chapter URL fallback was used."
+                        + (
+                            " A dated printed imprint was not detected automatically; keep this book blocked from "
+                            "approval until a reviewer verifies the edition."
+                            if not detected_edition else ""
+                        )
+                    ),
                 }
                 return digest, page_count, toc, "Complete NCERT whole-book bundle; all expected chapters validated"
             except Exception as exc:
@@ -1067,7 +1082,17 @@ def _is_complete_whole_book_entry(entry: dict[str, Any] | None) -> bool:
     if "partial" in str(entry.get("download_method", "")).casefold():
         return False
     if is_placeholder_edition(entry.get("edition")):
-        return False
+        # Complete NCERT books with a missing machine-readable imprint may be retained
+        # in GHCR for source recovery, but must carry the explicit review marker. The
+        # placeholder edition remains a hard stop in the downstream approval/import flow.
+        coverage_review = (
+            str(entry.get("source_type", "")).casefold() == "ncert"
+            and str(entry.get("publisher", "")).casefold() == "ncert"
+            and str(entry.get("edition_status", "")).casefold() == "review_required"
+            and coverage.get("edition_review_required") is True
+        )
+        if not coverage_review:
+            return False
     source_url = entry.get("source_url") or entry.get("catalog_entry_url") or entry.get("pdf_url") or entry.get("bundle_url")
     if not host_allowed(str(source_url or "")):
         return False

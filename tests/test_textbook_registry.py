@@ -432,7 +432,7 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(1, len(requested))
         self.assertTrue(requested[0].endswith("fegp1dd.zip"))
 
-    def test_ncert_whole_book_without_printed_edition_is_rejected(self):
+    def test_ncert_whole_book_without_extractable_printed_edition_is_cached_for_review(self):
         import io
         import zipfile
         import fitz
@@ -455,18 +455,24 @@ class TextbookRegistryTests(unittest.TestCase):
 
         book = {
             "book_id": "ncert-c6-english-fegp1", "code": "fegp1", "chapter_count": 1,
-            "title": "Example textbook", "medium": "english",
+            "title": "Example textbook", "medium": "english", "publisher": "NCERT",
+            "source_type": "NCERT",
             "bundle_url": "https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
+            "source_url": "https://ncert.nic.in/textbook.php?fegp1=0-1",
         }
         with tempfile.TemporaryDirectory() as temp, patch(
             "scripts.textbook_registry.get_url", side_effect=fake_get_url
         ):
             destination = Path(temp) / "unverified-edition.pdf"
-            with self.assertRaisesRegex(RuntimeError, "complete official NCERT whole-book bundle"):
-                download_ncert_merged(book, destination)
-            self.assertFalse(destination.exists())
+            digest, pages, toc, method = download_ncert_merged(book, destination)
+            self.assertTrue(destination.is_file())
+            self.assertTrue(digest)
+            self.assertEqual("REVIEW_REQUIRED", book["edition_status"])
+            self.assertEqual("complete", book["content_availability"]["status"])
+            self.assertTrue(book["content_availability"]["edition_review_required"])
+            self.assertIn("edition", book["content_availability"]["note"].lower())
+            self.assertTrue(_is_complete_whole_book_entry(book))
         self.assertTrue(all(url.endswith(".zip") for url in requested))
-        self.assertEqual("unavailable", book["content_availability"]["status"])
 
     def test_incomplete_ncert_bundle_fails_closed_without_individual_chapter_downloads(self):
         import io
@@ -570,6 +576,28 @@ class TextbookRegistryTests(unittest.TestCase):
         for entry in invalid_cases:
             with self.subTest(entry=entry):
                 self.assertFalse(_is_complete_whole_book_entry(entry))
+
+        review_required_ncert = dict(
+            valid,
+            publisher="NCERT",
+            source_type="NCERT",
+            edition="UNVERIFIED: official NCERT bundle; dated imprint not detected automatically",
+            edition_status="REVIEW_REQUIRED",
+            source_url="https://ncert.nic.in/textbook.php?fegp1=0-1",
+            bundle_url="https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
+            content_availability={
+                "status": "complete",
+                "expected_chapters": [1],
+                "available_chapters": [1],
+                "missing_chapters": [],
+                "edition_review_required": True,
+            },
+        )
+        self.assertTrue(_is_complete_whole_book_entry(review_required_ncert))
+        unmarked_review = dict(review_required_ncert)
+        unmarked_review["content_availability"] = dict(review_required_ncert["content_availability"])
+        unmarked_review["content_availability"]["edition_review_required"] = False
+        self.assertFalse(_is_complete_whole_book_entry(unmarked_review))
 
     def test_legacy_partial_book_is_removed_and_never_republished(self):
         book = self.make_registry_book("partial-existing")
