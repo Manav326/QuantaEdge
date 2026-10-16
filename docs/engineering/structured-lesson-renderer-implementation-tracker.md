@@ -189,3 +189,29 @@ A task can be marked complete only when the relevant code is committed and the e
 5. **SL-25–SL-28:** shared tests, parity, accessibility and performance; then mark tasks done from evidence.
 
 **Do not start with styling alone.** First connect the structured schema to the actual runtime, then implement each component against its declared contract. This avoids polished controls that cannot save, grade, localize or preserve a learner's answer.
+
+## 5. Active resume checkpoint — 2026-10-16
+
+**Status: in progress; no SL task is marked complete by this checkpoint.**
+
+- Verified `main` baseline: `54474d101b842dae89b1b2b6f1ca12c534871975`; its latest CI run succeeded. This does not validate staged UI source.
+- The existing Web renderer/Admin preview files remain in staged tree objects, not on `main`.
+- Added the additive native Compose renderer `apps/android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt`, blob `d82693d5793a9c4f56c46fc5305823dd99bb22d8`.
+- The renderer covers bilingual lesson metadata, rich text/recap, structured diagram data, canonical question controls, stable-ID response payloads, activity callbacks, and fail-closed visual/publication gates. It deliberately does not expose answer keys or claim persistence/grading success.
+- **Not yet wired or build-tested.** The existing API lesson DTO returns legacy `blocks` and database-backed `questions`. The current answer endpoint accepts numeric database question IDs and evaluates stored database answer payloads; structured artifact IDs cannot be passed through unchanged. Preserve `strip_answer_keys(...)` in the public lesson path.
+- Next: design and implement a backward-compatible server-side structured artifact adapter and response persistence contract with publication/visual checks and answer-key isolation. Only then wire the renderer into the student route and verify web/admin/Android builds and regression tests.
+- All UI tasks remain unchecked until acceptance evidence is available. No commit or branch-ref move was made for this staged checkpoint.
+
+## 6. Staged code review — 2026-10-16
+
+A focused review of the staged Web/Admin/Android source found and fixed these UI issues before CI:
+- Activity blocks no longer claim a response was saved when the screen has no persistence callback. The save control is disabled and the missing adapter is shown clearly.
+- Structured diagram edges now show localized endpoint labels from the node IDs instead of displaying raw IDs or inventing arrows between sequential nodes.
+- Web/Admin accept both explicit diagram review states already accepted by the delivery helper: `APPROVED` and `APPROVED_FOR_STUDENT_RENDERING`.
+- Android structured lesson rendering now requires both workflow status `PUBLISHED` and `publication_allowed=true`; learner-mode data containing author-only answer keys is blocked.
+- Android image-observation questions resolve `visual_asset_ref` against lesson blocks, require the approval gate, render the associated image/diagram, use the declared option-based control, and serialize the selected stable option ID.
+- Android question submission is disabled until the response is complete; activity instruction/step data supports string and structured localized shapes.
+
+**Still not complete:** no structured artifact API adapter or answer persistence/grading endpoint has been added; Android renderer is not wired to an API payload; Web learner submit adapter is absent. These staged components intentionally fail closed rather than using the legacy database question IDs incorrectly.
+
+**Do not mark tasks SL-01–SL-28 complete yet.** No local build could be run in this session; the next verification is the existing GitHub Actions build matrix after the staged UI changes are committed on `main`.

@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
+import StructuredLessonExperience from '../structured-lessons/StructuredLessonExperience';
+import type { StructuredLesson } from '../structured-lessons/contract';
 
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number; class_code:string;
@@ -46,6 +48,7 @@ type Detail = Lesson & {
   lesson_translated?:boolean; chapter_translated?:boolean; subject_translated?:boolean;
   class_translated?:boolean; objective_translated?:boolean;
   translation_gaps?:string[];
+  structured_lesson?:StructuredLesson;
   translation_coverage?:{blocks_total:number;blocks_published:number;questions_total:number;questions_published:number;class?:boolean;lesson?:boolean;chapter?:boolean;subject?:boolean;objective?:boolean};
 };
 
@@ -677,6 +680,19 @@ export default function LearnClient() {
     </section>
   </main>;
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow"><LocaleText hinglish="Lesson load हो रहा है…" english="Loading lesson…" /></div></section></main>;
+
+  // Additive adapter: current database lessons continue through the legacy path below.
+  // The API may embed a server-sanitized, explicitly published structured artifact when that delivery path is enabled.
+  if(lesson.structured_lesson) return <main className="lesson-page qe-structured-student-page">
+    <section className="lesson-wrap">
+      <div className="lesson-meta">
+        <span className="eyebrow">{tx('संरचित पाठ','Structured lesson')} · {lesson.chapter_name}</span>
+        <span>{lesson.class_code} · {lesson.subject_name}</span>
+      </div>
+      <StructuredLessonExperience lesson={lesson.structured_lesson} locale={learningLanguage} mode="student" />
+      <div className="lesson-next"><Link href="/student" className="button button-dark button-small"><LocaleText hinglish="Student home →" english="Student home →" /></Link></div>
+    </section>
+  </main>;
 
   return <main className="lesson-page">
     <section className="lesson-wrap">
