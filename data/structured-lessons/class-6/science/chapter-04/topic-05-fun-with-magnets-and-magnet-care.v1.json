@@ -751,18 +751,13 @@
         "answer_guide_by_locale": {
           "en": {
             "key_points": [
-              [
-                "Do not heat, drop or hammer magnets.",
-                "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
-              ]
+              "Do not heat, drop or hammer magnets."
             ],
             "sample_answer": "Do not heat, drop or hammer magnets. Store bar magnets in pairs with unlike poles on the same side, wood between and soft-iron pieces across the ends."
           },
           "hi": {
             "key_points": [
-              [
-                "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
-              ]
+              "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
             ],
             "sample_answer": "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें। छड़ चुंबकों को जोड़े में रखें, विपरीत ध्रुव एक ओर हों, बीच में लकड़ी और सिरों पर नरम लोहे के टुकड़े हों।"
           }
