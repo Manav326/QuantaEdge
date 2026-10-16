@@ -400,10 +400,15 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
                 if path.stem.rsplit("-",1)[-1]==digest[:12]: valid.append((path,digest))
         if len(valid)!=1: continue
         path,display_sha=valid[0]
+        occurrence_ids=sorted({str(occ.get("asset_id")) for occ in (row.get("occurrences") or [])
+            if isinstance(occ,dict) and occ.get("source_pdf_page_number")==page
+            and isinstance(occ.get("asset_id"),str) and occ.get("asset_id")})
+        if not occurrence_ids:
+            continue
         by_page.setdefault(page,[]).append({
             "candidate_id":cid,"candidate_kind":"embedded_image","source_book_id":source["book_id"],
             "source_pdf_sha256":source["source_pdf_sha256"],"source_pdf_page_number":page,
-            "source_asset_sha256":source_asset_sha,"display_sha256":display_sha,
+            "source_asset_sha256":source_asset_sha,"source_inventory_asset_ids":occurrence_ids,"display_sha256":display_sha,
             "url":"https://raw.githubusercontent.com/Manav326/QuantaEdge/main/"+path.relative_to(repo).as_posix(),
             "heuristic_score":float(row.get("heuristic_score") or 0),
         })
@@ -447,6 +452,39 @@ RENDERER_IDS = {
  "scenario_based":"qtype-scenario-based.v1",
 }
 
+def bind_layer5_evidence_to_visual_candidates(visuals_by_segment: dict[str,list[dict[str,Any]]],
+                                                   layer5_by_page: dict[int,list[dict[str,Any]]]) -> dict[str,list[dict[str,Any]]]:
+    """Attach only Layer 5 analyses proven to describe the exact underlying V3 image bytes."""
+    for segment_id,rows in visuals_by_segment.items():
+        for candidate in rows:
+            page=candidate.get("source_pdf_page_number")
+            candidate_hash=str(candidate.get("source_asset_sha256") or "").lower()
+            ids=candidate.get("source_inventory_asset_ids")
+            if not isinstance(page,int) or isinstance(page,bool) or not isinstance(ids,list) or not ids:
+                raise ValueError(f"{segment_id}/{candidate.get('candidate_id')}: V3 candidate lacks a source inventory occurrence crosswalk.")
+            expected_ids=set(ids)
+            matches=[row for row in layer5_by_page.get(page,[])
+                if row.get("asset_id") in expected_ids
+                and row.get("source_pdf_sha256")==candidate.get("source_pdf_sha256")
+                and str(row.get("source_asset_sha256") or "").lower()==candidate_hash]
+            matched_ids=sorted({row["asset_id"] for row in matches})
+            if matched_ids!=sorted(expected_ids):
+                raise ValueError(f"{segment_id}/{candidate.get('candidate_id')}: Layer 5 analysis IDs/hash do not reconcile with the V3 candidate's exact source-image occurrences.")
+            candidate["layer5_analysis_asset_ids"]=matched_ids
+            candidate["layer5_analysis"]=[{
+                "asset_id":row["asset_id"],"source_pdf_page_number":row["source_pdf_page_number"],
+                "source_asset_sha256":row["source_asset_sha256"],"visual_type":row.get("visual_type"),
+                "visual_summary":str(row.get("visual_summary") or "")[:180],
+                "visible_text":[str(value)[:80] for value in row.get("visible_text",[])[:5] if isinstance(value,str)],
+                "concepts":[str(value)[:80] for value in row.get("concepts",[])[:5] if isinstance(value,str)],
+                "context_relation":str(row.get("context_relation") or "")[:160],
+                "limitations":[str(value)[:100] for value in row.get("limitations",[])[:3] if isinstance(value,str)],
+                "correction_status":row.get("correction_status","NONE"),
+                "human_review_required":True,"publication_allowed":False
+            } for row in matches]
+    return visuals_by_segment
+
+
 def prompt_for(source: dict[str,Any], segment: dict[str,Any], visuals: list[dict[str,Any]]|None=None,
                layer5_visual_evidence: list[dict[str,Any]]|None=None) -> str:
     context="\n\n".join(f"Original PDF page {p['page']} (fragment {p['part']}):\n{p['text'] if p['text'].strip() else '[No extractable text]'}" for p in segment["pieces"])
@@ -454,13 +492,17 @@ def prompt_for(source: dict[str,Any], segment: dict[str,Any], visuals: list[dict
     visual_rows=visuals or []
     layer5_text=json.dumps(prompt_evidence_summary(layer5_visual_evidence or []),ensure_ascii=False,separators=(",",":"))
     visual_choices=[
-        {"visual_candidate_id":x["candidate_id"],"source_pdf_page_number":x["source_pdf_page_number"]}
+        {"visual_candidate_id":x["candidate_id"],"source_pdf_page_number":x["source_pdf_page_number"],
+         "source_asset_sha256":x.get("source_asset_sha256"),
+         "source_inventory_asset_ids":x.get("source_inventory_asset_ids",[]),
+         "matching_layer5_analysis_asset_ids":x.get("layer5_analysis_asset_ids",[]),
+         "same_asset_layer5_analysis":x.get("layer5_analysis",[])}
         for x in visual_rows if isinstance(x,dict) and x.get("candidate_id")
     ]
     visual_text=json.dumps(visual_choices,ensure_ascii=False)
     return f"""Create one compact, review-only bilingual NCERT learning unit grounded only in this excerpt. Use original wording; never copy textbook text or exercise questions. Never guess facts, chapter identity, page numbers or visual contents.
 Layer 5 same-PDF visual-analysis evidence (unapproved machine observations, for curriculum-mapping hints only): {layer5_text}
-Layer 5 summaries/concepts/visible text are hypotheses, not verified facts. Cross-check them against the supplied source text, retain uncertainty and limitations, and do not use Layer 5 asset IDs as visual question IDs. Visual questions may cite only the separately allow-listed V3 candidate IDs above; those candidates remain blocked until human approval.
+Layer 5 summaries/concepts/visible text are hypotheses, not verified facts. Cross-check them against the supplied source text and retain uncertainty and limitations. For a visual question, use only the exact V3 candidate's same-asset Layer 5 analysis listed with it; both its candidate ID and source inventory asset IDs must remain traceable. Never substitute a different asset's analysis. Layer 5 asset IDs are provenance references, not visual question IDs. Visual questions may cite only the separately allow-listed V3 candidate IDs above; those candidates remain blocked until human approval.
 There is NO question-type quota. The structured types below are a supported catalogue, not a checklist. Generate only questions that the source context and learning objectives justify; do not rotate through types, do not pad the output, and do not omit a core assessable idea just to keep the set short. Return 1 to 6 distinct, useful questions; fewer high-quality questions are better than redundant questions.
 Supported types and purpose:
 - multiple_choice: one best choice for an important concept or misconception;
@@ -694,6 +736,8 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
         asset={"asset_id":visual["candidate_id"],"candidate_id":visual["candidate_id"],"url":visual["url"],
           "source_book_id":source["book_id"],"source_pdf_sha256":source["source_pdf_sha256"],
           "source_pdf_page_number":page,"source_asset_sha256":visual["source_asset_sha256"],
+          "source_inventory_asset_ids":visual.get("source_inventory_asset_ids",[]),
+          "layer5_analysis_asset_ids":visual.get("layer5_analysis_asset_ids",[]),
           "display_sha256":visual["display_sha256"],"review_status":"CANDIDATE_NEEDS_HUMAN_REVIEW",
           "rights_status":"SOURCE_REFERENCE_ONLY","publication_allowed":False,"student_renderable":False,
           "human_review_required":True,"alt_by_locale":alt,"caption_by_locale":caption}
@@ -1034,6 +1078,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     report=benchmark_report(repo,args.benchmark_report,args.model)
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
+    visuals_by_segment=bind_layer5_evidence_to_visual_candidates(visuals_by_segment,layer5_by_page)
     source["visual_candidate_fingerprint"]=visual_fingerprint
     fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,
       "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
@@ -1138,6 +1183,7 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
     if sorted(source_report.get("sample_source_pages") or [])!=pages:
         raise ValueError("Benchmark source page set changed; rerun inference.")
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,selected)
+    visuals_by_segment=bind_layer5_evidence_to_visual_candidates(visuals_by_segment,layer5_by_page)
     prior_contract=report.get("lesson_contract_version")
     if report.get("visual_candidate_fingerprint")!=visual_fingerprint:
         raise ValueError("Visual candidate pack changed since benchmark inference; rerun the benchmark.")
@@ -1227,7 +1273,8 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     usable=[segment for segment in segments if any(piece["text"].strip() for piece in segment["pieces"])]
     if not usable: raise ValueError("NCERT benchmark source has no extractable text segments.")
     indices=sorted(set((0,len(usable)//2,len(usable)-1)))[:args.sample_segments]
-    samplesegs=[usable[i] for i in indices]; visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,samplesegs); results=[]
+    samplesegs=[usable[i] for i in indices]; visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,samplesegs)
+    visuals_by_segment=bind_layer5_evidence_to_visual_candidates(visuals_by_segment,layer5_by_page); results=[]
     models=[x.strip() for x in args.models.split(",") if x.strip()]
     if not models or len(models)>4 or len(set(models))!=len(models): raise ValueError("Provide 1–4 unique benchmark models.")
     for model in models:
