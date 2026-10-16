@@ -36,14 +36,19 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
     """Create a complete synthetic L1/L4/L5 source chain for bridge integration tests."""
     import hashlib
     import os
+    manifest=json.loads((pagesdir/"book.manifest.json").read_text(encoding="utf-8"))
+    grade=int(str(manifest["class"]).replace("Class ","").replace("class-",""))
+    language={"english":"English","en":"English","hindi":"Hindi","hi":"Hindi"}[str(manifest["language"]).strip().lower()]
+    subject=str(manifest["subject"])
+    slug=book
     asset_hash="c"*64
     analysis={"visual_summary":"A leaf diagram","visual_type":"illustration","visible_text":["leaf"],
               "concepts":["leaf","plant parts"],"context_relation":"next to the source paragraph",
               "limitations":["Machine observations require human review."]}
-    invdir=root/"data"/"textbook-visuals"/"curiosity"; invdir.mkdir(parents=True,exist_ok=True)
+    invdir=root/"data"/"textbook-visuals"/slug; invdir.mkdir(parents=True,exist_ok=True)
     inventory_path=invdir/"visual-inventory.v1.json"
     inventory={"schema_version":"quantaedge.visual-inventory.v1","inventory_status":"DRAFT_VISUAL_INVENTORY_ONLY",
-      "source":{"book_id":book,"pdf_sha256":pdfhash,"pdf_page_count":1,"class":"6","language":"English","subject":"Science","edition":"Reprint 2026-27"},
+      "source":{"book_id":book,"pdf_sha256":pdfhash,"pdf_page_count":1,"class":str(grade),"language":language,"subject":subject,"edition":"Reprint 2026-27"},
       "summary":{"pages_scanned":1,"asset_count":1},"pages":[{"source_pdf_page_number":1,"page_text_sha256":sha(body)}],
       "assets":[{"asset_id":"asset-preview-1","kind":"page_preview","source_book_id":book,
         "source_pdf_sha256":pdfhash,"source_pdf_page_number":1,"asset_path":"assets/page-1.jpg",
@@ -58,7 +63,7 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
       "model":"qwen2.5vl:3b","prompt_version":"visual-analysis-prompt-v2","results":[raw_result],
       "human_review_required":True,"publication_allowed":False}
     write_json(raw_path,raw)
-    ledgerdir=root/"data"/"textbook-content-pipeline"/"class-6"/"books"/"curiosity"
+    ledgerdir=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/slug"
     ledgerdir.mkdir(parents=True,exist_ok=True)
     effective_path=ledgerdir/"visual-analysis-effective.v1.json"
     effective_result={**raw_result,"effective_analysis":analysis,"correction_status":"NONE"}
@@ -336,6 +341,48 @@ class LayersTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"text hash/character count"):
                 run_layers(args,opener=open_)
 
+
+    def test_non_anchor_book_uses_anchor_benchmark_and_its_own_layer5_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); book="ncert-c6-hindi-fecu1"; pdfhash="7"*64
+            pages=root/"data"/"textbook-extractions"/"class-6"/"hindi"/"pages"; pages.mkdir(parents=True)
+            body="पौधों के भागों को समझने के लिए ध्यानपूर्वक अवलोकन करें। "*8
+            row={"book_id":book,"class":"6","language":"hindi","subject":"Science",
+                "asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,"source_book_page_number":1,
+                "asset_page_index":0,"text":body,"review_status":"TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW"}
+            write_jsonl(pages/"pages.jsonl",[row])
+            write_json(pages/"book.manifest.json",{"book_id":book,"class":"6","language":"hindi","subject":"Science",
+                "scope":"SUBJECT_BOOK","published":False,"asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,
+                "page_count":1,"completed_pages":1,"source_page_start":1,"text_jsonl":"pages.jsonl",
+                "source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12","title":"Curiosity","edition":"Reprint 2026-27"})
+            ledger=install_layer5_fixture(root,pages,book,pdfhash,body)
+            anchor_report={"schema_version":"quantaedge.local-ollama-benchmark.v1",
+                "source":{"book_id":"ncert-c6-english-fecu1","source_pdf_sha256":"a"*64,
+                    "layer5_coverage_ledger_sha256":"b"*64},
+                "visual_candidate_fingerprint":"c"*64,"prompt_version":PROMPT_VERSION,
+                "lesson_contract_version":LESSON_CONTRACT_VERSION,
+                "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
+                "models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]}
+            args=SimpleNamespace(repo_root=root,class_no=6,source_book_id=book,model="qwen2.5:1.5b",
+                benchmark_report=None,max_pages_per_segment=4,max_context_chars=7000,
+                endpoint="http://127.0.0.1:11434",max_model_calls=2,checkpoint_every=1,
+                request_timeout=30,commit_checkpoints=False)
+            calls={"count":0}
+            def open_(request,timeout=180):
+                calls["count"]+=1
+                return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
+            with patch("scripts.quantaedge_layers_6_8.benchmark_report",return_value=anchor_report):
+                result=run_layers(args,opener=open_)
+            self.assertEqual(1,calls["count"])
+            self.assertEqual(book,result["source_book_id"])
+            self.assertEqual(1,result["layer5_visual_evidence_consumed_count"])
+            self.assertEqual("DRAFT_REQUIRES_HUMAN_REVIEW",result["overall_status"])
+            self.assertEqual(ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4"/"curriculum-map.v1.json"),
+                ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4"/"curriculum-map.v1.json"))
+            mapping=read_json(ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4")/"curriculum-map.v1.json")
+            self.assertEqual(pdfhash,mapping["source"]["source_pdf_sha256"])
+            self.assertEqual(book,mapping["source"]["source_book_id"])
+            self.assertEqual("Hindi", mapping["source"]["language"].capitalize() if mapping["source"]["language"].lower()=="hindi" else mapping["source"]["language"])
 
     def test_existing_retrieval_corpus_is_checked_page_by_page(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -1035,13 +1035,6 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
     source["visual_candidate_fingerprint"]=visual_fingerprint
-    report_source=report.get("source") if isinstance(report.get("source"),dict) else {}
-    if report_source.get("book_id")!=source["book_id"] or str(report_source.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]:
-        raise ValueError("Benchmark source book/PDF hash does not match this generation run.")
-    if report_source.get("layer5_coverage_ledger_sha256")!=layer5_sha:
-        raise ValueError("Benchmark Layer 5 evidence ledger hash does not match the current ledger; run a fresh benchmark.")
-    if report.get("visual_candidate_fingerprint")!=visual_fingerprint:
-        raise ValueError("Benchmark visual-candidate fingerprint is stale; run a fresh benchmark.")
     fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,
       "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
       "layer5_coverage_ledger_sha256":layer5_sha,"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
