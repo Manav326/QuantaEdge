@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 300,
-    "successful_visual_analyses": 290,
-    "missing_visual_analyses": 7188,
+    "raw_analysis_result_rows": 325,
+    "successful_visual_analyses": 315,
+    "missing_visual_analyses": 7163,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7198,
+    "unresolved_count": 7173,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21017,9 +21017,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The text discusses the nature of science and its approach to learning and understanding the world.",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21035,9 +21057,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "ask deeper questions",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The image is a full page with no visible text or images.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21053,9 +21098,43 @@
       "asset_path": "page-0022.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+        ],
+        "concepts": [
+          "science",
+          "exploration",
+          "curiosity",
+          "questions",
+          "unknown",
+          "process",
+          "environment",
+          "society",
+          "human activities",
+          "environmental challenges",
+          "sustainability",
+          "properties of materials",
+          "discovery",
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
+        ],
+        "context_relation": "exploration and understanding of natural phenomena",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21071,9 +21150,16 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple diagram of a paper airplane flying through the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of flight or aerodynamics.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21089,9 +21175,16 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21107,9 +21200,16 @@
       "asset_path": "assets/c16d237029e049cee3379504c30be14b82a93a53cd83c81a869a3bb9e07cfb65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue sky with a building in the foreground.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21125,9 +21225,18 @@
       "asset_path": "assets/03b34baa2674c668ae72824a0d20218a20937e864c8f65f6ad063283275a94ff.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly in a mountainous or hilly area.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context related to the educational content.",
+        "limitations": [
+          "The image is not clear and may be difficult to interpret without additional context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21143,9 +21252,31 @@
       "asset_path": "assets/203c90e1b0f917c6a7b9e9c604ee3e3b24f246a9a458a3b5a48e35db3770f6ee.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires, likely exploring the properties of materials.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific materials or their properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21161,9 +21292,27 @@
       "asset_path": "assets/9b3a41cb1a45edaa135160be51c22ec3c210681a12339bccbeccab8d812694a3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "batteries",
+          "lamps",
+          "wires",
+          "materials",
+          "properties",
+          "classification"
+        ],
+        "context_relation": "The image shows a practical experiment related to the text about classifying materials based on their properties.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21179,9 +21328,20 @@
       "asset_path": "assets/f115bfebeb89d25df4dc81956c69303e6c42889fd3aa3f498d709665a06e53c9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in a room, possibly in a classroom or auditorium, with some individuals holding objects that could be batteries, lamps, or wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where students or participants are engaged in an activity involving batteries, lamps, and wires, possibly as part of a science experiment or demonstration.",
+        "limitations": [
+          "The image is blurry and the details are not clearly visible.",
+          "The text in the image is not fully legible, making it difficult to determine the exact nature of the objects being held.",
+          "The context is incomplete, as the visible text does not provide additional information about the activity or the setting."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21197,9 +21357,18 @@
       "asset_path": "assets/a0b313bb199e9d662f302b73d51e9e6a1f6fa14b19d933ad35306f6157525dec.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with small leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not clear enough to identify the specific type of plant or its properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21215,9 +21384,31 @@
       "asset_path": "assets/f0f203ae7b3a23704ceffb6f5680d8ef332ca3d8970291771ff501f6af34a904.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A classroom setting with students sitting in rows, facing the front of the room, possibly during a science lesson.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "Science",
+          "Materials",
+          "Properties",
+          "Classification"
+        ],
+        "context_relation": "The image is related to the educational content of a science lesson focusing on the properties of materials and their classification.",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact setup of the classroom."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21233,9 +21424,31 @@
       "asset_path": "assets/6006147b5bba825e42be4c17070d933eb47a7f7fb7509d493464182effc2a4c7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students in a classroom setting, possibly engaged in an experiment or activity involving batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the students' actions or the experiment in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21251,9 +21464,18 @@
       "asset_path": "assets/52069d76c7e571b0328082b7e76a0f01c154002683d32b940435c6d89440de17.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of children playing with electric batteries, lamps, and wires in a grassy outdoor setting.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows children engaged in an educational activity involving electricity and materials, likely related to the topic of classifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the properties being classified."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21269,9 +21491,31 @@
       "asset_path": "assets/7058c255d017b04c49fea7fda69260f32e6898ff5d0f0f74e55e90326c32aa8f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is slightly blurred and not entirely clear."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21287,9 +21531,32 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification of materials",
+          "electricity",
+          "properties of lamps"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The text is a narrative and does not provide visual aids."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21305,9 +21572,32 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "lamp",
+          "properties of materials"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21323,9 +21613,32 @@
       "asset_path": "assets/82a96192fe906d1e9a882595dd61a6f036ba966eef4db56f6a3960ea61486c65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not very clear.",
+          "The text is partially obscured and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21341,9 +21654,21 @@
       "asset_path": "assets/1480b50a75c685b42e971186ae1a01cec5c6ab72ea8e72c63a2c82d74a6e65bb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in a field with greenery and trees in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text content related to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21359,9 +21684,18 @@
       "asset_path": "assets/f3dcc2ee904233fbf4deab9e3c50ba5598a2cc153ab7ec916b93784aa4f1adf0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly representing a cityscape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image is an aerial view and does not show any specific objects or details that can be related to the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21377,9 +21711,20 @@
       "asset_path": "assets/d302cc211029899aac09fbaa969fb263e610ba694c378a5eb912205947de436e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text or a page with a formula."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21395,9 +21740,19 @@
       "asset_path": "assets/a592ad1cbc81de69af14541d08360bdbc246c8afba0bb2c55ac727e88384e0f8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure.",
+          "No visible text or labels to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21413,9 +21768,16 @@
       "asset_path": "assets/2d0a9423ee6c440e19a3ac907219152ee45717b08e3127495b1e377fba24b5bc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21431,9 +21793,16 @@
       "asset_path": "assets/f0003be02130c951b4725242b89494314be7a3dcb72008af8ccb7d6a64f9d83a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21449,9 +21818,22 @@
       "asset_path": "assets/2ee80d59162303ff6439af3ed3db8bf287a6ea1dc5f9ef0886a44afb4d3665d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students sitting in a circle, with a lit candle in the center, and one student holding a lit candle in front of the group.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "classifying materials based on properties",
+          "properties of materials",
+          "electricity and materials"
+        ],
+        "context_relation": "The image illustrates the concept of classifying materials based on their properties, which is a part of the educational content about electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the materials being classified."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

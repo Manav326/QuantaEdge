@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c66368e04847ee4719d39d63dc71a419f8a7a96c2bace85e1f08fe0d40e506c0",
+  "raw_analysis_sha256": "fd5e17f52601d4453570b8adc83c51fa6e288de786d4ee5b3a4bef99ab842dc9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -13403,6 +13403,1270 @@
         "context_relation": "The page discusses the nature of science as a process involving curiosity, questioning, and openness to the unknown, which is a continuation of the concepts introduced in Grade 6.",
         "limitations": [
           "The page does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "70ae5455900fa238c183fc6c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The text discusses the nature of science and its approach to learning and understanding the world.",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:12:29Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The text discusses the nature of science and its approach to learning and understanding the world.",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b3ba36371b21c3a3b0722f00",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "ask deeper questions",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The image is a full page with no visible text or images.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:12:49Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "ask deeper questions",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The image is a full page with no visible text or images.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "89b40b364042ef1985b11a00",
+      "asset_sha256": "6b97a9691a4ae69ec6fb289ae3cce00bbf6a91ed6c7ec437b7b8d455acaee82a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "page-0022.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+        ],
+        "concepts": [
+          "science",
+          "exploration",
+          "curiosity",
+          "questions",
+          "unknown",
+          "process",
+          "environment",
+          "society",
+          "human activities",
+          "environmental challenges",
+          "sustainability",
+          "properties of materials",
+          "discovery",
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
+        ],
+        "context_relation": "exploration and understanding of natural phenomena",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:16:24Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+        ],
+        "concepts": [
+          "science",
+          "exploration",
+          "curiosity",
+          "questions",
+          "unknown",
+          "process",
+          "environment",
+          "society",
+          "human activities",
+          "environmental challenges",
+          "sustainability",
+          "properties of materials",
+          "discovery",
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
+        ],
+        "context_relation": "exploration and understanding of natural phenomena",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fe7edf094f80b0efb21aa682",
+      "asset_sha256": "23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple diagram of a paper airplane flying through the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of flight or aerodynamics.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:17:29Z",
+      "effective_analysis": {
+        "visual_summary": "A simple diagram of a paper airplane flying through the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of flight or aerodynamics.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "010ccdbda642c07aa3483e03",
+      "asset_sha256": "1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:18:33Z",
+      "effective_analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3696ff306b5de9d2f55b7c62",
+      "asset_sha256": "c16d237029e049cee3379504c30be14b82a93a53cd83c81a869a3bb9e07cfb65",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/c16d237029e049cee3379504c30be14b82a93a53cd83c81a869a3bb9e07cfb65.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue sky with a building in the foreground.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:19:38Z",
+      "effective_analysis": {
+        "visual_summary": "A blue sky with a building in the foreground.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "61a588287220b1e97535a70f",
+      "asset_sha256": "03b34baa2674c668ae72824a0d20218a20937e864c8f65f6ad063283275a94ff",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/03b34baa2674c668ae72824a0d20218a20937e864c8f65f6ad063283275a94ff.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly in a mountainous or hilly area.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context related to the educational content.",
+        "limitations": [
+          "The image is not clear and may be difficult to interpret without additional context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:20:45Z",
+      "effective_analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly in a mountainous or hilly area.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context related to the educational content.",
+        "limitations": [
+          "The image is not clear and may be difficult to interpret without additional context."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "01de5dc1fa52ef9931bd5ea8",
+      "asset_sha256": "203c90e1b0f917c6a7b9e9c604ee3e3b24f246a9a458a3b5a48e35db3770f6ee",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/203c90e1b0f917c6a7b9e9c604ee3e3b24f246a9a458a3b5a48e35db3770f6ee.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires, likely exploring the properties of materials.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific materials or their properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:22:01Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires, likely exploring the properties of materials.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific materials or their properties."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b26c9a8ed56abc1be11e2e5",
+      "asset_sha256": "9b3a41cb1a45edaa135160be51c22ec3c210681a12339bccbeccab8d812694a3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/9b3a41cb1a45edaa135160be51c22ec3c210681a12339bccbeccab8d812694a3.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "batteries",
+          "lamps",
+          "wires",
+          "materials",
+          "properties",
+          "classification"
+        ],
+        "context_relation": "The image shows a practical experiment related to the text about classifying materials based on their properties.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:23:11Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "batteries",
+          "lamps",
+          "wires",
+          "materials",
+          "properties",
+          "classification"
+        ],
+        "context_relation": "The image shows a practical experiment related to the text about classifying materials based on their properties.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7b2eb6d50d777812a0971f3",
+      "asset_sha256": "f115bfebeb89d25df4dc81956c69303e6c42889fd3aa3f498d709665a06e53c9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/f115bfebeb89d25df4dc81956c69303e6c42889fd3aa3f498d709665a06e53c9.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people standing in a room, possibly in a classroom or auditorium, with some individuals holding objects that could be batteries, lamps, or wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where students or participants are engaged in an activity involving batteries, lamps, and wires, possibly as part of a science experiment or demonstration.",
+        "limitations": [
+          "The image is blurry and the details are not clearly visible.",
+          "The text in the image is not fully legible, making it difficult to determine the exact nature of the objects being held.",
+          "The context is incomplete, as the visible text does not provide additional information about the activity or the setting."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:24:23Z",
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in a room, possibly in a classroom or auditorium, with some individuals holding objects that could be batteries, lamps, or wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where students or participants are engaged in an activity involving batteries, lamps, and wires, possibly as part of a science experiment or demonstration.",
+        "limitations": [
+          "The image is blurry and the details are not clearly visible.",
+          "The text in the image is not fully legible, making it difficult to determine the exact nature of the objects being held.",
+          "The context is incomplete, as the visible text does not provide additional information about the activity or the setting."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a384d6738ab65c2ef43d5d07",
+      "asset_sha256": "a0b313bb199e9d662f302b73d51e9e6a1f6fa14b19d933ad35306f6157525dec",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/a0b313bb199e9d662f302b73d51e9e6a1f6fa14b19d933ad35306f6157525dec.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green plant with small leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not clear enough to identify the specific type of plant or its properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:25:30Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with small leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not clear enough to identify the specific type of plant or its properties."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "208a68e05d37518058179ebc",
+      "asset_sha256": "f0f203ae7b3a23704ceffb6f5680d8ef332ca3d8970291771ff501f6af34a904",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/f0f203ae7b3a23704ceffb6f5680d8ef332ca3d8970291771ff501f6af34a904.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A classroom setting with students sitting in rows, facing the front of the room, possibly during a science lesson.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "Science",
+          "Materials",
+          "Properties",
+          "Classification"
+        ],
+        "context_relation": "The image is related to the educational content of a science lesson focusing on the properties of materials and their classification.",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact setup of the classroom."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:26:45Z",
+      "effective_analysis": {
+        "visual_summary": "A classroom setting with students sitting in rows, facing the front of the room, possibly during a science lesson.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "Science",
+          "Materials",
+          "Properties",
+          "Classification"
+        ],
+        "context_relation": "The image is related to the educational content of a science lesson focusing on the properties of materials and their classification.",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact setup of the classroom."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7a8de9528c8a09a467d5b210",
+      "asset_sha256": "6006147b5bba825e42be4c17070d933eb47a7f7fb7509d493464182effc2a4c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/6006147b5bba825e42be4c17070d933eb47a7f7fb7509d493464182effc2a4c7.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students in a classroom setting, possibly engaged in an experiment or activity involving batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the students' actions or the experiment in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:27:59Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students in a classroom setting, possibly engaged in an experiment or activity involving batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the students' actions or the experiment in detail."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5a4d15ddbc87e1c1e7f505e3",
+      "asset_sha256": "52069d76c7e571b0328082b7e76a0f01c154002683d32b940435c6d89440de17",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/52069d76c7e571b0328082b7e76a0f01c154002683d32b940435c6d89440de17.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of children playing with electric batteries, lamps, and wires in a grassy outdoor setting.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows children engaged in an educational activity involving electricity and materials, likely related to the topic of classifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the properties being classified."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:29:07Z",
+      "effective_analysis": {
+        "visual_summary": "A group of children playing with electric batteries, lamps, and wires in a grassy outdoor setting.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows children engaged in an educational activity involving electricity and materials, likely related to the topic of classifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the properties being classified."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c933888092022d0efba8730f",
+      "asset_sha256": "7058c255d017b04c49fea7fda69260f32e6898ff5d0f0f74e55e90326c32aa8f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/7058c255d017b04c49fea7fda69260f32e6898ff5d0f0f74e55e90326c32aa8f.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is slightly blurred and not entirely clear."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:30:22Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is slightly blurred and not entirely clear."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4a333a177ce956568cf92ee9",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification of materials",
+          "electricity",
+          "properties of lamps"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The text is a narrative and does not provide visual aids."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:31:37Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification of materials",
+          "electricity",
+          "properties of lamps"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The text is a narrative and does not provide visual aids."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eb70687e7d59f9da56ddffa5",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "lamp",
+          "properties of materials"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:31:51Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "lamp",
+          "properties of materials"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b1067146f45ce902986e0cd",
+      "asset_sha256": "82a96192fe906d1e9a882595dd61a6f036ba966eef4db56f6a3960ea61486c65",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/82a96192fe906d1e9a882595dd61a6f036ba966eef4db56f6a3960ea61486c65.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not very clear.",
+          "The text is partially obscured and not fully readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:33:06Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not very clear.",
+          "The text is partially obscured and not fully readable."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fe5fe1ee4969f574d60093c5",
+      "asset_sha256": "1480b50a75c685b42e971186ae1a01cec5c6ab72ea8e72c63a2c82d74a6e65bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/1480b50a75c685b42e971186ae1a01cec5c6ab72ea8e72c63a2c82d74a6e65bb.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people standing in a field with greenery and trees in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text content related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:34:16Z",
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in a field with greenery and trees in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text content related to the text content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0cddc5054c39bcbd0cf7ca66",
+      "asset_sha256": "f3dcc2ee904233fbf4deab9e3c50ba5598a2cc153ab7ec916b93784aa4f1adf0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/f3dcc2ee904233fbf4deab9e3c50ba5598a2cc153ab7ec916b93784aa4f1adf0.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly representing a cityscape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image is an aerial view and does not show any specific objects or details that can be related to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:35:23Z",
+      "effective_analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly representing a cityscape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image is an aerial view and does not show any specific objects or details that can be related to the visible text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ddf55d9433f55031a1014051",
+      "asset_sha256": "d302cc211029899aac09fbaa969fb263e610ba694c378a5eb912205947de436e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/d302cc211029899aac09fbaa969fb263e610ba694c378a5eb912205947de436e.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text or a page with a formula."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:36:32Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text or a page with a formula."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b198556fecaab1c0d3b4b54b",
+      "asset_sha256": "a592ad1cbc81de69af14541d08360bdbc246c8afba0bb2c55ac727e88384e0f8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/a592ad1cbc81de69af14541d08360bdbc246c8afba0bb2c55ac727e88384e0f8.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure.",
+          "No visible text or labels to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:37:39Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure.",
+          "No visible text or labels to analyze."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a287b8d17c99c79821fb3285",
+      "asset_sha256": "2d0a9423ee6c440e19a3ac907219152ee45717b08e3127495b1e377fba24b5bc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/2d0a9423ee6c440e19a3ac907219152ee45717b08e3127495b1e377fba24b5bc.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:38:44Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4000c152bf5cbe1c77456089",
+      "asset_sha256": "f0003be02130c951b4725242b89494314be7a3dcb72008af8ccb7d6a64f9d83a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/f0003be02130c951b4725242b89494314be7a3dcb72008af8ccb7d6a64f9d83a.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:39:49Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "77780336cf37ab1a1c45e195",
+      "asset_sha256": "2ee80d59162303ff6439af3ed3db8bf287a6ea1dc5f9ef0886a44afb4d3665d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/2ee80d59162303ff6439af3ed3db8bf287a6ea1dc5f9ef0886a44afb4d3665d5.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students sitting in a circle, with a lit candle in the center, and one student holding a lit candle in front of the group.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "classifying materials based on properties",
+          "properties of materials",
+          "electricity and materials"
+        ],
+        "context_relation": "The image illustrates the concept of classifying materials based on their properties, which is a part of the educational content about electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the materials being classified."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:41:02Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students sitting in a circle, with a lit candle in the center, and one student holding a lit candle in front of the group.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "classifying materials based on properties",
+          "properties of materials",
+          "electricity and materials"
+        ],
+        "context_relation": "The image illustrates the concept of classifying materials based on their properties, which is a part of the educational content about electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the materials being classified."
         ]
       },
       "correction_status": "NONE"
