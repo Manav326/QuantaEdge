@@ -781,6 +781,7 @@ public class LearningClassController {
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
+        and (cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and ta.id is not null and ta.status='APPROVED'
         and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
@@ -799,6 +800,7 @@ public class LearningClassController {
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
+        and (cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and ta.id is not null and ta.status='APPROVED'
         and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
