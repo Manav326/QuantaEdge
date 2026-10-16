@@ -99,6 +99,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.11.1"
+      - name: Verify structured lesson UI contract
+        run: node scripts/check-structured-lesson-ui-contract.mjs
       - name: Verify Android UI localization contract
         run: node scripts/check-android-ui-localization.mjs
       - name: Run Android unit tests and build debug APK
@@ -215,6 +217,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Verify structured lesson UI contract
+        run: node scripts/check-structured-lesson-ui-contract.mjs
       - name: Verify student navigation contract
         run: node apps/web/scripts/check-student-navigation.mjs
       - name: Set up Buildx

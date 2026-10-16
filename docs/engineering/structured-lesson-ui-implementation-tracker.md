@@ -22,14 +22,14 @@
 
 | ID | JSON type | Required UI behavior | Current state |
 |---|---|---|---|
-| UI-Q01 | `multiple_choice` | Single-select accessible radio/choice group; stable option IDs; submitted correctness/feedback | [ ] Structured renderer not verified |
-| UI-Q02 | `multiple_select` | Multi-select checkbox group; preserve selected ID set; exact-set grading contract | [ ] Structured renderer not verified |
-| UI-Q03 | `true_false` | Accessible True/False choices; do not rely on colour alone | [ ] Structured renderer not verified |
-| UI-Q04 | `matching` | Each left item selects one right item; narrow-screen stacked layout; partial credit displayed when returned | [ ] Structured renderer not verified |
-| UI-Q05 | `fill_blank` | Localized input and validation; locale-specific accepted answers; Unicode-safe normalization | [ ] Structured renderer not verified |
-| UI-Q06 | `image_observation` | Approved image/diagram + caption/alt text + declared answer control; hard-block non-approved/non-renderable visuals | [ ] Structured renderer not verified |
-| UI-Q07 | `short_answer` | Multiline response, rubric/pending-review state; never invent automatic grading without a configured, validated grader | [ ] Structured renderer not verified |
-| UI-Q08 | `scenario_based` | Separate scenario/context and question; render the declared response subtype; all context localized | [ ] Structured renderer not verified |
+| UI-Q01 | `multiple_choice` | Single-select accessible radio/choice group; stable option IDs; submitted correctness/feedback | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q02 | `multiple_select` | Multi-select checkbox group; preserve selected ID set; exact-set grading contract | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q03 | `true_false` | Accessible True/False choices; do not rely on colour alone | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q04 | `matching` | Each left item selects one right item; narrow-screen stacked layout; partial credit displayed when returned | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q05 | `fill_blank` | Localized input and validation; locale-specific accepted answers; Unicode-safe normalization | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q06 | `image_observation` | Approved image/diagram + caption/alt text + declared answer control; hard-block non-approved/non-renderable visuals | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q07 | `short_answer` | Multiline response, rubric/pending-review state; never invent automatic grading without a configured, validated grader | [~] Renderer code is present; detailed acceptance evidence is pending |
+| UI-Q08 | `scenario_based` | Separate scenario/context and question; render the declared response subtype; all context localized | [~] Renderer code is present; detailed acceptance evidence is pending |
 
 ### Explain/lesson content
 
@@ -44,51 +44,51 @@ Handle the structured schema (not only legacy database block names):
 ## Implementation checklist
 
 ### Foundation and data plumbing
-- [ ] **UI-001 — Shared typed contract/adapter.** Define TypeScript/Kotlin models or validated adapters for lesson, locale map, explain blocks, questions, visuals and answer/rubric state. Keep structured data separate from legacy API records; document the mapping explicitly.
+- [~] **UI-001 — Shared typed contract/adapter.** Define TypeScript/Kotlin models or validated adapters for lesson, locale map, explain blocks, questions, visuals and answer/rubric state. Keep structured data separate from legacy API records; document the mapping explicitly.
   - Acceptance: malformed JSON, missing required locales, unknown types, duplicate IDs, invalid answer IDs/pairs and broken asset refs return actionable validation errors; valid Ch1/2/6 fixtures parse on both clients.
-- [ ] **UI-002 — Source and renderability gates.** Centralize checks for workflow approval, `publication_allowed`, `student_renderable`, `render_status` and visual localization. Do not show source-page previews or any blocked draft to students.
+- [~] **UI-002 — Source and renderability gates.** Centralize checks for workflow approval, `publication_allowed`, `student_renderable`, `render_status` and visual localization. Do not show source-page previews or any blocked draft to students.
   - Acceptance: blocked/unapproved visual is not rendered and cannot be bypassed by Web, Admin preview mode, or Android.
-- [ ] **UI-003 — Runtime delivery path.** Decide and implement how approved structured JSON reaches each client (admin preview from a selected/imported artifact; learner view via authenticated API/published version). Do not assume repository files are implicitly served by the existing relational learning endpoints.
+- [~] **UI-003 — Runtime delivery path.** Decide and implement how approved structured JSON reaches each client (admin preview from a selected/imported artifact; learner view via authenticated API/published version). Do not assume repository files are implicitly served by the existing relational learning endpoints.
   - Acceptance: versioned artifact loads with error/loading/empty states; no unauthenticated private content route; legacy lesson routes remain unchanged.
 
 ### Web student
-- [ ] **UI-101 — Structured Explain renderer.** Implement each supported block kind in `apps/web`; responsive, accessible, en/hi localized. Render diagrams using node/edge/layout data rather than treating data objects as URLs.
+- [~] **UI-101 — Structured Explain renderer.** Implement each supported block kind in `apps/web`; responsive, accessible, en/hi localized. Render diagrams using node/edge/layout data rather than treating data objects as URLs.
   - Acceptance: all block types have previews; correct block order and locale; unknown type is safely blocked; no console errors.
-- [ ] **UI-102 — Eight question components + dispatcher.** Implement the eight registry types behind a typed `PracticeQuestionRenderer`. Reuse existing QuantaEdge visual tokens/feedback styles where suitable; no new parallel practice page unless routing requires it.
+- [~] **UI-102 — Eight question components + dispatcher.** Implement the eight registry types behind a typed `PracticeQuestionRenderer`. Reuse existing QuantaEdge visual tokens/feedback styles where suitable; no new parallel practice page unless routing requires it.
   - Acceptance: fixture renders every type, validates inputs, and sends neutral IDs/boolean/text/pairs to the answer/grading interface.
-- [ ] **UI-103 — Practice-session state.** Store response/result by stable question ID; preserve current question, selected options, matching pairs, typed text, submitted state, score and progress across English/Hindi changes and question revisits.
+- [~] **UI-103 — Practice-session state.** Store response/result by stable question ID; preserve current question, selected options, matching pairs, typed text, submitted state, score and progress across English/Hindi changes and question revisits.
   - Acceptance: switch language before and after submission on each type; answers/progress remain unchanged.
-- [ ] **UI-104 — Visual and activity controls.** Add zoom/lightbox where appropriate; alt text and captions; diagram scaling; activity input/reset/save. Ensure keyboard/touch support and visible focus.
+- [~] **UI-104 — Visual and activity controls.** Add zoom/lightbox where appropriate; alt text and captions; diagram scaling; activity input/reset/save. Ensure keyboard/touch support and visible focus.
   - Acceptance: keyboard-only, screen-reader labels and mobile width test pass; visuals are not clipped.
 
 ### Web admin
-- [ ] **UI-201 — Structured lesson preview.** Preview the exact structured lesson schema using the same rendering logic as Web Student where practical; support en/hi toggle and block/question navigation.
+- [~] **UI-201 — Structured lesson preview.** Preview the exact structured lesson schema using the same rendering logic as Web Student where practical; support en/hi toggle and block/question navigation.
   - Acceptance: admin preview matches learner appearance for the same approved fixture; no student-publish behavior is triggered by previewing.
-- [ ] **UI-202 — Validation and status reporting.** Show missing locale/content fields, bad references/contracts, renderer support, visual review status and publication blockers with actionable messages.
+- [~] **UI-202 — Validation and status reporting.** Show missing locale/content fields, bad references/contracts, renderer support, visual review status and publication blockers with actionable messages.
   - Acceptance: one deliberately broken fixture produces the relevant error per field; preview cannot mark content approved/published.
-- [ ] **UI-203 — Visual QA workflow.** Show candidate/source provenance, generated visual draft vs approved asset, alt/caption and localization completeness. Connect the v3 candidate governance rather than bypassing it.
+- [~] **UI-203 — Visual QA workflow.** Show candidate/source provenance, generated visual draft vs approved asset, alt/caption and localization completeness. Connect the v3 candidate governance rather than bypassing it.
   - Acceptance: source preview is editor-only; only reviewed language-appropriate visuals pass the student renderability gate.
 
 ### Android
-- [ ] **UI-301 — Structured lesson block renderer.** Extend/reuse Compose renderers without breaking legacy `LessonContentBlock`; support localized rich text, image, diagram nodes/edges, activity and recap with responsive scrolling.
+- [~] **UI-301 — Structured lesson block renderer.** Extend/reuse Compose renderers without breaking legacy `LessonContentBlock`; support localized rich text, image, diagram nodes/edges, activity and recap with responsive scrolling.
   - Acceptance: Ch1/2/6 fixtures display; legacy DB lesson display stays unchanged; blocked assets never render.
-- [ ] **UI-302 — Eight question components + dispatcher.** Implement single-select, multi-select, true/false, matching, fill blank, image observation, short answer and scenario-based controls in Compose.
+- [~] **UI-302 — Eight question components + dispatcher.** Implement single-select, multi-select, true/false, matching, fill blank, image observation, short answer and scenario-based controls in Compose.
   - Acceptance: each type follows the registry contract, works with keyboard/accessibility services and touch, handles narrow/landscape layouts, and does not rely on colour alone.
-- [ ] **UI-303 — State and language parity.** Use the existing global Android language source; store neutral answer state by stable question ID. Switching language only changes labels/content, not learner input or score.
+- [~] **UI-303 — State and language parity.** Use the existing global Android language source; store neutral answer state by stable question ID. Switching language only changes labels/content, not learner input or score.
   - Acceptance: type-by-type language-switch test plus navigating away/back restores active response/session.
-- [ ] **UI-304 — Visuals and interactive activities.** Render native/vector diagram data, approved asset links, zoom/captions/alt descriptions and localized activity steps. Handle offline/unavailable assets with a clear placeholder.
+- [~] **UI-304 — Visuals and interactive activities.** Render native/vector diagram data, approved asset links, zoom/captions/alt descriptions and localized activity steps. Handle offline/unavailable assets with a clear placeholder.
   - Acceptance: no malformed-image crash; TalkBack labels present; content scales in portrait/landscape.
 
 ### Cross-platform QA / release
-- [ ] **UI-401 — Contract fixture and regression tests.** Keep shared JSON fixtures for all eight question types and all structured block kinds; test good/bad locale/ID/visual cases.
+- [~] **UI-401 — Contract fixture and regression tests.** Keep shared JSON fixtures for all eight question types and all structured block kinds; test good/bad locale/ID/visual cases.
   - Acceptance: automated Web unit/build tests and Android unit/build tests pass.
-- [ ] **UI-402 — Cross-platform parity matrix.** Test the same lesson/question fixture on Web Student, Web Admin preview and Android: content, options, correctness, partial credit, pending review, localization and progress.
+- [~] **UI-402 — Cross-platform parity matrix.** Test the same lesson/question fixture on Web Student, Web Admin preview and Android: content, options, correctness, partial credit, pending review, localization and progress.
   - Acceptance: all cells have evidence; any intentional platform-specific behavior is explicitly documented.
-- [ ] **UI-403 — Performance and lifecycle.** Avoid remounting the whole lesson when one answer changes; key state by stable IDs; lazy-render long lesson/question lists and avoid repeated artifact fetches.
+- [~] **UI-403 — Performance and lifecycle.** Avoid remounting the whole lesson when one answer changes; key state by stable IDs; lazy-render long lesson/question lists and avoid repeated artifact fetches.
   - Acceptance: answer interaction updates only the necessary component; route/language changes do not reset session; no unbounded refetch loop.
-- [ ] **UI-404 — Publish gate.** Content remains non-publishable until source completeness, scientific review, bilingual semantic review, visual accessibility and UI render tests pass.
+- [~] **UI-404 — Publish gate.** Content remains non-publishable until source completeness, scientific review, bilingual semantic review, visual accessibility and UI render tests pass.
   - Acceptance: attempting to publish a draft with any required blocker is rejected with explicit reasons.
-- [ ] **UI-405 — Final regression and resume update.** Run Web/Admin checks, Android `assembleDebug` and `testDebugUnitTest`, record outputs/limitations, update this file per completed task and append the final commit SHA to Issue #56.
+- [~] **UI-405 — Final regression and resume update.** Run Web/Admin checks, Android `assembleDebug` and `testDebugUnitTest`, record outputs/limitations, update this file per completed task and append the final commit SHA to Issue #56.
   - Acceptance: tested commit is identifiable; completed task IDs have evidence; remaining items state a concrete next action.
 
 ## Required test matrix
@@ -213,3 +213,14 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - New validation run: https://github.com/Manav326/QuantaEdge/actions/runs/38878396073 (run #2766). Its status was pending at the last check.
 - Do not mark UI-Q items green yet: latest green evidence covers API verification, Web/Admin/People builds and content import safeguards, not the repaired Android APK build or full manual Web/Admin/Android parity matrix.
 - Remaining acceptance: confirm run #2766 Android and API image succeed; exercise approved Class 6 Science Ch1/Ch2/Ch6 fixtures across learner Web, Admin preview and Android; test all question types, language switching, saved state and blocked-visual/publication gates. Current generated lesson artifacts remain drafts by design.
+
+
+## Latest implementation checkpoint — 2026-10-16 (CI green; full acceptance still open)
+
+- Current main before this checkpoint: 0de51f11bbaa374d71b1c721c43b52a9815c31be (tree e6ab5a2a7aa01a0bd6bc8395fa2039a4d1d56b3b). CI run #2778 (https://github.com/Manav326/QuantaEdge/actions/runs/38883078408) completed success on 653cc06f201d10cdb2cd51c5b7dd4764adfd1dae: Android APK/unit tests, API verification, API image, Web image, Admin image, People Operations image and content import safeguards passed. Main then advanced with an automated content-generation commit; this checkpoint is additive and does not modify lesson publication states.
+- Added scripts/check-structured-lesson-ui-contract.mjs, a dependency-free CI guard that checks all eight registry question types against Web learner, Admin preview and Android renderers; checks six lesson-block types; asserts publication/answer-key/visual guards and saved-state/API integration markers; and parses the Class 6 Science topic JSON inventory, confirming unique IDs, bilingual topic titles, explicit publication flags, question IDs and Ch1/Ch2/Ch6 coverage.
+- Added the guard to Android and Web CI jobs. This provides repeatable source/schema regression coverage; it is not represented as an interactive browser/device test.
+- Checklist status updated to [~] where implementation exists but the tracker's acceptance criteria still need evidence. No UI task is marked complete merely because source exists or Docker/APK builds pass.
+- Still not accepted: the eight-type Web/Admin/Android interaction matrix; live locale-switch preservation; real device TalkBack/keyboard/focus and portrait/landscape checks; runtime question/activity save-and-reload with an authenticated student; image zoom/visual rendering for approved assets; and cross-surface comparison using an approved fixture. CI has not simulated those user interactions.
+- Content boundary: current source-generated lessons still carry pending human source, scientific, bilingual and/or visual reviews and publication_allowed: false. Do not publish them to make UI tests appear populated. A structurally valid test fixture can validate UI behavior, but does not grant publication approval.
+- Next action: read the CI result for the commit containing this guard. If the guard fails, correct only validated mismatches. If it passes, perform the remaining authenticated browser/device acceptance tests and attach their evidence before changing any remaining [~] to [x].
