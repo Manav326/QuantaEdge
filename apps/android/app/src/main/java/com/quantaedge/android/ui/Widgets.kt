@@ -112,7 +112,8 @@ fun QuestionCard(
     feedback: String? = null,
     status: String? = null,
     submitLabel: String = "उत्तर सुरक्षित करें",
-    onTutorHelp: (() -> Unit)? = null
+    onTutorHelp: (() -> Unit)? = null,
+    showSubmitButton: Boolean = true
 ) {
     val options = jsonArrayValue(question.opt("options")).objectItems()
     val prompt = question.textAny("prompt", "question", "title").ifBlank { "प्रश्न" }
@@ -292,7 +293,7 @@ fun QuestionCard(
                     Text(localizedUiText("Tutor से मदद लें"))
                 }
             }
-            if (!locked) {
+            if (!locked && showSubmitButton) {
                 Button(
                     onClick = onSubmit,
                     enabled = !saving && answer.isNotBlank(),
