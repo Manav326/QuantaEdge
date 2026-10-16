@@ -33,6 +33,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Enforce data-only storage for generated pipeline artifacts
+        run: python scripts/validate_pipeline_data_locations.py --repo-root .
+
       - name: Detect changed paths
         id: detect
         shell: bash
