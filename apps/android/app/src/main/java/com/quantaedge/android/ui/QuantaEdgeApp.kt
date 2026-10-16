@@ -4490,6 +4490,27 @@ private fun AssessmentAttemptScreen(
 }
 
 @Composable
+private fun CompactActionButton(
+    label: String,
+    enabled: Boolean,
+    primary: Boolean,
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+    val buttonModifier = modifier.height(40.dp)
+    val contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 0.dp)
+    if (primary) {
+        Button(onClick = onClick, enabled = enabled, modifier = buttonModifier, contentPadding = contentPadding) {
+            Text(label, style = MaterialTheme.typography.labelSmall, maxLines = 1)
+        }
+    } else {
+        OutlinedButton(onClick = onClick, enabled = enabled, modifier = buttonModifier, contentPadding = contentPadding) {
+            Text(label, style = MaterialTheme.typography.labelSmall, maxLines = 1)
+        }
+    }
+}
+
+@Composable
 private fun CompactQuestionActions(
     language: String,
     showPrevious: Boolean,
@@ -4508,59 +4529,28 @@ private fun CompactQuestionActions(
     val previousLabel = if (language == "hi") "पिछला" else "Previous"
     val saveLabel = if (language == "hi") "सहेजें" else "Save"
     val clearLabel = if (language == "hi") "साफ़ करें" else "Clear"
-    @Composable
-    fun SaveButton(modifier: Modifier) {
-        OutlinedButton(
-            onClick = onSave,
-            enabled = canSave,
-            modifier = modifier.height(40.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-        ) { Text(saveLabel, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
-    }
-    @Composable
-    fun ClearButton(modifier: Modifier) {
-        OutlinedButton(
-            onClick = onClear,
-            enabled = canClear,
-            modifier = modifier.height(40.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-        ) { Text(clearLabel, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
-    }
-    @Composable
-    fun PreviousButton(modifier: Modifier) {
-        OutlinedButton(
-            onClick = onPrevious,
-            enabled = actionsEnabled,
-            modifier = modifier.height(40.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-        ) { Text(previousLabel, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
-    }
-    @Composable
-    fun PrimaryButton(modifier: Modifier) {
-        Button(
-            onClick = onPrimary,
-            enabled = primaryEnabled,
-            modifier = modifier.height(40.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-        ) { Text(primaryLabel, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
-    }
 
     if (compact) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
                 if (showPrevious) {
-                    PreviousButton(Modifier.weight(1f))
-                    SaveButton(Modifier.weight(1f))
+                    CompactActionButton(previousLabel, actionsEnabled, false, Modifier.weight(1f), onPrevious)
+                    CompactActionButton(saveLabel, canSave, false, Modifier.weight(1f), onSave)
                 } else {
-                    SaveButton(Modifier.weight(1f))
-                    ClearButton(Modifier.weight(1f))
+                    CompactActionButton(saveLabel, canSave, false, Modifier.weight(1f), onSave)
+                    CompactActionButton(clearLabel, canClear, false, Modifier.weight(1f), onClear)
                 }
             }
             if (showPrevious || showPrimary) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                    if (showPrevious) ClearButton(Modifier.weight(1f))
+                    if (showPrevious) {
+                        CompactActionButton(clearLabel, canClear, false, Modifier.weight(1f), onClear)
+                    }
                     if (showPrimary) {
-                        PrimaryButton(if (showPrevious) Modifier.weight(1f) else Modifier.fillMaxWidth())
+                        CompactActionButton(
+                            primaryLabel, primaryEnabled, true,
+                            if (showPrevious) Modifier.weight(1f) else Modifier.fillMaxWidth(), onPrimary
+                        )
                     } else if (showPrevious) {
                         Spacer(Modifier.weight(1f).height(40.dp))
                     }
@@ -4569,10 +4559,10 @@ private fun CompactQuestionActions(
         }
     } else {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-            if (showPrevious) PreviousButton(Modifier.weight(1f))
-            SaveButton(Modifier.weight(1f))
-            ClearButton(Modifier.weight(1f))
-            if (showPrimary) PrimaryButton(Modifier.weight(1.25f))
+            if (showPrevious) CompactActionButton(previousLabel, actionsEnabled, false, Modifier.weight(1f), onPrevious)
+            CompactActionButton(saveLabel, canSave, false, Modifier.weight(1f), onSave)
+            CompactActionButton(clearLabel, canClear, false, Modifier.weight(1f), onClear)
+            if (showPrimary) CompactActionButton(primaryLabel, primaryEnabled, true, Modifier.weight(1.25f), onPrimary)
         }
     }
 }
