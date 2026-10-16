@@ -2,9 +2,10 @@
 """Generate original, review-only question candidates from a SCERT extraction bundle.
 
 By default this prints an offline plan. Actual model calls require --generate.
-Loopback in-house endpoints (for example, Ollama on localhost) do not require a
-cloud API key or external-processing confirmation. Non-loopback providers require
-both. Uses only the Python standard library and an OpenAI-compatible chat API.
+Native local Ollama /api/chat is the default and requires no cloud API key. An
+OpenAI-compatible provider is available only when explicitly selected; non-loopback
+providers require HTTPS, external-processing confirmation and a key. Uses only the
+Python standard library.
 """
 from __future__ import annotations
 
@@ -313,8 +314,14 @@ def model_request_headers(api_key: str) -> dict[str, str]:
     return headers
 
 
-def model_endpoint(base_url: str) -> str:
+def model_endpoint(base_url: str, provider: str = "ollama") -> str:
     base = base_url.rstrip("/")
+    if provider == "ollama":
+        if base.endswith("/api/chat"):
+            return base
+        return base + "/api/chat"
+    if provider != "openai-compatible":
+        raise ValueError("provider must be ollama or openai-compatible")
     if base.endswith("/chat/completions"):
         return base
     return base + "/chat/completions" if base.endswith("/v1") else base + "/v1/chat/completions"
@@ -332,19 +339,39 @@ def _model_retry_delay(attempt: int, retry_after: str | None = None) -> float:
 def call_model(
     prompt: str, api_key: str, base_url: str, model: str, timeout: int,
     max_attempts: int = MAX_MODEL_ATTEMPTS, attempt_counter: list[int] | None = None,
+    provider: str = "ollama", num_ctx: int = 8192, num_predict: int = 4096,
 ) -> dict[str, Any]:
     if not 1 <= max_attempts <= MAX_MODEL_ATTEMPTS:
         raise ValueError(f"max_attempts must be between 1 and {MAX_MODEL_ATTEMPTS}.")
-    payload = {
-        "model": model, "temperature": 0.2,
-        "messages": [
-            {"role": "system", "content": "You are a careful curriculum author. Return schema-valid JSON and never guess unsupported answers."},
-            {"role": "user", "content": prompt},
-        ],
-    }
+    if not model.strip():
+        raise ValueError("A model name is required.")
+    messages = [
+        {"role": "system", "content": "You are a careful curriculum author. Return schema-valid JSON and never guess unsupported answers."},
+        {"role": "user", "content": prompt},
+    ]
+    if provider == "ollama":
+        parsed = urllib.parse.urlparse(base_url.strip())
+        if not is_loopback_model_url(base_url) or parsed.scheme != "http":
+            raise ValueError("Native Ollama must use unauthenticated HTTP on an exact loopback host.")
+        if not 2048 <= num_ctx <= 32768 or not 512 <= num_predict <= 8192:
+            raise ValueError("Ollama num_ctx must be 2048..32768 and num_predict must be 512..8192.")
+        payload = {
+            "model": model, "stream": False, "format": "json",
+            "options": {"temperature": 0.2, "num_ctx": num_ctx, "num_predict": num_predict},
+            "messages": messages,
+        }
+    elif provider == "openai-compatible":
+        payload = {
+            "model": model, "temperature": 0.2,
+            "messages": messages,
+            "response_format": {"type": "json_object"},
+        }
+    else:
+        raise ValueError("provider must be ollama or openai-compatible")
     request = urllib.request.Request(
-        model_endpoint(base_url), data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), method="POST",
-        headers=model_request_headers(api_key),
+        model_endpoint(base_url, provider),
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), method="POST",
+        headers=model_request_headers(api_key if provider == "openai-compatible" else ""),
     )
     raw: str | None = None
     for attempt in range(max_attempts):
@@ -374,9 +401,13 @@ def call_model(
         raise RuntimeError(f"Question model request failed after {max_attempts} attempts.")
     try:
         response_data = json.loads(raw)
-        content = response_data["choices"][0]["message"]["content"]
+        if provider == "ollama":
+            content = response_data["message"]["content"]
+        else:
+            content = response_data["choices"][0]["message"]["content"]
     except (json.JSONDecodeError, KeyError, IndexError, TypeError) as exc:
-        raise RuntimeError("Question model response did not match chat-completions response shape.") from exc
+        expected_shape = "native Ollama /api/chat" if provider == "ollama" else "OpenAI-compatible chat-completions"
+        raise RuntimeError(f"Question model response did not match {expected_shape} response shape.") from exc
     if isinstance(content, list):
         content = "".join(str(item.get("text", "")) for item in content if isinstance(item, dict))
     if not isinstance(content, str) or not content.strip():
@@ -521,7 +552,8 @@ def scheduled_question_types(total: int, allowed_types: set[str], subject_code: 
 
 
 def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], chapter: dict[str, Any],
-                           chunk_results: list[tuple[dict[str, Any], dict[str, Any]]], model: str) -> dict[str, Any]:
+                           chunk_results: list[tuple[dict[str, Any], dict[str, Any]]], model: str,
+                           provider: str = "ollama") -> dict[str, Any]:
     lessons, question_total = [], 0
     for index, (chunk, result) in enumerate(chunk_results, start=1):
         questions = []
@@ -563,7 +595,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
         "schema_version": 1,
         "bundle_status": "AI_GENERATED_DRAFT",
         "generated_by": {
-            "method": "ai-question-generation", "model": model,
+            "method": "ai-question-generation", "model": model, "provider": provider,
             "generated_at": datetime.now(timezone.utc).isoformat(), "question_count": question_total,
             "source_pdf_sha256": source["pdf_sha256"], "review_required": True, "auto_publish": False,
         },
@@ -593,7 +625,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
 def validate_resume_candidate(
     candidate: dict[str, Any], curriculum: dict[str, Any], source: dict[str, Any],
     chapter: dict[str, Any], questions_per_chapter: int, model: str,
-    expected_types: list[str] | None = None,
+    expected_types: list[str] | None = None, provider: str = "ollama",
 ) -> int:
     """Validate a previously completed chapter bundle before skipping it on --resume."""
     if not isinstance(candidate, dict):
@@ -615,6 +647,8 @@ def validate_resume_candidate(
         raise ValueError("Existing resume candidate targets a different chapter; refusing to reuse it.")
     if generated.get("model") != model:
         raise ValueError("Existing resume candidate was generated by a different model; pass the same --model or use a new output directory.")
+    if generated.get("provider", "openai-compatible") != provider:
+        raise ValueError("Existing resume candidate uses a different provider; keep --provider the same or use a new output directory.")
     if generated.get("review_required") is not True or generated.get("auto_publish") is not False:
         raise ValueError("Existing resume candidate does not preserve the mandatory review-only publishing gate.")
     if not isinstance(candidate_curriculum, dict):
@@ -726,12 +760,24 @@ def main() -> int:
     parser.add_argument("--max-chapters", type=int, default=0, help="Budget/test limit; zero means all mapped chapters")
     parser.add_argument("--max-api-calls", type=int, default=100, help="Hard cap on model requests per run")
     parser.add_argument("--resume", action="store_true", help="Skip only validated, matching chapter bundles already completed in the output directory")
-    parser.add_argument("--api-base-url", default=os.environ.get("QUANTAEDGE_QUESTION_API_BASE_URL", os.environ.get("OPENAI_API_BASE_URL", "https://api.openai.com")))
-    parser.add_argument("--model", default=os.environ.get("QUANTAEDGE_QUESTION_MODEL", os.environ.get("APP_AI_TUTOR_MODEL", "")))
-    parser.add_argument("--timeout", type=int, default=90)
+    parser.add_argument("--provider", choices=("ollama", "openai-compatible"),
+                        default=os.environ.get("QUANTAEDGE_QUESTION_PROVIDER", "ollama"),
+                        help="Use native loopback Ollama by default; external compatible APIs require explicit selection.")
+    parser.add_argument("--api-base-url", default="",
+                        help="Provider base URL; defaults to local Ollama for --provider ollama.")
+    parser.add_argument("--model", default="")
+    parser.add_argument("--num-ctx", type=int, default=8192, help="Ollama context budget (2048..32768).")
+    parser.add_argument("--num-predict", type=int, default=4096, help="Ollama output token budget (512..8192).")
+    parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--generate", action="store_true", help="Actually call the model; default is an offline plan")
     parser.add_argument("--confirm-external-processing", action="store_true", help="Confirm source text may be sent to the configured model provider")
     args = parser.parse_args()
+    if args.provider == "ollama":
+        args.api_base_url = (args.api_base_url or os.environ.get("QUANTAEDGE_QUESTION_OLLAMA_URL", "http://127.0.0.1:11434")).strip()
+        args.model = (args.model or os.environ.get("QUANTAEDGE_QUESTION_MODEL", os.environ.get("APP_AI_TUTOR_MODEL", "qwen2.5:1.5b"))).strip()
+    else:
+        args.api_base_url = (args.api_base_url or os.environ.get("QUANTAEDGE_QUESTION_API_BASE_URL", os.environ.get("OPENAI_API_BASE_URL", "https://api.openai.com"))).strip()
+        args.model = (args.model or os.environ.get("QUANTAEDGE_QUESTION_MODEL", os.environ.get("APP_AI_TUTOR_MODEL", ""))).strip()
 
     if not args.extraction.is_file():
         parser.error(f"Extraction bundle does not exist: {args.extraction}")
@@ -810,7 +856,7 @@ def main() -> int:
                 raise ValueError(f"Cannot resume from {destination}: existing candidate JSON is unreadable.") from exc
             question_count = validate_resume_candidate(
                 existing_bundle, curriculum, source, chapter, question_counts[chapter["code"]], args.model,
-                expected_types=target_schedules.get(chapter["code"]),
+                expected_types=target_schedules.get(chapter["code"]), provider=args.provider,
             )
             completed.append({
                 "chapter_code": chapter["code"], "file": str(destination),
@@ -829,7 +875,7 @@ def main() -> int:
             "chapters_already_completed": len(completed),
             "chapters_blocked_for_source_quality": extraction.get("extraction", {}).get("quality_blocked_chapters", []),
             "planned_model_requests": total_calls,
-            "max_model_http_requests": args.max_api_calls,
+            "max_model_http_requests": args.max_api_calls, "provider": args.provider, "api_base_url": args.api_base_url,
             "question_selection_mode": "CURRICULUM_TARGETS" if args.use_curriculum_targets else "BALANCED_EXPERIMENTAL_MIX",
             "questions_per_chapter": args.questions_per_chapter if not args.use_curriculum_targets else None,
             "question_counts_by_chapter": question_counts,
@@ -839,7 +885,7 @@ def main() -> int:
             "chapters_already_at_documented_question_target": target_satisfied_chapters,
             "note": "Question targets use the checked-in CSV approved-count snapshot, not a live database count.",
             "output_directory": str(args.output_dir), "source_pdf_sha256": source["pdf_sha256"],
-            "model": args.model or "(not configured)", "auto_publish": False,
+            "model": args.model or "(not configured)", "provider": args.provider, "api_base_url": args.api_base_url, "auto_publish": False,
             "chapter_codes": [chapter["code"] for chapter, _ in plan],
             "curriculum_target_csv": str(args.target_csv) if args.use_curriculum_targets else None,
             "resume_enabled": args.resume,
@@ -860,19 +906,22 @@ def main() -> int:
         api_key = os.environ.get("OPENAI_API_KEY", "").strip()
         local_endpoint = is_loopback_model_url(args.api_base_url)
         parsed_endpoint = urllib.parse.urlparse(args.api_base_url)
-        if local_endpoint:
-            # Local Ollama / OpenAI-compatible inference runs on the user's machine.
-            # Do not require external-processing consent or a hosted API key.
-            pass
+        if args.provider == "ollama":
+            if not local_endpoint or parsed_endpoint.scheme != "http":
+                raise ValueError("Native Ollama must use unauthenticated loopback HTTP; external model hosts are not allowed in Ollama mode.")
+            if not 2048 <= args.num_ctx <= 32768 or not 512 <= args.num_predict <= 8192:
+                raise ValueError("--num-ctx must be 2048..32768 and --num-predict must be 512..8192.")
+            api_key = ""
         else:
-            if parsed_endpoint.scheme != "https" or not parsed_endpoint.hostname:
-                raise ValueError("Use HTTPS for non-loopback model endpoints; plain HTTP is permitted only for exact localhost/loopback hosts.")
-            if not args.confirm_external_processing:
-                raise ValueError("This endpoint is not loopback. Review data/privacy requirements, then pass --confirm-external-processing before sending source text.")
-            if not api_key:
-                raise ValueError("OPENAI_API_KEY is required for a non-loopback model provider.")
-        if parsed_endpoint.username is not None or parsed_endpoint.password is not None:
-            raise ValueError("Do not embed credentials in the model API URL.")
+            if parsed_endpoint.username is not None or parsed_endpoint.password is not None:
+                raise ValueError("Do not embed credentials in the model API URL.")
+            if not local_endpoint:
+                if parsed_endpoint.scheme != "https" or not parsed_endpoint.hostname:
+                    raise ValueError("Use HTTPS for non-loopback model endpoints; plain HTTP is permitted only for exact localhost/loopback hosts.")
+                if not args.confirm_external_processing:
+                    raise ValueError("This endpoint is not loopback. Review data/privacy requirements, then pass --confirm-external-processing before sending source text.")
+                if not api_key:
+                    raise ValueError("OPENAI_API_KEY is required only for a non-loopback OpenAI-compatible provider.")
 
         args.output_dir.mkdir(parents=True, exist_ok=True)
         generated = []
@@ -896,7 +945,8 @@ def main() -> int:
                     make_prompt(curriculum, chapter, chunk, expected_types, str(curriculum.get("language", "hi"))),
                     api_key, args.api_base_url, args.model, args.timeout,
                     max_attempts=min(MAX_MODEL_ATTEMPTS, remaining_request_budget),
-                    attempt_counter=attempts_used,
+                    attempt_counter=attempts_used, provider=args.provider,
+                    num_ctx=args.num_ctx, num_predict=args.num_predict,
                 )
                 api_requests_used += attempts_used[0]
                 checked = validate_model_output(model_output, expected_types, chunk, curriculum.get("language"))
@@ -906,7 +956,7 @@ def main() -> int:
                         raise ValueError(f"Duplicate question across chapter chunks: {question['prompt'][:100]}")
                     seen_prompts.add(fingerprint)
                 chunk_results.append((chunk, checked))
-            candidate = build_candidate_bundle(curriculum, source, chapter, chunk_results, args.model)
+            candidate = build_candidate_bundle(curriculum, source, chapter, chunk_results, args.model, provider=args.provider)
             destination = args.output_dir / f"{chapter['code']}.ai-generated-draft.json"
             # Exclusive creation prevents overwriting a candidate if another run races this preflight.
             with destination.open("x", encoding="utf-8") as handle:
@@ -914,7 +964,7 @@ def main() -> int:
                 handle.write("\n")
             generated.append({
                 "chapter_code": chapter["code"], "file": str(destination),
-                "question_count": candidate["generated_by"]["question_count"],
+                "question_count": candidate["generated_by"]["question_count"], "provider": candidate["generated_by"]["provider"],
                 "lesson_count": len(candidate["lessons"]), "bundle_status": candidate["bundle_status"],
                 "student_delivery_allowed": False,
             })

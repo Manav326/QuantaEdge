@@ -3,9 +3,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from unittest.mock import patch
+import json
+
 from scripts.generate_questions_from_extraction import (
     SUPPORTED_TYPES,
+    call_model,
     is_loopback_model_url,
+    model_endpoint,
     model_request_headers,
     load_curriculum_question_targets,
     validate_extraction,
@@ -90,6 +95,21 @@ def hindi_lesson_result():
     return data
 
 
+
+class FakeHttpResponse:
+    def __init__(self, body):
+        self.body = body.encode("utf-8")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+    def read(self):
+        return self.body
+
+
 class QuestionGenerationSchemaTests(unittest.TestCase):
     def setUp(self):
         self.chunk = {"page_numbers": [3], "page_start": 3, "page_end": 3}
@@ -134,6 +154,50 @@ class QuestionGenerationSchemaTests(unittest.TestCase):
 
     def test_configured_hosted_model_key_is_sent_as_bearer(self):
         self.assertEqual("Bearer test-key", model_request_headers(" test-key ")["Authorization"])
+
+
+    def test_native_ollama_uses_api_chat_json_mode_without_openai_key(self):
+        captured = {}
+        answer = lesson_result(question("MATCH"))
+        def open_url(request, timeout=90):
+            captured["url"] = request.full_url
+            captured["headers"] = {key.lower(): value for key, value in request.header_items()}
+            captured["payload"] = json.loads(request.data.decode("utf-8"))
+            return FakeHttpResponse(json.dumps({"message": {"content": json.dumps(answer, ensure_ascii=False)}}))
+        with patch("scripts.generate_questions_from_extraction.urllib.request.urlopen", open_url):
+            result = call_model("prompt", "", "http://127.0.0.1:11434", "qwen2.5:1.5b", 10, provider="ollama")
+        self.assertTrue(captured["url"].endswith("/api/chat"))
+        self.assertNotIn("authorization", captured["headers"])
+        self.assertEqual("json", captured["payload"]["format"])
+        self.assertFalse(captured["payload"]["stream"])
+        self.assertEqual(8192, captured["payload"]["options"]["num_ctx"])
+        self.assertEqual(4096, captured["payload"]["options"]["num_predict"])
+        self.assertEqual(answer, result)
+
+    def test_native_ollama_refuses_non_loopback_before_network(self):
+        with self.assertRaisesRegex(ValueError, "loopback"):
+            call_model("prompt", "", "https://example.com", "qwen2.5:1.5b", 10, provider="ollama")
+
+    def test_openai_compatible_provider_remains_explicit_and_supported(self):
+        captured = {}
+        answer = lesson_result(question("MATCH"))
+        def open_url(request, timeout=90):
+            captured["url"] = request.full_url
+            captured["headers"] = {key.lower(): value for key, value in request.header_items()}
+            captured["payload"] = json.loads(request.data.decode("utf-8"))
+            return FakeHttpResponse(json.dumps({"choices": [{"message": {"content": json.dumps(answer)}}]}))
+        with patch("scripts.generate_questions_from_extraction.urllib.request.urlopen", open_url):
+            result = call_model("prompt", "secret-test-token", "https://api.example.com", "test-model", 10,
+                                provider="openai-compatible")
+        self.assertTrue(captured["url"].endswith("/v1/chat/completions"))
+        self.assertEqual("Bearer secret-test-token", captured["headers"]["authorization"])
+        self.assertEqual("json_object", captured["payload"]["response_format"]["type"])
+        self.assertEqual(answer, result)
+
+    def test_model_endpoint_defaults_to_native_ollama_and_preserves_legacy_api_path(self):
+        self.assertEqual("http://127.0.0.1:11434/api/chat", model_endpoint("http://127.0.0.1:11434"))
+        self.assertEqual("https://api.example.com/v1/chat/completions",
+                         model_endpoint("https://api.example.com", "openai-compatible"))
 
     def test_generator_declares_all_curriculum_types(self):
         self.assertTrue({
