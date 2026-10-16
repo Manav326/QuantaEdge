@@ -136,3 +136,34 @@ This journal is intentionally part of the repository contract. Update it in the 
 2. Add the detailed audit matrix and exact tests to issue #58; close it only when every contract is traced.
 3. Implement in small, direct-to-`main` commits in dependency order: multi-resource schema/API; 24-hour visibility/provider contract; reliable authorized recording ingestion; download policy and web/Android offline video; durable native messaging; admin/web/Android parity; security/load/cost/backup validation.
 4. Update this journal after every material change with commit SHA, changed files, migration IDs, test commands/results, workflow run links, unresolved risks and the exact next step. Never claim green CI or completed E2E without evidence.
+
+
+## Implementation journal — 2026-10-16 (checkpoint 2: first code change)
+
+### Delivered to `main`
+
+- Commit `dcd41f5f41fd687aff971451fd779864571ed3c7`: `LearningClassController.studentLiveClasses` now filters future `SCHEDULED` sessions to `starts_at <= now() + interval '24 hours'`.
+- The same predicate is applied to the catalogue item query and the total-count query, so pagination metadata cannot count hidden far-future scheduled sessions.
+- Commit `92f950c0c1f625a9565e9624e038b4eb7e5e4003`: added `scheduledClassesUseTheSameTwentyFourHourVisibilityRuleForItemsAndCount` to `LearningClassControllerTest`. It verifies the rule is present in both SQL paths.
+- This change deliberately leaves the separate 15-minute early join authorization unchanged. Existing join endpoint checks remain authoritative.
+- CI for the latest commit: [run 38933086666](https://github.com/Manav326/QuantaEdge/actions/runs/38933086666), status was `pending` when checked. The code and test have been committed, but test execution and CI success are **not yet confirmed**.
+
+### Additional schema discovery
+
+- V3 defines canonical `lesson` and `lesson_block`; lessons are chapter-scoped and blocks are ordered JSONB with a block type. V30 expands lesson block types to include `VIDEO` and `AUDIO`.
+- Lesson blocks are part of lesson content rendering, but they are not a provider-neutral resource catalogue with per-resource lifecycle, external provider references, checksums, download permission and archive audit. Do not overload the JSONB lesson block contract to solve the full catalogue requirement.
+- V79 already handles managed Google Meet lifecycle through provider operation state and verified meeting creation. Reuse `GoogleMeetCalendarService`; do not replace or bypass its retry/error-state model.
+- Android `RecordedPlayerScreen.kt` currently points Media3 to the authenticated `/api/v1/learning/recorded-classes/{id}/stream` endpoint and saves progress. `LearningClassesScreen.kt` exposes playback but no confirmed video download action. The existing `ProtectedResourceDownloadWorker` is for protected learning resources and must be inspected before reuse; do not assume it handles video.
+- No existing WebSocket/SSE/message implementation has been identified yet by repository searches. Continue a broader path/code search before concluding it does not exist.
+
+### Remaining validation for the first code change
+
+- Wait for and inspect CI run `38933086666`; if it fails, fix the root cause and record the follow-up commit/run.
+- The new unit test checks SQL contract shape, not a real PostgreSQL time-boundary behavior. Add an integration-level boundary test if the existing test harness supports PostgreSQL migrations.
+- Confirm whether all status transitions that remain visible are intentional; the current predicate only restricts rows whose status is `SCHEDULED`, preserving existing live/history visibility.
+
+### Exact resume point
+
+1. Check run `38933086666` and current `main` head.
+2. Continue audit: identify all existing content-resource tables/APIs and lesson/micro-topic keys; inspect complete admin upload/publish/archive endpoints; trace Android resource download worker and storage; inspect Compose/deployment/backup media-volume config; search the repository for any alternative messaging transport.
+3. Then implement the multi-resource model only after those FK and API contracts are reconciled. Keep this journal current at every milestone.
