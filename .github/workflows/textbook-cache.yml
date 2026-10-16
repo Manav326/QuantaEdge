@@ -154,8 +154,10 @@ jobs:
             echo "repair_only=true" >> "$GITHUB_OUTPUT"
             echo "Running targeted NCERT repair queue. Each verified whole book is published to its existing class/medium :latest image before moving to the next title."
             failures=0
-            while IFS=$'\\t' read -r grade medium code title; do
+          processed=0
+            while IFS=$'\t' read -r grade medium code title; do
               [ -n "$code" ] || continue
+              processed=$((processed + 1))
               echo "::group::Repair Class $grade $medium — $title ($code)"
               target_args=(python scripts/textbook_registry.py publish --class-wise --language "$medium" --class-no "$grade" --book-code "$code" --refresh --download-workers 1 --push-batch-size 1 --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
               output_file="$RUNNER_TEMP/repair-class-$grade-$medium-$code.log"
@@ -171,6 +173,10 @@ jobs:
               fi
               echo "::endgroup::"
             done < <(jq -r '.books[] | [.class_no, .language, .book_code, .title] | @tsv' "$repair_queue")
+            if [ "$processed" -ne 5 ]; then
+              echo "REPAIR_SCOPE_ERROR: processed $processed entries, expected exactly five approved books."
+              exit 1
+            fi
             if [ "$failures" -ne 0 ]; then
               echo "At least one requested textbook remains unresolved. Any books that passed validation were pushed individually to GHCR."
               exit 1
