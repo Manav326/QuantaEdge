@@ -303,7 +303,7 @@ class LayersTests(unittest.TestCase):
             self.assertEqual(1,result["layer5_visual_evidence_available_count"])
             self.assertEqual(1,result["layer5_visual_evidence_consumed_count"])
             self.assertIn("A leaf diagram",prompts[0])
-            self.assertIn("layer5_visual_evidence_asset_ids",prompts[0])
+            self.assertIn("asset-preview-1",prompts[0])
             outdir=ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4")
             mapping=json.loads((outdir/"curriculum-map.v1.json").read_text(encoding="utf-8"))
             self.assertEqual(["asset-preview-1"],mapping["topics"][0]["layer5_visual_evidence_asset_ids"])
@@ -374,6 +374,7 @@ class LayersTests(unittest.TestCase):
                 "scope":"SUBJECT_BOOK","published":False,"asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,
                 "page_count":1,"completed_pages":1,"source_page_start":1,"text_jsonl":"pages.jsonl",
                 "source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12","title":"Curiosity","edition":"Reprint 2026-27"})
+            install_layer5_fixture(root,pages,book,pdfhash,row["text"])
             invalid={"chapter_number":1,"tutor_examples":[
                 {"language":"en","student_message":"Why?","assistant_message":"Because.","source_pages":[1]},
                 {"language":"hi","student_message":"क्यों?","assistant_message":"क्योंकि।","source_pages":[1]}]}
