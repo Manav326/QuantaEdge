@@ -936,7 +936,45 @@ def write_rag(path:Path,source:dict[str,Any])->None:
           "review_status":"SOURCE_TEXT_REQUIRES_REVIEW","publication_allowed":False,"human_review_required":True})
     write_jsonl(path,rows)
 
-def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:dict[str,Any],outdir:Path,rag:Path,model:str,bench_sha:str)->dict[str,Any]:
+def write_layer5_visual_evidence_candidates(path:Path,source:dict[str,Any],
+                                          evidence_by_page:dict[int,list[dict[str,Any]]])->int:
+    """Persist L5 visual observations as blocked review candidates, never as live retrieval docs."""
+    rows=[]
+    for page in sorted(evidence_by_page):
+        for evidence in sorted(evidence_by_page[page],key=lambda item:item["asset_id"]):
+            asset_id=str(evidence["asset_id"])
+            pieces=[f"Unapproved machine-generated visual analysis for source PDF page {page}."]
+            if evidence.get("visual_type"): pieces.append("Visual type candidate: "+str(evidence["visual_type"]))
+            if evidence.get("visual_summary"): pieces.append("Visual summary candidate (requires review): "+str(evidence["visual_summary"]))
+            visible=[str(x).strip() for x in evidence.get("visible_text",[]) if isinstance(x,str) and x.strip()]
+            concepts=[str(x).strip() for x in evidence.get("concepts",[]) if isinstance(x,str) and x.strip()]
+            limitations=[str(x).strip() for x in evidence.get("limitations",[]) if isinstance(x,str) and x.strip()]
+            if visible: pieces.append("Visible text candidates: "+"; ".join(visible))
+            if concepts: pieces.append("Concept candidates: "+"; ".join(concepts))
+            if evidence.get("context_relation"): pieces.append("Context relation candidate: "+str(evidence["context_relation"]))
+            if limitations: pieces.append("Known limitations; verify before use: "+"; ".join(limitations))
+            text_value="\n".join(pieces)
+            metadata={
+                "source_book_id":source["book_id"],"source_title":source["title"],
+                "source_url":source["source_url"],"source_edition":source["edition"],
+                "source_pdf_sha256":source["source_pdf_sha256"],"source_pdf_page_number":page,
+                "source_asset_sha256":evidence["source_asset_sha256"],"layer5_visual_asset_id":asset_id,
+                "layer5_coverage_ledger_path":source.get("layer5_ledger_path"),
+                "layer5_coverage_ledger_sha256":source.get("layer5_ledger_sha256"),
+                "visual_type_candidate":evidence.get("visual_type"),"correction_status":evidence.get("correction_status","NONE"),
+                "review_status":"MACHINE_GENERATED_REQUIRES_HUMAN_REVIEW",
+                "human_review_required":True,"publication_allowed":False,"eligible_for_retrieval":False
+            }
+            document_id="qe-vis-"+sha(source["book_id"]+"|"+source["source_pdf_sha256"]+"|"+asset_id+"|"+str(evidence["source_asset_sha256"]))[:24]
+            rows.append({"schema_version":"quantaedge.ncert-visual-evidence-candidate.v1","document_id":document_id,
+                "text":text_value,"text_sha256":sha(text_value),"metadata":metadata,
+                "human_review_required":True,"publication_allowed":False,"eligible_for_retrieval":False})
+    write_jsonl(path,rows)
+    return len(rows)
+
+
+def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:dict[str,Any],outdir:Path,rag:Path,model:str,bench_sha:str,
+                  layer5_visual_evidence_by_page:dict[int,list[dict[str,Any]]]|None=None)->dict[str,Any]:
     good=[(s,checkpoint[s["segment_id"]]) for s in segments if checkpoint.get(s["segment_id"],{}).get("status")=="COMPLETE"]
     topics=[]; lessons=[]; sft=[]
     for seg,item in good:
@@ -990,6 +1028,9 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     for name,rows in parts.items(): write_jsonl(splitdir/(name+".jsonl"),rows)
     split_errors=validate_splits(sft,parts)
     if split_errors: raise ValueError("SFT split validation failed: "+"; ".join(split_errors))
+    visual_evidence_candidate_path=outdir/"layer-8-visual-evidence-candidates.v1.jsonl"
+    visual_evidence_candidate_count=write_layer5_visual_evidence_candidates(
+        visual_evidence_candidate_path,source,layer5_visual_evidence_by_page or {})
     mapped_segments={t["segment_id"] for t in topics}
     lesson_segments={l.get("generation_metadata",{}).get("segment_id") for l in lessons}
     missing_sft=any(len(checkpoint.get(seg["segment_id"],{}).get("sft_rows",[]))<2 for seg in segments)
@@ -1006,7 +1047,10 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
       "layer5_visual_evidence_asset_ids":sorted({aid for _,item in good for aid in item.get("layer5_visual_evidence_asset_ids",[])}),
       "layer5_visual_evidence_consumed_count":len({aid for _,item in good for aid in item.get("layer5_visual_evidence_asset_ids",[])}),"segments_total":len(segments),
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
-      "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),"retrieval_documents":source["page_count"],
+      "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),
+      "layer5_visual_evidence_candidate_path":visual_evidence_candidate_path.name,
+      "layer5_visual_evidence_candidate_documents":visual_evidence_candidate_count,
+      "layer5_visual_evidence_retrieval_eligible":False,"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
       "source_page_count":source["page_count"],"unresolved_source_pages":unresolved,"unresolved_text_pages":unresolved_text_pages,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"pending_segments":pending,
       "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
@@ -1139,7 +1183,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
               "layer5_visual_evidence_asset_ids":segment_layer5_ids,"error":str(exc)[:1200]}
         doc["segments"]=checkpoints; write_json(cpfile,doc)
         if calls%args.checkpoint_every==0 or calls==args.max_model_calls:
-            current=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)))
+            current=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)),layer5_by_page)
             if args.commit_checkpoints: checkpoint_git(repo,[outdir,rag],f"checkpoint(content): L6-8 {source['book_id']} ({calls} calls)")
             print(json.dumps({"book_id":source["book_id"],"model":args.model,"calls_this_run":calls,
               "segments_completed":current["segments_completed"],"segments_total":current["segments_total"],"status":current["overall_status"]}))
