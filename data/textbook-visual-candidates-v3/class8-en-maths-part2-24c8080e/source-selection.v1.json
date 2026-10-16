@@ -7,5 +7,8 @@
   "subject": "maths",
   "maths_part": 2,
   "file": "books/ncert-c8-english-hegp2.pdf",
-  "sha256": "e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0"
+  "sha256": "e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-8/english/pages/e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-8/english/pages/e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0.jsonl",
+  "text_jsonl_filename": "e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0.jsonl"
 }

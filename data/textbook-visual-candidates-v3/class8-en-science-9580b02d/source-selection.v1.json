@@ -7,5 +7,8 @@
   "subject": "science",
   "maths_part": null,
   "file": "books/ncert-c8-english-hecu1.pdf",
-  "sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba"
+  "sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-8/english/pages/5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-8/english/pages/5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba.jsonl",
+  "text_jsonl_filename": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba.jsonl"
 }
