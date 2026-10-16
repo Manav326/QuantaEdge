@@ -10,6 +10,7 @@ LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-run
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
+KINDS = {"embedded_image","page_preview"}
 SYSTEM = "You are a careful NCERT educational author for Classes 6–8. Use only the supplied source excerpt for facts. Write original explanations; do not copy textbook wording/exercises. Check maths and science claims. Return valid JSON only."
 TUTOR = {
  "en":"You are a patient NCERT tutor for Classes 6–8. Explain step by step, use original wording and do not invent facts outside the cited pages.",
@@ -372,6 +373,11 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
     if not packs:
         return {},sha("no-matching-visual-pack|"+source["book_id"]+"|"+source["source_pdf_sha256"])
     _,slug,pack_path,static_dir,pack=sorted(packs,key=lambda item:(-item[0],item[1]))[0]
+    source_page_count=source.get("page_count")
+    if not isinstance(source_page_count,int) or isinstance(source_page_count,bool):
+        source_page_count=(pack.get("source") or {}).get("page_count")
+    if not isinstance(source_page_count,int) or isinstance(source_page_count,bool) or source_page_count<1:
+        raise ValueError("Source/candidate pack is missing a valid original PDF page count.")
     wanted_pages={p for seg in segments for p in seg["source_pages"]}
     by_page={}
     for row in pack.get("candidates",[]):
@@ -418,7 +424,7 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
             str(row.get("source_pdf_sha256") or "").lower()==source["source_pdf_sha256"] and
             row.get("publication_allowed") is False and row.get("human_review_required") is True and
             str(row.get("review_status") or "").upper() in {"CANDIDATE_NEEDS_HUMAN_REVIEW","NEEDS_REVIEW"} and
-            isinstance(page,int) and not isinstance(page,bool) and 1<=page<=source["page_count"] and
+            isinstance(page,int) and not isinstance(page,bool) and 1<=page<=source_page_count and
             re.fullmatch(r"v3-image-[a-z0-9-]{8,100}",cid) and re.fullmatch(r"[0-9a-f]{64}",asset_sha)):
             pack_fingerprint_assets.append({"candidate_id":cid,"source_pdf_page_number":page,
                 "source_asset_sha256":asset_sha,"display_path":row.get("display_path")})
