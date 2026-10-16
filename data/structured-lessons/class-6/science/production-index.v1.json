@@ -2468,7 +2468,7 @@
   },
   "canonical_storage_contract": {
     "schema_version": "quantaedge.structured-lesson.v1",
-    "artifact_type": "quantaedge.structured-lesson.v1",
+    "artifact_type": "Separate classification label; canonical existing records use draft_lesson. Do not equate this field with schema_version.",
     "format": "One UTF-8 JSON object per topic. Preserve extra provenance, generation, alignment and review metadata; required runtime keys must also remain present.",
     "canonical_root": "data/structured-lessons/class-{class}/{subject}/",
     "filename_pattern": "chapter-{chapter_number:02d}/topic-{topic_number:02d}-{slug}.v1.json",

@@ -65,7 +65,7 @@ New coverage ledgers must provide `source_inventory.items[]` and `coverage_map[]
 
 ## Canonical application and database key contract
 
-The only canonical application artifact format is one UTF-8 JSON object per topic using schema_version and artifact_type equal to quantaedge.structured-lesson.v1. Keep extra model, alignment, source, provenance, scoring-guide and review metadata: additional keys are allowed. Do not omit or rename the keys that the current API/client contract requires.
+The only canonical application artifact format is one UTF-8 JSON object per topic using schema_version equals quantaedge.structured-lesson.v1; artifact_type is a non-empty classification string (draft_lesson for generated drafts). Keep extra model, alignment, source, provenance, scoring-guide and review metadata: additional keys are allowed. Do not omit or rename the keys that the current API/client contract requires.
 
 Canonical content path:
 data/structured-lessons/class-{class}/{subject}/chapter-{NN}/topic-{NN}-{slug}.v1.json

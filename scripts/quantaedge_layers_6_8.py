@@ -511,7 +511,7 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
             question["renderability"]={"status":"BLOCKED_FROM_STUDENT_RENDERING",
                 "reason":"Candidate visual is unapproved; render only after exact-asset visual, rights, language and accessibility approval."}
         questions.append(question)
-    return {"schema_version":"quantaedge.structured-lesson.v1","artifact_type":"quantaedge.structured-lesson.v1","artifact_id":aid,
+    return {"schema_version":"quantaedge.structured-lesson.v1","artifact_type":"draft_lesson","artifact_id":aid,
       "workflow":{"status":"DRAFT_REQUIRES_HUMAN_REVIEW","content_review_status":"NOT_REVIEWED","source_completeness_status":"SOURCE_LINKED_REQUIRES_REVIEW",
                   "visual_review_status":"NOT_REVIEWED","bilingual_parity_status":"MACHINE_CHECKED_REQUIRES_REVIEW","publication_allowed":False,
                   "human_review_required":True,"generation_model":"filled-by-run","source_pdf_sha256":source["source_pdf_sha256"],

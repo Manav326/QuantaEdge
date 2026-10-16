@@ -67,6 +67,7 @@ class LayersTests(unittest.TestCase):
         self.assertFalse(lesson["workflow"]["publication_allowed"])
         self.assertEqual(6,lesson["curriculum"]["class"])
         self.assertEqual("science",lesson["curriculum"]["subject"])
+        self.assertEqual("draft_lesson",lesson["artifact_type"])
         self.assertEqual(2,len(lesson["practice"]["questions"]))
 
     def test_question_types_are_contextual_and_question_count_is_not_fixed(self):

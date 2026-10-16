@@ -73,7 +73,7 @@ This per-segment generator is not a substitute for the structured chapter-author
 
 ## Canonical output path, application schema and DB response keys
 
-Layers 6–8 first writes generated lesson candidates under its run output folder. These candidates are not discovered as lessons by the runtime API. The canonical application format is one UTF-8 JSON file per topic with schema_version and artifact_type equal to quantaedge.structured-lesson.v1, saved under data/structured-lessons/class-{class}/{subject}/chapter-{NN}/topic-{NN}-{slug}.v1.json and registered in the matching production-index.v1.json.
+Layers 6–8 first writes generated lesson candidates under its run output folder. These candidates are not discovered as lessons by the runtime API. The canonical application format is one UTF-8 JSON file per topic with schema_version equals quantaedge.structured-lesson.v1; artifact_type is a non-empty classification string (draft_lesson for generated drafts), saved under data/structured-lessons/class-{class}/{subject}/chapter-{NN}/topic-{NN}-{slug}.v1.json and registered in the matching production-index.v1.json.
 
 Keep extra candidate metadata, but ensure the exact current keys exist: curriculum.class, curriculum.subject, chapter.chapter_number/title_by_locale, topic.topic_number/topic_id/title_by_locale, artifact_id, learning_objectives, source_refs, explain.blocks, practice.questions and workflow publication/review state. The API validates the chosen renderer contract and packages canonical JSON into the server JAR.
 
