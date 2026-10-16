@@ -37,7 +37,10 @@ fun StructuredLessonRenderer(
     language: String,
     studentMode: Boolean = true,
     onSubmitResponse: (questionId: String, responseJson: String) -> Unit,
-    onSaveActivity: ((blockId: String, responseJson: String) -> Unit)? = null
+    onSaveActivity: ((blockId: String, responseJson: String) -> Unit)? = null,
+    savedResponses: JSONObject = JSONObject(),
+    submittingQuestionIds: Set<String> = emptySet(),
+    savingActivityIds: Set<String> = emptySet()
 ) {
     val locale = if (language == "hi") "hi" else "en"
     val workflow = lesson.optJSONObject("workflow") ?: JSONObject()
@@ -48,6 +51,8 @@ fun StructuredLessonRenderer(
 
     val blocks = explain.optJSONArray("blocks").jsonObjects().sortedBy { it.optInt("order", Int.MAX_VALUE) }
     val questions = practice.optJSONArray("questions").jsonObjects()
+    val questionStates = savedResponses.optJSONObject("questions") ?: JSONObject()
+    val activityStates = savedResponses.optJSONObject("activities") ?: JSONObject()
     val hasAnswerKeys = questions.any { question ->
         listOf("correct_answer_ids", "correct_answer", "correct_pairs", "accepted_answers", "answer_guide_by_locale", "grading")
             .any(question::has)
@@ -78,11 +83,31 @@ fun StructuredLessonRenderer(
         Text(localized(topic.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.headlineSmall)
         Text(localized(explain.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.titleLarge)
         blocks.forEach { block ->
-            StructuredExplainBlockView(block, locale, studentMode, onSaveActivity)
+            StructuredExplainBlockView(block, locale, studentMode, onSaveActivity,
+                activityStates.optJSONObject(block.optString("id")) ?: JSONObject(),
+                block.optString("id") in savingActivityIds)
         }
         Text(localized(practice.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.titleLarge)
-        questions.forEach { question ->
-            StructuredQuestionView(question, locale, studentMode, blocks, onSubmitResponse)
+        if (questions.isEmpty()) {
+            Text(if (locale == "hi") "इस पाठ में अभी अभ्यास प्रश्न उपलब्ध नहीं हैं।" else "No practice questions are available in this lesson yet.")
+        } else {
+            var questionIndex by remember(lesson.optString("artifact_id")) { mutableStateOf(0) }
+            val safeIndex = questionIndex.coerceIn(0, questions.lastIndex)
+            val currentQuestion = questions[safeIndex]
+            Text((if (locale == "hi") "प्रश्न " else "Question ") + (safeIndex + 1) +
+                (if (locale == "hi") " / " else " of ") + questions.size,
+                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.secondary)
+            StructuredQuestionView(currentQuestion, locale, studentMode, blocks,
+                questionStates.optJSONObject(currentQuestion.optString("id")) ?: JSONObject(),
+                currentQuestion.optString("id") in submittingQuestionIds, onSubmitResponse)
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                OutlinedButton(enabled = safeIndex > 0, onClick = { questionIndex = (safeIndex - 1).coerceAtLeast(0) }) {
+                    Text(if (locale == "hi") "पिछला प्रश्न" else "Previous")
+                }
+                Button(enabled = safeIndex < questions.lastIndex, onClick = { questionIndex = (safeIndex + 1).coerceAtMost(questions.lastIndex) }) {
+                    Text(if (locale == "hi") "अगला प्रश्न" else "Next")
+                }
+            }
         }
     }
 }
@@ -92,7 +117,9 @@ private fun StructuredExplainBlockView(
     block: JSONObject,
     locale: String,
     studentMode: Boolean,
-    onSaveActivity: ((String, String) -> Unit)?
+    onSaveActivity: ((String, String) -> Unit)?,
+    savedActivity: JSONObject = JSONObject(),
+    savingActivity: Boolean = false
 ) {
     val type = block.optString("type")
     val text = block.optJSONObject("text_by_locale")?.optJSONObject(locale) ?: JSONObject()
@@ -135,7 +162,7 @@ private fun StructuredExplainBlockView(
                         }
                     }
                 }
-                "interactive", "activity" -> StructuredActivityContent(block, locale, onSaveActivity)
+                "interactive", "activity" -> StructuredActivityContent(block, locale, onSaveActivity, savedActivity, savingActivity)
                 else -> Text(if (locale == "hi") "यह सामग्री प्रकार समर्थित नहीं है।" else "Unsupported content type.")
             }
             val caption = localized(block.optJSONObject("caption_by_locale"), locale)
@@ -184,11 +211,14 @@ private fun StructuredDiagramContent(block: JSONObject, locale: String) {
 private fun StructuredActivityContent(
     block: JSONObject,
     locale: String,
-    onSave: ((String, String) -> Unit)?
+    onSave: ((String, String) -> Unit)?,
+    savedActivity: JSONObject = JSONObject(),
+    saving: Boolean = false
 ) {
     val config = block.optJSONObject("configuration") ?: JSONObject()
     val blockId = block.optString("id")
-    var response by remember(blockId) { mutableStateOf("") }
+    var response by remember(blockId) { mutableStateOf(savedActivity.optString("response")) }
+    var saveRequested by remember(blockId) { mutableStateOf(false) }
     val rawInstructions = block.optJSONObject("instructions_by_locale")?.opt(locale)
     when (rawInstructions) {
         is JSONArray -> rawInstructions.stringItems().forEach { Text(it) }
@@ -205,13 +235,18 @@ private fun StructuredActivityContent(
         if (stepText.isNotBlank()) Text("${index + 1}. $stepText")
     }
     OutlinedTextField(
-        value = response, onValueChange = { response = it }, modifier = Modifier.fillMaxWidth(),
+        value = response, onValueChange = { response = it; saveRequested = false }, modifier = Modifier.fillMaxWidth(),
         label = { Text(if (locale == "hi") "आपका उत्तर" else "Your response") }, minLines = 2
     )
-    Button(enabled = onSave != null, onClick = {
+    Button(enabled = onSave != null && !saving, onClick = {
         onSave?.invoke(blockId, JSONObject().put("response", response).toString())
+        saveRequested = true
     }) {
-        Text(if (locale == "hi") "उत्तर सहेजें" else "Save response")
+        Text(if (saving) { if (locale == "hi") "सहेज रहे हैं…" else "Saving…" }
+            else if (locale == "hi") "उत्तर सहेजें" else "Save response")
+    }
+    if (saveRequested && !saving && savedActivity.optString("response") == response) {
+        Text(if (locale == "hi") "उत्तर सहेजा गया।" else "Response saved.", style = MaterialTheme.typography.bodySmall)
     }
     if (onSave == null) Text(
         if (locale == "hi") "इस स्क्रीन पर उत्तर सहेजना अभी जुड़ा नहीं है।" else "Response saving is not connected on this screen yet.",
@@ -225,15 +260,30 @@ private fun StructuredQuestionView(
     locale: String,
     studentMode: Boolean,
     lessonBlocks: List<JSONObject>,
+    savedState: JSONObject = JSONObject(),
+    submitting: Boolean = false,
     onSubmit: (String, String) -> Unit
 ) {
     val id = question.optString("id")
     val type = question.optString("type")
     val prompt = localized(question.optJSONObject("prompt_by_locale"), locale)
     val options = question.optJSONArray("options").jsonObjects()
-    val response = remember(id) { mutableStateMapOf<String, String>() }
-    var textResponse by remember(id) { mutableStateOf("") }
-    var submittedRequest by remember(id) { mutableStateOf(false) }
+    val savedResponse = savedState.opt("response")
+    val response = remember(id) { mutableStateMapOf<String, String>().apply {
+        when (type) {
+            "multiple_choice", "scenario_based", "image_observation" -> if (savedResponse is String) put("selected", savedResponse)
+            "true_false" -> if (savedResponse is Boolean) put("boolean", savedResponse.toString())
+            "multiple_select" -> if (savedResponse is JSONArray) {
+                for (index in 0 until savedResponse.length()) put(savedResponse.optString(index), "true")
+            }
+            "matching" -> if (savedResponse is JSONObject) savedResponse.keys().forEach { key -> put(key, savedResponse.optString(key)) }
+        }
+    } }
+    var textResponse by remember(id) { mutableStateOf(
+        if (type == "fill_blank" || type == "short_answer") savedResponse as? String ?: "" else ""
+    ) }
+    var submittedRequest by remember(id) { mutableStateOf(savedState.has("status")) }
+    val locked = savedState.optString("status") in setOf("correct", "pending_review")
 
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -260,7 +310,7 @@ private fun StructuredQuestionView(
                         options.forEach { option ->
                             val optionId = option.optString("id")
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                RadioButton(response["selected"] == optionId, onClick = { response["selected"] = optionId })
+                                RadioButton(response["selected"] == optionId, enabled = !locked && !submitting, onClick = { response["selected"] = optionId })
                                 Text(localized(option.optJSONObject("text_by_locale"), locale))
                             }
                         }
@@ -268,13 +318,13 @@ private fun StructuredQuestionView(
                     "multiple_select" -> options.forEach { option ->
                         val optionId = option.optString("id")
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(response[optionId] == "true", onCheckedChange = { response[optionId] = it.toString() })
+                            Checkbox(response[optionId] == "true", enabled = !locked && !submitting, onCheckedChange = { response[optionId] = it.toString() })
                             Text(localized(option.optJSONObject("text_by_locale"), locale))
                         }
                     }
                     "true_false" -> listOf("true", "false").forEach { value ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(response["boolean"] == value, onClick = { response["boolean"] = value })
+                            RadioButton(response["boolean"] == value, enabled = !locked && !submitting, onClick = { response["boolean"] = value })
                             Text(if (value == "true") { if (locale == "hi") "सही" else "True" }
                                 else { if (locale == "hi") "गलत" else "False" })
                         }
@@ -287,7 +337,7 @@ private fun StructuredQuestionView(
                             var expanded by remember(id, leftId) { mutableStateOf(false) }
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text(localized(left.optJSONObject("label_by_locale"), locale))
-                                TextButton(onClick = { expanded = true }) {
+                                TextButton(onClick = { expanded = true }, enabled = !locked && !submitting) {
                                     val selected = rightItems.firstOrNull { it.optString("id") == response[leftId] }
                                     Text(selected?.let { localized(it.optJSONObject("label_by_locale"), locale) }
                                         ?: if (locale == "hi") "मिलान चुनें" else "Choose a match")
@@ -304,7 +354,7 @@ private fun StructuredQuestionView(
                         }
                     }
                     "fill_blank", "short_answer" -> OutlinedTextField(
-                        value = textResponse, onValueChange = { textResponse = it },
+                        value = textResponse, onValueChange = { textResponse = it }, enabled = !locked && !submitting,
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(if (locale == "hi") "उत्तर" else "Answer") },
                         minLines = if (type == "short_answer") 3 else 1
@@ -321,24 +371,43 @@ private fun StructuredQuestionView(
                     "fill_blank", "short_answer" -> textResponse.isNotBlank()
                     else -> false
                 }
-                Button(enabled = isAnswerComplete, onClick = {
-                    val payload = when (type) {
-                        "multiple_choice", "scenario_based", "image_observation" -> JSONObject().put("option_id", response["selected"] ?: "")
-                        "true_false" -> JSONObject().put("value", response["boolean"]?.toBooleanStrictOrNull())
+                Button(enabled = isAnswerComplete && !locked && !submitting, onClick = {
+                    val payloadJson = when (type) {
+                        "multiple_choice", "scenario_based", "image_observation" -> JSONObject.quote(response["selected"] ?: "")
+                        "true_false" -> response["boolean"]?.toBooleanStrictOrNull()?.toString() ?: "null"
                         "multiple_select" -> JSONArray().also { array ->
                             response.filterValues { it == "true" }.keys.sorted().forEach { selectedId -> array.put(selectedId) }
-                        }.let { JSONObject().put("option_ids", it) }
-                        "matching" -> JSONObject(response.toMap())
-                        else -> JSONObject().put("text", textResponse)
+                        }.toString()
+                        "matching" -> JSONObject(response.toMap()).toString()
+                        else -> JSONObject.quote(textResponse)
                     }
-                    onSubmit(id, payload.toString())
+                    onSubmit(id, payloadJson)
                     submittedRequest = true
-                }) { Text(if (locale == "hi") "उत्तर भेजें" else "Submit answer") }
-                if (submittedRequest) Text(
-                    if (locale == "hi") "उत्तर भेजने का अनुरोध किया गया है; परिणाम की पुष्टि ऐप करेगा。"
-                    else "Submission was requested; the app must confirm the result.",
-                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary
-                )
+                }) { Text(if (submitting) { if (locale == "hi") "सहेज रहे हैं…" else "Saving…" }
+                    else if (locale == "hi") "उत्तर भेजें" else "Submit answer") }
+                val savedStatus = savedState.optString("status")
+                if (savedStatus.isNotBlank()) {
+                    val statusLabel = when (savedStatus) {
+                        "correct" -> if (locale == "hi") "सही उत्तर" else "Correct"
+                        "incorrect" -> if (locale == "hi") "फिर प्रयास करें" else "Try again"
+                        "partially_correct" -> if (locale == "hi") "आंशिक रूप से सही" else "Partially correct"
+                        else -> if (locale == "hi") "जाँच के लिए सहेजा गया" else "Saved for review"
+                    }
+                    Text(statusLabel, style = MaterialTheme.typography.titleSmall, color =
+                        if (savedStatus == "correct") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                    val feedback = savedState.optJSONObject("feedbackByLocale")?.optString(locale).orEmpty()
+                        .ifBlank { savedState.optString("feedback") }
+                    if (feedback.isNotBlank()) Text(feedback, style = MaterialTheme.typography.bodyMedium)
+                    if (savedState.has("score") && savedState.has("maxScore")) {
+                        Text(savedState.optInt("score").toString() + " / " + savedState.optInt("maxScore").toString(),
+                            style = MaterialTheme.typography.labelMedium)
+                    }
+                } else if (submitting) {
+                    Text(if (locale == "hi") "आपका उत्तर सहेजा जा रहा है…" else "Saving your response…", style = MaterialTheme.typography.bodySmall)
+                } else if (submittedRequest) {
+                    Text(if (locale == "hi") "उत्तर का परिणाम अभी नहीं मिला। पुनः प्रयास करें。" else "No result received yet. You can retry.",
+                        style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }

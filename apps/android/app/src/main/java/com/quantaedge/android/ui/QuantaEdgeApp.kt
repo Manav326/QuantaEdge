@@ -103,6 +103,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONTokener
 import java.io.IOException
 import java.time.LocalTime
 
@@ -195,6 +196,12 @@ fun QuantaEdgeApp() {
     var selectedChild by remember { mutableStateOf(JSONObject()) }
 
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var structuredLessons by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var structuredLessonMode by rememberSaveable { mutableStateOf(false) }
+    var structuredLessonArtifactId by rememberSaveable { mutableStateOf("") }
+    var structuredLessonSavedResponses by remember { mutableStateOf(JSONObject()) }
+    var structuredLessonPendingQuestionIds by remember { mutableStateOf(emptySet<String>()) }
+    var structuredLessonPendingActivityIds by remember { mutableStateOf(emptySet<String>()) }
     var lesson by remember { mutableStateOf(JSONObject()) }
     var practice by remember { mutableStateOf(JSONObject()) }
     var diagnostic by remember { mutableStateOf(JSONObject()) }
@@ -515,6 +522,7 @@ fun QuantaEdgeApp() {
     }
 
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
+        structuredLessonMode = false
         currentSubject = subjectCode
         currentCourseId = courseId.coerceAtLeast(0L)
         lessons = emptyList()
@@ -539,7 +547,40 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun openStructuredLessons() {
+        structuredLessonMode = true
+        currentSubject = "science"
+        structuredLessons = emptyList()
+        route = AppRoute.SUBJECT_LESSONS
+        runTask {
+            val array = ApiClient.getArray("/api/v1/learning/structured-lessons?language=" + learningLanguage)
+            structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
+        }
+    }
+
+    fun openStructuredLesson(item: JSONObject) {
+        val artifactId = item.optString("artifactId")
+        if (artifactId.isBlank()) {
+            error = if (language == "hi") "यह structured lesson पहचान में नहीं आया।" else "This structured lesson could not be identified."
+            return
+        }
+        structuredLessonMode = true
+        lessonReturnRoute = AppRoute.SUBJECT_LESSONS
+        structuredLessonArtifactId = artifactId
+        runTask {
+            val encodedId = ApiClient.encodeQuery(artifactId)
+            lesson = ApiClient.getObject("/api/v1/learning/structured-lessons/" + encodedId + "?language=" + learningLanguage)
+            structuredLessonSavedResponses = ApiClient.getObject(
+                "/api/v1/learning/structured-lessons/" + encodedId + "/responses?language=" + learningLanguage
+            )
+            structuredLessonPendingQuestionIds = emptySet()
+            structuredLessonPendingActivityIds = emptySet()
+            route = AppRoute.LESSON
+        }
+    }
+
     fun openLesson(lessonRow: JSONObject) {
+        structuredLessonMode = false
         lessonReturnRoute = route.takeIf {
             it !in setOf(AppRoute.LESSON, AppRoute.PRACTICE, AppRoute.TUTOR, AppRoute.RECORDING_PLAYER)
         } ?: AppRoute.SUBJECT_LESSONS
@@ -1982,7 +2023,7 @@ fun QuantaEdgeApp() {
             AppRoute.PROFILE -> openStudentProfile()
             AppRoute.ACCOUNT_LIFECYCLE -> refreshAccountLifecycle()
             AppRoute.PROGRESS -> openProgress()
-            AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject, currentCourseId)
+            AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons() else openSubject(currentSubject, currentCourseId)
             AppRoute.DIAGNOSTIC -> openDiagnostic()
             AppRoute.ASSESSMENTS -> openAssessments(assessmentSubjectFilter)
             AppRoute.ASSESSMENT_RESULTS -> loadAssessmentResults()
@@ -2482,15 +2523,77 @@ fun QuantaEdgeApp() {
                         onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
-                    AppRoute.SUBJECT_LESSONS -> LessonListScreen(
+                    AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) StructuredLessonCatalogueScreen(
+                        items = structuredLessons,
+                        language = language,
+                        busy = busy,
+                        onRefresh = ::openStructuredLessons,
+                        onOpenLesson = ::openStructuredLesson,
+                        onOpenLegacyLessons = { structuredLessonMode = false; openSubject(currentSubject, currentCourseId) }
+                    ) else LessonListScreen(
                         subject = currentSubject,
                         lessons = lessons,
                         language = language,
                         busy = busy,
                         onRefresh = { openSubject(currentSubject, currentCourseId) },
-                        onOpenLesson = ::openLesson
+                        onOpenLesson = ::openLesson,
+                        onOpenStructuredLessons = ::openStructuredLessons
                     )
-                    AppRoute.LESSON -> LessonScreen(
+                    AppRoute.LESSON -> if (structuredLessonMode) StructuredLessonRenderer(
+                        lesson = lesson,
+                        language = learningLanguage,
+                        studentMode = true,
+                        savedResponses = structuredLessonSavedResponses,
+                        submittingQuestionIds = structuredLessonPendingQuestionIds,
+                        savingActivityIds = structuredLessonPendingActivityIds,
+                        onSubmitResponse = { questionId, responseJson ->
+                            if (questionId !in structuredLessonPendingQuestionIds) {
+                                structuredLessonPendingQuestionIds = structuredLessonPendingQuestionIds + questionId
+                                runTask {
+                                    try {
+                                        val responseValue = JSONTokener(responseJson).nextValue()
+                                        val result = ApiClient.postObject(
+                                            "/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(structuredLessonArtifactId) +
+                                                "/questions/" + ApiClient.encodeQuery(questionId) + "/responses?language=" + learningLanguage,
+                                            JSONObject().put("response", responseValue)
+                                        )
+                                        val state = JSONObject().put("response", responseValue)
+                                            .put("status", result.optString("status"))
+                                            .put("feedback", result.optString("feedback"))
+                                        result.optJSONObject("feedbackByLocale")?.let { state.put("feedbackByLocale", it) }
+                                        if (result.has("score")) state.put("score", result.optInt("score"))
+                                        if (result.has("maxScore")) state.put("maxScore", result.optInt("maxScore"))
+                                        val all = JSONObject(structuredLessonSavedResponses.toString())
+                                        val questions = JSONObject(all.optJSONObject("questions")?.toString() ?: "{}")
+                                        questions.put(questionId, state)
+                                        structuredLessonSavedResponses = all.put("questions", questions)
+                                    } finally {
+                                        structuredLessonPendingQuestionIds = structuredLessonPendingQuestionIds - questionId
+                                    }
+                                }
+                            }
+                        },
+                        onSaveActivity = { blockId, responseJson ->
+                            if (blockId !in structuredLessonPendingActivityIds) {
+                                structuredLessonPendingActivityIds = structuredLessonPendingActivityIds + blockId
+                                runTask {
+                                    try {
+                                        ApiClient.postObject(
+                                            "/api/v1/learning/structured-lessons/" + ApiClient.encodeQuery(structuredLessonArtifactId) +
+                                                "/activities/" + ApiClient.encodeQuery(blockId) + "/responses",
+                                            JSONObject().put("response", responseJson)
+                                        )
+                                        val all = JSONObject(structuredLessonSavedResponses.toString())
+                                        val activities = JSONObject(all.optJSONObject("activities")?.toString() ?: "{}")
+                                        activities.put(blockId, JSONObject(responseJson))
+                                        structuredLessonSavedResponses = all.put("activities", activities)
+                                    } finally {
+                                        structuredLessonPendingActivityIds = structuredLessonPendingActivityIds - blockId
+                                    }
+                                }
+                            }
+                        }
+                    ) else LessonScreen(
                         lesson = lesson,
                         language = language,
                         tutorMinimized = tutorMinimized,
@@ -3294,7 +3397,8 @@ private fun LessonListScreen(
     language: String,
     busy: Boolean,
     onRefresh: () -> Unit,
-    onOpenLesson: (JSONObject) -> Unit
+    onOpenLesson: (JSONObject) -> Unit,
+    onOpenStructuredLessons: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
@@ -3304,6 +3408,9 @@ private fun LessonListScreen(
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+        }
+        OutlinedButton(onClick = onOpenStructuredLessons, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
+            Text(if (language == "hi") "Structured lessons खोलें" else "Open structured lessons")
         }
         if (lessons.isEmpty() && !busy) {
             EmptyState("अभी कोई पाठ उपलब्ध नहीं", "इस कक्षा और विषय के प्रकाशित पाठ सर्वर पर उपलब्ध होने पर वे यहाँ दिखेंगे।")
@@ -3320,6 +3427,67 @@ private fun LessonListScreen(
                                 style = MaterialTheme.typography.bodySmall)
                             LinearProgressIndicator(progress = { progress.coerceIn(0, 100) / 100f }, modifier = Modifier.fillMaxWidth())
                             Text(localizedUiText("पाठ खोलें →"), color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun StructuredLessonCatalogueScreen(
+    items: List<JSONObject>,
+    language: String,
+    busy: Boolean,
+    onRefresh: () -> Unit,
+    onOpenLesson: (JSONObject) -> Unit,
+    onOpenLegacyLessons: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Structured lessons", style = MaterialTheme.typography.headlineSmall)
+                Text(if (language == "hi") "समीक्षा और प्रकाशन स्वीकृत पाठ" else "Reviewed and published lessons",
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+            }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(if (language == "hi") "रिफ्रेश" else "Refresh") }
+        }
+        OutlinedButton(onClick = onOpenLegacyLessons, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(if (language == "hi") "Existing lessons पर लौटें" else "Return to existing lessons")
+        }
+        if (busy) {
+            Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else if (items.isEmpty()) {
+            EmptyState(
+                if (language == "hi") "अभी कोई approved structured lesson उपलब्ध नहीं है" else "No approved structured lessons yet",
+                if (language == "hi") "Content, source, visual और bilingual review पूरा होने के बाद published lessons यहाँ दिखेंगे।"
+                else "Published lessons appear here only after content, source, visual and bilingual reviews are approved."
+            )
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxSize()) {
+                items(items) { item ->
+                    Card(modifier = Modifier.fillMaxWidth().clickable { onOpenLesson(item) }) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(item.optString("subjectCode").uppercase() + " · " +
+                                (if (language == "hi") "कक्षा " else "Class ") + item.optInt("classNumber"),
+                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                            Text(item.optString("title").ifBlank { if (language == "hi") "पाठ" else "Lesson" },
+                                style = MaterialTheme.typography.titleMedium)
+                            Text((if (language == "hi") "अध्याय " else "Chapter ") + item.optInt("chapterNumber") +
+                                ": " + item.optString("chapterTitle") + " · " +
+                                (if (language == "hi") "विषय " else "Topic ") + item.optInt("topicNumber"),
+                                style = MaterialTheme.typography.bodySmall)
+                            if (item.optInt("estimatedMinutes") > 0) {
+                                Text(item.optInt("estimatedMinutes").toString() + (if (language == "hi") " मिनट" else " min"),
+                                    style = MaterialTheme.typography.bodySmall)
+                            }
+                            Text(if (language == "hi") "Lesson खोलें →" else "Open lesson →",
+                                color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
                         }
                     }
                 }

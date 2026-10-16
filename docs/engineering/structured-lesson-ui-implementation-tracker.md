@@ -194,3 +194,13 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Web experience now hydrates restored question/activity responses, uses bilingual server feedback, and shows activity save success only after the server confirms the save.
 - Added a Web structured-lessons catalogue/detail route and a navigation link in the existing Learn group.
 - Validation pending: API verification and Web image build must pass before marking this slice complete.
+
+
+## Android structured lesson API wiring (2026-10-16; CI acceptance pending)
+
+- Reuses the existing Learn route and existing Compose StructuredLessonRenderer; no second navigation group or unrelated app route was added.
+- Adds an entry from the existing lesson list into the published-only structured lesson catalogue, with a clear empty state while the generated topics remain unapproved.
+- Loads lesson JSON and saved state from the same endpoints as Web. Question and activity responses use stable IDs and server persistence.
+- Corrects Android answer bodies to the new API's typed contract: string option IDs; Boolean true/false; string array for multi-select; matching object; raw text string for text answers.
+- Restores saved answer/activity state, renders server statuses/scores and language-specific feedback, and presents one practice question at a time.
+- Existing legacy numeric lesson route remains intact. Validation is pending the commit's Android APK, API verification, Web image build and migration checks. Do not mark implementation green until the run completes.
