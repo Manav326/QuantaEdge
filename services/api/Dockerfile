@@ -1,5 +1,9 @@
 # syntax=docker/dockerfile:1.7
 FROM maven:3.9.12-eclipse-temurin-21 AS build
+# The build-only publication gate filters draft content before it enters the JAR.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY services/api/pom.xml ./pom.xml
 # Keep Maven artifacts in BuildKit's persistent cache across rebuilds.
@@ -9,7 +13,7 @@ COPY services/api/src ./src
 COPY scripts/package_published_structured_lessons.py ./scripts/package_published_structured_lessons.py
 COPY data/structured-lessons/ ./data/structured-lessons/
 RUN --mount=type=cache,target=/root/.m2 \
-    python ./scripts/package_published_structured_lessons.py \
+    python3 ./scripts/package_published_structured_lessons.py \
       --source ./data/structured-lessons \
       --destination ./src/main/resources/structured-lessons \
     && mvn -B -ntp -q -DskipTests package
