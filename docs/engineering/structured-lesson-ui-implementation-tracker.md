@@ -242,3 +242,12 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Android's shared legacy image composable already provides a tappable image and enlarged Dialog with alternative text and close action. The structured Android renderer delegates approved image assets to that component; device accessibility/rotation/offline checks remain unrun.
 - Tasks UI-104, UI-304, UI-401 and UI-405 remain in progress because source/contract checks are not interactive Web/Admin/Android end-to-end or real-device acceptance.
 - Next acceptance: check the latest main CI for Android `testDebugUnitTest assembleDebug`, API verification, Web/Admin/People images and import safeguards. Then run signed-in learner acceptance with a legitimate approved test fixture; verify all eight types, locale switching and saved response restoration; verify visual gates and the enlarged image dialog; record keyboard/TalkBack and portrait/landscape results before marking remaining tasks complete.
+
+
+## UI continuation — Android diagram fail-closed guard (2026-10-16; CI pending)
+
+- Android Compose now independently checks diagram `student_renderable`, review status, bilingual alternative text and non-empty diagram nodes before displaying a student-facing diagram. The server already removes blocked diagrams from the learner payload; this is an additional client-side guard if a renderer receives a malformed/untrusted payload.
+- Added JVM regression tests for a valid approved bilingual diagram, pending/unapproved review status, and missing accessibility/content data. Added static-contract assertions requiring both the renderer gate and these test cases.
+- Content pipeline run #32 remains green. Previous main CI run #2798 passed Android APK/unit tests, API verification/API image, Admin image, People Operations image and content safeguards; its Web image build was still in progress when last checked. The current main head (image lightbox change) still awaits run #2799, and this additional Android gate triggers another run.
+- No lesson approval state was changed. Drafts and blocked visuals remain blocked.
+- Remaining acceptance unchanged: authenticated live save/reload and cross-platform eight-question interaction matrix; visual lightbox, focus/TalkBack and narrow/landscape device checks. Do not mark UI-402 or UI-405 green until evidence exists.

@@ -187,7 +187,9 @@ private fun StructuredExplainBlockView(
                         }
                     }
                 }
-                "diagram" -> StructuredDiagramContent(block, locale)
+                "diagram" -> if (studentMode && !isApprovedDiagram(block)) {
+                    Text(if (locale == "hi") "यह आरेख समीक्षा तक छिपा है।" else "Diagram is hidden until approved.")
+                } else StructuredDiagramContent(block, locale)
                 "image" -> {
                     val asset = block.optJSONObject("asset") ?: JSONObject()
                     if (studentMode && !isApprovedVisual(asset)) {
@@ -458,6 +460,22 @@ private fun StructuredQuestionView(
             }
         }
     }
+}
+
+internal fun isApprovedDiagram(block: JSONObject): Boolean {
+    val data = block.optJSONObject("diagram_data") ?: return false
+    val review = block.optString("review_status").ifBlank { data.optString("review_status") }.uppercase()
+    val renderable = if (block.has("student_renderable")) {
+        block.optBoolean("student_renderable")
+    } else {
+        data.optBoolean("student_renderable")
+    }
+    val alt = block.optJSONObject("alt_by_locale")
+    val nodes = data.optJSONArray("nodes")
+    return renderable &&
+        review in setOf("APPROVED", "APPROVED_FOR_STUDENT_RENDERING") &&
+        !localized(alt, "en").isBlank() && !localized(alt, "hi").isBlank() &&
+        nodes != null && nodes.length() > 0
 }
 
 private fun isApprovedVisual(asset: JSONObject): Boolean {

@@ -36,6 +36,7 @@ const files = {
   adminPreview: 'apps/admin/app/structured-lesson-preview/page.tsx',
   androidRenderer: 'apps/android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt',
   androidApp: 'apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt',
+  androidVisualGateTest: 'apps/android/app/src/test/java/com/quantaedge/android/ui/StructuredLessonVisualGateTest.kt',
   apiService: 'services/api/src/main/java/com/quantaedge/api/StructuredLessonArtifactService.java',
   apiController: 'services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java',
 };
@@ -95,6 +96,9 @@ for (const key of ['webImageLightbox', 'adminImageLightbox']) {
   assert.ok(source[key].includes('role="dialog"') && source[key].includes('aria-modal="true"'), key + ' must expose a modal dialog to assistive technology.');
   assert.ok(source[key].includes("event.key === 'Escape'"), key + ' must close with Escape.');
 }
+assert.ok(source.androidRenderer.includes('studentMode && !isApprovedDiagram(block)'), 'Android student diagram blocks must be independently fail-closed.');
+assert.ok(source.androidVisualGateTest.includes('rejectsUnreviewedOrIncompleteDiagrams'), 'Android diagram visual-gate regression test is required.');
+assert.ok(source.androidVisualGateTest.includes('acceptsExplicitlyApprovedBilingualDiagram'), 'Android diagram visual-gate positive regression test is required.');
 assert.ok(source.adminPreview.includes("setLocale('hi')"), 'Admin preview must have Hindi language selection.');
 assert.ok(source.adminPreview.includes("setLocale('en')"), 'Admin preview must have English language selection.');
 assert.ok(source.webDetail.includes('learningLanguage'), 'Web learner must use the global learning language.');
