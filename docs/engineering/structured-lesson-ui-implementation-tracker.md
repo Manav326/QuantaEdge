@@ -204,3 +204,12 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Corrects Android answer bodies to the new API's typed contract: string option IDs; Boolean true/false; string array for multi-select; matching object; raw text string for text answers.
 - Restores saved answer/activity state, renders server statuses/scores and language-specific feedback, and presents one practice question at a time.
 - Existing legacy numeric lesson route remains intact. Validation is pending the commit's Android APK, API verification, Web image build and migration checks. Do not mark implementation green until the run completes.
+
+
+## Android missing-import fix committed — acceptance still pending (2026-10-16)
+
+- On main commit 70d243a4cdce6135d1bb51accf23d3870544c536, added the missing androidx.compose.material3.OutlinedButton import reported by Android Kotlin compilation in run #2764.
+- The failing compile diagnostic was: StructuredLessonRenderer.kt:104 unresolved reference OutlinedButton; the related Composable-context diagnostic was downstream of that unresolved symbol.
+- New validation run: https://github.com/Manav326/QuantaEdge/actions/runs/38878396073 (run #2766). Its status was pending at the last check.
+- Do not mark UI-Q items green yet: latest green evidence covers API verification, Web/Admin/People builds and content import safeguards, not the repaired Android APK build or full manual Web/Admin/Android parity matrix.
+- Remaining acceptance: confirm run #2766 Android and API image succeed; exercise approved Class 6 Science Ch1/Ch2/Ch6 fixtures across learner Web, Admin preview and Android; test all question types, language switching, saved state and blocked-visual/publication gates. Current generated lesson artifacts remain drafts by design.
