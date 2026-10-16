@@ -4369,7 +4369,7 @@ private fun AssessmentAttemptScreen(
                         question = question,
                         answer = value,
                         onAnswerChange = { onAnswerChange(id, it) },
-                        onSubmit = { onSave(question, value) },
+                        onSubmit = { onSave(question, value) {} },
                         locked = !inProgress || deadlineReached,
                         saving = busy,
                         feedback = feedbacks[id],
