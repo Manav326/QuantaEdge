@@ -660,7 +660,7 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
       "source":{"book_id":source["book_id"],"title":source["title"],"edition":source["edition"],"source_url":source["source_url"],
         "source_pdf_sha256":source["source_pdf_sha256"],"sample_segment_ids":[s["segment_id"] for s in samplesegs],
         "sample_source_pages":sorted({p for s in samplesegs for p in s["source_pages"]})},
-      "endpoint_mode":"native local Ollama /api/chat; no hosted API or API key","prompt_version":PROMPT_VERSION,"models":results,
+      "endpoint_mode":"native local Ollama /api/chat; no hosted API or API key","prompt_version":PROMPT_VERSION,"visual_candidate_fingerprint":visual_fingerprint,"models":results,
       "selection_metric":"Review exact sample outputs plus schema validity, structured-lesson validity, page-citation validity and latency; no automatic winner.",
       "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
       "publication_allowed":False,"student_delivery_allowed":False,"human_review_required":True}

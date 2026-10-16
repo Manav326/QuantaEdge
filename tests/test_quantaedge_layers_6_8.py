@@ -7,8 +7,9 @@ from unittest.mock import patch
 from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
-    lesson_from, ollama_chat, sha, split_sft, validate_lesson, validate_output,
-    validate_splits, segments_for, write_rag, write_json, write_jsonl, write_outputs, run as run_layers,
+    PROMPT_VERSION, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft,
+    validate_lesson, validate_output, validate_splits, segments_for, write_rag,
+    write_json, write_jsonl, write_outputs, run as run_layers,
 )
 
 class FakeResponse:
@@ -129,7 +130,7 @@ class LayersTests(unittest.TestCase):
                 "source":{"source_book_id":book,"source_pdf_sha256":pdfhash}})
             benchmark=root/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
             write_json(benchmark,{"production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
-                "models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
+                "prompt_version":PROMPT_VERSION,"models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
             args=SimpleNamespace(repo_root=root,class_no=6,source_book_id=book,model="qwen2.5:1.5b",benchmark_report=None,
                 max_pages_per_segment=4,max_context_chars=7000,endpoint="http://127.0.0.1:11434",
                 max_model_calls=3,checkpoint_every=1,request_timeout=30,commit_checkpoints=False)
@@ -185,5 +186,43 @@ class LayersTests(unittest.TestCase):
             self.assertEqual("INCOMPLETE",report["layers"]["7"])
             self.assertEqual("INCOMPLETE",report["overall_status"])
             self.assertEqual(["unresolved"],report["unresolved_chapter_segments"])
+
+
+    def test_visual_candidates_are_hash_bound_and_preview_only(self):
+        with tempfile.TemporaryDirectory() as temp:
+            repo=Path(temp); book="book"; pdfhash="f"*64; slug="class6-en-science-test"
+            packdir=repo/"data"/"textbook-visual-candidates-v3"/slug; packdir.mkdir(parents=True)
+            write_json(packdir/"source-selection.v1.json",{"book_id":book,"sha256":pdfhash,"book_slug":slug})
+            import hashlib
+            raw=b"synthetic-candidate-image"
+            display_sha=hashlib.sha256(raw).hexdigest()
+            static=repo/"apps"/"web"/"public"/"content"/"visual-assets"/slug/"candidates"; static.mkdir(parents=True)
+            (static/f"v3-image-testcandidate-{display_sha[:12]}.jpg").write_bytes(raw)
+            write_json(packdir/"candidates.v3.json",{"schema_version":"quantaedge.visual-candidate-pack.v3",
+              "source":{"book_id":book,"pdf_sha256":pdfhash,"page_count":1},"summary":{"selected_embedded_images":1},
+              "publication_allowed":False,"candidates":[{"candidate_id":"v3-image-testcandidate","candidate_kind":"embedded_image",
+                "source_book_id":book,"source_pdf_sha256":pdfhash,"source_pdf_page_number":1,
+                "source_asset_sha256":"a"*64,"heuristic_score":10,"review_status":"CANDIDATE_NEEDS_HUMAN_REVIEW",
+                "publication_allowed":False,"human_review_required":True,"page_text_context":"source page"}]})
+            source={"book_id":book,"source_pdf_sha256":pdfhash,"source_url":"https://ncert.nic.in/x",
+              "title":"Science","edition":"Reprint","class_no":6,"subject":"science","language":"en"}
+            segment={"segment_id":"seg-1","sequence":1,"source_pages":[1]}
+            attached,fingerprint=load_visual_candidates(repo,source,[segment])
+            self.assertEqual(1,len(attached["seg-1"])); self.assertEqual(64,len(fingerprint))
+            lesson=lesson_from(source,segment,model_json([1]),attached["seg-1"])
+            self.assertEqual([],validate_lesson(lesson))
+            visual=next(b for b in lesson["explain"]["blocks"] if b["type"]=="image")
+            self.assertFalse(visual["asset"]["publication_allowed"])
+            self.assertFalse(visual["asset"]["student_renderable"])
+            self.assertEqual(pdfhash,visual["asset"]["source_pdf_sha256"])
+            self.assertTrue(visual["asset"]["url"].startswith("https://raw.githubusercontent.com/"))
+
+    def test_visual_candidates_from_another_pdf_edition_are_not_attached(self):
+        with tempfile.TemporaryDirectory() as temp:
+            repo=Path(temp); slug="wrong-edition"; folder=repo/"data"/"textbook-visual-candidates-v3"/slug; folder.mkdir(parents=True)
+            write_json(folder/"source-selection.v1.json",{"book_id":"book","sha256":"a"*64,"book_slug":slug})
+            attached,fingerprint=load_visual_candidates(repo,{"book_id":"book","source_pdf_sha256":"b"*64},
+                [{"segment_id":"s","source_pages":[1]}])
+            self.assertEqual({},attached); self.assertEqual(64,len(fingerprint))
 
 if __name__=="__main__": unittest.main()
