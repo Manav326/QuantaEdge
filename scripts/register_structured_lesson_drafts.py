@@ -38,6 +38,9 @@ def register(candidate_dir: Path, root: Path, index_path: Path, index: dict[str,
         raise ValueError("Confirm the exact canonical chapter mapping with --confirm-chapter-mapping.")
     if not candidate_dir.is_dir():
         raise ValueError(f"Candidate directory does not exist: {candidate_dir}")
+    baseline = validate_index(index, root, index_path)
+    if baseline["status"] != "PASS":
+        raise ValueError("Existing canonical store fails validation; registration stopped before writes:\n" + "\n".join(baseline["errors"][:30]))
     target = index.get("target") if isinstance(index.get("target"), dict) else {}
     class_number = target.get("class")
     if not isinstance(class_number, int) or isinstance(class_number, bool):
@@ -234,10 +237,8 @@ def register(candidate_dir: Path, root: Path, index_path: Path, index: dict[str,
     batch["status"] = "CANONICAL_DRAFT_REVIEW_PENDING"
     index["updated_date"] = date.today().isoformat()
 
-    index_errors = validate_index(index, root, index_path)
-    if index_errors["status"] != "PASS":
-        raise ValueError("Updated production index would fail validation:\n" + "\n".join(index_errors["errors"][:30]))
-
+    # Validate the resulting index after writing all planned files. Writes are rolled
+    # back and the original index restored if that complete-store check fails.
     original_index = index_path.read_bytes() if index_path.is_file() else None
     written: list[Path] = []
     try:
