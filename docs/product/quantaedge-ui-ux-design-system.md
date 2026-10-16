@@ -17,7 +17,7 @@ This is a restrained, polished education product—not a neon/glassmorphism them
 
 ## 2. Canonical brand tokens
 
-The existing approved brand system in `docs/branding.md` remains authoritative. This design plan does not replace it with a blue-first identity.
+The existing approved brand system in `docs/branding.md` remains authoritative. This design plan does not change the orange-led identity.
 
 | Token | Value | Use |
 |---|---|---|
@@ -98,7 +98,7 @@ All shared interactive components should define normal, hover, pressed, focus-vi
 
 ## 5. Centralisation and architecture rules
 
-1. `docs/branding.md` remains the source of truth for brand identity, the refreshed navy/blue interface palette, and canonical assets.
+1. `docs/branding.md` remains the source of truth for the existing orange-led brand identity and canonical assets.
 2. Inspect the current shared branding implementation and app-level styles before changing them. Reuse the central brand component; do not create parallel logo or wordmark components.
 3. Create or extend shared design tokens and reusable primitives only where the repository's app/build architecture supports it. If applications have separate bundles, keep token definitions synchronised through a documented shared source or parity check rather than pretending runtime sharing exists.
 4. Avoid broad global CSS selectors that accidentally restyle third-party widgets, equations, charts, editor content, or embedded media.
@@ -173,5 +173,5 @@ For every route, check real data, empty data, loading, server errors, permission
 
 ## 8. Progress log
 
-- **2026-10-16:** Premium-hybrid direction confirmed for all web interfaces. The user approved the navy/royal-blue/electric-blue palette shown in the visual preview. Updated `docs/branding.md` and this plan to separate the new blue interface palette from the unchanged canonical orange Q mark and orange wordmark. This documentation update does not mean UI code has been implemented or visually verified.
+- **2026-10-16:** User clarified that the existing orange-led QuantaEdge palette must remain unchanged. Layout and placement improvements may be proposed, but must be approved before implementation. Documentation updates do not mean UI code has been implemented or visually verified.
 - **Next action:** execute Phase 0 against the current `main` tree, then implement the shared foundation before route-by-route rollout.
