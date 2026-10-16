@@ -11,6 +11,12 @@ type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:s
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
 type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
 type VisualSourceMatch={class:string;subject:string};
+const LEGACY_REVIEW_ASSET_PREFIX='https://raw.githubusercontent.com/Manav326/QuantaEdge/main/apps/web/public/content/visual-assets/';
+const REVIEW_ASSET_PREFIX='https://raw.githubusercontent.com/Manav326/QuantaEdge/main/data/textbook-visual-candidates-v3/';
+function normalizeReviewAssetUrl(url:string|undefined):string|undefined {
+ if(!url)return url;
+ return url.startsWith(LEGACY_REVIEW_ASSET_PREFIX)?REVIEW_ASSET_PREFIX+url.slice(LEGACY_REVIEW_ASSET_PREFIX.length):url;
+}
 function visualSourceMatchesLesson(row:Row|undefined,source:VisualSourceMatch|undefined):boolean {
  if(!row||!source)return false;
  const normalizedClass=(value:string|undefined|null)=>String(value??'').trim().toLocaleLowerCase().replace(/^(?:class|grade)[\s_-]*/,'');
@@ -376,7 +382,11 @@ export default function ContentStudio(){
       ||value.source?.pdf_sha256!==entry?.source_pdf_sha256
       ||value.summary?.publication_allowed!==false||value.summary?.review_required!==true)
       throw new Error('The selected textbook catalog does not match its checked-in index or is not review-only.');
-    setVisualCatalog(value as VisualCatalog);setVisualCatalogError('');
+    const catalog=value as VisualCatalog;
+    setVisualCatalog({...catalog,candidates:catalog.candidates.map(candidate=>({...candidate,
+      image_url:normalizeReviewAssetUrl(candidate.image_url)||'',
+      source_page_url:normalizeReviewAssetUrl(candidate.source_page_url)
+    }))});setVisualCatalogError('');
    })
    .catch(error=>{if(mounted){setVisualCatalog(null);setVisualCatalogError(error instanceof Error?error.message:'Textbook visual catalog could not be loaded.')}})
    .finally(()=>{if(mounted)setVisualCatalogLoading(false)});

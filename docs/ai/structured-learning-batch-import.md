@@ -130,7 +130,7 @@ All four manifests are marked `DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW` and `publi
 - Package: `ghcr.io/manav326/quantaedge-textbook-visuals:candidates-v3-class6-class6-curiosity-en-run-38688536449`.
 - Candidate tar SHA-256: `4b03642acde232c968999d90320ace616f8b5f51d286ac0cb1ed961364e7465d`.
 - 60 heuristic candidates across 54 distinct source pages (24 embedded-image candidates and 36 page-preview candidates). The method is heuristic, not semantic validation. The chapter map is `TOC_DERIVED_NEEDS_HUMAN_REVIEW`; `semantic_classification_performed=false`; `publication_allowed=false`.
-- Review the contact sheet/candidates and source-page context before deciding what to attach to original teaching material. Do not automatically copy these source images to `apps/web/public/content/visual-assets` or public raw GitHub URLs; repository visibility is public, and candidate assets are not publication-cleared.
+- Review the contact sheet/candidates and source-page context before deciding what to attach to original teaching material. Candidate image files belong in `data/textbook-visual-candidates-v3/{book_slug}/` and the immutable GHCR review bundle, not `apps/web/public`. This repository is public, so raw-GitHub catalog links remain publicly accessible even when they point into `data/`; these assets are review-only, not rights-cleared student media. Use private/authenticated media storage for material that must not be publicly accessible.
 
 ### Other existing data and archives — inspect before generating anything new
 

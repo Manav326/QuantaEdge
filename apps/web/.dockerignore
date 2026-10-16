@@ -1,4 +1,6 @@
 # Host-generated dependencies and Next.js build output must not enter Docker builds.
+# Editor-only textbook review candidates must never enter the student web image.
+public/content/visual-assets
 node_modules
 .next
 out

@@ -52,9 +52,9 @@ class BuildVisualLessonAttachmentManifestTests(unittest.TestCase):
         self.assertFalse(item["publication_allowed"])
         self.assertEqual("NEEDS_REVIEW", item["visual_review_status"])
         self.assertEqual("SOURCE_REFERENCE_ONLY", item["rights_status"])
-        self.assertIn("candidates/v3-image-abcdef1234-", item["image_url"])
+        self.assertIn("data/textbook-visual-candidates-v3/class6-curiosity-en/candidates/v3-image-abcdef1234-", item["image_url"])
         self.assertIn("pages/page-0002-", item["source_page_url"])
-        self.assertTrue((self.repo / "apps/web/public/content/visual-assets/class6-curiosity-en" /
+        self.assertTrue((self.repo / "data/textbook-visual-candidates-v3/class6-curiosity-en" /
                          "candidates").is_dir())
         self.assertEqual(hashlib.sha256(b"figure bytes").hexdigest(), item["display_sha256"])
 

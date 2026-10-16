@@ -63,7 +63,10 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                 for field in ("image_url", "source_page_url"):
                     url = item[field]
                     self.assertTrue(url.startswith(RAW_PREFIX), f"{field} is not a repository asset URL.")
-                    path = ROOT / url.removeprefix(RAW_PREFIX)
+                    relative_path = url.removeprefix(RAW_PREFIX).replace(
+                        "apps/web/public/content/visual-assets/", "data/textbook-visual-candidates-v3/"
+                    )
+                    path = ROOT / relative_path
                     self.assertTrue(path.is_file(), f"{field} does not resolve to a checked-in file: {path}")
 
     def test_every_catalog_index_pack_and_tracked_asset_agree_before_persistence(self):
@@ -110,7 +113,10 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                         for field in ("image_url", "source_page_url"):
                             url = item[field]
                             self.assertTrue(url.startswith(RAW_PREFIX), f"{slug}/{candidate_id}: {field} not repository-hosted")
-                            local_file = ROOT / url.removeprefix(RAW_PREFIX)
+                            relative_path = url.removeprefix(RAW_PREFIX).replace(
+                                "apps/web/public/content/visual-assets/", "data/textbook-visual-candidates-v3/"
+                            )
+                            local_file = ROOT / relative_path
                             self.assertTrue(local_file.is_file(), f"{slug}/{candidate_id}: missing tracked asset {local_file}")
 
         self.assertEqual(len(index_by_slug), self.index["summary"]["catalog_count"])

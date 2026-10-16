@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Build a review-gated, student-renderable media catalog from a v3 candidate pack.
+"""Build a review-gated media catalog from a v3 candidate pack.
 
-The source PDF and candidate pack remain immutable. This helper copies only the
-selected previews needed by the admin/media UI into content-addressed static paths
-and writes a compact catalog with complete source provenance. It never approves
-or publishes any visual.
+The source PDF and candidate pack remain immutable. Selected previews are stored
+beside the per-book review data under data/textbook-visual-candidates-v3, never in
+the student web app's public static directory. The catalog preserves full source
+provenance; it never approves or publishes any visual.
 """
 from __future__ import annotations
 
@@ -70,7 +70,7 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
     if not isinstance(candidates, list) or not candidates:
         raise ValueError("Candidate pack must contain at least one candidate.")
 
-    static_root = repo_root / "apps" / "web" / "public" / "content" / "visual-assets" / book_slug
+    assets_root = repo_root / "data" / "textbook-visual-candidates-v3" / book_slug
     records: list[dict[str, Any]] = []
     copied: set[str] = set()
     for row in candidates:
@@ -93,7 +93,7 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
         display_hash = digest(display)
         ext = ".jpg"
         relative_asset = Path("candidates") / f"{candidate_id}-{display_hash[:12]}{ext}"
-        destination = static_root / relative_asset
+        destination = assets_root / relative_asset
         destination.parent.mkdir(parents=True, exist_ok=True)
         if destination.exists() and digest(destination) != display_hash:
             raise ValueError(f"Refusing to overwrite content-addressed visual asset: {destination}")
@@ -104,7 +104,7 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
         page_preview = safe_file(pack_root, row.get("source_page_preview_path"))
         page_hash = digest(page_preview)
         relative_page = Path("pages") / f"page-{page:04d}-{page_hash[:12]}.jpg"
-        page_destination = static_root / relative_page
+        page_destination = assets_root / relative_page
         page_destination.parent.mkdir(parents=True, exist_ok=True)
         if page_destination.exists() and digest(page_destination) != page_hash:
             raise ValueError(f"Refusing to overwrite content-addressed page preview: {page_destination}")

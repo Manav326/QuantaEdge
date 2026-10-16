@@ -217,6 +217,9 @@ class AdminContentControllerTest {
     assertTrue(AdminContentController.visualPublicationValidationError(
         "IMAGE", Map.of("url", "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/data/textbook-visuals/class6-curiosity-en/assets/figure.jpg"))
         .contains("Preserve the source candidate metadata"));
+    assertTrue(AdminContentController.visualPublicationValidationError(
+        "IMAGE", Map.of("url", "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/data/textbook-visual-candidates-v3/class7-en-science-93a8f46e/candidates/figure.jpg"))
+        .contains("Preserve the source candidate metadata"));
   }
 
   @Test

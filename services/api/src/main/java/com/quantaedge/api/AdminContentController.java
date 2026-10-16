@@ -1582,6 +1582,7 @@ public class AdminContentController {
     String url=rawUrl==null?"":rawUrl.trim().toLowerCase(Locale.ROOT);
     return url.contains("/apps/web/public/content/visual-assets/")
         ||url.contains("/content/visual-assets/")
+        ||url.contains("/data/textbook-visual-candidates-v3/")
         ||url.contains("raw.githubusercontent.com/manav326/quantaedge/main/data/textbook-visuals/");
   }
 

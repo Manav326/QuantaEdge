@@ -368,7 +368,7 @@ jobs:
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
-          git add data/textbook-visual-candidates-v3 apps/admin/public/content/visual-candidates apps/web/public/content/visual-assets
+          git add -A data/textbook-visual-candidates-v3 apps/admin/public/content/visual-candidates
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
