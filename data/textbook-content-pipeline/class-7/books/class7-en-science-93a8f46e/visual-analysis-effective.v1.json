@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "17427a076dc646590520f02fc768bc22c10c694364a022a066669cdacbc27bda",
+  "raw_analysis_sha256": "a69165722e7027b200a310c3bf6a3bc577c546ee3212f2a2edd72889cebc572b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -2109,6 +2109,932 @@
           "The image does not provide specific details about the chapter it represents."
         ]
       },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "64296964e2f7a6c0a1961ff6",
+      "asset_sha256": "bf6d8ea7766255d593fd597c9e29b2eb615f574817eea3a81c89b0b7125cb2fa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/bf6d8ea7766255d593fd597c9e29b2eb615f574817eea3a81c89b0b7125cb2fa.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:24:37Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7e419d4a81a466cbbec8c837",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:25:40Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aabb045978a9a5ff28e5f019",
+      "asset_sha256": "7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a visual aid for learning.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:25:46Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a visual aid for learning.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c4483b6409c1a6735a2bfc24",
+      "asset_sha256": "ba9666f1861772e441d1cdb86105e3be35ff1cd21edd4bc474863e0c5cf50922",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/ba9666f1861772e441d1cdb86105e3be35ff1cd21edd4bc474863e0c5cf50922.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character standing inside a large nut, holding a piece of paper and gesturing with his other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of the concept of 'In a Nutshell', which is a summary of a chapter.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:26:56Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character standing inside a large nut, holding a piece of paper and gesturing with his other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of the concept of 'In a Nutshell', which is a summary of a chapter.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or its content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7a2db82cfa12b55511f0eb31",
+      "asset_sha256": "9634f9baebaf2b7d7b223246828427b4dd7e115f184d41f8f9584cdb05780a59",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9634f9baebaf2b7d7b223246828427b4dd7e115f184d41f8f9584cdb05780a59.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a document while standing inside a large nut.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "summary",
+          "chapter overview",
+          "key ideas"
+        ],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:28:04Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a document while standing inside a large nut.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "summary",
+          "chapter overview",
+          "key ideas"
+        ],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6bb2cb00ac60cc26f675f326",
+      "asset_sha256": "ae48c0861367311a934dc2d30c7c84cf9a3c7b8bccc169fc64a2173ae0a85c58",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/ae48c0861367311a934dc2d30c7c84cf9a3c7b8bccc169fc64a2173ae0a85c58.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of 'Innovation' and 'Discovery' as mentioned in the 'In a Nutshell' section.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:29:11Z",
+      "effective_analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of 'Innovation' and 'Discovery' as mentioned in the 'In a Nutshell' section.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "08a37e4dc5d7c72a35fca8b7",
+      "asset_sha256": "2e552343a2d3ab72e4690bd403776a89d568da93304ef5fa978bda6a29ddabc9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/2e552343a2d3ab72e4690bd403776a89d568da93304ef5fa978bda6a29ddabc9.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl climbing a rope ladder with ice blocks.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a chapter summary.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:30:15Z",
+      "effective_analysis": {
+        "visual_summary": "A girl climbing a rope ladder with ice blocks.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a chapter summary.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1efe3beea489d5071f34d169",
+      "asset_sha256": "d1240b8d84ed1d37903378b54ddf4d0bc8b2fe46de75aea9f458dc8a7a9776bc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/d1240b8d84ed1d37903378b54ddf4d0bc8b2fe46de75aea9f458dc8a7a9776bc.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue loop at the end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:31:21Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at the end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "65a8e41efabd9a696f2259da",
+      "asset_sha256": "c4eb054ebaa00c1ac93256813ba27ef42e6461fb82e12604adaa149f925d17e4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c4eb054ebaa00c1ac93256813ba27ef42e6461fb82e12604adaa149f925d17e4.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope ladder with blue rings.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope ladder.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:32:27Z",
+      "effective_analysis": {
+        "visual_summary": "A rope ladder with blue rings.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope ladder.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "965f5b0e6d19326c3d548208",
+      "asset_sha256": "8361c7c9fdb0097a4032ab6a02d7f35d8c0ca01b1f251232aa611f81fb1872d3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/8361c7c9fdb0097a4032ab6a02d7f35d8c0ca01b1f251232aa611f81fb1872d3.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:33:29Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "962e77276cbdc32d7a1aaddc",
+      "asset_sha256": "3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:33:35Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f212daa29da6baa8ba513427",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a visual aid for learning.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it is related to.",
+          "The image is a single object and does not represent a complex concept or relationship."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:33:45Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a visual aid for learning.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it is related to.",
+          "The image is a single object and does not represent a complex concept or relationship."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "980da2e9beb827bf6286276f",
+      "asset_sha256": "492106d78406c86daf92a723fdeb67b71a7a6a57c03c65ace992fba85922119f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/492106d78406c86daf92a723fdeb67b71a7a6a57c03c65ace992fba85922119f.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image may be a full page, not a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:34:52Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image may be a full page, not a cropped figure."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "233abf4ce25f8b352130cfd2",
+      "asset_sha256": "9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spiral or helical structure with yellow and black colors.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:35:54Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helical structure with yellow and black colors.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "43f446ec12c32472f399fb49",
+      "asset_sha256": "9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spiral or helical structure with a yellow and black color scheme.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:35:58Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helical structure with a yellow and black color scheme.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3abf3f23d4d5f69d3d0579ad",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a discovery concept.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or concept it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:36:06Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a discovery concept.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or concept it represents."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dd76f7274e564af2d7819252",
+      "asset_sha256": "80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:37:13Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "55c5c60ab8097f742bb46782",
+      "asset_sha256": "f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:38:20Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "01f0bfea892d2f5bb1beece8",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:38:28Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "269adb2d7b3d54cf9ac9c607",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:38:34Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a2d39946b90ff84043477ddd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black and white page from a textbook, likely a page from a chapter summary or an introduction section.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:38:43Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black and white page from a textbook, likely a page from a chapter summary or an introduction section.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7995abc4a8135e543eee7e6c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:38:53Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a5d3c9c6dccadc9ca0cc6e62",
+      "asset_sha256": "f914211f3658b2fc73d9803858f6c6fbacd6eb3a2c998b2ed34f82aeb2dd6e4c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the features and activities included in the book, such as 'In a Nutshell' and 'Let Us Enhance Our Learning'.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In a Nutshell",
+          "'In a Nutshell' presents the summary of a chapter, offering an overview of the key ideas discussed.",
+          "Let Us Enhance Our Learning",
+          "‘Let Us Enhance Our Learning’ includes a range of exercises, from pictorial questions and puzzles to multiple-choice questions, offering a challenging and engaging experience.",
+          "These questions not only help in self-evaluation but also evaluate the competencies developed in each chapter. We recommend that questions for evaluation be similar to the ones in this section.",
+          "Exploratory Projects",
+          "A unique feature of the book is 'Exploratory Projects', which involves activities designed to encourage the interaction of learners with their peers, parents, teachers, experts, and the community.",
+          "Learners are encouraged to gather diverse information and draw their own conclusions. Some projects may require prior preparation and collaboration.",
+          "The textbook is just one way to learn. Learners should also explore and observe their surroundings. Information and Communication Technology (ICT) can further enhance learning when used appropriately. The QR codes across the textbook provide access to interactive resources like audio and video clips",
+          "The journey of each learner through this science textbook is expected to be filled with joy. We hope that the curiosity sparked by this book will continue in the higher grades! We express our gratitude to all the members of the Textbook Development Committee for their contributions in shaping this t",
+          "TEXTBOOK DEVELOPMENT TEAM",
+          "vii"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Exploration",
+          "Curiosity",
+          "History",
+          "Art",
+          "Geography",
+          "Society",
+          "Economy",
+          "Information and Communication Technology (ICT)",
+          "QR codes",
+          "Exploratory Projects",
+          "Learners",
+          "Peers",
+          "Parents",
+          "Teachers",
+          "Experts",
+          "Community",
+          "Information"
+        ],
+        "context_relation": "The page provides an overview of the features and activities included in the textbook, such as 'In a Nutshell' and 'Let Us Enhance Our Learning'.",
+        "limitations": [
+          "The page does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:42:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining the features and activities included in the book, such as 'In a Nutshell' and 'Let Us Enhance Our Learning'.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In a Nutshell",
+          "'In a Nutshell' presents the summary of a chapter, offering an overview of the key ideas discussed.",
+          "Let Us Enhance Our Learning",
+          "‘Let Us Enhance Our Learning’ includes a range of exercises, from pictorial questions and puzzles to multiple-choice questions, offering a challenging and engaging experience.",
+          "These questions not only help in self-evaluation but also evaluate the competencies developed in each chapter. We recommend that questions for evaluation be similar to the ones in this section.",
+          "Exploratory Projects",
+          "A unique feature of the book is 'Exploratory Projects', which involves activities designed to encourage the interaction of learners with their peers, parents, teachers, experts, and the community.",
+          "Learners are encouraged to gather diverse information and draw their own conclusions. Some projects may require prior preparation and collaboration.",
+          "The textbook is just one way to learn. Learners should also explore and observe their surroundings. Information and Communication Technology (ICT) can further enhance learning when used appropriately. The QR codes across the textbook provide access to interactive resources like audio and video clips",
+          "The journey of each learner through this science textbook is expected to be filled with joy. We hope that the curiosity sparked by this book will continue in the higher grades! We express our gratitude to all the members of the Textbook Development Committee for their contributions in shaping this t",
+          "TEXTBOOK DEVELOPMENT TEAM",
+          "vii"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Exploration",
+          "Curiosity",
+          "History",
+          "Art",
+          "Geography",
+          "Society",
+          "Economy",
+          "Information and Communication Technology (ICT)",
+          "QR codes",
+          "Exploratory Projects",
+          "Learners",
+          "Peers",
+          "Parents",
+          "Teachers",
+          "Experts",
+          "Community",
+          "Information"
+        ],
+        "context_relation": "The page provides an overview of the features and activities included in the textbook, such as 'In a Nutshell' and 'Let Us Enhance Our Learning'.",
+        "limitations": [
+          "The page does not provide specific details about the textbook or its content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "88da8a370e4d5ff5bef52f9c",
+      "asset_sha256": "14014d0e1898f734025bee1ac8236d1b15748aa72bc9b8c39b67ffa8eb4708d4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/14014d0e1898f734025bee1ac8236d1b15748aa72bc9b8c39b67ffa8eb4708d4.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3be4d6b418a6733fe7e1fde9",
+      "asset_sha256": "de790bb5a3cc95297181c36d127232f2a0576d2fcc8c176cec5734be19d3f420",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/de790bb5a3cc95297181c36d127232f2a0576d2fcc8c176cec5734be19d3f420.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
       "correction_status": "NONE"
     }
   ],
