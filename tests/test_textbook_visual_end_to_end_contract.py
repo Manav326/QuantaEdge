@@ -193,6 +193,8 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn("visualSourceMappingValidationError", source)
         self.assertIn('content.get("source_class")', source)
         self.assertIn('content.get("source_subject")', source)
+        self.assertIn("if(sourceMappingIssue!=null) throw badRequest(sourceMappingIssue);", source)
+        self.assertIn("private void replaceBlocks(long lessonId, Object value, AuthContext context)", source)
 
 
 if __name__ == "__main__":

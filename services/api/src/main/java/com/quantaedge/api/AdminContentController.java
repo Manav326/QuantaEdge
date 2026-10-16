@@ -1426,6 +1426,7 @@ public class AdminContentController {
   private void replaceBlocks(long lessonId, Object value, AuthContext context) {
     List<Map<String, Object>> blocks = objectList(value, "blocks");
     if (blocks.isEmpty() || blocks.size() > 100) throw badRequest("A lesson must contain between 1 and 100 content blocks.");
+    Map<String,Object> lessonIdentity=null;
     Set<String> existingSourceVisualUrls=new HashSet<>();
     List<Map<String,Object>> existingSourceVisuals=jdbc.queryForList(
         "select content::text as content from lesson_block where lesson_id=? and nullif(btrim(content->>'source_candidate_id'),'') is not null",
@@ -1452,6 +1453,21 @@ public class AdminContentController {
         throw badRequest("Only a content reviewer can detach source provenance from an existing textbook visual.");
       }
       if(candidateId!=null) {
+        if(lessonIdentity==null) {
+          lessonIdentity=jdbc.queryForMap("""
+            select c.code as class_code, s.code as subject_code, s.display_name as subject_name
+            from lesson l
+            join curriculum_chapter ch on ch.id=l.chapter_id
+            join curriculum_subject s on s.id=ch.subject_id
+            join curriculum_class c on c.id=s.class_id
+            where l.id=?
+            """, lessonId);
+        }
+        String sourceMappingIssue=visualSourceMappingValidationError(content,
+            String.valueOf(lessonIdentity.getOrDefault("class_code","")),
+            String.valueOf(lessonIdentity.getOrDefault("subject_code","")),
+            String.valueOf(lessonIdentity.getOrDefault("subject_name","")));
+        if(sourceMappingIssue!=null) throw badRequest(sourceMappingIssue);
         String visualStatus=String.valueOf(content.getOrDefault("visual_review_status","NEEDS_REVIEW")).trim().toUpperCase(Locale.ROOT);
         String rightsStatus=String.valueOf(content.getOrDefault("rights_status","SOURCE_REFERENCE_ONLY")).trim().toUpperCase(Locale.ROOT);
         boolean requestsReviewSensitiveState="APPROVED".equals(visualStatus)||"LICENSE_CONFIRMED".equals(rightsStatus);
