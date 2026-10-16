@@ -13,7 +13,7 @@ Use a **premium hybrid** visual language:
 - Consistent typography, spacing, borders, radii, focus styles, component states, and motion across all three applications.
 - A single QuantaEdge identity. Do not independently restyle or translate the logo, wordmark, tagline, or canonical brand colours per application or language.
 
-This is a restrained, polished education product—not a neon/glassmorphism theme. Effects should improve hierarchy and perceived quality, not compete with content.
+This is a restrained, polished education product—not a neon/glassmorphism theme. Effects should improve hierarchy and perceived quality, not compete with content. The refreshed interface palette is midnight navy + royal blue + electric blue with light working surfaces. Preserve the existing approved orange Q mark and orange wordmark exactly; blue is the interface accent, not a replacement or recolouring of the canonical logo asset.
 
 ## 2. Canonical brand tokens
 
@@ -21,23 +21,26 @@ The existing approved brand system in `docs/branding.md` remains authoritative. 
 
 | Token | Value | Use |
 |---|---|---|
-| Brand navy | `#152038` | Brand structure, dark hero, headings/navigation where appropriate |
-| Brand orange | `#F97316` | Main brand accent, primary actions and highlights |
-| Deep orange | `#C2410C` | Small orange text and active controls where contrast requires it |
-| Soft orange | `#FFF0E5` | Selected/soft brand surfaces, restrained callouts |
+| Canonical brand navy | `#152038` | Existing wordmark and identity elements |
+| Interface midnight navy | `#101828` | Dark hero and selected navigation surfaces |
+| Primary interface blue | `#315EFB` | Primary buttons, links, active and selected controls |
+| Electric blue | `#6C8CFF` | Restrained highlights and decorative gradients; avoid small text on light surfaces |
+| Legacy/canonical orange | `#F97316` | Existing approved Q mark, wordmark and brand-specific contexts |
+| Deep orange | `#C2410C` | Existing brand contexts where required; not the default UI action colour |
+| Soft orange | `#FFF0E5` | Existing brand-specific soft surfaces where appropriate |
 | White | `#FFFFFF` | Cards and reading surfaces |
-| Light canvas | `#F7F8FA` (proposed neutral token) | Main light work area |
-| Neutral border | `#E5E7EB` (proposed neutral token) | Dividers, outlines, card boundaries |
-| Primary text | `#172033` (proposed neutral token) | Body and heading text on light surfaces |
-| Muted text | `#667085` (proposed neutral token) | Secondary metadata; verify contrast before use |
+| Light canvas | `#F5F7FC` | Main light work area |
+| Neutral border | `#E5EAF3` | Dividers, outlines, card boundaries |
+| Primary text | `#172033` | Body and heading text on light surfaces |
+| Muted text | `#667085` | Secondary metadata, after contrast verification |
 | Success / warning / error | Existing semantic tokens first | Status and validation meaning, never decorative branding |
 
-Neutral tokens are proposed starting values and must be reconciled with current CSS and component usage before implementation. Existing logo files and the approved Q mark are reused; do not repair or replace assets by inventing a new logo. Do not introduce blue or violet as competing primary brand colours. Additional semantic colours may be used only for meaning, with accessible contrast.
+The navy/blue interface palette is approved as the refreshed UI direction. The canonical Q mark and wordmark remain unchanged; do not recolour or replace the approved assets. Reconcile the proposed neutral tokens with existing CSS and test contrast before implementation. Additional semantic colours may be used only for meaning, with accessible contrast.
 
 ## 3. Visual and interaction foundations
 
 ### Surfaces and depth
-- Public landing pages may use a navy hero, subtle brand-colour glow, high-contrast headline, and one dominant primary call to action.
+- Public landing pages may use a midnight-navy hero, a restrained royal/electric-blue glow, high-contrast headline, and one dominant royal-blue primary call to action. Keep the canonical orange Q mark and wordmark unchanged.
 - The hero is followed by light sections; working screens should not become dark solely for visual novelty.
 - Prefer surface contrast, thin borders, and low-elevation shadows over heavy drop shadows.
 - Glass effects, blur, gradients, and decorative illustrations are optional and rare; avoid them behind dense text and data tables.
@@ -98,7 +101,7 @@ All shared interactive components should define normal, hover, pressed, focus-vi
 
 ## 5. Centralisation and architecture rules
 
-1. `docs/branding.md` remains the source of truth for brand identity and canonical assets.
+1. `docs/branding.md` remains the source of truth for brand identity, the refreshed navy/blue interface palette, and canonical assets.
 2. Inspect the current shared branding implementation and app-level styles before changing them. Reuse the central brand component; do not create parallel logo or wordmark components.
 3. Create or extend shared design tokens and reusable primitives only where the repository's app/build architecture supports it. If applications have separate bundles, keep token definitions synchronised through a documented shared source or parity check rather than pretending runtime sharing exists.
 4. Avoid broad global CSS selectors that accidentally restyle third-party widgets, equations, charts, editor content, or embedded media.
@@ -173,5 +176,5 @@ For every route, check real data, empty data, loading, server errors, permission
 
 ## 8. Progress log
 
-- **2026-10-16:** Premium-hybrid direction confirmed for all web interfaces. This plan created as the persistent handoff document. The plan itself does not mean UI code has been implemented or visually verified.
+- **2026-10-16:** Premium-hybrid direction confirmed for all web interfaces. The user approved the navy/royal-blue/electric-blue palette shown in the visual preview. Updated `docs/branding.md` and this plan to separate the new blue interface palette from the unchanged canonical orange Q mark and orange wordmark. This documentation update does not mean UI code has been implemented or visually verified.
 - **Next action:** execute Phase 0 against the current `main` tree, then implement the shared foundation before route-by-route rollout.
