@@ -146,7 +146,7 @@ def segments_for(pages: list[dict[str,Any]], max_pages: int=4, max_chars: int=70
         pages_used=sorted({x["page"] for x in g})
         identity="|".join(f"{x['page']}:{x['part']}:{x['hash']}" for x in g)
         result.append({"segment_id":f"seg-{i:05d}-{sha(identity)[:10]}","sequence":i,"pieces":g,"source_pages":pages_used,"segment_sha256":sha(identity)})
-    if sum(len(x["text"]) for g in result for x in g)!=sum(len(p["text"]) for p in pages): raise ValueError("Segment builder dropped source characters.")
+    if sum(len(x["text"]) for g in result for x in g["pieces"])!=sum(len(p["text"]) for p in pages): raise ValueError("Segment builder dropped source characters.")
     return result
 
 def prompt_for(source: dict[str,Any], segment: dict[str,Any]) -> str:
