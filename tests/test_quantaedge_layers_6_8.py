@@ -7,7 +7,7 @@ from unittest.mock import patch
 from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
-    PROMPT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft,
+    PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
     validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag,
     write_json, write_jsonl, write_outputs, run as run_layers,
 )
@@ -130,7 +130,7 @@ class LayersTests(unittest.TestCase):
                 "source":{"source_book_id":book,"source_pdf_sha256":pdfhash}})
             benchmark=root/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
             write_json(benchmark,{"production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
-                "prompt_version":PROMPT_VERSION,"models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
+                "prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
             args=SimpleNamespace(repo_root=root,class_no=6,source_book_id=book,model="qwen2.5:1.5b",benchmark_report=None,
                 max_pages_per_segment=4,max_context_chars=7000,endpoint="http://127.0.0.1:11434",
                 max_model_calls=3,checkpoint_every=1,request_timeout=30,commit_checkpoints=False)
@@ -262,6 +262,42 @@ class LayersTests(unittest.TestCase):
         self.assertEqual(generated["recap_by_locale"]["hi"],recap["content_by_locale"]["hi"]["key_takeaways"][0])
         self.assertEqual([],validate_lesson(lesson))
 
+
+
+    def test_refresh_benchmark_revalidates_raw_sample_without_new_model_calls(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); book="ncert-c6-english-fecu1"; pdfhash="a"*64
+            pages=root/"data"/"textbook-extractions"/"class-6"/"english"/"pages"; pages.mkdir(parents=True)
+            body="Curiosity develops through observation and careful questions. " * 10
+            row={"book_id":book,"class":"6","language":"english","subject":"Science",
+                 "asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,"source_book_page_number":1,
+                 "asset_page_index":0,"text":body}
+            write_jsonl(pages/"pages.jsonl",[row])
+            write_json(pages/"book.manifest.json",{"book_id":book,"class":"6","language":"english","subject":"Science",
+                 "scope":"SUBJECT_BOOK","published":False,"asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,
+                 "page_count":1,"completed_pages":1,"source_page_start":1,"text_jsonl":"pages.jsonl",
+                 "source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12","title":"Curiosity","edition":"Reprint 2026-27"})
+            source=__import__("scripts.quantaedge_layers_6_8",fromlist=["load_source"]).load_source(root,6,book)
+            segment=segments_for(source["pages"],4,7000)[0]
+            raw=model_json([1])
+            report={"schema_version":"quantaedge.local-ollama-benchmark.v1","prompt_version":PROMPT_VERSION,
+                 "source":{"book_id":book,"source_pdf_sha256":pdfhash,"sample_segment_ids":[segment["segment_id"]],"sample_source_pages":[1]},
+                 "models":[{"model":"qwen2.5:1.5b","samples_attempted":1,"successful_samples":1,
+                    "samples":[{"segment_id":segment["segment_id"],"source_pages":[1],"sample_output":raw,
+                      "sample_output_sha256":sha(json.dumps(raw,ensure_ascii=False,sort_keys=True)),
+                      "schema_valid":True,"lesson_contract_valid":True,"sft_examples_valid":True,
+                      "source_page_citations_valid":True,"seconds":1.0}]}],
+                 "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None}
+            path=root/"benchmark.json"; write_json(path,report)
+            args=SimpleNamespace(repo_root=root,source_book_id=book,output=path,commit_checkpoints=False)
+            refreshed=refresh_benchmark(args)
+            self.assertEqual("REFRESHED",refreshed["status"])
+            updated=json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(LESSON_CONTRACT_VERSION,updated["lesson_contract_version"])
+            self.assertEqual(0,updated["benchmark_revalidation"]["new_model_calls"])
+            recap=next(b for b in updated["models"][0]["samples"][0]["lesson_candidate_preview"]["explain"]["blocks"] if b["type"]=="recap")
+            self.assertIn("key_takeaways",recap["content_by_locale"]["en"])
+            self.assertEqual(1,updated["models"][0]["successful_samples"])
 
     def test_visual_candidates_are_hash_bound_and_preview_only(self):
         with tempfile.TemporaryDirectory() as temp:

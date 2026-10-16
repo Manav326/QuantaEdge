@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 PROMPT_VERSION = "qe-l6-l8-ollama-v3-bounded-benchmark"
+LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-renderer-recap.v1"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -546,7 +547,7 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     report={"schema_version":"quantaedge.layers-6-8-run-manifest.v1","source_book_id":source["book_id"],
       "source_pdf_sha256":source["source_pdf_sha256"],"class_code":str(source["class_no"]),"subject_code":source["subject"],
       "language":source["language"],"model":model,"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE",
-      "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"input_fingerprint":source.get("pipeline_input_fingerprint"),"visual_candidate_fingerprint":source.get("visual_candidate_fingerprint"),"segments_total":len(segments),
+      "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"input_fingerprint":source.get("pipeline_input_fingerprint"),"visual_candidate_fingerprint":source.get("visual_candidate_fingerprint"),"segments_total":len(segments),
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
       "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
@@ -583,7 +584,9 @@ def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     if not row or row.get("successful_samples",0)<1 or row.get("lesson_contract_valid_rate",0)<=0:
         raise ValueError(f"Model {model} has no successful, contract-valid Class 6 NCERT benchmark sample.")
     if report.get("prompt_version")!=PROMPT_VERSION:
-        raise ValueError("Benchmark prompt/lesson-contract version is stale; rerun benchmark before generation.")
+        raise ValueError("Benchmark prompt version is stale; rerun benchmark before generation.")
+    if report.get("lesson_contract_version")!=LESSON_CONTRACT_VERSION:
+        raise ValueError("Benchmark lesson-renderer contract is stale; run refresh-benchmark on its saved raw samples before generation.")
     if report.get("production_model_selection")!="PENDING_HUMAN_REVIEW" or report.get("production_model") is not None:
         raise ValueError("Benchmark report must keep production selection pending human review.")
     return report
@@ -597,7 +600,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,
       "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
       "layer5_sha256":sha_file(ledger),"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
-      "model":args.model,"prompt":PROMPT_VERSION,"max_pages_per_segment":args.max_pages_per_segment,
+      "model":args.model,"prompt":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"max_pages_per_segment":args.max_pages_per_segment,
       "max_context_chars":args.max_context_chars,"generation_parameters":{"temperature":0.15,"num_ctx":6144,"num_predict":2048}},sort_keys=True))
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
@@ -610,7 +613,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
         if not isinstance(checkpoints,dict): raise ValueError("Invalid checkpoint segments.")
     else:
         checkpoints={}; doc={"schema_version":"quantaedge.layers-6-8-checkpoint.v1","source_book_id":source["book_id"],
-          "source_pdf_sha256":source["source_pdf_sha256"],"model":args.model,"prompt_version":PROMPT_VERSION,
+          "source_pdf_sha256":source["source_pdf_sha256"],"model":args.model,"prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,
           "input_fingerprint":fingerprint,"segments":{}}
     write_rag(rag,source); calls=0
     for seg in segments:
@@ -659,6 +662,103 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     if args.commit_checkpoints: checkpoint_git(repo,[outdir,rag],f"status(content): L6-8 {source['book_id']} ({result['overall_status']})")
     return result
 
+
+def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
+    """Revalidate saved raw Ollama samples under the current lesson renderer contract, without model calls."""
+    repo=args.repo_root.resolve()
+    output=args.output.resolve()
+    if not output.is_file():
+        raise ValueError(f"Benchmark report missing: {output}")
+    report=read_json(output)
+    if report.get("schema_version")!="quantaedge.local-ollama-benchmark.v1":
+        raise ValueError("Unsupported benchmark report schema.")
+    if report.get("prompt_version")!=PROMPT_VERSION:
+        raise ValueError("Benchmark prompt changed; new model inference is required.")
+    source=load_source(repo,6,args.source_book_id)
+    source_report=report.get("source") or {}
+    if source_report.get("book_id")!=source["book_id"] or str(source_report.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]:
+        raise ValueError("Benchmark source book/PDF SHA-256 mismatch.")
+    segments=segments_for(source["pages"],4,7000)
+    segments_by_id={segment["segment_id"]:segment for segment in segments}
+    ids=source_report.get("sample_segment_ids")
+    if not isinstance(ids,list) or not ids or any(segment_id not in segments_by_id for segment_id in ids):
+        raise ValueError("Benchmark sample segments do not match current source segmentation.")
+    selected=[segments_by_id[segment_id] for segment_id in ids]
+    pages=sorted({page for segment in selected for page in segment["source_pages"]})
+    if sorted(source_report.get("sample_source_pages") or [])!=pages:
+        raise ValueError("Benchmark source page set changed; rerun inference.")
+    visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,selected)
+    prior_contract=report.get("lesson_contract_version")
+    if prior_contract==LESSON_CONTRACT_VERSION and report.get("visual_candidate_fingerprint")==visual_fingerprint:
+        return {"status":"ALREADY_CURRENT","report":str(output),"lesson_contract_version":LESSON_CONTRACT_VERSION,
+                "new_model_calls":0,"models":[{"model":m.get("model"),"successful_samples":m.get("successful_samples"),
+                 "lesson_contract_valid_rate":m.get("lesson_contract_valid_rate")} for m in report.get("models",[])]}
+    old_report_sha=sha_file(output)
+    selected_by_id={segment["segment_id"]:segment for segment in selected}
+    refreshed_metrics=[]
+    models=report.get("models")
+    if not isinstance(models,list) or not models:
+        raise ValueError("Benchmark report contains no models.")
+    for model_row in models:
+        if not isinstance(model_row,dict) or not isinstance(model_row.get("model"),str):
+            raise ValueError("Malformed benchmark model record.")
+        samples=model_row.get("samples")
+        if not isinstance(samples,list) or not samples:
+            raise ValueError("No raw per-sample outputs available; rerun the model benchmark.")
+        for sample in samples:
+            segment_id=sample.get("segment_id")
+            segment=selected_by_id.get(segment_id)
+            if segment is None:
+                raise ValueError(f"Unknown benchmark segment ID: {segment_id}")
+            if sample.get("source_pages")!=segment["source_pages"]:
+                raise ValueError(f"Benchmark source pages changed for {segment_id}; rerun inference.")
+            value=sample.get("sample_output")
+            if value is None:
+                sample.update({"schema_valid":False,"lesson_contract_valid":False,"sft_examples_valid":False,
+                    "source_page_citations_valid":False,"lesson_candidate_preview":None,
+                    "lesson_contract_errors":sample.get("errors") or ["Original sample had no model response."]})
+                continue
+            if not isinstance(value,dict):
+                raise ValueError(f"Raw model output is not a JSON object: {segment_id}")
+            value_sha=sha(json.dumps(value,ensure_ascii=False,sort_keys=True))
+            if sample.get("sample_output_sha256") and sample["sample_output_sha256"]!=value_sha:
+                raise ValueError(f"Raw output hash mismatch: {model_row['model']} / {segment_id}")
+            schema_errors=validate_output(value,set(segment["source_pages"]))
+            lesson=lesson_from(source,segment,value,visuals_by_segment.get(segment_id,[])) if not schema_errors else None
+            lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not schema_errors else [])
+            lesson_valid=(not schema_errors and lesson is not None and not lesson_errors)
+            citations_valid=tutor_citations_valid(value,set(segment["source_pages"]))
+            sft_valid=(not schema_errors and len(sft_records(source,segment,value,model_row["model"]))>=2)
+            sample.update({"schema_valid":not schema_errors,"lesson_contract_valid":lesson_valid,
+                "sft_examples_valid":sft_valid,"source_page_citations_valid":citations_valid,
+                "sample_output_sha256":value_sha,"lesson_candidate_preview":lesson,
+                "lesson_contract_errors":lesson_errors[:12],"errors":(schema_errors+lesson_errors)[:12]})
+        count=len(samples)
+        schema_ok=sum(bool(sample.get("schema_valid")) for sample in samples)
+        lesson_ok=sum(bool(sample.get("lesson_contract_valid")) for sample in samples)
+        sft_ok=sum(bool(sample.get("sft_examples_valid")) for sample in samples)
+        citation_ok=sum(bool(sample.get("source_page_citations_valid")) for sample in samples)
+        model_row.update({"samples_attempted":count,"successful_samples":schema_ok,
+            "schema_valid_rate":round(schema_ok/count,3),"lesson_contract_valid_rate":round(lesson_ok/count,3),
+            "sft_examples_valid_rate":round(sft_ok/count,3),"source_page_citation_valid_rate":round(citation_ok/count,3)})
+        refreshed_metrics.append({"model":model_row["model"],"successful_samples":schema_ok,
+            "schema_valid_rate":model_row["schema_valid_rate"],"lesson_contract_valid_rate":model_row["lesson_contract_valid_rate"],
+            "sft_examples_valid_rate":model_row["sft_examples_valid_rate"],
+            "source_page_citation_valid_rate":model_row["source_page_citation_valid_rate"]})
+    if report.get("production_model_selection")!="PENDING_HUMAN_REVIEW" or report.get("production_model") is not None:
+        raise ValueError("Refusing to revalidate a report that already selected a production model.")
+    report["lesson_contract_version"]=LESSON_CONTRACT_VERSION
+    report["visual_candidate_fingerprint"]=visual_fingerprint
+    report["benchmark_revalidation"]={"reason":"lesson-renderer-contract-refresh","previous_contract_version":prior_contract,
+        "previous_report_sha256":old_report_sha,"revalidated_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
+        "new_model_calls":0,"source_pdf_sha256":source["source_pdf_sha256"]}
+    write_json(output,report)
+    if args.commit_checkpoints:
+        checkpoint_git(repo,[output],"review(ai): revalidate Ollama benchmark lesson contract")
+    return {"status":"REFRESHED","report":str(output),"lesson_contract_version":LESSON_CONTRACT_VERSION,
+        "new_model_calls":0,"models":refreshed_metrics,"source_pdf_sha256":source["source_pdf_sha256"]}
+
+
 def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     repo=args.repo_root.resolve(); source=load_source(repo,6,args.source_book_id)
     if source["subject"]!="science" or source["language"]!="en": raise ValueError("Benchmark must use Class 6 NCERT English Science (Curiosity).")
@@ -705,7 +805,7 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
       "source":{"book_id":source["book_id"],"title":source["title"],"edition":source["edition"],"source_url":source["source_url"],
         "source_pdf_sha256":source["source_pdf_sha256"],"sample_segment_ids":[s["segment_id"] for s in samplesegs],
         "sample_source_pages":sorted({p for s in samplesegs for p in s["source_pages"]})},
-      "endpoint_mode":"native local Ollama /api/chat; no hosted API or API key","prompt_version":PROMPT_VERSION,"visual_candidate_fingerprint":visual_fingerprint,"models":results,
+      "endpoint_mode":"native local Ollama /api/chat; no hosted API or API key","prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"visual_candidate_fingerprint":visual_fingerprint,"models":results,
       "selection_metric":"Review exact sample outputs plus schema validity, structured-lesson validity, page-citation validity and latency; no automatic winner.",
       "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
       "publication_allowed":False,"student_delivery_allowed":False,"human_review_required":True}
@@ -724,9 +824,15 @@ def main(argv:list[str]|None=None)->int:
     b.add_argument("--endpoint",default="http://127.0.0.1:11434"); b.add_argument("--models",default="qwen2.5:1.5b,qwen2.5:3b")
     b.add_argument("--sample-segments",type=int,default=3); b.add_argument("--request-timeout",type=int,default=180)
     b.add_argument("--output",type=Path,default=Path("data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json")); b.add_argument("--commit-checkpoints",action="store_true")
+    refresh=sub.add_parser("refresh-benchmark",help="Revalidate saved raw samples against the current lesson renderer contract without model calls.")
+    refresh.add_argument("--repo-root",type=Path,default=Path.cwd()); refresh.add_argument("--source-book-id",default="ncert-c6-english-fecu1")
+    refresh.add_argument("--output",type=Path,default=Path("data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json"))
+    refresh.add_argument("--commit-checkpoints",action="store_true")
     a=p.parse_args(argv)
     try:
-        if a.mode=="benchmark":
+        if a.mode=="refresh-benchmark":
+            result=refresh_benchmark(a)
+        elif a.mode=="benchmark":
             if not 1<=a.sample_segments<=3: raise ValueError("sample-segments must be 1..3.")
             result=benchmark(a)
         else:
