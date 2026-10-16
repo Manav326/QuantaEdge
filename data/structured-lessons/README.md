@@ -5,10 +5,11 @@ This folder stores AI-authored learning drafts separately from source-text extra
 ## Start here
 
 - [Production index](class-6/science/production-index.v1.json) — chapter/topic inventory, per-type totals, validation and resume state.
+- [Reusable textbook content-generation prompt](../../docs/ai/reusable-textbook-content-generation-prompt.md) — source-first, bilingual lesson generation instructions for new class/subject batches.
 - [Chapter 3 source-coverage ledger](class-6/science/chapter-03/source-coverage.v1.json) — numbered sections, source pages, figures/tables/activities, special material, summary, keywords, 13 review questions and six Learning further tasks.
 - [Chapter 4 source-coverage ledger](class-6/science/chapter-04/source-coverage.v1.json) — five numbered lesson sections, EN/HI source page map, 18 numbered figures, 3 tables, 7 activities, storage/caution guidance, 11 review questions and 5 Learning further tasks.
 - [Question-rendering registry — JSON](question-rendering-registry.v1.json) and [human-readable guide](question-rendering-registry.v1.md) — data contracts for the registered question types.
-- Chapter 1 has earlier-committed drafts. Chapters 2–4 are staged as uncommitted Git objects, not on a branch.
+- Chapters 1–6 are committed as draft lesson data; source reconciliation, bilingual review, science review and visual approval remain pending. A commit does not mean the lessons are approved or publishable.
 
 ## Non-negotiable production rules
 
@@ -39,7 +40,7 @@ The prepared inventory contains **39 questions of each** registered type: multip
 
 ## Resume procedure
 
-Read the production index and GitHub issue [#56](https://github.com/Manav326/QuantaEdge) first. Continue from the recorded staged tree/blob SHAs; do not regenerate existing drafts. Complete rendered-source, bilingual, visual and scientific reviews. Map the next chapter's numbered headings before choosing its lesson count. Do not commit unless explicitly requested to finalize.
+Read the production index and GitHub issue [#56](https://github.com/Manav326/QuantaEdge/issues/56) first. Continue from the recorded staged tree/blob SHAs; do not regenerate existing drafts. Complete rendered-source, bilingual, visual and scientific reviews. Map the next chapter's numbered headings before choosing its lesson count. Do not commit unless explicitly requested to finalize.
 
 
 ## Chapter 5 checkpoint (draft; review pending)

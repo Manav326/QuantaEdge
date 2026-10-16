@@ -97,7 +97,7 @@ def _matches_filters(source: dict[str, Any], class_no: int | None,
         if ("सामाजिक विज्ञान" in normalized or "समाजिक विज्ञान" in normalized
                 or re.search(r"\bsocial\s+sciences?\b", normalized)):
             return "social science"
-        if normalized in {"math", "maths", "mathematics", "गणित"} or "गणित" in normalized:
+        if re.search(r"\b(?:math|maths|mathematics)\b", normalized) or "गणित" in normalized:
             return "maths"
         if normalized in {"science", "विज्ञान"} or "विज्ञान" in normalized or re.search(r"\bscience\b", normalized):
             return "science"

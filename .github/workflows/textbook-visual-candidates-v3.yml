@@ -4,8 +4,13 @@ on:
   push:
     paths:
       - ".github/workflows/textbook-visual-candidates-v3.yml"
+      - ".github/workflows/textbook-extraction-pilot.yml"
       - "scripts/prepare_visual_candidates_v3.py"
+      - "scripts/select_textbook_visual_sources.py"
+      - "scripts/validate_textbook_extraction_artifacts.py"
       - "tests/test_prepare_visual_candidates_v3.py"
+      - "tests/test_select_textbook_visual_sources.py"
+      - "tests/test_validate_textbook_extraction_artifacts.py"
       - "scripts/build_visual_lesson_attachment_manifest.py"
       - "tests/test_build_visual_lesson_attachment_manifest.py"
       - "tests/test_textbook_visual_end_to_end_contract.py"
@@ -15,42 +20,20 @@ on:
       - "apps/admin/public/content/visual-candidates/*.v3.json"
       - "data/textbook-visual-candidates-v3/**"
       - "apps/admin/app/content/page.tsx"
-      - "apps/admin/public/content/visual-candidates/class6-curiosity-en.v3.json"
       - "services/api/src/main/java/com/quantaedge/api/AdminContentController.java"
       - "services/api/src/test/java/com/quantaedge/api/AdminContentControllerTest.java"
       - "scripts/extract_visual_asset_inventory.py"
       - "tests/test_extract_visual_asset_inventory.py"
   workflow_dispatch:
     inputs:
-      book_slug:
-        description: Stable short identifier, e.g. class6-curiosity-en
-        required: true
-        type: string
-        default: class6-curiosity-en
       class_no:
-        description: Class number for the existing whole-book GHCR cache
+        description: "Prepare candidates for this complete bilingual class source set"
         required: true
         type: choice
-        options:
-          - "6"
-          - "7"
-          - "8"
-        default: "6"
-      language:
-        description: Language of the exact whole-book source
-        required: true
-        type: choice
-        options:
-          - english
-          - hindi
-        default: english
-      book_id:
-        description: Exact book ID in the existing source manifest
-        required: true
-        type: string
-        default: ncert-c6-english-fecu1
+        options: ["7", "8"]
+        default: "7"
       max_candidates:
-        description: Number of review candidates to prepare (1-200)
+        description: "Review candidates per source book (1-200)"
         required: true
         type: string
         default: "60"
@@ -60,192 +43,238 @@ permissions:
   packages: write
 
 concurrency:
-  group: textbook-visual-candidates-v3-${{ inputs.book_slug || 'validation-only' }}
+  group: textbook-visual-candidates-v3-class-${{ inputs.class_no || 'validation-only' }}
   cancel-in-progress: false
 
 jobs:
   validate:
     if: github.event_name == 'push'
-    name: Validate v3 scripts (tests only)
+    name: Validate additive v3 preparation scripts
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install extraction dependency
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
-
-      - name: Compile candidate scripts
-        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
-
-      - name: Test existing inventory extractor
-        run: python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
-
-      - name: Test v3 candidate preparation
-        run: python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
-
-      - name: Test v3 visual attachment catalog and chapter map
+      - name: Compile preparation and validation scripts
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
+      - name: Test source selection, extraction integrity and candidate preparation
         run: |
-          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
-          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
-          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
-
-  prepare:
-    if: github.event_name == 'workflow_dispatch'
-    name: Prepare source-bound visual candidate pack
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    env:
-      BOOK_SLUG: ${{ inputs.book_slug }}
-      CLASS_NO: ${{ inputs.class_no }}
-      LANGUAGE: ${{ inputs.language }}
-      BOOK_ID: ${{ inputs.book_id }}
-      MAX_CANDIDATES: ${{ inputs.max_candidates }}
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-          persist-credentials: true
-
-      - name: Validate inputs and run focused regression tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
-          [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
-          [[ "$MAX_CANDIDATES" =~ ^[0-9]+$ ]] && (( MAX_CANDIDATES >= 1 && MAX_CANDIDATES <= 200 )) || { echo "max_candidates must be 1..200"; exit 2; }
-          python --version
-          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
+          python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
 
-      - name: Pull exact whole-book PDF and matching source context from GHCR
+  prepare:
+    if: github.event_name == 'workflow_dispatch'
+    name: Prepare full bilingual Class ${{ inputs.class_no }} candidate set
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      CLASS_NO: ${{ inputs.class_no }}
+      MAX_CANDIDATES: ${{ inputs.max_candidates }}
+    steps:
+      - name: Checkout main with write permission for review metadata
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Validate inputs and run regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 7 or Class 8 is supported."; exit 2; }
+          [[ "$MAX_CANDIDATES" =~ ^[0-9]+$ ]] && (( MAX_CANDIDATES >= 1 && MAX_CANDIDATES <= 200 )) || { echo "max_candidates must be 1..200"; exit 2; }
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
+          python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
+          python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
+          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
+
+      - name: Authenticate to GHCR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
         run: |
           set -euo pipefail
-          SOURCE_IMAGE="ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest"
           echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
-          docker pull "$SOURCE_IMAGE"
-          container_id="$(docker create "$SOURCE_IMAGE" /__quantaedge_cache_inspection_only)"
-          trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT
-          mkdir -p "$RUNNER_TEMP/quantaedge-source-v3"
-          docker cp "$container_id:/index.json" "$RUNNER_TEMP/quantaedge-source-v3/index.json"
-          docker cp "$container_id:/books/$BOOK_ID.pdf" "$RUNNER_TEMP/quantaedge-source-v3/source.pdf"
-          python - <<'PY'
-          import json, os, shutil
+
+      - name: Resolve exact sources and verify mirrored extraction manifests
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          source_root="$RUNNER_TEMP/quantaedge-visual-source"
+          mkdir -p "$source_root"
+          for medium in english hindi; do
+            image="ghcr.io/$owner/quantaedge-textbooks-class-$CLASS_NO-$medium:latest"
+            echo "::group::Pull $image"
+            docker pull "$image"
+            container_id="$(docker create "$image" /__quantaedge_source_index_only)"
+            docker cp "$container_id:/index.json" "$source_root/index-$medium.json"
+            python scripts/select_textbook_visual_sources.py \
+              --index "$source_root/index-$medium.json" \
+              --class-no "$CLASS_NO" \
+              --output "$source_root/selected-$medium.json"
+            python scripts/validate_textbook_extraction_artifacts.py \
+              --registry-index "$source_root/index-$medium.json" \
+              --extraction-dir "$GITHUB_WORKSPACE/data/textbook-extractions/class-$CLASS_NO/$medium" \
+              --class-no "$CLASS_NO" \
+              --language "$medium"
+            python - "$container_id" "$source_root/selected-$medium.json" "$source_root" "$GITHUB_WORKSPACE" "$CLASS_NO" "$medium" <<'PY'
+          import hashlib, json, os, shutil, subprocess, sys
           from pathlib import Path
-          root = Path(os.environ["GITHUB_WORKSPACE"])
-          source_dir = Path(os.environ["RUNNER_TEMP"]) / "quantaedge-source-v3"
-          book_id = os.environ["BOOK_ID"]
-          class_no = os.environ["CLASS_NO"]
-          language = os.environ["LANGUAGE"]
-          index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
-          entries = [item for item in index.get("books", []) if item.get("book_id") == book_id]
-          if len(entries) != 1 or entries[0].get("file") != f"books/{book_id}.pdf":
-              raise SystemExit(f"The exact whole book {book_id} is not uniquely present in the GHCR index.")
-          manifest_dir = root / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
-          matches = []
-          for path in manifest_dir.glob("*.manifest.json"):
-              try:
-                  item = json.loads(path.read_text(encoding="utf-8"))
-              except Exception:
-                  continue
-              if item.get("book_id") == book_id:
-                  matches.append((path, item))
-          if len(matches) != 1:
-              raise SystemExit(f"Expected one committed source manifest for {book_id}; found {len(matches)}.")
-          manifest_path, manifest = matches[0]
-          expected_hash = str(entries[0].get("sha256", "")).lower()
-          actual_manifest_hash = str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or "").lower()
-          if not expected_hash or actual_manifest_hash != expected_hash:
-              raise SystemExit("The GHCR index PDF hash does not match the committed source manifest.")
-          page_name = manifest.get("text_jsonl")
-          if not isinstance(page_name, str) or not page_name or Path(page_name).name != page_name or not page_name.endswith(".jsonl"):
-              raise SystemExit("The source manifest has an unsafe sibling page JSONL name.")
-          page_path = manifest_path.parent / page_name
-          if not page_path.is_file():
-              raise SystemExit(f"Committed sibling page JSONL is missing: {page_path}")
-          shutil.copy2(manifest_path, source_dir / "source.manifest.json")
-          shutil.copy2(page_path, source_dir / page_name)
-          print(json.dumps({
-              "book_id": book_id,
-              "ghcr_image": f"ghcr.io/manav326/quantaedge-textbooks-class-{class_no}-{language}:latest",
-              "manifest": str(manifest_path),
-              "expected_pdf_sha256": expected_hash
-          }, indent=2))
+          from scripts.validate_textbook_extraction_artifacts import normalize_language, normalize_subject
+          container_id, selection_arg, root_arg, repo_arg, class_no, language = sys.argv[1:]
+          selection = json.loads(Path(selection_arg).read_text(encoding="utf-8"))
+          root = Path(root_arg)
+          repo = Path(repo_arg)
+          manifest_dir = repo / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
+          if not manifest_dir.is_dir():
+              raise SystemExit(f"Committed extracted pages are missing: {manifest_dir}. Run the extraction pilot and mirror its verified artifact first.")
+          for source in selection.get("sources", []):
+              book_id = source["book_id"]
+              book_dir = root / source["book_slug"]
+              book_dir.mkdir(parents=True, exist_ok=False)
+              pdf_path = book_dir / "source.pdf"
+              subprocess.run(["docker", "cp", f"{container_id}:/{source['file']}", str(pdf_path)], check=True)
+              digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
+              if digest != source["sha256"]:
+                  raise SystemExit(f"{book_id}: source PDF SHA-256 differs from the selected GHCR index.")
+              matches = []
+              for manifest_path in manifest_dir.glob("*.manifest.json"):
+                  try:
+                      value = json.loads(manifest_path.read_text(encoding="utf-8"))
+                  except Exception:
+                      continue
+                  if value.get("book_id") == book_id:
+                      matches.append((manifest_path, value))
+              if len(matches) != 1:
+                  raise SystemExit(f"{book_id}: expected one committed source manifest matching this selected source, found {len(matches)}.")
+              manifest_path, manifest = matches[0]
+              manifest_hash = str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or "").lower()
+              if manifest_hash != digest:
+                  raise SystemExit(f"{book_id}: committed extraction manifest hash does not match the selected whole-book PDF.")
+              if normalize_language(manifest.get("language")) != language:
+                  raise SystemExit(f"{book_id}: manifest language does not match {language}.")
+              if normalize_subject(manifest.get("subject")) != source["subject"]:
+                  raise SystemExit(f"{book_id}: manifest subject does not match selected subject {source['subject']}.")
+              if manifest.get("scope") != "SUBJECT_BOOK" or manifest.get("content_state") != "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW":
+                  raise SystemExit(f"{book_id}: expected a whole-book draft-only extraction manifest.")
+              page_name = manifest.get("text_jsonl")
+              if not isinstance(page_name, str) or Path(page_name).name != page_name or not page_name.endswith(".jsonl"):
+                  raise SystemExit(f"{book_id}: unsafe/missing text_jsonl filename in manifest.")
+              page_path = manifest_path.parent / page_name
+              if not page_path.is_file():
+                  raise SystemExit(f"{book_id}: sibling page JSONL is missing.")
+              shutil.copy2(manifest_path, book_dir / "source.manifest.json")
+              shutil.copy2(page_path, book_dir / page_name)
+              (book_dir / "source-selection.json").write_text(json.dumps(source, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              print(json.dumps({"book_id": book_id, "language": language, "subject": source["subject"], "slug": source["book_slug"], "sha256": digest}))
+          subprocess.run(["docker", "rm", "-f", container_id], check=True)
           PY
-          echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source-v3" >> "$GITHUB_ENV"
-
-      - name: Extract source-bound inventory into runner temporary storage
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/extract_visual_asset_inventory.py \
-            --pdf "$SOURCE_DIR/source.pdf" \
-            --manifest "$SOURCE_DIR/source.manifest.json" \
-            --output-dir "$RUNNER_TEMP/visual-inventory-v3" \
-            --preview-width 1200
-
-      - name: Prepare stratified candidate pack and verify outputs
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/prepare_visual_candidates_v3.py \
-            --inventory "$RUNNER_TEMP/visual-inventory-v3/visual-inventory.v1.json" \
-            --pdf "$SOURCE_DIR/source.pdf" \
-            --output-dir "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG" \
-            --max-candidates "$MAX_CANDIDATES" \
-            --crop-scale 2.0
-          python - "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG/candidates.v3.json" <<'PY'
+            echo "::endgroup::"
+          done
+          python - "$source_root" "$CLASS_NO" <<'PY'
           import json, sys
           from pathlib import Path
-          path = Path(sys.argv[1])
-          pack = json.loads(path.read_text(encoding="utf-8"))
-          if pack.get("schema_version") != "quantaedge.visual-candidate-pack.v3":
-              raise SystemExit("Unexpected candidate pack schema.")
-          if pack.get("summary", {}).get("selected_candidate_count", 0) < 1:
-              raise SystemExit("The candidate pack is empty.")
-          if pack.get("summary", {}).get("publication_allowed") is not False:
-              raise SystemExit("Candidate pack must remain non-publishable.")
-          root = path.parent
-          for candidate in pack.get("candidates", []):
-              for key in ("display_path", "source_page_preview_path"):
-                  target = (root / candidate[key]).resolve()
-                  if root.resolve() not in target.parents or not target.is_file():
-                      raise SystemExit(f"Missing/unsafe candidate preview referenced by {key}: {candidate.get('candidate_id')}")
-          print(json.dumps(pack["summary"], indent=2))
+          root = Path(sys.argv[1])
+          grade = int(sys.argv[2])
+          all_sources = []
+          for language in ("english", "hindi"):
+              value = json.loads((root / f"selected-{language}.json").read_text(encoding="utf-8"))
+              if value.get("class") != grade or len(value.get("sources", [])) != 3:
+                  raise SystemExit(f"Invalid source set for Class {grade} {language}.")
+              all_sources.extend(value["sources"])
+          if len(all_sources) != 6 or len({x["book_slug"] for x in all_sources}) != 6:
+              raise SystemExit(f"Expected six unique source books (Science + Maths Parts 1/2 in each language); found {len(all_sources)}.")
+          (root / "selected-sources.json").write_text(json.dumps({"class": grade, "sources": all_sources, "publication_allowed": False, "review_required": True}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps({"class": grade, "selected_source_count": len(all_sources), "subjects": ["science", "maths"], "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
           PY
+          echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
-      - name: Build review-only admin attachment catalog and content-addressed media URLs
+      - name: Build review-only candidate packs and attachment manifests for all six source books
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p apps/admin/public/content/visual-candidates
-          chapter_map_args=()
-          chapter_map_path="data/textbook-visual-candidates-v3/$BOOK_SLUG/chapter-map.v1.json"
-          if [[ -f "$chapter_map_path" ]]; then chapter_map_args=(--chapter-map "$chapter_map_path"); fi
-          python scripts/build_visual_lesson_attachment_manifest.py \\
-            --candidate-pack "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG/candidates.v3.json" \\
-            --candidate-root "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG" \\
-            --repo-root "$GITHUB_WORKSPACE" \\
-            --book-slug "$BOOK_SLUG" \\
-            --output "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" \\
-            "${chapter_map_args[@]}"
-          python scripts/update_visual_catalog_index.py --catalog-dir apps/admin/public/content/visual-candidates --output apps/admin/public/content/visual-candidates/index.v1.json
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$RUNNER_TEMP/visual-candidates-v3" "$GITHUB_WORKSPACE" "$MAX_CANDIDATES" <<'PY'
+          import json, os, shutil, subprocess, sys
+          from pathlib import Path
+          selection_path, source_root_arg, output_root_arg, repo_arg, max_candidates = sys.argv[1:]
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          source_root = Path(source_root_arg)
+          output_root = Path(output_root_arg)
+          repo = Path(repo_arg)
+          output_root.mkdir(parents=True, exist_ok=True)
+          for source in selection["sources"]:
+              slug = source["book_slug"]
+              work = source_root / slug
+              out = output_root / slug
+              inventory_dir = work / "inventory"
+              subprocess.run([
+                  sys.executable, "scripts/extract_visual_asset_inventory.py",
+                  "--pdf", str(work / "source.pdf"),
+                  "--manifest", str(work / "source.manifest.json"),
+                  "--output-dir", str(inventory_dir),
+                  "--preview-width", "1200",
+              ], cwd=repo, check=True)
+              subprocess.run([
+                  sys.executable, "scripts/prepare_visual_candidates_v3.py",
+                  "--inventory", str(inventory_dir / "visual-inventory.v1.json"),
+                  "--pdf", str(work / "source.pdf"),
+                  "--output-dir", str(out),
+                  "--max-candidates", str(max_candidates),
+                  "--crop-scale", "2.0",
+              ], cwd=repo, check=True)
+              pack_path = out / "candidates.v3.json"
+              pack = json.loads(pack_path.read_text(encoding="utf-8"))
+              if pack.get("schema_version") != "quantaedge.visual-candidate-pack.v3":
+                  raise SystemExit(f"{slug}: unexpected candidate pack schema.")
+              if pack.get("summary", {}).get("selected_candidate_count", 0) < 1:
+                  raise SystemExit(f"{slug}: candidate pack is empty.")
+              if pack.get("summary", {}).get("publication_allowed") is not False:
+                  raise SystemExit(f"{slug}: candidate pack must remain non-publishable.")
+              for candidate in pack.get("candidates", []):
+                  for key in ("display_path", "source_page_preview_path"):
+                      target = (out / candidate[key]).resolve()
+                      if out.resolve() not in target.parents or not target.is_file():
+                          raise SystemExit(f"{slug}: missing/unsafe {key} for {candidate.get('candidate_id')}")
+              out_in_repo = repo / "data" / "textbook-visual-candidates-v3" / slug
+              out_in_repo.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(pack_path, out_in_repo / "candidates.v3.json")
+              shutil.copy2(out / "summary.v3.json", out_in_repo / "summary.v3.json")
+              shutil.copy2(out / "contact-sheet.jpg", out_in_repo / "contact-sheet.jpg")
+              (out_in_repo / "source-selection.v1.json").write_text(json.dumps(source, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              chapter_map = repo / "data" / "textbook-visual-candidates-v3" / slug / "chapter-map.v1.json"
+              cmd = [
+                  sys.executable, "scripts/build_visual_lesson_attachment_manifest.py",
+                  "--candidate-pack", str(pack_path),
+                  "--candidate-root", str(out),
+                  "--repo-root", str(repo),
+                  "--book-slug", slug,
+                  "--output", str(repo / "apps" / "admin" / "public" / "content" / "visual-candidates" / f"{slug}.v3.json"),
+              ]
+              if chapter_map.is_file():
+                  cmd.extend(["--chapter-map", str(chapter_map)])
+              subprocess.run(cmd, cwd=repo, check=True)
+              print(json.dumps({"book_id": source["book_id"], "slug": slug, "candidate_count": pack["summary"]["selected_candidate_count"], "publication_allowed": False}))
+          PY
 
       - name: Install ORAS and authenticate to GHCR
         env:
@@ -261,70 +290,73 @@ jobs:
           sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
-      - name: Publish immutable v3 candidate pack (no stable tag update)
-        id: publish_pack
+      - name: Publish immutable per-book candidate packs and persist bundle indexes
         shell: bash
-        run: |
-          set -euo pipefail
-          package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
-          version_tag="candidates-v3-class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
-          archive_name="$BOOK_SLUG-candidates-v3.tar.gz"
-          tar -C "$RUNNER_TEMP/visual-candidates-v3" -czf "$RUNNER_TEMP/$archive_name" "$BOOK_SLUG"
-          bundle_sha256="$(sha256sum "$RUNNER_TEMP/$archive_name" | cut -d' ' -f1)"
-          (cd "$RUNNER_TEMP" && oras push "$package:$version_tag" "$archive_name:application/gzip")
-          echo "package=$package" >> "$GITHUB_OUTPUT"
-          echo "version_tag=$version_tag" >> "$GITHUB_OUTPUT"
-          echo "bundle_sha256=$bundle_sha256" >> "$GITHUB_OUTPUT"
-          echo "Published immutable candidate pack $package:$version_tag ($bundle_sha256)."
-          echo "The stable visual bundle tag was not modified."
-
-      - name: Persist compact review manifest and index on main
         env:
-          CANDIDATE_PACKAGE: ${{ steps.publish_pack.outputs.package }}
-          CANDIDATE_VERSION_TAG: ${{ steps.publish_pack.outputs.version_tag }}
-          CANDIDATE_BUNDLE_SHA256: ${{ steps.publish_pack.outputs.bundle_sha256 }}
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          source_root="$VISUAL_SOURCE_ROOT"
+          pack_root="$RUNNER_TEMP/visual-candidates-v3"
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          package="ghcr.io/$owner/quantaedge-textbook-visuals"
+          python - "$source_root/selected-sources.json" "$pack_root" "$GITHUB_WORKSPACE" "$package" "$GITHUB_RUN_ID" <<'PY'
+          import hashlib, json, os, subprocess, sys, tarfile
+          from pathlib import Path
+          selection_path, pack_root_arg, repo_arg, package, run_id = sys.argv[1:]
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          pack_root, repo = Path(pack_root_arg), Path(repo_arg)
+          for source in selection["sources"]:
+              slug = source["book_slug"]
+              pack_dir = pack_root / slug
+              out = repo / "data" / "textbook-visual-candidates-v3" / slug
+              archive = pack_root / f"{slug}-candidates-v3.tar.gz"
+              subprocess.run(["tar", "-C", str(pack_root), "-czf", str(archive), slug], check=True)
+              bundle_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+              version_tag = f"candidates-v3-class{selection['class']}-{slug}-run-{run_id}"
+              subprocess.run(["oras", "push", f"{package}:{version_tag}", f"{archive}:application/gzip"], check=True)
+              pack = json.loads((pack_dir / "candidates.v3.json").read_text(encoding="utf-8"))
+              summary = pack.get("summary", {})
+              bundle_index = {
+                  "schema_version": "quantaedge.visual-candidate-bundle-index.v3",
+                  "book_slug": slug,
+                  "class": selection["class"],
+                  "language": source["language"],
+                  "subject": source["subject"],
+                  "maths_part": source.get("maths_part"),
+                  "source_book_id": source["book_id"],
+                  "source_pdf_sha256": source["sha256"],
+                  "candidate_pack_schema": pack.get("schema_version"),
+                  "candidate_count": summary.get("selected_candidate_count", 0),
+                  "candidate_pages": summary.get("selected_page_numbers", []),
+                  "publication_allowed": False,
+                  "review_required": True,
+                  "ghcr_package": package,
+                  "version_tag": version_tag,
+                  "bundle_tar_sha256": bundle_sha,
+                  "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
+              }
+              (out / "bundle-index.v3.json").write_text(json.dumps(bundle_index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              print(json.dumps({"book_id": source["book_id"], "slug": slug, "package": package, "tag": version_tag, "bundle_sha256": bundle_sha, "candidate_count": bundle_index["candidate_count"], "publication_allowed": False}))
+          PY
+
+      - name: Rebuild the catalog, test candidate-to-content contracts, and commit the full batch
         shell: bash
         run: |
           set -euo pipefail
-          pack_dir="$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG"
-          out="data/textbook-visual-candidates-v3/$BOOK_SLUG"
-          mkdir -p "$out"
-          cp "$pack_dir/candidates.v3.json" "$out/candidates.v3.json"
-          cp "$pack_dir/summary.v3.json" "$out/summary.v3.json"
-          cp "$pack_dir/contact-sheet.jpg" "$out/contact-sheet.jpg"
-          python - "$out/bundle-index.v3.json" "$pack_dir/summary.v3.json" <<'PY'
-          import json, os, sys
-          from pathlib import Path
-          index_path = Path(sys.argv[1])
-          summary = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
-          summary_source = summary["source"]
-          value = {
-              "schema_version": "quantaedge.visual-candidate-bundle-index.v3",
-              "book_slug": os.environ["BOOK_SLUG"],
-              "source_book_id": os.environ["BOOK_ID"],
-              "source_pdf_sha256": summary_source["pdf_sha256"],
-              "candidate_pack_schema": summary["schema_version"],
-              "candidate_count": summary["summary"]["selected_candidate_count"],
-              "candidate_pages": summary["summary"]["selected_page_numbers"],
-              "publication_allowed": False,
-              "review_required": True,
-              "ghcr_package": os.environ["CANDIDATE_PACKAGE"],
-              "version_tag": os.environ["CANDIDATE_VERSION_TAG"],
-              "bundle_tar_sha256": os.environ["CANDIDATE_BUNDLE_SHA256"],
-              "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. The full contact sheets, source previews, image crops and original image objects are in the package."
-          }
-          index_path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print(json.dumps(value, indent=2))
-          PY
           python scripts/update_visual_catalog_index.py --catalog-dir apps/admin/public/content/visual-candidates --output apps/admin/public/content/visual-candidates/index.v1.json
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
-          git add "$out" "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" "apps/admin/public/content/visual-candidates/index.v1.json" "apps/web/public/content/visual-assets/$BOOK_SLUG"
+          git add data/textbook-visual-candidates-v3 apps/admin/public/content/visual-candidates apps/web/public/content/visual-assets
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "data(ai): persist v3 textbook visual candidate manifest"
+            git commit -m "data(ai): prepare Class $CLASS_NO bilingual visual candidate batch"
+          else
+            echo "The candidate metadata and media manifest already match main; no Git commit required."
+            exit 0
           fi
           git pull --rebase origin main
           git push origin HEAD:main
-          echo "Persisted the v3 candidate manifest, contact sheet, review-only admin catalog and web-ready content-addressed visual assets. No existing v1/v2 files were changed."
+          echo "Persisted candidates for Science plus Maths Parts 1/2 in English and Hindi. All candidate packs remain review-only and non-publishable."

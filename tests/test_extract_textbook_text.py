@@ -92,6 +92,8 @@ class TextbookTextExtractionTests(unittest.TestCase):
     def test_class_language_subject_and_scope_filters(self):
         source = {"class": 6, "subject": "Mathematics", "language": "hindi", "scope": "SUBJECT_BOOK"}
         self.assertTrue(_matches_filters(source, 6, "hindi", ["Math", "Science"], "SUBJECT_BOOK"))
+        part_title = {"class": 7, "subject": "Mathematics Part 1", "language": "english", "scope": "SUBJECT_BOOK"}
+        self.assertTrue(_matches_filters(part_title, 7, "english", ["Mathematics", "Maths"], "SUBJECT_BOOK"))
         self.assertFalse(_matches_filters(source, 7, "hindi", ["Math"], "SUBJECT_BOOK"))
         self.assertFalse(_matches_filters(source, 6, "english", ["Math"], "SUBJECT_BOOK"))
         self.assertFalse(_matches_filters(source, 6, "hindi", ["Science"], "SUBJECT_BOOK"))

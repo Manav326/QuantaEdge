@@ -128,14 +128,36 @@ Implementation commits:
 - [x] Strengthen runner resumability: process batches of 10, commit all generated inventory/analysis/assets/previews to main after each batch, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
 - [ ] Validate the new workflow end-to-end. GitHub connector status output has not yet confirmed a successful Actions run for these commits.
 
-## Reusable class-wise extraction contract (2026-10-15)
+## Class 7/8 source preparation and authoring handoff (2026-10-16)
 
-The existing extractor and GHCR registry preparation scripts are the standard reusable implementation; do not create a new extraction script for each class, subject, language, or book. Use the single workflow `.github/workflows/textbook-extraction-pilot.yml` with the `class_no` input (6, 7, or 8). Each run pulls both Hindi and English class-wise GHCR images, prepares complete-book PDFs, and reuses the same resumable page-level extractor. Original PDFs remain in GHCR; Actions artifacts contain extracted JSONL/manifests/reports.
+The two class workflows deliberately accept **only Class 7 or Class 8**. Each selected class is handled in both English and Hindi; the required source set is one complete Science book and exactly two Maths books explicitly identifiable as Part 1 and Part 2 in each language. If the GHCR index has missing, duplicate, unlabelled or ambiguous sources, selection fails instead of guessing.
 
-- Canonical page output: `pilot-output/extracted/class-N/{hindi,english}/pages/<asset-sha256>.jsonl` with a sibling `.manifest.json`.
-- The validator `scripts/validate_textbook_extraction_artifacts.py` verifies the registry index, exact source-book hashes, full contiguous page coverage, subject/language provenance, complete-book scope and extraction status before an artifact is accepted.
-- Class 7 and Class 8 Maths require at least two distinct complete Maths source-book IDs per language (Part 1 and Part 2). A missing part, incomplete/partial book, missing page, mismatched hash or extraction failure fails the workflow instead of reporting a complete class.
-- Tests live in `tests/test_validate_textbook_extraction_artifacts.py`; they cover two-part Maths enforcement and missing-page detection. Extend these reusable tests rather than creating per-class scripts.
-- All outputs are extraction-only drafts. Passing validation does not approve, generate, or publish lessons/questions.
+### Required sequence
 
-To run a class, open the [reusable extraction workflow](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-extraction-pilot.yml), choose **Run workflow**, select class 6, 7 or 8, and start it. A successful run's artifact is the handoff for the reusable artifact-mirroring workflow `.github/workflows/commit-class6-extraction-artifact.yml`; select the same class and source run ID there to validate and commit the extracted pages to `main`. Do not claim those classes are extracted until the run and artifact verification succeed.
+1. Run [QuantaEdge GHCR Textbook Extraction Pilot](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-extraction-pilot.yml) and select Class 7 or 8. It extracts only matching Science/Maths subject-book pages in both languages and validates source hashes, full page continuity, the exact source counts and the Maths part labels.
+2. Only after that run succeeds, run [Mirror verified textbook extraction artifact to main](https://github.com/Manav326/QuantaEdge/actions/workflows/commit-class6-extraction-artifact.yml) with the same class and successful pilot run ID. This records the selected class's extraction JSONL/manifests on `main`; original PDFs remain in GHCR.
+3. Run [Prepare textbook visual candidates v3 (additive)](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) and select the same Class 7 or 8. It resolves the six expected sources automatically, verifies each selected GHCR PDF hash against its committed extraction manifest/page JSONL, and builds a separate review-only visual candidate pack per source book. The full visual assets are stored under immutable per-run GHCR tags; compact JSON, contact sheets, bundle indexes and the admin review catalog are checkpointed on `main`.
+4. Review source identity, page coverage, figures/tables, scientific meaning, Hindi/English semantic parity, visual labels, readability, rights/provenance and accessibility. Candidate generation is not lesson generation, approval or publication.
+5. Then author the chapter-specific bilingual lesson JSON using [the reusable textbook content-generation prompt](reusable-textbook-content-generation-prompt.md). Read the current production index and [Issue #56](https://github.com/Manav326/QuantaEdge/issues/56) before starting; never assume a previous chat's context or reuse stale source IDs.
+
+### Canonical data and gates
+
+- Extraction output: `data/textbook-extractions/class-N/{english,hindi}/pages/*.jsonl` plus sibling `*.manifest.json`.
+- Visual candidate metadata: `data/textbook-visual-candidates-v3/<book_slug>/`.
+- Admin review catalog: `apps/admin/public/content/visual-candidates/<book_slug>.v3.json` and `index.v1.json`.
+- Visual bundles are versioned in GHCR and must be restored/verified by the recorded bundle SHA-256.
+- All extracts and visual candidates remain draft/review-only. The pipeline never marks content publishable.
+- Web/Android question renderers and the single state-preserving global language selector are separate runtime implementation tasks; source preparation does not implement them.
+
+### Reusable class content contract
+
+- Use the actual numbered headings/subsections in both language editions to choose lesson count; never choose a fixed number of topics before reviewing the chapter structure.
+- Maintain a bilingual source-coverage ledger for page ranges, figures, tables, activities, sidebars/safety notes, keywords, summary, chapter questions and “Learning further” tasks. The ledger records what still needs review; it is not proof that coverage is complete.
+- Each lesson JSON must use the current structured lesson schema and have separate Explain and Practice sections; stable locale-neutral IDs; non-empty English and Hindi text for learner-visible fields; and one question for each registered type (8 questions per topic).
+- Questions must use the current renderer contract IDs, localized options/feedback/rubrics and validated answer references. AI-authored questions are supplementary, not verbatim NCERT questions.
+- A generated diagram or visual observation is non-renderable until visual, source, semantic bilingual, scientific and accessibility review passes. Keep the publication flag false until human approval.
+- Create all topic JSONs and the coverage ledger as one chapter batch. Do not commit topic-by-topic. Update Issue #56 once per completed chapter with the exact tree/blob pointers, test results and next action. Commit only when explicitly requested.
+
+### Current verification status
+
+The updated workflow code and focused tests are committed together as an implementation change, but the Class 7/8 batch is **not confirmed end-to-end until both workflows are run against the actual GHCR indexes and the source artifacts are reviewed**. If the GHCR source list differs from the required 1 Science + 2 clearly labelled Maths parts per language, first resolve the source selection rather than weakening the validation.

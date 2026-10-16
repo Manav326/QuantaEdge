@@ -19,6 +19,8 @@ class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
             "math-part-1": "a" * 64,
             "math-part-2": "b" * 64,
             "science": "c" * 64,
+            "math-part-3": "d" * 64,
+            "science-alt": "e" * 64,
         }
 
     def tearDown(self):
@@ -29,7 +31,7 @@ class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
         for book_id in ids:
             books.append({
                 "book_id": book_id,
-                "title": book_id,
+                "title": book_id.replace("-", " "),
                 "class": "7",
                 "medium": "english",
                 "subject": "Mathematics" if book_id.startswith("math") else "Science",
@@ -74,15 +76,36 @@ class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
         self.write_manifest("math-part-2", "Mathematics", self.hashes["math-part-2"])
         self.write_manifest("science", "Science", self.hashes["science"])
         result = validate(self.index_path, self.extraction, 7, "english")
-        self.assertEqual(len(result["maths_source_books"]), 2)
-        self.assertEqual(result["verified_page_count"], 6)
+        self.assertEqual(2, len(result["maths_source_books"]))
+        self.assertEqual(1, len(result["science_source_books"]))
+        self.assertEqual({1, 2}, {x["maths_part"] for x in result["verified_books"] if x["subject"] == "maths"})
+        self.assertEqual(6, result["verified_page_count"])
         self.assertFalse(result["publication_allowed"])
 
     def test_class7_fails_if_second_maths_part_is_missing(self):
         self.write_source(ids=("math-part-1", "science"))
-        self.write_manifest("math-part-1", "Mathematics", self.hashes["math-part-1"])
-        self.write_manifest("science", "Science", self.hashes["science"])
-        with self.assertRaisesRegex(ValueError, "both part books"):
+        with self.assertRaisesRegex(ValueError, "exactly two complete Maths"):
+            validate(self.index_path, self.extraction, 7, "english")
+
+    def test_class7_rejects_more_than_two_math_books(self):
+        self.write_source(ids=("math-part-1", "math-part-2", "math-part-3", "science"))
+        with self.assertRaisesRegex(ValueError, "exactly two complete Maths"):
+            validate(self.index_path, self.extraction, 7, "english")
+
+    def test_class7_rejects_more_than_one_science_book(self):
+        self.write_source(ids=("math-part-1", "math-part-2", "science", "science-alt"))
+        with self.assertRaisesRegex(ValueError, "exactly one complete Science"):
+            validate(self.index_path, self.extraction, 7, "english")
+
+    def test_class7_rejects_unlabelled_maths_parts(self):
+        self.write_source()
+        books = json.loads(self.index_path.read_text(encoding="utf-8"))
+        row = next(x for x in books["books"] if x["book_id"] == "math-part-2")
+        row["title"] = "Mathematics"
+        row["book_id"] = "math-book"
+        books["books"] = [x for x in books["books"] if x["book_id"] != "math-part-2"] + [row]
+        self.index_path.write_text(json.dumps(books), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "identify Part 1 and Part 2"):
             validate(self.index_path, self.extraction, 7, "english")
 
     def test_missing_page_record_fails_integrity_check(self):

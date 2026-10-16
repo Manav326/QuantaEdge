@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       class_no:
-        description: "Bihar Board pilot class"
+        description: "Class to extract (both English and Hindi, Science + Maths Parts 1 and 2)"
         type: choice
-        options: ["6", "7", "8"]
-        default: "6"
+        options: ["7", "8"]
+        default: "7"
         required: true
 
 permissions:
@@ -15,13 +15,12 @@ permissions:
   packages: read
 
 concurrency:
-  # Allow Class 7 and Class 8 to extract in parallel, while preventing duplicate runs for the same class.
-  group: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no || '6' }}
+  group: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no || '7' }}
   cancel-in-progress: false
 
 jobs:
   extract:
-    name: Pull GHCR complete books and extract page text
+    name: Extract selected Class ${{ inputs.class_no }} in English and Hindi
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -42,8 +41,10 @@ jobs:
       - name: Test safe GHCR page importer
         run: python -m unittest discover -s tests -p 'test_import_ghcr_extracted_pages.py' -v
 
-      - name: Test whole-book extraction integrity and two-part Maths rules
-        run: python -m unittest discover -s tests -p 'test_validate_textbook_extraction_artifacts.py' -v
+      - name: Test strict source selection and whole-book integrity
+        run: |
+          python -m unittest discover -s tests -p 'test_validate_textbook_extraction_artifacts.py' -v
+          python -m unittest discover -s tests -p 'test_select_textbook_visual_sources.py' -v
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -52,60 +53,60 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull approved class-wise GHCR cache and extract complete books
+      - name: Pull source caches and extract only the selected class's Science and Maths
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
-          DISPATCH_CLASS: ${{ inputs.class_no }}
-          EVENT_NAME: ${{ github.event_name }}
+          CLASS_NO: ${{ inputs.class_no }}
         run: |
           set -euo pipefail
-          owner="$(printf '%s' "${GHCR_OWNER}" | tr '[:upper:]' '[:lower:]')"
-          class_no=6
-          if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ -n "${DISPATCH_CLASS:-}" ]; then
-            class_no="${DISPATCH_CLASS}"
-          fi
-          mkdir -p pilot-output
+          [[ "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 7 or Class 8 is supported."; exit 2; }
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          mkdir -p pilot-output/reports
           for medium in hindi english; do
-            image="ghcr.io/${owner}/quantaedge-textbooks-class-${class_no}-${medium}:latest"
-            registry_dir="pilot-output/cache/class-${class_no}/${medium}"
-            prepared_dir="pilot-output/prepared/class-${class_no}/${medium}"
-            extracted_dir="pilot-output/extracted/class-${class_no}/${medium}"
-            echo "::group::Pull ${image}"
-            python scripts/textbook_registry.py pull --image "${image}" --output-dir "${registry_dir}"
+            image="ghcr.io/$owner/quantaedge-textbooks-class-$CLASS_NO-$medium:latest"
+            registry_dir="pilot-output/cache/class-$CLASS_NO/$medium"
+            prepared_dir="pilot-output/prepared/class-$CLASS_NO/$medium"
+            extracted_dir="pilot-output/extracted/class-$CLASS_NO/$medium"
+
+            echo "::group::Pull $image"
+            python scripts/textbook_registry.py pull --image "$image" --output-dir "$registry_dir"
             echo "::endgroup::"
-            echo "::group::Prepare complete-book extraction inputs (${medium})"
-            python scripts/textbook_registry.py prepare-library --registry-dir "${registry_dir}" --output-dir "${prepared_dir}" --extraction-only
+
+            echo "::group::Prepare complete-book extraction inputs ($medium)"
+            python scripts/textbook_registry.py prepare-library --registry-dir "$registry_dir" --output-dir "$prepared_dir" --extraction-only
             echo "::endgroup::"
-            echo "::group::Extract class ${class_no} ${medium} Maths and Science pages"
+
+            echo "::group::Extract selected Class $CLASS_NO $medium Maths Parts 1/2 and Science"
             python scripts/extract_textbook_text.py \
-              --bundle-dir "${prepared_dir}/bundles" \
-              --pdf-dir "${prepared_dir}/pdfs" \
-              --output-dir "${extracted_dir}" \
-              --class-no "${class_no}" \
-              --language "${medium}" \
+              --bundle-dir "$prepared_dir/bundles" \
+              --pdf-dir "$prepared_dir/pdfs" \
+              --output-dir "$extracted_dir" \
+              --class-no "$CLASS_NO" \
+              --language "$medium" \
               --subject Mathematics \
               --subject Maths \
               --subject Science \
               --scope SUBJECT_BOOK
             echo "::endgroup::"
-            echo "::group::Validate complete-book manifests, hashes, page continuity, and required Maths parts"
+
+            echo "::group::Validate exact required source set, page continuity, hashes and metadata"
             python scripts/validate_textbook_extraction_artifacts.py \
-              --registry-index "${registry_dir}/index.json" \
-              --extraction-dir "${extracted_dir}" \
-              --class-no "${class_no}" \
-              --language "${medium}"
+              --registry-index "$registry_dir/index.json" \
+              --extraction-dir "$extracted_dir" \
+              --class-no "$CLASS_NO" \
+              --language "$medium"
             echo "::endgroup::"
-            mkdir -p pilot-output/reports
-            cp "${prepared_dir}/prepare-report.json" "pilot-output/reports/class-${class_no}-${medium}-prepare-report.json"
-            cp "${extracted_dir}/extraction-report.json" "pilot-output/reports/class-${class_no}-${medium}-extraction-report.json"
+
+            cp "$prepared_dir/prepare-report.json" "pilot-output/reports/class-$CLASS_NO-$medium-prepare-report.json"
+            cp "$extracted_dir/extraction-report.json" "pilot-output/reports/class-$CLASS_NO-$medium-extraction-report.json"
           done
 
-      - name: Publish extracted text and reports (not source PDFs)
+      - name: Publish extracted page data and reports (not source PDFs)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no || '6' }}-${{ github.run_id }}
+          name: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no }}-${{ github.run_id }}
           path: |
             pilot-output/extracted/
             pilot-output/reports/
