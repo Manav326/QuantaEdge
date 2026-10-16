@@ -231,3 +231,14 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Added server regression coverage for all eight registered question types: multiple choice, multi-select, true/false, matching, fill blank, image observation, short answer (pending review), and scenario based. Added an API regression for an approved activity block being returned to the activity-response adapter.
 - The CI contract guard now checks the server block registry includes activity as well. The new code/test changes require the next GitHub Actions run to pass before their acceptance can be marked green.
 - Still outstanding after CI: authenticated end-to-end interactions and accessibility/device checks recorded above. These cannot be claimed from source tests alone.
+
+## UI continuation — Accessible image enlargement (2026-10-16; CI pending)
+
+- Added a reusable structured-image lightbox in the isolated Web Student and Web Admin build contexts. Both lesson block images and image-observation question visuals use it after their existing caller-side visibility checks.
+- The control has localized English/Hindi open/close labels, image alternative text/caption, a semantic modal dialog, close button, Escape-to-close and backdrop-to-close. It does not change publication, renderability or image-review status.
+- Extended `scripts/check-structured-lesson-ui-contract.mjs` to verify both app-local components exist, that the lightbox is wired into both content and question renderers, and that the modal/keyboard-dismissal contract is present.
+- Also fixed the Web learner feedback display bug: objective-answer feedback now renders from the server result even though author-only question feedback is removed from the sanitized payload; the regression checker guards this.
+- Content validation is green on pipeline run #32: https://github.com/Manav326/QuantaEdge/actions/runs/38889257624. Core CI run #2798 status when this checkpoint was authored: in_progress. This UI slice requires a fresh CI run on its own commit.
+- Android's shared legacy image composable already provides a tappable image and enlarged Dialog with alternative text and close action. The structured Android renderer delegates approved image assets to that component; device accessibility/rotation/offline checks remain unrun.
+- Tasks UI-104, UI-304, UI-401 and UI-405 remain in progress because source/contract checks are not interactive Web/Admin/Android end-to-end or real-device acceptance.
+- Next acceptance: check the latest main CI for Android `testDebugUnitTest assembleDebug`, API verification, Web/Admin/People images and import safeguards. Then run signed-in learner acceptance with a legitimate approved test fixture; verify all eight types, locale switching and saved response restoration; verify visual gates and the enlarged image dialog; record keyboard/TalkBack and portrait/landscape results before marking remaining tasks complete.

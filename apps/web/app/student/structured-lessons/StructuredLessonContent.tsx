@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { LessonLocale, StructuredExplainBlock, StructuredLesson } from './contract';
 import { isStudentRenderableAsset, readLocale } from './contract';
+import StructuredImageLightbox from './StructuredImageLightbox';
 
 type Mode = 'student' | 'admin-preview';
 type Props = { lesson: StructuredLesson; locale: LessonLocale; mode?: Mode; onActivitySave?: (blockId: string, value: string) => void | Promise<void>; initialActivityResponses?: Record<string, Record<string, string>> };
@@ -141,7 +142,7 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           const url = typeof asset.url === 'string' ? asset.url : '';
           const alt = localized(asset.alt_by_locale, locale) || localized(block.alt_by_locale, locale);
           return <figure className="qe-structured-card qe-structured-image" key={block.id}>
-            {canPreview && url ? <img src={url} alt={alt} loading="lazy" /> :
+            {canPreview && url ? <StructuredImageLightbox url={url} alt={alt} caption={localized(asset.caption_by_locale, locale) || localized(block.caption_by_locale, locale)} locale={locale} /> :
               <div className="qe-structured-muted" role="status">{locale === 'hi' ? 'चित्र समीक्षा लंबित है; विद्यार्थी को नहीं दिखाया गया।' : 'Visual review is pending; hidden from students.'}</div>}
             <figcaption>{localized(asset.caption_by_locale, locale) || localized(block.caption_by_locale, locale)}</figcaption>
             {mode === 'admin-preview' && <small>{String(asset.source_book_id || '')} · {locale === 'hi' ? 'PDF पृष्ठ ' : 'PDF page '}{String(asset.source_pdf_page_number || '—')} · {String(asset.review_status || 'UNREVIEWED')}</small>}

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import type { LessonLocale, StructuredLesson, StructuredQuestion } from './contract';
 import { findQuestionVisual, isQuestionVisualApproved } from './contract';
 import { StructuredDiagramView } from './StructuredLessonContent';
+import StructuredImageLightbox from './StructuredImageLightbox';
 
 export type QuestionResponse = string | boolean | string[] | Record<string, string>;
 export type QuestionResult = { status: 'correct' | 'incorrect' | 'partially_correct' | 'pending_review'; score?: number; maxScore?: number; feedback?: string; correctAnswer?: unknown };
@@ -96,7 +97,7 @@ export default function StructuredQuestionRenderer({
       {visualApproved ? (locale === 'hi' ? 'स्वीकृत दृश्य' : 'Approved visual') : (locale === 'hi' ? 'दृश्य समीक्षा लंबित' : 'Visual review pending')}
     </div>}
     {question.type === 'image_observation' && (visualApproved || mode === 'admin-preview') && visualBlock?.type === 'image' && typeof (visualBlock.asset as any)?.url === 'string' &&
-      <img className="qe-structured-question__image" src={String((visualBlock.asset as any).url)} alt={text((visualBlock.asset as any).alt_by_locale, locale)} />}
+      <StructuredImageLightbox url={String((visualBlock.asset as any).url)} alt={text((visualBlock.asset as any).alt_by_locale, locale)} caption={text((visualBlock.asset as any).caption_by_locale, locale) || text(visualBlock.caption_by_locale, locale)} locale={locale} />}
     {question.type === 'image_observation' && (visualApproved || mode === 'admin-preview') && visualBlock?.type === 'diagram' &&
       <StructuredDiagramView block={visualBlock} locale={locale} />}
     <h2 id={'question-' + question.id}>{text(question.prompt_by_locale, locale)}</h2>

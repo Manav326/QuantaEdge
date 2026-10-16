@@ -28,6 +28,8 @@ const files = {
   webContent: 'apps/web/app/student/structured-lessons/StructuredLessonContent.tsx',
   webExperience: 'apps/web/app/student/structured-lessons/StructuredLessonExperience.tsx',
   webDetail: 'apps/web/app/student/structured-lessons/StructuredLessonDetailClient.tsx',
+  webImageLightbox: 'apps/web/app/student/structured-lessons/StructuredImageLightbox.tsx',
+  adminImageLightbox: 'apps/admin/app/structured-lesson-preview/StructuredImageLightbox.tsx',
   adminContract: 'apps/admin/app/structured-lesson-preview/contract.ts',
   adminQuestions: 'apps/admin/app/structured-lesson-preview/StructuredQuestionRenderer.tsx',
   adminContent: 'apps/admin/app/structured-lesson-preview/StructuredLessonContent.tsx',
@@ -86,6 +88,13 @@ for (const [key, needle] of [
 
 assert.ok(source.webQuestions.includes("question.type !== 'short_answer' && result &&"), 'Learner feedback must render from the server result after author-only feedback is sanitized.');
 assert.ok(!source.webQuestions.includes("question.type !== 'short_answer' && question.feedback_by_locale && result &&"), 'Learner feedback must not depend on the sanitized author-only question feedback field.');
+for (const key of ['webContent', 'webQuestions', 'adminContent', 'adminQuestions']) {
+  assert.ok(source[key].includes('StructuredImageLightbox'), key + ' must use the accessible image lightbox for lesson/observation visuals.');
+}
+for (const key of ['webImageLightbox', 'adminImageLightbox']) {
+  assert.ok(source[key].includes('role="dialog"') && source[key].includes('aria-modal="true"'), key + ' must expose a modal dialog to assistive technology.');
+  assert.ok(source[key].includes("event.key === 'Escape'"), key + ' must close with Escape.');
+}
 assert.ok(source.adminPreview.includes("setLocale('hi')"), 'Admin preview must have Hindi language selection.');
 assert.ok(source.adminPreview.includes("setLocale('en')"), 'Admin preview must have English language selection.');
 assert.ok(source.webDetail.includes('learningLanguage'), 'Web learner must use the global learning language.');
