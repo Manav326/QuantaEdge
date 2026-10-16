@@ -51,7 +51,7 @@ class LayersTests(unittest.TestCase):
             return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
         v,elapsed=ollama_chat("http://127.0.0.1:11434","qwen2.5:1.5b","prompt",opener=open_)
         self.assertTrue(got["url"].endswith("/api/chat")); self.assertNotIn("authorization",got["headers"])
-        self.assertEqual("json",got["body"]["format"]); self.assertEqual(2048,got["body"]["options"]["num_predict"]); self.assertEqual(6144,got["body"]["options"]["num_ctx"]); self.assertEqual("Careful observation",v["microtopic_title_by_locale"]["en"])
+        self.assertEqual("json",got["body"]["format"]); self.assertEqual(3072,got["body"]["options"]["num_predict"]); self.assertEqual(8192,got["body"]["options"]["num_ctx"]); self.assertEqual("Careful observation",v["microtopic_title_by_locale"]["en"])
         self.assertGreaterEqual(elapsed,0)
 
     def test_external_ollama_endpoint_is_blocked(self):
@@ -278,7 +278,7 @@ class LayersTests(unittest.TestCase):
                  "page_count":1,"completed_pages":1,"source_page_start":1,"text_jsonl":"pages.jsonl",
                  "source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12","title":"Curiosity","edition":"Reprint 2026-27"})
             source=__import__("scripts.quantaedge_layers_6_8",fromlist=["load_source"]).load_source(root,6,book)
-            segment=segments_for(source["pages"],4,7000)[0]
+            segment=segments_for(source["pages"],2,5000)[0]
             raw=model_json([1])
             report={"schema_version":"quantaedge.local-ollama-benchmark.v1","prompt_version":PROMPT_VERSION,
                  "source":{"book_id":book,"source_pdf_sha256":pdfhash,"sample_segment_ids":[segment["segment_id"]],"sample_source_pages":[1]},

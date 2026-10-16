@@ -65,8 +65,8 @@ jobs:
             --source-book-id ncert-c6-english-fecu1 \
             --endpoint http://127.0.0.1:11434 \
             --models qwen2.5:1.5b,qwen2.5:3b \
-            --sample-segments 3 \
-            --request-timeout 300 \
+            --sample-segments 2 \
+            --request-timeout 360 \
             --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --commit-checkpoints
       - name: Summarize actual sample quality and latency

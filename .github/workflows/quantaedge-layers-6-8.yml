@@ -140,7 +140,7 @@ jobs:
           python scripts/quantaedge_layers_6_8.py benchmark \
             --repo-root "$GITHUB_WORKSPACE" --source-book-id ncert-c6-english-fecu1 \
             --endpoint http://127.0.0.1:11434 --models "${{ inputs.benchmark_models }}" \
-            --sample-segments 3 \
+            --sample-segments 2 --request-timeout 300 \
             --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --commit-checkpoints
       - name: Run bounded single-book draft generation

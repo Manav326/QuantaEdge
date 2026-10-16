@@ -5,7 +5,7 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v3-bounded-benchmark"
+PROMPT_VERSION = "qe-l6-l8-ollama-v4-compact-benchmark"
 LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-renderer-recap.v1"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
@@ -223,15 +223,14 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
 def prompt_for(source: dict[str,Any], segment: dict[str,Any]) -> str:
     context="\n\n".join(f"Original PDF page {p['page']} (fragment {p['part']}):\n{p['text'] if p['text'].strip() else '[No extractable text]'}" for p in segment["pieces"])
     allowed=json.dumps(segment["source_pages"])
-    return f"""Produce one review-only bilingual learning unit grounded exclusively in the supplied NCERT source excerpt.
-If the chapter number is not confidently supported, chapter_number must be null and mapping_confidence must be LOW; never guess. Create original teaching explanations, a worked example when supported, a recap, two new multiple-choice questions with correct answers, and one English plus one Hindi tutor conversation. Do not reproduce textbook prose or exercise questions verbatim. Every localized field must contain natural, meaningful English and Hindi text. Every tutor example must cite one or more of the exact allowed PDF page numbers: {allowed}.
-Return JSON only with these keys and shapes:
-chapter_number (integer 1..80 or null), chapter_title_by_locale {{en,hi}}, mapping_confidence, topic_title_by_locale {{en,hi}}, microtopic_title_by_locale {{en,hi}}, concepts_by_locale {{en:[strings],hi:[strings]}}, learning_objectives [{{statement_by_locale:{{en,hi}}}}],
-explanation_by_locale {{en:{{heading,paragraphs:[strings]}},hi:{{heading,paragraphs:[strings]}}}},
-worked_example_by_locale (same shape), recap_by_locale {{en,hi}},
-questions [exactly 2 objects with prompt_by_locale {{en,hi}}, options [at least 2 objects {{id,text_by_locale:{{en,hi}}}}], correct_answer_ids [one option ID], feedback_by_locale {{en,hi}}],
-tutor_examples [objects {{language:"en" or "hi",student_message,assistant_message,source_pages:[allowed page numbers]}}; include both languages].
-Class {source['class_no']}; subject {source['subject']}; source language {source['language']}; book ID {source['book_id']}; book {source['title']}; edition {source['edition']}.
+    return f"""Return ONE compact JSON object for an educational lesson draft based ONLY on the supplied NCERT excerpt. Do not copy textbook wording or exercises. Never guess chapter identity or facts. If chapter number is not certain, use null and mapping_confidence "LOW". Keep every bilingual text field short (normally one sentence; only 1-2 short paragraphs per explanation). Exactly one learning objective, at most two concepts per language, exactly two MCQs with exactly two short options each, and exactly two tutor examples (one en, one hi). Tutor examples must cite only these allowed original PDF pages: {allowed}.
+Return only JSON matching these keys:
+chapter_number (1..80 or null); chapter_title_by_locale {{en,hi}}; mapping_confidence; topic_title_by_locale {{en,hi}}; microtopic_title_by_locale {{en,hi}}; concepts_by_locale {{en:[strings],hi:[strings]}}; learning_objectives [{{statement_by_locale:{{en,hi}}}}];
+explanation_by_locale {{en:{{heading,paragraphs:[strings]}},hi:{{heading,paragraphs:[strings]}}}};
+worked_example_by_locale (same shape, one concise step/example per language); recap_by_locale {{en,hi}};
+questions [2 objects: prompt_by_locale {{en,hi}}, options [2 objects {{id,text_by_locale:{{en,hi}}}}], correct_answer_ids [one option ID], feedback_by_locale {{en,hi}}];
+tutor_examples [2 objects {{language:"en" or "hi",student_message,assistant_message,source_pages:[allowed page numbers]}}].
+Keep JSON compact. Avoid markdown, commentary and repeated text. Class {source['class_no']}; subject {source['subject']}; source language {source['language']}; book ID {source['book_id']}; title {source['title']}; edition {source['edition']}.
 Source excerpt:
 {context}"""
 
@@ -240,7 +239,7 @@ def ollama_chat(endpoint: str, model: str, prompt: str, timeout: int=180, opener
     if u.scheme!="http" or u.hostname not in {"127.0.0.1","localhost","::1"} or u.username or u.password:
         raise ValueError("Generation must use native unauthenticated loopback Ollama HTTP; external providers are disabled.")
     if not model.strip(): raise ValueError("Model is required.")
-    body={"model":model,"stream":False,"format":"json","options":{"temperature":0.15,"num_ctx":6144,"num_predict":2048},
+    body={"model":model,"stream":False,"format":"json","options":{"temperature":0.1,"num_ctx":8192,"num_predict":3072},
           "messages":[{"role":"system","content":SYSTEM},{"role":"user","content":prompt}]}
     req=urllib.request.Request(endpoint.rstrip("/")+"/api/chat",data=json.dumps(body,ensure_ascii=False).encode(),headers={"Content-Type":"application/json"},method="POST")
     send=opener or urllib.request.urlopen; last=None
@@ -601,7 +600,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
       "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
       "layer5_sha256":sha_file(ledger),"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
       "model":args.model,"prompt":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"max_pages_per_segment":args.max_pages_per_segment,
-      "max_context_chars":args.max_context_chars,"generation_parameters":{"temperature":0.15,"num_ctx":6144,"num_predict":2048}},sort_keys=True))
+      "max_context_chars":args.max_context_chars,"generation_parameters":{"temperature":0.1,"num_ctx":8192,"num_predict":3072}},sort_keys=True))
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}"
@@ -678,7 +677,7 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
     source_report=report.get("source") or {}
     if source_report.get("book_id")!=source["book_id"] or str(source_report.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]:
         raise ValueError("Benchmark source book/PDF SHA-256 mismatch.")
-    segments=segments_for(source["pages"],4,7000)
+    segments=segments_for(source["pages"],2,5000)
     segments_by_id={segment["segment_id"]:segment for segment in segments}
     ids=source_report.get("sample_segment_ids")
     if not isinstance(ids,list) or not ids or any(segment_id not in segments_by_id for segment_id in ids):
@@ -762,7 +761,7 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
 def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     repo=args.repo_root.resolve(); source=load_source(repo,6,args.source_book_id)
     if source["subject"]!="science" or source["language"]!="en": raise ValueError("Benchmark must use Class 6 NCERT English Science (Curiosity).")
-    segments=segments_for(source["pages"],4,7000)
+    segments=segments_for(source["pages"],2,5000)
     usable=[segment for segment in segments if any(piece["text"].strip() for piece in segment["pieces"])]
     if not usable: raise ValueError("NCERT benchmark source has no extractable text segments.")
     indices=sorted(set((0,len(usable)//2,len(usable)-1)))[:args.sample_segments]
@@ -817,12 +816,12 @@ def main(argv:list[str]|None=None)->int:
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="mode",required=True)
     r=sub.add_parser("run"); r.add_argument("--repo-root",type=Path,default=Path.cwd()); r.add_argument("--class-no",type=int,choices=(6,7,8),required=True)
     r.add_argument("--source-book-id",required=True); r.add_argument("--endpoint",default="http://127.0.0.1:11434"); r.add_argument("--model",default="qwen2.5:1.5b")
-    r.add_argument("--max-model-calls",type=int,default=6); r.add_argument("--max-pages-per-segment",type=int,default=4); r.add_argument("--max-context-chars",type=int,default=7000)
-    r.add_argument("--request-timeout",type=int,default=180); r.add_argument("--checkpoint-every",type=int,default=2); r.add_argument("--benchmark-report",type=Path)
+    r.add_argument("--max-model-calls",type=int,default=6); r.add_argument("--max-pages-per-segment",type=int,default=2); r.add_argument("--max-context-chars",type=int,default=5000)
+    r.add_argument("--request-timeout",type=int,default=300); r.add_argument("--checkpoint-every",type=int,default=2); r.add_argument("--benchmark-report",type=Path)
     r.add_argument("--allow-experimental-model",action="store_true"); r.add_argument("--commit-checkpoints",action="store_true")
     b=sub.add_parser("benchmark"); b.add_argument("--repo-root",type=Path,default=Path.cwd()); b.add_argument("--source-book-id",default="ncert-c6-english-fecu1")
     b.add_argument("--endpoint",default="http://127.0.0.1:11434"); b.add_argument("--models",default="qwen2.5:1.5b,qwen2.5:3b")
-    b.add_argument("--sample-segments",type=int,default=3); b.add_argument("--request-timeout",type=int,default=180)
+    b.add_argument("--sample-segments",type=int,default=2); b.add_argument("--request-timeout",type=int,default=300)
     b.add_argument("--output",type=Path,default=Path("data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json")); b.add_argument("--commit-checkpoints",action="store_true")
     refresh=sub.add_parser("refresh-benchmark",help="Revalidate saved raw samples against the current lesson renderer contract without model calls.")
     refresh.add_argument("--repo-root",type=Path,default=Path.cwd()); refresh.add_argument("--source-book-id",default="ncert-c6-english-fecu1")
@@ -833,7 +832,7 @@ def main(argv:list[str]|None=None)->int:
         if a.mode=="refresh-benchmark":
             result=refresh_benchmark(a)
         elif a.mode=="benchmark":
-            if not 1<=a.sample_segments<=3: raise ValueError("sample-segments must be 1..3.")
+            if not 1<=a.sample_segments<=2: raise ValueError("sample-segments must be 1..2 for the bounded CPU benchmark.")
             result=benchmark(a)
         else:
             if not 1<=a.max_model_calls<=100 or not 1<=a.checkpoint_every<=5 or not 30<=a.request_timeout<=600: raise ValueError("Invalid model-call/timeout/checkpoint budget.")
