@@ -251,3 +251,15 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Content pipeline run #32 remains green. Previous main CI run #2798 passed Android APK/unit tests, API verification/API image, Admin image, People Operations image and content safeguards; its Web image build was still in progress when last checked. The current main head (image lightbox change) still awaits run #2799, and this additional Android gate triggers another run.
 - No lesson approval state was changed. Drafts and blocked visuals remain blocked.
 - Remaining acceptance unchanged: authenticated live save/reload and cross-platform eight-question interaction matrix; visual lightbox, focus/TalkBack and narrow/landscape device checks. Do not mark UI-402 or UI-405 green until evidence exists.
+
+
+## CI verification checkpoint — 2026-10-16 (main run #2800)
+
+- Verified current `main` HEAD: `6807d92afa02a94aab1f77d4f6c7fe9229189051`.
+- GitHub Actions [run #2800](https://github.com/Manav326/QuantaEdge/actions/runs/38890180803) completed with conclusion **success**.
+- Verified all 8 jobs completed successfully: affected-component detection, Android APK + unit tests, People Operations image, Admin image, content import safeguards, API verification, Web image and API image.
+- Android job passed both structured-lesson and localization contract checks, unit tests, and debug APK build. API verification and the canonical content/schema checks passed.
+- The immediately preceding run #2799 was cancelled because the newer main push superseded it; the current head's run #2800 is the authoritative CI result.
+- **Acceptance remains open.** This CI run is not proof of authenticated learner save/reload, the eight-type interactive matrix, live locale-switch state preservation, screen-reader/keyboard focus, physical-device rotation, or cross-platform visual parity. Those require browser/device execution with an explicitly approved test fixture and must be recorded before related [~] rows become [x].
+- No lesson publication state was changed. The 39 canonical lesson artifacts / 312 questions validated by CI remain drafts; source completeness, scientific accuracy, Hindi semantic parity and visual approval remain separate gates.
+- **Resume next:** execute authenticated Web Student save/reload and locale-switch checks with an approved fixture, then run the same fixture in Admin preview and Android. Capture evidence for each acceptance row; fix only observed regressions. Do not create a branch.
