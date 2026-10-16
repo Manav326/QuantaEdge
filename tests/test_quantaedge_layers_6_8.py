@@ -377,12 +377,11 @@ class LayersTests(unittest.TestCase):
             self.assertEqual(book,result["source_book_id"])
             self.assertEqual(1,result["layer5_visual_evidence_consumed_count"])
             self.assertEqual("DRAFT_REQUIRES_HUMAN_REVIEW",result["overall_status"])
-            self.assertEqual(ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4"/"curriculum-map.v1.json"),
-                ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4"/"curriculum-map.v1.json"))
-            mapping=read_json(ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4")/"curriculum-map.v1.json")
+            mapping_path=ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4")/"curriculum-map.v1.json"
+            mapping=json.loads(mapping_path.read_text(encoding="utf-8"))
             self.assertEqual(pdfhash,mapping["source"]["source_pdf_sha256"])
             self.assertEqual(book,mapping["source"]["source_book_id"])
-            self.assertEqual("Hindi", mapping["source"]["language"].capitalize() if mapping["source"]["language"].lower()=="hindi" else mapping["source"]["language"])
+            self.assertEqual("hi",mapping["source"]["language"])
 
     def test_existing_retrieval_corpus_is_checked_page_by_page(self):
         with tempfile.TemporaryDirectory() as temp:
