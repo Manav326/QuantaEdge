@@ -89,7 +89,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     name: Prepare full bilingual Class ${{ inputs.class_no }} candidate set
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 360
     env:
       CLASS_NO: ${{ inputs.class_no }}
       ANALYSIS_MODE: ${{ inputs.analysis_mode }}
