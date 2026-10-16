@@ -193,7 +193,8 @@ fun QuestionCard(
                                 onCheckedChange = { checked ->
                                     val next = selectedMulti.toMutableSet()
                                     if (checked) next.add(key) else next.remove(key)
-                                    onAnswerChange(JSONArray(optionKeys.filter { it in next }).toString())
+                                    val selected = optionKeys.filter { it in next }
+                                    onAnswerChange(if (selected.isEmpty()) "" else JSONArray(selected).toString())
                                 },
                                 enabled = !locked && !saving
                             )
