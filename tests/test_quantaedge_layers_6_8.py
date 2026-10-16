@@ -65,6 +65,8 @@ class LayersTests(unittest.TestCase):
         seg={"segment_id":"seg1","sequence":1,"source_pages":[1,2]}
         lesson=lesson_from(source,seg,generated); self.assertEqual([],validate_lesson(lesson))
         self.assertFalse(lesson["workflow"]["publication_allowed"])
+        self.assertEqual(6,lesson["curriculum"]["class"])
+        self.assertEqual("science",lesson["curriculum"]["subject"])
         self.assertEqual(2,len(lesson["practice"]["questions"]))
 
     def test_question_types_are_contextual_and_question_count_is_not_fixed(self):
@@ -124,7 +126,7 @@ class LayersTests(unittest.TestCase):
             ("short_answer",{"answer_guide_by_locale":{
                                 "en":{"sample_answer":"A leaf is a plant part.","key_points":["It is part of a plant."]},
                                 "hi":{"sample_answer":"पत्ती पौधे का एक भाग है।","key_points":["यह पौधे का भाग है।"]}},
-                             "grading":{"max_score":2,"rubric_by_locale":{"en":"Award up to two points.","hi":"दो अंक तक दें।"}}},[]),
+                             "grading":{"mode":"rubric","max_score":2,"rubric_by_locale":{"en":"Award up to two points.","hi":"दो अंक तक दें।"}}},[]),
             ("scenario_based",{"scenario_by_locale":{"en":"A learner observes a plant.","hi":"एक विद्यार्थी पौधे का अवलोकन करता है।"},
                                "options":options,"correct_answer_ids":["a"]},[])
         ]

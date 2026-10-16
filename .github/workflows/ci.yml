@@ -129,6 +129,12 @@ jobs:
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
       - name: Validate reviewed-content import safeguards
         run: python -m unittest discover -s tests -p "test_*.py" -v
+      - name: Validate canonical structured lessons against runtime and DB keys
+        run: |
+          python scripts/validate_structured_lesson_artifacts.py \
+            --repo-root . \
+            --index data/structured-lessons/class-6/science/production-index.v1.json \
+            --json-report /tmp/quantaedge-structured-lesson-schema-report.json
 
   validate-api:
     name: API verification

@@ -229,3 +229,10 @@ The importer validates supported student question types, answer-key consistency,
 - V27 defines a minimum planning target of 2,166 original questions. This is a target, not content already authored or published. See docs/product/curriculum-question-inventory.md and docs/product/curriculum-question-targets.csv for the per-track and chapter × question-type inventory.
 - Version history and a dedicated structured question/block editor are not yet implemented; the current CMS uses validated JSON editors for lesson blocks and question metadata.
 - Content is not launch-ready until source mapping, original lesson authoring, assessment coverage, review and focused student acceptance checks are complete.
+
+
+## Structured lesson JSON handoff (separate from legacy question-bank import)
+
+The structured Layers 6–8 output uses one full quantaedge.structured-lesson.v1 JSON object per topic. Preserve additional metadata, but include exact runtime keys such as curriculum.class, curriculum.subject, chapter.chapter_number, topic.topic_number/topic_id, artifact_id, explain.blocks, practice.questions and the matching question rendering_contract_id. The canonical path is data/structured-lessons/class-{class}/{subject}/chapter-{NN}/topic-{NN}-{slug}.v1.json; production-index.v1.json tracks those paths.
+
+The student response schema stores artifact_id, SHA-256 of the exact canonical JSON bytes, question_id and block_id, plus response and authenticated student_id. The source textbook PDF hash is provenance, not the response row's artifact hash. Registration and validation scripts check those constraints before any canonical content is packaged. Legacy question-bank candidates remain a separate format and must not be inserted into this JSON path without an explicit schema conversion.

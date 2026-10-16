@@ -61,3 +61,38 @@ Read the production index and GitHub issue [#56](https://github.com/Manav326/Qua
 ## Item-level source coverage contract
 
 New coverage ledgers must provide `source_inventory.items[]` and `coverage_map[]`. Every source item ID appears exactly once in the map; coverage references resolve to real lesson block, activity or question IDs. A source item may be taught, handled by an activity, assessed in practice, intentionally kept as reference-only, excluded with a reason, or explicitly blocked pending source review. An unaccounted item is a validation failure. Existing ledgers without these fields remain historical audit records and are not coverage-validator passes.
+
+
+## Canonical application and database key contract
+
+The only canonical application artifact format is one UTF-8 JSON object per topic using schema_version and artifact_type equal to quantaedge.structured-lesson.v1. Keep extra model, alignment, source, provenance, scoring-guide and review metadata: additional keys are allowed. Do not omit or rename the keys that the current API/client contract requires.
+
+Canonical content path:
+data/structured-lessons/class-{class}/{subject}/chapter-{NN}/topic-{NN}-{slug}.v1.json
+
+For the current Class 6 Science batch, the production index is:
+data/structured-lessons/class-6/science/production-index.v1.json
+
+The index is the authoring/resume/path ledger. The API Docker build packages data/structured-lessons into its JAR resources and loads topic JSON from the class/subject/chapter directories. A generation manifest, SFT/RAG file, benchmark response or candidate under data/textbook-content-pipeline is not itself a learner lesson.
+
+Required application-routing keys include curriculum.class (integer), curriculum.subject (subject code), chapter.chapter_number, chapter.title_by_locale, topic.topic_number, topic.topic_id, topic.title_by_locale and artifact_id. The required content keys include learning_objectives, source_refs, explain.blocks, practice.questions and workflow.publication_allowed. The selected question must carry its exact rendering_contract_id. The validator permits additional keys and does not require a fixed question-type distribution.
+
+Database mapping is explicit:
+- artifact_id maps to artifact_id in the student_structured_question_response and student_structured_activity_response tables.
+- The API computes artifact_sha256 from the exact canonical JSON bytes. It is a content-version identity, not the source textbook's workflow.source_pdf_sha256.
+- practice.questions[].id maps to question_id in student_structured_question_response.
+- explain.blocks[].id maps to block_id in student_structured_activity_response.
+- student_id is resolved from the authenticated student's context and is never generated in lesson JSON.
+- response is the student's response JSONB. Correct-answer IDs, accepted answers, answer guides and grading rubrics remain server-side.
+
+The DB columns constrain artifact_id to varchar(120), question_id to varchar(180) and block_id to varchar(180). Stable IDs must not depend on translated labels or array position. Changing the bytes of an already-published artifact intentionally changes its artifact hash so earlier answers are not silently attributed to a different content version.
+
+Generation output is staged first. After confirming the canonical chapter mapping, preview registration with:
+python scripts/register_structured_lesson_drafts.py --candidate-dir <run-output>/lessons --index data/structured-lessons/class-6/science/production-index.v1.json --chapter-number 7 --confirm-chapter-mapping
+
+Review every destination and key. Then add --apply to write canonical draft files and update the index. Registration preserves additional metadata and stable artifact/question/block IDs, verifies the source-book ID and whole-book PDF SHA-256, checks the runtime schema, refuses overwrites and keeps publication disabled.
+
+Before merging content, run:
+python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
+
+Validation checks the canonical files against the production index, current runtime fields, the renderer registry and DB identifier limits. It does not approve factual accuracy, source completeness, bilingual semantic parity, visual assets or publication. The existing 39-topic / 312-question batch remains draft-only.

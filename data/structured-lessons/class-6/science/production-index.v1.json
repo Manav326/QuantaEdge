@@ -33,7 +33,7 @@
     "The single global app language selector drives every student-visible string across web and Android; the user can switch it at any time. Do not make the learner select language separately inside each section.",
     "Every learner-visible field needs non-empty en and hi values: lesson metadata, explanation, captions, alt text, diagram labels, activities, practice prompts/options, feedback, hints, answer explanations, rubrics, glossary, recap, and shared UI controls/errors/status labels.",
     "Language changes must switch the whole visible experience together and preserve question index, selected/typed answers, score, progress and reading position. Mixed-language screens and silent cross-language fallback are prohibited.",
-    "Every artifact has distinct Explain and Practice sections; practice includes multiple question types.",
+    "Every artifact has distinct Explain and Practice sections; practice questions select supported types according to source evidence and learning objectives. Question-type counts are descriptive, not quotas; do not require one of each type or pad a lesson.",
     "Generated explanations, diagrams and practice questions are authored learning aids, not verbatim NCERT text or NCERT-provided assessment questions.",
     "V3 source images stay review-only until checked for semantic fit, source fidelity, alt text, provenance, rights and approval. Full-page source previews containing English text are editor-only and must not render as student visuals in Hindi mode.",
     "Generating a lesson does not establish source completeness, fact-checking, bilingual approval or publication eligibility.",
@@ -2465,5 +2465,46 @@
       "Global app language switching and response-state preservation remain specification-only; actual web/Android components are not implemented.",
       "Chapter 1 and Chapter 2 source text/visual completeness and semantic Hindi alignment remain human-review blockers."
     ]
+  },
+  "canonical_storage_contract": {
+    "schema_version": "quantaedge.structured-lesson.v1",
+    "artifact_type": "quantaedge.structured-lesson.v1",
+    "format": "One UTF-8 JSON object per topic. Preserve extra provenance, generation, alignment and review metadata; required runtime keys must also remain present.",
+    "canonical_root": "data/structured-lessons/class-{class}/{subject}/",
+    "filename_pattern": "chapter-{chapter_number:02d}/topic-{topic_number:02d}-{slug}.v1.json",
+    "discovery_index": "production-index.v1.json beside chapter directories; authoring/resume ledger and path index.",
+    "renderer_registry": "data/structured-lessons/question-rendering-registry.v1.json",
+    "required_routing_keys": [
+      "curriculum.class",
+      "curriculum.subject",
+      "chapter.chapter_number",
+      "chapter.title_by_locale",
+      "topic.topic_number",
+      "topic.topic_id",
+      "topic.title_by_locale",
+      "artifact_id"
+    ],
+    "required_content_keys": [
+      "learning_objectives",
+      "source_refs",
+      "explain.blocks",
+      "practice.questions",
+      "workflow.publication_allowed"
+    ],
+    "candidate_staging": "data/textbook-content-pipeline/.../lessons/; candidate files are not runtime lessons until validated and registered.",
+    "registration_script": "scripts/register_structured_lesson_drafts.py",
+    "validation_script": "scripts/validate_structured_lesson_artifacts.py",
+    "api_resource_pattern": "classpath*:structured-lessons/class-*/*/chapter-*/topic-*.json",
+    "api_packaging": "services/api/Dockerfile copies data/structured-lessons into server JAR resources.",
+    "runtime_publication_gate": "Only status=PUBLISHED and publication_allowed=true with all content, source-completeness, bilingual, scientific and visual gates approved may be served to learners.",
+    "database_key_mapping": {
+      "lesson_identity": "artifact_id -> student_structured_question_response.artifact_id and student_structured_activity_response.artifact_id",
+      "artifact_version": "API computes SHA-256 from exact canonical JSON bytes -> artifact_sha256; this is not workflow.source_pdf_sha256",
+      "question_identity": "practice.questions[].id -> student_structured_question_response.question_id",
+      "activity_identity": "explain.blocks[].id -> student_structured_activity_response.block_id",
+      "learner_identity": "student_id comes from authenticated student context and FK to student.id; never generated in content JSON",
+      "learner_response": "response is per-student JSONB; answer keys/rubrics remain server-side"
+    },
+    "current_batch_note": "The 39-topic/312-question files are existing draft artifacts. Their old 39-per-type distribution is historical only; none are promoted by validation."
   }
 }

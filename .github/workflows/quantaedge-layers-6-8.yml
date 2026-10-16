@@ -6,7 +6,15 @@ on:
     paths:
       - "scripts/quantaedge_layers_6_8.py"
       - "scripts/ai_training_dataset.py"
+      - "scripts/validate_structured_lesson_artifacts.py"
+      - "scripts/register_structured_lesson_drafts.py"
       - "tests/test_quantaedge_layers_6_8.py"
+      - "tests/test_validate_structured_lesson_artifacts.py"
+      - "tests/test_register_structured_lesson_drafts.py"
+      - "data/structured-lessons/**"
+      - "services/api/src/main/java/com/quantaedge/api/StructuredLessonArtifactService.java"
+      - "services/api/src/test/java/com/quantaedge/api/StructuredLessonArtifactServiceTest.java"
+      - ".github/workflows/ci.yml"
       - ".github/workflows/quantaedge-layers-6-8.yml"
       - "docs/textbook-content-pipeline-eight-layers.md"
       - "apps/admin/app/structured-lesson-preview/page.tsx"
@@ -68,12 +76,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile pipeline scripts
-        run: python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py
+      - name: Compile pipeline and content-contract scripts
+        run: python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
       - name: Test pipeline contracts, native Ollama, provenance, resume and split safety
         run: |
           python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
           python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+          python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
+      - name: Validate current canonical lesson store and database-facing IDs
+        run: python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
 
   execute:
     if: github.event_name == 'workflow_dispatch'
@@ -95,9 +107,12 @@ jobs:
           python-version: "3.12"
       - name: Repeat checks on the execution checkout
         run: |
-          python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py
+          python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
           python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
           python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+          python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
+          python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
+          python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
       - name: Start loopback-only Ollama service
         shell: bash
         run: |

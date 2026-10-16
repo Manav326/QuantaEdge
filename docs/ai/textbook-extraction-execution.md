@@ -176,3 +176,18 @@ python scripts/validate_structured_lesson_coverage.py \
 ```
 
 Use `--allow-pending-review` only when creating a draft checkpoint and report every pending item. Run again without that flag after source reconciliation; only the strict run can pass without source-review blockers. Existing coverage ledgers written before the item-level `source_inventory`/`coverage_map` contract will be reported as incomplete until they are reviewed and normalized. Do not treat a missing map as an empty map or silently mark it complete.
+
+
+## Exact runtime/DB handoff — validate before generation batches
+
+A lesson candidate must be a full quantaedge.structured-lesson.v1 object, not merely the model response, source extract, benchmark record or SFT example. Preserve all extra metadata but include the runtime-required names exactly: curriculum.class (integer), curriculum.subject (code matching the curriculum-subject enrollment key), chapter.chapter_number/title_by_locale, topic.topic_number/topic_id/title_by_locale, artifact_id, source_refs, learning_objectives, explain.blocks, practice.questions and publication workflow state.
+
+The content DB does not store lesson definitions. It stores student response rows using artifact_id, artifact_sha256 (hash of exact canonical JSON bytes), question_id (question id), block_id (activity block id), response JSONB and the authenticated student_id. The textbook PDF hash is provenance only and must never be substituted for artifact_sha256. IDs must fit artifact_id varchar(120), question_id varchar(180) and block_id varchar(180).
+
+After source-bound generation, map the output to its real canonical NCERT chapter, then dry-run:
+python scripts/register_structured_lesson_drafts.py --candidate-dir <run-output>/lessons --index data/structured-lessons/class-6/science/production-index.v1.json --chapter-number 7 --confirm-chapter-mapping
+
+Only after checking the displayed file names, stable IDs, exact source book/hash and question contracts should --apply be added. The importer preserves richer keys, normalizes runtime routing keys, appends new paths to the production index, and keeps drafts unpublished. Finish with:
+python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
+
+The strict validator is wired into CI. Existing 39 topics and 312 questions are included in the same index check, but structural success does not clear pending rendered-source, science, bilingual, activity-safety or visual reviews.

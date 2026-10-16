@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 PROMPT_VERSION = "qe-l6-l8-ollama-v5-contextual-questions"
-LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions.v2"
+LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v3"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -284,7 +284,7 @@ Return JSON only:
       "correct_pairs":[{{"left_id":"left-id","right_id":"right-id"}}],
       "accepted_answers":{{"en":["..."],"hi":["..."]}},
       "answer_guide_by_locale":{{"en":{{"sample_answer":"...","key_points":["..."]}},"hi":{{"sample_answer":"...","key_points":["..."]}}}},
-      "grading":{{"max_score":2,"rubric_by_locale":{{"en":"...","hi":"..."}}}},
+      "grading":{{"mode":"rubric","max_score":2,"rubric_by_locale":{{"en":"...","hi":"..."}}}},
       "scenario_by_locale":{{"en":"...","hi":"..."}},
       "visual_candidate_id":"an ID from the supplied allowlist or null"
     }}
@@ -423,7 +423,7 @@ def validate_output(v: Any, allowed: set[int], visuals: list[dict[str,Any]]|None
                 guide=q.get("answer_guide_by_locale"); grading=q.get("grading")
                 if not isinstance(guide,dict) or any(not isinstance(guide.get(l),dict) or not isinstance(guide[l].get("sample_answer"),str) or not guide[l]["sample_answer"].strip() or not isinstance(guide[l].get("key_points"),list) or not guide[l]["key_points"] or any(not isinstance(point,str) or not point.strip() for point in guide[l]["key_points"] ) for l in ("en","hi")):
                     errors.append(f"question {i} needs bilingual short-answer guide/sample answer")
-                if not isinstance(grading,dict) or not isinstance(grading.get("max_score"),(int,float)) or isinstance(grading.get("max_score"),bool) or grading["max_score"]<=0 or not localized(grading.get("rubric_by_locale")):
+                if not isinstance(grading,dict) or grading.get("mode")!="rubric" or not isinstance(grading.get("max_score"),int) or isinstance(grading.get("max_score"),bool) or grading["max_score"]<=0 or not localized(grading.get("rubric_by_locale")):
                     errors.append(f"question {i} needs positive max_score and bilingual rubric")
     examples=v.get("tutor_examples"); found=set()
     if not isinstance(examples,list): errors.append("tutor_examples missing")
@@ -516,7 +516,7 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
                   "visual_review_status":"NOT_REVIEWED","bilingual_parity_status":"MACHINE_CHECKED_REQUIRES_REVIEW","publication_allowed":False,
                   "human_review_required":True,"generation_model":"filled-by-run","source_pdf_sha256":source["source_pdf_sha256"],
                   "source_book_id":source["book_id"],"source_pages":seg["source_pages"]},
-      "curriculum":{"class_code":str(source["class_no"]),"subject_code":source["subject"],"source_language":source["language"],"source_book_id":source["book_id"]},
+      "curriculum":{"class":source["class_no"],"subject":source["subject"],"class_code":str(source["class_no"]),"subject_code":source["subject"],"source_language":source["language"],"source_book_id":source["book_id"]},
       "chapter":{"chapter_number":v["chapter_number"],"title_by_locale":v["chapter_title_by_locale"],"source_page_start":min(seg["source_pages"]),"source_page_end":max(seg["source_pages"])},
       "topic":{"topic_number":seg["sequence"],"topic_id":topic_id,"title_by_locale":v["microtopic_title_by_locale"]},
       "learning_objectives":objectives,"source_refs":refs,"explain":{"title_by_locale":v["microtopic_title_by_locale"],"blocks":blocks},
@@ -525,7 +525,10 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
       "generation_metadata":{"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE","prompt_version":PROMPT_VERSION,"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"publication_allowed":False,"human_review_required":True}}
 
 def validate_lesson(x: dict[str,Any]) -> list[str]:
-    e=[]; objs=x.get("learning_objectives",[]); oids={o.get("id") for o in objs if isinstance(o,dict)}
+    e=[]; curriculum=x.get("curriculum",{})
+    if not isinstance(curriculum,dict) or not isinstance(curriculum.get("class"),int) or isinstance(curriculum.get("class"),bool) or not 1<=curriculum["class"]<=12 or not isinstance(curriculum.get("subject"),str) or not re.fullmatch(r"[a-z][a-z0-9_-]{0,39}",curriculum["subject"]):
+        e.append("runtime curriculum.class/subject contract invalid")
+    objs=x.get("learning_objectives",[]); oids={o.get("id") for o in objs if isinstance(o,dict)}
     refs=x.get("source_refs",[]); rids={r.get("source_ref_id") or r.get("id") for r in refs if isinstance(r,dict)}
     if not localized(x.get("chapter",{}).get("title_by_locale")) or not localized(x.get("topic",{}).get("title_by_locale")): e.append("chapter/topic titles invalid")
     if not objs or len(oids)!=len(objs) or None in oids: e.append("objective IDs invalid")
@@ -596,7 +599,7 @@ def validate_lesson(x: dict[str,Any]) -> list[str]:
         elif qtype=="short_answer":
             guide=q.get("answer_guide_by_locale"); grading=q.get("grading")
             if not isinstance(guide,dict) or any(not isinstance(guide.get(l),dict) or not isinstance(guide[l].get("sample_answer"),str) or not guide[l]["sample_answer"].strip() or not isinstance(guide[l].get("key_points"),list) or not guide[l]["key_points"] for l in ("en","hi")): e.append("short-answer guide invalid")
-            if not isinstance(grading,dict) or not isinstance(grading.get("max_score"),(int,float)) or isinstance(grading.get("max_score"),bool) or grading["max_score"]<=0 or not localized(grading.get("rubric_by_locale")): e.append("short-answer grading invalid")
+            if not isinstance(grading,dict) or grading.get("mode")!="rubric" or not isinstance(grading.get("max_score"),int) or isinstance(grading.get("max_score"),bool) or grading["max_score"]<=0 or not localized(grading.get("rubric_by_locale")): e.append("short-answer grading invalid")
     w=x.get("workflow",{})
     if w.get("publication_allowed") is not False or w.get("human_review_required") is not True: e.append("publication gate invalid")
     return e

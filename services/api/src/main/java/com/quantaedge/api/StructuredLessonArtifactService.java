@@ -39,7 +39,7 @@ import tools.jackson.databind.node.ObjectNode;
 public class StructuredLessonArtifactService {
   private static final Logger LOG = LoggerFactory.getLogger(StructuredLessonArtifactService.class);
   private static final String RESOURCE_PATTERN =
-      "classpath*:structured-lessons/class-*/science/chapter-*/topic-*.json";
+      "classpath*:structured-lessons/class-*/*/chapter-*/topic-*.json";
   private static final Set<String> QUESTION_TYPES = Set.of(
       "multiple_choice", "multiple_select", "true_false", "matching",
       "fill_blank", "image_observation", "short_answer", "scenario_based");
@@ -379,8 +379,7 @@ public class StructuredLessonArtifactService {
         }
         if (type.equals("image") && !block.path("asset").isObject()) errors.add("explain.blocks.asset");
         if (type.equals("diagram") && !block.path("diagram_data").isObject()) errors.add("explain.blocks.diagram_data");
-        if ((type.equals("interactive") || type.equals("activity"))
-            && !hasLocalizedActivityInstructions(block.path("instructions_by_locale"))) {
+        if ((type.equals("interactive") || type.equals("activity")) && !hasInteractiveInstructions(block)) {
           errors.add("explain.blocks.instructions_by_locale");
         }
         if ((type.equals("image") || type.equals("diagram")) && !hasLocale(block.path("alt_by_locale"))) {
@@ -548,6 +547,23 @@ public class StructuredLessonArtifactService {
   private boolean hasLocalizedContentObject(JsonNode value) {
     return value.isObject() && value.path("en").isObject() && !value.path("en").isEmpty()
         && value.path("hi").isObject() && !value.path("hi").isEmpty();
+  }
+
+  private boolean hasInteractiveInstructions(JsonNode block) {
+    if (hasLocalizedActivityInstructions(block.path("instructions_by_locale"))) return true;
+    JsonNode configuration = block.path("configuration");
+    if (hasLocalizedActivityInstructions(configuration.path("instruction_by_locale"))) return true;
+    // Current lesson JSON can model an interaction as steps, each with en/hi instructions.
+    JsonNode steps = configuration.path("steps");
+    if (!steps.isArray() || steps.isEmpty()) return false;
+    for (JsonNode step : steps) {
+      JsonNode instructions = step.path("instruction_by_locale");
+      if (instructions.isMissingNode() || instructions.isNull()) {
+        instructions = step.path("instructions_by_locale");
+      }
+      if (!hasLocalizedActivityInstructions(instructions)) return false;
+    }
+    return true;
   }
 
   private boolean hasLocalizedActivityInstructions(JsonNode value) {

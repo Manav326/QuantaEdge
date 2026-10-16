@@ -62,6 +62,38 @@ class StructuredLessonArtifactServiceTest {
   }
 
   @Test
+  void currentInteractiveStepSchemaIsAcceptedAndActivityIdsRemainStringKeys() throws Exception {
+    ObjectNode root = (ObjectNode) mapper.readTree(fixture(true, true));
+    ArrayNode blocks = (ArrayNode) root.path("explain").path("blocks");
+
+    ObjectNode interactive = blocks.addObject();
+    interactive.put("id", "c6-sci-ch01-t01-b05");
+    interactive.put("type", "interactive");
+    ObjectNode configuration = interactive.putObject("configuration");
+    configuration.put("input_mode", "free_text_and_choice");
+    ArrayNode steps = configuration.putArray("steps");
+    ObjectNode observe = steps.addObject();
+    observe.put("id", "step-observe");
+    observe.set("instruction_by_locale", bilingual("Observe one item.", "एक वस्तु का अवलोकन करें।"));
+    ObjectNode question = steps.addObject();
+    question.put("id", "step-question");
+    question.set("instruction_by_locale", bilingual("Write one question.", "एक प्रश्न लिखें।"));
+
+    ObjectNode activity = blocks.addObject();
+    activity.put("id", "c6-sci-ch03-t01-b04");
+    activity.put("type", "activity");
+    activity.set("instructions_by_locale", bilingual("Record observations.", "अवलोकन दर्ज करें।"));
+
+    StructuredLessonArtifactService service =
+        new StructuredLessonArtifactService(mapper, mapper.writeValueAsString(root));
+    var artifact = service.requirePublished("qe-test-topic-v1");
+    assertEquals(6, service.classNumber(artifact));
+    assertEquals("science", service.subjectCode(artifact));
+    assertEquals("c6-sci-ch01-t01-b05",
+        service.activityBlockForStudent(artifact, "c6-sci-ch01-t01-b05").path("id").asText());
+  }
+
+  @Test
   void invalidOptionIdIsRejectedBeforeGrading() throws Exception {
     StructuredLessonArtifactService service =
         new StructuredLessonArtifactService(mapper, fixture(true, true));
