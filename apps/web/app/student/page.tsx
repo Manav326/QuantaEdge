@@ -307,10 +307,18 @@ export default function StudentHome(){
             : <article className="app-task next">
               <span className="task-icon" aria-hidden="true">◷</span>
               <div>
-                <strong><LocaleText hinglish="अभी कोई आगामी लाइव कक्षा नहीं है" english="No upcoming live classes" /></strong>
-                <small><LocaleText hinglish="यहाँ आगामी कक्षाएँ और पिछले 3 दिनों में समाप्त हुई कक्षाएँ दिखाई देंगी।" english="Upcoming sessions and sessions that ended in the last 3 days appear here." /></small>
+                <strong>{activeCourseId
+                  ? <LocaleText hinglish="अभी कोई आगामी लाइव कक्षा नहीं है" english="No upcoming live classes" />
+                  : <LocaleText hinglish="लाइव कक्षाएँ देखने के लिए कोर्स चुनें" english="Choose a course to see live classes" />}</strong>
+                <small>{activeCourseId
+                  ? <LocaleText hinglish="यहाँ आगामी कक्षाएँ और पिछले 3 दिनों में समाप्त हुई कक्षाएँ दिखाई देंगी।" english="Upcoming sessions and sessions that ended in the last 3 days appear here." />
+                  : <LocaleText hinglish="अपना नामांकित कोर्स चुनें, फिर उसका कक्षा-कार्यक्रम यहाँ दिखेगा।" english="Select an enrolled course to see its actual class schedule here." />}</small>
               </div>
-              {activeCourseId && <Link href={'/student/classes?courseId='+encodeURIComponent(String(activeCourseId))} className="task-action"><LocaleText hinglish="सभी देखें" english="View all" /> ↗</Link>}
+              <Link href={activeCourseId
+                ? '/student/classes?courseId='+encodeURIComponent(String(activeCourseId))
+                : '/student/courses'} className="task-action">
+                <LocaleText hinglish={activeCourseId ? "सभी देखें" : "कोर्स चुनें"} english={activeCourseId ? "View all" : "Choose course"} /> ↗
+              </Link>
             </article>}
         </section>
 
