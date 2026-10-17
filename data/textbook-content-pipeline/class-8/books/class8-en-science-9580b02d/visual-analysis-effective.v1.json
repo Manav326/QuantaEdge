@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "33e4b0048e6d40a2557c8b9a91e2ad2f7ce4c3da95f19f004112ec97f0bf6d1d",
+  "raw_analysis_sha256": "6291496fd85ec115684144afe807d888d2b8cd2bc14797423ce0e1669f541995",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39013231656",
-      "checkpointed_at": "2026-10-17T17:57:30Z",
+      "checkpointed_at": "2026-10-17T17:59:07Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
