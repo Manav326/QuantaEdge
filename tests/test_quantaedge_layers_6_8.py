@@ -294,7 +294,7 @@ class LayersTests(unittest.TestCase):
                 "models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
             args=SimpleNamespace(repo_root=root,class_no=6,source_book_id=book,model="qwen2.5:1.5b",benchmark_report=None,
                 max_pages_per_segment=4,max_context_chars=7000,endpoint="http://127.0.0.1:11434",
-                max_model_calls=3,checkpoint_every=1,request_timeout=30,commit_checkpoints=False)
+                max_model_calls=3,checkpoint_every=1,request_timeout=30,commit_checkpoints=False,preflight_only=False)
             calls={"count":0}; prompts=[]
             def open_(request,timeout=180):
                 calls["count"]+=1
@@ -302,6 +302,11 @@ class LayersTests(unittest.TestCase):
                 self.assertEqual("json",payload["format"])
                 prompts.append(payload["messages"][1]["content"])
                 return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
+            args.preflight_only=True
+            preflight=run_layers(args)
+            self.assertTrue(preflight["preflight_only"])
+            self.assertEqual(0,calls["count"],"resume preflight must never invoke Ollama")
+            args.preflight_only=False
             result=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"])
             self.assertEqual(1,result["segments_completed"])
@@ -339,6 +344,11 @@ class LayersTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"older Layer 5 ledger"):
                 run_layers(args,opener=open_)
             write_json(benchmark,saved_benchmark)
+            args.preflight_only=True
+            resumed_preflight=run_layers(args)
+            self.assertTrue(resumed_preflight["preflight_only"])
+            self.assertEqual(1,calls["count"],"resume preflight must not call Ollama")
+            args.preflight_only=False
             again=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"],"completed checkpoints must not call Ollama again")
             self.assertEqual(1,again["segments_completed"])
