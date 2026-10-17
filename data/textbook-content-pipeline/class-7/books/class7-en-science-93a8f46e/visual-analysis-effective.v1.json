@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d0e1c1fd17280c695bf48b98cb221feba9cba844c8247ec657c6ce3436810f29",
+  "raw_analysis_sha256": "2349f158a13acc45cc11647505bc574653ad14382c764745b5ef8682ec2d71b3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -5952,6 +5952,7 @@
       "source_pdf_page_number": 16,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5960,18 +5961,31 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely a blank page in a textbook.",
+        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
         "limitations": [
-          "The page is blank and does not contain any text or images."
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or content.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or illustration."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:27:50Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:02:56Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or content.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or illustration."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5982,6 +5996,7 @@
       "source_pdf_page_number": 16,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5999,9 +6014,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:28:01Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:03:10Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6011,68 +6035,16 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 16,
       "asset_path": "page-0016.jpg",
-      "asset_kind": "page_preview",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page from a textbook displaying the Constitution of India's Fundamental Duties.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Constitution of India",
-          "Part IV A (Article 51 A)",
-          "Fundamental Duties",
-          "It shall be the duty of every citizen of India —",
-          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
-          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;",
-          "(c) to uphold and protect the sovereignty, unity and integrity of India;",
-          "(d) to defend the country and render national service when called upon to do so;",
-          "(e) to promote harmony and the spirit of common brotherhood amongst all the people of India transcending religious, linguistic and regional or sectional diversities; to renounce practices derogatory to the dignity of women;",
-          "(f) to value and preserve the rich heritage of our composite culture;",
-          "(g) to protect and improve the natural environment including forests, lakes, rivers, wildlife and to have compassion for living creatures;",
-          "(h) to develop the scientific temper, humanism and the spirit of inquiry and reform;",
-          "(i) to safeguard public property and to abjure violence;",
-          "(j) to strive towards excellence in all spheres of individual and collective activity so that the nation constantly rises to higher levels of endeavour and achievement;",
-          "(k) who is a parent or guardian, to provide opportunities for education to his child or, as the case may be, ward between the age of six and fourteen years.",
-          "Note: The Article 51A containing Fundamental Duties was inserted by the Constitution (42nd Amendment) Act, 1976 (with effect from 3 January 1977).",
-          "(k) was inserted by the Constitution (86th Amendment) Act, 2002 (with effect from 1 April 2010)."
-        ],
-        "concepts": [
-          "Fundamental Duties",
-          "Constitution of India",
-          "Article 51 A",
-          "National Flag",
-          "National Anthem",
-          "Sovereignty",
-          "Unity",
-          "Integrity",
-          "Harmony",
-          "Brotherhood",
-          "Heritage",
-          "Natural Environment",
-          "Scientific Temper",
-          "Humanism",
-          "Inquiry",
-          "Excellence",
-          "Education",
-          "Parent",
-          "Guardian",
-          "Ward"
-        ],
-        "context_relation": "The page provides a detailed list of Fundamental Duties as outlined in the Constitution of India.",
-        "limitations": [
-          "The page does not include any images or diagrams.",
-          "The page does not contain any interactive elements or multimedia content.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:31:42Z",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
       "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -6083,6 +6055,7 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6091,18 +6064,23 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Acknowledgements section of a textbook",
-        "limitations": [
-          "No specific details about the rope or its context are provided in the visible text. The image is a standalone illustration without additional context or information."
-        ]
+        "context_relation": "Acknowledgements for the translation of NCF-SE 2023 perspectives into the textbook.",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:31:51Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:08:21Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements for the translation of NCF-SE 2023 perspectives into the textbook.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6112,27 +6090,16 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 17,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A rope with a blue loop at one end.",
-        "visual_type": "illustration",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Acknowledgements section of a textbook",
-        "limitations": [
-          "No specific concepts or formulas are visible in the image."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:31:59Z",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
       "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -6143,27 +6110,36 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/41ce49ecb3b935916e5ef8453f38af045e7327bd16b155e051f17e8ba499d551.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or synthetic material.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is not directly related to the text content.",
+        "context_relation": "The image is unrelated to the text provided.",
         "limitations": [
-          "The image is not a full page, but a cropped figure.",
-          "The image does not provide any specific information or context related to the text content."
+          "The image is a close-up of a coiled rope or cable, and the visible text is incomplete or not related to the image content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:33:09Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:11:38Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a close-up of a coiled rope or cable, and the visible text is incomplete or not related to the image content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6174,26 +6150,38 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is not directly related to the text content.",
+        "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
-          "The image does not provide any specific information or context related to the text content."
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:33:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:11:52Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6204,26 +6192,38 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/dae8ffd8bef43ff873458537c1f6963d22f5f3e00306ae4937b8df5ccb5d103c.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A rope-like structure with multiple loops.",
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
         "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Acknowledgements for the translation of NCF-SE 2023 perspectives into the textbook.",
+        "context_relation": "uncertain",
         "limitations": [
-          "Unclear if the image is a full page or a cropped figure."
+          "unclear if the image is a full page or a cropped figure",
+          "unclear if the image is a diagram or a photo"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:34:27Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:13:26Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or a cropped figure",
+          "unclear if the image is a diagram or a photo"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6234,6 +6234,79 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acknowledgements",
+          "The National Council of Educational Research and Training (NCERT)",
+          "acknowledges the guidance and support of the esteemed Chairperson",
+          "and members of the National Curriculum Framework Oversight Committee",
+          "for their invaluable contributions in overseeing the",
+          "translation of NCF-SE 2023 perspectives into the textbook. NCERT is",
+          "also deeply grateful to the Chairperson, Co-Chairperson, and members",
+          "of the National Syllabus and Teaching-Learning Material Development",
+          "Committee for their continuous guidance and thorough review of",
+          "the textbook. Furthermore, NCERT extends its heartf"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching-Learning Material Development Committee"
+        ],
+        "context_relation": "The page is likely a blank page in an educational textbook.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T04:14:06Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acknowledgements",
+          "The National Council of Educational Research and Training (NCERT)",
+          "acknowledges the guidance and support of the esteemed Chairperson",
+          "and members of the National Curriculum Framework Oversight Committee",
+          "for their invaluable contributions in overseeing the",
+          "translation of NCF-SE 2023 perspectives into the textbook. NCERT is",
+          "also deeply grateful to the Chairperson, Co-Chairperson, and members",
+          "of the National Syllabus and Teaching-Learning Material Development",
+          "Committee for their continuous guidance and thorough review of",
+          "the textbook. Furthermore, NCERT extends its heartf"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching-Learning Material Development Committee"
+        ],
+        "context_relation": "The page is likely a blank page in an educational textbook.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d62193461bf5bff27694e390",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6251,39 +6324,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:34:39Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "d62193461bf5bff27694e390",
-      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 17,
-      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+      "checkpointed_at": "2026-10-17T04:14:14Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
-          "No specific content or details are visible on the page. The page is blank and serves as a placeholder for additional content."
+          "No specific content or details are visible on the page."
         ]
       },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:34:48Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6294,6 +6346,7 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6311,9 +6364,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:34:59Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:14:30Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6324,6 +6386,7 @@
       "source_pdf_page_number": 17,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6332,18 +6395,29 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Acknowledgements section of a textbook",
+        "context_relation": "acknowledgements",
         "limitations": [
-          "No visible content on the page."
+          "unclear content",
+          "no visible text"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:35:11Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:14:44Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgements",
+        "limitations": [
+          "unclear content",
+          "no visible text"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6372,27 +6446,16 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 18,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Acknowledgments and contributions from various individuals and departments.",
-        "limitations": [
-          "No specific content or information is visible on the page."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:39:37Z",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
       "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -6403,26 +6466,116 @@
       "source_pdf_page_number": 18,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "acknowledgment of support and contributions from various individuals and departments",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar, DTP Operators (Contractual);",
+          "Ilma Nasir, Editor (Contractual), and Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders (Contractual), Publication Division, NCERT, New Delhi for giving",
+          "the",
+          "support",
+          "to",
+          "the",
+          "project",
+          "and",
+          "the",
+          "team",
+          "for",
+          "the",
+          "success",
+          "of",
+          "the",
+          "project."
+        ],
+        "concepts": [
+          "support",
+          "APC office",
+          "administrative staff",
+          "DES",
+          "NCERT",
+          "New Delhi",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "acknowledgment of contributions and support for a project",
         "limitations": [
-          "No specific content or information is visible on the page."
+          "The image is a blank page with a light green border, no specific content is visible."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:39:46Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:17:59Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar, DTP Operators (Contractual);",
+          "Ilma Nasir, Editor (Contractual), and Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders (Contractual), Publication Division, NCERT, New Delhi for giving",
+          "the",
+          "support",
+          "to",
+          "the",
+          "project",
+          "and",
+          "the",
+          "team",
+          "for",
+          "the",
+          "success",
+          "of",
+          "the",
+          "project."
+        ],
+        "concepts": [
+          "support",
+          "APC office",
+          "administrative staff",
+          "DES",
+          "NCERT",
+          "New Delhi",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "acknowledgment of contributions and support for a project",
+        "limitations": [
+          "The image is a blank page with a light green border, no specific content is visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6432,28 +6585,16 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 18,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "acknowledgment of support and contributions",
-        "limitations": [
-          "unclear content",
-          "no visible text or images"
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:39:58Z",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
       "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -6464,6 +6605,7 @@
       "source_pdf_page_number": 18,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6482,9 +6624,19 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:40:10Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:18:44Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6495,11 +6647,12 @@
       "source_pdf_page_number": 18,
       "asset_path": "page-0018.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_summary": "Acknowledgment page for a book or publication.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "acknowledges the support provided by the APC office and",
@@ -6511,7 +6664,8 @@
           "Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders",
           "(Contractual), Publication Division, NCERT, New Delhi for giving this",
           "manuscript a final shape.",
-          "xviii"
+          "xviii",
+          "Reprint 2026-27"
         ],
         "concepts": [
           "Acknowledgment",
@@ -6535,18 +6689,60 @@
           "Praveen Kumar",
           "Ambuj Mishra"
         ],
-        "context_relation": "Acknowledgment for contributions and support in the publication process.",
+        "context_relation": "Acknowledgment of contributions and staff support",
         "limitations": [
-          "No specific limitations are mentioned in the image."
+          "No specific visual elements or diagrams are present."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:43:28Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:23:03Z",
+      "effective_analysis": {
+        "visual_summary": "Acknowledgment page for a book or publication.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and",
+          "administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar",
+          "Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar,",
+          "DTP Operators (Contractual); Ilma Nasir, Editor (Contractual), and",
+          "Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders",
+          "(Contractual), Publication Division, NCERT, New Delhi for giving this",
+          "manuscript a final shape.",
+          "xviii",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Acknowledgment",
+          "Support",
+          "APC office",
+          "Administrative staff",
+          "DESM",
+          "NCERT",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "Acknowledgment of contributions and staff support",
+        "limitations": [
+          "No specific visual elements or diagrams are present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6557,26 +6753,36 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/684bf75be3fa948b474ef16858204439eac4a26ea1367f6775ab30d41be38d17.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_summary": "A rope with a blue ring at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is unrelated to the content of the textbook.",
+        "context_relation": "Educational content related to science or physics",
         "limitations": [
-          "The image does not provide any specific information about the textbook's content or structure."
+          "The image does not provide specific details about the rope or its context within the educational content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:44:44Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:24:41Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to science or physics",
+        "limitations": [
+          "The image does not provide specific details about the rope or its context within the educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6587,6 +6793,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/9c23e352c3e5fda3f978352b09e47e705969d9d73d3fda75738729fb846f36ca.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6596,7 +6803,7 @@
         "visible_text": [],
         "concepts": [
           "rope",
-          "blue loop"
+          "loop"
         ],
         "context_relation": "The image is related to the chapter on 'The World of Metals and Non-metals' in the textbook.",
         "limitations": [
@@ -6607,9 +6814,21 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:45:55Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:26:19Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "rope",
+          "loop"
+        ],
+        "context_relation": "The image is related to the chapter on 'The World of Metals and Non-metals' in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or its content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6620,6 +6839,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6628,18 +6848,23 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Educational content related to science and physics",
-        "limitations": [
-          "The image does not provide specific details about the rope or its context within the textbook."
-        ]
+        "context_relation": "None",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:47:04Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:27:50Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6650,6 +6875,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6658,18 +6884,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter on physical properties or materials in a science textbook.",
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
         "limitations": [
-          "The image does not provide specific details about the chapter or content it is related to."
+          "The image does not provide specific details about the chapter or topic it represents."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:47:11Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:27:58Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6680,6 +6915,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6688,18 +6924,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter on physical properties or materials in a science textbook.",
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
         "limitations": [
-          "The image does not provide specific details about the chapter or content it is related to."
+          "The image does not provide specific details about the chapter or topic it represents."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:47:17Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:28:06Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6710,6 +6955,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6718,18 +6964,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter on physical properties or materials in a science textbook.",
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
         "limitations": [
-          "The image does not provide specific details about the chapter or content it is related to."
+          "The image does not provide specific details about the chapter or topic it represents."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:47:23Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:28:14Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6740,6 +6995,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -6748,18 +7004,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter on physical properties or materials in a science textbook.",
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
         "limitations": [
-          "The image does not provide specific details about the chapter or content it is related to."
+          "The image does not provide specific details about the chapter or topic it represents."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:47:30Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:28:22Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6770,24 +7035,36 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem with a white center, possibly representing a badge or award.",
+        "visual_summary": "A circular emblem or badge with a dark green border and a lighter green inner circle.",
         "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The emblem is likely a decorative element or a logo for the textbook.",
-        "limitations": []
+        "context_relation": "The image is a visual element in a textbook, likely used as a header or title for a chapter.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the textbook or the chapter it represents."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:48:40Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:30:01Z",
+      "effective_analysis": {
+        "visual_summary": "A circular emblem or badge with a dark green border and a lighter green inner circle.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a textbook, likely used as a header or title for a chapter.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the textbook or the chapter it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

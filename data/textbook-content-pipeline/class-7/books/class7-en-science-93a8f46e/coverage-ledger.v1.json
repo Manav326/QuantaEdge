@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 350,
-    "successful_visual_analyses": 123,
+    "successful_visual_analyses": 144,
     "missing_visual_analyses": 7138,
-    "failed_visual_analyses": 227,
+    "failed_visual_analyses": 206,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7365,
+    "unresolved_count": 7344,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -15813,9 +15813,20 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or content.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15831,9 +15842,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15849,7 +15869,7 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -15867,9 +15887,16 @@
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements for the translation of NCF-SE 2023 perspectives into the textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15885,7 +15912,7 @@
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -15903,9 +15930,18 @@
       "asset_path": "assets/41ce49ecb3b935916e5ef8453f38af045e7327bd16b155e051f17e8ba499d551.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or synthetic material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a close-up of a coiled rope or cable, and the visible text is incomplete or not related to the image content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15921,9 +15957,19 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15939,9 +15985,19 @@
       "asset_path": "assets/dae8ffd8bef43ff873458537c1f6963d22f5f3e00306ae4937b8df5ccb5d103c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or a cropped figure",
+          "unclear if the image is a diagram or a photo"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15957,9 +16013,34 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acknowledgements",
+          "The National Council of Educational Research and Training (NCERT)",
+          "acknowledges the guidance and support of the esteemed Chairperson",
+          "and members of the National Curriculum Framework Oversight Committee",
+          "for their invaluable contributions in overseeing the",
+          "translation of NCF-SE 2023 perspectives into the textbook. NCERT is",
+          "also deeply grateful to the Chairperson, Co-Chairperson, and members",
+          "of the National Syllabus and Teaching-Learning Material Development",
+          "Committee for their continuous guidance and thorough review of",
+          "the textbook. Furthermore, NCERT extends its heartf"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching-Learning Material Development Committee"
+        ],
+        "context_relation": "The page is likely a blank page in an educational textbook.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15975,9 +16056,18 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific content or details are visible on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15993,9 +16083,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16011,9 +16110,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgements",
+        "limitations": [
+          "unclear content",
+          "no visible text"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16047,7 +16156,7 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -16065,9 +16174,58 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar, DTP Operators (Contractual);",
+          "Ilma Nasir, Editor (Contractual), and Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders (Contractual), Publication Division, NCERT, New Delhi for giving",
+          "the",
+          "support",
+          "to",
+          "the",
+          "project",
+          "and",
+          "the",
+          "team",
+          "for",
+          "the",
+          "success",
+          "of",
+          "the",
+          "project."
+        ],
+        "concepts": [
+          "support",
+          "APC office",
+          "administrative staff",
+          "DES",
+          "NCERT",
+          "New Delhi",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "acknowledgment of contributions and support for a project",
+        "limitations": [
+          "The image is a blank page with a light green border, no specific content is visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16083,7 +16241,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -16101,9 +16259,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment of support and contributions",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16119,9 +16287,51 @@
       "asset_path": "page-0018.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Acknowledgment page for a book or publication.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and",
+          "administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar",
+          "Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar,",
+          "DTP Operators (Contractual); Ilma Nasir, Editor (Contractual), and",
+          "Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders",
+          "(Contractual), Publication Division, NCERT, New Delhi for giving this",
+          "manuscript a final shape.",
+          "xviii",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Acknowledgment",
+          "Support",
+          "APC office",
+          "Administrative staff",
+          "DESM",
+          "NCERT",
+          "Pawan Kumar Barriar",
+          "In-charge",
+          "DTP Cell",
+          "Publication Division",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "DTP Operators (Contractual)",
+          "Ilma Nasir",
+          "Editor (Contractual)",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra"
+        ],
+        "context_relation": "Acknowledgment of contributions and staff support",
+        "limitations": [
+          "No specific visual elements or diagrams are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16137,9 +16347,18 @@
       "asset_path": "assets/684bf75be3fa948b474ef16858204439eac4a26ea1367f6775ab30d41be38d17.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to science or physics",
+        "limitations": [
+          "The image does not provide specific details about the rope or its context within the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16155,9 +16374,21 @@
       "asset_path": "assets/9c23e352c3e5fda3f978352b09e47e705969d9d73d3fda75738729fb846f36ca.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "rope",
+          "loop"
+        ],
+        "context_relation": "The image is related to the chapter on 'The World of Metals and Non-metals' in the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or its content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16173,9 +16404,16 @@
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16191,9 +16429,18 @@
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16209,9 +16456,18 @@
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16227,9 +16483,18 @@
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16245,9 +16510,18 @@
       "asset_path": "assets/622bc4d8d3a073b723184269f4900bd0c488581b711074d7df3192e2362f26df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a twisted pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of a textbook chapter on physical science or chemistry, possibly discussing concepts related to materials or forces.",
+        "limitations": [
+          "The image does not provide specific details about the chapter or topic it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16263,9 +16537,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A circular emblem or badge with a dark green border and a lighter green inner circle.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a textbook, likely used as a header or title for a chapter.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the textbook or the chapter it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
