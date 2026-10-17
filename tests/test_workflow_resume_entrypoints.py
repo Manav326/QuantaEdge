@@ -27,6 +27,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("max-parallel: 1", workflow)
         self.assertIn("fromJSON(contains(github.event.head_commit.message", workflow)
         self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
+        self.assertIn("inputs.vision_model || 'qwen2.5vl:3b'", workflow)
+        self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '1'", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("!contains(github.event.head_commit.message || '', marker)", workflow.replace("[resume-visual-layers-4-5-classes-7-8]", "marker"))
 
