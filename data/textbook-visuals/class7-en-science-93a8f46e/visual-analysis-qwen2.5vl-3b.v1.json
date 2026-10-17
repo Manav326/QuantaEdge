@@ -11,10 +11,10 @@
     "assets_selected": 331,
     "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 331,
-    "assets_remaining": 7157,
+    "assets_analyzed": 332,
+    "assets_remaining": 7156,
     "assets_completion_percent": 4.4,
-    "assets_failed": 19,
+    "assets_failed": 18,
     "assets_skipped_from_checkpoint": 330,
     "batch_limit": 1,
     "publication_allowed": false
@@ -298,7 +298,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3"
     },
     {
       "asset_id": "005539fdcb6f0d959a76bab9",
@@ -385,15 +386,27 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 3,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational content, possibly related to the National Education Policy 2020 and the National Curriculum Framework for School Education (NCF-SE) 2023.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images.",
+          "The page may be intended for content insertion or annotation by an educational content editor."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db"
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T07:56:03Z"
     },
     {
       "asset_id": "82488ace4159be78881396e5",
