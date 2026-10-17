@@ -578,7 +578,7 @@ fun QuantaEdgeApp() {
         for (subjectCode in subjects) {
             val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
             val liveResponse = runCatching {
-                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery)
+                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery + "&includeFuture=true")
                     .optJSONArray("items").objectItems()
             }
             if (liveResponse.isFailure) anyRequestFailed = true
