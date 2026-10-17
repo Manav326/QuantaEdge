@@ -125,12 +125,12 @@ All four manifests are marked `DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW` and `publi
 - Bundle TAR SHA-256 recorded in the index: `6584aa817e1bbc1fa12b426e1dcfca845fb44d913706caa213b83421fda3d1af`.
 - The bundle index reports 146 selected assets, 145 analysis records, and 28 failed/error statuses. Treat analysis as **incomplete** until that counter mismatch and failures are reviewed. The index and results both set `publication_allowed=false`; results require human review.
 
-**Visual candidate v3 package**
-- GitHub pack: [data/textbook-visual-candidates-v3/class6-curiosity-en/](../../data/textbook-visual-candidates-v3/class6-curiosity-en/).
-- Package: `ghcr.io/manav326/quantaedge-textbook-visuals:candidates-v3-class6-class6-curiosity-en-run-38688536449`.
-- Candidate tar SHA-256: `4b03642acde232c968999d90320ace616f8b5f51d286ac0cb1ed961364e7465d`.
-- 60 heuristic candidates across 54 distinct source pages (24 embedded-image candidates and 36 page-preview candidates). The method is heuristic, not semantic validation. The chapter map is `TOC_DERIVED_NEEDS_HUMAN_REVIEW`; `semantic_classification_performed=false`; `publication_allowed=false`.
-- Review the contact sheet/candidates and source-page context before deciding what to attach to original teaching material. Candidate image files belong in `data/textbook-visual-candidates-v3/{book_slug}/` and the immutable GHCR review bundle, not `apps/web/public`. This repository is public, so raw-GitHub catalog links remain publicly accessible even when they point into `data/`; these assets are review-only, not rights-cleared student media. Use private/authenticated media storage for material that must not be publicly accessible.
+**Visual candidate v3 package — canonical exhaustive pack**
+- The former `class6-curiosity-en` v3 pack was a 60-candidate stratified subset of the same Class 6 English Science source. Its Git-tracked V3 folder and catalog row are retired to eliminate duplicate source representations.
+- Current canonical pack: [`data/textbook-visual-candidates-v3/class6-en-science-9c1315ba/`](../../data/textbook-visual-candidates-v3/class6-en-science-9c1315ba/); catalog: [`data/textbook-visual-candidates-v3/catalogs/class6-en-science-9c1315ba.v3.json`](../../data/textbook-visual-candidates-v3/catalogs/class6-en-science-9c1315ba.v3.json).
+- The current source-bound pack contains 1,472 candidates for the 272-page NCERT Class 6 English Science book: 1,200 unique embedded-image groups plus 272 page previews. Source book ID is `ncert-c6-english-fecu1`, source PDF SHA-256 is `7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73`. This is exhaustive inventory coverage, not semantic or educational approval.
+- The immutable legacy GHCR artefact `ghcr.io/manav326/quantaedge-textbook-visuals:candidates-v3-class6-class6-curiosity-en-run-38688536449` may remain as historical storage; do not use it as the current Git catalog. All live lesson/production references must use the canonical pack.
+- Review candidates and source-page context before attaching imagery to teaching material. Candidates belong in `data/textbook-visual-candidates-v3/{book_slug}/` and the immutable review bundle, not `apps/web/public`. Because this repository is public, raw-GitHub links remain public even within `data/`; these assets are review-only, not rights-cleared student media. Use private/authenticated media storage for material that must not be publicly accessible.
 
 ### Other existing data and archives — inspect before generating anything new
 

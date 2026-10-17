@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOK_SLUG = "class6-curiosity-en"
+BOOK_SLUG = "class6-en-science-9c1315ba"
 CATALOG_DIR = ROOT / "data/textbook-visual-candidates-v3" / "catalogs"
 CATALOG_PATH = CATALOG_DIR / f"{BOOK_SLUG}.v3.json"
 PACK_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "candidates.v3.json"
@@ -123,6 +123,16 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertEqual(len(index_by_slug), self.index["summary"]["catalog_count"])
         self.assertFalse(self.index["summary"]["publication_allowed"])
         self.assertTrue(self.index["summary"]["review_required"])
+
+    def test_legacy_class6_curiosity_subset_is_retired_in_favor_of_exhaustive_pack(self):
+        legacy_slug = "class6-curiosity-en"
+        current_slug = "class6-en-science-9c1315ba"
+        self.assertFalse((ROOT / "data/textbook-visual-candidates-v3" / legacy_slug).exists())
+        self.assertFalse((CATALOG_DIR / f"{legacy_slug}.v3.json").exists())
+        self.assertTrue((ROOT / "data/textbook-visual-candidates-v3" / current_slug / "candidates.v3.json").is_file())
+        self.assertFalse(any(row["book_slug"] == legacy_slug for row in self.index["catalogs"]))
+        current = next(row for row in self.index["catalogs"] if row["book_slug"] == current_slug)
+        self.assertEqual(1472, current["candidate_count"])
 
     def test_generated_catalogs_are_not_kept_under_application_public_directories(self):
         for relative in (

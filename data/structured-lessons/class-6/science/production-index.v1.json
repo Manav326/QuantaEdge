@@ -2352,8 +2352,8 @@
   ],
   "source_audit_dependencies": {
     "english_text_extraction_audit": "docs/content-pilot-input/class-6-science-english-extraction-audit.md",
-    "english_chapter_map": "data/textbook-visual-candidates-v3/class6-curiosity-en/chapter-map.v1.json",
-    "english_visual_candidate_summary": "data/textbook-visual-candidates-v3/class6-curiosity-en/summary.v3.json",
+    "english_chapter_map": "data/textbook-visual-candidates-v3/class6-en-science-9c1315ba/chapter-map.v1.json",
+    "english_visual_candidate_summary": "data/textbook-visual-candidates-v3/class6-en-science-9c1315ba/summary.v3.json",
     "visual_render_contract": "docs/ai/visual-render-contract.v1.json",
     "hindi_source_alignment": "Required; Hindi whole-book extraction exists but chapter/page boundaries for the authored lesson still require verification.",
     "chapter3_coverage_ledger": "data/structured-lessons/class-6/science/chapter-03/source-coverage.v1.json",
