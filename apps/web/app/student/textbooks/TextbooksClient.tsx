@@ -493,7 +493,7 @@ export default function TextbooksClient() {
             </section>;
           })}
         </div>}
-      <div className="qe-textbook-privacy-note"><span>▣</span><p><b>{translateUi(locale, 'legacy.web.private.reading.mode.4ee7442e')}</b> {translateUi(locale, 'legacy.web.the.viewer.does.not.provide.a.pdf.down.a5279925')}</p></div>
+      <div className="qe-textbook-privacy-note"><span>▣</span><p><b>{translateUi(locale, 'legacy.web.private.reading.mode.4ee7442e')}</b> {locale==='english'?'The viewer does not offer a PDF download or print button. The app checks your account and subject access before rendering each page.':'रीडर में PDF डाउनलोड या प्रिंट बटन नहीं है। हर पृष्ठ दिखाने से पहले ऐप आपके खाते और विषय की अनुमति जाँचता है।'}</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
       <div className="qe-reader-heading">
         <button type="button" className="qe-reader-heading-back" onClick={returnToLibrary} aria-label={returnLabel}>←</button>
