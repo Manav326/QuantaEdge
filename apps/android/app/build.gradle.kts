@@ -45,7 +45,9 @@ val tenantPackageSlug = configuredInstitutionCode.lowercase()
 val tenantPackageHash = if (configuredInstitutionCode.isBlank()) "" else
     MessageDigest.getInstance("SHA-256")
         .digest(configuredInstitutionCode.toByteArray(Charsets.UTF_8))
-        .take(4).joinToString("") { "%02x".format(it) }
+        .take(4).joinToString("") { byte ->
+            (byte.toInt() and 0xff).toString(16).padStart(2, '0')
+        }
 val configuredInstitutionApplicationId = providers.gradleProperty("quantaedgeInstitutionApplicationId")
     .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_APPLICATION_ID"))
     .orNull?.trim()?.takeIf { it.isNotBlank() }
