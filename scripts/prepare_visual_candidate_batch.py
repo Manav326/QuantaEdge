@@ -315,7 +315,22 @@ def validate_pack(out: Path, source: dict[str, Any]) -> dict[str, Any]:
     count = data.get("selected_candidate_count")
     if not isinstance(count, int) or count < 1 or data.get("publication_allowed") is not False:
         raise ValueError(f"{source['book_slug']}: candidate pack is empty or is not review-only.")
-    if summary.get("selected_candidate_count") != count or summary.get("publication_allowed") is not False:
+    # The producer writes a summary document whose counters are nested under
+    # "summary"; accept the earlier flat shape only for older saved bundles.
+    summary_data = summary.get("summary") if isinstance(summary.get("summary"), dict) else summary
+    summary_source = summary.get("source") if isinstance(summary.get("source"), dict) else {}
+    if summary.get("schema_version") not in (None, PACK_SCHEMA):
+        raise ValueError(f"{source['book_slug']}: candidate summary schema mismatch.")
+    if summary_source and (
+        str(summary_source.get("pdf_sha256") or "").lower() != str(source["sha256"]).lower()
+        or (summary_source.get("book_id") and summary_source["book_id"] != source["book_id"])
+    ):
+        raise ValueError(f"{source['book_slug']}: candidate summary source identity mismatch.")
+    if (
+        summary_data.get("selected_candidate_count") != count
+        or summary_data.get("publication_allowed") is not False
+        or summary.get("publication_allowed") is not False
+    ):
         raise ValueError(f"{source['book_slug']}: candidate summary mismatches pack.")
     candidates = pack.get("candidates")
     if not isinstance(candidates, list) or len(candidates) != count:

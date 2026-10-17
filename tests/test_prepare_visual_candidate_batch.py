@@ -33,9 +33,27 @@ class CandidateBundleCheckpointTests(unittest.TestCase):
                 "source_page_preview_path": "page.jpg", "source_pdf_page_number": 1,
             }],
         }
+        pack["pack_status"] = "CANDIDATES_FOR_HUMAN_REVIEW"
+        pack["selection_policy"] = {"semantic_classification_performed": False}
         (self.out / "candidates.v3.json").write_text(json.dumps(pack), encoding="utf-8")
-        (self.out / "summary.v3.json").write_text(json.dumps(pack["summary"]), encoding="utf-8")
+        summary = {
+            "schema_version": pack["schema_version"],
+            "pack_status": pack["pack_status"],
+            "source": pack["source"],
+            "summary": pack["summary"],
+            "selection_policy": pack["selection_policy"],
+            "publication_allowed": False,
+        }
+        (self.out / "summary.v3.json").write_text(json.dumps(summary), encoding="utf-8")
         (self.out / "contact-sheet.jpg").write_bytes(b"contact-sheet")
+
+    def test_rejects_wrapped_summary_count_mismatch(self):
+        summary_path = self.out / "summary.v3.json"
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        summary["summary"]["selected_candidate_count"] = 2
+        summary_path.write_text(json.dumps(summary), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "candidate summary mismatches pack"):
+            validate_pack(self.out, self.source)
 
     def test_bundle_manifest_binds_source_and_fingerprint(self):
         manifest = write_bundle_manifest(self.out, self.source, "f" * 64)
