@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
@@ -31,13 +32,16 @@ import com.quantaedge.android.data.ApiClient
 import kotlinx.coroutines.delay
 import org.json.JSONObject
 import com.quantaedge.android.data.optLongAny
+import android.net.Uri
+import java.io.File
 
 @Composable
 fun RecordedPlayerScreen(
     recording: JSONObject,
     startPositionSeconds: Long,
     onSaveProgress: (Long, Long, Boolean) -> Unit,
-    onSaveAndBack: (Long, Long, Boolean) -> Unit
+    onSaveAndBack: (Long, Long, Boolean) -> Unit,
+    offlineFile: File? = null
 ) {
     val context = LocalContext.current
     val language = LocalQuantaLanguage.current
@@ -48,12 +52,15 @@ fun RecordedPlayerScreen(
     var currentPosition by rememberSaveable(recordingId) { mutableStateOf(startPositionSeconds.coerceAtLeast(0)) }
     var isEnded by rememberSaveable(recordingId) { mutableStateOf(false) }
 
-    val player = remember(recordingId) {
-        val dataSource = OkHttpDataSource.Factory(ApiClient.authenticatedHttpClient())
+    val player = remember(recordingId, offlineFile?.absolutePath) {
+        val dataSource = DefaultDataSource.Factory(context,
+            OkHttpDataSource.Factory(ApiClient.authenticatedHttpClient()))
+        val mediaUri = offlineFile?.let { Uri.fromFile(it) }
+            ?: Uri.parse(ApiClient.absoluteUrl("/api/v1/learning/recorded-classes/" + recordingId + "/stream"))
         ExoPlayer.Builder(context)
             .setMediaSourceFactory(DefaultMediaSourceFactory(dataSource))
             .build().apply {
-                setMediaItem(MediaItem.fromUri(ApiClient.absoluteUrl("/api/v1/learning/recorded-classes/" + recordingId + "/stream")))
+                setMediaItem(MediaItem.fromUri(mediaUri))
                 prepare()
                 seekTo(currentPosition.coerceAtLeast(0) * 1000)
             }
@@ -105,8 +112,9 @@ fun RecordedPlayerScreen(
         )
         Text(t("Playback position: ", "वीडियो की स्थिति: ") + currentPosition + " " + t("seconds", "सेकंड"),
             style = MaterialTheme.typography.bodySmall)
-        Text(localizedUiText("Progress is saved to your QuantaEdge account periodically."), style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary)
+        Text(if (offlineFile != null) t("Offline copy is playing. Playback progress is saved locally and synced when connected.", "Offline वीडियो चल रहा है। प्रगति डिवाइस पर सहेजी जाएगी और कनेक्शन मिलने पर sync होगी।")
+            else localizedUiText("Progress is saved to your QuantaEdge account periodically."),
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         Button(onClick = {
             currentPosition = (player.currentPosition / 1000).coerceAtLeast(0)
             val complete = isEnded || (durationSeconds > 0 && currentPosition >= durationSeconds - 10)
