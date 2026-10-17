@@ -141,10 +141,14 @@ public final class InstitutionThemeTokens {
     String muted = darkMode ? "#D1D5DB" : "#475467";
     String border = darkMode ? "#6B7280" : "#737D91";
     String borderSubtle = darkMode ? "#4B5563" : "#D1D5DB";
-    String primaryText = ensureContrast(brandPrimary, darkMode ? surface : "#FFFFFF", 4.5, !darkMode);
-    String accentText = ensureContrast(brandAccent, darkMode ? surface : "#FFFFFF", 4.5, !darkMode);
-    String primaryContainer = mix(darkMode ? "#111827" : "#FFFFFF", brandPrimary, darkMode ? 0.28 : 0.10);
-    String accentContainer = mix(darkMode ? "#111827" : "#FFFFFF", brandAccent, darkMode ? 0.26 : 0.10);
+    String primaryContainer = mix(surface, brandPrimary, darkMode ? 0.28 : 0.10);
+    String accentContainer = mix(surface, brandAccent, darkMode ? 0.26 : 0.10);
+    // Text/accent roles appear on both neutral surfaces and their tinted containers. Check both
+    // backgrounds rather than merely ensuring contrast on white/black, which can fail on a tint.
+    String primaryText = ensureContrast(
+        ensureContrast(brandPrimary, surface, 4.5, !darkMode), primaryContainer, 4.5, !darkMode);
+    String accentText = ensureContrast(
+        ensureContrast(brandAccent, surface, 4.5, !darkMode), accentContainer, 4.5, !darkMode);
     String success = darkMode ? "#4ADE80" : "#166534";
     String warning = darkMode ? "#FCD34D" : "#92400E";
     String error = darkMode ? "#FDA4AF" : "#B42318";
