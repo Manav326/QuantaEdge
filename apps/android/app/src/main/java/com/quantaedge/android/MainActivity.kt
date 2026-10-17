@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.mutableStateOf
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.ui.QuantaEdgeApp
 import com.quantaedge.android.ui.QuantaEdgeTheme
@@ -13,6 +14,7 @@ import com.razorpay.PaymentResultWithDataListener
 import org.json.JSONObject
 
 class MainActivity : ComponentActivity(), PaymentResultWithDataListener, RazorpayCourseCheckoutHost {
+    private val incomingLaunchIntent = mutableStateOf<Intent?>(null)
     private lateinit var themeController: com.quantaedge.android.ui.QuantaEdgeThemeController
     private var pendingCourseOrderId: String? = null
     private var pendingCourseResult: ((CourseCheckoutResult) -> Unit)? = null
@@ -74,11 +76,18 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
         pendingCourseResult = null
         callback?.invoke(CourseCheckoutResult(userMessage = "Payment was not completed. You can try again."))
     }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        incomingLaunchIntent.value = intent
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        incomingLaunchIntent.value = intent
         ApiClient.initialize(applicationContext)
         themeController = com.quantaedge.android.ui.QuantaEdgeThemeController(applicationContext)
-        setContent { QuantaEdgeTheme(themeController) { QuantaEdgeApp() } }
+        setContent { QuantaEdgeTheme(themeController) { QuantaEdgeApp(incomingLaunchIntent.value) } }
     }
 }
