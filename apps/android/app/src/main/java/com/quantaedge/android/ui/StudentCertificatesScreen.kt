@@ -71,6 +71,15 @@ fun StudentCertificatesScreen(
 ) {
     val context = LocalContext.current
     val institutionBrand = LocalInstitutionBrandIdentity.current
+    val certificateFileStem = remember(institutionBrand?.institutionCode, institutionBrand?.displayName) {
+        val schoolName = institutionBrand?.displayName?.trim()
+        if (schoolName.isNullOrBlank()) {
+            "quantaedge-certificate"
+        } else {
+            schoolName.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')
+                .take(72).ifBlank { "school" } + "-certificate"
+        }
+    }
     val scope = rememberCoroutineScope()
     val compact = LocalConfiguration.current.screenWidthDp < 390
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -87,7 +96,7 @@ fun StudentCertificatesScreen(
     var error by remember { mutableStateOf("") }
     var notice by remember { mutableStateOf("") }
     var pendingBytes by remember { mutableStateOf<ByteArray?>(null) }
-    var pendingName by remember { mutableStateOf("quantaedge-certificate") }
+    var pendingName by remember(certificateFileStem) { mutableStateOf(certificateFileStem) }
     var verification by remember { mutableStateOf<JSONObject?>(null) }
     var verificationCode by remember { mutableStateOf("") }
     var verifyingQr by remember { mutableStateOf(false) }
@@ -219,7 +228,7 @@ fun StudentCertificatesScreen(
         pendingBytes = bytes
         val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
             .replace(Regex("[^A-Za-z0-9_-]"), "_")
-        pendingName = "quantaedge-$code.$format"
+        pendingName = "$certificateFileStem-$code.$format"
         if (format == "pdf") pdfLauncher.launch(pendingName) else pngLauncher.launch(pendingName)
     }
 
@@ -295,7 +304,7 @@ fun StudentCertificatesScreen(
         )
                 val directory = java.io.File(context.cacheDir, "certificates")
                 if (!directory.exists() && !directory.mkdirs()) throw IOException("प्रमाणपत्र preview तैयार नहीं हो सका।")
-                val file = java.io.File(directory, "quantaedge-certificate-" + id + ".pdf")
+                val file = java.io.File(directory, certificateFileStem + "-" + id + ".pdf")
                 withContext(Dispatchers.IO) { file.writeBytes(bytes) }
                 val uri = androidx.core.content.FileProvider.getUriForFile(
                     context, context.packageName + ".fileprovider", file
@@ -396,8 +405,13 @@ fun StudentCertificatesScreen(
                 val code = parseQuantaEdgeCertificateQr(rawValue, BuildConfig.DEBUG)
                 if (code == null) {
                     verifyingQr = false
-                    error = if (language == "hi") "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
-                    else "This is not a valid QuantaEdge certificate QR or barcode."
+                    error = if (language == "hi") {
+                        if (institutionBrand != null) "यह मान्य प्रमाणपत्र QR या बारकोड नहीं है।"
+                        else "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
+                    } else {
+                        if (institutionBrand != null) "This is not a valid certificate QR or barcode."
+                        else "This is not a valid QuantaEdge certificate QR or barcode."
+                    }
                     notice = ""
                 } else {
                     verificationCode = code
@@ -425,9 +439,13 @@ fun StudentCertificatesScreen(
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(if (language == "hi") "प्रमाणपत्र स्कैन करें" else "Scan a certificate",
                     style = MaterialTheme.typography.titleMedium)
-                Text(if (language == "hi")
-                    "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
-                    else "Scan the QR or linear barcode on a QuantaEdge certificate. Its current status is checked with the server.",
+                Text(if (language == "hi") {
+                    if (institutionBrand != null) "प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
+                    else "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
+                } else {
+                    if (institutionBrand != null) "Scan the QR or linear barcode on a certificate. Its current status is checked with the server."
+                    else "Scan the QR or linear barcode on a QuantaEdge certificate. Its current status is checked with the server."
+                },
                     style = MaterialTheme.typography.bodyMedium)
                 OutlinedTextField(
                     value = verificationCode,
@@ -664,7 +682,8 @@ fun StudentCertificatesScreen(
         certificates.forEach { certificate ->
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                    Text(certificate.optString("achievement_title", certificate.optString("achievementTitle", "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
+                    Text(certificate.optString("achievement_title", certificate.optString("achievementTitle",
+                        if (institutionBrand != null) "Achievement certificate" else "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
                     val certificateClass = certificate.optString("class_code")
                     val subject = localizedCertificateSubject(
                         certificate.optString("subject_code"), certificate.optString("subject_name"), language)
