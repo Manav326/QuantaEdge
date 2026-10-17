@@ -798,5 +798,6 @@ public class CourseMarketplaceController {
   }
 
   public record VerifyCoursePaymentRequest(String paymentId, String orderId, String signature) {}
+  public record FamilyCourseOrderRequest(String recipientType, Long studentId) {}
   public record SaveCourseOfferRequest(String title, String description, long pricePaise, String currency, String status) {}
 }
