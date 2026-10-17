@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
@@ -66,6 +66,11 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const mobileMenuWasOpen = useRef(false);
   const router = useRouter();
   const t = (key: string, values: Record<string, string | number> = {}) => translateUi(locale, key, values);
+  const changeLocale = useCallback((next: AdminLocale) => {
+    setLocale(next);
+    if (typeof document !== 'undefined') document.documentElement.lang = next === 'hinglish' ? 'hi' : 'en';
+    persistAdminLocale(next);
+  }, []);
 
   useEffect(() => {
     let saved: AdminLocale | null = null;
@@ -145,16 +150,11 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const value = useMemo(() => ({
     insideWorkspace: !publicRoute,
     locale,
+    setLocale: changeLocale,
     role: session?.role || '',
     permissions: Array.isArray(session?.permissions) ? session.permissions : [],
     displayName: session?.displayName || '',
-  }), [publicRoute, locale, session]);
-
-  function changeLocale(next: AdminLocale) {
-    setLocale(next);
-    if (typeof document !== 'undefined') document.documentElement.lang = next === 'hinglish' ? 'hi' : 'en';
-    persistAdminLocale(next);
-  }
+  }), [publicRoute, locale, session, changeLocale]);
 
   async function logout() {
     setLoggingOut(true);

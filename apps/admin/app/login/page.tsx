@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
+import { AdminWorkspaceContext, type AdminLocale } from '../components/AdminWorkspaceContext';
+import { useUiTranslation } from '../i18n/useUiTranslation';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 
 async function readApiJson(response: Response): Promise<any> {
@@ -19,6 +21,8 @@ async function readApiJson(response: Response): Promise<any> {
 
 export default function AdminLogin() {
   const router = useRouter();
+  const workspace = useContext(AdminWorkspaceContext);
+  const t = useUiTranslation();
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<1 | 2>(1);
@@ -39,13 +43,13 @@ export default function AdminLogin() {
         body: JSON.stringify({mobile, purpose: 'STAFF_LOGIN'})
       });
       const body = await readApiJson(response);
-      if (!response.ok) throw new Error(body.message || body.detail || body.error || 'We could not send your sign-in code.');
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || t('admin.login.couldNotSendCode'));
       setFirstAccess(Boolean(body.firstAccess));
       setDevCode(body.devCode || '');
       setOtp('');
       setStep(2);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'We could not send your sign-in code.');
+      setError(e instanceof Error ? e.message : t('admin.login.couldNotSendCode'));
     } finally {
       setBusy(false);
     }
@@ -63,7 +67,7 @@ export default function AdminLogin() {
         body: JSON.stringify({mobile, otp, purpose: 'STAFF_LOGIN', firstAccess})
       });
       const body = await readApiJson(response);
-      if (!response.ok) throw new Error(body.message || body.detail || body.error || 'The code could not be verified.');
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || t('admin.login.couldNotVerifyCode'));
 
       // The successful verification response already includes the authenticated staff
       // identity and sets both HttpOnly cookies. Avoid an unnecessary immediate /me
@@ -76,21 +80,21 @@ export default function AdminLogin() {
       }
 
       if (!(Number(body.staffId) > 0)) {
-        throw new Error('OTP was accepted, but the server did not create a staff session. Please retry once or contact your administrator.');
+        throw new Error(t('admin.login.otpNoSession'));
       }
       const meResponse = await fetch('/api/v1/auth/me', {cache: 'no-store', credentials: 'same-origin'});
       const me = await readApiJson(meResponse);
       if (!meResponse.ok || !me.staffId) {
-        throw new Error(me.message || me.detail || 'Your staff session could not be confirmed. Please retry sign-in.');
+        throw new Error(me.message || me.detail || t('admin.login.sessionNotConfirmed'));
       }
 
       const permissions: string[] = Array.isArray(me.permissions) ? me.permissions : [];
       if (me.role === 'ADMIN') router.replace('/');
       else if (permissions.includes('CONTENT_VIEW')) router.replace('/content');
       else if (permissions.includes('AUDIT_VIEW')) router.replace('/employees?view=audit');
-      else throw new Error('Your staff account has no workspace permissions. Contact your administrator.');
+      else throw new Error(t('admin.login.noWorkspacePermissions'));
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'The code could not be verified.');
+      setError(e instanceof Error ? e.message : t('admin.login.couldNotVerifyCode'));
     } finally {
       setBusy(false);
     }
@@ -110,26 +114,26 @@ export default function AdminLogin() {
       <aside className="qe-login-story">
         <div className="qe-admin-login-brand">
           <QuantaEdgeBrand href="/" variant="auth" className="qe-admin-login-brand-lockup" />
-          <small className="qe-login-brand-context">STAFF CONSOLE</small>
+          <small className="qe-login-brand-context">{t('admin.login.staffConsole')}</small>
         </div>
 
         <div className="qe-login-story-content">
-          <span className="qe-login-eyebrow"><i /> WORKSPACE ACCESS</span>
-          <h1>Great learning starts with <em>great people.</em></h1>
-          <p>A secure workspace for the team building, reviewing and publishing trusted learning content.</p>
+          <span className="qe-login-eyebrow"><i /> {t('admin.login.workspaceAccess')}</span>
+          <h1>{t('admin.login.heroHeadlineBefore')} <em>{t('admin.login.heroHeadlineEmphasis')}</em></h1>
+          <p>{t('admin.login.heroDescription')}</p>
           <div className="qe-login-proof">
             <span className="qe-login-proof-icon">✓</span>
-            <span><strong>Permission-based access</strong><small>Your role controls what you can see and change.</small></span>
+            <span><strong>{t('admin.login.permissionBasedAccess')}</strong><small>{t('admin.login.permissionDescription')}</small></span>
           </div>
           <div className="qe-login-proof">
             <span className="qe-login-proof-icon">↗</span>
-            <span><strong>Every important action is tracked</strong><small>Content and staff activity are recorded in the audit trail.</small></span>
+            <span><strong>{t('admin.login.actionTracked')}</strong><small>{t('admin.login.auditDescription')}</small></span>
           </div>
         </div>
 
         <div className="qe-login-story-footer">
-          <span>QUANTAEDGE · LEARNING OPERATIONS</span>
-          <span>Secure access for invited staff</span>
+          <span>{t('admin.login.footerOperations')}</span>
+          <span>{t('admin.login.invitedStaff')}</span>
         </div>
         <div className="qe-login-decoration qe-login-decoration-one" />
         <div className="qe-login-decoration qe-login-decoration-two" />
@@ -140,14 +144,20 @@ export default function AdminLogin() {
           <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-login-brand-lockup" />
         </div>
         <div className="qe-login-card">
-          <div className="qe-login-card-top">
+          <label className="qe-admin-language-switcher qe-admin-login-language-switcher">
+          <span aria-hidden="true">文</span><span className="qe-admin-language-label">{t('admin.language.label')}</span>
+          <select value={workspace.locale} onChange={event => workspace.setLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
+            <option value="hinglish">{t('common.language.hinglish')}</option><option value="english">{t('common.language.english')}</option>
+          </select>
+        </label>
+        <div className="qe-login-card-top">
             <span className="qe-login-symbol">{step === 1 ? '↗' : firstAccess ? '✳' : '✓'}</span>
-            <span className="qe-login-secure"><i /> SECURE STAFF ACCESS</span>
+            <span className="qe-login-secure"><i /> {t('admin.login.secureStaffAccess')}</span>
           </div>
 
           <div className="qe-login-heading">
-            <span className="qe-login-overline">{step === 1 ? 'YOUR WORKSPACE AWAITS' : firstAccess ? 'FIRST-TIME ACCESS' : 'WELCOME BACK'}</span>
-            <h2>{step === 1 ? 'Sign in to your team' : firstAccess ? 'Activate your invitation' : 'Verify it’s you'}</h2>
+            <span className="qe-login-overline">{step === 1 ? t('admin.login.workspaceAwaits') : firstAccess ? t('admin.login.firstTimeAccess') : t('admin.login.welcomeBack')}</span>
+            <h2>{step === 1 ? t('admin.login.signInTeam') : firstAccess ? t('admin.login.activateInvitation') : t('admin.login.verifyIdentity')}</h2>
             <p>{step === 1
               ? 'Use the mobile number assigned to you by your QuantaEdge administrator.'
               : firstAccess
@@ -157,7 +167,7 @@ export default function AdminLogin() {
 
           {step === 1 ? (
             <form className="qe-login-form" onSubmit={event => {event.preventDefault(); if (!busy && normalizedLength === 10) void requestOtp();}}>
-              <label htmlFor="staff-mobile">Staff mobile number</label>
+              <label htmlFor="staff-mobile">{t('admin.login.mobileLabel')}</label>
               <div className="qe-login-input-wrap">
                 <span className="qe-login-input-prefix">+91</span>
                 <input
@@ -166,30 +176,30 @@ export default function AdminLogin() {
                   onChange={event => setMobile(event.target.value.replace(/\D/g, '').slice(-10))}
                   inputMode="numeric"
                   autoComplete="tel-national"
-                  placeholder="98765 43210"
+                  placeholder={t("admin.login.mobilePlaceholder")}
                   maxLength={10}
                   required
                   aria-describedby="staff-mobile-help"
                 />
               </div>
-              <small id="staff-mobile-help" className="qe-login-field-help">Use the number registered by your administrator.</small>
-              {error && <div className="qe-login-error" role="alert"><strong>We couldn’t continue</strong><span>{error}</span></div>}
+              <small id="staff-mobile-help" className="qe-login-field-help">{t("admin.login.mobileHelp")}</small>
+              {error && <div className="qe-login-error" role="alert"><strong>{t("admin.login.errorContinue")}</strong><span>{error}</span></div>}
               <button className="qe-login-primary" disabled={busy || normalizedLength !== 10} type="submit">
-                {busy ? 'Checking account…' : 'Continue securely'} <span>→</span>
+                {busy ? t('admin.login.checkingAccount') : t('admin.login.continueSecurely')} <span>→</span>
               </button>
               <div className="qe-login-activation-note">
                 <span className="qe-login-note-icon">i</span>
-                <p><strong>First time here?</strong> Staff accounts are created by an administrator. We’ll guide you through activation if this is your first sign-in.</p>
+                <p><strong>{t('admin.login.firstTimeHere')}</strong> {t('admin.login.activationNote')}</p>
               </div>
             </form>
           ) : (
             <form className="qe-login-form" onSubmit={event => {event.preventDefault(); if (!busy && /^\d{6}$/.test(otp)) void verify();}}>
               <div className="qe-login-recipient">
                 <span className="qe-login-recipient-icon">↗</span>
-                <span><small>CODE REQUESTED FOR</small><strong>+91 {mobile.replace(/\D/g, '').slice(-10)}</strong></span>
-                <button type="button" onClick={changeNumber} disabled={busy}>Change</button>
+                <span><small>{t('admin.login.codeRequestedFor')}</small><strong>+91 {mobile.replace(/\D/g, '').slice(-10)}</strong></span>
+                <button type="button" onClick={changeNumber} disabled={busy}>{t('admin.login.change')}</button>
               </div>
-              <label htmlFor="staff-otp">Six-digit verification code</label>
+              <label htmlFor="staff-otp">{t("admin.login.otpLabel")}</label>
               <input
                 className="qe-login-otp"
                 id="staff-otp"
@@ -197,29 +207,29 @@ export default function AdminLogin() {
                 onChange={event => setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))}
                 inputMode="numeric"
                 autoComplete="one-time-code"
-                placeholder="000000"
+                placeholder={t("admin.login.otpPlaceholder")}
                 maxLength={6}
                 autoFocus
                 required
               />
               <small className="qe-login-field-help">{firstAccess ? 'Verify your assigned number to activate your invitation.' : 'Enter the code sent to your registered staff number.'}</small>
-              {devCode && <div className="qe-login-dev-code"><span>Local development code</span><strong>{devCode}</strong><small>Displayed only when local demo OTP mode is enabled.</small></div>}
-              {error && <div className="qe-login-error" role="alert"><strong>Verification didn’t complete</strong><span>{error}</span></div>}
+              {devCode && <div className="qe-login-dev-code"><span>{t("admin.login.localDevCode")}</span><strong>{devCode}</strong><small>{t("admin.login.devCodeNote")}</small></div>}
+              {error && <div className="qe-login-error" role="alert"><strong>{t("admin.login.verificationIncomplete")}</strong><span>{error}</span></div>}
               <button className="qe-login-primary" disabled={busy || !/^\d{6}$/.test(otp)} type="submit">
-                {busy ? 'Verifying access…' : firstAccess ? 'Activate and open workspace' : 'Sign in to workspace'} <span>→</span>
+                {busy ? t('admin.login.verifyingAccess') : firstAccess ? t('admin.login.activateAndOpen') : t('admin.login.signInWorkspace')} <span>→</span>
               </button>
-              <button className="qe-login-back" type="button" onClick={changeNumber} disabled={busy}>← Use a different mobile number</button>
+              <button className="qe-login-back" type="button" onClick={changeNumber} disabled={busy}>{t('admin.login.useDifferentMobile')}</button>
             </form>
           )}
 
           <div className="qe-login-policy">
-            <span>🔒</span><p>Access is tied to your staff identity and assigned role. Only an administrator can create staff accounts or change permissions.</p>
+            <span>🔒</span><p>{t('admin.login.accessPolicy')}</p>
           </div>
         </div>
 
         <footer className="qe-login-panel-footer">
-          <span>Need access? Contact your QuantaEdge administrator.</span>
-          <span>QuantaEdge · Staff operations</span>
+          <span>{t('admin.login.needAccess')}</span>
+          <span>{t('admin.login.staffOperations')}</span>
         </footer>
       </section>
     </main>
