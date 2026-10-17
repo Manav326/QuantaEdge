@@ -278,7 +278,7 @@ export default function ParentProfilePage() {
             <h1><UiText message="legacy.web.parent.profile.and.settings.72a419fa" /></h1>
             <p><UiText message="legacy.web.keep.your.contact.and.personal.details.93d90adb" /></p>
           </div>
-          <div className="parent-profile-page__account-pill"><span><UiText message="legacy.web.account.status.3bcb293f" /></span><strong><UiText message="legacy.web.mobile.verified.c2cc5255" /></strong><small>{identity.mobile || 'Sign in ke liye use hone wala mobile'}</small></div>
+          <div className="parent-profile-page__account-pill"><span><UiText message="legacy.web.account.status.3bcb293f" /></span><strong><LocaleText hinglish="खाता सक्रिय" english="Account active" /></strong><small>{identity.mobile || (locale === 'english' ? 'No mobile linked' : 'मोबाइल लिंक नहीं है')}</small></div>
         </div>
 
         {error && <div className="parent-profile-page__alert is-error" role="alert">{error}</div>}
@@ -310,7 +310,7 @@ export default function ParentProfilePage() {
               <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2><UiText message="legacy.web.personal.details.2c540009" /></h2><p><UiText message="legacy.web.your.parent.account.details.32242915" /></p></div></div>
               <div className="parent-profile-fields">
                 <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.full.name.f7576097" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={t('parent.profile.namePlaceholder')} autoComplete="name" /></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.email.address.8779888d" /> <span className="parent-profile-field__optional"><UiText message="legacy.web.optional.7371513d" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
+                <label className="parent-profile-field">{locale === 'english' ? 'Contact email (separate from verified Gmail)' : 'संपर्क ईमेल (सत्यापित Gmail से अलग)'} <span className="parent-profile-field__optional"><UiText message="legacy.web.optional.7371513d" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.mobile.number.678acd99" /><input value={identity.mobile} readOnly aria-readonly="true"/><small><UiText message="legacy.web.used.for.otp.sign.in.contact.support.i.c11e2aed" /></small></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={identity.publicUserId} readOnly aria-readonly="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={t('parent.profile.cityPlaceholder')} autoComplete="address-level2" /></label>
