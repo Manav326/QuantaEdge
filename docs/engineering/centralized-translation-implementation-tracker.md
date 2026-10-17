@@ -386,3 +386,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Centralized Admin and People Operations pagination copy: range counts, no-item states, page count, rows-per-page, previous/next actions and accessibility labels.
 - Removed hardcoded Admin/People workspace navigation accessibility labels. Extended CI to check these raw shared strings do not return and to validate the catalog keys/placeholders in both languages.
 - Other route-level static sentences remain open. This batch does not certify that all page bodies are free of embedded copy.
+
+
+## Student Learn coverage labels and Admin structured-preview copy — 2026-10-17
+
+- Replaced the remaining `tx(Hinglish, English)` helper in Student Learn for missing lesson-block/question counts with interpolated catalog messages; removed a redundant language-pair wrapper around question-type labels.
+- Migrated Admin structured lesson preview fallback feedback, publication gate warnings, question progress/instructions, question navigation and validation errors to the central UI translator. The UI now follows the Admin UI locale; the lesson's selected content locale still controls lesson content, accepted answers and feedback from the lesson data.
+- Simplified long static preview instructions while preserving the publication gate and the warning that author-only grading keys must be sanitized before student display.
+- Added guard coverage for these two inline-pair helper patterns plus 20 new paired catalog keys. Route audits and full browser acceptance remain open pending CI and manual testing.

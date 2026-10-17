@@ -195,14 +195,13 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
 function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void}) {
   const { locale, learningLanguage } = useLocale();
   const searchParams = useSearchParams();
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [value,setValue]=useState('');
   const [busy,setBusy]=useState(false);
   const [result,setResult]=useState<any>(null);
   const [answerError,setAnswerError]=useState('');
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
   const submitted=result?.correct===true;
-  const questionLabel=q.question_type==='MCQ'?translateUi(locale, 'legacy.web.multiple.choice.649280af'):q.question_type==='TRUE_FALSE'?translateUi(locale, 'legacy.web.true.or.false.43e5661e'):q.question_type==='NUMERICAL'?translateUi(locale, 'legacy.web.numerical.question.3993dcf1'):tx(q.question_type.replaceAll('_',' '),q.question_type.replaceAll('_',' '));
+  const questionLabel=q.question_type==='MCQ'?translateUi(locale, 'legacy.web.multiple.choice.649280af'):q.question_type==='TRUE_FALSE'?translateUi(locale, 'legacy.web.true.or.false.43e5661e'):q.question_type==='NUMERICAL'?translateUi(locale, 'legacy.web.numerical.question.3993dcf1'):q.question_type.replaceAll('_',' ');
 
   async function submit(next:string) {
     setValue(next);
@@ -267,7 +266,6 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
 
 export default function LearnClient() {
   const { locale, learningLanguage } = useLocale();
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [lessons,setLessons]=useState<Lesson[]>([]);
   const [lesson,setLesson]=useState<Detail|null>(null);
   const [trackBrowse,setTrackBrowse]=useState<TrackBrowse|null>(null);
@@ -592,8 +590,8 @@ export default function LearnClient() {
       case 'chapter_name': return translateUi(locale, 'legacy.web.chapter.name.4b8a805b');
       case 'subject_name': return translateUi(locale, 'legacy.web.subject.name.a190525f');
       case 'objective_title': return translateUi(locale, 'legacy.web.learning.objective.65da87a3');
-      case 'lesson_blocks': { const missing=Math.max(0,Number(coverage?.blocks_total||0)-Number(coverage?.blocks_published||0)); return tx(missing+' शिक्षण भाग',''+missing+' teaching block(s)'); }
-      case 'questions': { const missing=Math.max(0,Number(coverage?.questions_total||0)-Number(coverage?.questions_published||0)); return tx(missing+' प्रश्न',''+missing+' question(s)'); }
+      case 'lesson_blocks': { const missing=Math.max(0,Number(coverage?.blocks_total||0)-Number(coverage?.blocks_published||0)); return translateUi(locale, 'student.learn.missingTeachingBlocks', { count: missing }); }
+      case 'questions': { const missing=Math.max(0,Number(coverage?.questions_total||0)-Number(coverage?.questions_published||0)); return translateUi(locale, 'student.learn.missingQuestions', { count: missing }); }
       default: return gap.replaceAll('_',' ');
     }
   }

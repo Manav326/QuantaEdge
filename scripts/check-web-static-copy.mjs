@@ -32,6 +32,7 @@ const required = [
   'student.login.signInFailed', 'student.login.parentMobilePlaceholder', 'student.login.usernamePlaceholder',
   'student.login.passwordPlaceholder',
   'common.accountMenu.openOptions', 'common.accountMenu.options', 'common.accountMenu.openParentMenu', 'common.accountMenu.parentAccount', 'common.accountMenu.parentOptions', 'common.accountMenu.openStudentSettings', 'common.accountMenu.studentOptions', 'common.accountMenu.loggingOut', 'common.accountMenu.logOut', 'common.navigation.closeMenu', 'common.navigation.adminLabel', 'common.navigation.primaryWorkspace', 'common.pagination.navigationForItems', 'common.pagination.noItems', 'common.pagination.showingRange', 'common.pagination.singleItem', 'common.pagination.itemCount', 'common.pagination.rowsPerPage', 'common.pagination.previousPage', 'common.pagination.previous', 'common.pagination.pageNumber', 'common.pagination.nextPage', 'common.pagination.next', 'common.pagination.tableNavigation', 'common.pagination.pageOf',
+  'admin.structuredPreview.answerChecked', 'admin.structuredPreview.shortAnswerNeedsReview', 'admin.structuredPreview.gradingAdapterNeeded', 'admin.structuredPreview.submitEndpointUnavailable', 'admin.structuredPreview.answerSubmitFailed', 'admin.structuredPreview.lessonUnavailable', 'admin.structuredPreview.payloadNotSanitized', 'admin.structuredPreview.publicationGatePending', 'admin.structuredPreview.explainPracticeEyebrow', 'admin.structuredPreview.practiceTitle', 'admin.structuredPreview.practiceInstructions', 'admin.structuredPreview.visualQuestionsPending', 'admin.structuredPreview.noApprovedQuestions', 'admin.structuredPreview.questionProgress', 'admin.structuredPreview.question', 'admin.structuredPreview.tryAgain', 'admin.structuredPreview.previousQuestion', 'admin.structuredPreview.nextQuestion', 'student.learn.missingTeachingBlocks', 'student.learn.missingQuestions',
 ];
 for (const key of required) {
   assert.equal(typeof english[key], 'string', 'English catalog missing ' + key);
@@ -74,6 +75,16 @@ for (const [file, forbiddenCopy] of sharedCopyRegressions) {
   for (const literal of forbiddenCopy) {
     assert.equal(source.includes(literal), false, file + ': found raw shared UI copy ' + literal);
   }
+}
+
+
+const lessonCopyHelpers = [
+  ['apps/web/app/student/learn/LearnClient.tsx', /const tx\s*=\s*\(hinglish:\s*string,\s*english:\s*string\)/],
+  ['apps/admin/app/structured-lesson-preview/StructuredLessonExperience.tsx', /const tx\s*=\s*\(locale:\s*LessonLocale/],
+];
+for (const [file, pattern] of lessonCopyHelpers) {
+  const source = fs.readFileSync(path.join(root, file), 'utf8');
+  assert.equal(pattern.test(source), false, file + ': inline locale-pair translation helper remains');
 }
 
 console.log('Catalog keys/placeholders and migrated auth copy passed; no forced English/Hinglish mappings found across Web, Admin or People Operations UI source.');
