@@ -80,7 +80,9 @@ function installRefreshRecovery() {
       : await nativeFetch(requestInput, requestInit);
     if (skip || response.status !== 401) return response;
     if (!refreshInFlight) {
-      refreshInFlight = boundedFetch(nativeFetch, workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
+      const institutionPortal = window.location.pathname.startsWith('/institution');
+      const refreshPath = institutionPortal ? '/api/v1/institution/auth/refresh' : '/api/v1/auth/refresh';
+      refreshInFlight = boundedFetch(nativeFetch, workspaceRequest(refreshPath, { method: 'POST', cache: 'no-store' }))
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     }
     const refreshed = await refreshInFlight;
