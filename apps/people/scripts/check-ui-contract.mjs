@@ -21,6 +21,8 @@ const workspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const sessionBoundary = read('apps/people/app/components/PeopleSessionBoundary.tsx');
 const components = read('apps/people/app/components/PeopleUI.tsx');
 const styles = read('apps/people/app/people-design-system.css');
+const adminStyles = read('apps/admin/app/globals.css');
+const webStyles = read('apps/web/app/globals.css');
 const alignmentPlan = read('docs/ui/hrms-educational-admin-alignment-plan.md');
 
 assert(rootLayout.includes("import './people-design-system.css'"), 'Root layout must load the People design system.');
@@ -131,6 +133,9 @@ assert(styles.includes('.login-card .qe-people-button'), 'Authentication primary
 
 
 // Route-wide responsive polish and accessible state presentation.
+assert(adminStyles.includes('--qe-brand-orange:#f97316') && adminStyles.includes('--qe-brand-orange-deep:#c2410c'), 'Admin must retain the canonical QuantaEdge orange tokens.');
+assert(webStyles.includes('--qe-brand-orange:#f97316') && webStyles.includes('--qe-brand-orange-deep:#c2410c'), 'Learner web must retain the canonical QuantaEdge orange tokens.');
+assert(!styles.toLowerCase().includes('#244c9a') && !styles.toLowerCase().includes('#10264b'), 'HRMS must not regress to its former standalone blue palette.');
 assert(styles.includes('--brand: #f97316;') && styles.includes('--brand2: #c2410c;'), 'HRMS primary and deep accents must match QuantaEdge orange.');
 assert(styles.includes('--brand-soft: #fff0e5;'), 'HRMS soft accent must use the approved light-orange surface.');
 assert(styles.includes('background: #fffaf6;'), 'Data-table hover states must stay within the approved warm-neutral palette.');
