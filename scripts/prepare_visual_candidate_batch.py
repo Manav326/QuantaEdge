@@ -20,6 +20,7 @@ PREPARATION_SCRIPTS = (
     "scripts/extract_visual_asset_inventory.py",
     "scripts/prepare_visual_candidates_v3.py",
     "scripts/build_visual_lesson_attachment_manifest.py",
+    "scripts/prepare_visual_candidate_batch.py",
 )
 
 
@@ -241,7 +242,10 @@ def extract_archive(archive: Path, root: Path, slug: str) -> Path:
 
 def missing_artifact(message: str) -> bool:
     lower = message.lower()
-    return any(term in lower for term in ("404", "manifest unknown", "name_unknown", "not found", "does not exist"))
+    # Only an explicit registry "artifact absent" response permits a rebuild.
+    # Generic "not found" wording can appear in authentication/proxy/server errors,
+    # which must fail closed rather than silently trigger expensive regeneration.
+    return any(term in lower for term in ("404", "manifest unknown", "name_unknown"))
 
 
 def pull_archive(package: str, tag: str, staging: Path) -> tuple[Path | None, str]:
