@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -206,8 +207,13 @@ public class InstitutionTenantController {
   /** Shows only the authenticated learner's own institution memberships. */
   @GetMapping("/memberships/me")
   public Map<String,Object> myInstitutionMemberships(
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam(value="institutionCode",required=false) String institutionCode) {
     AuthContext student=authorization.requireStudent(context);
+    String requestedCode = institutionCode == null ? "" : institutionCode.trim().toUpperCase(Locale.ROOT);
+    if (!requestedCode.isEmpty() && !requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{2,31}$")) {
+      throw new IllegalArgumentException("Institution code is invalid.");
+    }
     List<Map<String,Object>> memberships=jdbc.queryForList("""
         select t.tenant_code,coalesce(b.display_name,t.display_name) as institution_name,
           t.status as institution_status,m.status as membership_status,m.joined_at,
@@ -219,11 +225,20 @@ public class InstitutionTenantController {
         from institution_membership m
         join institution_tenant t on t.id=m.institution_id
         left join institution_branding b on b.institution_id=t.id
-        where m.student_id=? and m.status='ACTIVE'
+        where m.student_id=? and m.status='ACTIVE' and t.status='ACTIVE'
+          and (?='' or t.tenant_code=?)
         order by t.display_name,t.id
-        """,student.studentId());
+        """,student.studentId(),requestedCode,requestedCode);
     Map<String,Object> result=new LinkedHashMap<>();
-    result.put("institutions",memberships);
+    // Learners see only the school explicitly bound to the current link, or their single
+    // active school. Never return a chooser containing other institution names.
+    if (requestedCode.isEmpty() && memberships.size() != 1) {
+      result.put("institutions",List.of());
+      result.put("requiresInstitutionContext",!memberships.isEmpty());
+    } else {
+      result.put("institutions",memberships);
+      result.put("requiresInstitutionContext",false);
+    }
     return result;
   }
 
