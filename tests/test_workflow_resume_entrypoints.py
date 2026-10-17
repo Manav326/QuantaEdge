@@ -41,6 +41,20 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("${{ inputs.allow_experimental_model }}", wrapper)
         self.assertIn('default: false', wrapper)
 
+    def test_layers_6_to_8_checks_draft_acknowledgement_before_model_startup(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        approval = workflow.index("- name: Require explicit experimental-draft approval before model startup")
+        ollama_start = workflow.index("- name: Start loopback-only Ollama service")
+        model_pull = workflow.index("- name: Pull only candidate models for this invocation")
+        generation = workflow.index("- name: Run bounded single-book draft generation")
+        self.assertLess(approval, ollama_start)
+        self.assertLess(approval, model_pull)
+        self.assertLess(approval, generation)
+        approval_step = workflow[approval:ollama_start]
+        self.assertIn("inputs.mode == 'run'", approval_step)
+        self.assertIn("steps.resume_preflight.outputs.retryable_segments != '0'", approval_step)
+        self.assertIn("ALLOW_EXPERIMENTAL_MODEL", approval_step)
+
     def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
         workflow = read("quantaedge-layers-6-8.yml")
         self.assertIn("workflow_call:", workflow)
