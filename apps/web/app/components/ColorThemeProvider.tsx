@@ -14,7 +14,7 @@ const APPEARANCE_KEY = 'qe.appearance-mode.v1';
 const modes: AppearanceMode[] = ['system', 'light', 'dark'];
 const roles = [
   'primary', 'onPrimary', 'primaryText', 'primaryContainer', 'onPrimaryContainer',
-  'accent', 'onAccent', 'accentText', 'background', 'onBackground', 'surface', 'onSurface',
+  'accent', 'onAccent', 'accentText', 'accentContainer', 'onAccentContainer', 'background', 'onBackground', 'surface', 'onSurface',
   'surfaceElevated', 'onSurfaceElevated', 'text', 'textMuted', 'border', 'borderSubtle', 'focus',
   'success', 'onSuccess', 'successContainer', 'onSuccessContainer',
   'warning', 'onWarning', 'warningContainer', 'onWarningContainer',
@@ -26,7 +26,7 @@ const roles = [
 const defaultPalette = {
   light: {
     primary: '#F97316', onPrimary: '#291400', primaryText: '#9A3412', primaryContainer: '#FFF0E5',
-    onPrimaryContainer: '#7C2D12', accent: '#C2410C', onAccent: '#FFFFFF', accentText: '#9A3412',
+    onPrimaryContainer: '#7C2D12', accent: '#C2410C', onAccent: '#FFFFFF', accentText: '#9A3412', accentContainer: '#F9ECE7', onAccentContainer: '#111827',
     background: '#F8FAFC', onBackground: '#172033', surface: '#FFFFFF', onSurface: '#172033',
     surfaceElevated: '#FFFFFF', onSurfaceElevated: '#172033', text: '#172033', textMuted: '#475467',
     border: '#737D91', borderSubtle: '#D1D5DB', focus: '#9A3412', success: '#166534',
@@ -39,7 +39,7 @@ const defaultPalette = {
   },
   dark: {
     primary: '#F97316', onPrimary: '#291400', primaryText: '#FDBA74', primaryContainer: '#48220D',
-    onPrimaryContainer: '#FFF0E5', accent: '#C2410C', onAccent: '#FFFFFF', accentText: '#FDBA74',
+    onPrimaryContainer: '#FFF0E5', accent: '#C2410C', onAccent: '#FFFFFF', accentText: '#FDBA74', accentContainer: '#3F2320', onAccentContainer: '#FFFFFF',
     background: '#0B1220', onBackground: '#F3F4F6', surface: '#111827', onSurface: '#F3F4F6',
     surfaceElevated: '#182235', onSurfaceElevated: '#F3F4F6', text: '#F3F4F6', textMuted: '#D1D5DB',
     border: '#6B7280', borderSubtle: '#4B5563', focus: '#FDBA74', success: '#4ADE80',
