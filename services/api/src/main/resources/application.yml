@@ -36,6 +36,8 @@ app:
   demo-seed: ${APP_DEMO_SEED:false}
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
+  institution:
+    code-encryption-key: ${APP_INSTITUTION_CODE_ENCRYPTION_KEY:}
   auth:
     google-client-id: ${APP_AUTH_GOOGLE_CLIENT_ID:}
     session-hours: ${APP_AUTH_SESSION_HOURS:4}
@@ -50,6 +52,7 @@ app:
       education-admin: ${APP_AUTH_EDUCATION_ADMIN_ORIGINS:http://localhost:3001}
       hrms: ${APP_AUTH_HRMS_ORIGINS:http://localhost:3002}
       learning: ${APP_AUTH_LEARNING_ORIGINS:http://localhost:3000}
+      institution: ${APP_AUTH_INSTITUTION_ORIGINS:http://localhost:3003}
     max-children-per-parent: ${APP_AUTH_MAX_CHILDREN_PER_PARENT:3}
   ai-tutor:
     enabled: ${APP_AI_TUTOR_ENABLED:false}
