@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Baseline before this documentation commit: `d188ac4fc09383b24514e45d1bf2ed26f5ab155a`. [Baseline commit](https://github.com/Manav326/QuantaEdge/commit/d188ac4fc09383b24514e45d1bf2ed26f5ab155a).
+**Last reviewed:** 2026-10-17. Baseline before this documentation update: `8f50b81dca5d37f5cb0dec7584c0f0f7bcbefd6b`. [Baseline commit](https://github.com/Manav326/QuantaEdge/commit/8f50b81dca5d37f5cb0dec7584c0f0f7bcbefd6b).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -12,7 +12,7 @@
 - Canonical Hinglish catalog: `localization/catalogs/hinglish.json`.
 - Shared runtime and synchronization contract: `localization/runtime.ts`, `scripts/sync_ui_localization.py`.
 - Generated copies are stored under each independent Next.js Docker context: `apps/{web,admin,people}/app/i18n/catalogs/{english,hinglish}.json` and app-local `catalog.ts` files.
-- At the current baseline, the catalogs have **1,467 keys each**, identical key sets, no empty string values, and all six generated JSON copies match the canonical catalogs. Re-run `python3 scripts/sync_ui_localization.py --check` after any change; never hand-edit only one generated copy.
+- At the current baseline, the catalogs have **1,520 keys each**, identical key sets, no empty string values, and all six generated JSON copies match the canonical catalogs. Re-run `python3 scripts/sync_ui_localization.py --check` after any change; never hand-edit only one generated copy.
 - CI invokes the synchronization/parity validator in `.github/workflows/ci.yml`. The check validates catalog parity, placeholder sets, and generated copies.
 - Static interface locale and learning-content locale are separate preferences. The web app keeps the existing `qe-learning-language` and `qe-certificate-language` behavior. The shared UI choice uses `qe-locale`, with `english` and `hinglish` as normalized cross-app values and backward compatibility for the older `hindi` value.
 - Hinglish means Hindi in Devanagari with commonly used English/Roman-script terms retained; it does not mean phonetic Hindi written in Roman letters.
@@ -30,7 +30,7 @@
 
 | Area | Current state | Evidence / notes |
 |---|---|---|
-| Central English/Hinglish UI catalogs | Done for foundation | 1,467 matched keys as of the baseline above; run the sync validator after every catalog update. |
+| Central English/Hinglish UI catalogs | Done for foundation | 1,520 matched keys as of the baseline above; run the sync validator after every catalog update. |
 | Shared runtime, key fallback and interpolation | Implemented | `localization/runtime.ts`, copied into app-local `catalog.ts`. Placeholder and empty-key handling received follow-up fixes. |
 | Preference bridge | Implemented for shell-level selector | Shared `qe-locale` cookie/storage contract across web/admin/People; validate same-domain deployment and cross-app refresh behavior in browser tests. |
 | Shared shell/navigation labels | Partially migrated | Student/parent and admin navigation use catalog keys. People navigation labels use catalog messages and have a language selector. Some account/session labels still need coverage. |
@@ -64,6 +64,8 @@
 - [Admin login localization and pre-login language selector](https://github.com/Manav326/QuantaEdge/commit/7cd22a47a9457738a7c7dc8672f8010e81c89220).
 - [Admin Language Review page centralized catalog migration](https://github.com/Manav326/QuantaEdge/commit/b48733d0ac4380ce16f753672be48bb5145c9b17).
 - [Language Review JSX/status and catalog follow-up fixes](https://github.com/Manav326/QuantaEdge/commit/d188ac4fc09383b24514e45d1bf2ed26f5ab155a).
+- [Student directory and Account Lifecycle catalog migration](https://github.com/Manav326/QuantaEdge/commit/8f50b81dca5d37f5cb0dec7584c0f0f7bcbefd6b).
+- [Parent directory first-pass catalog migration](https://github.com/Manav326/QuantaEdge/commit/PENDING_PARENT_COMMIT).
 
 The catalog currently contains many stable, generated `legacy.web.*` keys from safely extracting existing English/Hinglish pairs. This is a transitional naming scheme, not the desired final authoring standard. Add semantic namespaces for new strings and gradually rename legacy keys with tests; do not change both content and identifiers blindly in bulk.
 
@@ -95,7 +97,8 @@ Preserve these rules when implementing the next phase:
 
 - [ ] Build a complete machine-readable route inventory from the Next.js app trees for web, admin and People Operations.
 - [x] Migrate admin login and overview/dashboard first pass, plus the Language Review workflow page. Validate all with CI before considering these routes complete.
-- [ ] Migrate remaining admin page body text: content Studio, questions, resources, source ingestion, assessments/tests/grading, live classes, staff, students, parents, account lifecycle, certificates, structured lesson preview, session and all dialogs/forms/tables.
+- [x] Migrate first pass of Student directory, Account Lifecycle and Parent directory copy into the central catalog; verify these routes in browser after CI is green.
+- [ ] Migrate remaining admin page body text: Content Studio, questions, resources, source ingestion, assessments/tests/grading, live classes, staff, certificates, structured lesson preview, session and all dialogs/forms/tables.
 - [ ] Migrate all People Operations page bodies: login/change-password, employee directory, workforce, access, attendance/leave, payroll, teaching assignments/classes, and employee self-service.
 - [ ] Audit remaining student and public routes, including profile/settings, class recording detail, all test states, error/empty/loading states, legal/metadata and account menus.
 - [ ] Replace page-level `tx('Hinglish', 'English')` helpers, inline language ternaries, duplicate local dictionaries and hardcoded accessibility text with typed catalog keys; leave content-derived values/data untouched unless their formatting needs locale handling.
@@ -128,6 +131,7 @@ Recent runs exposed integration issues during the active migration. The earlier 
 ## Resume instructions
 
 On the next session: read this tracker first, inspect the latest main SHA and newest Actions run, finish the P0 CI verification, then proceed to P1 route-by-route coverage. Work directly on main only. Update this checklist after each meaningful change and record the relevant commit/CI run. Do not implement a second AI translation service until the existing learning-content translator and API contracts have been inspected.
+
 
 
 

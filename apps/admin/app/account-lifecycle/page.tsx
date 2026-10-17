@@ -59,7 +59,7 @@ export default function AccountLifecyclePage() {
       const body=await bodyOf(response);
       if(!response.ok) throw new Error(body.message||t('admin.lifecycle.saveAdultFailed'));
       setReferences(current=>({...current,[key]:''}));
-      setNotice(t('admin.lifecycle.adultUpdated',{studentId:item.student_id}));
+      setNotice(approved?t('admin.lifecycle.adultApprovedNotice',{studentId:item.student_id}):t('admin.lifecycle.adultRejectedNotice',{studentId:item.student_id}));
       await load();
     } catch(actionError) {
       setError(actionError instanceof Error?actionError.message:t('admin.lifecycle.saveAdultFailed'));
@@ -79,7 +79,7 @@ export default function AccountLifecyclePage() {
       const body=await bodyOf(response);
       if(!response.ok) throw new Error(body.message||t('admin.lifecycle.saveParentFailed'));
       setReferences(current=>({...current,[key]:''}));
-      setNotice(t('admin.lifecycle.parentUpdated',{userId:item.user_id}));
+      setNotice(eligible?t('admin.lifecycle.parentApprovedNotice',{userId:item.user_id}):t('admin.lifecycle.parentRejectedNotice',{userId:item.user_id}));
       await load();
     } catch(actionError) {
       setError(actionError instanceof Error?actionError.message:t('admin.lifecycle.saveParentFailed'));
