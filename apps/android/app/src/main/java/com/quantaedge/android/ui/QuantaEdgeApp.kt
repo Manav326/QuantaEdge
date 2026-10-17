@@ -710,11 +710,13 @@ fun QuantaEdgeApp() {
             val session = ApiClient.postObject("/api/v1/auth/google",
                 JSONObject().put("credential", googleCredential.idToken))
             val workspace = session.optString("workspace").uppercase()
+            val verifiedMethods = session.optJSONArray("verifiedMethods")
+            val gmailMethodVerified = verifiedMethods != null &&
+                (0 until verifiedMethods.length()).any { verifiedMethods.optString(it) == "GMAIL" }
             if (workspace !in setOf("PARENT", "STUDENT") ||
                 (workspace == "PARENT" && session.optString("role") != "PARENT") ||
                 (workspace == "STUDENT" && session.optLong("studentId") <= 0L) ||
-                !session.optBoolean("gmailVerified") ||
-                !session.optJSONArray("verifiedMethods").orEmptyContains("GMAIL")) {
+                !session.optBoolean("gmailVerified") || !gmailMethodVerified) {
                 ApiClient.postObject("/api/v1/auth/logout", JSONObject())
                 ApiClient.clearSession()
                 throw IOException("QuantaEdge could not confirm the verified Google account.")
