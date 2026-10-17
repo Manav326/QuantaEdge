@@ -1,0 +1,37 @@
+name: Resume textbook visual pipeline (Layers 4–5)
+
+on:
+  workflow_dispatch:
+    inputs:
+      class_no:
+        description: "Resume this class from the exact saved Layer 4–5 checkpoints"
+        type: choice
+        options: ["6", "7", "8"]
+        default: "8"
+        required: true
+      vision_model:
+        description: "Must match the model used in the interrupted run"
+        type: string
+        default: "qwen2.5vl:3b"
+        required: true
+      checkpoint_batch_size:
+        description: "Assets per durable checkpoint; 1 minimizes work lost on cancellation"
+        type: choice
+        options: ["1", "2", "5"]
+        default: "1"
+        required: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  resume:
+    name: Resume Layers 4–5 for Class ${{ inputs.class_no }}
+    uses: ./.github/workflows/textbook-visual-candidates-v3.yml
+    with:
+      class_no: ${{ inputs.class_no }}
+      analysis_mode: resume_layers_4_5
+      vision_model: ${{ inputs.vision_model }}
+      checkpoint_batch_size: ${{ inputs.checkpoint_batch_size }}
+    secrets: inherit
