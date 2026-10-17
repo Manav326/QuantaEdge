@@ -314,3 +314,24 @@ assert.ok(androidFloatingTutorContract.includes('userResized') &&
   androidFloatingTutorContract.includes('if (compact && !userResized)') &&
   androidFloatingTutorContract.includes('userResized = true'),
   'The floating tutor must honour resize gestures on compact screens as well as wide screens.');
+
+
+// Issue #66 dashboard live-class schedule and future-session visibility contracts.
+const issue66StudentDashboardContract = read('../app/student/page.tsx');
+const issue66LiveClassApiContract = read('../../../services/api/src/main/java/com/quantaedge/api/LearningClassController.java');
+const issue66LiveClassTestsContract = read('../../../services/api/src/test/java/com/quantaedge/api/LearningClassControllerTest.java');
+assert.ok(issue66StudentDashboardContract.includes('/api/v1/learning/live-classes?') &&
+  issue66StudentDashboardContract.includes('formatUserTimestamp(upcoming ? item.starts_at : item.ends_at)') &&
+  issue66StudentDashboardContract.includes('dashboardNow - 3 * 24 * 60 * 60 * 1000') &&
+  issue66StudentDashboardContract.includes('dashboardClassesBySubject'),
+  'The student dashboard must load authorized course-scoped live classes, show only future/current and the preceding three days, group by subject and format local user timestamps.');
+assert.ok(issue66LiveClassApiContract.includes('@GetMapping("/learning/live-classes")') &&
+  issue66LiveClassApiContract.includes("cs.ends_at>now()-interval '60 days'") &&
+  !issue66LiveClassApiContract.slice(
+    issue66LiveClassApiContract.indexOf('@GetMapping("/learning/live-classes")'),
+    issue66LiveClassApiContract.indexOf('@PostMapping("/learning/live-classes/{sessionId}/join")')
+  ).includes("starts_at<=now()+interval '24 hours'"),
+  'The student class catalogue must keep recent history bounded while allowing scheduled classes beyond the next 24 hours; join eligibility remains a separate endpoint rule.');
+assert.ok(issue66LiveClassTestsContract.includes('studentClassCatalogueIncludesFarFutureScheduledSessionsAndKeepsCountScopeAligned') &&
+  issue66LiveClassTestsContract.includes('assertFalse(itemSql.getValue().contains("starts_at<=now()+interval \'24 hours\'"))'),
+  'Backend tests must guard full upcoming schedule visibility in both item and count SQL.');
