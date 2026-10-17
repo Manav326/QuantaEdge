@@ -50,6 +50,16 @@ val configuredInstitutionApplicationId = providers.gradleProperty("quantaedgeIns
     .orNull?.trim()?.takeIf { it.isNotBlank() }
     ?: if (configuredInstitutionCode.isBlank()) "com.quantaedge.android"
        else "com.quantaedge.android.tenant." + tenantPackageSlug + tenantPackageHash
+val institutionLinkPath = if (configuredInstitutionCode.isBlank()) {
+    "/__no_tenant_app_link_for_platform_build__/"
+} else {
+    "/school/" + configuredInstitutionCode + "/"
+}
+val institutionLinkScheme = if (configuredInstitutionCode.isBlank()) {
+    "qe-institution"
+} else {
+    "qe-institution-" + tenantPackageSlug + tenantPackageHash
+}
 require(configuredInstitutionApplicationId.matches(Regex("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"))) {
     "QUANTAEDGE_INSTITUTION_APPLICATION_ID must be a valid, unique Android package ID."
 }
@@ -92,6 +102,8 @@ android {
         applicationId = configuredInstitutionApplicationId
         manifestPlaceholders["applicationLabel"] = configuredInstitutionDisplayName
         manifestPlaceholders["applicationIcon"] = "@drawable/qe_launcher_icon"
+        manifestPlaceholders["institutionLinkPath"] = institutionLinkPath
+        manifestPlaceholders["institutionLinkScheme"] = institutionLinkScheme
         minSdk = 26
         targetSdk = 36
         versionCode = configuredVersionCode
