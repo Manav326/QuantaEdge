@@ -276,6 +276,52 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(1, resumed["summary"]["assets_processed_this_run"])
         self.assertEqual({"asset-1", "asset-2"}, {item["asset_id"] for item in resumed["results"]})
 
+    def test_resume_reanalyzes_successful_checkpoint_with_invalid_analysis_payload(self):
+        output = self.root / "visual-analysis.v1.json"
+        run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        saved = json.loads(output.read_text(encoding="utf-8"))
+        saved["results"][0]["analysis"].pop("concepts")
+        output.write_text(json.dumps(saved), encoding="utf-8")
+
+        calls = {"count": 0}
+        def counted_opener(request, timeout=180):
+            calls["count"] += 1
+            return self._opener(request, timeout)
+
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=counted_opener, output_path=output, resume=True,
+        )
+        self.assertEqual(1, calls["count"])
+        self.assertEqual(0, resumed["summary"]["assets_skipped_from_checkpoint"])
+        self.assertIn("concepts", resumed["results"][0]["analysis"])
+
+    def test_resume_rejects_duplicate_asset_ids_in_checkpoint(self):
+        output = self.root / "visual-analysis.v1.json"
+        run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        saved = json.loads(output.read_text(encoding="utf-8"))
+        saved["results"].append(dict(saved["results"][0]))
+        output.write_text(json.dumps(saved), encoding="utf-8")
+
+        def must_not_call(*args, **kwargs):
+            raise AssertionError("duplicate checkpoints must fail before model inference")
+
+        with self.assertRaisesRegex(ValueError, "duplicate asset_id asset-1"):
+            run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+                opener=must_not_call, output_path=output, resume=True,
+            )
+
     def test_http_error_body_is_preserved_in_checkpoint_for_diagnosis(self):
         import io
         import urllib.error
