@@ -245,6 +245,10 @@ public class InstitutionAuthService {
         where institution_id=? and status='ACTIVE'
           and (expires_at is null or expires_at>now())
           and (use_limit is null or redeemed_count<use_limit)
+          and exists (select 1 from institution_billing_contract bc
+            where bc.institution_id=institution_join_code.institution_id and bc.active=true
+              and bc.effective_from<=current_date
+              and (bc.effective_until is null or bc.effective_until>=current_date))
         order by created_at desc,id desc limit 1
         """, String.class, institutionId);
     if (encryptedCodes.isEmpty()) return null;
