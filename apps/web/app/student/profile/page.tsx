@@ -1,5 +1,6 @@
 'use client';
 
+import AccountIdentitySettings from '../../components/AccountIdentitySettings';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -475,6 +476,7 @@ export default function StudentProfilePage() {
             </div>
           </form>
         )}
+        <AccountIdentitySettings />
       </div>
     </main>
   );
