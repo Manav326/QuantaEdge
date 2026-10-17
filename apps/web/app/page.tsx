@@ -22,13 +22,24 @@ export default function Home() {
   const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
-  if (!brand && (isResolving || institutionContextRequested)) return (
+  if (!brand && isResolving) return (
     <main className="site qe-tenant-landing" aria-busy="true">
       <section className="hero">
         <div className="hero-copy">
           <div className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपका सीखने का स्थान'}</div>
           <h1>{english ? 'Welcome to your' : 'आपके'}<br /><em>{english ? 'learning space' : 'सीखने का स्थान'}</em></h1>
           <p className="hero-lead">{english ? 'Lessons, practice and progress in one place.' : 'पाठ, अभ्यास और प्रगति — एक ही स्थान पर।'}</p>
+        </div>
+      </section>
+    </main>
+  );
+  if (!brand && institutionContextRequested) return (
+    <main className="site qe-tenant-landing">
+      <section className="hero">
+        <div className="hero-copy">
+          <div className="eyebrow">{english ? 'SCHOOL LINK' : 'विद्यालय लिंक'}</div>
+          <h1>{english ? 'This school link could not be verified.' : 'इस विद्यालय लिंक की पुष्टि नहीं हो सकी।'}</h1>
+          <p className="hero-lead">{english ? 'Please reopen the link shared by your school or ask the school administrator for a current link.' : 'कृपया विद्यालय द्वारा साझा किया गया लिंक फिर खोलें या विद्यालय प्रशासक से नया लिंक लें।'}</p>
         </div>
       </section>
     </main>
