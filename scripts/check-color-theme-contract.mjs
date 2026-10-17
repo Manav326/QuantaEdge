@@ -39,6 +39,7 @@ assert(apiTheme.includes('SCHEMA_VERSION = 2'), 'API theme schema must be explic
 assert(apiTheme.includes('public static List<Map<String, Object>> presets()'), 'Server must expose a curated palette catalogue.');
 assert(apiTheme.includes('"quantaedge-orange"') && apiTheme.includes('"custom"'), 'QuantaEdge default and custom presets must be supported.');
 assert(apiTheme.includes('contrastRatio') && apiTheme.includes('ensureContrast'), 'Generated foregrounds must be contrast-aware.');
+assert(apiTheme.includes('ensureContrast(darken(brandPrimary, 0.22), "#FFFFFF", 4.5, true)'), 'Tenant navigation must enforce readable text contrast for arbitrary custom primary colours.');
 assert(apiTheme.includes('c.put("accentContainer", accentContainer)') && apiTheme.includes('c.put("onAccentContainer", bestContrastText(accentContainer))'), 'API must expose the accent container and readable foreground.');
 assert(platformApi.includes('"/theme-presets"') && platformApi.includes('InstitutionThemeTokens.presets()'), 'Preset API must remain owner-controlled.');
 assert(platformApi.includes('"/theme-preview"') && platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Palette preview and save must use the owner-protected canonical normalizer.');
@@ -53,6 +54,7 @@ assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && 
 assert(editor.includes('appearance') && editor.includes('themePreviewGrid'), 'Institution editor must expose appearance and preview.');
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-preview') && editor.includes('themePreviewStates') && !editor.includes('contrastTextForPreview'), 'Institution preview must use the server-generated full palette rather than a duplicate client colour algorithm.');
 assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes('qeAppearance'), 'Web runtime must resolve system/light/dark appearance.');
+assert(webRuntime.includes("export type AppearanceMode = 'institution' | 'system' | 'light' | 'dark'") && webRuntime.includes("const mode = savedMode ?? 'institution'") && webRuntime.includes('effectiveMode(mode, configuredMode, media.matches)'), 'Web users must be able to return to the institution-configured default after overriding appearance.');
 assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens') && webRuntime.includes('accentContainer'), 'Web runtime must map all tenant semantic roles, including accent containers.');
 assert(webLayout.includes('<ColorThemeProvider>'), 'Learner web root must install the theme provider.');
 assert(webWorkspace.includes('<AppearanceModeButton />'), 'Learner/parent workspace must provide appearance control.');
