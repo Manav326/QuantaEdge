@@ -212,7 +212,7 @@ export default function StudentMarketplacePage() {
       <header className={styles.hero}>
         <div className={styles.eyebrow}>LEARN SOMETHING NEW</div>
         <h1>Course Marketplace</h1>
-        <p>Choose a learning path that fits your goals. Your course price and access are confirmed securely by QuantaEdge.</p>
+        <p>Choose a learning path that fits your goals. Your course price and access are confirmed securely before checkout.</p>
         <div className={styles.heroActions}>
           <Link className={styles.secondaryButton} href="/student/courses">All Courses</Link>
           <button className={styles.iconButton} type="button" onClick={() => void loadOffers()} disabled={loading} aria-label="Reload course offers" title="Reload course offers">↻</button>
