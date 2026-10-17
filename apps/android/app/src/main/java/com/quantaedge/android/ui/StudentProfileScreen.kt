@@ -106,6 +106,7 @@ fun StudentProfileScreen(
                 }
             }
         }
+        ColorThemeSettingsCard(language = language)
         androidx.compose.material3.Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
