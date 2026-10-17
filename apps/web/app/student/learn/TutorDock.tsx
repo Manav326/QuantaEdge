@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useLocale } from '../../components/LanguageProvider';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 
 type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string; created_at?: string | number; createdAt?: string | number };
 type Mode = 'HINT' | 'EXPLAIN' | 'EXAMPLE' | 'STEP_BY_STEP' | 'CHECK_MY_WORK';
@@ -37,16 +38,7 @@ const modeIcons: Record<Mode, string> = {
 
 function formatTutorTimestamp(value?: string | number): string {
   if (!value) return '';
-  const date = typeof value === 'number' ? new Date(value) : new Date(value);
-  if (!Number.isFinite(date.getTime())) return '';
-  const now = new Date();
-  const sameDay = date.getFullYear() === now.getFullYear()
-    && date.getMonth() === now.getMonth()
-    && date.getDate() === now.getDate();
-  const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(date);
-  if (sameDay) return time;
-  const dateLabel = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(date);
-  return dateLabel + ', ' + time;
+  return formatUserTimestamp(value);
 }
 
 async function readBody(response: Response): Promise<ApiBody> {
