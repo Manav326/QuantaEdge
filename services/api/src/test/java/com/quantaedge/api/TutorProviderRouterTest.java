@@ -52,17 +52,36 @@ class TutorProviderRouterTest {
         +"\"usage\":{\"input_tokens\":10,\"output_tokens\":12}}";
   }
 
+  private String modelCatalog(String model) {
+    return "{\"object\":\"list\",\"data\":[{\"id\":\""+model+"\",\"object\":\"model\"}]}";
+  }
+
   @Test
   void reportsAvailableWhenPrivateProviderIsReachableAndCachesTheProbe() throws Exception {
     AtomicInteger primaryRequests=new AtomicInteger();
     AtomicInteger fallbackRequests=new AtomicInteger();
-    HttpServer primary=server(200,chatReply("private model is reachable"),primaryRequests);
+    HttpServer primary=server(200,modelCatalog("private-test-model"),primaryRequests);
     HttpServer fallback=server(200,apiReply("fallback should not be probed"),fallbackRequests);
     try {
       TutorProviderRouter router=new TutorProviderRouter(new ObjectMapper(),
           properties(primary.getAddress().getPort(),fallback.getAddress().getPort(),true,8));
       assertTrue(router.isAvailable());
       assertTrue(router.isAvailable());
+      assertEquals(1,primaryRequests.get());
+      assertEquals(0,fallbackRequests.get());
+    } finally { primary.stop(0); fallback.stop(0); }
+  }
+
+  @Test
+  void reportsUnavailableWhenEndpointIsReachableButConfiguredModelIsMissing() throws Exception {
+    AtomicInteger primaryRequests=new AtomicInteger();
+    AtomicInteger fallbackRequests=new AtomicInteger();
+    HttpServer primary=server(200,modelCatalog("different-installed-model"),primaryRequests);
+    HttpServer fallback=server(200,apiReply("fallback remains disabled"),fallbackRequests);
+    try {
+      TutorProviderRouter router=new TutorProviderRouter(new ObjectMapper(),
+          properties(primary.getAddress().getPort(),fallback.getAddress().getPort(),false,8));
+      assertFalse(router.isAvailable());
       assertEquals(1,primaryRequests.get());
       assertEquals(0,fallbackRequests.get());
     } finally { primary.stop(0); fallback.stop(0); }
