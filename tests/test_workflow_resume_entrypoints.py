@@ -90,6 +90,24 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('"production_model_selection": report.get("production_model_selection")', workflow)
         self.assertIn('"publication_allowed": report.get("publication_allowed")', workflow)
 
+    def test_class6_generation_waits_for_successful_fresh_benchmark(self):
+        workflow = read("quantaedge-layers-6-8-generate-once.yml")
+        self.assertIn('workflows: ["Benchmark Class 6 Curiosity after Layer 5 recovery"]', workflow)
+        self.assertIn("if: github.event.workflow_run.conclusion == 'success'", workflow)
+        preflight = workflow.index("- name: Verify complete Layer 5 evidence and select an eligible experimental candidate")
+        ollama = workflow.index("- name: Start loopback-only local Ollama")
+        model_pull = workflow.index("- name: Pull only the contract-valid experimental candidate")
+        generate = workflow.index("- name: Generate six review-only model calls with durable savepoints")
+        self.assertLess(preflight, ollama)
+        self.assertLess(ollama, model_pull)
+        self.assertLess(model_pull, generate)
+        self.assertIn('ledger.get("ledger_status") != "COMPLETE"', workflow)
+        self.assertIn('row.get("lesson_contract_valid_rate", 0) > 0', workflow)
+        self.assertIn('row.get("production_model") is not None', workflow)
+        self.assertIn("--checkpoint-every 1", workflow)
+        self.assertIn("--allow-experimental-model", workflow)
+        self.assertNotIn(".github/triggers/generate-class6-curiosity.trigger", workflow)
+
     def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
         workflow = read("quantaedge-layers-6-8.yml")
         self.assertIn("workflow_call:", workflow)
