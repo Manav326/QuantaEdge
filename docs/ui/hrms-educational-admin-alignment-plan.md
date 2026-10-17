@@ -236,6 +236,6 @@ Run `38372164855` validates commit `ddc83a1` (HRMS auth branding/components). Th
 ## Execution log — October 17, 2026
 
 - Updated the People Operations shared design stylesheet with route-wide form label/help/error treatment, disabled-control states, resilient table overflow and numeric alignment, row hover/focus states, compact pagination, responsive page actions, and reduced-motion-safe transitions. This is presentation-only; no route, API, permission, or workflow changes are intended.
-- Extended the People Operations UI contract to guard the warm-orange theme, readable numeric values, semantic invalid-form styling, horizontal table scrolling, and keyboard focus within table rows.
+- Extended the People Operations UI contract to guard the warm-orange theme, readable numeric values, semantic invalid-form styling, horizontal table scrolling, and keyboard focus within table rows. The contract also now checks that Admin and learner web retain the canonical orange/deep-orange tokens and that HRMS does not regress to the former blue palette.
 - Latest theme and UI polish require the GitHub Actions run for the resulting commit. Browser screenshots, real viewport interaction checks, keyboard/screen-reader review, and end-to-end HR workflows remain separate verification gates and are not marked complete until actually exercised.
 - Scope note: this pass improves the shared People UI foundation. It does not claim that every page-specific workflow or all three applications have completed visual QA; those checks remain tracked above.
