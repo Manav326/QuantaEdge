@@ -371,7 +371,7 @@ export function TenantBrandMark({ className = '' }: { className?: string }) {
       ? <img className={className} src={logoUrl} alt="" aria-hidden="true" />
       : <span className={className} role="img" aria-label={title || 'School'}>{(title || 'S').slice(0, 1).toLocaleUpperCase()}</span>;
   }
-  return institutionContextRequested
+  return institutionContextRequested || isResolving
     ? <span className={className} aria-hidden="true" />
     : <img className={className} src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" />;
 }
