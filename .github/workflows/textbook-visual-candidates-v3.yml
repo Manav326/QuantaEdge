@@ -6,9 +6,11 @@ on:
       - ".github/workflows/textbook-visual-candidates-v3.yml"
       - ".github/workflows/textbook-extraction-pilot.yml"
       - "scripts/prepare_visual_candidates_v3.py"
+      - "scripts/prepare_visual_candidate_batch.py"
       - "scripts/select_textbook_visual_sources.py"
       - "scripts/validate_textbook_extraction_artifacts.py"
       - "tests/test_prepare_visual_candidates_v3.py"
+      - "tests/test_prepare_visual_candidate_batch.py"
       - "tests/test_select_textbook_visual_sources.py"
       - "tests/test_validate_textbook_extraction_artifacts.py"
       - "scripts/build_visual_lesson_attachment_manifest.py"
@@ -39,10 +41,10 @@ on:
         options: ["6", "7", "8"]
         default: "7"
       analysis_mode:
-        description: "Prepare candidates, run all stages, or resume Layers 4–5 from saved checkpoints without rebuilding candidate packs"
+        description: "Prepare only, run Layers 1–5, resume missing Layer 1–3 book checkpoints, or resume Layer 4–5 analysis without rebuilding candidates"
         required: true
         type: choice
-        options: ["prepare_only", "analyze_all", "resume_layers_4_5"]
+        options: ["prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"]
         default: "analyze_all"
       vision_model:
         description: "Ollama vision model used in Layer 4"
@@ -93,6 +95,7 @@ jobs:
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
           python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
     if: github.event_name == 'workflow_dispatch'
@@ -121,11 +124,11 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
-          [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
+          [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_preparation" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
           [[ "$CHECKPOINT_BATCH_SIZE" == "1" || "$CHECKPOINT_BATCH_SIZE" == "2" || "$CHECKPOINT_BATCH_SIZE" == "5" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
-          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
+          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
@@ -245,8 +248,7 @@ jobs:
           PY
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
-      - name: Install ORAS for checkpoint recovery
-        if: inputs.analysis_mode == 'resume_layers_4_5'
+      - name: Install ORAS and authenticate before per-book checkpoint handling
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -384,87 +386,22 @@ jobs:
                   raise SystemExit(f"{slug}: no committed v3 candidate pack exists; resume mode will not rebuild candidate packs.")
           PY
 
-      - name: Build review-only candidate packs and attachment manifests for all six source books
+      - name: Restore or build immutable per-book candidate checkpoints
         if: inputs.analysis_mode != 'resume_layers_4_5'
         shell: bash
-        run: |
-          set -euo pipefail
-          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$RUNNER_TEMP/visual-candidates-v3" "$GITHUB_WORKSPACE" <<'PY'
-          import json, os, shutil, subprocess, sys
-          from pathlib import Path
-          selection_path, source_root_arg, output_root_arg, repo_arg = sys.argv[1:]
-          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
-          source_root = Path(source_root_arg)
-          output_root = Path(output_root_arg)
-          repo = Path(repo_arg)
-          output_root.mkdir(parents=True, exist_ok=True)
-          for source in selection["sources"]:
-              slug = source["book_slug"]
-              work = source_root / slug
-              out = output_root / slug
-              inventory_dir = work / "inventory"
-              subprocess.run([
-                  sys.executable, "scripts/extract_visual_asset_inventory.py",
-                  "--pdf", str(work / "source.pdf"),
-                  "--manifest", str(work / "source.manifest.json"),
-                  "--output-dir", str(inventory_dir),
-                  "--preview-width", "1200",
-              ], cwd=repo, check=True)
-              subprocess.run([
-                  sys.executable, "scripts/prepare_visual_candidates_v3.py",
-                  "--inventory", str(inventory_dir / "visual-inventory.v1.json"),
-                  "--pdf", str(work / "source.pdf"),
-                  "--output-dir", str(out),
-                  "--crop-scale", "2.0",
-              ], cwd=repo, check=True)
-              pack_path = out / "candidates.v3.json"
-              pack = json.loads(pack_path.read_text(encoding="utf-8"))
-              if pack.get("schema_version") != "quantaedge.visual-candidate-pack.v3":
-                  raise SystemExit(f"{slug}: unexpected candidate pack schema.")
-              if pack.get("summary", {}).get("selected_candidate_count", 0) < 1:
-                  raise SystemExit(f"{slug}: candidate pack is empty.")
-              if pack.get("summary", {}).get("publication_allowed") is not False:
-                  raise SystemExit(f"{slug}: candidate pack must remain non-publishable.")
-              for candidate in pack.get("candidates", []):
-                  for key in ("display_path", "source_page_preview_path"):
-                      target = (out / candidate[key]).resolve()
-                      if out.resolve() not in target.parents or not target.is_file():
-                          raise SystemExit(f"{slug}: missing/unsafe {key} for {candidate.get('candidate_id')}")
-              out_in_repo = repo / "data" / "textbook-visual-candidates-v3" / slug
-              out_in_repo.mkdir(parents=True, exist_ok=True)
-              shutil.copy2(pack_path, out_in_repo / "candidates.v3.json")
-              shutil.copy2(out / "summary.v3.json", out_in_repo / "summary.v3.json")
-              shutil.copy2(out / "contact-sheet.jpg", out_in_repo / "contact-sheet.jpg")
-              (out_in_repo / "source-selection.v1.json").write_text(json.dumps(source, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-              chapter_map = repo / "data" / "textbook-visual-candidates-v3" / slug / "chapter-map.v1.json"
-              cmd = [
-                  sys.executable, "scripts/build_visual_lesson_attachment_manifest.py",
-                  "--candidate-pack", str(pack_path),
-                  "--candidate-root", str(out),
-                  "--repo-root", str(repo),
-                  "--book-slug", slug,
-                  "--output", str(repo / "data" / "textbook-visual-candidates-v3" / "catalogs" / f"{slug}.v3.json"),
-              ]
-              if chapter_map.is_file():
-                  cmd.extend(["--chapter-map", str(chapter_map)])
-              subprocess.run(cmd, cwd=repo, check=True)
-              print(json.dumps({"book_id": source["book_id"], "slug": slug, "candidate_count": pack["summary"]["selected_candidate_count"], "publication_allowed": False}))
-          PY
-
-      - name: Install ORAS and authenticate to GHCR
-        if: inputs.analysis_mode != 'resume_layers_4_5'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
+          GHCR_OWNER: ${{ github.repository_owner }}
         run: |
           set -euo pipefail
-          oras_archive="$RUNNER_TEMP/oras_1.2.0_linux_amd64.tar.gz"
-          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL \
-            "https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz" \
-            -o "$oras_archive"
-          tar -xzf "$oras_archive" -C "$RUNNER_TEMP" oras
-          sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
-          echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          package="ghcr.io/$owner/quantaedge-textbook-visuals"
+          python scripts/prepare_visual_candidate_batch.py \
+            --selection "$VISUAL_SOURCE_ROOT/selected-sources.json" \
+            --source-root "$VISUAL_SOURCE_ROOT" \
+            --output-root "$RUNNER_TEMP/visual-candidates-v3" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --package "$package" \
+            --mode "$ANALYSIS_MODE"
 
       - name: Preflight and restore matching Layer 4 checkpoints before loading the vision model
         if: inputs.analysis_mode == 'resume_layers_4_5'
@@ -550,56 +487,49 @@ jobs:
           print(json.dumps({"resume_preflight": "PASSED", "book_count": len(selection["sources"]), "model": model, "prompt_version": prompt_version}))
           PY
 
-      - name: Publish immutable per-book candidate packs and persist bundle indexes
+      - name: Verify per-book immutable candidate checkpoints before committing the catalog
         if: inputs.analysis_mode != 'resume_layers_4_5'
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
         run: |
           set -euo pipefail
-          source_root="$VISUAL_SOURCE_ROOT"
-          pack_root="$RUNNER_TEMP/visual-candidates-v3"
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
-          package="ghcr.io/$owner/quantaedge-textbook-visuals"
-          python - "$source_root/selected-sources.json" "$pack_root" "$GITHUB_WORKSPACE" "$package" "$GITHUB_RUN_ID" <<'PY'
-          import hashlib, json, os, subprocess, sys, tarfile
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$RUNNER_TEMP/visual-candidates-v3" "$GITHUB_WORKSPACE" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
+          import hashlib, json, sys
           from pathlib import Path
-          selection_path, pack_root_arg, repo_arg, package, run_id = sys.argv[1:]
-          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
-          pack_root, repo = Path(pack_root_arg), Path(repo_arg)
+          selection_path, work_arg, repo_arg, package = sys.argv[1:]
+          selection=json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          work,repo=Path(work_arg),Path(repo_arg)
+          def digest(path):
+              h=hashlib.sha256()
+              with path.open("rb") as stream:
+                  for chunk in iter(lambda:stream.read(1024*1024),b""): h.update(chunk)
+              return h.hexdigest()
           for source in selection["sources"]:
-              slug = source["book_slug"]
-              pack_dir = pack_root / slug
-              out = repo / "data" / "textbook-visual-candidates-v3" / slug
-              archive = pack_root / f"{slug}-candidates-v3.tar.gz"
-              subprocess.run(["tar", "-C", str(pack_root), "-czf", str(archive), slug], check=True)
-              bundle_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
-              version_tag = f"candidates-v3-class{selection['class']}-{slug}-run-{run_id}"
-              subprocess.run(["oras", "push", "--artifact-type", "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3", f"{package}:{version_tag}", f"{archive.name}:application/gzip"], cwd=pack_root, check=True)
-              pack = json.loads((pack_dir / "candidates.v3.json").read_text(encoding="utf-8"))
-              summary = pack.get("summary", {})
-              bundle_index = {
-                  "schema_version": "quantaedge.visual-candidate-bundle-index.v3",
-                  "book_slug": slug,
-                  "class": selection["class"],
-                  "language": source["language"],
-                  "subject": source["subject"],
-                  "maths_part": source.get("maths_part"),
-                  "source_book_id": source["book_id"],
-                  "source_pdf_sha256": source["sha256"],
-                  "candidate_pack_schema": pack.get("schema_version"),
-                  "candidate_count": summary.get("selected_candidate_count", 0),
-                  "candidate_pages": summary.get("selected_page_numbers", []),
-                  "publication_allowed": False,
-                  "review_required": True,
-                  "ghcr_package": package,
-                  "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
-                  "version_tag": version_tag,
-                  "bundle_tar_sha256": bundle_sha,
-                  "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
-              }
-              (out / "bundle-index.v3.json").write_text(json.dumps(bundle_index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-              print(json.dumps({"book_id": source["book_id"], "slug": slug, "package": package, "tag": version_tag, "bundle_sha256": bundle_sha, "candidate_count": bundle_index["candidate_count"], "publication_allowed": False}))
+              slug=source["book_slug"]
+              index_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"bundle-index.v3.json"
+              pack_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json"
+              archive=work/f"{slug}-candidates-v3.tar.gz"
+              if not index_path.is_file() or not pack_path.is_file() or not archive.is_file():
+                  raise SystemExit(f"{slug}: per-book checkpoint outputs are missing; refusing to commit a partial catalog.")
+              index=json.loads(index_path.read_text(encoding="utf-8"))
+              pack=json.loads(pack_path.read_text(encoding="utf-8"))
+              if index.get("schema_version")!="quantaedge.visual-candidate-bundle-index.v3":
+                  raise SystemExit(f"{slug}: checkpoint index schema mismatch.")
+              if index.get("source_book_id")!=source["book_id"] or str(index.get("source_pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
+                  raise SystemExit(f"{slug}: checkpoint source identity mismatch.")
+              if index.get("ghcr_package")!=package or not isinstance(index.get("version_tag"),str):
+                  raise SystemExit(f"{slug}: checkpoint registry package/tag missing.")
+              if digest(archive)!=index.get("bundle_tar_sha256"):
+                  raise SystemExit(f"{slug}: local per-book archive SHA-256 differs from its committed checkpoint index.")
+              if pack.get("schema_version")!="quantaedge.visual-candidate-pack.v3" or str((pack.get("source") or {}).get("pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
+                  raise SystemExit(f"{slug}: candidate pack source/schema mismatch.")
+              if pack.get("summary",{}).get("publication_allowed") is not False or pack.get("summary",{}).get("selected_candidate_count")!=index.get("candidate_count"):
+                  raise SystemExit(f"{slug}: checkpoint candidate count or publication guard mismatch.")
+              if index.get("candidate_pack_sha256") and index["candidate_pack_sha256"]!=digest(pack_path):
+                  raise SystemExit(f"{slug}: candidate pack SHA-256 differs from checkpoint index.")
+              print(json.dumps({"slug":slug,"checkpoint":"VERIFIED","tag":index["version_tag"],"candidate_count":index["candidate_count"],"archive_sha256":index["bundle_tar_sha256"],"publication_allowed":False}))
           PY
 
       - name: Rebuild the catalog, test candidate-to-content contracts, and commit the full batch
