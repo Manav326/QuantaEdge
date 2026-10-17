@@ -50,7 +50,7 @@ const ENTITY_MESSAGE_KEYS: Record<string, string> = {
   recorded_class: 'admin.translations.entity.recordedClass',
 };
 const STATUS_OPTIONS = ['ALL', 'DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'REJECTED', 'SUPERSEDED'];
-const ENTITY_OPTIONS = Object.keys(ENTITY_LABELS);
+const ENTITY_OPTIONS = Object.keys(ENTITY_MESSAGE_KEYS);
 
 function pretty(value: unknown) {
   if (typeof value === 'string') {
@@ -229,7 +229,7 @@ export default function TranslationsPage() {
       }
     })();
     return () => { active = false; };
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!identity) return;
@@ -318,12 +318,12 @@ export default function TranslationsPage() {
 
       <div className={styles.statGrid}>
         <article><span>{t('admin.translations.matchingItems')}</span><strong>{total.toLocaleString('en-IN')}</strong><small>{t('admin.translations.existingAndMissing')}</small></article>
-        <article><span>{t('admin.translations.awaitingReview')}</span><strong>{pending}</strong><small>IN_REVIEW</small></article>
+        <article><span>{t('admin.translations.awaitingReview')}</span><strong>{pending}</strong><small>{statusLabel('IN_REVIEW', t)}</small></article>
         <article><span>{t('admin.translations.staleVersions')}</span><strong>{stale}</strong><small>{t('admin.translations.cannotPublishStale')}</small></article>
       </div>
 
       <section className={styles.filters} aria-label={t('admin.translations.filters')}>
-        <label>{t('admin.translations.targetLanguage')}<select value={language} onChange={e => {setLanguage(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allLanguages')}</option><option value="hi">Hindi · हिन्दी</option><option value="en">English</option></select></label>
+        <label>{t('admin.translations.targetLanguage')}<select value={language} onChange={e => {setLanguage(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allLanguages')}</option><option value="hi">{t('admin.translations.hindiDevanagari')}</option><option value="en">{t('common.language.english')}</option></select></label>
         <label>{t('admin.translations.workflowStatus')}<select value={status} onChange={e => {setStatus(e.target.value);setOffset(0);setSelectedKey('');}}>{STATUS_OPTIONS.map(value => <option value={value} key={value}>{value === 'ALL' ? t('admin.translations.status.ALL') : statusLabel(value, t)}</option>)}</select></label>
         <label>{t('admin.translations.contentType')}<select value={entityType} onChange={e => {setEntityType(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allContentTypes')}</option>{ENTITY_OPTIONS.map(value => <option value={value} key={value}>{entityLabel(value, t)}</option>)}</select></label>
         <label>{t('admin.translations.class')}<select value={classCode} onChange={e => {setClassCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allClasses')}</option><option value="6">{t('admin.translations.classCode', { code: 6 })}</option><option value="7">{t('admin.translations.classCode', { code: 7 })}</option><option value="8">{t('admin.translations.classCode', { code: 8 })}</option></select></label>
@@ -336,7 +336,7 @@ export default function TranslationsPage() {
 
       <div className={styles.workspace}>
         <section className={styles.listPanel}>
-          <div className={styles.panelHeader}><div><h2>{t('admin.translations.queue')}</h2><p>{total.toLocaleString('en-IN')} matching items</p></div><span role="status" aria-live="polite">{loading ? t('admin.translations.loading') : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
+          <div className={styles.panelHeader}><div><h2>{t('admin.translations.queue')}</h2><p>{t('admin.translations.matchingCount', { count: total.toLocaleString(locale === 'english' ? 'en-IN' : 'hi-IN') })}</p></div><span role="status" aria-live="polite">{loading ? t('admin.translations.loading') : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
           <div className={styles.rows}>
             {!loading && items.length === 0 && <div className={styles.empty}><strong>{t('admin.translations.noMatch')}</strong><p>{t('admin.translations.tryFilters')}</p></div>}
             {items.map(row => <button type="button" key={rowKey(row)} className={styles.row + (selectedKey === rowKey(row) ? ' ' + styles.rowSelected : '')} onClick={() => selectRow(row)}>
@@ -360,7 +360,7 @@ export default function TranslationsPage() {
         <section className={styles.editorPanel}>
           {!selected ? <div className={styles.editorEmpty}><span>文 / Aa</span><h2>{t('admin.translations.selectTranslation')}</h2><p>{t('admin.translations.editorEmpty')}</p></div> : <>
             <div className={styles.editorHeader}>
-              <div><span className={styles.kicker}>{selected.language === 'hi' ? t('admin.translations.hindiDevanagari') : t('common.language.english')} / {t('admin.translations.version', { version: selected.version_no })}</span><h2>{ENTITY_LABELS[selected.entity_type] || selected.entity_type}</h2><p>{contextLabel(selected, t)} · entity #{selected.entity_id}</p></div>
+              <div><span className={styles.kicker}>{selected.language === 'hi' ? t('admin.translations.hindiDevanagari') : t('common.language.english')} / {t('admin.translations.version', { version: selected.version_no })}</span><h2>{entityLabel(selected.entity_type, t)}</h2><p>{contextLabel(selected, t)} · entity #{selected.entity_id}</p></div>
               <span className={badgeClass(selected.translation_status)}>{statusLabel(selected.translation_status, t)}</span>
             </div>
             {selected.is_current_revision === false && <div className={styles.error}>{t('admin.translations.olderSource')}</div>}
@@ -371,16 +371,16 @@ export default function TranslationsPage() {
               <label><span>{t('admin.translations.translatedEditable')}</span><textarea value={editor} onChange={e => setEditor(e.target.value)} disabled={saving || (!canEdit && !canReview)} spellCheck={false} /></label>
             </div>
             <label className={styles.notes}><span>{t('admin.translations.reviewerNotes')}</span><textarea value={qualityNotes} maxLength={2000} onChange={e => setQualityNotes(e.target.value)} placeholder={t("admin.translations.notesPlaceholder")} disabled={saving || (!canEdit && !canReview)} rows={3}/></label>
-            {selected.translation_id == null && <div className={styles.notice}><strong>{t('admin.translations.notStarted')}</strong> This is the original source content. {t('admin.translations.sourceContentOnly', { language: selected.language === 'hi' ? t('admin.translations.hindiDevanagari') : t('common.language.english') })}</div>}
+            {selected.translation_id == null && <div className={styles.notice}><strong>{t('admin.translations.notStarted')}</strong> {t('admin.translations.sourceIntro')} {t('admin.translations.sourceContentOnly', { language: selected.language === 'hi' ? t('admin.translations.hindiDevanagari') : t('common.language.english') })}</div>}
             <div className={styles.workflowHint}><strong>{t('admin.translations.safePublicationPath')}</strong><span>{t('admin.translations.workflowDescription')}</span></div>
             <div className={styles.actions}>
               <button type="button" onClick={() => void saveDraft()} disabled={saving || (!canEdit && !canReview) || selected.is_current_revision === false}>{saving ? t('admin.translations.saving') : t('admin.translations.saveDraft')}</button>
-              {['DRAFT', 'REJECTED'].includes(selected.translation_status) && canSubmit && <button type="button" className={styles.secondary} onClick={() => void changeStatus('IN_REVIEW')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.submitReview')}</button>}
+              {['DRAFT', 'REJECTED'].includes(selected.translation_status) && canSubmit && <button type="button" className={styles.secondary} onClick={() => void changeStatus('IN_REVIEW')} disabled={saving || selected.is_current_revision === false}>{t('admin.translations.submitReview')}</button>}
               {selected.translation_status === 'IN_REVIEW' && canReview && <>
-                <button type="button" className={styles.secondary} onClick={() => void changeStatus('REJECTED')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.rejectNotes')}</button>
-                <button type="button" onClick={() => void changeStatus('APPROVED')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.approve')}</button>
+                <button type="button" className={styles.secondary} onClick={() => void changeStatus('REJECTED')} disabled={saving || selected.is_current_revision === false}>{t('admin.translations.rejectNotes')}</button>
+                <button type="button" onClick={() => void changeStatus('APPROVED')} disabled={saving || selected.is_current_revision === false}>{t('admin.translations.approve')}</button>
               </>}
-              {selected.translation_status === 'APPROVED' && canPublish && <button type="button" onClick={() => void changeStatus('PUBLISHED')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.publish')}</button>}
+              {selected.translation_status === 'APPROVED' && canPublish && <button type="button" onClick={() => void changeStatus('PUBLISHED')} disabled={saving || selected.is_current_revision === false}>{t('admin.translations.publish')}</button>}
               {selected.translation_status === 'PUBLISHED' && <span className={styles.publishedNote}>{t('admin.translations.liveNote')}</span>}
             </div>
           </>}
