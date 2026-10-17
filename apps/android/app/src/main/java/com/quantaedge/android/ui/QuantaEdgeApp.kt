@@ -3306,6 +3306,7 @@ fun QuantaEdgeApp() {
                             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
                             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
                         } },
+                        onCourses = ::openParentCourses,
                         onReport = ::openParentReport,
                         onManageChild = ::openManageChild,
                         onAddChild = ::openCreateChild,
@@ -3313,6 +3314,35 @@ fun QuantaEdgeApp() {
                         onProfile = ::openParentProfile,
                         onLogout = ::logout,
                         maxChildren = parentAccount.optInt("maxChildren", 3)
+                    )
+                    AppRoute.PARENT_COURSES -> ParentCourseMarketplaceScreen(
+                        offers = parentMarketplaceOffers,
+                        requests = parentCourseRequests,
+                        entitlements = parentCourseEntitlements,
+                        children = parentChildren,
+                        language = language,
+                        loading = parentMarketplaceLoading,
+                        loadFailed = parentMarketplaceLoadFailed,
+                        busy = busy || parentMarketplaceBusyCourseId > 0L,
+                        busyCourseId = parentMarketplaceBusyCourseId,
+                        error = error,
+                        status = status,
+                        onRefresh = ::refreshParentMarketplace,
+                        onBuy = ::purchaseFamilyMarketplaceCourse,
+                        onAddFree = ::addFreeFamilyCourse,
+                        onDismissRequest = ::dismissParentCourseRequest,
+                        onTransfer = ::transferParentCourse,
+                        onMyLearning = {
+                            runTask {
+                                val session = ApiClient.postObject("/api/v1/auth/my-learning-session", JSONObject())
+                                if (session.optString("workspace") != "STUDENT" || session.optLong("studentId") <= 0L) {
+                                    throw IOException("Your personal learning session could not be confirmed.")
+                                }
+                                ApiClient.setWorkspace("STUDENT")
+                                refreshUser()
+                            }
+                        },
+                        onBack = ::goBack
                     )
                     AppRoute.PARENT_REPORT -> ParentReportScreen(
                         report = parentReport,
@@ -6421,6 +6451,7 @@ private fun ParentHomeScreen(
     language: String,
     busy: Boolean,
     onRefresh: () -> Unit,
+    onCourses: () -> Unit,
     onReport: (JSONObject) -> Unit,
     onManageChild: (JSONObject) -> Unit,
     onAddChild: () -> Unit,
@@ -6454,6 +6485,9 @@ private fun ParentHomeScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextButton(onClick = onRefresh, enabled = !busy) {
                 Text(if (language == "hi") "रिफ्रेश" else "Refresh")
+            }
+            TextButton(onClick = onCourses, enabled = !busy) {
+                Text(if (language == "hi") "कोर्स खरीदें / ट्रांसफर" else "Courses / transfers")
             }
             TextButton(onClick = onLogout, enabled = !busy) {
                 Text(if (language == "hi") "साइन आउट" else "Sign out")
