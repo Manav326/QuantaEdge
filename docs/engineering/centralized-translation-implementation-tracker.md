@@ -459,3 +459,19 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Centralized workspace mode/status, permission notices, chapter/micro-topic creation fields, source metadata labels and placeholders, actions, and initial loading state.
 - Mathematics/Science options now use catalog labels. Dynamic class/subject/chapter names remain data-driven.
 - Added paired catalog messages and regression checks. Existing chapter-edit fields, publishing readiness, block/question authoring and learner preview still require localization.
+
+
+## Latest continuation — Admin source-ingestion localization first pass (2026-10-17)
+
+- Prepared the feature patch earlier on `main`, then merged its catalogs and tracker against current `main` head `e8b77e98e95bf0ad8d2619fcd657562584628872` after newer Content Studio localization batches landed. No branch was created; newer changes were retained.
+- Extracted Admin `/source-ingestion` UI copy into semantic `admin.sourceIngestion.*` catalog messages covering source registration/search, HTTPS validation, GHCR whole-book cache, source-gap inventory, chapter/source mappings, job lifecycle, chapter mapping/review, approval safeguards and searchable-text extraction.
+- Centralized client-owned validation/notices and HTTP-status fallbacks. Server diagnostics, source/curriculum records, chapter/book titles and educational preview content remain data-driven; UI locale does not overwrite learning-content language.
+- Added paired English/Hinglish messages, synchronized the six generated Web/Admin/People catalog copies, and introduced `scripts/check-admin-source-ingestion-i18n.mjs` in CI for used-key coverage, placeholder parity, status labels and representative literal-copy regressions.
+- Updated the route coverage matrix. Status is **first pass / CI pending / browser audit open** until Actions passes and browser acceptance verifies both languages, responsive layout, loading/empty/error states, role-gated actions and accessibility.
+- Merged catalogs now have `3280` entries per locale with matching key sets and interpolation placeholders. CI and browser validation remain separate gates.
+
+### Next continuation
+1. Verify this commit's Actions result and repair regressions before another route.
+2. Continue Admin `/resources` (textbook PDF library and preview), preserving private-PDF access, publish permissions and viewer behavior.
+3. Continue route-by-route static-copy/accessibility audits; preserve curriculum content language independently from UI locale.
+4. Keep this tracker and route matrix updated after each meaningful batch. Overall localization remains **IN PROGRESS — NOT PRODUCTION-COMPLETE**.

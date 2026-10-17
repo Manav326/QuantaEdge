@@ -51,7 +51,7 @@
 | `/questions` | `apps/admin/app/questions/page.tsx` | Localized in current slice — CI pending | Verify permission guidance, prompts, history snapshots and all visible status/error variants. |
 | `/resources` | `apps/admin/app/resources/page.tsx` | Needs audit/migration | Translate PDF library forms, ingestion/preview and assignment states. |
 | `/session` | `apps/admin/app/session/page.tsx` | Needs audit/migration | Audit staff session-boundary/recovery messages. |
-| `/source-ingestion` | `apps/admin/app/source-ingestion/page.tsx` | Needs audit/migration | Translate ingestion, verification and failure states. |
+| `/source-ingestion` | `apps/admin/app/source-ingestion/page.tsx` | Central-catalog first pass — CI pending, route audit open | Verify both locales for source registration, GHCR cache, source-gap inventory, chapter mapping/review, approval gates and text extraction; keep server diagnostics and curriculum/source records data-driven. |
 | `/structured-lesson-preview` | `apps/admin/app/structured-lesson-preview/page.tsx` | Needs audit/migration | Check question types, preview controls and validation feedback. |
 | `/students` | `apps/admin/app/students/page.tsx` | First pass — audit pending | Verify table, pagination, load errors and search. |
 | `/translations` | `apps/admin/app/translations/page.tsx` | First pass — audit pending | Check filters, editor, save/review/publish statuses and dialogs. |

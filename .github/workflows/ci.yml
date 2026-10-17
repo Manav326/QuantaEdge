@@ -72,6 +72,9 @@ jobs:
       - name: Verify Admin classes localization coverage
         run: node scripts/check-admin-classes-i18n.mjs
 
+      - name: Verify Admin source-ingestion localization coverage
+        run: node scripts/check-admin-source-ingestion-i18n.mjs
+
       - name: Verify cross-app UI and brand contract
         run: node scripts/check-ui-brand-contract.mjs
 

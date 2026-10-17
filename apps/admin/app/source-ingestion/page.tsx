@@ -4,6 +4,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './SourceIngestion.module.css';
+import { useUiTranslation } from '../i18n/useUiTranslation';
 
 type Source = {
   source_id: number; source_kind: string; title: string; provider?: string | null;
@@ -61,10 +62,23 @@ async function api(url: string, init: RequestInit = {}) {
   const raw = await response.text();
   let body: any = {};
   try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-  if (!response.ok) throw new Error(body.detail || body.message || body.error || ('Request failed (' + response.status + ')'));
+  if (!response.ok) throw new Error(body.detail || body.message || body.error || ('__QE_REQUEST_FAILED__' + response.status));
   return body;
 }
-function normalizeJob(value: any): Job {
+function localizedError(error: unknown, t: (key: string, values?: Record<string, string | number>) => string, fallbackKey: string) {
+  if (error instanceof Error) {
+    const status = error.message.match(/^__QE_REQUEST_FAILED__(\d+)$/);
+    if (status) return t('admin.sourceIngestion.requestFailed', { status: Number(status[1]) });
+    if (error.message) return error.message;
+  }
+  return t(fallbackKey);
+}
+function sourceStatusLabel(status: string | null | undefined, t: (key: string, values?: Record<string, string | number>) => string) {
+  const value = String(status || '').toUpperCase();
+  const known = ['QUEUED','DOWNLOADING','REVIEW','APPROVED','REJECTED','FAILED','INCOMPLETE','UNAVAILABLE','PENDING','RUNNING','COMPLETE'];
+  return known.includes(value) ? t('admin.sourceIngestion.status.' + value) : (value.replaceAll('_', ' ') || t('admin.sourceIngestion.unknown'));
+}
+function normalizeJob(value: any) {
   let outline = value?.detected_outline;
   if (typeof outline === 'string') {
     try { outline = JSON.parse(outline); } catch { outline = []; }
@@ -76,6 +90,7 @@ function normalized(value: string) {
 }
 
 export default function SourceIngestionPage() {
+  const t = useUiTranslation();
   const [sources, setSources] = useState<Source[]>([]);
   const [sourceSearchDraft, setSourceSearchDraft] = useState('');
   const [sourceQuery, setSourceQuery] = useState('');
@@ -178,7 +193,7 @@ export default function SourceIngestionPage() {
         setSelectedSource('new');
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Source ingestion data could not be loaded.');
+      setError(localizedError(e, t, 'admin.sourceIngestion.dataLoadFailed'));
     } finally { setLoading(false); }
   }, [classCode, subjectCode, selectedSource, jobPage, jobPageSize, sourceQuery, sourcePage, sourcePageSize]);
 
@@ -249,15 +264,15 @@ export default function SourceIngestionPage() {
     api('/api/v1/admin/source-ingestion/sources/' + encodeURIComponent(selectedSource) + '/chapter-mappings')
       .then(rows => { if (active) setExistingMappings(Array.isArray(rows) ? rows : []); })
       .catch(e => {
-        if (active) setMappingError(e instanceof Error ? e.message : 'Existing chapter-source mappings could not be loaded.');
+        if (active) setMappingError(localizedError(e, t, 'admin.sourceIngestion.mappingLoadFailed'));
       });
     return () => { active = false; };
   }, [selectedSource]);
 
   async function startJob() {
-    if (!classCode || !subjectCode) { setError('Choose a class and subject first.'); return; }
-    if (!sourceTitle.trim() || !sourceUrl.trim()) { setError('Add the source title and official HTTPS URL.'); return; }
-    if (!/^https:\/\//i.test(sourceUrl.trim())) { setError('Source downloads must use HTTPS.'); return; }
+    if (!classCode || !subjectCode) { setError(t('admin.sourceIngestion.chooseClassSubject')); return; }
+    if (!sourceTitle.trim() || !sourceUrl.trim()) { setError(t('admin.sourceIngestion.addSourceTitleUrl')); return; }
+    if (!/^https:\/\//i.test(sourceUrl.trim())) { setError(t('admin.sourceIngestion.httpsOnly')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
       const created = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs', {
@@ -269,20 +284,20 @@ export default function SourceIngestionPage() {
           provider: provider.trim(), sourceKind: sourceKind.trim() || 'BOARD_TEXTBOOK',
         }),
       }));
-      setNotice('Ingestion job #' + created.job_id + ' started. Refresh its status after the download finishes.');
+      setNotice(t('admin.sourceIngestion.ingestionStarted', { jobId: created.job_id }));
       await loadBase();
       setJob(created);
       if (created.status === 'REVIEW') await loadJob(created.job_id);
       else setJob(created);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The source ingestion could not be started.');
+      setError(localizedError(e, t, 'admin.sourceIngestion.startFailed'));
     } finally { setBusy(false); }
   }
 
   async function startCachedBookJob() {
-    if (!classCode || !subjectCode) { setError('Choose a curriculum class and subject first.'); return; }
-    if (!selectedRegistryBookRow) { setError('No complete cached book is available for this class and medium.'); return; }
-    if (!confirmSubjectMapping) { setError('Confirm that this complete textbook belongs to the selected curriculum class and subject.'); return; }
+    if (!classCode || !subjectCode) { setError(t('admin.sourceIngestion.chooseCurriculumTrack')); return; }
+    if (!selectedRegistryBookRow) { setError(t('admin.sourceIngestion.noCachedBook')); return; }
+    if (!confirmSubjectMapping) { setError(t('admin.sourceIngestion.confirmBookMapping')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
       const created = normalizeJob(await api(
@@ -295,12 +310,12 @@ export default function SourceIngestionPage() {
       if (created.status === 'REVIEW') await loadJob(created.job_id);
       else setJob(created);
       setNotice(created.status === 'APPROVED'
-        ? 'This GHCR textbook has already completed source review for the selected track.'
+        ? t('admin.sourceIngestion.cachedBookAlreadyReviewed')
         : created.status === 'REVIEW'
-          ? 'Complete book opened from GHCR. Inspect its detected outline, map curriculum chapters and review every split before approval.'
-          : 'Created source-ingestion job #' + created.job_id + ' from the checksummed GHCR complete book. Refresh status after PDF inspection finishes.');
+          ? t('admin.sourceIngestion.cachedBookOpened')
+          : t('admin.sourceIngestion.cachedBookStarted', { jobId: created.job_id }));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The cached whole-book ingestion could not be started.');
+      setError(localizedError(e, t, 'admin.sourceIngestion.cachedJobFailed'));
     } finally { setBusy(false); }
   }
 
@@ -310,21 +325,21 @@ export default function SourceIngestionPage() {
       await loadBase();
       const target = id || job?.job_id || jobs[0]?.job_id;
       if (target) await loadJob(target);
-      setNotice('Source ingestion status refreshed.');
-    } catch (e) { setError(e instanceof Error ? e.message : 'Refresh failed.'); }
+      setNotice(t('admin.sourceIngestion.statusRefreshed'));
+    } catch (e) { setError(localizedError(e, t, 'admin.sourceIngestion.refreshFailed')); }
     finally { setBusy(false); }
   }
   async function queueTextbookExtraction() {
-    if (!job?.book_asset_id) { setError('This ingestion job has no stored complete-book PDF asset to extract.'); return; }
+    if (!job?.book_asset_id) { setError(t('admin.sourceIngestion.noStoredAsset')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
       const response = await api('/api/v1/admin/textbook-extraction/assets/' + job.book_asset_id, {
         method: 'POST', body: JSON.stringify({}),
       });
       setExtractionStatus(response.job as ExtractionStatus);
-      setNotice('Text extraction queued for the complete book. It runs in the background; use Refresh extraction status to follow progress.');
+      setNotice(t('admin.sourceIngestion.extractionQueued'));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Text extraction could not be queued.');
+      setError(localizedError(e, t, 'admin.sourceIngestion.extractionQueueFailed'));
     } finally { setBusy(false); }
   }
 
@@ -333,9 +348,9 @@ export default function SourceIngestionPage() {
     setBusy(true); setError('');
     try {
       setExtractionStatus(await api('/api/v1/admin/textbook-extraction/assets/' + job.book_asset_id));
-      setNotice('Text extraction status refreshed.');
+      setNotice(t('admin.sourceIngestion.extractionStatusRefreshed'));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Text extraction status could not be loaded.');
+      setError(localizedError(e, t, 'admin.sourceIngestion.extractionStatusFailed'));
     } finally { setBusy(false); }
   }
 
@@ -363,16 +378,16 @@ export default function SourceIngestionPage() {
   async function saveJobMetadata() {
     if (!job) return;
     if (!sourceTitle.trim() || !sourceUrl.trim() || !edition.trim()) {
-      setError('Source title, official HTTPS URL, and the printed edition/reprint year or session are required before approval.');
+      setError(t('admin.sourceIngestion.metadataRequired'));
       return;
     }
     if (!/^https:\/\//i.test(sourceUrl.trim())) {
-      setError('The reviewed source URL must use HTTPS.');
+      setError(t('admin.sourceIngestion.reviewedUrlHttps'));
       return;
     }
     if (/^(unverified|unknown|tbd|n\/a)$/i.test(edition.trim())
         || /verify edition|to be verified|not specified/i.test(edition.trim())) {
-      setError('Read the book cover or publication page and enter the printed edition, reprint year, or academic session.');
+      setError(t('admin.sourceIngestion.editionRequired'));
       return;
     }
     setBusy(true); setError(''); setNotice('');
@@ -390,18 +405,18 @@ export default function SourceIngestionPage() {
       setSourceUrl(updated.source_url || '');
       setEdition(updated.edition || '');
       await loadBase();
-      setNotice('Official source metadata saved. You can continue chapter mapping and review.');
+      setNotice(t('admin.sourceIngestion.metadataSaved'));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Source metadata could not be saved.');
+      setError(localizedError(e, t, 'admin.sourceIngestion.metadataSaveFailed'));
     } finally { setBusy(false); }
   }
 
   async function splitChapters() {
     if (!job) return;
     const selected = mapping.filter(row => row.included);
-    if (!selected.length) { setError('Select at least one chapter to split.'); return; }
+    if (!selected.length) { setError(t('admin.sourceIngestion.selectChapters')); return; }
     if (selected.some(row => !row.chapterId || !row.start || !row.end)) {
-      setError('Every selected row needs a curriculum chapter and start/end PDF page.'); return;
+      setError(t('admin.sourceIngestion.chapterMappingIncomplete')); return;
     }
     setBusy(true); setError(''); setNotice('');
     try {
@@ -414,8 +429,8 @@ export default function SourceIngestionPage() {
       setJob(updated);
       await loadJob(updated.job_id);
       await loadBase();
-      setNotice('Chapter PDFs have been created as private review candidates. Approve or reject each one below.');
-    } catch (e) { setError(e instanceof Error ? e.message : 'Chapter PDFs could not be prepared.'); }
+      setNotice(t('admin.sourceIngestion.chaptersCreated'));
+    } catch (e) { setError(localizedError(e, t, 'admin.sourceIngestion.splitFailed')); }
     finally { setBusy(false); }
   }
 
@@ -427,9 +442,9 @@ export default function SourceIngestionPage() {
         method: 'PATCH', body: JSON.stringify({ status }),
       }));
       setJob(updated);
-      setNotice(row.chapter_title + ' marked ' + status.toLowerCase() + '.');
+      setNotice(t('admin.sourceIngestion.chapterStatusSaved', { title: row.chapter_title, status: sourceStatusLabel(status, t) }));
       await loadBase();
-    } catch (e) { setError(e instanceof Error ? e.message : 'The chapter review could not be saved.'); }
+    } catch (e) { setError(localizedError(e, t, 'admin.sourceIngestion.chapterReviewFailed')); }
     finally { setBusy(false); }
   }
 
@@ -440,20 +455,20 @@ export default function SourceIngestionPage() {
       const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/approve', { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
-      setNotice('The complete book and approved chapter PDFs are now library drafts. Rejected chapters were excluded; preview and publish each resource from Textbook library.');
-    } catch (e) { setError(e instanceof Error ? e.message : 'The source book could not be approved.'); }
+      setNotice(t('admin.sourceIngestion.bookApproved'));
+    } catch (e) { setError(localizedError(e, t, 'admin.sourceIngestion.bookApproveFailed')); }
     finally { setBusy(false); }
   }
 
   async function rejectJob() {
-    if (!job || !window.confirm('Reject this entire source ingestion? Its pending PDFs will remain hidden from the library.')) return;
+    if (!job || !window.confirm(t('admin.sourceIngestion.rejectConfirm'))) return;
     setBusy(true); setError(''); setNotice('');
     try {
       const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/reject', { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
-      setNotice('Source ingestion rejected. Its pending PDF assets remain hidden from the library.');
-    } catch (e) { setError(e instanceof Error ? e.message : 'The ingestion could not be rejected.'); }
+      setNotice(t('admin.sourceIngestion.ingestionRejected'));
+    } catch (e) { setError(localizedError(e, t, 'admin.sourceIngestion.rejectFailed')); }
     finally { setBusy(false); }
   }
 
@@ -468,32 +483,32 @@ export default function SourceIngestionPage() {
       <header className="admin-top">
         <div>
           <span className="admin-kicker">QUANTAEDGE LEARNING / CONTENT GOVERNANCE</span>
-          <h1>Source ingestion & chapter review</h1>
-          <p>Reuse database source records, download official books, split chapter PDFs, review them, then add approved material to the library.</p>
+          <h1>{t('admin.sourceIngestion.title')}</h1>
+          <p>{t('admin.sourceIngestion.description')}</p>
         </div>
-        <button className="admin-refresh" type="button" aria-label="Refresh source ingestion status" disabled={busy} onClick={() => void refreshJob()} title="Refresh source status">↻</button>
+        <button className="admin-refresh" type="button" aria-label={t('admin.sourceIngestion.refreshStatus')} disabled={busy} onClick={() => void refreshJob()} title={t('admin.sourceIngestion.refreshTitle')}>↻</button>
       </header>
 
       {error && <div className={styles.error} role="alert">{error}</div>}
       {notice && <div className={styles.notice} role="status">{notice}</div>}
 
       <section className={styles.summary}>
-        <div><small>REGISTERED SOURCES</small><strong>{sourcesTotal}</strong><span>Matching records in source register</span></div>
-        <div><small>IN REVIEW</small><strong>{Number(jobSummary.in_review ?? jobs.filter(j => j.status === 'REVIEW').length)}</strong><span>Books waiting for chapter review</span></div>
-        <div><small>APPROVED JOBS</small><strong>{Number(jobSummary.approved ?? jobs.filter(j => j.status === 'APPROVED').length)}</strong><span>Added to library as drafts</span></div>
+        <div><small>{t('admin.sourceIngestion.registeredSources')}</small><strong>{sourcesTotal}</strong><span>{t('admin.sourceIngestion.matchingSourceRecords')}</span></div>
+        <div><small>{t('admin.sourceIngestion.inReview')}</small><strong>{Number(jobSummary.in_review ?? jobs.filter(j => j.status === 'REVIEW').length)}</strong><span>{t('admin.sourceIngestion.booksAwaitingReview')}</span></div>
+        <div><small>{t('admin.sourceIngestion.approvedJobs')}</small><strong>{Number(jobSummary.approved ?? jobs.filter(j => j.status === 'APPROVED').length)}</strong><span>{t('admin.sourceIngestion.addedAsDrafts')}</span></div>
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.heading}><div><span>STEP 01</span><h2>Choose or register a source</h2><p>The tool checks linked PDFs, stored checksums and source references before downloading again.</p></div></div>
+        <div className={styles.heading}><div><span>{t('admin.sourceIngestion.stepOne')}</span><h2>{t('admin.sourceIngestion.chooseRegisterSource')}</h2><p>{t('admin.sourceIngestion.sourceChecksDescription')}</p></div></div>
         <div className={styles.fields}>
           <div className={styles.field}>
-            <label htmlFor="qe-source-search">Source record</label>
-            <input id="qe-source-search" value={sourceSearchDraft} onChange={e=>setSourceSearchDraft(e.target.value)} placeholder="Search title, provider, URL or edition…" aria-label="Search registered sources" />
+            <label htmlFor="qe-source-search">{t('admin.sourceIngestion.sourceRecord')}</label>
+            <input id="qe-source-search" value={sourceSearchDraft} onChange={e=>setSourceSearchDraft(e.target.value)} placeholder={t('admin.sourceIngestion.searchSourcePlaceholder')} aria-label={t('admin.sourceIngestion.searchRegisteredSources')} />
             <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',margin:'8px 0'}}>
-              <button type="button" className={styles.secondary} onClick={()=>{setSourceQuery(sourceSearchDraft.trim());setSourcePage(0)}}>Search sources</button>
-              <button type="button" className={styles.secondary} disabled={!sourceQuery&&!sourceSearchDraft} onClick={()=>{setSourceSearchDraft('');setSourceQuery('');setSourcePage(0)}}>Clear search</button>
+              <button type="button" className={styles.secondary} onClick={()=>{setSourceQuery(sourceSearchDraft.trim());setSourcePage(0)}} >{t('admin.sourceIngestion.searchSources')}</button>
+              <button type="button" className={styles.secondary} disabled={!sourceQuery&&!sourceSearchDraft} onClick={()=>{setSourceSearchDraft('');setSourceQuery('');setSourcePage(0)}}>{t('admin.sourceIngestion.clearSearch')}</button>
             </div>
-            <select aria-label="Choose registered source" value={selectedSource || 'new'} onChange={e => {
+            <select aria-label={t('admin.sourceIngestion.chooseRegisteredSource')} value={selectedSource || 'new'} onChange={e => {
               const value = e.target.value; setSelectedSource(value);
               if (value !== 'new') {
                 const source = sources.find(row => String(row.source_id) === value);
@@ -507,18 +522,18 @@ export default function SourceIngestionPage() {
                 setProvider(''); setSourceKind('BOARD_TEXTBOOK');
               }
             }}>
-              <option value="new">Register a new subject/source</option>
+              <option value="new">{t('admin.sourceIngestion.registerNewSource')}</option>
               {selectedSource && selectedSource!=='new' && !sources.some(source=>String(source.source_id)===selectedSource) &&
-                <option value={selectedSource}>Selected registered source #{selectedSource}</option>}
+                <option value={selectedSource}>{t('admin.sourceIngestion.selectedRegisteredSource', { sourceId: selectedSource })}</option>}
               {sources.map(source => <option key={source.source_id} value={source.source_id}>
                 {source.title} · {source.source_kind} {source.matching_pdf_asset_id ? '· PDF stored' : '· PDF not linked'}
               </option>)}
             </select>
             <PremiumPagination page={sourcePage} total={sourcesTotal} pageSize={sourcePageSize}
               onPageChange={setSourcePage} onPageSizeChange={size=>{setSourcePageSize(size);setSourcePage(0);}}
-              itemLabel="registered sources" loading={loading} />
+              itemLabel={t('admin.sourceIngestion.registeredSourcesPlural')} loading={loading} />
           </div>
-          <label>Class
+          <label>{t('admin.sourceIngestion.class')}
             <select value={classCode} onChange={e => {
               const value = e.target.value; setClassCode(value);
               setSubjectCode(tracks.find(t => t.class_code === value)?.subject_code || '');
@@ -527,58 +542,58 @@ export default function SourceIngestionPage() {
               {tracksByClass.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name} ({track.class_code})</option>)}
             </select>
           </label>
-          <label>Subject
+          <label>{t('admin.sourceIngestion.subject')}
             <select value={subjectCode} onChange={e => { setSubjectCode(e.target.value); setConfirmSubjectMapping(false); }}>
               {subjects.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
             </select>
           </label>
-          <label>Source title
-            <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder="Title printed on the book" />
+          <label>{t('admin.sourceIngestion.sourceTitle')}
+            <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={t('admin.sourceIngestion.bookTitlePlaceholder')} />
           </label>
-          <label className={styles.wide}>Official source URL (catalogue page or direct PDF)
-            <input type="url" value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} placeholder="https://official-board.example/book.pdf" />
+          <label className={styles.wide}>{t('admin.sourceIngestion.officialSourceUrl')}
+            <input type="url" value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} placeholder={t('admin.sourceIngestion.officialPdfPlaceholder')} />
           </label>
-          <label>Edition / session
-            <input value={edition} onChange={e => setEdition(e.target.value)} placeholder="Edition or academic session" />
+          <label>{t('admin.sourceIngestion.editionSession')}
+            <input value={edition} onChange={e => setEdition(e.target.value)} placeholder={t('admin.sourceIngestion.editionPlaceholder')} />
           </label>
-          <label>Language
-            <input value={language} onChange={e => setLanguage(e.target.value)} placeholder="hi / en" />
+          <label>{t('admin.sourceIngestion.language')}
+            <input value={language} onChange={e => setLanguage(e.target.value)} placeholder={t('admin.sourceIngestion.languagePlaceholder')} />
           </label>
           {selectedSource === 'new' && <>
-            <label>Provider / board
-              <input value={provider} onChange={e => setProvider(e.target.value)} placeholder="Board / publisher" />
+            <label>{t('admin.sourceIngestion.providerBoard')}
+              <input value={provider} onChange={e => setProvider(e.target.value)} placeholder={t('admin.sourceIngestion.providerPlaceholder')} />
             </label>
-            <label>Source type
-              <input value={sourceKind} onChange={e => setSourceKind(e.target.value)} placeholder="BOARD_TEXTBOOK" />
+            <label>{t('admin.sourceIngestion.sourceType')}
+              <input value={sourceKind} onChange={e => setSourceKind(e.target.value)} placeholder={t('admin.sourceIngestion.sourceTypePlaceholder')} />
             </label>
           </>}
         </div>
         <div className={styles.actions}>
-          <p>Manual website downloads are limited to the private library's 50 MiB per-file limit. Use the GHCR complete-book cache above for larger books; its full PDF is reviewed from disk and only approved chapter PDFs are copied into PostgreSQL.</p>
+          <p>{t('admin.sourceIngestion.downloadLimitGuidance')}</p>
           <button className={styles.primary} type="button" disabled={busy || !sourceTitle.trim() || !sourceUrl.trim() || !subjectCode} onClick={() => void startJob()}>
-            {busy ? 'Working…' : 'Check database & start download'}
+            {busy ? t('admin.sourceIngestion.working') : t('admin.sourceIngestion.startDownload')}
           </button>
         </div>
       </section>
 
       <section className={styles.panel}>
         <div className={styles.heading}>
-          <div><span>GHCR CACHE</span><h2>Use a persistent complete textbook</h2>
-            <p>These books are already stored in the Hindi/English GHCR images. The selected whole book is checksum-verified and reviewed from the mounted cache; the source website is not downloaded again.</p>
+          <div><span>{t('admin.sourceIngestion.ghcrCache')}</span><h2>{t('admin.sourceIngestion.persistentCompleteBook')}</h2>
+            <p>{t('admin.sourceIngestion.cacheDescription')}</p>
           </div>
-          <span className={styles.bigStatus}>{registryBooks.length} indexed books</span>
+          <span className={styles.bigStatus}>{t('admin.sourceIngestion.indexedBooks', { count: registryBooks.length })}</span>
         </div>
         <div className={styles.fields}>
-          <label>Medium
+          <label>{t('admin.sourceIngestion.medium')}
             <select value={registryMedium} onChange={e => { setRegistryMedium(e.target.value as 'hindi' | 'english'); setConfirmSubjectMapping(false); }}>
-              <option value="hindi">Hindi</option>
-              <option value="english">English</option>
+              <option value="hindi">{t('admin.sourceIngestion.hindi')}</option>
+              <option value="english">{t('admin.sourceIngestion.english')}</option>
             </select>
           </label>
-          <label>Complete textbook for {activeTrack?.class_name || 'selected class'}
+          <label>{t('admin.sourceIngestion.completeBookForClass', { className: activeTrack?.class_name || classCode || t('admin.sourceIngestion.class') })}
             <select value={selectedRegistryBookRow?.book_id || ''} onChange={e => { setSelectedRegistryBook(e.target.value); setConfirmSubjectMapping(false); }}
               disabled={!registryBookOptions.length}>
-              {registryBookOptions.length === 0 && <option value="">No cached books for this class/medium</option>}
+              {registryBookOptions.length === 0 && <option value="">{t('admin.sourceIngestion.noCachedBooksOption')}</option>}
               {registryBookOptions.map(book => <option key={book.book_id} value={book.book_id}>
                 {book.title} — {book.subject || 'Subject not specified'} · {book.publisher}
               </option>)}
@@ -592,7 +607,7 @@ export default function SourceIngestionPage() {
           <code>{selectedRegistryBookRow.book_id} · SHA-256 {String(selectedRegistryBookRow.sha256 || '').slice(0, 16)}…</code>
           <label className={styles.mappingConfirm}>
             <input type="checkbox" checked={confirmSubjectMapping} onChange={e => setConfirmSubjectMapping(e.target.checked)} />
-            <span>I checked this book and confirm it belongs to {activeTrack?.class_name || classCode} · {subjects.find(t => t.subject_code === subjectCode)?.subject_name || subjectCode}.</span>
+            <span>{t('admin.sourceIngestion.confirmSelectedMapping', { className: activeTrack?.class_name || classCode, subjectName: subjects.find(t => t.subject_code === subjectCode)?.subject_name || subjectCode })}</span>
           </label>
         </div> : <p className={styles.help}>
           {registryBooks.length === 0
@@ -611,103 +626,103 @@ export default function SourceIngestionPage() {
 
       <section className={styles.panel}>
         <div className={styles.heading}>
-          <div><span>SOURCE AVAILABILITY</span><h2>Unavailable books and missing chapters</h2>
-            <p>This inventory is read-only. Chapter numbers detected in rejected/incomplete official bundles are for planning only; those partial bundles are not cached or available to students. These rows cannot be ingested as complete textbooks.</p>
+          <div><span>{t('admin.sourceIngestion.sourceAvailability')}</span><h2>{t('admin.sourceIngestion.unavailableBooks')}</h2>
+            <p>{t('admin.sourceIngestion.sourceGapsDescription')}</p>
           </div>
-          <span className={styles.bigStatus}>{registryBookGapRows.length} gaps</span>
+          <span className={styles.bigStatus}>{t('admin.sourceIngestion.gapCount', { count: registryBookGapRows.length })}</span>
         </div>
         {registryBookGapRows.length === 0
-          ? <p className={styles.empty}>No reported source gaps for Class {selectedGrade || '—'} · {registryMedium}. This means no gap was recorded in the currently synced cache indexes; refresh the cache inventory to see newer source reports.</p>
+          ? <p className={styles.empty}>{t('admin.sourceIngestion.noReportedGaps', { classNumber: selectedGrade || '—', medium: registryMedium === 'hindi' ? t('admin.sourceIngestion.hindi') : t('admin.sourceIngestion.english') })}</p>
           : <div className={styles.gapList}>
               {registryBookGapRows.map((gap) => <article className={styles.gapCard} key={gap.medium + ':' + gap.class + ':' + gap.book_id}>
                 <div className={styles.gapTop}>
-                  <div><b>{gap.title}</b><small>{gap.book_id} · {gap.publisher || 'Official source'} · {gap.subject || 'Subject unspecified'}</small></div>
+                  <div><b>{gap.title}</b><small>{gap.book_id} · {gap.publisher || t('admin.sourceIngestion.officialSource')} · {gap.subject || t('admin.sourceIngestion.subjectUnspecified')}</small></div>
                   <span className={styles.gapBadge}>{gap.status.replaceAll('_', ' ').toUpperCase()}</span>
                 </div>
                 <div className={styles.gapCoverage}>
-                  <span><b>Chapters detected in rejected bundle (not cached):</b> {gap.available_chapters?.length ? gap.available_chapters.join(', ') : 'None verified'}</span>
-                  <span><b>Missing chapter numbers:</b> {gap.missing_chapters?.length ? gap.missing_chapters.join(', ') : 'Not determined by source'}</span>
-                  {gap.expected_chapters?.length ? <span><b>Expected chapters:</b> {gap.expected_chapters.join(', ')}</span> : null}
+                  <span><b>{t('admin.sourceIngestion.chaptersDetectedNotCached')}</b> {gap.available_chapters?.length ? gap.available_chapters.join(', ') : t('admin.sourceIngestion.noneVerified')}</span>
+                  <span><b>{t('admin.sourceIngestion.missingChapterNumbers')}</b> {gap.missing_chapters?.length ? gap.missing_chapters.join(', ') : t('admin.sourceIngestion.notDeterminedBySource')}</span>
+                  {gap.expected_chapters?.length ? <span><b>{t('admin.sourceIngestion.expectedChapters')}</b> {gap.expected_chapters.join(', ')}</span> : null}
                 </div>
                 {gap.note && <p>{gap.note}</p>}
                 {gap.last_error && <p className={styles.gapError}>{gap.last_error}</p>}
-                {gap.source_url && <a href={gap.source_url} target="_blank" rel="noreferrer">Open official source or bundle URL</a>}
+                {gap.source_url && <a href={gap.source_url} target="_blank" rel="noreferrer">{t('admin.sourceIngestion.openSourceUrl')}</a>}
               </article>)}
             </div>}
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.heading}><div><span>DATABASE CHECK</span><h2>Existing chapter/source records</h2>
-          <p>Compare stored chapter mappings with any chapter PDFs already associated with the registered source before processing a new download.</p></div>
-          <span className={styles.bigStatus}>{existingMappings.length} mappings</span>
+        <div className={styles.heading}><div><span>{t('admin.sourceIngestion.databaseCheck')}</span><h2>{t('admin.sourceIngestion.existingChapterRecords')}</h2>
+          <p>{t('admin.sourceIngestion.mappingDescription')}</p></div>
+          <span className={styles.bigStatus}>{t('admin.sourceIngestion.mappingsCount', { count: existingMappings.length })}</span>
         </div>
         {mappingError && <div className={styles.error} role="alert">{mappingError}</div>}
         {selectedSource === 'new' || !selectedSource
-          ? <p className={styles.empty}>Select an existing source record above to inspect its chapter_source relationships.</p>
+          ? <p className={styles.empty}>{t('admin.sourceIngestion.selectExistingSource')}</p>
           : existingMappings.length === 0
-            ? <p className={styles.empty}>No chapter_source mappings are registered for this source yet. A new book download can create mappings after the chapter PDFs are reviewed and approved.</p>
+            ? <p className={styles.empty}>{t('admin.sourceIngestion.noMappings')}</p>
             : <div className={styles.existingMappingList}>{existingMappings.map(row => <article className={styles.existingMapping} key={row.chapter_source_id}>
               <div className={styles.mappingIdentity}>
                 <b>{row.chapter_code} — {row.chapter_name}</b>
-                <small>Mapping: {row.coverage_status} · {row.coverage_type}</small>
-                {row.source_chapter_title && <small>Source chapter: {row.source_chapter_title}{row.source_chapter_no ? ' · No. ' + row.source_chapter_no : ''}</small>}
-                {row.source_locator && <small>Source locator: {row.source_locator}</small>}
+                <small>{t('admin.sourceIngestion.mapping')}: {sourceStatusLabel(row.coverage_status, t)} · {sourceStatusLabel(row.coverage_type, t)}</small>
+                {row.source_chapter_title && <small>{t('admin.sourceIngestion.sourceChapter')}: {row.source_chapter_title}{row.source_chapter_no ? ' · ' + t('admin.sourceIngestion.numberAbbreviation') + ' ' + row.source_chapter_no : ''}</small>}
+                {row.source_locator && <small>{t('admin.sourceIngestion.sourceLocator')}: {row.source_locator}</small>}
                 {row.notes && <p>{row.notes}</p>}
               </div>
               <div className={styles.mappingAsset}>
                 {row.pdf_asset_id
-                  ? <><b>{row.pdf_title || row.document_title || 'Stored chapter PDF'}</b>
-                    <span>{row.document_status || 'No document status'} · {row.pdf_page_count || '—'} pages · Asset #{row.pdf_asset_id}</span>
-                    <span>Asset review: {row.pdf_review_status || 'unknown'}</span>
-                    {row.document_source_url && <a href={row.document_source_url} target="_blank" rel="noreferrer">Open recorded source URL</a>}
+                  ? <><b>{row.pdf_title || row.document_title || t('admin.sourceIngestion.storedChapterPdf')}</b>
+                    <span>{row.document_status ? sourceStatusLabel(row.document_status, t) : t('admin.sourceIngestion.noDocumentStatus')} · {row.pdf_page_count || '—'} pages · Asset #{row.pdf_asset_id}</span>
+                    <span>Asset review: {row.pdf_review_status ? sourceStatusLabel(row.pdf_review_status, t) : t('admin.sourceIngestion.unknown')}</span>
+                    {row.document_source_url && <a href={row.document_source_url} target="_blank" rel="noreferrer">{t('admin.sourceIngestion.openRecordedUrl')}</a>}
                   </>
-                  : <><b>No source-linked chapter PDF detected</b><span>Mapping metadata exists, but no chapter PDF could be confidently linked to this source. Verify the URL and process the book above.</span></>}
+                  : <><b>{t('admin.sourceIngestion.noLinkedPdf')}</b><span>{t('admin.sourceIngestion.mappingWithoutPdf')}</span></>}
               </div>
             </article>)}</div>}
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.heading}><div><span>STEP 02</span><h2>Ingestion jobs</h2><p>Open a job to review the book, detected chapter headings, page ranges and chapter-wise PDFs.</p></div>
-          <button className={styles.secondary} type="button" disabled={busy} onClick={() => void refreshJob()}>Refresh status</button>
+        <div className={styles.heading}><div><span>{t('admin.sourceIngestion.stepTwo')}</span><h2>{t('admin.sourceIngestion.ingestionJobs')}</h2><p>{t('admin.sourceIngestion.jobsDescription')}</p></div>
+          <button className={styles.secondary} type="button" disabled={busy} onClick={() => void refreshJob()}>{t('admin.sourceIngestion.refreshJobStatus')}</button>
         </div>
-        {loading ? <p className={styles.empty} role="status" aria-live="polite">Loading source records…</p> : jobs.length === 0 ? <p className={styles.empty}>No ingestion jobs yet. Start with a source above.</p> :
+        {loading ? <p className={styles.empty} role="status" aria-live="polite">{t('admin.sourceIngestion.loadingSourceRecords')}</p> : jobs.length === 0 ? <p className={styles.empty}>{t('admin.sourceIngestion.noJobs')}</p> :
           <div className={styles.jobList}>{jobs.map(row => <button type="button" key={row.job_id}
             className={styles.jobButton + (job?.job_id === row.job_id ? ' ' + styles.selected : '')}
             onClick={() => void loadJob(row.job_id)}>
-            <span className={styles.jobStatus + ' ' + styles['status' + row.status]}>{row.status}</span>
+            <span className={styles.jobStatus + ' ' + styles['status' + row.status]}>{sourceStatusLabel(row.status, t)}</span>
             <b>#{row.job_id} · {row.source_title}</b>
-            <small>{row.class_name} · {row.subject_name} · {row.page_count ? row.page_count + ' pages' : 'PDF not ready'}</small>
-            <small>{row.chapter_count} chapter candidates · {row.approved_chapter_count} approved · {row.rejected_chapter_count || 0} rejected</small>
+            <small>{row.class_name} · {row.subject_name} · {row.page_count ? t('admin.sourceIngestion.pageCount', { count: row.page_count }) : t('admin.sourceIngestion.pdfNotReady')}</small>
+            <small>{t('admin.sourceIngestion.chapterCandidates', { count: row.chapter_count || 0 })} · {t('admin.sourceIngestion.approvedCount', { count: row.approved_chapter_count || 0 })} · {t('admin.sourceIngestion.rejectedCount', { count: row.rejected_chapter_count || 0 })}</small>
             {row.error_message && <small className={styles.jobError}>{row.error_message}</small>}
           </button>)}</div>}
         <PremiumPagination page={jobPage} total={jobsTotal} pageSize={jobPageSize}
           onPageChange={setJobPage} onPageSizeChange={size=>{setJobPageSize(size);setJobPage(0);}}
           itemLabel="ingestion jobs" loading={loading} />
-        {latestReviewJobs.length > 0 && <p className={styles.help}>Jobs still marked DOWNLOADING may need a minute for the PDF to be fetched and inspected. Select the job and refresh its status.</p>}
+        {latestReviewJobs.length > 0 && <p className={styles.help}>{t('admin.sourceIngestion.downloadingHelp')}</p>}
       </section>
 
       {job && <section className={styles.panel}>
-        <div className={styles.heading}><div><span>STEP 03</span><h2>Review job #{job.job_id}: {job.source_title}</h2>
-          <p>{job.class_name} · {job.subject_name} · {job.edition} · {job.page_count || '—'} pages · <b>{job.status}</b></p></div>
-          <span className={styles.bigStatus}>{job.status}</span></div>
+        <div className={styles.heading}><div><span>{t('admin.sourceIngestion.stepThree')}</span><h2>{t('admin.sourceIngestion.reviewJob', { jobId: job.job_id, title: job.source_title })}</h2>
+          <p>{job.class_name} · {job.subject_name} · {job.edition} · {job.page_count ? t('admin.sourceIngestion.pageCount', { count: job.page_count }) : '—'} · <b>{sourceStatusLabel(job.status, t)}</b></p></div>
+          <span className={styles.bigStatus}>{sourceStatusLabel(job.status, t)}</span></div>
         {job.error_message && <div className={styles.error} role="alert">{job.error_message}</div>}
         {job.status === 'REVIEW' && <div className={styles.metadataReview}>
-          <div><b>Source provenance</b><p>Before approving this book, verify the printed edition/reprint year or academic session in the PDF. Edit the source title, official HTTPS URL and edition in Step 01 above, then save them here.</p></div>
+          <div><b>{t('admin.sourceIngestion.sourceProvenance')}</b><p>{t('admin.sourceIngestion.provenanceInstructions')}</p></div>
           <button className={styles.secondary} type="button" disabled={busy}
-            onClick={() => void saveJobMetadata()}>Save verified source metadata</button>
+            onClick={() => void saveJobMetadata()}>{t('admin.sourceIngestion.saveVerifiedMetadata')}</button>
         </div>}
         {job.status === 'DOWNLOADING' && <div className={styles.empty}>The source is being checked and downloaded. Select “Refresh status” above to see the detected PDF outline.</div>}
         {job.status === 'REVIEW' && <>
           <div className={styles.preview}>
             <div className={styles.previewBar}>
-              <div><b>Private PDF preview</b><small>Review page boundaries visually before splitting.</small></div>
-              <label>Preview
+              <div><b>{t('admin.sourceIngestion.privatePdfPreview')}</b><small>{t('admin.sourceIngestion.previewDescription')}</small></div>
+              <label>{t('admin.sourceIngestion.preview')}
                 <select value={previewChapterRow} onChange={e => { setPreviewChapterRow(e.target.value); setPreviewPage('1'); }}>
-                  <option value="">Complete book · source pages</option>
-                  {job.chapters.map(ch => <option key={ch.chapter_row_id} value={ch.chapter_row_id}>{ch.chapter_title} · split PDF</option>)}
+                  <option value="">{t('admin.sourceIngestion.completeBookPages')}</option>
+                  {job.chapters.map(ch => <option key={ch.chapter_row_id} value={ch.chapter_row_id}>{ch.chapter_title} · {t('admin.sourceIngestion.splitPdf')}</option>)}
                 </select>
               </label>
-              <label>Page
+              <label>{t('admin.sourceIngestion.page')}
                 <input type="number" min="1" max={previewChapterRow ? (job.chapters.find(ch => String(ch.chapter_row_id) === previewChapterRow)?.pdf_page_count || 2000) : (job.page_count || 2000)}
                   value={previewPage} onChange={e => setPreviewPage(e.target.value)} />
               </label>
@@ -715,62 +730,62 @@ export default function SourceIngestionPage() {
             {(job.book_asset_id || job.cache_book_id) && <img className={styles.previewImage} src={previewUrl} alt="Privately rendered PDF page preview" />}
           </div>
           <div className={styles.outline}>
-            <div className={styles.outlineHeading}><div><h3>Detected chapter outline</h3><p>Bookmarks or recognizable chapter headings are suggestions, not trusted mappings. Correct them before splitting.</p></div>
-              {job.detected_outline?.length > 0 && <button className={styles.secondary} type="button" onClick={applyDetectedOutline}>Use detected page ranges</button>}
+            <div className={styles.outlineHeading}><div><h3>{t('admin.sourceIngestion.detectedOutline')}</h3><p>{t('admin.sourceIngestion.outlineHelp')}</p></div>
+              {job.detected_outline?.length > 0 && <button className={styles.secondary} type="button" onClick={applyDetectedOutline}>{t('admin.sourceIngestion.useDetectedRanges')}</button>}
             </div>
             {job.detected_outline?.length ? <div className={styles.outlineList}>{job.detected_outline.map((item, index) =>
               <div key={index}><b>{item.title}</b><span>PDF pages {item.pageStart}–{item.pageEnd || job.page_count}</span></div>)}</div>
-              : <p className={styles.help}>No reliable table-of-contents bookmarks/headings were detected. Add chapter mappings and page ranges manually below.</p>}
+              : <p className={styles.help}>{t('admin.sourceIngestion.noOutline')}</p>}
           </div>
           <div className={styles.chapterEditor}>
-            <div className={styles.outlineHeading}><div><h3>Map and split chapters</h3><p>Select only chapters present in this PDF. Ranges use 1-based PDF pages and cannot overlap.</p></div></div>
+            <div className={styles.outlineHeading}><div><h3>{t('admin.sourceIngestion.mapSplitChapters')}</h3><p>{t('admin.sourceIngestion.chapterRangeHelp')}</p></div></div>
             <div className={styles.mappingList}>
               {mapping.map(row => <div key={row.key} className={styles.mappingRow}>
-                <label className={styles.include}><input type="checkbox" checked={row.included} onChange={e => updateMapping(row.key, { included: e.target.checked })} /><span>Include</span></label>
-                <label>Detected / chapter title<input value={row.title} onChange={e => updateMapping(row.key, { title: e.target.value })} /></label>
-                <label>Curriculum chapter
+                <label className={styles.include}><input type="checkbox" checked={row.included} onChange={e => updateMapping(row.key, { included: e.target.checked })} /><span>{t('admin.sourceIngestion.include')}</span></label>
+                <label>{t('admin.sourceIngestion.detectedChapterTitle')}<input value={row.title} onChange={e => updateMapping(row.key, { title: e.target.value })} /></label>
+                <label>{t('admin.sourceIngestion.curriculumChapter')}
                   <select value={row.chapterId} onChange={e => updateMapping(row.key, { chapterId: e.target.value })}>
-                    <option value="">Choose mapping…</option>
+                    <option value="">{t('admin.sourceIngestion.chooseMapping')}</option>
                     {chapterOptions.map(ch => <option key={ch.chapter_id} value={ch.chapter_id}>{ch.chapter_code} — {ch.chapter_name}</option>)}
                   </select>
                 </label>
-                <label>Start<input type="number" min="1" max={job.page_count || 2000} value={row.start} onChange={e => updateMapping(row.key, { start: e.target.value })} /></label>
-                <label>End<input type="number" min={row.start || 1} max={job.page_count || 2000} value={row.end} onChange={e => updateMapping(row.key, { end: e.target.value })} /></label>
+                <label>{t('admin.sourceIngestion.startPage')}<input type="number" min="1" max={job.page_count || 2000} value={row.start} onChange={e => updateMapping(row.key, { start: e.target.value })} /></label>
+                <label>{t('admin.sourceIngestion.endPage')}<input type="number" min={row.start || 1} max={job.page_count || 2000} value={row.end} onChange={e => updateMapping(row.key, { end: e.target.value })} /></label>
               </div>)}
             </div>
             <div className={styles.actions}>
-              <p>Splitting creates private, checksum-deduplicated chapter PDFs in review status. Students cannot see them at this stage.</p>
-              <button className={styles.primary} type="button" disabled={busy || chapterOptions.length === 0} onClick={() => void splitChapters()}>{busy ? 'Splitting…' : 'Create chapter PDFs for review'}</button>
+              <p>{t('admin.sourceIngestion.privateReviewHelp')}</p>
+              <button className={styles.primary} type="button" disabled={busy || chapterOptions.length === 0} onClick={() => void splitChapters()}>{busy ? t('admin.sourceIngestion.splitting') : t('admin.sourceIngestion.createChapters')}</button>
             </div>
           </div>
           {job.chapters.length > 0 && <div className={styles.reviewList}>
-            <div className={styles.outlineHeading}><div><h3>Chapter PDF review queue</h3><p>Preview each split, confirm title and mapping, then approve or reject it.</p></div></div>
+            <div className={styles.outlineHeading}><div><h3>{t('admin.sourceIngestion.chapterReviewQueue')}</h3><p>{t('admin.sourceIngestion.chapterReviewQueueHelp')}</p></div></div>
             {job.chapters.map(ch => <article className={styles.chapterCard} key={ch.chapter_row_id}>
               <div><b>{ch.chapter_title}</b><small>{ch.chapter_code} · source pages {ch.page_start}–{ch.page_end} · {ch.pdf_page_count} pages</small>
-                <small>Asset review: {ch.pdf_review_status || 'REVIEW'} · {ch.pdf_sha256 ? ch.pdf_sha256.slice(0, 16) + '…' : ''}</small>
+                <small>{t('admin.sourceIngestion.assetReviewStatus', { status: ch.pdf_review_status ? sourceStatusLabel(ch.pdf_review_status, t) : t('admin.sourceIngestion.status.REVIEW') })} · {ch.pdf_sha256 ? ch.pdf_sha256.slice(0, 16) + '…' : ''}</small>
                 {ch.review_notes && <p>{ch.review_notes}</p>}
               </div>
               <span className={styles.jobStatus + ' ' + styles['status' + ch.status]}>{ch.status}</span>
               <div className={styles.chapterActions}>
-                <button type="button" className={styles.secondary} onClick={() => { setPreviewChapterRow(String(ch.chapter_row_id)); setPreviewPage('1'); }}>Preview</button>
-                <button type="button" className={styles.approve} disabled={busy || ch.status === 'APPROVED'} onClick={() => void reviewChapter(ch, 'APPROVED')}>Approve</button>
-                <button type="button" className={styles.reject} disabled={busy || ch.status === 'REJECTED'} onClick={() => void reviewChapter(ch, 'REJECTED')}>Reject</button>
+                <button type="button" className={styles.secondary} onClick={() => { setPreviewChapterRow(String(ch.chapter_row_id)); setPreviewPage('1'); }}>{t('admin.sourceIngestion.preview')}</button>
+                <button type="button" className={styles.approve} disabled={busy || ch.status === 'APPROVED'} onClick={() => void reviewChapter(ch, 'APPROVED')}>{t('admin.sourceIngestion.approve')}</button>
+                <button type="button" className={styles.reject} disabled={busy || ch.status === 'REJECTED'} onClick={() => void reviewChapter(ch, 'REJECTED')}>{t('admin.sourceIngestion.reject')}</button>
               </div>
             </article>)}
             <div className={styles.actions}>
-              <p>Final approval requires saved, verified source edition/session metadata. It adds the complete book when it fits the library limit and only approved chapter PDFs to the library as drafts. Every chapter must be explicitly approved or rejected, and at least one chapter must be approved. A publisher must then preview and publish each resource for students.</p>
-              <button className={styles.primary} type="button" disabled={busy || !job.chapters.length || job.chapters.some(ch => !['APPROVED', 'REJECTED'].includes(ch.status)) || !job.chapters.some(ch => ch.status === 'APPROVED')} onClick={() => void approveJob()}>Approve book & approved chapters</button>
-              <button className={styles.reject} type="button" disabled={busy} onClick={() => void rejectJob()}>Reject entire ingestion</button>
+              <p>{t('admin.sourceIngestion.finalApprovalRules')}</p>
+              <button className={styles.primary} type="button" disabled={busy || !job.chapters.length || job.chapters.some(ch => !['APPROVED', 'REJECTED'].includes(ch.status)) || !job.chapters.some(ch => ch.status === 'APPROVED')} onClick={() => void approveJob()}>{t('admin.sourceIngestion.approveBookAndChapters')}</button>
+              <button className={styles.reject} type="button" disabled={busy} onClick={() => void rejectJob()}>{t('admin.sourceIngestion.rejectIngestion')}</button>
             </div>
           </div>}
         </>}
         {job.status === 'APPROVED' && <>
-          <div className={styles.approvedNote}>Approved. The complete book and chapter PDFs are now in the textbook library as drafts. Use Admin → Textbook library to publish the resources when they are ready for students.</div>
+          <div className={styles.approvedNote}>{t('admin.sourceIngestion.approvedNotice')}</div>
           {job.book_asset_id && <div className={styles.metadataReview}>
-            <div><b>Searchable textbook text</b>
-              <p>Extract page text from this approved complete book so the AI Tutor can retrieve relevant source passages. Extraction does not publish lessons or questions.</p>
+            <div><b>{t('admin.sourceIngestion.searchableText')}</b>
+              <p>{t('admin.sourceIngestion.searchableTextHelp')}</p>
               {extractionStatus && <p role="status" aria-live="polite">
-                Status: <b>{extractionStatus.status}</b>
+                {t('admin.sourceIngestion.extractionStatus')} <b>{sourceStatusLabel(extractionStatus.status, t)}</b>
                 {typeof extractionStatus.total_pages === 'number' ? ' · ' + extractionStatus.processed_pages + '/' + extractionStatus.total_pages + ' pages processed' : ''}
                 {typeof extractionStatus.extracted_pages === 'number' ? ' · ' + extractionStatus.extracted_pages + ' pages with text' : ''}
                 {typeof extractionStatus.ocr_pages === 'number' ? ' · ' + extractionStatus.ocr_pages + ' OCR pages' : ''}
@@ -780,13 +795,13 @@ export default function SourceIngestionPage() {
             </div>
             <div className={styles.chapterActions}>
               <button className={styles.primary} type="button" disabled={busy || ['PENDING','RUNNING'].includes(extractionStatus?.status || '')} onClick={() => void queueTextbookExtraction()}>
-                {extractionStatus?.status === 'COMPLETE' ? 'Recheck / re-extract book' : 'Extract searchable text'}
+                {extractionStatus?.status === 'COMPLETE' ? t('admin.sourceIngestion.recheckExtraction') : t('admin.sourceIngestion.extractText')}
               </button>
-              <button className={styles.secondary} type="button" disabled={busy || !extractionStatus} onClick={() => void refreshTextbookExtraction()}>Refresh extraction status</button>
+              <button className={styles.secondary} type="button" disabled={busy || !extractionStatus} onClick={() => void refreshTextbookExtraction()}>{t('admin.sourceIngestion.refreshExtractionStatus')}</button>
             </div>
           </div>}
         </>}
-        {job.status === 'REJECTED' && <div className={styles.empty}>This ingestion was rejected and its pending PDF assets remain hidden from the reusable library.</div>}
+        {job.status === 'REJECTED' && <div className={styles.empty}>{t('admin.sourceIngestion.rejectedNotice')}</div>}
       </section>}
     </section>
   </main>;
