@@ -1,3 +1,4 @@
+import { UiText } from './i18n/useUiTranslation';
 import { LanguageSwitcher, LocaleText } from './components/LanguageProvider';
 import Link from 'next/link';
 import QuantaEdgeBrand from './components/QuantaEdgeBrand';
@@ -21,9 +22,9 @@ export default function Home() {
         <QuantaEdgeBrand variant="header" />
 
         <nav className="topnav" aria-label="Main navigation">
-          <a href="#how-it-works"><LocaleText hinglish="कैसे काम करता है" english="How it works" /></a>
-          <a href="#subjects"><LocaleText hinglish="पढ़ाई" english="Learning" /></a>
-          <a href="#parents"><LocaleText hinglish="Parents" english="Parents" /></a>
+          <a href="#how-it-works"><UiText message="legacy.web.how.it.works.5f2a2c5d" /></a>
+          <a href="#subjects"><UiText message="legacy.web.learning.9e92d931" /></a>
+          <a href="#parents"><UiText message="legacy.web.parents.a532bfe5" /></a>
         </nav>
 
         <div className="top-actions"><LanguageSwitcher compact />
@@ -33,21 +34,21 @@ export default function Home() {
 
       <section className="hero">
         <div className="hero-copy">
-          <div className="eyebrow"><span className="live-dot" /> <LocaleText hinglish="कक्षा 6–8 · Bihar Board · हिन्दी माध्यम" english="Classes 6–8 · Bihar Board · Hindi medium" /></div>
-          <h1><LocaleText hinglish="पढ़ाई," english="Learning," /><br /><em><LocaleText hinglish="बच्चे के हिसाब से।" english="adapted to each child." /></em></h1>
+          <div className="eyebrow"><span className="live-dot" /> <UiText message="legacy.web.classes.6.8.bihar.board.hindi.medium.4009abd6" /></div>
+          <h1><UiText message="legacy.web.learning.5028b955" /><br /><em><UiText message="legacy.web.adapted.to.each.child.291c43fd" /></em></h1>
           <p className="hero-lead">
-            <LocaleText hinglish="QuantaEdge सिर्फ answers नहीं देता। Diagnostic, practice और real learning records के आधार पर बच्चे का अगला learning step तय होता है।" english="QuantaEdge does more than provide answers. Diagnostics, practice, and real learning records help choose each child's next learning step." />
+            <UiText message="legacy.web.quantaedge.does.more.than.provide.answ.41cfb954" />
           </p>
 
           <div className="hero-actions">
-            <Link href="/login/student" className="button button-dark"><LocaleText hinglish="अपनी पढ़ाई शुरू करें" english="Start learning" /> <span>→</span></Link>
-            <Link href="/login" className="button button-light"><LocaleText hinglish="मैं Parent हूँ" english="I'm a parent" /></Link>
+            <Link href="/login/student" className="button button-dark"><UiText message="legacy.web.start.learning.c0c87037" /> <span>→</span></Link>
+            <Link href="/login" className="button button-light"><UiText message="legacy.web.i.m.a.parent.21661703" /></Link>
           </div>
 
           <div className="trust-row">
-            <span><LocaleText hinglish="✓ कोई public ranking नहीं" english="✓ No public rankings" /></span>
-            <span><LocaleText hinglish="✓ Learning पर focus" english="✓ Focus on learning" /></span>
-            <span><LocaleText hinglish="✓ Parent को progress दिखेगी" english="✓ Parents can see progress" /></span>
+            <span><UiText message="legacy.web.no.public.rankings.ff0693c0" /></span>
+            <span><UiText message="legacy.web.focus.on.learning.49160904" /></span>
+            <span><UiText message="legacy.web.parents.can.see.progress.bad0199a" /></span>
           </div>
         </div>
 
@@ -55,55 +56,55 @@ export default function Home() {
           <div className="device-glow" />
           <div className="student-card">
             <div className="student-head">
-              <div><span className="muted-small"><LocaleText hinglish="Learning journey" english="Learning journey" /></span><h3><LocaleText hinglish="आपके बच्चे के लिए" english="For your child" /></h3></div>
+              <div><span className="muted-small"><UiText message="legacy.web.learning.journey.8c1c2635" /></span><h3><UiText message="legacy.web.for.your.child.60a0d8db" /></h3></div>
               <div className="avatar">Q</div>
             </div>
 
             <div className="mission-card">
               <div>
-                <span className="mission-label"><LocaleText hinglish="आज की पढ़ाई" english="Today's learning" /></span>
-                <strong><LocaleText hinglish="एक concept · अगला सही step" english="One concept · one right next step" /></strong>
+                <span className="mission-label"><UiText message="legacy.web.today.s.learning.f636afdf" /></span>
+                <strong><UiText message="legacy.web.one.concept.one.right.next.step.ee2df317" /></strong>
                 <div className="progress-track"><span style={{ width: '58%' }} /></div>
-                <small><LocaleText hinglish="Answers के साथ progress save होती है" english="Progress saves as you answer" /></small>
+                <small><UiText message="legacy.web.progress.saves.as.you.answer.7f4dc282" /></small>
               </div>
-              <span className="streak"><LocaleText hinglish="LIVE" english="LIVE" /></span>
+              <span className="streak"><UiText message="legacy.web.live.0fa74861" /></span>
             </div>
 
-            <div className="section-title"><strong><LocaleText hinglish="Learning flow" english="Learning flow" /></strong><span><LocaleText hinglish="adaptive" english="adaptive" /></span></div>
+            <div className="section-title"><strong><UiText message="legacy.web.learning.flow.ddb1d3cd" /></strong><span><UiText message="legacy.web.adaptive.716d0f79" /></span></div>
 
             <div className="task done">
               <span className="task-icon">↻</span>
-              <div><strong><LocaleText hinglish="समझें" english="Learn" /></strong><small><LocaleText hinglish="Prerequisite · explanation · worked example" english="Prerequisite · explanation · worked example" /></small></div>
+              <div><strong><UiText message="legacy.web.learn.e055cff7" /></strong><small><UiText message="legacy.web.prerequisite.explanation.worked.exampl.cc9f4ed1" /></small></div>
               <span className="check">✓</span>
             </div>
 
             <div className="task active">
               <span className="task-icon">∑</span>
-              <div><strong><LocaleText hinglish="Practice करें" english="Practise" /></strong><small><LocaleText hinglish="Interactive questions · instant feedback" english="Interactive questions · instant feedback" /></small></div>
+              <div><strong><UiText message="legacy.web.practise.ea71f373" /></strong><small><UiText message="legacy.web.interactive.questions.instant.feedback.8e04e36d" /></small></div>
               <span className="arrow">→</span>
             </div>
 
             <div className="task">
               <span className="task-icon">✦</span>
-              <div><strong><LocaleText hinglish="Mastery बढ़ाएँ" english="Build mastery" /></strong><small><LocaleText hinglish="Concept mastery के आधार पर अगला step" english="Next step based on concept mastery" /></small></div>
+              <div><strong><UiText message="legacy.web.build.mastery.4877ba09" /></strong><small><UiText message="legacy.web.next.step.based.on.concept.mastery.3c4e876f" /></small></div>
               <span className="arrow">→</span>
             </div>
 
-            <Link href="/login/student" className="device-cta"><LocaleText hinglish="अपनी learning journey शुरू करें →" english="Start your learning journey →" /></Link>
+            <Link href="/login/student" className="device-cta"><UiText message="legacy.web.start.your.learning.journey.0d258640" /></Link>
           </div>
         </div>
       </section>
 
       <section className="strip">
-        <span><LocaleText hinglish="एक learning system जो हर बच्चे के लिए सही अगला step चुनता है" english="A learning system that chooses the right next step for every child" /></span>
+        <span><UiText message="legacy.web.a.learning.system.that.chooses.the.rig.16c2fefa" /></span>
         <div><b>DIAGNOSE</b><i>→</i><b>LEARN</b><i>→</i><b>PRACTICE</b><i>→</i><b>MASTER</b></div>
       </section>
 
       <section id="how-it-works" className="section">
         <div className="section-intro">
-          <span className="eyebrow"><LocaleText hinglish="हमारा learning loop" english="Our learning loop" /></span>
-          <h2><LocaleText hinglish="सिर्फ content नहीं।" english="More than content." /><br /><em><LocaleText hinglish="हर बार एक सही next step।" english="The right next step, every time." /></em></h2>
-          <p><LocaleText hinglish="Progress, question attempts, sessions और concept mastery save रहते हैं और अगली recommendation तय करने में मदद करते हैं।" english="Progress, question attempts, sessions, and concept mastery inform the next recommendation." /></p>
+          <span className="eyebrow"><UiText message="legacy.web.our.learning.loop.fea94a66" /></span>
+          <h2><UiText message="legacy.web.more.than.content.76733b95" /><br /><em><UiText message="legacy.web.the.right.next.step.every.time.3f3b50f8" /></em></h2>
+          <p><UiText message="legacy.web.progress.question.attempts.sessions.an.70713d1a" /></p>
         </div>
 
         <div className="promise-grid">
@@ -119,15 +120,15 @@ export default function Home() {
 
       <section id="subjects" className="section section-soft">
         <div className="section-heading">
-          <div><span className="eyebrow"><LocaleText hinglish="अभी शुरू करें" english="Start now" /></span><h2><LocaleText hinglish="आपकी पढ़ाई का पहला step" english="Your first step in learning" /></h2></div>
-          <Link href="/login/student" className="text-link"><LocaleText hinglish="शुरू करें →" english="Get started →" /></Link>
+          <div><span className="eyebrow"><UiText message="legacy.web.start.now.88b76ad2" /></span><h2><UiText message="legacy.web.your.first.step.in.learning.ddd4ba00" /></h2></div>
+          <Link href="/login/student" className="text-link"><UiText message="legacy.web.get.started.cd90a839" /></Link>
         </div>
 
         <div className="subject-grid">
           {subjects.map(subject => (
             <Link href="/login/student" className="subject-card" key={subject.name}>
               <div className={`subject-icon ${subject.tone}`}>{subject.icon}</div>
-              <div><span><LocaleText hinglish="कक्षा 6–8" english="Classes 6–8" /></span><h3>{subject.name === 'गणित' ? <LocaleText hinglish="गणित" english="Mathematics" /> : <LocaleText hinglish="विज्ञान" english="Science" />}</h3><p><LocaleText hinglish={subject.meta} english="Classes 6–8 · Hindi medium" /></p></div>
+              <div><span><UiText message="legacy.web.classes.6.8.9af66485" /></span><h3>{subject.name === 'गणित' ? <UiText message="legacy.web.mathematics.4cf6be1a" /> : <UiText message="legacy.web.science.f85a10aa" />}</h3><p><LocaleText hinglish={subject.meta} english="Classes 6–8 · Hindi medium" /></p></div>
               <span className="card-arrow">↗</span>
             </Link>
           ))}
@@ -136,34 +137,34 @@ export default function Home() {
 
       <section id="parents" className="parent-section">
         <div className="parent-copy">
-          <span className="eyebrow"><LocaleText hinglish="Parents के लिए" english="For parents" /></span>
-          <h2><LocaleText hinglish="सिर्फ कितना पढ़ा नहीं —" english="Not just how much they studied—" /><br /><em><LocaleText hinglish="क्या सीखा, वह देखें।" english="see what they learned." /></em></h2>
-          <p><LocaleText hinglish="आपके बच्चे के actual lessons, attempts, sessions, completion और concept mastery का simple summary।" english="A simple summary of your child’s actual lessons, attempts, sessions, completion, and concept mastery." /></p>
-          <Link href="/login" className="button button-dark"><LocaleText hinglish="Parent view खोलें →" english="Open parent view →" /></Link>
+          <span className="eyebrow"><UiText message="legacy.web.for.parents.f4a58e74" /></span>
+          <h2><UiText message="legacy.web.not.just.how.much.they.studied.bf5abaa9" /><br /><em><UiText message="legacy.web.see.what.they.learned.7c690630" /></em></h2>
+          <p><UiText message="legacy.web.a.simple.summary.of.your.child.s.actua.45407e46" /></p>
+          <Link href="/login" className="button button-dark"><UiText message="legacy.web.open.parent.view.5d942b13" /></Link>
         </div>
 
         <div className="report-card">
           <div className="report-top">
-            <div><span><LocaleText hinglish="Real learning records" english="Real learning records" /></span><strong><LocaleText hinglish="Parent report" english="Parent report" /></strong></div>
+            <div><span><UiText message="legacy.web.real.learning.records.8345bc3d" /></span><strong><UiText message="legacy.web.parent.report.82e13ce5" /></strong></div>
             <span className="up">LIVE</span>
           </div>
           <div className="report-stat">
-            <strong><LocaleText hinglish="Progress" english="Progress" /></strong>
-            <span><LocaleText hinglish="Lessons · attempts · mastery" english="Lessons · attempts · mastery" /></span>
+            <strong><UiText message="legacy.web.progress.953da4d3" /></strong>
+            <span><UiText message="legacy.web.lessons.attempts.mastery.abc38175" /></span>
             <div className="mini-bars">
               <i style={{ height: '30%' }} /><i style={{ height: '44%' }} /><i style={{ height: '54%' }} />
               <i style={{ height: '61%' }} /><i style={{ height: '72%' }} /><i style={{ height: '81%' }} />
               <i style={{ height: '88%' }} />
             </div>
           </div>
-          <div className="report-bottom"><span><LocaleText hinglish="Strengths: mastery" english="Strengths: mastery" /></span><span><LocaleText hinglish="Support: जिन concepts में मदद चाहिए" english="Support: concepts needing help" /></span></div>
+          <div className="report-bottom"><span><UiText message="legacy.web.strengths.mastery.fd7b51ef" /></span><span><UiText message="legacy.web.support.concepts.needing.help.9f502667" /></span></div>
         </div>
       </section>
 
       <footer className="footer">
         <QuantaEdgeBrand href={null} variant="footer" />
-        <p><LocaleText hinglish="पढ़ाई, अब आपके बच्चे के हिसाब से।" english="Learning tailored to your child." /></p>
-        <div className="footer-links"><Link href="/privacy"><LocaleText hinglish="Privacy" english="Privacy" /></Link><Link href="/terms"><LocaleText hinglish="Terms" english="Terms" /></Link></div>
+        <p><UiText message="legacy.web.learning.tailored.to.your.child.ce21e04d" /></p>
+        <div className="footer-links"><Link href="/privacy"><UiText message="legacy.web.privacy.323f3a35" /></Link><Link href="/terms"><UiText message="legacy.web.terms.c9f30225" /></Link></div>
         <span>© 2026 QuantaEdge Learning</span>
       </footer>
     </main>

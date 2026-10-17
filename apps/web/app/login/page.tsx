@@ -1,5 +1,6 @@
 'use client';
 
+import { UiText } from '../i18n/useUiTranslation';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
@@ -154,45 +155,45 @@ export default function ParentLoginPage() {
       <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
       <section className="auth-card parent-auth-card">
-        <Link href="/" className="auth-back-link"><LocaleText hinglish="← QuantaEdge पर वापस" english="← Back to QuantaEdge" /></Link>
-        <span className="eyebrow">{mode === 'login' ? <LocaleText hinglish="PARENT / GUARDIAN" english="PARENT / GUARDIAN" /> : mode === 'register' ? <LocaleText hinglish="FAMILY ACCOUNT बनाएँ" english="CREATE FAMILY ACCOUNT" /> : <LocaleText hinglish="ACCOUNT RECOVERY" english="ACCOUNT RECOVERY" />}</span>
-        <h1>{mode === 'login' ? <LocaleText hinglish="वापस स्वागत है।" english="Welcome back." /> : mode === 'register' ? <LocaleText hinglish="आपकी family learning space।" english="Your family learning space." /> : <LocaleText hinglish="नया password बनाएँ।" english="Create a new password." />}</h1>
+        <Link href="/" className="auth-back-link"><UiText message="legacy.web.back.to.quantaedge.afca99d4" /></Link>
+        <span className="eyebrow">{mode === 'login' ? <UiText message="legacy.web.parent.guardian.70a181bd" /> : mode === 'register' ? <UiText message="legacy.web.create.family.account.48f9b3ad" /> : <UiText message="legacy.web.account.recovery.1b09ce51" />}</span>
+        <h1>{mode === 'login' ? <UiText message="legacy.web.welcome.back.ab75bbfd" /> : mode === 'register' ? <UiText message="legacy.web.your.family.learning.space.6fdbe315" /> : <UiText message="legacy.web.create.a.new.password.582ed665" />}</h1>
         <p>{mode === 'login'
-          ? <LocaleText hinglish="अपने registered mobile number और password से sign in करें। Password set नहीं है तो OTP sign-in चुनें।" english="Sign in with your registered mobile number and password. If you haven't set a password, choose OTP sign-in." />
+          ? <UiText message="legacy.web.sign.in.with.your.registered.mobile.nu.2cd44b58" />
           : mode === 'register'
-            ? <LocaleText hinglish="Mobile number verify करें और parent password बनाएँ। फिर एक ही dashboard से बच्चों के Profiles manage करें।" english="Verify your mobile number and create a parent password. Then manage all your children's profiles from one dashboard." />
-            : <LocaleText hinglish="Registered mobile पर आया OTP verify करके नया password बनाएँ। आगे से इसी password से sign in कर सकते हैं।" english="Verify the OTP sent to your registered mobile number to create a new password." />}</p>
+            ? <UiText message="legacy.web.verify.your.mobile.number.and.create.a.8707e1ec" />
+            : <UiText message="legacy.web.verify.the.otp.sent.to.your.registered.573234e4" />}</p>
         {error && <div className="auth-message is-error" role="alert">{error}</div>}
         {notice && <div className="auth-message" role="status">{notice}</div>}
 
         <form className="auth-form" onSubmit={submit}>
-          {mode === 'register' && <label><LocaleText hinglish="Parent / guardian का नाम" english="Parent / guardian name" />
+          {mode === 'register' && <label><UiText message="legacy.web.parent.guardian.name.1ab0447b" />
             <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder={tx('अपना पूरा नाम लिखें', 'Enter your full name')} autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
           </label>}
-          <label><LocaleText hinglish="Registered mobile number" english="Registered mobile number" />
+          <label><UiText message="legacy.web.registered.mobile.number.65c4e773" />
             <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder={tx('10 अंकों का mobile number डालें', 'Enter 10-digit mobile number')} inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
           </label>
-          {mode === 'login' && loginMethod === 'password' && <label><LocaleText hinglish="Password" english="Password" />
+          {mode === 'login' && loginMethod === 'password' && <label><UiText message="legacy.web.password.dc78b30b" />
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('अपना password डालें', 'Enter your password')} autoComplete="current-password" required />
           </label>}
           {mode === 'register' && step === 'mobile' && <>
-            <label><LocaleText hinglish="Password बनाएँ" english="Create password" />
+            <label><UiText message="legacy.web.create.password.b06eaef9" />
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('कम से कम 8 characters', 'At least 8 characters')} autoComplete="new-password" minLength={8} required />
             </label>
-            <label><LocaleText hinglish="Password दोबारा डालें" english="Re-enter password" />
+            <label><UiText message="legacy.web.re.enter.password.541a6b9c" />
               <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder={tx('वही password दोबारा डालें', 'Re-enter the same password')} autoComplete="new-password" minLength={8} required />
             </label>
           </>}
           {otpFlow && step === 'otp' && <>
-            {devCode && <div className="auth-dev-code"><span><LocaleText hinglish="Local development OTP" english="Local development OTP" /></span><strong>{devCode}</strong></div>}
-            <label><LocaleText hinglish="6-digit OTP" english="6-digit OTP" />
+            {devCode && <div className="auth-dev-code"><span><UiText message="legacy.web.local.development.otp.51756e69" /></span><strong>{devCode}</strong></div>}
+            <label><UiText message="legacy.web.6.digit.otp.7a404f31" />
               <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder={tx('OTP डालें', 'Enter OTP')} inputMode="numeric" autoComplete="one-time-code" required />
             </label>
             {mode === 'reset' && <>
-              <label><LocaleText hinglish="नया password" english="New password" />
+              <label><UiText message="legacy.web.new.password.32a2f216" />
                 <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Kam se kam 8 characters" autoComplete="new-password" minLength={8} required />
               </label>
-              <label><LocaleText hinglish="नया password दोबारा डालें" english="Re-enter new password" />
+              <label><UiText message="legacy.web.re.enter.new.password.37b05353" />
                 <input type="password" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} placeholder={tx('वही password दोबारा डालें', 'Re-enter the same password')} autoComplete="new-password" minLength={8} required />
               </label>
             </>}
@@ -204,21 +205,21 @@ export default function ParentLoginPage() {
             (mode === 'reset' && step === 'otp' && (newPassword.length < 8 || newPassword !== confirmNewPassword))}>
             {submitLabel}
           </button>
-          {otpFlow && step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}><LocaleText hinglish="← Mobile number बदलें" english="← Change mobile number" /></button>}
+          {otpFlow && step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}><UiText message="legacy.web.change.mobile.number.a4e4ee0c" /></button>}
         </form>
 
         <div className="auth-mode-links">
           {mode === 'login' ? <>
-            <button type="button" onClick={() => resetState('reset')}><LocaleText hinglish="Password भूल गए?" english="Forgot password?" /></button>
+            <button type="button" onClick={() => resetState('reset')}><UiText message="legacy.web.forgot.password.0815b893" /></button>
             <button type="button" onClick={() => switchLoginMethod(loginMethod === 'password' ? 'otp' : 'password')}>
-              {loginMethod === 'password' ? <LocaleText hinglish="OTP से sign in करें" english="Sign in with OTP" /> : <LocaleText hinglish="Password से sign in करें" english="Sign in with password" />}
+              {loginMethod === 'password' ? <UiText message="legacy.web.sign.in.with.otp.8d79c836" /> : <UiText message="legacy.web.sign.in.with.password.55ae7710" />}
             </button>
-            <button type="button" onClick={() => resetState('register')}><LocaleText hinglish="Parent account बनाएँ" english="Create parent account" /></button>
-          </> : <button type="button" onClick={() => resetState('login')}><LocaleText hinglish="Parent sign in पर वापस" english="Back to parent sign-in" /></button>}
+            <button type="button" onClick={() => resetState('register')}><UiText message="legacy.web.create.parent.account.ee2209e1" /></button>
+          </> : <button type="button" onClick={() => resetState('login')}><UiText message="legacy.web.back.to.parent.sign.in.0cfae1e3" /></button>}
         </div>
-        <div className="auth-separator"><span><LocaleText hinglish="या" english="OR" /></span></div>
-        <Link href="/login/student" className="auth-alt-link"><LocaleText hinglish="Student login" english="Student login" /> <span>→</span></Link>
-        <small className="auth-note"><LocaleText hinglish="Registration और password reset के लिए OTP ज़रूरी है। Parent sign-in के लिए भी OTP का option available है।" english="OTP is required for registration and password reset. Parents can also sign in with an OTP." /></small>
+        <div className="auth-separator"><span><UiText message="legacy.web.or.5dca2d83" /></span></div>
+        <Link href="/login/student" className="auth-alt-link"><UiText message="legacy.web.student.login.9541c2d5" /> <span>→</span></Link>
+        <small className="auth-note"><UiText message="legacy.web.otp.is.required.for.registration.and.p.2af964c6" /></small>
       </section>
     </main>
   );
