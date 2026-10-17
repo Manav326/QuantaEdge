@@ -113,3 +113,42 @@ The package-name expansion fix and the new contract/test code are committed to *
 ### Git storage invariant
 
 All generated textbook pipeline data committed to Git lives under `data/`: source extractions, visual inventories/candidates/catalogs, Layer 4–5 evidence and coverage ledgers, Layer 6–8 checkpoints/maps/lesson candidates, retrieval datasets and SFT candidates. The Admin Content Studio reads review-only visual catalogs from `data/textbook-visual-candidates-v3/catalogs/` and its index from `data/textbook-visual-candidates-v3/index.v1.json`; generated review data is not duplicated under `apps/*/public/`. Checkpoint helpers reject commit targets outside `data/`, and `scripts/validate_pipeline_data_locations.py` scans repository paths before candidate/analysis/generation checkpoints are committed.
+
+
+## Recovery contract and UI resume modes
+
+The GitHub Actions UI exposes different actions for starting work and recovering work. A push-triggered validation run is not a content-processing run. Use **Actions → Prepare textbook visual candidates v3 → Run workflow** for Layers 1–5, or **Actions → QuantaEdge Layers 6–8 - local Ollama pipeline → Run workflow** for generation.
+
+### Layers 1–5 UI choices
+
+- **prepare_only** — resolve the selected whole-book sources, build and persist candidate packs/catalogs, and stop before vision analysis.
+- **analyze_all** — run the full preparation path and then continue through Layers 4–5. If analysis outputs already exist with matching fingerprints, the analyzer reuses successful rows.
+- **resume_layers_4_5** — do not rebuild candidate packs, contact sheets, lesson-attachment catalogs, or re-publish their GHCR bundles. Validate the selected source IDs, exact source PDF hashes, committed extraction manifests and candidate-pack fingerprints. For every book, try to restore its previous immutable Layer 1 inventory bundle using the tag and SHA-256 in `data/textbook-visuals/{book_slug}/visual-pipeline-index.v1.json`. A bundle is reused only after the tar hash, archive paths, source identity, inventory schema, stable asset IDs and on-disk asset hashes validate. The pipeline records `INVENTORY_BUNDLE_REUSED` instead of packaging/publishing an identical new inventory bundle. If the referenced bundle is genuinely missing (registry 404), Layer 1 alone is rebuilt and a new inventory bundle is saved; a corrupt bundle, non-404 registry error, mismatched source edition, or missing/stale candidate pack stops before model inference. This mode restores/reuses matching Layer 4 checkpoints from Git or ORAS, then resumes the unfinished assets and recomputes the Layer 5 ledger from the verified raw analysis and current correction overlay.
+
+The vision model name is part of checkpoint identity. A resume request must not silently turn into a different-model full rerun. If the selected model has no checkpoint while a prior Layer 4 run is recorded for that book, the preflight fails with an explanation; choose **analyze_all** only when deliberately beginning a different model/configuration run.
+
+### Layers 6–8 UI choices
+
+- **benchmark** — benchmark only; this benchmark is intentionally anchored to Class 6 English Science (Curiosity).
+- **run** — start a bounded, review-only draft run. When a matching checkpoint already exists, completed segments are reused automatically.
+- **resume** — require an existing checkpoint with a matching input fingerprint. Preflight runs before Ollama startup or model download and checks the source edition/text, Layer 5 ledger, V3 visual-candidate fingerprint, model, benchmark report, prompt version, renderer contract, segmenting options and existing checkpoint schema. Missing/mismatched checkpoints fail safely instead of starting work from zero. Retryable segments are attempted up to the new invocation's `max_model_calls`; completed and terminal `UNRESOLVED_SOURCE_TEXT` segments are not re-generated. If no model calls remain, the workflow rebuilds aggregate review outputs from the durable checkpoint and skips Ollama startup, model download and inference entirely.
+
+For any resume, keep the class, exact whole-book ID, model and generation settings the same. Reusing a checkpoint after the edition, text, prompt, contract, benchmark, visual evidence or relevant configuration changes is not safe; the pipeline refuses to mix the incompatible records. Select a deliberate fresh-run path and a new versioned checkpoint namespace after reviewing the cause rather than deleting or overwriting the old checkpoint.
+
+### Checkpoint / interruption decision table
+
+| Situation | Required behaviour |
+| --- | --- |
+| Cancelled during source resolution / candidate generation | A **resume Layers 4–5** dispatch validates existing candidate packs and does not re-create them. If candidate packs were never committed, resume stops and a preparation run is required. |
+| Cancelled after Layers 4–5 started for a book | Restore that book's verified inventory bundle and raw analysis checkpoint; reuse successful asset results and process only missing/failed/stale-context assets. |
+| One or more model calls failed | Preserve explicit error rows. A later invocation with the same fingerprint retries those rows; don't retry them repeatedly within the same batch/run. |
+| Input source PDF / edition differs | Fail closed. Never join analysis from different PDF hashes into one ledger. |
+| Model or prompt differs | Do not silently call it a resume. Require an explicit new analysis run/checkpoint identity. |
+| Correction overlay changes | Rebuild Layer 5 effective analysis/coverage from the preserved raw Layer 4 result. Do not spend vision-model calls to apply a reviewer correction. |
+| Layers 6–8 interrupted mid-generation | Commit checkpoints under `data/`; reuse completed segment results; retry only errors/pending segments on resume. |
+| All Layers 6–8 segments are already terminal but aggregate files are stale/missing | Rebuild the map, lesson candidates and datasets from checkpointed rows with zero model calls and no model download. |
+| Checkpoint or artifact is corrupt, contradictory, or unverifiable | Stop before expensive model work. Keep existing evidence untouched and report the invalid fingerprint/hash rather than pretending the stage resumed. |
+
+### Operational signals
+
+Successful recovery logs should distinguish `REUSED_FROM_GIT`, `RESTORED_FROM_GHCR`, `INVENTORY_BUNDLE_REUSED`, `INVENTORY_BUNDLE_PUBLISHED`, `BATCH_CHECKPOINTED` and `OUTPUTS_REBUILT_WITHOUT_MODEL_CALLS`. `IN_PROGRESS` is not completion. The coverage ledger determines Layer 5 completion; the saved segment statuses plus input fingerprint determine Layers 6–8 completion. All generated textbook artifacts stay review-only, and all committed generated data remains under `data/`.
