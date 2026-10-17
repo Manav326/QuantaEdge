@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 25,
+    "assets_selected": 48,
     "assets_processed_this_run": 25,
     "assets_analyzed": 335,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 0,
+    "assets_skipped_from_checkpoint": 23,
     "publication_allowed": false
   },
   "results": [
@@ -820,24 +820,25 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/47252ea47395d94c2c52fc4a8583c6443b23c780eecbab38df357eef883a25cd.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank rectangular frame with a light green background and a black outline.",
+        "visual_summary": "A blank white rectangle with a black outline.",
         "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a blank frame, likely intended for educational content.",
+        "context_relation": "The image is a blank space for educational content.",
         "limitations": [
-          "The image is blank and does not contain any specific content or information."
+          "The image is a blank rectangle with no specific content or information."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:03:36Z"
+      "checkpointed_at": "2026-10-17T02:19:19Z"
     },
     {
       "asset_id": "af671151264e431894720b56",
@@ -847,6 +848,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -859,16 +861,16 @@
           "detective",
           "magnifying glass"
         ],
-        "context_relation": "The image likely represents a character from a story or educational content that involves investigation or detective work.",
+        "context_relation": "The image likely represents a character from an educational content, possibly related to a detective or investigative theme.",
         "limitations": [
-          "The image does not provide specific details about the story or content it is part of."
+          "The image does not provide specific details about the educational content it is associated with."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:04:42Z"
+      "checkpointed_at": "2026-10-17T02:20:48Z"
     },
     {
       "asset_id": "a305bf1f33f764706dd26213",
@@ -878,6 +880,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/6a0b3c78cf48995be5f653d8b3e0b9bdc4685c8a3c2ecfbcbe3506879715bb67.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -885,23 +888,17 @@
         "visual_summary": "A cartoon scientist holding a test tube.",
         "visual_type": "cartoon",
         "visible_text": [],
-        "concepts": [
-          "scientist",
-          "test tube",
-          "lab coat",
-          "research",
-          "experiment"
-        ],
-        "context_relation": "The image is likely used to illustrate a scientific concept or experiment.",
+        "concepts": [],
+        "context_relation": "The image represents a scientist conducting an experiment.",
         "limitations": [
-          "The image does not provide specific details about the experiment or concept."
+          "The image does not provide specific details about the experiment or the scientist's actions."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:05:51Z"
+      "checkpointed_at": "2026-10-17T02:22:17Z"
     },
     {
       "asset_id": "7fffaa676bf981633268bb52",
@@ -911,6 +908,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/622f1ada3b04d9879057a691088566ac29720e33d1f984df7e27ad5cfe3d0347.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -924,16 +922,16 @@
           "globe",
           "workplace"
         ],
-        "context_relation": "The image represents a scientist's workspace, possibly related to a science topic.",
+        "context_relation": "The image represents a scientist's workspace, possibly related to a science education topic.",
         "limitations": [
-          "The image does not provide specific details about the scientist's work or the topic being discussed."
+          "The image does not provide specific details about the scientist's work or the educational content it represents."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:07:00Z"
+      "checkpointed_at": "2026-10-17T02:23:50Z"
     },
     {
       "asset_id": "e1f5aa0b42b156c5572f4a23",
@@ -943,6 +941,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -964,7 +963,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:08:09Z"
+      "checkpointed_at": "2026-10-17T02:25:21Z"
     },
     {
       "asset_id": "fcb7dd88f751167a49061fda",
@@ -974,6 +973,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -984,14 +984,15 @@
         "concepts": [],
         "context_relation": "The image likely represents a scene where someone is investigating or examining something with a magnifying glass, possibly for educational or illustrative purposes.",
         "limitations": [
-          "The image does not provide specific details about the context or the subject being examined."
+          "The image does not provide specific details about the context or the person's actions.",
+          "The visible text is empty, so no additional information can be inferred from it."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:09:16Z"
+      "checkpointed_at": "2026-10-17T02:26:52Z"
     },
     {
       "asset_id": "846e3f522e2be7aa2124483d",
@@ -1001,25 +1002,26 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/b213e223419f1c635dccd486a098daa2d1d4ecb646bb23d9e61114a0b9505ef9.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a rectangular outline.",
+        "visual_summary": "A blank white page with a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
         "context_relation": "The page is likely intended for educational content to be filled with various types of content.",
         "limitations": [
           "The page is blank and requires content to be added.",
-          "The page is designed to be filled with educational content, but currently has no content."
+          "The page is a full page, not a cropped figure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:10:25Z"
+      "checkpointed_at": "2026-10-17T02:28:26Z"
     },
     {
       "asset_id": "db5e2a4c865f0dbf5898e2c1",
@@ -1029,6 +1031,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1051,7 +1054,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:11:34Z"
+      "checkpointed_at": "2026-10-17T02:29:59Z"
     },
     {
       "asset_id": "bbc21f48608130c11d4d8f60",
@@ -1061,11 +1064,12 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/57ce9084367d7efa02da98b88156ef382e0376c3756be55dc1b640d974af4714.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cloud-like shape with a light blue interior and a black outline.",
+        "visual_summary": "A cloud-like shape with a light blue interior and a darker blue outline.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
@@ -1079,7 +1083,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:12:41Z"
+      "checkpointed_at": "2026-10-17T02:31:28Z"
     },
     {
       "asset_id": "62a3e7888d70da1a7c78cb64",
@@ -1089,25 +1093,25 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/3bcd5cc2eda749e2d7bad923c9eefbe32b40e097ce371452ee9c3a225ed7f984.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank white page with a black border.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A blank rectangular frame with a black outline.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely intended for educational content editing.",
+        "context_relation": "The image is a blank frame, likely intended for inserting content.",
         "limitations": [
-          "The page is blank and requires content to be added.",
-          "The page does not provide specific information or data to analyze."
+          "The image is a blank frame, and no content is present."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:13:50Z"
+      "checkpointed_at": "2026-10-17T02:33:00Z"
     },
     {
       "asset_id": "44a0b2c695d4ed74fc97c934",
@@ -1117,24 +1121,25 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/ffbc467299c0b36be3c71739999570a0f52c59bc37a6a912e77adc732b9ff423.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character in a wheelchair holding a camera.",
+        "visual_summary": "A cartoon character in a wheelchair holding binoculars.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely used as an illustration to accompany a text box or a section in the book.",
+        "context_relation": "The image is likely used to illustrate a fun fact or curiosity-driven question about a character in a wheelchair.",
         "limitations": [
-          "The image does not provide specific information about the book's content or the page it is on."
+          "The image does not provide specific details about the character or the context."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:14:56Z"
+      "checkpointed_at": "2026-10-17T02:34:31Z"
     },
     {
       "asset_id": "9a53c2d2fec333671b377fe4",
@@ -1144,6 +1149,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/d84652b6b20f1152194ecc97e0072e6e320e564231ef4fc6e2d53fc010eefc48.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1154,14 +1160,15 @@
         "concepts": [],
         "context_relation": "The image is likely a blank page or whiteboard where educational content can be added.",
         "limitations": [
-          "The image is empty and does not contain any text or content."
+          "The image is empty and does not contain any text or content.",
+          "The image does not provide any specific information or context for the educational content editor."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:16:01Z"
+      "checkpointed_at": "2026-10-17T02:36:02Z"
     },
     {
       "asset_id": "c46dfdd8d4215644a43a2792",
@@ -1171,6 +1178,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1185,16 +1193,16 @@
           "globe",
           "equipment"
         ],
-        "context_relation": "The image represents a scientific theme, possibly related to a lesson on the role of scientists in the world.",
+        "context_relation": "The image represents a scientific or educational theme, possibly related to a textbook or educational content.",
         "limitations": [
-          "The image does not provide specific details about the content of the lesson."
+          "The image does not provide specific details about the content or context of the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:17:12Z"
+      "checkpointed_at": "2026-10-17T02:37:35Z"
     },
     {
       "asset_id": "3f133a6115bf766dd7dd3b47",
@@ -1204,6 +1212,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/6ca756eb88fc974ebaa35a821bc1b2ed8fb8869147aeaf6fc9ade966f420be17.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1212,7 +1221,7 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image represents a blank space for educational content.",
+        "context_relation": "The image is likely a blank page or whiteboard intended for educational content.",
         "limitations": [
           "The image is empty and does not contain any specific content or information."
         ]
@@ -1221,7 +1230,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:18:19Z"
+      "checkpointed_at": "2026-10-17T02:39:04Z"
     },
     {
       "asset_id": "a70461e1cc755e8050094477",
@@ -1231,6 +1240,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1242,15 +1252,15 @@
         "context_relation": "The page is likely intended for educational content editing, possibly for a textbook.",
         "limitations": [
           "The page is blank and does not contain any specific content or visual elements.",
-          "The page may be used as a template for adding educational content.",
-          "The page may be used as a placeholder for inserting text or images."
+          "The page may be used as a template for inserting educational content.",
+          "The page does not provide any specific information or data that can be analyzed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:18:33Z"
+      "checkpointed_at": "2026-10-17T02:39:22Z"
     },
     {
       "asset_id": "05adb6ff814232ce2e5a30c7",
@@ -1260,6 +1270,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1270,14 +1281,14 @@
         "concepts": [],
         "context_relation": "The page is likely intended for educational content editing.",
         "limitations": [
-          "The page is blank and does not contain any specific content or information."
+          "The page is blank and does not contain any specific content or visual elements."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:18:41Z"
+      "checkpointed_at": "2026-10-17T02:39:31Z"
     },
     {
       "asset_id": "e00c458fbc46f499cd3153da",
@@ -1287,38 +1298,12 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a blank page with no visible content.",
-        "limitations": [
-          "The image is a blank page with no visible content."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:18:52Z"
-    },
-    {
-      "asset_id": "44d9ca93478e49dc3b640764",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 6,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -1331,7 +1316,35 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:19:02Z"
+      "checkpointed_at": "2026-10-17T02:39:45Z"
+    },
+    {
+      "asset_id": "44d9ca93478e49dc3b640764",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a black page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T02:39:57Z"
     },
     {
       "asset_id": "421608240c19ff39723748c4",
@@ -1341,11 +1354,12 @@
       "source_pdf_page_number": 6,
       "asset_path": "page-0006.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "f5d0fba21273f329e4a46d6c2a158f453a3f73c47f298855ca488aa32da0376d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook, featuring various educational content boxes and illustrations.",
+        "visual_summary": "Page from a textbook explaining various educational content boxes.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "To sustain the readers’ interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in various boxes.",
@@ -1369,16 +1383,16 @@
           "Indian texts",
           "NEP 2020"
         ],
-        "context_relation": "The image is a page from a textbook that provides various educational content boxes and illustrations to engage readers and promote learning.",
+        "context_relation": "The page explains various educational content boxes and their purposes.",
         "limitations": [
-          "The image does not provide specific details about the textbook or its content."
+          "The page does not provide specific examples or details about the content boxes."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:22:19Z"
+      "checkpointed_at": "2026-10-17T02:44:00Z"
     },
     {
       "asset_id": "25584e8eb6767a8d99cabeb3",
@@ -1388,6 +1402,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/f6300f6d7833c0c599b3ba3d867e164ac85e99d8e71d49962f96fd81accf3696.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1396,16 +1411,14 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or illustration for a chapter summary.",
-        "limitations": [
-          "The image does not provide specific details about the chapter it represents."
-        ]
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:23:25Z"
+      "checkpointed_at": "2026-10-17T02:45:28Z"
     },
     {
       "asset_id": "64296964e2f7a6c0a1961ff6",
@@ -1415,22 +1428,26 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/bf6d8ea7766255d593fd597c9e29b2eb615f574817eea3a81c89b0b7125cb2fa.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_summary": "A rope with a blue hook at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
-        "limitations": []
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or idea."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:24:37Z"
+      "checkpointed_at": "2026-10-17T02:47:01Z"
     },
     {
       "asset_id": "7e419d4a81a466cbbec8c837",
@@ -1440,22 +1457,23 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A coiled rope or cable, possibly representing a concept or idea.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
+        "context_relation": "The image may be a full page, not a cropped figure.",
         "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:25:40Z"
+      "checkpointed_at": "2026-10-17T02:48:28Z"
     },
     {
       "asset_id": "aabb045978a9a5ff28e5f019",
@@ -1465,24 +1483,25 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/7d17bb65440198b3a2fe26c88c7a1768824add15e3d8998d7793823723fdb557.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A twisted rope or cord.",
+        "visual_summary": "A close-up of a coiled rope or cable.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a visual aid for learning.",
+        "context_relation": "The image is not directly related to the content of the 'In a Nutshell' section.",
         "limitations": [
-          "The image does not provide specific details about the chapter or topic it represents."
+          "The image does not provide any specific information about the chapter's content or the 'In a Nutshell' section."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:25:46Z"
+      "checkpointed_at": "2026-10-17T02:48:36Z"
     },
     {
       "asset_id": "c4483b6409c1a6735a2bfc24",
@@ -1492,6 +1511,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/ba9666f1861772e441d1cdb86105e3be35ff1cd21edd4bc474863e0c5cf50922.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1501,15 +1521,13 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is a visual representation of the concept of 'In a Nutshell', which is a summary of a chapter.",
-        "limitations": [
-          "The image does not provide specific details about the chapter or its content."
-        ]
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:26:56Z"
+      "checkpointed_at": "2026-10-17T02:50:06Z"
     },
     {
       "asset_id": "7a2db82cfa12b55511f0eb31",
@@ -1519,26 +1537,29 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/9634f9baebaf2b7d7b223246828427b4dd7e115f184d41f8f9584cdb05780a59.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character holding a document while standing inside a large nut.",
+        "visual_summary": "A cartoon character standing inside a large nut, holding a piece of paper.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [
-          "summary",
-          "chapter overview",
-          "key ideas"
+          "Innovation",
+          "Discovery",
+          "Learning"
         ],
-        "context_relation": "summary",
-        "limitations": []
+        "context_relation": "The image is related to the educational content of the textbook, specifically the chapter 'In a Nutshell' which presents a summary of key ideas discussed in the chapter.",
+        "limitations": [
+          "The image does not provide specific details about the content of the chapter or the educational context."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:28:04Z"
+      "checkpointed_at": "2026-10-17T02:51:40Z"
     },
     {
       "asset_id": "6bb2cb00ac60cc26f675f326",
