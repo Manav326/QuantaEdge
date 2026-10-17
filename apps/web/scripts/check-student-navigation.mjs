@@ -202,7 +202,7 @@ assert.ok(androidScanner.includes('ScannerMode.QR_ONLY') && androidScanner.inclu
 const adminClasses = read('../../admin/app/classes/page.tsx');
 const studentClasses = read('../app/student/classes/ClassesClient.tsx');
 const assignedResources = read('../app/student/structured-lessons/AssignedLearningResources.tsx');
-const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+// Reuse androidApp loaded above for the shared navigation contract.
 const androidLessonResources = read('../../android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonResourcesPanel.kt');
 const androidClasses = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
 const androidBroadcastPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/LiveBroadcastPlayerScreen.kt');
