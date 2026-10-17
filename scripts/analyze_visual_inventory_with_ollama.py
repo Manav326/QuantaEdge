@@ -207,6 +207,25 @@ def run_analysis(
         raise ValueError("Visual inventory is missing source or assets.")
     inventory_dir = inventory_path.parent
 
+    # A checkpoint is reusable only for assets that still exist in this exact inventory
+    # with the same content hash. Stale rows would otherwise become orphan analyses in
+    # Layer 5 and prevent completion after an upstream inventory change.
+    current_asset_hashes: dict[str, str] = {}
+    for asset in assets:
+        if not isinstance(asset, dict) or asset.get("kind") not in {"embedded_image", "page_preview"}:
+            continue
+        if asset.get("kind") == "page_preview" and not include_page_previews:
+            continue
+        asset_id = asset.get("asset_id")
+        if not isinstance(asset_id, str) or not asset_id:
+            raise ValueError("An analyzable visual inventory row lacks asset_id; refusing silent omission.")
+        if asset_id in current_asset_hashes:
+            raise ValueError(f"Duplicate analyzable visual asset_id {asset_id}; refusing silent omission.")
+        asset_hash = asset.get("asset_sha256")
+        if not isinstance(asset_hash, str) or not asset_hash:
+            raise ValueError(f"Analyzable visual asset {asset_id} lacks asset_sha256.")
+        current_asset_hashes[asset_id] = asset_hash
+
     previous: dict[str, dict[str, Any]] = {}
     if resume and output_path and output_path.is_file():
         saved = json.loads(output_path.read_text(encoding="utf-8"))
@@ -216,9 +235,22 @@ def run_analysis(
             raise ValueError("Cannot resume: checkpoint source book/PDF hash does not match this inventory.")
         if saved.get("model") != model or saved.get("prompt_version") != PROMPT_VERSION:
             raise ValueError("Cannot resume: model or prompt version changed. Use a new output directory or --overwrite.")
-        for item in saved.get("results", []):
-            if isinstance(item, dict) and item.get("asset_id"):
-                previous[str(item["asset_id"])] = item
+        saved_results = saved.get("results")
+        if not isinstance(saved_results, list):
+            raise ValueError("Cannot resume: checkpoint results must be a list.")
+        for item in saved_results:
+            if not isinstance(item, dict) or not item.get("asset_id"):
+                continue
+            asset_id = str(item["asset_id"])
+            if asset_id not in current_asset_hashes:
+                continue
+            if item.get("asset_sha256") != current_asset_hashes[asset_id]:
+                continue
+            if item.get("source_book_id") != source.get("book_id") or item.get("source_pdf_sha256") != source.get("pdf_sha256"):
+                continue
+            if item.get("model") != model or item.get("prompt_version") != PROMPT_VERSION:
+                continue
+            previous[asset_id] = item
 
     selected: list[dict[str, Any]] = []
     seen: set[str] = set()
