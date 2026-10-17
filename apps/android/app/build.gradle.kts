@@ -21,6 +21,44 @@ val configuredGoogleWebClientId = providers.gradleProperty("googleWebClientId")
     .trim()
 
 val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
+
+val configuredInstitutionCode = providers.gradleProperty("quantaedgeInstitutionCode")
+    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_CODE"))
+    .orElse("").get().trim().uppercase()
+val suppliedInstitutionName = providers.gradleProperty("quantaedgeInstitutionName")
+    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_NAME"))
+    .orElse("").get().trim()
+val configuredInstitutionDisplayName = if (configuredInstitutionCode.isBlank()) "QuantaEdge" else suppliedInstitutionName
+require(configuredInstitutionCode.isBlank() || configuredInstitutionDisplayName.length in 2..180) {
+    "A tenant-branded Android package requires QUANTAEDGE_INSTITUTION_NAME (2–180 characters)."
+}
+require(configuredInstitutionDisplayName.none { it.code < 32 || it.code == 127 }) {
+    "Institution display name contains control characters."
+}
+val configuredInstitutionIconPath = providers.gradleProperty("quantaedgeInstitutionIconPath")
+    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_ICON_PATH"))
+    .orNull?.trim()?.takeIf { it.isNotBlank() }
+val tenantPackageSlug = configuredInstitutionCode.lowercase()
+    .filter { it in 'a'..'z' || it in '0'..'9' }
+    .take(24).ifBlank { "school" }
+val tenantPackageHash = if (configuredInstitutionCode.isBlank()) "" else
+    java.security.MessageDigest.getInstance("SHA-256")
+        .digest(configuredInstitutionCode.toByteArray(Charsets.UTF_8))
+        .take(4).joinToString("") { "%02x".format(it) }
+val configuredInstitutionApplicationId = providers.gradleProperty("quantaedgeInstitutionApplicationId")
+    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_APPLICATION_ID"))
+    .orNull?.trim()?.takeIf { it.isNotBlank() }
+    ?: if (configuredInstitutionCode.isBlank()) "com.quantaedge.android"
+       else "com.quantaedge.android.tenant." + tenantPackageSlug + tenantPackageHash
+require(configuredInstitutionApplicationId.matches(Regex("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"))) {
+    "QUANTAEDGE_INSTITUTION_APPLICATION_ID must be a valid, unique Android package ID."
+}
+require(configuredInstitutionCode.isBlank() || configuredInstitutionApplicationId != "com.quantaedge.android") {
+    "A separately listed institution app needs its own application ID."
+}
+fun buildConfigString(value: String): String = "\"" + value
+    .replace("\\", "\\\\").replace("\"", "\\\"")
+    .replace("\n", "\\n").replace("\r", "\\r") + "\""
 val configuredVersionCode = providers.gradleProperty("quantaedgeVersionCode")
     .orElse(providers.environmentVariable("QUANTAEDGE_VERSION_CODE"))
     .orElse("1").get().toInt().also { require(it > 0) { "versionCode must be a positive integer." } }
@@ -51,13 +89,18 @@ android {
         }
     }
     defaultConfig {
-        applicationId = "com.quantaedge.android"
+        applicationId = configuredInstitutionApplicationId
+        manifestPlaceholders["applicationLabel"] = configuredInstitutionDisplayName
+        manifestPlaceholders["applicationIcon"] = "@drawable/qe_launcher_icon"
         minSdk = 26
         targetSdk = 36
         versionCode = configuredVersionCode
         versionName = configuredVersionName
         buildConfigField("String", "API_BASE_URL", "\"$configuredApiBaseUrl\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$configuredGoogleWebClientId\"")
+        buildConfigField("String", "INSTITUTION_CODE", buildConfigString(configuredInstitutionCode))
+        buildConfigField("String", "INSTITUTION_DISPLAY_NAME", buildConfigString(configuredInstitutionDisplayName))
+        buildConfigField("boolean", "IS_TENANT_BRANDED", configuredInstitutionCode.isNotBlank().toString())
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -108,16 +151,31 @@ dependencies {
 }
 
 val brandIcon = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-icon.png")
+val tenantLauncherIcon = configuredInstitutionIconPath?.let { file(it) }
 tasks.register<Copy>("syncQuantaEdgeBranding") {
-    from(brandIcon)
+    from(brandIcon) { rename { "quantaedge_icon.png" } }
+    from(tenantLauncherIcon ?: brandIcon.asFile) { rename { "qe_launcher_icon.png" } }
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
-    rename { "quantaedge_icon.png" }
     doFirst {
         check(brandIcon.asFile.isFile) {
             "QuantaEdge canonical Android branding icon is missing at " + brandIcon.asFile.absolutePath
         }
         check(javax.imageio.ImageIO.read(brandIcon.asFile) != null) {
             "QuantaEdge canonical branding icon is not a decodable image: " + brandIcon.asFile.absolutePath
+        }
+        if (configuredInstitutionCode.isNotBlank()) {
+            require(!configuredInstitutionIconPath.isNullOrBlank()) {
+                "A tenant-branded Android package requires QUANTAEDGE_INSTITUTION_ICON_PATH so the installed launcher icon is school-branded."
+            }
+            val iconFile = requireNotNull(tenantLauncherIcon)
+            require(iconFile.isFile && iconFile.length() in 1..2_097_152L) {
+                "The institution launcher icon must be a readable image no larger than 2 MiB."
+            }
+            val image = javax.imageio.ImageIO.read(iconFile)
+            require(image != null && image.width in 1..4096 && image.height in 1..4096 &&
+                image.width.toLong() * image.height.toLong() <= 16_000_000L) {
+                "The institution launcher icon must be a valid PNG/JPEG no larger than 4096 by 4096 pixels."
+            }
         }
     }
 }
