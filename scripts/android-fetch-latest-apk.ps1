@@ -257,7 +257,7 @@ try {
 
     if (-not $cacheHit) {
         Write-Status "Finding a successful Actions run for this exact commit..." "Cyan"
-        $runsRaw = & gh run list --repo $Repository --branch $Branch --limit 100 --json databaseId,workflowName,createdAt,headSha,status,conclusion 2>&1
+        $runsRaw = & gh run list --repo $Repository --branch $Branch --workflow "ci.yml" --limit 100 --json databaseId,workflowName,createdAt,headSha,status,conclusion 2>&1
         $runsExitCode = $LASTEXITCODE
         if ($runsExitCode -ne 0) { throw "Could not query GitHub Actions runs: $($runsRaw -join ' ')" }
 
