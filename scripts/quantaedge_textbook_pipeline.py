@@ -142,6 +142,61 @@ def git_checkpoint(repo,paths,message):
         subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
         subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
 
+def backfill_legacy_context_hashes(previous_inventory, raw_path, *, book_id, source_sha, model):
+    """Recover legacy per-asset text-context fingerprints from the exact committed prior inventory.
+
+    Older raw analysis rows predate page_text_context_sha256. When the prior inventory is
+    available, backfill the fingerprint used for those results so unchanged rows remain
+    reusable while only rows whose current context changed are sent back to the model.
+    Without a source-matching prior inventory, leave the hash absent; the analyzer will
+    conservatively reprocess those legacy rows instead of silently trusting them.
+    """
+    raw_path=Path(raw_path)
+    if not raw_path.is_file():
+        return 0
+    raw=read_json(raw_path)
+    if (raw.get("schema_version")!="quantaedge.visual-analysis.v1"
+        or raw.get("source_book_id")!=book_id
+        or str(raw.get("source_pdf_sha256") or "").lower()!=str(source_sha).lower()
+        or raw.get("model")!=model
+        or not isinstance(raw.get("results"),list)):
+        return 0
+    src=(previous_inventory or {}).get("source",{}) if isinstance(previous_inventory,dict) else {}
+    if (not isinstance(previous_inventory,dict)
+        or previous_inventory.get("schema_version")!="quantaedge.visual-inventory.v1"
+        or src.get("book_id")!=book_id
+        or str(src.get("pdf_sha256") or "").lower()!=str(source_sha).lower()
+        or not isinstance(previous_inventory.get("assets"),list)):
+        legacy=sum(1 for row in raw["results"] if isinstance(row,dict) and not row.get("page_text_context_sha256"))
+        if legacy:
+            print(f"[pipeline] LEGACY_CONTEXT_UNVERIFIABLE book={book_id} rows={legacy}; successful legacy rows without fingerprints will be reanalyzed conservatively.",flush=True)
+        return 0
+    assets={}
+    for asset in previous_inventory["assets"]:
+        if isinstance(asset,dict) and isinstance(asset.get("asset_id"),str) and asset.get("kind") in KINDS:
+            assets[asset["asset_id"]]=asset
+    updated=0
+    prompt=raw.get("prompt_version")
+    for row in raw["results"]:
+        if not isinstance(row,dict) or row.get("page_text_context_sha256"):
+            continue
+        if (row.get("source_book_id")!=book_id
+            or str(row.get("source_pdf_sha256") or "").lower()!=str(source_sha).lower()
+            or row.get("model")!=model
+            or row.get("prompt_version")!=prompt):
+            continue
+        asset=assets.get(row.get("asset_id"))
+        if not asset or asset.get("asset_sha256")!=row.get("asset_sha256"):
+            continue
+        context=str(asset.get("page_text_context") or "")[:1600]
+        row["page_text_context_sha256"]=hashlib.sha256(context.encode("utf-8")).hexdigest()
+        updated+=1
+    if updated:
+        write_json(raw_path,raw)
+        print(f"[pipeline] LEGACY_CONTEXT_HASHES_BACKFILLED book={book_id} model={model} rows={updated}; current inventory context will be compared before reuse.",flush=True)
+    return updated
+
+
 def run_layers(args):
     repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[]
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
@@ -156,8 +211,10 @@ def run_layers(args):
             if not s.get(key):raise ValueError(f"{slug}: source selection missing {key}.")
         vis=repo/"data"/"textbook-visuals"/slug;layer=repo/"data"/"textbook-content-pipeline"/f"class-{selection['class']}"/"books"/slug
         vis.mkdir(parents=True,exist_ok=True);layer.mkdir(parents=True,exist_ok=True)
-        invrepo=vis/"visual-inventory.v1.json";shutil.copy2(inv,invrepo);shutil.copy2(work/"source.manifest.json",vis/"source.manifest.json")
+        invrepo=vis/"visual-inventory.v1.json"
+        previous_inventory=read_json(invrepo) if invrepo.is_file() else None
         raw=vis/f"visual-analysis-{model}.v1.json";cor=layer/"visual-analysis-corrections.v1.json";eff=layer/"visual-analysis-effective.v1.json";ledger=layer/"coverage-ledger.v1.json"
+        shutil.copy2(inv,invrepo);shutil.copy2(work/"source.manifest.json",vis/"source.manifest.json")
         index=vis/"visual-pipeline-index.v1.json"
         prior_index=read_json(index) if index.is_file() else {}
         prior_matches=(prior_index.get("source_book_id")==s["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower()==str(s["sha256"]).lower())
@@ -202,6 +259,8 @@ def run_layers(args):
                 files=list(pull.glob(f"visual-analysis-{model}.v1.json")) if got.returncode==0 else []
                 if files:shutil.copy2(files[0],raw);cmd.append("--resume")
                 shutil.rmtree(pull,ignore_errors=True)
+            if raw.is_file():
+                backfill_legacy_context_hashes(previous_inventory,raw,book_id=s["book_id"],source_sha=s["sha256"],model=args.model)
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
             subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-analysis-checkpoint.v1",f"{args.package}:{checkpoint}",f"{raw.name}:application/json"],cwd=raw.parent,check=True)
