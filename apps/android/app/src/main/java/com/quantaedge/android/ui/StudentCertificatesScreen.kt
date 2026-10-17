@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.quantaedge.android.data.ApiClient
-import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiFailure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
