@@ -8,6 +8,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.clickable
@@ -3264,6 +3265,7 @@ fun QuantaEdgeApp() {
                         language = language,
                         busy = busy,
                         onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = { question, answer, afterSaved -> saveAssessmentAnswer(question, answer, afterSaved) },
                         onSubmit = ::submitAssessment,
@@ -3376,8 +3378,7 @@ fun QuantaEdgeApp() {
                         certificateEligibility = assessmentCertificateEligibility,
                         onRefresh = ::openProgress,
                         onIssueCertificate = ::issueCertificateForAttempt,
-                        onViewCertificate = ::viewResultCertificate,
-                        onDownloadCertificate = ::downloadResultCertificate
+                        onViewCertificate = ::viewResultCertificate
                     )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
