@@ -217,6 +217,7 @@ private fun resourceDownloadUiState(work: androidx.work.WorkInfo, language: Stri
 @Composable
 fun QuantaEdgeApp() {
     val context = LocalContext.current
+    val themeController = LocalQuantaEdgeThemeController.current
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
@@ -253,10 +254,20 @@ fun QuantaEdgeApp() {
                     preferences.edit().putString("institutionCode", code).apply()
                 }
             }
-            institutionBrandIdentity = code?.let { InstitutionBrandingRepository.fetch(it) }
+            if (code == null) {
+                institutionBrandIdentity = null
+                themeController.clearInstitutionTheme()
+            } else {
+                // A tenant cache is activated only after the existing resolver has validated the code.
+                themeController.activateCachedInstitutionTheme(code)
+                val identity = InstitutionBrandingRepository.fetch(code)
+                themeController.applyInstitutionTheme(code, identity.themeTokensJson)
+                institutionBrandIdentity = identity
+            }
         } catch (_: Exception) {
-            // A missing/invalid school link must never block ordinary sign-in or learning.
+            // A missing/invalid link must not block sign-in/learning or leave a stale tenant palette active.
             institutionBrandIdentity = null
+            themeController.clearInstitutionTheme()
         }
     }
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
