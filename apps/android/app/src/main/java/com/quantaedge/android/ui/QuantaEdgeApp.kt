@@ -4169,7 +4169,7 @@ private fun AccountSignupScreen(
             enabled = !busy,
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
         ) {
-            Text(t("Sign up with Google", "Google से साइन अप करें"))
+            Text(if (language == "hi") "Google से साइन अप करें" else "Sign up with Google")
         }
         Text(if(language=="hi") "या मोबाइल OTP से जारी रखें" else "Or continue with mobile OTP",
             style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary,
