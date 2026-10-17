@@ -172,8 +172,20 @@ def layer5_ledger(repo: Path, source: dict[str,Any]) -> Path:
             raise ValueError(f"Need one matching Layer 5 ledger for {expected_id}; found {len(matches)} without a canonical source-index selection. Run/repair Layers 1–5 first.")
         selected=matches[0]
     ledger=read_json(selected)
-    if ledger.get("ledger_status")!="COMPLETE" or ledger.get("publication_allowed") is not False:
-        raise ValueError(f"Layer 5 status is {ledger.get('ledger_status')!r}; only a complete review-only ledger is eligible.")
+    summary=ledger.get("summary") if isinstance(ledger.get("summary"),dict) else {}
+    unresolved=summary.get("unresolved_count")
+    if ledger.get("ledger_status")!="COMPLETE" or unresolved!=0 or ledger.get("publication_allowed") is not False:
+        details=(
+            f"unresolved_count={unresolved if unresolved is not None else 'unknown'}, "
+            f"pages_with_unresolved_text={summary.get('pages_with_unresolved_text','unknown')}, "
+            f"missing_visual_analyses={summary.get('missing_visual_analyses','unknown')}, "
+            f"failed_visual_analyses={summary.get('failed_visual_analyses','unknown')}, "
+            f"orphan_analysis_results={summary.get('orphan_analysis_results','unknown')}"
+        )
+        raise ValueError(
+            f"Layer 5 for {expected_id} is {ledger.get('ledger_status')!r} ({details}). "
+            "Resume Layers 4–5 for this exact book/PDF hash; Layers 6–8 require complete page and visual evidence."
+        )
     return selected
 
 def load_layer5_evidence(repo: Path, source: dict[str,Any]) -> tuple[Path,dict[str,Any],dict[int,list[dict[str,Any]]]]:
@@ -1472,8 +1484,32 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     if args.commit_checkpoints: checkpoint_git(repo,[output],"benchmark(ai): local Ollama on Class 6 NCERT Curiosity")
     return out
 
+def preflight_source(args:argparse.Namespace)->dict[str,Any]:
+    """Validate the exact source and complete Layer 5 evidence without loading Ollama."""
+    repo=args.repo_root.resolve()
+    source=load_source(repo,args.class_no,args.source_book_id)
+    ledger_path,ledger,evidence_by_page=load_layer5_evidence(repo,source)
+    return {
+        "preflight":"READY",
+        "source_book_id":source["book_id"],
+        "source_pdf_sha256":source["source_pdf_sha256"],
+        "class_no":source["class_no"],
+        "language":source["language"],
+        "subject":source["subject"],
+        "source_page_count":source["page_count"],
+        "layer5_ledger_path":ledger_path.relative_to(repo).as_posix(),
+        "layer5_ledger_sha256":sha_file(ledger_path),
+        "layer5_visual_evidence_count":sum(len(rows) for rows in evidence_by_page.values()),
+        "layer5_unresolved_count":ledger["summary"]["unresolved_count"],
+        "model_download_required":False,
+    }
+
+
 def main(argv:list[str]|None=None)->int:
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="mode",required=True)
+    pf=sub.add_parser("preflight",help="Validate source and Layer 5 evidence without downloading or starting a model.")
+    pf.add_argument("--repo-root",type=Path,default=Path.cwd()); pf.add_argument("--class-no",type=int,choices=(6,7,8),required=True)
+    pf.add_argument("--source-book-id",required=True)
     r=sub.add_parser("run"); r.add_argument("--repo-root",type=Path,default=Path.cwd()); r.add_argument("--class-no",type=int,choices=(6,7,8),required=True)
     r.add_argument("--source-book-id",required=True); r.add_argument("--endpoint",default="http://127.0.0.1:11434"); r.add_argument("--model",default="qwen2.5:1.5b")
     r.add_argument("--max-model-calls",type=int,default=6); r.add_argument("--max-pages-per-segment",type=int,default=2); r.add_argument("--max-context-chars",type=int,default=5000)
@@ -1489,7 +1525,9 @@ def main(argv:list[str]|None=None)->int:
     refresh.add_argument("--commit-checkpoints",action="store_true")
     a=p.parse_args(argv)
     try:
-        if a.mode=="refresh-benchmark":
+        if a.mode=="preflight":
+            result=preflight_source(a)
+        elif a.mode=="refresh-benchmark":
             result=refresh_benchmark(a)
         elif a.mode=="benchmark":
             if not 1<=a.sample_segments<=2: raise ValueError("sample-segments must be 1..2 for the bounded CPU benchmark.")
