@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.consume
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -76,10 +75,12 @@ fun FloatingTutorDock(
         val viewportWidth = maxWidth.value
         val viewportHeight = maxHeight.value
         val compact = maxWidth < 700.dp
-        val effectiveWidth = if (compact) maxWidth else panelWidth.dp.coerceIn(320.dp, (maxWidth - 16.dp).coerceAtLeast(320.dp))
-        val effectiveHeight = if (compact) maxHeight else panelHeight.dp.coerceIn(360.dp, (maxHeight - 16.dp).coerceAtLeast(360.dp))
-        val defaultLeft = (viewportWidth - effectiveWidth.value - 16f).coerceAtLeast(8f)
-        val defaultTop = (viewportHeight - effectiveHeight.value - 18f).coerceAtLeast(8f)
+        val availableWidth = (maxWidth - 16.dp).coerceAtLeast(260.dp)
+        val availableHeight = (maxHeight - 16.dp).coerceAtLeast(260.dp)
+        val effectiveWidth = if (compact) availableWidth else panelWidth.dp.coerceIn(320.dp, (maxWidth - 16.dp).coerceAtLeast(320.dp))
+        val effectiveHeight = if (compact) (maxHeight * 0.78f).coerceIn(300.dp, availableHeight) else panelHeight.dp.coerceIn(360.dp, (maxHeight - 16.dp).coerceAtLeast(360.dp))
+        val defaultLeft = if (compact) 8f else (viewportWidth - effectiveWidth.value - 16f).coerceAtLeast(8f)
+        val defaultTop = (viewportHeight - effectiveHeight.value - if (compact) 12f else 18f).coerceAtLeast(8f)
         val panelLeft = (left ?: defaultLeft).coerceIn(8f, (viewportWidth - effectiveWidth.value - 8f).coerceAtLeast(8f))
         val panelTop = (top ?: defaultTop).coerceIn(8f, (viewportHeight - effectiveHeight.value - 8f).coerceAtLeast(8f))
 
@@ -114,8 +115,8 @@ fun FloatingTutorDock(
                 }
             }
         } else {
-            val frameModifier = if (maximized || compact) {
-                Modifier.fillMaxSize().padding(if (compact) 4.dp else 8.dp)
+            val frameModifier = if (maximized) {
+                Modifier.fillMaxSize().padding(8.dp)
             } else {
                 Modifier
                     .offset(x = panelLeft.dp, y = panelTop.dp)
@@ -125,14 +126,14 @@ fun FloatingTutorDock(
 
             Surface(
                 modifier = frameModifier.zIndex(21f),
-                shape = RoundedCornerShape(if (maximized || compact) 14.dp else 20.dp),
+                shape = RoundedCornerShape(if (maximized) 14.dp else 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface,
                 shadowElevation = 18.dp,
                 tonalElevation = 3.dp
             ) {
                 Box(Modifier.fillMaxSize()) {
-                    val dragHeader = if (maximized || compact) {
+                    val dragHeader = if (maximized) {
                         Modifier
                     } else {
                         Modifier.pointerInput(viewportWidth, viewportHeight, effectiveWidth, effectiveHeight) {
@@ -166,7 +167,7 @@ fun FloatingTutorDock(
                         modifier = Modifier.fillMaxSize(),
                         headerDragModifier = dragHeader
                     )
-                    if (!maximized && !compact) {
+                    if (!maximized) {
                         Surface(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
@@ -177,9 +178,9 @@ fun FloatingTutorDock(
                                     detectDragGestures { change, dragAmount ->
                                         change.consume()
                                         panelWidth = (effectiveWidth.value + dragAmount.x / density)
-                                            .coerceIn(320f, (viewportWidth - panelLeft - 8f).coerceAtLeast(320f))
+                                            .coerceIn(260f, (viewportWidth - panelLeft - 8f).coerceAtLeast(260f))
                                         panelHeight = (effectiveHeight.value + dragAmount.y / density)
-                                            .coerceIn(360f, (viewportHeight - panelTop - 8f).coerceAtLeast(360f))
+                                            .coerceIn(260f, (viewportHeight - panelTop - 8f).coerceAtLeast(260f))
                                     }
                                 },
                             color = MaterialTheme.colorScheme.surfaceVariant,
