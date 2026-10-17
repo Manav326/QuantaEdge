@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocale } from '../../components/LanguageProvider';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
@@ -12,72 +12,44 @@ type InstitutionMembership = {
   membership_status?: string;
   joined_at?: string;
   authorized_courses?: number;
-  logo_asset_key?: string;
-  branding_version?: number;
 };
 
-async function learnerApi<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const headers = new Headers(init.headers);
-  headers.set('X-QE-Workspace', 'STUDENT');
-  headers.set('Accept', 'application/json');
-  if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
-  const response = await fetch(path, { ...init, headers, credentials: 'same-origin', cache: 'no-store' });
+async function loadLearnerMemberships(): Promise<InstitutionMembership[]> {
+  const response = await fetch('/api/v1/institution/memberships/me', {
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' },
+  });
   const raw = await response.text();
-  let body: any = {};
+  let body: { institutions?: InstitutionMembership[]; message?: string; detail?: string } = {};
   try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-  if (!response.ok) throw new Error(String(body.message || body.detail || body.error || 'The request could not be completed.'));
-  return body as T;
+  if (!response.ok) throw new Error(body.message || body.detail || 'School enrollment could not be checked.');
+  return Array.isArray(body.institutions) ? body.institutions : [];
 }
 
-export default function StudentInstitutionsPage() {
+export default function StudentSchoolPage() {
   const { locale } = useLocale();
   const english = locale === 'english';
-  const { brand, resolveInstitutionCode } = useTenantBranding();
+  const { brand, isResolving } = useTenantBranding();
   const [memberships, setMemberships] = useState<InstitutionMembership[]>([]);
-  const [code, setCode] = useState('');
   const [loading, setLoading] = useState(true);
-  const [joining, setJoining] = useState(false);
   const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
 
-  const loadMemberships = useCallback(async () => {
+  const refresh = useCallback(async () => {
     setLoading(true);
-    try {
-      const result = await learnerApi<{ institutions?: InstitutionMembership[] }>('/api/v1/institution/memberships/me');
-      setMemberships(Array.isArray(result.institutions) ? result.institutions : []);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Institution memberships could not be loaded.');
-    } finally { setLoading(false); }
+    setError('');
+    try { setMemberships(await loadLearnerMemberships()); }
+    catch (problem) { setError(problem instanceof Error ? problem.message : 'School enrollment could not be checked.'); }
+    finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { void loadMemberships(); }, [loadMemberships]);
+  useEffect(() => { void refresh(); }, [refresh]);
 
-  async function joinInstitution(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError('');
-    setNotice('');
-    const clean = code.trim().toUpperCase();
-    if (clean.length < 3) {
-      setError(english ? 'Enter the institution code shared by your school.' : 'अपने विद्यालय द्वारा दिया गया संस्थान कोड दर्ज करें।');
-      return;
-    }
-    setJoining(true);
-    try {
-      const result = await learnerApi<{ institutionCode?: string; institutionName?: string; status?: string }>('/api/v1/institution/join', {
-        method: 'POST',
-        body: JSON.stringify({ code: clean }),
-      });
-      setCode('');
-      const institutionCode = String(result.institutionCode || '').trim();
-      if (institutionCode) await resolveInstitutionCode(institutionCode);
-      setNotice(english
-        ? 'You are now linked with ' + (result.institutionName || 'your school') + '.'
-        : (result.institutionName || 'आपका विद्यालय') + ' से आपका खाता जुड़ गया है।');
-      await loadMemberships();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'The institution code could not be used.');
-    } finally { setJoining(false); }
-  }
+  // Never list the learner's other institution memberships in a school-branded experience.
+  const membership = brand
+    ? memberships.find(item => String(item.tenant_code || '').trim().toUpperCase() === brand.institutionCode)
+    : undefined;
+  const active = membership?.institution_status === 'ACTIVE' && membership.membership_status === 'ACTIVE';
 
   return (
     <main className="qe-structured-student-page qe-institutions-page">
@@ -85,50 +57,44 @@ export default function StudentInstitutionsPage() {
         <QuantaEdgeBrand href="/student" variant="compact" />
         <div>
           <span className="eyebrow">{brand?.displayName || (english ? 'YOUR SCHOOL' : 'आपका विद्यालय')}</span>
-          <h1>{english ? 'My institutions' : 'मेरे विद्यालय'}</h1>
-          <p>{english ? 'See the schools linked to your learner account, or join another school using its invitation code.' : 'अपने विद्यार्थी खाते से जुड़े विद्यालय देखें या आमंत्रण कोड से दूसरे विद्यालय से जुड़ें।'}</p>
+          <h1>{english ? 'My school' : 'मेरा विद्यालय'}</h1>
+          <p>{english ? 'Your school identity and enrollment for this learning space.' : 'इस सीखने के स्थान में आपके विद्यालय और नामांकन की जानकारी।'}</p>
         </div>
       </header>
 
       {error ? <div className="auth-message is-error" role="alert">{error}</div> : null}
-      {notice ? <div className="auth-message" role="status">{notice}</div> : null}
 
       <section className="qe-institutions-panel">
-        <h2>{english ? 'Join your school' : 'अपने विद्यालय से जुड़ें'}</h2>
-        <p>{english ? 'Enter the join code provided by the school. This links your existing account; it does not create a duplicate learner account.' : 'विद्यालय द्वारा दिया गया जुड़ने का कोड दर्ज करें। आपका मौजूदा खाता जुड़ेगा, नया विद्यार्थी खाता नहीं बनेगा।'}</p>
-        <form className="qe-institutions-join-form" onSubmit={joinInstitution}>
-          <label>
-            {english ? 'Institution join code' : 'संस्थान का जुड़ने का कोड'}
-            <input value={code} onChange={event => setCode(event.target.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 32))}
-              autoComplete="off" minLength={3} maxLength={32} required placeholder={english ? 'Enter school code' : 'विद्यालय कोड दर्ज करें'} />
-          </label>
-          <button type="submit" className="button button-dark" disabled={joining || loading}>{joining ? (english ? 'Joining…' : 'जुड़ रहे हैं…') : (english ? 'Join institution' : 'विद्यालय से जुड़ें')}</button>
-        </form>
-      </section>
-
-      <section className="qe-institutions-panel">
-        <div className="qe-institutions-panel-heading">
-          <h2>{english ? 'Schools linked to your account' : 'आपके खाते से जुड़े विद्यालय'}</h2>
-          <button type="button" className="button button-light button-small" onClick={() => void loadMemberships()} disabled={loading}>{english ? 'Refresh' : 'रीफ़्रेश'}</button>
-        </div>
-        {loading ? <p>{english ? 'Loading your school memberships…' : 'विद्यालय की जानकारी लोड हो रही है…'}</p> : null}
-        {!loading && memberships.length === 0 ? <div className="qe-institutions-empty">
-          <strong>{english ? 'No school linked yet' : 'अभी कोई विद्यालय नहीं जुड़ा है'}</strong>
-          <p>{english ? 'Use the join code supplied by your school to connect this account.' : 'इस खाते को जोड़ने के लिए विद्यालय से मिला कोड दर्ज करें।'}</p>
+        {isResolving || loading ? <p>{english ? 'Checking your school enrollment…' : 'विद्यालय में नामांकन की जाँच हो रही है…'}</p> : null}
+        {!isResolving && !brand ? <div className="qe-institutions-empty">
+          <strong>{english ? 'Open your school’s learning link' : 'अपने विद्यालय का learning link खोलें'}</strong>
+          <p>{english ? 'Use the link shared by your school to enter its branded learning space. Your account will be linked through that school’s invitation.' : 'अपने विद्यालय द्वारा साझा किया गया लिंक खोलें। उसी विद्यालय के आमंत्रण से आपका मौजूदा खाता जुड़ेगा।'}</p>
         </div> : null}
-        <div className="qe-institutions-list">
-          {memberships.map((item, index) => {
-            const active = item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE';
-            return <article className="qe-institution-membership" key={(item.tenant_code || 'tenant') + '-' + index}>
-              <span className="qe-brand__tenant-mark" aria-hidden="true">{(item.institution_name || 'S').slice(0, 1).toLocaleUpperCase()}</span>
-              <div className="qe-institution-membership-copy">
-                <strong>{item.institution_name || item.tenant_code || (english ? 'School' : 'विद्यालय')}</strong>
-                <span>{item.tenant_code || ''}</span>
-                <small>{english ? 'Authorised courses: ' : 'अधिकृत पाठ्यक्रम: '}{item.authorized_courses ?? 0}</small>
-              </div>
-              <span className={active ? 'qe-institution-status is-active' : 'qe-institution-status'}>{active ? (english ? 'Active' : 'सक्रिय') : (item.membership_status || item.institution_status || (english ? 'Unavailable' : 'उपलब्ध नहीं'))}</span>
-            </article>;
-          })}
+        {!isResolving && !loading && brand && !membership ? <div className="qe-institutions-empty">
+          <strong>{english ? 'Enrollment is not active for this school' : 'इस विद्यालय में नामांकन सक्रिय नहीं है'}</strong>
+          <p>{english ? 'Open the enrollment link shared by your school, or contact the school administrator.' : 'विद्यालय द्वारा साझा किया गया नामांकन लिंक खोलें या विद्यालय प्रशासक से संपर्क करें।'}</p>
+        </div> : null}
+        {!loading && brand && membership ? (
+          <article className="qe-institution-membership">
+            {brand.logoUrl
+              ? <img className="qe-institution-school-logo" src={brand.logoUrl} alt="" aria-hidden="true" />
+              : <span className="qe-brand__tenant-mark" aria-hidden="true">{brand.displayName.slice(0, 1).toLocaleUpperCase()}</span>}
+            <div className="qe-institution-membership-copy">
+              <strong>{brand.displayName}</strong>
+              <small>{english ? 'School enrollment' : 'विद्यालय में नामांकन'}</small>
+              {membership.joined_at ? <small>{english ? 'Joined: ' : 'जुड़े: '}{new Date(membership.joined_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')}</small> : null}
+              <small>{english ? 'Authorised courses: ' : 'अधिकृत पाठ्यक्रम: '}{membership.authorized_courses ?? 0}</small>
+            </div>
+            <span className={active ? 'qe-institution-status is-active' : 'qe-institution-status'}>
+              {active ? (english ? 'Enrolled' : 'नामांकित') : (english ? 'Inactive' : 'निष्क्रिय')}
+            </span>
+          </article>
+        ) : null}
+        <div className="qe-institutions-panel-heading">
+          <span />
+          <button type="button" className="button button-light button-small" onClick={() => void refresh()} disabled={loading || isResolving}>
+            {english ? 'Refresh status' : 'स्थिति रीफ़्रेश करें'}
+          </button>
         </div>
       </section>
     </main>
