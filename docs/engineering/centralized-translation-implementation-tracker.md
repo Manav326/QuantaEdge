@@ -403,3 +403,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - People Operations login's username placeholder is catalog-backed. Password-only HRMS authentication and OTP-based educational staff authentication remain unchanged.
 - Added CI regressions for removed literal helper sentences, fixed Admin language options and the People login placeholder; new catalog keys and placeholder parity are checked in both locales.
 - Both routes remain first-pass: inspect remaining embedded copy, responsive/browser behavior and all error states before marking route audit complete.
+
+
+## Admin Employees/Governance — first-pass catalog extraction
+
+- Extracted static UI copy for staff account creation, permission editing, role choices, suspend/reactivate flows, staff and audit tabs, loading/empty/error states, security guidance, search fields and audit event details into semantic catalog keys.
+- Known role codes now map to translated catalog labels. Permission names/descriptions and API-supplied error details remain dynamic records instead of duplicating source data as UI copy.
+- Request failures use a catalog fallback with an HTTP status placeholder; audit dates follow the registered UI locale tag.
+- Added CI raw-copy regression checks for representative prior literals and paired catalog messages across generated Web/Admin/People copies.
+- Route remains first-pass until current CI passes and browser checks cover staff creation, role permissions, suspend/reactivate and read-only audit access.

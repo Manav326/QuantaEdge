@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
+import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
+import { useUiTranslation } from '../i18n/useUiTranslation';
+import { getUiLocaleLanguage } from '../i18n/catalog';
 
 type StaffRow = {
   id:number; public_id:string; mobile_e164:string; display_name:string; role:string; active:boolean;
@@ -16,13 +19,14 @@ type AuditRow = {
 };
 
 const roleOptions = [
-  {value:'CONTENT_AUTHOR',label:'Content author'},
-  {value:'CONTENT_REVIEWER',label:'Content reviewer'},
-  {value:'MODERATOR',label:'Moderator'},
-  {value:'PUBLISHER',label:'Publisher'},
-  {value:'MANAGER',label:'Manager'},
-  {value:'ADMIN',label:'Administrator'}
+  {value:'CONTENT_AUTHOR',message:'admin.employees.roleContentAuthor'},
+  {value:'CONTENT_REVIEWER',message:'admin.employees.roleContentReviewer'},
+  {value:'MODERATOR',message:'admin.employees.roleModerator'},
+  {value:'PUBLISHER',message:'admin.employees.rolePublisher'},
+  {value:'MANAGER',message:'admin.employees.roleManager'},
+  {value:'ADMIN',message:'admin.employees.roleAdministrator'}
 ];
+function roleLabel(t:(key:string,values?:Record<string,string|number>)=>string,role:string){const keys:Record<string,string>={CONTENT_AUTHOR:'admin.employees.roleContentAuthor',CONTENT_REVIEWER:'admin.employees.roleContentReviewer',MODERATOR:'admin.employees.roleModerator',PUBLISHER:'admin.employees.rolePublisher',MANAGER:'admin.employees.roleManager',ADMIN:'admin.employees.roleAdministrator'};return keys[role]?t(keys[role]):role.replaceAll('_',' ');}
 
 function defaultsForRole(role:string, permissions:Permission[]):string[] {
   switch(role) {
@@ -36,22 +40,24 @@ function defaultsForRole(role:string, permissions:Permission[]):string[] {
   }
 }
 
-async function readJson(response:Response):Promise<any> {
+async function readJson(response:Response,t:(key:string,values?:Record<string,string|number>)=>string):Promise<any> {
   const raw=await response.text();
   let value:any={};
   try { value=raw?JSON.parse(raw):{}; } catch { value={message:raw}; }
-  if(!response.ok) throw new Error(value.detail||value.message||value.error||('Request failed (HTTP '+response.status+').'));
+  if(!response.ok) throw new Error(value.detail||value.message||value.error||t('admin.employees.requestFailed',{status:response.status}));
   return value;
 }
 
-function prettyDate(value:string|null|undefined) {
-  if(!value)return 'Never';
+function prettyDate(value:string|null|undefined,locale:string,t:(key:string)=>string) {
+  if(!value)return t('admin.employees.never');
   const date=new Date(value);
-  return Number.isNaN(date.getTime())?'—':date.toLocaleString();
+  return Number.isNaN(date.getTime())?'—':date.toLocaleString(getUiLocaleLanguage(locale)+'-IN');
 }
 
 export default function AdminStaffPage() {
   const router=useRouter();
+  const t=useUiTranslation();
+  const workspace=useContext(AdminWorkspaceContext);
   const [me,setMe]=useState<any>(null);
   const [staff,setStaff]=useState<StaffRow[]>([]);
   const [staffPage,setStaffPage]=useState(0);
@@ -91,11 +97,11 @@ export default function AdminStaffPage() {
     (async()=>{
       const params=new URLSearchParams({limit:String(auditPageSize),offset:String(auditPage*auditPageSize)});
       const response=await fetch('/api/v1/admin/staff/audit?'+params.toString(),{cache:'no-store'});
-      const data=await readJson(response);
+      const data=await readJson(response,t);
       if(!active)return;
       setAudit(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
       setAuditTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
-    })().catch((e:any)=>{if(active)setError(e.message||'Audit history could not be loaded.');});
+    })().catch((e:any)=>{if(active)setError(e.message||t('admin.employees.auditLoadFailed'));});
     return()=>{active=false};
   },[canAudit,auditPage,auditPageSize]);
 
@@ -105,14 +111,14 @@ export default function AdminStaffPage() {
 
   async function loadStaff() {
     const r=await fetch('/api/v1/admin/staff',{cache:'no-store'});
-    const data=await readJson(r);
+    const data=await readJson(r,t);
     setStaff(Array.isArray(data)?data:[]);
   }
    async function loadAdminData(admin:boolean) {
     const tasks:Promise<any>[]=[];
     if(admin) {
-      tasks.push(fetch('/api/v1/admin/staff',{cache:'no-store'}).then(readJson).then(data=>setStaff(Array.isArray(data)?data:[])));
-      tasks.push(fetch('/api/v1/admin/staff/permissions',{cache:'no-store'}).then(readJson).then(data=>{
+      tasks.push(fetch('/api/v1/admin/staff',{cache:'no-store'}).then(response=>readJson(response,t)).then(data=>setStaff(Array.isArray(data)?data:[])));
+      tasks.push(fetch('/api/v1/admin/staff/permissions',{cache:'no-store'}).then(response=>readJson(response,t)).then(data=>{
         const rows=Array.isArray(data)?data:[];
         setAvailablePermissions(rows);
         setNewPermissions(defaultsForRole('CONTENT_AUTHOR',rows));
@@ -126,7 +132,7 @@ export default function AdminStaffPage() {
     (async()=>{
       try {
         const response=await fetch('/api/v1/auth/me',{cache:'no-store'});
-        const identity=await readJson(response);
+        const identity=await readJson(response,t);
         if(!identity.staffId) { router.replace('/login'); return; }
         if(!mounted)return;
         setMe(identity);
@@ -137,7 +143,7 @@ export default function AdminStaffPage() {
         if(!admin&&!hasAudit) { router.replace('/content'); return; }
         await loadAdminData(admin);
       } catch(e:any) {
-        if(mounted)setError(e.message||'Staff workspace could not be loaded.');
+        if(mounted)setError(e.message||t('admin.employees.workspaceLoadFailed'));
       } finally {
         if(mounted)setLoading(false);
       }
@@ -189,11 +195,11 @@ export default function AdminStaffPage() {
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({displayName:newName.trim(),mobile:newMobile,role:newRole,permissions:newPermissions})
       });
-      await readJson(response);
+      await readJson(response,t);
       setNewName('');setNewMobile('');changeNewRole('CONTENT_AUTHOR');
       await loadStaff();
-      setNotice('Staff account created. The person can now use Staff access with their assigned mobile number.');
-    } catch(e:any) {setError(e.message||'Staff account could not be created.');}
+      setNotice(t('admin.employees.accountCreated'));
+    } catch(e:any) {setError(e.message||t('admin.employees.accountCreateFailed'));}
     finally {setSaving(false);}
   }
 
@@ -205,124 +211,124 @@ export default function AdminStaffPage() {
         method:'PUT',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({role:draftRole,permissions:draftPermissions})
       });
-      const updated=await readJson(response);
+      const updated=await readJson(response,t);
       setStaff(rows=>rows.map(row=>row.id===selected.id?updated:row));
       setSelected(updated);
       setInitialRole(updated.role);
       setDraftRole(updated.role);
       setInitialPermissions([...updated.permissions]);
       setDraftPermissions([...updated.permissions]);
-      setNotice('Permissions updated. The new grants are checked by the API on each request.');
-    } catch(e:any) {setError(e.message||'Permissions could not be saved.');}
+      setNotice(t('admin.employees.permissionsUpdated'));
+    } catch(e:any) {setError(e.message||t('admin.employees.permissionsSaveFailed'));}
     finally {setSaving(false);}
   }
 
   async function toggleActive(row:StaffRow) {
     if(row.isCurrentStaff&&!row.active)return;
     const next=!row.active;
-    if(!next&&!window.confirm('Suspend '+row.display_name+'? Their active staff sessions will be revoked immediately. Audit history will be retained.'))return;
+    if(!next&&!window.confirm(t('admin.employees.suspendConfirm',{name:row.display_name})))return;
     setSaving(true);setError('');setNotice('');
     try {
       const response=await fetch('/api/v1/admin/staff/'+row.id+'/status',{
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:next})
       });
-      const updated=await readJson(response);
+      const updated=await readJson(response,t);
       setStaff(rows=>rows.map(item=>item.id===row.id?{...item,...updated}:item));
       if(selected?.id===row.id) {
         const merged={...selected,...updated} as StaffRow;
         setSelected(merged);
       }
-      setNotice(updated.message||('Staff account '+(next?'activated.':'suspended.')));
-    } catch(e:any) {setError(e.message||'Staff status could not be updated.');}
+      setNotice(updated.message||(next?t('admin.employees.accountActivated'):t('admin.employees.accountSuspended')));
+    } catch(e:any) {setError(e.message||t('admin.employees.statusUpdateFailed'));}
     finally {setSaving(false);}
   }
 
-  if(loading)return <main className="admin-shell"><AdminSidebar active="staff"/><section className="admin-main"><div className="admin-loading"><span className="admin-kicker">STAFF & GOVERNANCE</span><h1>Preparing staff workspace</h1><p>Loading staff identities, permission grants and activity history…</p></div></section></main>;
+  if(loading)return <main className="admin-shell"><AdminSidebar active="staff"/><section className="admin-main"><div className="admin-loading"><span className="admin-kicker">{t('admin.employees.loadingKicker')}</span><h1>{t('admin.employees.preparingWorkspace')}</h1><p>{t('admin.employees.loadingDescription')}</p></div></section></main>;
 
   return <main className="admin-shell">
     <AdminSidebar active="staff"/>
     <section className="admin-main qe-staff-main">
       <header className="admin-top">
-        <div><span className="admin-kicker">ACCESS CONTROL / GOVERNANCE</span><h1>{isAdmin?'Staff & permissions':'Staff activity trail'}</h1><p>{isAdmin?'Keep staff identities separate from parent/student accounts and grant only the tasks each person needs.':'Review recorded staff activity. Your account cannot manage staff identities.'}</p></div>
-        <span className="top-status"><span className="status-dot"/>{isAdmin?'Staff directory · live permissions':'Read-only audit access'}</span>
+        <div><span className="admin-kicker">{t('admin.employees.governanceKicker')}</span><h1>{isAdmin?t('admin.employees.title'):t('admin.employees.auditOnlyTitle')}</h1><p>{isAdmin?t('admin.employees.directoryDescription'):t('admin.employees.auditOnlyDescription')}</p></div>
+        <span className="top-status"><span className="status-dot"/>{isAdmin?t('admin.employees.directoryLive'):t('admin.employees.auditReadOnly')}</span>
       </header>
 
       <section className="qe-staff-principles">
         <span className="qe-staff-principle-mark">✓</span>
-        <div><strong>Separate identities. Least privilege. Traceable actions.</strong><p>Staff accounts are stored separately from parent/student accounts. Suspending staff revokes their sessions without deleting their audit history.</p></div>
+        <div><strong>{t('admin.employees.principlesTitle')}</strong><p>{t('admin.employees.principlesDescription')}</p></div>
       </section>
 
-      {error&&<div className="admin-alert qe-feedback" role="alert"><strong>Needs attention</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>Dismiss</button></div>}
-      {notice&&<div className="admin-notice qe-feedback" role="status"><strong>Workspace update</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>Dismiss</button></div>}
+      {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.employees.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.employees.dismiss')}</button></div>}
+      {notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.employees.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.employees.dismiss')}</button></div>}
 
       <div className="qe-staff-tabs">
-        {isAdmin&&<button type="button" className={tab==='staff'?'active':''} onClick={()=>setTab('staff')}>Staff directory <b>{staff.length}</b></button>}
-        {canAudit&&<button type="button" className={tab==='audit'?'active':''} onClick={()=>setTab('audit')}>Audit trail <b>{auditTotal}</b></button>}
+        {isAdmin&&<button type="button" className={tab==='staff'?'active':''} onClick={()=>setTab('staff')} >{t('admin.employees.staffDirectory')} <b>{staff.length}</b></button>}
+        {canAudit&&<button type="button" className={tab==='audit'?'active':''} onClick={()=>setTab('audit')} >{t('admin.employees.auditTrail')} <b>{auditTotal}</b></button>}
       </div>
 
       {tab==='staff'&&isAdmin&&<div className="qe-staff-layout">
         <section className="admin-panel qe-staff-directory">
-          <div className="panel-head"><div><span className="admin-kicker">STAFF IDENTITIES</span><h2>Staff directory</h2><p>These are not parent or student user accounts.</p></div><span className="count">{staff.filter(row=>row.active).length} active</span></div>
-          <label className="qe-staff-search">Search staff<input value={search} onChange={e=>{setSearch(e.target.value);setStaffPage(0);}} placeholder="Name, mobile or role"/></label>
+          <div className="panel-head"><div><span className="admin-kicker">{t('admin.employees.staffIdentities')}</span><h2>{t('admin.employees.staffDirectory')}</h2><p>{t('admin.employees.notLearnerAccounts')}</p></div><span className="count">{t('admin.employees.activeCount',{count:staff.filter(row=>row.active).length})}</span></div>
+          <label className="qe-staff-search">{t('admin.employees.searchStaff')}<input value={search} onChange={e=>{setSearch(e.target.value);setStaffPage(0);}} placeholder={t('admin.employees.searchPlaceholder')}/></label>
           <div className="qe-staff-list">
             {visibleStaff.map(row=><article className={'qe-staff-row '+(selected?.id===row.id?'selected':'')} key={row.id}>
               <button type="button" className="qe-staff-person" onClick={()=>startEdit(row)}>
                 <span className="qe-staff-avatar">{row.display_name.trim().slice(0,1).toUpperCase()}</span>
-                <span className="qe-staff-person-copy"><strong>{row.display_name}</strong><small>{row.mobile_e164} · {row.role.replaceAll('_',' ')}</small><small>{row.permissions.length} task permissions</small></span>
-                <span className={'qe-status-pill '+(row.active?'published':'archived')}>{row.active?'Active':'Suspended'}</span>
+                <span className="qe-staff-person-copy"><strong>{row.display_name}</strong><small>{row.mobile_e164} · {roleLabel(t,row.role)}</small><small>{t('admin.employees.taskPermissionCount',{count:row.permissions.length})}</small></span>
+                <span className={'qe-status-pill '+(row.active?'published':'archived')}>{row.active?t('admin.employees.active'):t('admin.employees.suspended')}</span>
               </button>
-              <button type="button" className="qe-staff-row-action" onClick={()=>void toggleActive(row)} disabled={saving||row.isCurrentStaff}>{row.active?'Suspend access':'Reactivate'}</button>
+              <button type="button" className="qe-staff-row-action" onClick={()=>void toggleActive(row)} disabled={saving||row.isCurrentStaff}>{row.active?t('admin.employees.suspendAccess'):t('admin.employees.reactivate')}</button>
             </article>)}
-            {!filteredStaff.length&&<div className="qe-library-empty"><strong>No matching staff accounts</strong><p>Create a staff identity or change the search text.</p></div>}
+            {!filteredStaff.length&&<div className="qe-library-empty"><strong>{t('admin.employees.noMatchingAccounts')}</strong><p>{t('admin.employees.createOrSearchHelp')}</p></div>}
           </div>
           <PremiumPagination page={staffPage} total={filteredStaff.length} pageSize={staffPageSize}
             onPageChange={setStaffPage} onPageSizeChange={size=>{setStaffPageSize(size);setStaffPage(0);}}
-            itemLabel="staff accounts" />
+            itemLabel={t('admin.employees.staffAccounts')} />
         </section>
 
         <section className="admin-panel qe-staff-editor">
           {selected?<>
-            <div className="panel-head"><div><span className="admin-kicker">PERMISSION ASSIGNMENT</span><h2>{selected.display_name}</h2><p>{selected.mobile_e164} · Role: {selected.role.replaceAll('_',' ')}</p></div><button type="button" className="qe-icon-button" onClick={()=>setSelected(null)} aria-label="Close permission editor">×</button></div>
-            <label className="qe-staff-field">Staff role<select value={draftRole} onChange={e=>changeDraftRole(e.target.value)} disabled={saving||selected.isCurrentStaff}><option value="CONTENT_AUTHOR">Content author</option><option value="CONTENT_REVIEWER">Content reviewer</option><option value="MODERATOR">Moderator</option><option value="PUBLISHER">Publisher</option><option value="MANAGER">Manager</option><option value="ADMIN">Administrator</option></select></label>
-            <div className="qe-staff-permissions-head"><strong>Task permissions</strong><span>{draftPermissions.length} selected</span></div>
-            <p className="qe-staff-help">Choose the tasks this person is allowed to perform. Permissions are enforced by the API, not just by hiding buttons.</p>
+            <div className="panel-head"><div><span className="admin-kicker">{t('admin.employees.permissionAssignment')}</span><h2>{selected.display_name}</h2><p>{selected.mobile_e164} · {t('admin.employees.role')}: {roleLabel(t,selected.role)}</p></div><button type="button" className="qe-icon-button" onClick={()=>setSelected(null)} aria-label={t('admin.employees.dismiss')}>×</button></div>
+            <label className="qe-staff-field">{t('admin.employees.role')}<select value={draftRole} onChange={e=>changeDraftRole(e.target.value)} disabled={saving||selected.isCurrentStaff}>{roleOptions.map(option=><option key={option.value} value={option.value}>{t(option.message)}</option>)}</select></label>
+            <div className="qe-staff-permissions-head"><strong>{t('admin.employees.taskPermissions')}</strong><span>{t('admin.employees.selectedCount',{count:draftPermissions.length})}</span></div>
+            <p className="qe-staff-help">{t('admin.employees.permissionHelp')}</p>
             <div className="qe-staff-permission-list">{availablePermissions.map(permission=><label key={permission.permission_key} className="qe-permission-option">
               <input type="checkbox" checked={draftPermissions.includes(permission.permission_key)} disabled={saving||draftRole==='ADMIN'||selected.isCurrentStaff||(permission.permission_key==='STAFF_MANAGE'&&draftRole!=='ADMIN')} onChange={e=>toggleDraftPermission(permission.permission_key,e.target.checked)}/>
               <span><b>{permission.display_name}</b><small>{permission.description}</small><em>{permission.permission_key.replaceAll('_',' ')}</em></span>
             </label>)}</div>
-            {draftRole==='ADMIN'&&<p className="qe-staff-help">Administrator accounts retain every permission. Assign the Administrator role only to trusted operators.</p>}
-            <button type="button" className="qe-primary-button qe-save-staff" disabled={saving||!editDirty||selected.isCurrentStaff} onClick={()=>void savePermissions()}>{saving?'Saving…':'Save role & permissions'}</button>
+            {draftRole==='ADMIN'&&<p className="qe-staff-help">{t('admin.employees.adminRoleWarning')}</p>}
+            <button type="button" className="qe-primary-button qe-save-staff" disabled={saving||!editDirty||selected.isCurrentStaff} onClick={()=>void savePermissions()}>{saving?t('admin.employees.saving'):t('admin.employees.saveRolePermissions')}</button>
           </>:<>
-            <div className="panel-head"><div><span className="admin-kicker">ADD A STAFF IDENTITY</span><h2>Create staff account</h2><p>Use this for a moderator, manager, author, reviewer or publisher.</p></div></div>
-            <label className="qe-staff-field">Full name<input value={newName} onChange={e=>setNewName(e.target.value)} maxLength={120} placeholder="Staff member name"/></label>
-            <label className="qe-staff-field">Mobile number<input value={newMobile} onChange={e=>setNewMobile(e.target.value)} inputMode="tel" maxLength={18} placeholder="10-digit Indian mobile"/></label>
-            <label className="qe-staff-field">Initial role<select value={newRole} onChange={e=>changeNewRole(e.target.value)}>{roleOptions.map(option=><option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
-            <div className="qe-staff-permissions-head"><strong>Initial task permissions</strong><span>{newPermissions.length} selected</span></div>
-            <p className="qe-staff-help">The role selects a starting set. You can then remove or add individual task permissions.</p>
+            <div className="panel-head"><div><span className="admin-kicker">{t('admin.employees.addStaffIdentity')}</span><h2>{t('admin.employees.createStaffAccount')}</h2><p>{t('admin.employees.createStaffHelp')}</p></div></div>
+            <label className="qe-staff-field">{t('admin.employees.fullName')}<input value={newName} onChange={e=>setNewName(e.target.value)} maxLength={120} placeholder={t('admin.employees.staffNamePlaceholder')}/></label>
+            <label className="qe-staff-field">{t('admin.employees.mobileNumber')}<input value={newMobile} onChange={e=>setNewMobile(e.target.value)} inputMode="tel" maxLength={18} placeholder={t('admin.employees.mobilePlaceholder')}/></label>
+            <label className="qe-staff-field">{t('admin.employees.initialRole')}<select value={newRole} onChange={e=>changeNewRole(e.target.value)}>{roleOptions.map(option=><option key={option.value} value={option.value}>{t(option.message)}</option>)}</select></label>
+            <div className="qe-staff-permissions-head"><strong>{t('admin.employees.initialTaskPermissions')}</strong><span>{t('admin.employees.selectedCount',{count:newPermissions.length})}</span></div>
+            <p className="qe-staff-help">{t('admin.employees.roleDefaultHelp')}</p>
             <div className="qe-staff-permission-list">{availablePermissions.map(permission=><label key={permission.permission_key} className="qe-permission-option">
               <input type="checkbox" checked={newPermissions.includes(permission.permission_key)} disabled={saving||newRole==='ADMIN'||permission.permission_key==='STAFF_MANAGE'} onChange={e=>toggleDraftPermission(permission.permission_key,e.target.checked,true)}/>
               <span><b>{permission.display_name}</b><small>{permission.description}</small><em>{permission.permission_key.replaceAll('_',' ')}</em></span>
             </label>)}</div>
-            <button type="button" className="qe-primary-button qe-save-staff" disabled={saving||!newReady||!adminPermissionsComplete} onClick={()=>void createStaff()}>{saving?'Creating…':'Create staff account'}</button>
+            <button type="button" className="qe-primary-button qe-save-staff" disabled={saving||!newReady||!adminPermissionsComplete} onClick={()=>void createStaff()}>{saving?t('admin.employees.creating'):t('admin.employees.createStaffAccount')}</button>
           </>}
         </section>
       </div>}
 
       {tab==='audit'&&canAudit&&<section className="admin-panel qe-audit-panel">
-        <div className="panel-head"><div><span className="admin-kicker">RECORDED STAFF ACTIVITY</span><h2>Audit trail</h2><p>Requests to the admin API are captured with actor, endpoint, result and timestamp. Request bodies and OTP values are not stored here.</p></div><span className="count">{auditTotal} events</span></div>
+        <div className="panel-head"><div><span className="admin-kicker">{t('admin.employees.recordedActivity')}</span><h2>{t('admin.employees.auditTrail')}</h2><p>{t('admin.employees.auditDescription')}</p></div><span className="count">{t('admin.employees.eventCount',{count:auditTotal})}</span></div>
         <div className="qe-audit-list">
           {audit.map(row=><article key={row.id} className="qe-audit-row">
             <span className={'qe-audit-status '+(row.response_status>=200&&row.response_status<400?'success':'failure')}>{row.response_status}</span>
-            <div className="qe-audit-event"><strong>{row.actor_name} <small>{row.actor_role}</small></strong><span><b>{row.http_method}</b> {row.request_path}</span><small>{prettyDate(row.created_at)} · {row.remote_address||'IP unavailable'}</small>{row.details&&<small className="qe-audit-detail">{row.details}</small>}</div>
-            <button type="button" className="qe-audit-info" title={row.user_agent||'No user-agent recorded'} onClick={()=>window.alert((row.user_agent||'No user-agent recorded')+'\n'+(row.remote_address||'IP unavailable'))}>Details</button>
+            <div className="qe-audit-event"><strong>{row.actor_name} <small>{{roleLabel(t,row.actor_role)}</small></strong><span><b>{row.http_method}</b> {row.request_path}</span><small>{prettyDate(row.created_at,workspace.locale,key=>t(key))} · {row.remote_address||t('admin.employees.ipUnavailable')}</small>{row.details&&<small className="qe-audit-detail">{row.details}</small>}</div>
+            <button type="button" className="qe-audit-info" title={row.user_agent||t('admin.employees.noUserAgentRecorded')} onClick={()=>window.alert((row.user_agent||t('admin.employees.noUserAgentRecorded'))+'\n'+(row.remote_address||t('admin.employees.ipUnavailable')))} >{t('admin.employees.details')}</button>
           </article>)}
-          {!audit.length&&<div className="qe-library-empty"><strong>No staff activity is recorded yet</strong><p>New staff API actions will appear here. Existing pre-audit events are not synthesized.</p></div>}
+          {!audit.length&&<div className="qe-library-empty"><strong>{t('admin.employees.noActivity')}</strong><p>{t('admin.employees.newActivityHelp')}</p></div>}
         </div>
         <PremiumPagination page={auditPage} total={auditTotal} pageSize={auditPageSize} onPageChange={setAuditPage}
-          onPageSizeChange={size=>{setAuditPageSize(size);setAuditPage(0);}} itemLabel="audit events" />
+          onPageSizeChange={size=>{setAuditPageSize(size);setAuditPage(0);}} itemLabel={t('admin.employees.auditEvents')} />
       </section>}
 
-      <p className="admin-footer qe-admin-footer">QuantaEdge · Staff governance <span>Identities, permissions and audit history are separate from learner accounts.</span></p>
+      <p className="admin-footer qe-admin-footer">{t('admin.employees.governanceFooter')} <span>{t('admin.employees.governanceFooterDescription')}</span></p>
     </section>
   </main>;
 }

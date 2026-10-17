@@ -44,7 +44,7 @@
 | `/certificates` | `apps/admin/app/certificates/page.tsx` | First pass — build-verified, audit pending | Verify filters, revocation/audit states and localized dates in browser. |
 | `/classes` | `apps/admin/app/classes/page.tsx` | Scheduling form + session/recording actions first pass — next CI pending | Verify the latest Classes localization build, both locales, session/provider status notices, recording lifecycle actions, and accessibility/empty/error states; route acceptance remains open. |
 | `/content` | `apps/admin/app/content/page.tsx` | Needs audit/migration | Audit Content Studio editor, preview, visual review and validation. |
-| `/employees` | `apps/admin/app/employees/page.tsx` | Needs audit/migration | Audit employee and permission-facing text. |
+| `/employees` | `apps/admin/app/employees/page.tsx` | Staff/governance copy catalog-backed — CI pending, audit open | Verify staff creation, role/permission grants, suspend/reactivate, read-only audit access and pagination in browser. |
 | `/legacy-content` | `apps/admin/app/legacy-content/page.tsx` | Needs audit/migration | Inspect retained route before deciding deprecation or migration. |
 | `/login` | `apps/admin/app/login/page.tsx` | Instruction copy catalog-backed; selector registry-driven — CI pending, audit open | Verify server failures, OTP activation, permission errors and language switch in browser. |
 | `/parents` | `apps/admin/app/parents/page.tsx` | First pass — audit pending | Check parent/child permissions, confirmations and status feedback. |
