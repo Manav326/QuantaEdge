@@ -116,6 +116,25 @@ private data class ResourceDownloadUiState(
     val active: Boolean = false
 )
 
+private fun courseSessionTimestamp(item: JSONObject): Long? {
+    val value = item.textAny(
+        "start_at", "starts_at", "start_time", "scheduled_start_at", "scheduledAt", "startAt",
+        "recorded_at", "recordedAt", "started_at", "startedAt", "created_at"
+    ).trim()
+    if (value.isBlank()) return null
+    return runCatching { java.time.OffsetDateTime.parse(value).toInstant().toEpochMilli() }.getOrNull()
+        ?: runCatching { java.time.Instant.parse(value).toEpochMilli() }.getOrNull()
+        ?: runCatching { java.time.LocalDateTime.parse(value).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli() }.getOrNull()
+}
+
+private fun courseReadableTimestamp(item: JSONObject, language: String): String {
+    val instant = courseSessionTimestamp(item) ?: return ""
+    val locale = if (language == "hi") java.util.Locale("hi", "IN") else java.util.Locale.ENGLISH
+    val formatter = java.time.format.DateTimeFormatter.ofPattern("EEE dd MMM yyyy, h:mm a", locale)
+        .withZone(java.time.ZoneId.systemDefault())
+    return formatter.format(java.time.Instant.ofEpochMilli(instant))
+}
+
 private fun offlineVideoDownloadLabel(work: androidx.work.WorkInfo, language: String): String {
     val bytes = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
         work.outputData.getLong("bytesDownloaded", work.progress.getLong("bytesDownloaded", 0L))
@@ -273,6 +292,9 @@ fun QuantaEdgeApp() {
     var tutorLoadingOlderMessages by remember { mutableStateOf(false) }
     var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var dashboardClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var dashboardClassesLoaded by rememberSaveable { mutableStateOf(false) }
+    var dashboardClassesFailed by remember { mutableStateOf(false) }
     var offlineRecordingIds by remember { mutableStateOf(offlineVideoStore.downloadedRecordingIds()) }
     val videoDownloadStates = remember { mutableStateMapOf<Long, String>() }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
@@ -505,6 +527,42 @@ fun QuantaEdgeApp() {
         }
         studentTextbookDocuments = loaded.distinctBy { it.optLongAny("document_id", "id") }
         studentTextbookDocumentsLoadFailed = requestFailed && studentTextbookDocuments.isEmpty()
+    }
+
+    suspend fun refreshDashboardClasses() {
+        val enrolledCourse = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == currentCourseId
+        }
+        val courseSubjects = enrolledCourse?.optJSONArray("subjects")?.let { array ->
+            (0 until array.length()).mapNotNull { index ->
+                array.optJSONObject(index)?.textAny("subject_code", "code")?.takeIf { it.isNotBlank() }
+            }
+        }.orEmpty()
+        val subjects = courseSubjects.ifEmpty { listOf("maths", "science") }.distinct()
+        val gathered = mutableListOf<JSONObject>()
+        var anyRequestFailed = false
+        for (subjectCode in subjects) {
+            val liveResponse = runCatching {
+                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode))
+                    .optJSONArray("items").objectItems()
+            }
+            if (liveResponse.isFailure) anyRequestFailed = true
+            gathered.addAll(liveResponse.getOrDefault(emptyList()))
+            val recordedResponse = runCatching {
+                ApiClient.getObject("/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode))
+                    .optJSONArray("items").objectItems()
+            }
+            if (recordedResponse.isFailure) anyRequestFailed = true
+            gathered.addAll(recordedResponse.getOrDefault(emptyList()))
+        }
+        dashboardClasses = gathered.distinctBy {
+            val recordedId = it.longAny("recorded_class_id", "recordingId")
+            val sessionId = it.longAny("session_id", "sessionId")
+            if (recordedId > 0L) "recording:$recordedId" else if (sessionId > 0L) "session:$sessionId"
+            else it.textAny("title", "name") + "|" + it.textAny("start_at", "starts_at", "start_time")
+        }
+        dashboardClassesFailed = anyRequestFailed && dashboardClasses.isEmpty()
+        dashboardClassesLoaded = true
     }
 
     suspend fun enterSignedInHome(user: JSONObject) {
@@ -2821,6 +2879,9 @@ fun QuantaEdgeApp() {
                         profile = studentProfile,
                         recommendation = recommendation,
                         programs = studentPrograms,
+                        dashboardClasses = dashboardClasses,
+                        dashboardClassesLoaded = dashboardClassesLoaded,
+                        dashboardClassesFailed = dashboardClassesFailed,
                         activeCourseId = currentCourseId,
                         onAllCourses = ::openAllCourses,
                         onMarketplace = ::openMarketplace,
@@ -3564,6 +3625,12 @@ private fun StudentHomeScreen(
     programs: List<JSONObject>,
     programsLoadFailed: Boolean,
     courseProgress: Map<Long, JSONObject>,
+    dashboardClasses: List<JSONObject>,
+    dashboardClassesLoaded: Boolean,
+    dashboardClassesFailed: Boolean,
+    activeCourseId: Long,
+    onAllCourses: () -> Unit,
+    onMarketplace: () -> Unit,
     onEnrollCourse: (Long) -> Unit,
     onOpenCourseSubject: (String, Long) -> Unit,
     textbookDocuments: List<JSONObject>,
@@ -3580,7 +3647,24 @@ private fun StudentHomeScreen(
     val questionStats = profile.optJSONObject("questionStats")
     val hasLessonSummary = profile.has("completedLessons") || profile.has("completed_lessons") || profile.has("lessonStats")
     val percent = if (totalLessons > 0) (completedLessons * 100 / totalLessons).coerceIn(0, 100) else 0
-    val curriculum = profile.optJSONArray("curriculum")?.objectItems()?.take(2) ?: emptyList()
+    val activeCourse = programs.firstOrNull {
+        it.longAny("id", "course_id") == activeCourseId &&
+            (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+    } ?: programs.firstOrNull { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }
+    val activeCourseIdResolved = activeCourse?.longAny("id", "course_id") ?: 0L
+    val activeCourseSubjects = activeCourse?.optJSONArray("subjects")?.let { array ->
+        (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
+    }.orEmpty()
+    val nowMillis = System.currentTimeMillis()
+    val recentThreshold = nowMillis - 3L * 24L * 60L * 60L * 1000L
+    val upcomingClasses = dashboardClasses.filter {
+        val whenMillis = courseSessionTimestamp(it)
+        whenMillis != null && whenMillis >= nowMillis
+    }.sortedBy { courseSessionTimestamp(it) ?: Long.MAX_VALUE }.take(3)
+    val recentClasses = dashboardClasses.filter {
+        val whenMillis = courseSessionTimestamp(it)
+        whenMillis != null && whenMillis < nowMillis && whenMillis >= recentThreshold
+    }.sortedByDescending { courseSessionTimestamp(it) ?: 0L }.take(3)
     val greeting = HomeGreeting.text(LocalTime.now().hour, language)
 
     Column(
@@ -3650,99 +3734,123 @@ private fun StudentHomeScreen(
             }
         }
 
-        Text(if (language == "hi") "आपके विषय" else "Your subjects",
-            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            if (curriculum.isNotEmpty()) {
-                curriculum.forEach { subject ->
-                    val code = subject.textAny("subject_code", "subjectCode").ifBlank { "maths" }.lowercase()
-                    Surface(
-                        modifier = Modifier.weight(1f).clickable { onSubject(code) },
-                        shape = MaterialTheme.shapes.medium,
-                        color = MaterialTheme.colorScheme.surface,
-                        tonalElevation = 1.dp
-                    ) {
-                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(
-                                subject.textAny("subject_name", "subject_code").ifBlank {
-                                    if (code == "science") "Science" else "Mathematics"
-                                },
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Text(subject.optInt("completion_percent", 0).toString() + "%",
-                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-                            LinearProgressIndicator(
-                                progress = { subject.optDouble("completion_percent", 0.0).toFloat().coerceIn(0f, 100f) / 100f },
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Text(if (language == "hi") "पाठ खोलें →" else "Open lessons →",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary)
-                        }
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                        Text(if (language == "hi") "आपका course" else "Your course",
+                            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text(
+                            activeCourse?.optString("display_name").orEmpty().ifBlank {
+                                if (language == "hi") "कोई course नहीं चुना गया" else "No course selected"
+                            },
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                        Text(
+                            activeCourse?.optString("course_tag").orEmpty().ifBlank {
+                                activeCourse?.optString("tag").orEmpty().ifBlank {
+                                    activeCourse?.optString("curriculum_version").orEmpty().ifBlank {
+                                        if (language == "hi") "आपकी सीखने की जगह" else "Your learning space"
+                                    }
+                                }
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Surface(color = MaterialTheme.colorScheme.primaryContainer, shape = MaterialTheme.shapes.small) {
+                        Text(if (language == "hi") "सक्रिय" else "Active",
+                            modifier = Modifier.padding(horizontal = 9.dp, vertical = 6.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
-                if (curriculum.size == 1) {
-                    Surface(
-                        modifier = Modifier.weight(1f).clickable {
-                            onSubject(if (curriculum.first().textAny("subject_code").equals("maths", true)) "science" else "maths")
+                if (activeCourseSubjects.isNotEmpty()) {
+                    Text(if (language == "hi") "विषय" else "Subjects",
+                        style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                    activeCourseSubjects.forEach { subject ->
+                        val code = subject.textAny("subject_code", "code").lowercase()
+                        Row(
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 44.dp)
+                                .clickable(enabled = !busy && activeCourseIdResolved > 0L) {
+                                    onOpenCourseSubject(code, activeCourseIdResolved)
+                                }.padding(vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                Text(subject.textAny("subject_name", "subject_code").ifBlank { "Subject" },
+                                    style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                                Text(if (language == "hi") "संरचित पाठ खोलें" else "Open structured lessons",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Text("→", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
+                        }
+                    }
+                } else {
+                    Text(
+                        if (programsLoadFailed) {
+                            if (language == "hi") "Courses लोड नहीं हो पाए।" else "Courses could not be loaded."
+                        } else {
+                            if (language == "hi") "Course चुनने के लिए All courses खोलें।" else "Choose a course from All courses."
                         },
-                        shape = MaterialTheme.shapes.medium,
-                        color = MaterialTheme.colorScheme.surfaceVariant
-                    ) {
-                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(if (language == "hi") "दूसरा विषय" else "Other subject",
-                                style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                            Text(if (language == "hi") "अध्याय देखें →" else "Explore chapters →",
-                                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-                        }
-                    }
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-            } else {
-                Surface(
-                    modifier = Modifier.weight(1f).clickable { onSubject("maths") },
-                    shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surface, tonalElevation = 1.dp
-                ) {
-                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Text(if (language == "hi") "गणित" else "Mathematics",
-                            style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                        Text(if (language == "hi") "पाठ खोलें →" else "Open lessons →",
-                            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(onClick = onAllCourses, enabled = !busy) {
+                        Text(if (language == "hi") "All courses" else "All courses")
                     }
-                }
-                Surface(
-                    modifier = Modifier.weight(1f).clickable { onSubject("science") },
-                    shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surface, tonalElevation = 1.dp
-                ) {
-                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Text(if (language == "hi") "विज्ञान" else "Science",
-                            style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                        Text(if (language == "hi") "पाठ खोलें →" else "Open lessons →",
-                            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    Button(onClick = onMarketplace, enabled = !busy) {
+                        Text(if (language == "hi") "Marketplace" else "Marketplace")
                     }
                 }
             }
         }
 
-        StudentCourseCatalog(
-            programs = programs,
-            programsLoadFailed = programsLoadFailed,
-            courseProgress = courseProgress,
-            language = language,
-            busy = busy,
-            onEnroll = onEnrollCourse,
-            onOpenSubject = onOpenCourseSubject,
-            onRefresh = onRefresh
-        )
-        StudentTextbookQuickLinks(
-            documents = textbookDocuments,
-            loadFailed = textbookDocumentsLoadFailed,
-            language = language,
-            busy = busy,
-            onOpenDocument = onOpenDocument,
-            onBrowseSubject = onResources,
-            onRefresh = onRefresh
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(if (language == "hi") "आपकी Live Classes" else "Your Live Classes",
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(if (language == "hi") "आने वाली कक्षाएँ और पिछले 3 दिनों की recordings"
+                        else "Upcoming sessions and recent classes from the last 3 days",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                TextButton(onClick = { onClasses(currentSubject) }, enabled = !busy) {
+                    Text(if (language == "hi") "सभी देखें" else "View all")
+                }
+            }
+            if (!dashboardClassesLoaded) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            } else if (dashboardClassesFailed && dashboardClasses.isEmpty()) {
+                Text(if (language == "hi") "Live classes अभी लोड नहीं हो पाईं।" else "Live classes could not be loaded yet.",
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else if (upcomingClasses.isEmpty() && recentClasses.isEmpty()) {
+                Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium,
+                    color = MaterialTheme.colorScheme.surfaceVariant) {
+                    Text(if (language == "hi") "अभी कोई upcoming या हाल की class नहीं है।"
+                        else "No upcoming or recent classes right now.",
+                        modifier = Modifier.padding(14.dp), style = MaterialTheme.typography.bodyMedium)
+                }
+            } else {
+                if (upcomingClasses.isNotEmpty()) {
+                    Text(if (language == "hi") "आने वाली" else "Upcoming",
+                        style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                    upcomingClasses.forEach { item ->
+                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { currentSubject }) }
+                    }
+                }
+                if (recentClasses.isNotEmpty()) {
+                    Text(if (language == "hi") "हाल की · पिछले 3 दिन" else "Recent · last 3 days",
+                        style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                    recentClasses.forEach { item ->
+                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { currentSubject }) }
+                    }
+                }
+            }
+        }
 
         Text(if (language == "hi") "त्वरित पहुँच" else "Quick access",
             style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -3757,18 +3865,6 @@ private fun StudentHomeScreen(
             subtitle = if (language == "hi") "विषय अभ्यास, टेस्ट और परिणाम" else "Topic practice, assessments and results",
             action = if (language == "hi") "देखें" else "View",
             glyph = "✓", enabled = !busy, onClick = { onTests("ALL") }
-        )
-        DashboardActionRow(
-            title = if (language == "hi") "किताबें और अध्याय" else "Books & chapters",
-            subtitle = if (language == "hi") "किताबें पढ़ें और उपलब्ध पेज डाउनलोड करें" else "Read books and download available pages",
-            action = if (language == "hi") "लाइब्रेरी" else "Library",
-            glyph = "▤", enabled = !busy, onClick = { onResources("maths") }
-        )
-        DashboardActionRow(
-            title = if (language == "hi") "Live classes और recordings" else "Live classes & recordings",
-            subtitle = if (language == "hi") "कक्षाएँ और आपकी playback progress" else "Classes and your playback progress",
-            action = if (language == "hi") "खोलें" else "Open",
-            glyph = "▷", enabled = !busy, onClick = { onClasses("maths") }
         )
         DashboardActionRow(
             title = if (language == "hi") "मेरे परिणाम और समीक्षा" else "My results & review",
@@ -3806,13 +3902,36 @@ private fun StudentHomeScreen(
             )
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton(onClick = onProfile, enabled = !busy) {
-                Text(if (language == "hi") "प्रोफ़ाइल और सेटिंग" else "Profile & settings")
+    }
+}
+
+@Composable
+private fun DashboardLiveClassCard(item: JSONObject, language: String, onOpen: () -> Unit) {
+    val title = item.textAny("title", "session_title", "name").ifBlank {
+        if (language == "hi") "Live class" else "Live class"
+    }
+    val subject = item.textAny("subject_name", "subjectName", "subject_code", "subjectCode")
+    val timeLabel = courseReadableTimestamp(item, language)
+    Surface(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onOpen),
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp
+    ) {
+        Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Surface(shape = RoundedCornerShape(10.dp), color = MaterialTheme.colorScheme.primaryContainer) {
+                Text("▷", modifier = Modifier.padding(horizontal = 10.dp, vertical = 9.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
-            TextButton(onClick = onRefresh, enabled = !busy) {
-                Text(if (language == "hi") "रिफ्रेश" else "Refresh")
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                if (subject.isNotBlank()) Text(subject, style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (timeLabel.isNotBlank()) Text(timeLabel, style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary)
             }
+            Text("→", color = MaterialTheme.colorScheme.primary)
         }
     }
 }
