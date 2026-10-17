@@ -336,5 +336,19 @@ assert.ok(androidApp.includes('&includeFuture=true') &&
   issue66LiveClassTestsContract.includes('studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow') &&
   issue66LiveClassTestsContract.includes('eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0)'),
   'Android dashboard and API tests must exercise the full-schedule query mode.');
+const issue66AndroidDashboardRefresh = androidApp.slice(
+  androidApp.indexOf('suspend fun refreshDashboardClasses()'),
+  androidApp.indexOf('suspend fun enterSignedInHome(')
+);
+assert.ok(issue66AndroidDashboardRefresh.includes('&includeFuture=true') &&
+  issue66AndroidDashboardRefresh.includes('/api/v1/learning/live-classes?subjectCode=') &&
+  !issue66AndroidDashboardRefresh.includes('/api/v1/learning/recorded-classes?subjectCode='),
+  'Android dashboard Live Classes must request the full upcoming session schedule without mixing standalone recording-library items into live sessions.');
+assert.ok(androidApp.includes('courseSessionEndTimestamp(it)') &&
+  androidApp.includes('groupClassesBySubject(items: List<JSONObject>)') &&
+  androidApp.includes('showSubject: Boolean = true') &&
+  androidApp.includes('item.optBoolean("has_recording", item.optBoolean("hasRecording"))'),
+  'Android dashboard must include sessions currently in progress, use end timestamps for recency, group sessions by subject and disclose actual recording availability.');
+
 
 console.log('Navigation, localization, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
