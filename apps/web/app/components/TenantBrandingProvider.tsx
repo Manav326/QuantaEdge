@@ -363,7 +363,7 @@ export function useTenantBranding() {
 }
 
 export function TenantBrandMark({ className = '' }: { className?: string }) {
-  const { brand, institutionContextRequested } = useTenantBranding();
+  const { brand, institutionContextRequested, isResolving } = useTenantBranding();
   const title = brand?.displayName?.trim();
   const logoUrl = brand && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo') ? brand.logoUrl : null;
   if (brand) {
