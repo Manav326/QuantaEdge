@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import StructuredLessonExperience from './StructuredLessonExperience';
+import AssignedLearningResources from './AssignedLearningResources';
 import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
 import type { StructuredLesson, StructuredQuestion } from './contract';
 
@@ -74,8 +75,11 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}</header>
     {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.go.back.f75fdd65')}</Link></> :
       busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
-      <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
-        onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
-        initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />}
+      <>
+        <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
+          onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
+          initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />
+        <AssignedLearningResources artifactId={artifactId} language={learningLanguage} />
+      </>}
   </section></div></main>;
 }

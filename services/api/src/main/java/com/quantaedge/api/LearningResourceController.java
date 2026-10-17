@@ -455,7 +455,7 @@ public class LearningResourceController {
       item.put("language",raw.get("language"));item.put("sourceKind",raw.get("source_kind"));
       item.put("mediaType",raw.get("media_type")!=null?raw.get("media_type"):raw.get("recording_media_type"));
       item.put("fileSizeBytes",raw.get("file_size_bytes")!=null?raw.get("file_size_bytes"):raw.get("recording_file_size_bytes"));
-      item.put("durationSeconds",raw.get("duration_seconds"));item.put("downloadAllowed",Boolean.TRUE.equals(raw.get("download_allowed")));
+      item.put("durationSeconds",raw.get("duration_seconds"));item.put("sha256",raw.get("sha256"));item.put("downloadAllowed",Boolean.TRUE.equals(raw.get("download_allowed")));
       item.put("lastPositionSeconds",raw.get("last_position_seconds"));item.put("watchedSeconds",raw.get("watched_seconds"));item.put("completed",raw.get("completed"));
       String sourceKind=String.valueOf(raw.get("source_kind"));
       long id=((Number)raw.get("resource_id")).longValue(),assignment=((Number)raw.get("assignment_id")).longValue();

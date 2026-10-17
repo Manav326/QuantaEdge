@@ -1,0 +1,23 @@
+.section{margin:1.5rem 0;padding:clamp(1rem,2.5vw,1.4rem);border:1px solid var(--qe-border,#d9e1e7);border-radius:1rem;background:var(--qe-surface,#fff);color:var(--qe-text,#192734)}
+.heading{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.heading h2{margin:.2rem 0 .35rem;font-size:1.15rem;font-weight:750}
+.heading p{margin:0;color:var(--qe-muted,#5b6b78);font-size:.9rem;line-height:1.5}
+.eyebrow{margin:0;color:var(--qe-orange,#ed6b20);font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.refresh,.openLink,.downloadLink{display:inline-flex;align-items:center;justify-content:center;min-height:2.4rem;padding:.5rem .8rem;border:1px solid var(--qe-border,#d9e1e7);border-radius:.65rem;background:transparent;color:inherit;font-size:.85rem;font-weight:700;text-decoration:none;cursor:pointer}
+.refresh:disabled{opacity:.55;cursor:wait}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:.85rem}
+.card{display:flex;flex-direction:column;align-items:stretch;gap:.65rem;min-width:0;padding:1rem;border:1px solid var(--qe-border,#d9e1e7);border-radius:.85rem;background:var(--qe-surface-raised,#f8fafb)}
+.card h3{margin:0;font-size:1rem;line-height:1.4;overflow-wrap:anywhere}
+.card p{margin:0}
+.cardHeading{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.kind{display:inline-flex;padding:.25rem .5rem;border-radius:999px;background:var(--qe-soft,#fff3eb);color:var(--qe-orange,#b64b13);font-size:.68rem;font-weight:800;letter-spacing:.05em}
+.muted{color:var(--qe-muted,#5b6b78);font-size:.82rem}
+.description{color:var(--qe-muted,#5b6b78);font-size:.9rem;line-height:1.5;overflow-wrap:anywhere}
+.media{display:block;width:100%;max-height:24rem;border-radius:.7rem;background:#0b0f13}
+.audio{display:block;width:100%}
+.openLink,.downloadLink{align-self:flex-start}
+.downloadLink{border-color:var(--qe-orange,#ed6b20);color:var(--qe-orange,#b64b13)}
+.empty{padding:1rem;border:1px dashed var(--qe-border,#d9e1e7);border-radius:.7rem;color:var(--qe-muted,#5b6b78)}
+.error{padding:.75rem;border-radius:.6rem;background:#fff0f0;color:#a21f1f;font-size:.9rem}
+.completed{font-size:.8rem;font-weight:750;color:#26734d}
+@media(max-width:560px){.heading{flex-direction:column}.refresh{align-self:flex-start}.grid{grid-template-columns:1fr}.media{max-height:18rem}}
