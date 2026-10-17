@@ -55,7 +55,7 @@ assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'Live Quan
 assert(adminBrandComponent === peopleBrandComponent, 'Admin and People Operations must keep the same canonical operator brand component.');
 assert(brandComponent.includes('useTenantBranding') && brandComponent.includes('brand.displayName'), 'Learner web brand lockup must consume resolved tenant branding.');
 assert(tenantBrandingProvider.includes('/api/v1/institution/public/branding/') && tenantBrandingProvider.includes('institution/memberships/me'), 'Tenant branding provider must resolve trusted institution codes and a single learner membership.');
-assert(tenantBrandingProvider.includes('^#[0-9a-f]{6}
+assert(!tenantBrandingProvider.includes('--qe-brand-orange'), 'Tenant identity resolution must leave palette variables to the shared theme system.');
 assert(adminSidebar.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin sidebar must use the canonical shared brand component.');
 assert(adminWorkspaceLayout.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin mobile workspace header must use the shared brand component.');
 assert(adminWorkspaceLayout.includes('className="qe-admin-global-brand"'), 'Admin mobile workspace header must render the canonical brand lockup.');
