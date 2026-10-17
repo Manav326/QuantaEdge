@@ -237,7 +237,15 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
         // Invite secrets live in the URL fragment for transport; once safely stored in
         // session storage, remove them from the address bar/history before authentication.
         if (urlJoin && readPendingJoinCode() === urlJoin) {
-          window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
+          // Remove invite secrets from both the query string and fragment after session storage succeeds.
+          const cleanQuery = new URLSearchParams(window.location.search);
+          for (const key of ['joinCode', 'join_code', 'join']) cleanQuery.delete(key);
+          const safeSearch = cleanQuery.toString();
+          window.history.replaceState(
+            window.history.state,
+            '',
+            window.location.pathname + (safeSearch ? '?' + safeSearch : '')
+          );
         }
       } else if (urlCode && readPendingJoinCode() && readPendingJoinTenantCode() !== urlCode) {
         savePendingJoinCode(null);
