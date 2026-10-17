@@ -434,7 +434,7 @@ public class TutorService {
 
   private static String suppressUnderlyingProviderName(String answer,String language,String tutorIdentityLabel) {
     if(answer==null||answer.isBlank()||"QuantaEdge".equals(tutorIdentityLabel)
-        ||!java.util.regex.Pattern.compile("(?i)Quanta\\\\s*Edge").matcher(answer).find()) return answer;
+        ||!java.util.regex.Pattern.compile("(?i)Quanta\\s*Edge").matcher(answer).find()) return answer;
     String school="your school".equalsIgnoreCase(tutorIdentityLabel) ? "your school" : tutorIdentityLabel;
     if("en".equalsIgnoreCase(language)){
       return "I’m the AI tutor for " + school
