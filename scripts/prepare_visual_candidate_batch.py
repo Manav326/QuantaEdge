@@ -101,7 +101,7 @@ def preparation_fingerprint(source: dict[str, Any], work: Path, inventory_path: 
         if not path.is_file():
             raise ValueError(f"Preparation dependency is missing: {relative}")
         script_hashes[relative] = sha256_file(path)
-    import fitz
+    import pymupdf as fitz
     value = {
         "schema_version": "quantaedge.visual-candidate-preparation-fingerprint.v1",
         "class": source.get("class") or source.get("classes"),
@@ -132,7 +132,7 @@ def layer1_input_fingerprint(source: dict[str, Any], work: Path, repo: Path) -> 
         raise ValueError(f"{source.get('book_slug')}: source PDF, manifest, or page JSONL is missing.")
     if sha256_file(pdf) != str(source.get("sha256") or "").lower():
         raise ValueError(f"{source.get('book_slug')}: source PDF SHA-256 mismatch.")
-    import fitz
+    import pymupdf as fitz
     payload = {
         "schema_version": "quantaedge.visual-inventory-preparation-fingerprint.v1",
         "source_book_id": source["book_id"],
@@ -416,12 +416,20 @@ def extract_archive(archive: Path, root: Path, slug: str) -> Path:
     return out
 
 
-def missing_artifact(message: str) -> bool:
+def missing_artifact(message: str, expected_reference: str | None = None) -> bool:
     lower = message.lower()
-    # Only an explicit registry "artifact absent" response permits a rebuild.
-    # Generic "not found" wording can appear in authentication/proxy/server errors,
-    # which must fail closed rather than silently trigger expensive regeneration.
-    return any(term in lower for term in ("404", "manifest unknown", "manifest_unknown", "name_unknown"))
+    # Only explicit registry "artifact absent" responses permit a rebuild.
+    # Keep the established registry codes, and recognize GHCR/ORAS's exact-reference
+    # "failed to resolve <package>:<tag>: <package>:<tag>: not found" form. A generic
+    # "not found" from a proxy, authentication layer, or upstream server must fail closed.
+    if any(term in lower for term in ("404", "manifest unknown", "manifest_unknown", "name_unknown")):
+        return True
+    if expected_reference:
+        reference = expected_reference.lower()
+        exact_missing = f"failed to resolve {reference}: {reference}: not found"
+        if exact_missing in lower:
+            return True
+    return False
 
 
 def pull_archive(package: str, tag: str, staging: Path) -> tuple[Path | None, str]:
@@ -431,7 +439,7 @@ def pull_archive(package: str, tag: str, staging: Path) -> tuple[Path | None, st
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     detail = (result.stdout or "").strip()
     if result.returncode:
-        if missing_artifact(detail):
+        if missing_artifact(detail, f"{package}:{tag}"):
             return None, detail
         raise RuntimeError(f"Cannot verify/pull {package}:{tag}: {detail[-1000:]}")
     archives = list(staging.glob("*.tar.gz"))
