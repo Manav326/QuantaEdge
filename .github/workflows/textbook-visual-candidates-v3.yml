@@ -468,6 +468,17 @@ jobs:
                   print(json.dumps({"book_id": source["book_id"], "checkpoint": "REUSED_FROM_GIT", "results": len(json.loads(raw.read_text(encoding="utf-8")).get("results", []))}))
                   continue
               raw_was_present = raw.exists()
+              index_path = repo / "data" / "textbook-visuals" / slug / "visual-pipeline-index.v1.json"
+              prior_index = {}
+              if index_path.is_file():
+                  try:
+                      prior_index = json.loads(index_path.read_text(encoding="utf-8"))
+                  except (OSError, json.JSONDecodeError):
+                      failures.append({"book_id": source["book_id"], "reason": "committed pipeline index is malformed"})
+                      continue
+                  if prior_index.get("source_book_id") == source["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower() != str(source["sha256"]).lower():
+                      failures.append({"book_id": source["book_id"], "reason": "source edition differs from prior checkpoint; use analyze_all for a new edition"})
+                      continue
               tag = f"layer4-class{selection['class']}-{slug}-{safe_model}-checkpoint"
               pull_dir = temp / slug
               shutil.rmtree(pull_dir, ignore_errors=True)
@@ -484,8 +495,18 @@ jobs:
                   continue
               detail = (pull.stdout or "").strip()[-500:]
               not_found = "404" in detail or "not found" in detail.lower() or "manifest unknown" in detail.lower()
-              if not raw_was_present and not_found:
+              prior_layers = prior_index.get("layers") if isinstance(prior_index.get("layers"), dict) else {}
+              prior_analysis_path = prior_index.get("analysis_path")
+              expected_raw_path = raw.relative_to(repo).as_posix()
+              prior_analysis_started = prior_index.get("source_book_id") == source["book_id"] and (
+                  prior_layers.get("4") in {"RUNNING", "CHECKPOINTED", "COMPLETE", "INCOMPLETE"}
+                  or prior_analysis_path
+              )
+              if not raw_was_present and not_found and not prior_analysis_started:
                   print(json.dumps({"book_id": source["book_id"], "checkpoint": "NOT_STARTED", "action": "will analyze this book from the beginning; no prior checkpoint exists"}))
+                  continue
+              if not raw_was_present and not_found and prior_analysis_started:
+                  failures.append({"book_id": source["book_id"], "reason": "prior Layer 4 work is recorded but no checkpoint for the selected model was found", "prior_analysis_path": prior_analysis_path, "requested_analysis_path": expected_raw_path, "action": "resume stopped instead of silently redoing inference; use analyze_all only to deliberately start a new model/edition run"})
                   continue
               failures.append({"book_id": source["book_id"], "reason": "checkpoint exists but is invalid, or GHCR could not be checked safely", "detail": detail})
           if failures:
