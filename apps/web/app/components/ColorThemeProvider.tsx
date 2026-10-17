@@ -199,13 +199,15 @@ export function ColorThemeProvider({ children }: { children: ReactNode }) {
 
 export function AppearanceModeButton() {
   const { mode, setMode } = useContext(ColorThemeContext);
+  const { brand } = useTenantBranding();
   const nextMode: AppearanceMode =
     mode === 'institution' ? 'system' : mode === 'system' ? 'dark' : mode === 'dark' ? 'light' : 'institution';
+  const defaultModeLabel = brand?.displayName ? 'School' : 'Default';
   const modeName: Record<AppearanceMode, string> = {
-    institution: 'School', system: 'System', dark: 'Dark', light: 'Light',
+    institution: defaultModeLabel, system: 'System', dark: 'Dark', light: 'Light',
   };
   const label = mode === 'institution'
-    ? 'School appearance setting'
+    ? defaultModeLabel + ' appearance setting'
     : modeName[mode] + ' appearance';
   const icon = mode === 'institution' ? '⌂' : mode === 'system' ? '◐' : mode === 'dark' ? '☾' : '☀';
   return (
