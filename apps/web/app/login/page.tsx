@@ -14,9 +14,27 @@ async function readJson(response: Response): Promise<any> {
   return body;
 }
 
-function destination(body: any): string {
-  if (body.workspace === 'PARENT' && body.role === 'PARENT' && Number(body.userId) > 0) return '/parent';
-  if (body.workspace === 'STUDENT' && body.role === 'STUDENT' && Number(body.studentId) > 0) return '/student';
+function redirectAfterLogin(body: any): void {
+  const parentSessionConfirmed = body.workspace === 'PARENT' && body.role === 'PARENT' &&
+    Number(body.userId) > 0 && !(Number(body.studentId) > 0);
+  const studentSessionConfirmed = body.workspace === 'STUDENT' && body.role === 'STUDENT' &&
+    Number(body.studentId) > 0;
+  if (parentSessionConfirmed) {
+    window.location.replace('/parent');
+    return;
+  }
+  if (studentSessionConfirmed) {
+    window.location.replace('/student');
+    return;
+  }
+  // This unified login page can serve both roles, but must never route a mismatched
+  // role/workspace pair into either authenticated area.
+  if (body.role !== 'PARENT' && body.role !== 'STUDENT') {
+    throw new Error('QuantaEdge could not confirm a Parent- or Student-scoped session.');
+  }
+  if (body.workspace !== 'PARENT' && body.workspace !== 'STUDENT') {
+    throw new Error('QuantaEdge could not confirm a Parent- or Student-scoped workspace.');
+  }
   throw new Error('QuantaEdge could not confirm this account session. Please sign in again.');
 }
 
@@ -67,7 +85,7 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile, otp, purpose: 'LOGIN' }),
       }));
-      window.location.replace(destination(body));
+      redirectAfterLogin(body);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Mobile sign-in could not be completed.');
     } finally { setBusy(false); }
@@ -86,7 +104,7 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim(), password }),
       }));
-      window.location.replace(destination(body));
+      redirectAfterLogin(body);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Username/password sign-in could not be completed.');
     } finally { setBusy(false); }
