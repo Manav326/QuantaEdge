@@ -123,3 +123,10 @@ This closes the main topic-ID ambiguity from the first audit pass and is require
 ### Recording retry edge-case tests and teacher-link boundary — 2026-10-17
 
 The follow-up source checkpoint adds tests for same-key/same-fingerprint retry and same-key/different-content conflict with duplicate-file cleanup. It also keeps the teacher private-link listing restricted to sessions that actually have a private join URL; public YouTube broadcast metadata is not a substitute for that link. This follow-up is pending publication and CI validation after the join-window run.
+
+
+## Provider-neutral catalogue backend checkpoint — 2026-10-17
+
+A new V111 catalogue backend is present in code pending CI verification. It adds a common resource record that references existing recordings, published textbook documents and content assets without copying their binaries; new generic files use the existing private media volume under `learning-resources/`. Ordered assignments can target a chapter, canonical legacy lesson, or published structured artifact. Stable artifact IDs are mapped explicitly to canonical chapters and checked against the runtime artifact before learner delivery.
+
+The backend includes resource/assignment lifecycle, source checks, per-resource download policy, private byte-range streaming/download and learner media progress. It is not the completed cross-platform feature yet: Admin catalogue UI, student lesson presentation, Android resource view/offline video, real-account device verification, backup/restore and load tests remain required. Treat V111 as implemented-but-unverified until CI completes.

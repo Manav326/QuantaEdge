@@ -276,3 +276,13 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - During this follow-up review, restored the teacher `joinable` query's private-URL requirement. The admin-configurable join window changes only when the server allows an assigned teacher to retrieve a private meeting link; a public YouTube broadcast is not a private teacher meeting link and must not appear as joinable through that endpoint.
 - The tests and query correction are prepared as the next source checkpoint but are not yet on `main`; the live join-window validation run must finish first. Once published, the full Actions run is the acceptance evidence for this checkpoint.
 - Next implementation: provider-neutral resource catalogue, ordered scope assignments across chapters/legacy lessons/published structured artifacts, then authorized Android offline media.
+
+
+### Implementation journal — 2026-10-17 (checkpoint 9: provider-neutral resource catalogue backend)
+
+- Added forward-only V111 schema for reusable resources, private file metadata, source references to existing recordings/textbook documents/content assets, explicit reviewed mappings from structured artifact IDs to canonical chapter IDs, ordered assignments, lifecycle/audit fields, per-resource download policy and learner media progress.
+- Added private streamed file storage under the existing media volume's `learning-resources/` subdirectory. Uploads use a streamed checksum pass, 500 MiB ceiling, file-signature allowlist and temporary-file/atomic-move handling. New video/worksheet/slide/audio/image bytes do not enter PostgreSQL.
+- Added API routes for linking existing assets or external HTTPS resources, private uploads, resource publication/archive and download policy, target selection, ordered chapter/legacy lesson/structured artifact assignments, learner resource lists, authenticated byte-range streaming/download and media progress.
+- Existing recorded-class, learning-document and content-asset bytes are referenced by database ID rather than copied. The existing textbook reader remains responsible for protected learning-document pages.
+- Structured resource assignments require an actually published artifact. The first assignment creates an explicit mapping from its stable artifact_id to the chosen canonical chapter; subsequent assignments must respect that mapping, and class/subject/chapter metadata is checked again when learners access it.
+- Validation status: the new API/schema/test checkpoint is on main but not validated yet. The Admin catalogue page and student web/Android lesson surfaces still need to be implemented; offline Android video transfer and backup/restore/load tests remain open.
