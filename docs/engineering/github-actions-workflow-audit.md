@@ -52,7 +52,7 @@ The independent `.github/workflows/textbook-visual-analysis.yml` is retained as 
 | `textbook-cache.yml` | Source-of-truth whole-book GHCR cache and repair queue for textbook inputs. |
 | `curriculum-pipeline-audit.yml` | Audit report for textbook registry, cache/source presence and pipeline handoff integrity. |
 | `textbook-extraction-pilot.yml` | Extracts and validates Class 7/8 whole-book page data into run artifacts. |
-| `commit-class6-extraction-artifact.yml` | Validates and mirrors verified Class 7/8 extraction outputs from a source run to `data/`; the artifact handoff must not trust arbitrary workflow artifacts. |
+| `mirror-textbook-extraction-artifact.yml` | Validates and mirrors verified Class 7/8 extraction outputs from a source run to `data/`; the artifact handoff must not trust arbitrary workflow artifacts. |
 | `textbook-visual-analysis.yml` | Specialist single-book visual-analysis artifact flow, retained pending a deliberate migration into the class-wide pipeline. |
 | `textbook-visual-candidates-v3.yml` | Canonical Layers 1–5 pipeline. |
 | `quantaedge-layers-6-8.yml` | Canonical Layers 6–8 pipeline. |

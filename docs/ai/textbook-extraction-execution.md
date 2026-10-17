@@ -63,7 +63,7 @@ Corrected GHCR extraction workflow succeeded at https://github.com/Manav326/Quan
 
 ## Repository artifact mirror
 
-A GitHub Actions workflow (`.github/workflows/commit-class6-extraction-artifact.yml`) mirrors the verified Class 6 extraction artifact into `data/textbook-extractions/class-6/` on `main`, so a normal `git pull` retrieves the page JSONL and manifests without a manual artifact download. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
+A GitHub Actions workflow (`.github/workflows/mirror-textbook-extraction-artifact.yml`) mirrors validated Class 7 or Class 8 extraction artifacts into the matching `data/textbook-extractions/class-{class}/` folder on `main`, so a normal `git pull` retrieves the page JSONL and manifests without a manual artifact download. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
 
 ## GHCR extraction to question-generation bridge
 
@@ -135,7 +135,7 @@ The two class workflows deliberately accept **only Class 7 or Class 8**. Each se
 ### Required sequence
 
 1. Run [QuantaEdge GHCR Textbook Extraction Pilot](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-extraction-pilot.yml) and select Class 7 or 8. It extracts only matching Science/Maths subject-book pages in both languages and validates source hashes, full page continuity, the exact source counts and the Maths part labels.
-2. Only after that run succeeds, run [Mirror verified textbook extraction artifact to main](https://github.com/Manav326/QuantaEdge/actions/workflows/commit-class6-extraction-artifact.yml) with the same class and successful pilot run ID. This records the selected class's extraction JSONL/manifests on `main`; original PDFs remain in GHCR.
+2. Only after that run succeeds, run [Mirror verified textbook extraction artifact to main](https://github.com/Manav326/QuantaEdge/actions/workflows/commit-class6-extraction-artifact.yml) with the same class and successful pilot run ID. This records the selected Class 7/8 extraction JSONL/manifests on `main`; original PDFs remain in GHCR.
 3. Run [Prepare textbook visual candidates v3 (additive)](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) and select the same Class 7 or 8. It resolves the six expected sources automatically, verifies each selected GHCR PDF hash against its committed extraction manifest/page JSONL, and builds a separate review-only visual candidate pack per source book. The full visual assets are stored under immutable per-run GHCR tags; compact JSON, contact sheets, bundle indexes and the admin review catalog are checkpointed on `main`.
 4. Review source identity, page coverage, figures/tables, scientific meaning, Hindi/English semantic parity, visual labels, readability, rights/provenance and accessibility. Candidate generation is not lesson generation, approval or publication.
 5. Then author the chapter-specific bilingual lesson JSON using [the reusable textbook content-generation prompt](reusable-textbook-content-generation-prompt.md). Read the current production index and [Issue #56](https://github.com/Manav326/QuantaEdge/issues/56) before starting; never assume a previous chat's context or reuse stale source IDs.

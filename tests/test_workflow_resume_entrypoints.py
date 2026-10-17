@@ -75,6 +75,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         retired = [
             "agent-4-validation.yml",
             "android-build.yml",
+            "commit-class6-extraction-artifact.yml",
             "benchmark-class6-curiosity-after-layer5.yml",
             "quantaedge-layers-1-5-resume.yml",
             "quantaedge-layers-6-8-generate-once.yml",
@@ -87,6 +88,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertFalse((WORKFLOWS / name).exists(), f"{name} is a retired duplicate entrypoint")
         self.assertFalse((ROOT / ".github" / "triggers" / "layers1-5-class6-curiosity.trigger").exists())
+        self.assertTrue((WORKFLOWS / "mirror-textbook-extraction-artifact.yml").is_file())
 
     def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
         workflow = read("quantaedge-layers-6-8.yml")
