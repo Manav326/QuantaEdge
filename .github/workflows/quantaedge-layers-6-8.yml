@@ -130,7 +130,38 @@ jobs:
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model --preflight-only
 
+      - name: Preflight exact resume checkpoint before model download
+        if: inputs.mode == 'resume'
+        id: resume_preflight
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+          MODEL: "${{ inputs.generation_model }}"
+          MAX_MODEL_CALLS: "${{ inputs.max_model_calls }}"
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py run \
+            --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
+            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
+            --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
+            --checkpoint-every 2 --request-timeout 180 \
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --allow-experimental-model --preflight-only --require-existing-checkpoint \
+            > "$RUNNER_TEMP/resume-preflight.json"
+          cat "$RUNNER_TEMP/resume-preflight.json"
+          python - "$RUNNER_TEMP/resume-preflight.json" "$GITHUB_OUTPUT" <<'PY'
+          import json, sys
+          from pathlib import Path
+          report=json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          if report.get("preflight")!="MATCHED_CHECKPOINT":
+              raise SystemExit("Resume mode requires an exact matching saved checkpoint.")
+          with open(sys.argv[2],"a",encoding="utf-8") as out:
+              out.write(f"retryable_segments={int(report['retryable_segments'])}\n")
+          PY
+
       - name: Start loopback-only Ollama service
+        if: inputs.mode != 'resume' || steps.resume_preflight.outputs.retryable_segments != '0'
         shell: bash
         run: |
           set -euo pipefail
@@ -147,6 +178,7 @@ jobs:
           done
           [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-ollama; exit 1; }
       - name: Pull only candidate models for this invocation
+        if: inputs.mode != 'resume' || steps.resume_preflight.outputs.retryable_segments != '0'
         shell: bash
         env:
           MODE: "${{ inputs.mode }}"
@@ -176,7 +208,7 @@ jobs:
             --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --commit-checkpoints
       - name: Run bounded single-book draft generation
-        if: inputs.mode == 'run' || inputs.mode == 'resume'
+        if: inputs.mode == 'run' || (inputs.mode == 'resume' && steps.resume_preflight.outputs.retryable_segments != '0')
         shell: bash
         env:
           CLASS_NO: "${{ inputs.class_no }}"
@@ -205,6 +237,7 @@ jobs:
             echo "- One whole-book source per run and a strict model-call budget."
             echo "- Git savepoints are pushed to main; resume reuses matching source, edition, model, prompt, contract and visual-evidence fingerprints."
             if [[ "${{ inputs.mode }}" == "resume" ]]; then echo "- Explicit RESUME mode selected: completed matching segments are reused; only pending/error segments within the new model-call budget are attempted."; fi
+            if [[ "${{ inputs.mode }}" == "resume" && "${{ steps.resume_preflight.outputs.retryable_segments }}" == "0" ]]; then echo "- All segments are already terminal; skipped Ollama startup/model download/inference."; fi
             echo "- Lessons, retrieval records and SFT examples remain review-only; production selection remains pending human review."
             echo "- IN_PROGRESS means repeat the same inputs to resume. It is never a false completion."
           } >> "$GITHUB_STEP_SUMMARY"
