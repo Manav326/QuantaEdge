@@ -32,6 +32,8 @@ public class AuthService {
   public static final String LEARNING_REFRESH_COOKIE = "QE_LEARN_REFRESH";
   public static final String HRMS_COOKIE = "QE_HRMS_SESSION";
   public static final String HRMS_REFRESH_COOKIE = "QE_HRMS_REFRESH";
+  public static final String INSTITUTION_COOKIE = "QE_INSTITUTION_SESSION";
+  public static final String INSTITUTION_REFRESH_COOKIE = "QE_INSTITUTION_REFRESH";
   public static final String WORKSPACE_HEADER = "X-QE-Workspace";
   public static final String GUARDIAN_CONSENT_VERSION = "guardian-consent-v1";
   private static final int MAX_PASSWORD_LOGIN_FAILURES = 5;
@@ -45,6 +47,7 @@ public class AuthService {
       case "PARENT" -> "PARENT";
       case "STUDENT" -> "STUDENT";
       case "LEARNING" -> "LEARNING";
+      case "INSTITUTION" -> "INSTITUTION";
       default -> null;
     };
   }
@@ -52,6 +55,7 @@ public class AuthService {
   public static String sessionCookieForWorkspace(String workspace) {
     String normalized = normalizeWorkspace(workspace);
     if ("HRMS".equals(normalized)) return HRMS_COOKIE;
+    if ("INSTITUTION".equals(normalized)) return INSTITUTION_COOKIE;
     if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) return STAFF_COOKIE;
     if ("PARENT".equals(normalized)) return "QE_PARENT_SESSION";
     if ("STUDENT".equals(normalized)) return "QE_STUDENT_SESSION";
@@ -61,6 +65,7 @@ public class AuthService {
   public static String refreshCookieForWorkspace(String workspace) {
     String normalized = normalizeWorkspace(workspace);
     if ("HRMS".equals(normalized)) return HRMS_REFRESH_COOKIE;
+    if ("INSTITUTION".equals(normalized)) return INSTITUTION_REFRESH_COOKIE;
     if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) return STAFF_REFRESH_COOKIE;
     if ("PARENT".equals(normalized)) return "QE_PARENT_REFRESH";
     if ("STUDENT".equals(normalized)) return "QE_STUDENT_REFRESH";
@@ -1348,6 +1353,11 @@ public class AuthService {
   private String workspacePredicate(String workspace, String alias) {
     String normalized = normalizeWorkspace(workspace);
     String prefix = alias == null || alias.isBlank() ? "" : alias + ".";
+    if ("INSTITUTION".equals(normalized)) {
+      // Institution customers authenticate in a dedicated identity/session table.
+      // No ordinary auth_session row is ever accepted for this workspace.
+      return "\n        and 1=0";
+    }
     if ("HRMS".equals(normalized)) {
       return "\n        and " + prefix + "workspace_key='HRMS'"
           + " and " + prefix + "staff_id is not null"
@@ -1381,6 +1391,7 @@ public class AuthService {
 
   private boolean workspaceMatches(Long userId, Long studentId, Long staffId, String sessionWorkspace, String workspace) {
     if (workspace == null) return true;
+    if ("INSTITUTION".equals(workspace)) return false;
     if ("HRMS".equals(workspace)) return "HRMS".equals(sessionWorkspace)
         && staffId != null && userId == null && studentId == null;
     if ("STAFF".equals(workspace) || "EDUCATION_ADMIN".equals(workspace)) {
