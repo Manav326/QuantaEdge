@@ -221,7 +221,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
-    val launchTenantCode = remember(launchIntent) { InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent) }
+    val configuredTenantCode = remember { InstitutionBrandingRepository.normalizeCode(BuildConfig.INSTITUTION_CODE) }
+    val launchTenantCode = remember(launchIntent, configuredTenantCode) {
+        val linkedCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
+        configuredTenantCode ?: linkedCode
+    }
     var activeTenantCode by rememberSaveable {
         mutableStateOf(launchTenantCode ?: preferences.getString("institutionCode", null).orEmpty())
     }
@@ -230,8 +234,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
     var institutionBrandIdentity by remember { mutableStateOf<InstitutionBrandIdentity?>(null) }
     LaunchedEffect(launchIntent) {
-        val incomingCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
+        val linkedCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
         val incomingJoinCode = InstitutionBrandingRepository.joinCodeFromIntent(launchIntent)
+        if (configuredTenantCode != null && linkedCode != null && linkedCode != configuredTenantCode) {
+            // A per-school install must never switch into another institution from a copied link.
+            pendingInstitutionJoinCode = ""
+            return@LaunchedEffect
+        }
+        val incomingCode = linkedCode ?: configuredTenantCode
         if (incomingCode != null) {
             val previousCode = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
             activeTenantCode = incomingCode
@@ -294,11 +304,24 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 themeController.activateCachedInstitutionTheme(code)
                 val identity = InstitutionBrandingRepository.fetch(code)
                 themeController.applyInstitutionTheme(code, identity.themeTokensJson)
+                preferences.edit()
+                    .putString("institutionCode", identity.institutionCode)
+                    .putString("institutionDisplayName", identity.displayName)
+                    .putLong("institutionBrandingVersion", identity.brandingVersion)
+                    .apply()
                 institutionBrandIdentity = identity
             }
         } catch (_: Exception) {
-            // A missing/invalid link must not block sign-in/learning or leave a stale tenant palette active.
-            institutionBrandIdentity = null
+            // Even offline, never display the platform wordmark in a school-branded context.
+            institutionBrandIdentity = if (code != null) {
+                val packagedLogo = if (BuildConfig.IS_TENANT_BRANDED && code == configuredTenantCode) {
+                    runCatching { BitmapFactory.decodeResource(context.resources, R.drawable.qe_launcher_icon) }.getOrNull()
+                } else null
+                val fallbackName = if (BuildConfig.IS_TENANT_BRANDED && code == configuredTenantCode) {
+                    BuildConfig.INSTITUTION_DISPLAY_NAME
+                } else "Your school"
+                InstitutionBrandIdentity(code, fallbackName, packagedLogo, null, 0L, "{}")
+            } else null
             themeController.clearInstitutionTheme()
         }
     }
