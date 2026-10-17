@@ -174,6 +174,39 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual({"asset-2"}, {item["asset_id"] for item in resumed["results"]})
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
 
+    def test_resume_reanalyzes_when_page_text_context_changes(self):
+        output = self.root / "visual-analysis.v1.json"
+        first = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        old_context_hash = first["results"][0]["page_text_context_sha256"]
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        inventory["assets"][0]["page_text_context"] = "Rainfall and clouds"
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+
+        def changed_context_opener(request, timeout=180):
+            payload = json.loads(request.data.decode("utf-8"))
+            self.assertIn("Rainfall and clouds", payload["messages"][0]["content"])
+            return FakeResponse({"message": {"content": json.dumps({
+                "visual_summary": "A rainfall diagram.",
+                "visual_type": "diagram",
+                "visible_text": [],
+                "concepts": ["rainfall"],
+                "context_relation": "Matches the updated page text.",
+                "limitations": [],
+            })}})
+
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=changed_context_opener, output_path=output, resume=True,
+        )
+        self.assertEqual(0, resumed["summary"]["assets_skipped_from_checkpoint"])
+        self.assertNotEqual(old_context_hash, resumed["results"][0]["page_text_context_sha256"])
+        self.assertEqual("A rainfall diagram.", resumed["results"][0]["analysis"]["visual_summary"])
+
     def test_resume_rejects_changed_model_or_source(self):
         output = self.root / "visual-analysis.v1.json"
         run_analysis(
