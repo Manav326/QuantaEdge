@@ -60,18 +60,26 @@ public class PlatformInstitutionController {
         from institution_tenant
         """);
     List<Map<String,Object>> billing = jdbc.queryForList("""
-        select count(distinct e.membership_id) as current_period_billable_enrollments,
-          coalesce(jsonb_object_agg(e.currency,e.amount_paise) filter (where e.currency is not null),'{}'::jsonb)::text
-            as amount_by_currency
-        from (
-          select be.membership_id,be.currency,sum(be.amount_paise)::bigint as amount_paise
-          from institution_billable_event be
-          join institution_billing_contract c on c.id=be.contract_id
-          where be.event_type='CHARGE'
-            and be.billing_period_start=case when c.billing_cadence='ANNUAL'
-              then date_trunc('year',current_date)::date else date_trunc('month',current_date)::date end
-          group by be.membership_id,be.currency
-        ) e
+        select
+          (select count(distinct be.membership_id)
+            from institution_billable_event be
+            join institution_billing_contract c on c.id=be.contract_id
+            where be.event_type='CHARGE'
+              and be.billing_period_start=case when c.billing_cadence='ANNUAL'
+                then date_trunc('year',current_date)::date else date_trunc('month',current_date)::date end
+          ) as current_period_billable_enrollments,
+          coalesce((
+            select jsonb_object_agg(t.currency,t.total_paise)::text
+            from (
+              select be.currency,sum(be.amount_paise)::bigint as total_paise
+              from institution_billable_event be
+              join institution_billing_contract c on c.id=be.contract_id
+              where be.event_type='CHARGE'
+                and be.billing_period_start=case when c.billing_cadence='ANNUAL'
+                  then date_trunc('year',current_date)::date else date_trunc('month',current_date)::date end
+              group by be.currency
+            ) t
+          ),'{}') as amount_by_currency
         """);
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("institutions", totals.isEmpty()?Map.of():totals.getFirst());
@@ -385,6 +393,14 @@ public class PlatformInstitutionController {
     }
     LocalDate effectiveUntil = value(body,"effectiveUntil").isBlank()?null:parseDate(value(body,"effectiveUntil"),"effectiveUntil");
     if(effectiveUntil!=null && effectiveUntil.isBefore(effectiveFrom)) throw new IllegalArgumentException("effectiveUntil must be on or after effectiveFrom.");
+    Boolean periodAlreadyBilled=jdbc.queryForObject("""
+        select exists(select 1 from institution_billable_event
+          where institution_id=? and event_type='CHARGE'
+            and billing_period_start in (date_trunc('month',current_date)::date,date_trunc('year',current_date)::date))
+        """,Boolean.class,institutionId);
+    if(Boolean.TRUE.equals(periodAlreadyBilled)) {
+      throw new IllegalStateException("A billable enrollment is already recorded for the current period. Contract price or currency cannot be changed mid-period; update it at the next period boundary.");
+    }
     jdbc.update("""
         update institution_billing_contract
         set active=false,effective_until=greatest(effective_from,?::date)
@@ -401,6 +417,62 @@ public class PlatformInstitutionController {
     return Map.of("contractId",java.util.Objects.requireNonNull(contractId),"currency",currency,
         "unitPriceRupees",unitPrice,"unitPricePaise",pricePaise,"billingCadence",cadence,
         "effectiveFrom",effectiveFrom.toString(),"effectiveUntil",effectiveUntil==null?"":effectiveUntil.toString());
+  }
+
+  @PostMapping("/{institutionId}/billing/reconcile")
+  @Transactional
+  public Map<String,Object> reconcileBilling(
+      @PathVariable long institutionId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    LocalDate today=LocalDate.now(BILLING_ZONE);
+    List<Map<String,Object>> contracts=jdbc.queryForList("""
+        select id,currency,unit_price_paise,billing_cadence
+        from institution_billing_contract
+        where institution_id=? and active=true and effective_from<=?
+          and (effective_until is null or effective_until>=?)
+        order by effective_from desc,id desc limit 1
+        """,institutionId,today,today);
+    if(contracts.isEmpty()) {
+      throw new IllegalStateException("Configure an active billing contract before reconciling or allowing institution enrollments.");
+    }
+    Map<String,Object> contract=contracts.getFirst();
+    LocalDate periodStart;
+    LocalDate periodEnd;
+    if("ANNUAL".equals(String.valueOf(contract.get("billing_cadence")))) {
+      periodStart=today.withDayOfYear(1);
+      periodEnd=periodStart.plusYears(1).minusDays(1);
+    } else {
+      periodStart=today.withDayOfMonth(1);
+      periodEnd=periodStart.plusMonths(1).minusDays(1);
+    }
+    Integer before=jdbc.queryForObject("""
+        select count(*) from institution_billable_event
+        where institution_id=? and event_type='CHARGE' and billing_period_start=?
+        """,Integer.class,institutionId,periodStart);
+    int inserted=jdbc.update("""
+        insert into institution_billable_event(
+          institution_id,membership_id,student_id,contract_id,billing_period_start,billing_period_end,
+          event_type,amount_paise,currency,idempotency_key,description)
+        select ?,m.id,m.student_id,?,?,?,'CHARGE',?,?, 
+          'institution:'||?||':membership:'||m.id||':period:'||?||':charge',
+          'Active institution enrollment'
+        from institution_membership m
+        where m.institution_id=? and m.joined_at<=now()
+          and (m.left_at is null or m.left_at>=?::date)
+        on conflict do nothing
+        """,institutionId,contract.get("id"),periodStart,periodEnd,contract.get("unit_price_paise"),
+        contract.get("currency"),institutionId,periodStart,institutionId,periodStart);
+    Integer after=jdbc.queryForObject("""
+        select count(*) from institution_billable_event
+        where institution_id=? and event_type='CHARGE' and billing_period_start=?
+        """,Integer.class,institutionId,periodStart);
+    audit(owner,institutionId,"BILLING_LEDGER_RECONCILED","BILLING_PERIOD",periodStart.toString(),
+        Map.of("insertedEvents",inserted,"existingEvents",before==null?0:before,"totalChargeEvents",after==null?0:after,
+          "periodEnd",periodEnd.toString(),"currency",String.valueOf(contract.get("currency"))));
+    return Map.of("institutionId",institutionId,"periodStart",periodStart.toString(),"periodEnd",periodEnd.toString(),
+        "insertedEvents",inserted,"totalChargeEvents",after==null?0:after,"currency",contract.get("currency"));
   }
 
   @PostMapping("/{institutionId}/join-code/rotate")
