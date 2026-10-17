@@ -227,7 +227,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const storedJoinTenant = readPendingJoinTenantCode();
       const storedCode = hasUrlCode || (pendingJoinCodeAtStart && !storedJoinTenant) ? null : readSessionCode();
       const candidate = urlCode || storedCode;
-      let contextRequested = Boolean(hasUrlCode || candidate || hasUrlJoin || storedJoinTenant);
+      let contextRequested = Boolean(hasUrlCode || candidate || hasUrlJoin || storedJoinTenant || pendingJoinCodeAtStart);
       setInstitutionContextRequested(contextRequested);
       if (hasUrlCode && !urlCode) saveSessionCode(null);
 
