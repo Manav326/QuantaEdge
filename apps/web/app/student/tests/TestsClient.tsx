@@ -1,5 +1,6 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import PremiumPagination from '../../components/PremiumPagination';
 import AnswerFeedback from '../../components/AnswerFeedback';
@@ -556,11 +557,8 @@ export default function TestsClient(){
         <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1>{attempt.test_id&&<small>{t('Test ID','टेस्ट ID')}: {attempt.test_id}</small>}<p>{t('Attempt','प्रयास')} {attempt.attempt_number} · {attempt.questions.length} {t('questions','प्रश्न')} · {attempt.max_score} {t('marks','अंक')}</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>{t('TIME REMAINING','शेष समय')}</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?t('Saving answer…','उत्तर सहेजा जा रहा है…'):t('Answers auto-save','उत्तर अपने-आप सहेजे जाते हैं')}</span></div>}</div>
         {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
         {attempt.translation_complete===false&&<div className={styles.languageNotice} role="status">
-          <b><LocaleText hinglish="भाषा कवरेज" english="Language coverage" /></b>
-          <span><LocaleText
-            hinglish="कुछ test प्रश्नों की चुनी हुई भाषा में अलग, समीक्षा-स्वीकृत प्रति उपलब्ध नहीं है। जहाँ ज़रूरी हो, मूल पाठ रखा गया है; अंक और answer keys नहीं बदले गए।"
-            english="Some test questions do not yet have a separately reviewed version in the selected language. Original text is retained where needed; marks and answer keys are unchanged."
-          /></span>
+          <b><UiText message="legacy.web.language.coverage.047432da" /></b>
+          <span><UiText message="legacy.web.some.test.questions.do.not.yet.have.a..4b8d7d84" /></span>
         </div>}
         {released?<section className={styles.releasedResult} aria-live="polite">
           <div className={styles.resultHero}>

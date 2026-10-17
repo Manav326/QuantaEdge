@@ -1,4 +1,5 @@
 'use client';
+import { UiText } from '../../i18n/useUiTranslation';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -31,11 +32,11 @@ export default function StructuredLessonsClient() {
   useEffect(() => { void loadCatalogue(); }, [loadCatalogue]);
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
     <header className="content-heading"><div>
-      <span className="eyebrow"><LocaleText hinglish="बाइलिंगुअल lesson format" english="Bilingual lesson format" /></span>
-      <h1><LocaleText hinglish="Structured lessons" english="Structured lessons" /></h1>
-      <p><LocaleText hinglish="Explain, visuals, activities और एक-एक करके practice questions।" english="Explain, visuals, activities and one-question-at-a-time practice." /></p>
+      <span className="eyebrow"><UiText message="legacy.web.bilingual.lesson.format.349a3c45" /></span>
+      <h1><UiText message="web.navigation.student.structuredLessons" /></h1>
+      <p><UiText message="legacy.web.explain.visuals.activities.and.one.que.c789dbec" /></p>
     </div>
-    <button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><LocaleText hinglish="Refresh" english="Refresh" /></button></header>
+    <button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><UiText message="legacy.web.refresh.45078d05" /></button></header>
     {error && <p role="alert" className="error-message">{error}</p>}
     {busy ? <p role="status" className="eyebrow">{tx('Published lessons खोज रहे हैं…', 'Finding published lessons…')}</p> :
       items.length === 0 ? <section className="auth-card" role="status">
