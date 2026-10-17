@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from 'react';
 import { useLocale } from './LanguageProvider';
+import { translateUi } from '../i18n/catalog';
 
 export type PremiumPaginationProps = {
   page: number;
@@ -51,7 +52,6 @@ export default function PremiumPagination({
   pageSizeOptions = [10, 20, 30, 50],
 }: PremiumPaginationProps) {
   const { locale } = useLocale();
-  const t = (english: string, hindi: string) => locale === 'english' ? english : hindi;
   const number = (value: number) => value.toLocaleString(locale === 'english' ? 'en-IN' : 'hi-IN');
   const safeTotal = Math.max(0, Number(total) || 0);
   const safeSize = Math.max(1, Number(pageSize) || 10);
@@ -115,19 +115,19 @@ export default function PremiumPagination({
   if (safeTotal <= 10) return null;
 
   return (
-    <nav aria-label={t('Pagination for ', 'पृष्ठांकन: ') + itemLabel} style={shell}>
+    <nav aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pagination.for.5b57562e') + itemLabel} style={shell}>
       <div style={{ display: 'grid', gap: 3, minWidth: 160 }}>
         <strong aria-live="polite" style={{ fontSize: 12, fontWeight: 800, letterSpacing: '-.1px' }}>
-          {safeTotal === 0 ? t('No ', 'कोई ') + itemLabel : t('Showing ', 'दिखाए जा रहे हैं ') + number(first) + '–' + number(last) + t(' of ', ' में से ') + number(safeTotal)}
+          {safeTotal === 0 ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.9f451e4a') + itemLabel : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.showing.ee66c06d') + number(first) + '–' + number(last) + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.0762fe50') + number(safeTotal)}
         </strong>
-        <span style={mutedText}>{safeTotal === 1 ? t('1 item', '1 आइटम') : number(safeTotal) + ' ' + itemLabel}</span>
+        <span style={mutedText}>{safeTotal === 1 ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.1.item.b03c667c') : number(safeTotal) + ' ' + itemLabel}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', marginLeft: 'auto' }}>
         <div style={tinyLabel}>
-          {t('ROWS PER PAGE', 'प्रति पृष्ठ पंक्तियाँ')}
+          {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rows.per.page.3f63ed4e')}
           <select
-            aria-label={t('Rows per page', 'प्रति पृष्ठ पंक्तियाँ')}
+            aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rows.per.page.eb6b4a0e')}
             value={safeSize}
             disabled={loading}
             onChange={event => onPageSizeChange(Number(event.target.value))}
@@ -140,12 +140,12 @@ export default function PremiumPagination({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
           <button
             type="button"
-            aria-label={t('Previous page', 'पिछला पृष्ठ')}
-            title={t('Previous page', 'पिछला पृष्ठ')}
+            aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.page.dcddbbc8')}
+            title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.page.dcddbbc8')}
             disabled={loading || safePage <= 0}
             onClick={() => onPageChange(Math.max(0, safePage - 1))}
             style={loading || safePage <= 0 ? disabledButton : buttonBase}
-          >‹ <span style={{ fontSize: 11 }}>{t('Previous', 'पिछला')}</span></button>
+          >‹ <span style={{ fontSize: 11 }}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.9320332c')}</span></button>
 
           {pages.map((entry, index) => typeof entry === 'number'
             ? <button
@@ -162,12 +162,12 @@ export default function PremiumPagination({
 
           <button
             type="button"
-            aria-label={t('Next page', 'अगला पृष्ठ')}
-            title={t('Next page', 'अगला पृष्ठ')}
+            aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.page.24bee7ac')}
+            title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.page.24bee7ac')}
             disabled={loading || safePage >= pageCount - 1}
             onClick={() => onPageChange(Math.min(pageCount - 1, safePage + 1))}
             style={loading || safePage >= pageCount - 1 ? disabledButton : buttonBase}
-          ><span style={{ fontSize: 11 }}>{t('Next', 'अगला')}</span> ›</button>
+          ><span style={{ fontSize: 11 }}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.7c68200e')}</span> ›</button>
         </div>
       </div>
     </nav>

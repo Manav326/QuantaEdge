@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
+import { useUiTranslation } from '../../i18n/useUiTranslation';
 
 type InlineDocument = {
   document_id: number;
@@ -24,6 +25,7 @@ export default function InlineTextbookReader({
   heading: string;
   initiallyExpanded?: boolean;
 }) {
+  const t = useUiTranslation();
   const [page, setPage] = useState(() => Math.max(1, Math.min(Math.max(1, Number(item.page_count || 1)), Number(item.last_page || 1))));
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [loading, setLoading] = useState(true);
@@ -73,7 +75,7 @@ export default function InlineTextbookReader({
           <div style={{ color: '#c2410c', fontSize: 10, fontWeight: 850, letterSpacing: '.08em', textTransform: 'uppercase' }}>{heading}</div>
           <strong style={{ display: 'block', marginTop: 4, color: '#1f2937', fontSize: 13, overflowWrap: 'anywhere' }}>{item.title}</strong>
           <small style={{ display: 'block', marginTop: 3, color: '#6b7280', fontSize: 11 }}>
-            {item.edition ? item.edition + ' · ' : ''}{pageCount} pages · Secure online reader
+            {item.edition ? item.edition + ' · ' : ''}{t('web.textbookReader.pageCount', { count: pageCount })} · {t('web.textbookReader.secureOnline')}
           </small>
         </div>
         <button type="button" aria-expanded={expanded} onClick={() => setExpanded(value => !value)} style={{
@@ -86,7 +88,7 @@ export default function InlineTextbookReader({
           fontSize: 11,
           fontWeight: 800,
           cursor: 'pointer',
-        }}>{expanded ? 'Hide reader ↑' : 'Read here ↓'}</button>
+        }}>{expanded ? t('web.textbookReader.hideReader') : t('web.textbookReader.readHere')}</button>
       </div>
 
       {expanded && <>
@@ -100,10 +102,10 @@ export default function InlineTextbookReader({
           background: '#f8fafc',
           borderBottom: '1px solid #e8edf3',
         }}>
-          <span style={{ color: '#667085', fontSize: 11 }}>Page <b style={{ color: '#293548' }}>{page}</b> of {pageCount}</span>
+          <span style={{ color: '#667085', fontSize: 11 }}>{t('web.textbookReader.pageLabel')} <b style={{ color: '#293548' }}>{page}</b> {t('web.textbookReader.of')} {pageCount}</span>
           <div style={{ display: 'flex', gap: 7 }}>
-            <button type="button" disabled={page <= 1} onClick={() => setPage(value => Math.max(1, value - 1))} style={controlStyle(page <= 1)}>← Previous</button>
-            <button type="button" disabled={page >= pageCount} onClick={() => setPage(value => Math.min(pageCount, value + 1))} style={controlStyle(page >= pageCount)}>Next →</button>
+            <button type="button" disabled={page <= 1} onClick={() => setPage(value => Math.max(1, value - 1))} style={controlStyle(page <= 1)}>{t('web.textbookReader.previous')}</button>
+            <button type="button" disabled={page >= pageCount} onClick={() => setPage(value => Math.min(pageCount, value + 1))} style={controlStyle(page >= pageCount)}>{t('web.textbookReader.next')}</button>
           </div>
         </div>
         <div style={{
@@ -126,13 +128,13 @@ export default function InlineTextbookReader({
             color: '#667085',
             fontSize: 11,
             boxShadow: '0 2px 8px rgba(0,0,0,.08)',
-          }}>Loading page {page}…</div>}
+          }}>{t('web.textbookReader.loadingPage', { page })}</div>}
           <AuthenticatedPageImage
             key={item.document_id + '-' + page + '-' + retryKey}
             src={imageUrl}
-            alt={item.title + ', page ' + page}
+            alt={t('web.textbookReader.pageAlt', { title: item.title, page })}
             onLoad={() => { setLoading(false); setPageError(''); }}
-            onError={message => { setLoading(false); setPageError(message); }}
+            onError={() => { setLoading(false); setPageError(t('web.textbookReader.loadFailed')); }}
             style={{
               display: pageError ? 'none' : 'block',
               width: '100%',
@@ -146,7 +148,7 @@ export default function InlineTextbookReader({
           />
           {pageError && <div role="alert" style={{ padding: 24, textAlign: 'center', color: '#9b3325', fontSize: 12 }}>
             <p>{pageError}</p>
-            <button type="button" onClick={() => { setPageError(''); setLoading(true); setRetryKey(value => value + 1); }} style={controlStyle(false)}>Retry page</button>
+            <button type="button" onClick={() => { setPageError(''); setLoading(true); setRetryKey(value => value + 1); }} style={controlStyle(false)}>{t('web.textbookReader.retryPage')}</button>
           </div>}
         </div>
       </>}
