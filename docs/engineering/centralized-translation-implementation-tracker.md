@@ -349,3 +349,8 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Fixed the Parent profile’s legacy `setLocale('hindi')` call to the registered `hinglish` ID while retaining old stored `hindi`/ `hi` aliases in the provider/registry. Learning-language preference remains separate from UI language.
 - Added `scripts/check-web-static-copy.mjs` and wired it into CI to prevent inline `tx()` regressions on these three migrated routes and to verify the new semantic keys in both catalogs. This guard is intentionally scoped; it is not evidence that every web route is clean yet.
 - The changed routes remain **first-pass, audit pending** for residual literal JSX labels, native/browser messages, accessibility text, and server-error fallback strings. This migration is not complete until its own CI build passes and the remaining route audit is green.
+
+
+## Type-check follow-up — translation hook call shape
+
+- Corrected migrated components to bind `const t = useUiTranslation()`; this hook returns the translator callback directly (it does not return an object with a `t` property). The route-copy extraction is still pending the current full Actions result.

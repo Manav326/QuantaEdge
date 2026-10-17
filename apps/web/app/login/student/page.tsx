@@ -14,7 +14,7 @@ async function readApi(response: Response): Promise<any> {
 }
 
 export default function StudentLoginPage() {
-  const { t } = useUiTranslation();
+  const t = useUiTranslation();
   const [parentMobile, setParentMobile] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

@@ -97,7 +97,7 @@ async function prepareProfilePhoto(file: File): Promise<string> {
 export default function ParentProfilePage() {
   const router = useRouter();
   const { locale, setLocale } = useLocale();
-  const { t } = useUiTranslation();
+  const t = useUiTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
   const [identity, setIdentity] = useState<ParentIdentity>({ mobile: '', publicUserId: '', profileImageUrl: null });

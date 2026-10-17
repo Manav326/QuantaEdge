@@ -34,7 +34,7 @@ async function readJson(response:Response):Promise<any>{
 export default function ParentChildrenPage(){
   const router=useRouter();
   const { locale } = useLocale();
-  const { t } = useUiTranslation();
+  const t = useUiTranslation();
   const [account,setAccount]=useState<Account|null>(null);
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
