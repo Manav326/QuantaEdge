@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import { LanguageSwitcher, useLocale } from '../../components/LanguageProvider';
+import { useTenantBranding } from '../../components/TenantBrandingProvider';
 
 async function readApi(response: Response): Promise<any> {
   const raw = await response.text();
@@ -16,6 +17,7 @@ async function readApi(response: Response): Promise<any> {
 export default function StudentLoginPage() {
   const t = useUiTranslation();
   const { locale } = useLocale();
+  const { brand } = useTenantBranding();
   const [parentIdentifier, setParentIdentifier] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +50,7 @@ export default function StudentLoginPage() {
       <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
       <section className="auth-card student-login-card">
-        <Link href="/" className="auth-back-link"><UiText message="legacy.web.back.to.quantaedge.afca99d4" /></Link>
+        <Link href="/" className="auth-back-link">{brand ? (locale === 'english' ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : <UiText message="legacy.web.back.to.quantaedge.afca99d4" />}</Link>
         <span className="eyebrow"><UiText message="legacy.web.student.login.82db4c55" /></span>
         <h1><UiText message="legacy.web.your.learning.space.41b6b37f" /></h1>
         <p>{locale === 'english' ? 'Enter your parent’s verified Gmail or mobile number, plus the username and password they created for you.' : 'अपने माता-पिता का सत्यापित Gmail या मोबाइल नंबर और उनके द्वारा बनाया गया यूज़रनेम व पासवर्ड दर्ज करें।'}</p>
