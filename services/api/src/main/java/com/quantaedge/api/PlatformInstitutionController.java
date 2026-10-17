@@ -81,6 +81,19 @@ public class PlatformInstitutionController {
     return result;
   }
 
+  @GetMapping("/catalog/courses")
+  public List<Map<String,Object>> courseCatalog(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner = requirePlatformOwner(context);
+    audit(owner,null,"COURSE_CATALOG_VIEWED","COURSE_CATALOG",null,Map.of());
+    return jdbc.queryForList("""
+        select p.id,p.code,p.display_name,c.code as class_code
+        from curriculum_program p
+        left join curriculum_class c on c.id=p.class_id
+        where p.status='ACTIVE' and p.code<>'GENERAL'
+        order by c.sort_order nulls last,p.display_name,p.code
+        """);
+  }
+
   @GetMapping
   public List<Map<String,Object>> listInstitutions(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     AuthContext owner = requirePlatformOwner(context);
