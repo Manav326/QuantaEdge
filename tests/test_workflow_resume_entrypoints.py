@@ -69,7 +69,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertLess(approval, generation)
         approval_step = workflow[approval:ollama_start]
         self.assertIn("inputs.mode == 'run'", approval_step)
-        self.assertIn("steps.resume_preflight.outputs.retryable_segments != '0'", approval_step)
+        self.assertIn("steps.generation_preflight.outputs.retryable_segments != '0'", approval_step)
         self.assertIn("ALLOW_EXPERIMENTAL_MODEL", approval_step)
 
     def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
