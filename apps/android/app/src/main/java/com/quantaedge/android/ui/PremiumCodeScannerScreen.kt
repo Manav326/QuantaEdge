@@ -263,8 +263,8 @@ fun PremiumCodeScannerScreen(
                 Text(if (hindi) "स्मार्ट स्कैन" else "SMART SCAN", color = scanMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.8.sp)
                 Text(if (hindi) "QR और बारकोड स्कैन करें" else "Scan QR & barcodes", color = scanText, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                 if (!landscape) Text(
-                    if (hindi) "प्रमाणपत्र का कोड फ्रेम में रखें। उसकी स्थिति QuantaEdge सर्वर से सत्यापित होगी।"
-                    else "Align a certificate code inside the frame. Its status is verified securely with QuantaEdge.",
+                    if (hindi) "प्रमाणपत्र का कोड फ्रेम में रखें। उसकी स्थिति सुरक्षित रूप से ऑनलाइन सत्यापित होगी।"
+                    else "Align a certificate code inside the frame. Its status is verified securely online.",
                     color = scanMuted, style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -296,7 +296,7 @@ fun PremiumCodeScannerScreen(
                         Text("▦", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 48.sp, fontWeight = FontWeight.Light)
                         Text(if (hindi) "कैमरा अनुमति चाहिए" else "Camera access needed", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                         Text(
-                            if (hindi) "QR या बारकोड पढ़ने के लिए QuantaEdge को कैमरा अनुमति दें। तस्वीरें सेव या अपलोड नहीं होतीं।"
+                            if (hindi) "QR या बारकोड पढ़ने के लिए कैमरा अनुमति दें। तस्वीरें सेव या अपलोड नहीं होतीं।"
                             else "Allow camera access to read QR codes and barcodes. Images are not saved or uploaded.",
                             color = scanMuted, style = MaterialTheme.typography.bodyMedium
                         )
