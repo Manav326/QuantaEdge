@@ -57,6 +57,18 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     for row in results:
         if not isinstance(row,dict) or not row.get("asset_id") or row["asset_id"] in rawby:raise ValueError("Raw analysis row has missing/duplicate asset_id.")
         rawby[row["asset_id"]]=row
+    def checkpoint_mismatch(aid,row):
+        asset=invassets.get(aid)
+        if asset is None:return "CHECKPOINT_ASSET_MISSING"
+        if row.get("analysis_status")=="ANALYSIS_ERROR":return "ANALYSIS_ERROR"
+        if row.get("asset_sha256")!=asset.get("asset_sha256"):return "ASSET_HASH_MISMATCH"
+        if row.get("source_book_id")!=bid or str(row.get("source_pdf_sha256") or "").lower()!=sha:return "SOURCE_IDENTITY_MISMATCH"
+        if row.get("model")!=raw.get("model") or row.get("prompt_version")!=raw.get("prompt_version"):return "MODEL_OR_PROMPT_MISMATCH"
+        expected_context=hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest()
+        if row.get("page_text_context_sha256")!=expected_context:return "PAGE_TEXT_CONTEXT_MISMATCH"
+        if row.get("analysis_status")!="DRAFT_REQUIRES_REVIEW" or not isinstance(row.get("analysis"),dict):return "ANALYSIS_NOT_SUCCESSFUL"
+        return "MATCHED"
+
     accepted={}
     if corrections_path and Path(corrections_path).is_file():
         overlay=read_json(corrections_path)
@@ -73,7 +85,8 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
             if c["status"]!="ACCEPTED":continue
             if not str(c.get("reviewer") or "").strip() or not str(c.get("reason") or "").strip():raise ValueError(f"Accepted correction {aid} needs reviewer and reason.")
             base=rawby.get(aid,{})
-            if base.get("analysis_status")!="DRAFT_REQUIRES_REVIEW" or not isinstance(base.get("analysis"),dict):raise ValueError(f"Accepted correction {aid} requires successful raw analysis.")
+            if checkpoint_mismatch(aid,base)!="MATCHED":
+                raise ValueError(f"Accepted correction {aid} requires current source/model/prompt/page-text-context analysis; resume Layer 4 before applying the correction.")
             patch=c.get("analysis_patch")
             if not isinstance(patch,dict) or not patch or set(patch)-PATCH_FIELDS:raise ValueError(f"Correction {aid}: unsupported/empty analysis_patch.")
             merged=dict(base["analysis"]);merged.update(patch)
@@ -86,7 +99,11 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
             accepted[aid]={"analysis":merged,"reviewer":c["reviewer"].strip(),"reason":c["reason"].strip(),"accepted_at":c.get("accepted_at")}
     eff=[]
     for aid,row in rawby.items():
-        out=copy.deepcopy(row);out["effective_analysis"]=copy.deepcopy(row.get("analysis")) if row.get("analysis_status")=="DRAFT_REQUIRES_REVIEW" else None;out["correction_status"]="NONE"
+        fingerprint_status=checkpoint_mismatch(aid,row)
+        out=copy.deepcopy(row)
+        out["effective_analysis"]=copy.deepcopy(row.get("analysis")) if fingerprint_status=="MATCHED" else None
+        out["checkpoint_fingerprint_status"]=fingerprint_status
+        out["correction_status"]="NONE"
         if aid in accepted:
             out["effective_analysis"]=accepted[aid]["analysis"];out["correction_status"]="ACCEPTED"
             out["correction_review"]={k:accepted[aid][k] for k in ("reviewer","reason","accepted_at")}
@@ -110,6 +127,8 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
             if r is None:state="ANALYSIS_MISSING"
             elif r.get("asset_sha256")!=a.get("asset_sha256"):state="ASSET_HASH_MISMATCH"
             elif r.get("analysis_status")=="ANALYSIS_ERROR":state="ANALYSIS_ERROR"
+            elif r.get("checkpoint_fingerprint_status")=="PAGE_TEXT_CONTEXT_MISMATCH":state="ANALYSIS_STALE_CONTEXT"
+            elif r.get("checkpoint_fingerprint_status") not in {None,"MATCHED"}:state="ANALYSIS_STALE_CHECKPOINT"
             elif r.get("analysis_status")=="DRAFT_REQUIRES_REVIEW" and isinstance(r.get("effective_analysis"),dict):state="ANALYZED_REQUIRES_HUMAN_REVIEW";ea=r["effective_analysis"];cs=r.get("correction_status","NONE")
             else:state="ANALYSIS_STATUS_UNKNOWN"
             visual_bad += state!="ANALYZED_REQUIRES_HUMAN_REVIEW"
@@ -118,7 +137,7 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     visual_bad+=len(orphans);unresolved=page_bad+visual_bad
     paths={"inventory":rel(inventory_path,root),"raw_analysis":rel(raw_path,root),"manifest":rel(manifest_path,root),"text_jsonl":rel(text_path,root),"corrections":rel(corrections_path,root) if corrections_path else None,"effective_analysis_output":rel(effective_path,root),"coverage_ledger_output":rel(ledger_path,root)}
     write_json(effective_path,{"schema_version":"quantaedge.visual-analysis-effective.v1","source_book_id":bid,"source_pdf_sha256":sha,"raw_analysis_path":paths["raw_analysis"],"raw_analysis_sha256":hashlib.sha256(Path(raw_path).read_bytes()).hexdigest(),"model":raw.get("model"),"prompt_version":raw.get("prompt_version"),"corrections_path":paths["corrections"],"corrections_applied_count":len(accepted),"results":eff,"human_review_required":True,"publication_allowed":False})
-    out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
+    out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):

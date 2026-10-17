@@ -136,6 +136,30 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
 
+    def test_resume_reanalyzes_legacy_success_without_context_fingerprint(self):
+        output = self.root / "visual-analysis.v1.json"
+        first = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        self.assertEqual(1, first["summary"]["assets_analyzed"])
+        legacy = json.loads(output.read_text(encoding="utf-8"))
+        legacy["results"][0].pop("page_text_context_sha256")
+        output.write_text(json.dumps(legacy), encoding="utf-8")
+        calls = {"count": 0}
+        def counted_opener(request, timeout=180):
+            calls["count"] += 1
+            return self._opener(request, timeout)
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=counted_opener, output_path=output, resume=True,
+        )
+        self.assertEqual(1, calls["count"])
+        self.assertEqual(0, resumed["summary"]["assets_skipped_from_checkpoint"])
+        self.assertEqual(hashlib.sha256(b"Water cycle").hexdigest(), resumed["results"][0]["page_text_context_sha256"])
+
     def test_resume_drops_stale_asset_rows_when_inventory_changes(self):
         output = self.root / "visual-analysis.v1.json"
         run_analysis(
