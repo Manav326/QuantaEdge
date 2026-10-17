@@ -8,15 +8,15 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 217,
-    "assets_processed_this_run": 25,
+    "assets_selected": 328,
+    "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 328,
-    "assets_remaining": 7160,
+    "assets_analyzed": 329,
+    "assets_remaining": 7159,
     "assets_completion_percent": 4.4,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 192,
-    "batch_limit": 25,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 327,
+    "batch_limit": 1,
     "publication_allowed": false
   },
   "results": [
@@ -90,14 +90,26 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 1,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T07:35:37Z"
     },
     {
       "asset_id": "1fa5abf052e8dd26a1ca6789",
@@ -113,7 +125,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3"
     },
     {
       "asset_id": "caac3c22deaf6a6f93ec68c9",
@@ -169,7 +182,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3"
     },
     {
       "asset_id": "ca778fc3fca0c5c049ea63bf",
@@ -241,7 +255,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3"
     },
     {
       "asset_id": "005539fdcb6f0d959a76bab9",
@@ -335,7 +350,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db"
     },
     {
       "asset_id": "82488ace4159be78881396e5",
@@ -408,7 +424,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db"
     },
     {
       "asset_id": "37788c1f9a2ccb0eb06bdc89",
@@ -814,7 +831,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031"
     },
     {
       "asset_id": "f5efe597ad79b686b56b1c14",
@@ -2107,7 +2125,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f"
     },
     {
       "asset_id": "3be4d6b418a6733fe7e1fde9",
@@ -2123,7 +2142,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f"
     },
     {
       "asset_id": "c1a5bf2fba7b775b0497d08e",
@@ -4102,7 +4122,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082"
     },
     {
       "asset_id": "b229a75462bb7152cbc2131d",
@@ -4144,7 +4165,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0"
     },
     {
       "asset_id": "951e41f9f65aae6540dfbfe4",
@@ -4375,7 +4397,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0"
     },
     {
       "asset_id": "e904eb84e607d05c01b9eca9",
@@ -4391,7 +4414,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f"
     },
     {
       "asset_id": "1e176e2e70e26c49d8c76c83",
@@ -4475,7 +4499,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f"
     },
     {
       "asset_id": "4e4ae7fe5a2d72d9cb0fa50e",
@@ -5947,7 +5972,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "86211575ab48da627f29e29f",
@@ -5963,7 +5989,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "e09ea70af96a8f931b6a4851",
@@ -5979,7 +6006,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "ba7c2da282e311b6571cad2b",
@@ -6794,7 +6822,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "9abf5a02b7b99dd6c72ff614",
@@ -7200,7 +7229,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:57:34Z"
+      "checkpointed_at": "2026-10-16T16:57:34Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "f4e971d4271f883be31de7f8",
@@ -7240,7 +7270,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:58:48Z"
+      "checkpointed_at": "2026-10-16T16:58:48Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "cfad42b4ea15191bb69f78ed",
@@ -7267,7 +7298,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:59:52Z"
+      "checkpointed_at": "2026-10-16T16:59:52Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "0394d2d47447c058ecfbbdcd",
@@ -7308,7 +7340,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:00:11Z"
+      "checkpointed_at": "2026-10-16T17:00:11Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "776c6655b87cbf18f47dd37d",
@@ -7335,7 +7368,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:01:15Z"
+      "checkpointed_at": "2026-10-16T17:01:15Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "8981d2e078b4b832e99fe05b",
@@ -7376,7 +7410,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:01:34Z"
+      "checkpointed_at": "2026-10-16T17:01:34Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "cb73390400107f9cffb90ca7",
@@ -7403,7 +7438,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:02:38Z"
+      "checkpointed_at": "2026-10-16T17:02:38Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "a0d2c42ab35b518cb73709ce",
@@ -7430,7 +7466,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:03:43Z"
+      "checkpointed_at": "2026-10-16T17:03:43Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "6785f46215d4bdd9444a3630",
@@ -7457,7 +7494,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:04:47Z"
+      "checkpointed_at": "2026-10-16T17:04:47Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "0b294895ba14bd0980a79bec",
@@ -7498,7 +7536,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:05:05Z"
+      "checkpointed_at": "2026-10-16T17:05:05Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "fde7bf8f60d67e6107b43098",
@@ -7538,7 +7577,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:06:25Z"
+      "checkpointed_at": "2026-10-16T17:06:25Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "55b00e369b51b130282e508a",
@@ -7578,7 +7618,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:07:42Z"
+      "checkpointed_at": "2026-10-16T17:07:42Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "6a0c32ab0a7094c0eb589e4e",
@@ -7605,7 +7646,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:08:49Z"
+      "checkpointed_at": "2026-10-16T17:08:49Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "7322de61a27bca16aa7125e2",
@@ -7646,7 +7688,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:10:13Z"
+      "checkpointed_at": "2026-10-16T17:10:13Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "21ff2cb0c0f04d440a0e5bfa",
@@ -7671,7 +7714,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:11:21Z"
+      "checkpointed_at": "2026-10-16T17:11:21Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "13d1c10a2c204c12b869f73b",
@@ -7698,7 +7742,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:12:31Z"
+      "checkpointed_at": "2026-10-16T17:12:31Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "23d4c6030f3aeb4e0dc63dae",
@@ -7725,7 +7770,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:13:40Z"
+      "checkpointed_at": "2026-10-16T17:13:40Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "979f94d4106f60abf4035564",
@@ -7758,7 +7804,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:14:56Z"
+      "checkpointed_at": "2026-10-16T17:14:56Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "a675461ca5a61befbc720d27",
@@ -7786,7 +7833,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:16:06Z"
+      "checkpointed_at": "2026-10-16T17:16:06Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "ff57f429d46c640eaec0ba05",
@@ -7813,7 +7861,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:17:10Z"
+      "checkpointed_at": "2026-10-16T17:17:10Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "a0165bfa702f0f1839c65aef",
@@ -7840,7 +7889,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:18:21Z"
+      "checkpointed_at": "2026-10-16T17:18:21Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "14e0c90aac3dc3bc1cdf06a5",
@@ -7867,7 +7917,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:19:28Z"
+      "checkpointed_at": "2026-10-16T17:19:28Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "66bfcbda9bdd072f51ac6999",
@@ -7894,7 +7945,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:20:35Z"
+      "checkpointed_at": "2026-10-16T17:20:35Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "ea84088f042bb94b46e1d4cc",
@@ -7921,7 +7973,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:21:43Z"
+      "checkpointed_at": "2026-10-16T17:21:43Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "3c8ccf3c252cc1900fdab704",
@@ -7948,7 +8001,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:22:51Z"
+      "checkpointed_at": "2026-10-16T17:22:51Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "c07a4ad0803792f73437e09c",
@@ -7973,7 +8027,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:23:54Z"
+      "checkpointed_at": "2026-10-16T17:23:54Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "d9c5463c6a32960b9c328c16",
@@ -8000,7 +8055,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:24:59Z"
+      "checkpointed_at": "2026-10-16T17:24:59Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "2284fc9ffcc171fa19a9e95d",
@@ -8042,7 +8098,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:26:20Z"
+      "checkpointed_at": "2026-10-16T17:26:20Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "57bfca0170da5bddf731dee3",
@@ -8067,7 +8124,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:27:24Z"
+      "checkpointed_at": "2026-10-16T17:27:24Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "8e878b15749ba73725e2e575",
@@ -8107,7 +8165,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:28:41Z"
+      "checkpointed_at": "2026-10-16T17:28:41Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "b47adbd9066a40cda8231e2e",
@@ -8135,7 +8194,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:29:49Z"
+      "checkpointed_at": "2026-10-16T17:29:49Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "9d711e97e6a189b49409e4de",
@@ -8176,7 +8236,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:31:05Z"
+      "checkpointed_at": "2026-10-16T17:31:05Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "67d2727937348fbfdde54cad",
@@ -8205,7 +8266,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:32:15Z"
+      "checkpointed_at": "2026-10-16T17:32:15Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "9e06a43d5e616c6197b28721",
@@ -8234,7 +8296,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:33:20Z"
+      "checkpointed_at": "2026-10-16T17:33:20Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "5c41419808c13d4e5d8100bc",
@@ -8272,7 +8335,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:34:40Z"
+      "checkpointed_at": "2026-10-16T17:34:40Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "636679ca81beabe649b5f7ec",
@@ -8299,7 +8363,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:35:49Z"
+      "checkpointed_at": "2026-10-16T17:35:49Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "38650c2d3b613415d9daee79",
@@ -8326,7 +8391,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:36:56Z"
+      "checkpointed_at": "2026-10-16T17:36:56Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "18787d943856275e91283636",
@@ -8353,7 +8419,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:38:03Z"
+      "checkpointed_at": "2026-10-16T17:38:03Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "a64ec3dae788e83c7134918d",
@@ -8380,7 +8447,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:39:10Z"
+      "checkpointed_at": "2026-10-16T17:39:10Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "ed4b09120f86bf447abc7224",
@@ -8405,7 +8473,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:40:14Z"
+      "checkpointed_at": "2026-10-16T17:40:14Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "e2e005d6a211f5bc23c54559",
@@ -8432,7 +8501,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:41:22Z"
+      "checkpointed_at": "2026-10-16T17:41:22Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "e08b89458823c88177ad767a",
@@ -8457,7 +8527,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:42:35Z"
+      "checkpointed_at": "2026-10-16T17:42:35Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "3b45026ad5bd0bd3699d2f92",
@@ -8484,7 +8555,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:43:41Z"
+      "checkpointed_at": "2026-10-16T17:43:41Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "0016d1d03a339dc45d89f613",
@@ -8511,7 +8583,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:44:50Z"
+      "checkpointed_at": "2026-10-16T17:44:50Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "1b5e853c8e6ebcfd78d7f47a",
@@ -8538,7 +8611,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:45:58Z"
+      "checkpointed_at": "2026-10-16T17:45:58Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "5f0595e95b5474d80c8db774",
@@ -8580,7 +8654,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:47:15Z"
+      "checkpointed_at": "2026-10-16T17:47:15Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "0fd9902fd5918f56e5156f8d",
@@ -8607,7 +8682,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:48:20Z"
+      "checkpointed_at": "2026-10-16T17:48:20Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "ae073f37268842821ad9fc1e",
@@ -8634,7 +8710,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:49:28Z"
+      "checkpointed_at": "2026-10-16T17:49:28Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "876a8392e733d52354f74a51",
@@ -8663,7 +8740,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:50:39Z"
+      "checkpointed_at": "2026-10-16T17:50:39Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "48f5c0ffc88c168dfc22205b",
@@ -8679,7 +8757,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "a6eb6926d058d671e0417583",
@@ -8704,7 +8783,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:54:05Z"
+      "checkpointed_at": "2026-10-16T17:54:05Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "e43caaae3b418f42c191b6df",
@@ -8734,7 +8814,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:55:14Z"
+      "checkpointed_at": "2026-10-16T17:55:14Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "812f7b723791f47fd0a8c454",
@@ -8765,7 +8846,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:56:24Z"
+      "checkpointed_at": "2026-10-16T17:56:24Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "d3ae81b390284727f5c6f9c3",
@@ -8792,7 +8874,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:57:33Z"
+      "checkpointed_at": "2026-10-16T17:57:33Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "3f218610954fd60a767eb164",
@@ -8819,7 +8902,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:58:40Z"
+      "checkpointed_at": "2026-10-16T17:58:40Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "2e078c01a7e8e4c121a8b732",
@@ -8850,7 +8934,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:59:48Z"
+      "checkpointed_at": "2026-10-16T17:59:48Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "23b5d2da1833e2197d4ec74a",
@@ -8877,7 +8962,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T17:59:59Z"
+      "checkpointed_at": "2026-10-16T17:59:59Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "c886ddd4d32a41c9f8bffc43",
@@ -8904,7 +8990,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:00:10Z"
+      "checkpointed_at": "2026-10-16T18:00:10Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "1cf4aab369877fa2b10ca856",
@@ -8967,7 +9054,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:03:39Z"
+      "checkpointed_at": "2026-10-16T18:03:39Z",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9"
     },
     {
       "asset_id": "2e65529277ab46f2465ddc44",
@@ -9003,7 +9091,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:04:51Z"
+      "checkpointed_at": "2026-10-16T18:04:51Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "87caff3e826665d5edda680b",
@@ -9028,7 +9117,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:05:57Z"
+      "checkpointed_at": "2026-10-16T18:05:57Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "040a0c6fbe362701806ca705",
@@ -9063,7 +9153,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:07:10Z"
+      "checkpointed_at": "2026-10-16T18:07:10Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "178c5e72b9c7c73bdd6436a8",
@@ -9096,7 +9187,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:08:20Z"
+      "checkpointed_at": "2026-10-16T18:08:20Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "feb792d53774f4bdfd5bb0e4",
@@ -9135,7 +9227,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:09:32Z"
+      "checkpointed_at": "2026-10-16T18:09:32Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "58aa96e1e2410617e7e09d94",
@@ -9167,7 +9260,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:10:45Z"
+      "checkpointed_at": "2026-10-16T18:10:45Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "700231bb49c037d5d8077981",
@@ -9204,7 +9298,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:12:03Z"
+      "checkpointed_at": "2026-10-16T18:12:03Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "70ae5455900fa238c183fc6c",
@@ -9244,7 +9339,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:12:29Z"
+      "checkpointed_at": "2026-10-16T18:12:29Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "b3ba36371b21c3a3b0722f00",
@@ -9285,7 +9381,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:12:49Z"
+      "checkpointed_at": "2026-10-16T18:12:49Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "89b40b364042ef1985b11a00",
@@ -9337,7 +9434,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:16:24Z"
+      "checkpointed_at": "2026-10-16T18:16:24Z",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -9362,7 +9460,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:17:29Z"
+      "checkpointed_at": "2026-10-16T18:17:29Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "010ccdbda642c07aa3483e03",
@@ -9387,7 +9486,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:18:33Z"
+      "checkpointed_at": "2026-10-16T18:18:33Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "3696ff306b5de9d2f55b7c62",
@@ -9412,7 +9512,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:19:38Z"
+      "checkpointed_at": "2026-10-16T18:19:38Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "61a588287220b1e97535a70f",
@@ -9439,7 +9540,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:20:45Z"
+      "checkpointed_at": "2026-10-16T18:20:45Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "01de5dc1fa52ef9931bd5ea8",
@@ -9479,7 +9581,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:22:01Z"
+      "checkpointed_at": "2026-10-16T18:22:01Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "2b26c9a8ed56abc1be11e2e5",
@@ -9515,7 +9618,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:23:11Z"
+      "checkpointed_at": "2026-10-16T18:23:11Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "d7b2eb6d50d777812a0971f3",
@@ -9544,7 +9648,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:24:23Z"
+      "checkpointed_at": "2026-10-16T18:24:23Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "a384d6738ab65c2ef43d5d07",
@@ -9571,7 +9676,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:25:30Z"
+      "checkpointed_at": "2026-10-16T18:25:30Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "208a68e05d37518058179ebc",
@@ -9611,7 +9717,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:26:45Z"
+      "checkpointed_at": "2026-10-16T18:26:45Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "7a8de9528c8a09a467d5b210",
@@ -9651,7 +9758,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:27:59Z"
+      "checkpointed_at": "2026-10-16T18:27:59Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "5a4d15ddbc87e1c1e7f505e3",
@@ -9678,7 +9786,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:29:07Z"
+      "checkpointed_at": "2026-10-16T18:29:07Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "c933888092022d0efba8730f",
@@ -9718,7 +9827,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:30:22Z"
+      "checkpointed_at": "2026-10-16T18:30:22Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "4a333a177ce956568cf92ee9",
@@ -9759,7 +9869,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:31:37Z"
+      "checkpointed_at": "2026-10-16T18:31:37Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "eb70687e7d59f9da56ddffa5",
@@ -9800,7 +9911,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:31:51Z"
+      "checkpointed_at": "2026-10-16T18:31:51Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "5b1067146f45ce902986e0cd",
@@ -9841,7 +9953,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:33:06Z"
+      "checkpointed_at": "2026-10-16T18:33:06Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "fe5fe1ee4969f574d60093c5",
@@ -9871,7 +9984,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:34:16Z"
+      "checkpointed_at": "2026-10-16T18:34:16Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "0cddc5054c39bcbd0cf7ca66",
@@ -9898,7 +10012,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:35:23Z"
+      "checkpointed_at": "2026-10-16T18:35:23Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "ddf55d9433f55031a1014051",
@@ -9927,7 +10042,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:36:32Z"
+      "checkpointed_at": "2026-10-16T18:36:32Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "b198556fecaab1c0d3b4b54b",
@@ -9955,7 +10071,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:37:39Z"
+      "checkpointed_at": "2026-10-16T18:37:39Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "a287b8d17c99c79821fb3285",
@@ -9980,7 +10097,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:38:44Z"
+      "checkpointed_at": "2026-10-16T18:38:44Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "4000c152bf5cbe1c77456089",
@@ -10005,7 +10123,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:39:49Z"
+      "checkpointed_at": "2026-10-16T18:39:49Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "77780336cf37ab1a1c45e195",
@@ -10036,7 +10155,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T18:41:02Z"
+      "checkpointed_at": "2026-10-16T18:41:02Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "096f8b170eea1176a92aac45",
@@ -10074,7 +10194,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T00:53:37Z"
+      "checkpointed_at": "2026-10-17T00:53:37Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "a3951a6e8fb85f35bacc05da",
@@ -10101,7 +10222,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T00:55:13Z"
+      "checkpointed_at": "2026-10-17T00:55:13Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "be85bfb8e5e6751b7d9d9ff8",
@@ -10126,7 +10248,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T00:56:42Z"
+      "checkpointed_at": "2026-10-17T00:56:42Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "ee8a5b30671bfb8d4a580635",
@@ -10153,7 +10276,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T00:58:15Z"
+      "checkpointed_at": "2026-10-17T00:58:15Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "0024c59fd32a798773da7904",
@@ -10178,7 +10302,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T00:59:45Z"
+      "checkpointed_at": "2026-10-17T00:59:45Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "c18fdffc9c15169f4f78288e",
@@ -10207,7 +10332,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:01:21Z"
+      "checkpointed_at": "2026-10-17T01:01:21Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "f2004ffb61e9af12ce32c1cb",
@@ -10249,7 +10375,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:03:03Z"
+      "checkpointed_at": "2026-10-17T01:03:03Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "4c8780fa82a0cf3696c84dee",
@@ -10276,7 +10403,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:04:36Z"
+      "checkpointed_at": "2026-10-17T01:04:36Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "7b40a857e829aa2c41420ed8",
@@ -10304,7 +10432,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:06:11Z"
+      "checkpointed_at": "2026-10-17T01:06:11Z",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "adecdddd7200468c8c1f6a82",
@@ -10320,7 +10449,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "25839f9e80e151d43770a51e",
@@ -10336,7 +10466,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "131194bd29e4be1b6ccdbb7e",
@@ -10352,7 +10483,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120"
     },
     {
       "asset_id": "f3cd1e812374621f2a446f35",
@@ -10377,7 +10509,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:24:44Z"
+      "checkpointed_at": "2026-10-17T01:24:44Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "b5e902b66c75c1a201bfb382",
@@ -10402,7 +10535,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:26:14Z"
+      "checkpointed_at": "2026-10-17T01:26:14Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "2c0447c271a465133256ce73",
@@ -10427,7 +10561,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:27:43Z"
+      "checkpointed_at": "2026-10-17T01:27:43Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "f9cbde8cf351283be25f225c",
@@ -10460,7 +10595,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:29:18Z"
+      "checkpointed_at": "2026-10-17T01:29:18Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "42c327fdd2a2ab53c3197606",
@@ -10492,7 +10628,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:30:51Z"
+      "checkpointed_at": "2026-10-17T01:30:51Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "1dc3fcda4822bc2305f5253c",
@@ -10520,7 +10657,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:32:24Z"
+      "checkpointed_at": "2026-10-17T01:32:24Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "7728e8e5203a07c7bb3fa5e0",
@@ -10553,7 +10691,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:33:59Z"
+      "checkpointed_at": "2026-10-17T01:33:59Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "31c5bca83d8ff0766ae8652c",
@@ -10578,7 +10717,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:35:28Z"
+      "checkpointed_at": "2026-10-17T01:35:28Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "565033071375f7bd7eb784a2",
@@ -10605,7 +10745,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:37:00Z"
+      "checkpointed_at": "2026-10-17T01:37:00Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "c0bd214b4c22f12971bf2327",
@@ -10630,7 +10771,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:38:29Z"
+      "checkpointed_at": "2026-10-17T01:38:29Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "e0d9dad1b94413ce4ca85aa1",
@@ -10658,7 +10800,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:40:02Z"
+      "checkpointed_at": "2026-10-17T01:40:02Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "69d5a2bc903e0787949f6b8f",
@@ -10683,7 +10826,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:41:31Z"
+      "checkpointed_at": "2026-10-17T01:41:31Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     },
     {
       "asset_id": "aa84a0180e39186a3929a36e",
@@ -10717,7 +10861,8 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-17T01:43:06Z"
+      "checkpointed_at": "2026-10-17T01:43:06Z",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8"
     }
   ]
 }

@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 350,
-    "successful_visual_analyses": 216,
+    "successful_visual_analyses": 329,
     "missing_visual_analyses": 7138,
-    "failed_visual_analyses": 134,
+    "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7272,
+    "unresolved_count": 7159,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -11969,9 +11969,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18883,9 +18892,18 @@
       "asset_path": "assets/5d8db085590b401b9a0dc98b57eebfbd4db7d28f0256a368fe51e625af52cb65.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18901,9 +18919,31 @@
       "asset_path": "assets/c20b862a81b68a099cba8e07168b177f1a2af75577a721b85f52346f6b90694f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook about the world of science, inviting readers to question and explore.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Questioning",
+          "Exploration"
+        ],
+        "context_relation": "Introduction to the world of science",
+        "limitations": [
+          "No specific images or diagrams are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18919,9 +18959,18 @@
       "asset_path": "assets/33ffec965d6a76932f03710775ba41e3c1202cce57c01f7d21355542cf7dde8b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18937,9 +18986,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18955,9 +19027,18 @@
       "asset_path": "assets/ed179cfba686a957b8c5167ca19e2db99ea5abc4010fdef1b8fd54eb103dd784.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18973,9 +19054,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18991,9 +19095,18 @@
       "asset_path": "assets/6030b1dece611dd9953bb084b364d267fc7f97100edc3bc21a0a199fbd68b3a4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19009,9 +19122,18 @@
       "asset_path": "assets/7ec6533e878c0c7c101582537963f6d27896d0f5d0f48d485c773345d058af98.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19027,9 +19149,18 @@
       "asset_path": "assets/ce44fd64fd6c17ae1ce8a3bc53e62defcf53badcf0fe4329f21457103d709f96.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19045,9 +19176,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19063,9 +19217,31 @@
       "asset_path": "assets/bd773f1f7394cbc18db1b68ddc223c170c4d88fc52c73af44d39ed5948b2a084.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6'. The cover features a blue background with a white border and a small image of a globe.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "World of Science"
+        ],
+        "context_relation": "The image is a cover page of a textbook, likely for a Grade 6 science course.",
+        "limitations": [
+          "The image does not show any specific content or illustrations from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19081,9 +19257,31 @@
       "asset_path": "assets/288429df82c3eed95df8ed3adb7a2d55ef44e114d0c5cea0c120728caedd114f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a light blue background and a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the subject of science",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19099,9 +19297,18 @@
       "asset_path": "assets/05bea64d96fb2ecc5885019f0b7962eb5e590370acf5a9d5cbee88d03af50a66.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19117,9 +19324,32 @@
       "asset_path": "assets/512480e43ca0e3e8dbd4f212114473a6441f64e22894cdb5d112e7a002c5cdf2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of curiosity and questioning in learning.",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19135,9 +19365,16 @@
       "asset_path": "assets/5f221bb2517d8dadd594709ec6889c59092417021748256ca731e81c7f13fa0a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a light gray background and a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19153,9 +19390,18 @@
       "asset_path": "assets/4f21f51427ffaca543084868d33249fc6e90c969043c58dd7a853ebaf5118760.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19171,9 +19417,18 @@
       "asset_path": "assets/0b8979548a98bbde6b7897f37e785153e206c2d07d41f905c6627ca4861bd64c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely from a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19189,9 +19444,24 @@
       "asset_path": "assets/3e3335af4c568f3cb8f92e7c326ce8691c6f9bae7174efc7edbf0e5a129e8703.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A light blue background with a faint, faintly visible text that reads 'The Ever-Evolving 1 World of Science Science of Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving 1 World of Science Science of Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the subject matter",
+        "limitations": [
+          "Faint visibility of text"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19207,9 +19477,19 @@
       "asset_path": "assets/a33c59209b28c69531c5bd94d0d14925f435db00611cedb1ffc3ba2dd951d757.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A light blue background with a faint, faintly visible text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a page from a textbook, possibly a title or introductory page.",
+        "limitations": [
+          "The text is not clearly legible.",
+          "The image is too small to analyze specific details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19225,9 +19505,18 @@
       "asset_path": "assets/b77be1a0f9d8079de8dc96cda3891193fd2c9d01a922271c2459f8b2b94f0bc6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19243,9 +19532,18 @@
       "asset_path": "assets/3a1f5730300e582fcbe4f500b47138de716d1c1acaa96333b5e3d49b6687a88f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a light blue background and a faint, faintly visible text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook, possibly a page with a light blue background and faint text.",
+        "limitations": [
+          "The image is a full page with a light blue background and faint text, which may not be fully visible or readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19261,9 +19559,18 @@
       "asset_path": "assets/ddb28cb968a18ee8a02939551a04c25230c81fc4943e6022076c377da89cfd71.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19279,9 +19586,18 @@
       "asset_path": "assets/3034428564958dab9c6b79c9bfb614206ee9f25e21ebd6304dc50a244488a816.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19297,9 +19613,18 @@
       "asset_path": "assets/26e1563fca260806a3b8bf7f82a5954c7a8ad72f140a1dd09c2ee793b8b89955.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19315,9 +19640,18 @@
       "asset_path": "assets/e84ac8f72e54f907c24b0b58921888fe0ba47b92fc8a87e919e5547e27829bc6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19333,9 +19667,16 @@
       "asset_path": "assets/724aaec69ed3c727359bfbfd9b895d1665ad41761c27d9397e5cc3d8502b7fca.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a white light source in the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19351,9 +19692,18 @@
       "asset_path": "assets/8126604c225a6a13433947bfcc4374834eb069a81364f141ce49593901dd12bf.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gradient background transitioning from light blue to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook, possibly between sections or at the end.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19369,9 +19719,33 @@
       "asset_path": "assets/431fdb968fe3c07f1e9f52fae3c2a203b8f172af02048cc6e16fe9d1c27c1a31.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a tagline 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "cover",
+        "limitations": [
+          "no specific image details",
+          "no specific visual elements"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19387,9 +19761,16 @@
       "asset_path": "assets/0177ef7eefc341ae53060c052aa1b247ae2e4c6ed446876529b30d9fdbdd26e9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a white light source on the right side.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19405,9 +19786,31 @@
       "asset_path": "assets/bbf2d8aaeba9873375d4e97997bc7317e916c681485ac9d67da0b4dc67f7f163.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19423,9 +19826,19 @@
       "asset_path": "assets/013bd4aa55d0bcee9a93f164ec1de3f71f489650838c58e6435df5a738b4259c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gradient background transitioning from light blue to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page does not contain any text or images.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19441,9 +19854,32 @@
       "asset_path": "assets/e7879743d7b010c76faf37b7df40009dac45b0481450834de1ee6d85fbcaeb6d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a gray background and text about the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "science",
+          "curiosity",
+          "grade 6",
+          "world of science",
+          "invitation to question"
+        ],
+        "context_relation": "introduction to the world of science",
+        "limitations": [
+          "no specific images or diagrams are visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19459,9 +19895,20 @@
       "asset_path": "assets/4e70f50a48f4abec5a07273043845c62bf1ff2d5b62de1b810d2293adc6c5ad2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gradient background transitioning from light blue to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely part of a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or content.",
+          "The page is a placeholder or a transitional page in the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19477,9 +19924,20 @@
       "asset_path": "assets/344516adb9f56b46df0ceb8a38e0e4cc5137e2d90e56404bd5db94b7b29d49a6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a light blue background and a faint, partially visible text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook, likely related to science education.",
+        "limitations": [
+          "The image is partially obscured and not fully legible.",
+          "The visible text is not readable.",
+          "The page contains a light blue background with faint text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19495,9 +19953,29 @@
       "asset_path": "assets/e2e5835d7824b522b3aa1a3e6fe97f8ed12d7a48fa9758bd32d1ff0aa7fe204c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a tagline 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19513,9 +19991,18 @@
       "asset_path": "assets/8d8b87823012f41e9cc82ef84f45c9d5993bea738d9435d025eb0254d51c123a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19531,9 +20018,18 @@
       "asset_path": "assets/91a8dce3e0b1680db27ffa7df4ee75cac9cf8c3577ea581181cb5916a876e2ad.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19549,9 +20045,18 @@
       "asset_path": "assets/1ef7fbfc35835c1b72e5684f423d2798254452a552ef561b419aecdf00741693.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19567,9 +20072,18 @@
       "asset_path": "assets/00d7b55dfe9136afe46042968efaefaa42e19327351a6a726d929381a33e418c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19585,9 +20099,16 @@
       "asset_path": "assets/f8037bffbc930fd4369d0c1c92a207a844e3de25afdfbd1345f47da872e895c2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a white vertical stripe in the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19603,9 +20124,18 @@
       "asset_path": "assets/80de88e008171b06c32aeab54432fb2faa895c8ff2e85379dea35c60803ab750.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19621,9 +20151,16 @@
       "asset_path": "assets/2482ccc4485c38e752ae9274022f341203b96a848d34571b68daaceffe61fed7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19639,9 +20176,18 @@
       "asset_path": "assets/cf8ee6f9a4d45624429a06dc5b7240ab0434cb51dda18438520c402d9053c838.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19657,9 +20203,18 @@
       "asset_path": "assets/44954ea598c22438fcdcbf3a00a29fc06072c28ed740fea237298baa1c9591b4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19675,9 +20230,18 @@
       "asset_path": "assets/2991388815e5ce92fd17335bcd2105b2a39341899350b18a555af57fc65df5b8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19693,9 +20257,33 @@
       "asset_path": "assets/eef53ce20d1d181287a3cb6b3a4a6c7fd00a0a4bdf1819210eb0de8ebb7e6538.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a gray background and text about the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "science",
+          "curiosity",
+          "world of science",
+          "grade 6",
+          "invitation to question"
+        ],
+        "context_relation": "introduction to the world of science",
+        "limitations": [
+          "no specific visual elements",
+          "text only"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19711,9 +20299,18 @@
       "asset_path": "assets/6ca7987a98a3f50a74e07c8040842e3c3f8b642cfcc0312e8b61f621ce64e2be.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19729,9 +20326,18 @@
       "asset_path": "assets/7bbf33891a3776e6535982889de6d7f8c19c09829c53be558082fccb0b66566e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19747,9 +20353,20 @@
       "asset_path": "assets/3107dbe585c1ac59b504ede828249d9d553a278faebe0ede4e0cb3b00bb3294e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0777CH01' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH01"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly linking to additional resources or information.",
+        "limitations": [
+          "The QR code's content is not visible in the image, so the specific information it contains cannot be determined."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19783,9 +20400,16 @@
       "asset_path": "assets/ebfe2dc6344cb887fed6ecc83547147bf8297f3a1ce36a34b6c4805a3b78be2d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustrations of various objects and symbols, including a moon, leaves, a flower, an apple, a watermelon, a ruler, a bottle, and a box with buildings inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is part of an educational content, likely related to a science textbook for Grade 6.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19801,9 +20425,21 @@
       "asset_path": "assets/e10c871073bf6011c8b95f81d6168149e8222ba6084341c74eab78710fcdaaa9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a faucet and a hose connected to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "water faucet",
+          "hose"
+        ],
+        "context_relation": "The image is related to the topic of water and its usage in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the faucet or hose, only their general appearance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19819,9 +20455,22 @@
       "asset_path": "assets/ac384be18c01ee07cdd2fdf740bd5dcdaa8a0fd3e6e1c7f2fb4e2cf508b467ef.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass and a beaker, with a question mark above.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "questioning",
+          "exploration"
+        ],
+        "context_relation": "The image is related to the theme of science and questioning in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the grade level."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19837,9 +20486,18 @@
       "asset_path": "assets/a98eecad393a80a90defc357f347398f2908e0bc62749429160a3761837ec28f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a curved shape, possibly a letter or a symbol.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a science textbook.",
+        "limitations": [
+          "The image is a black and white illustration and does not provide specific details about the content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19855,9 +20513,18 @@
       "asset_path": "assets/83a0c1d4b838c8341837f4e82b8ffb00c96e5d9e6a4cfa5c04e5f9c8e50e5ef4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a pineapple being sliced open, revealing its juicy interior.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of 'The Ever-Evolving World of Science', suggesting a focus on scientific exploration and curiosity.",
+        "limitations": [
+          "The image does not provide specific scientific content or formulas. It is a general illustration related to the theme of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19873,9 +20540,22 @@
       "asset_path": "assets/87928c613f161b1002131dd2cb3f71fa40aa6907fc56b12aff7e7376b166937a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a brain with a brain cell on top, surrounded by various other brain-related symbols.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "brain",
+          "brain cell",
+          "brain-related symbols"
+        ],
+        "context_relation": "The image is related to the theme of the textbook, which is about the world of science.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19891,9 +20571,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in a textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text, images, or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19909,9 +20598,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19927,9 +20625,54 @@
       "asset_path": "page-0021.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook introducing the world of science, featuring illustrations of a paper airplane and a child playing with it, along with text about curiosity and exploration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question, to perform experiments,",
+          "and to explore, as we try to understand the beautiful world we",
+          "live in. The world of science covers everything—small and large,",
+          "near and far. We may be looking at tiny cells inside a leaf, or",
+          "the movement of the sun and the stars. We may be testing out",
+          "the materials around us at home, or discussing how water flows",
+          "underground. As you go through the chapters in this book, you",
+          "will start new adventures that challenge your thinking, expand",
+          "your knowledge, and help you become an explorer, making small",
+          "discoveries for yourself.",
+          "Before we dive into our exciting journey, take a moment to",
+          "observe something special about this book. Look at the page",
+          "numbers—they follow the playful flight of a butterfly and the",
+          "soaring of a paper plane! Just as a butterfly flutters freely and a",
+          "paper plane flies into the sky, learning takes flight when curiosity",
+          "leads the way. Did you know that something as simple as a paper",
+          "plane inspired real scientific explorations of flight? From early",
+          "inventors studying bird wings to modern engineers designing",
+          "aircraft, the dream of flying started with simple observations and",
+          "experiments. So, as you turn each page, let your imagination take",
+          "flight—exploring new ideas, discovering wonders, and reaching",
+          "for the skies!"
+        ],
+        "concepts": [
+          "curiosity",
+          "exploration",
+          "science",
+          "experiments",
+          "learning",
+          "invention",
+          "observation",
+          "exploration"
+        ],
+        "context_relation": "introduction",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content or structure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19945,9 +20688,27 @@
       "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized, abstract figure with a curved line and a circular shape with two small lines extending from it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "curiosity",
+          "thinking",
+          "exploration",
+          "science",
+          "questions",
+          "unknown",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image is related to the educational content about the process of science, emphasizing curiosity, asking questions, and exploring the unknown.",
+        "limitations": [
+          "The image does not provide specific details about the science process or the questions being asked."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19963,9 +20724,16 @@
       "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of the text discussing the nature of science as a process involving curiosity and asking questions.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19981,9 +20749,26 @@
       "asset_path": "assets/030ff33e1dc09c4300d1138413ef4eaa6688052cf72109b3926dd404e765957b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a newspaper with a cartoon character on it, with a thought bubble above their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "curiosity",
+          "thinking",
+          "exploration",
+          "science",
+          "questions",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image illustrates the concept of curiosity and exploration in the context of science, as described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the newspaper or the cartoon character."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19999,9 +20784,24 @@
       "asset_path": "assets/548df967ef00af7e77f59137e27cdcaa8a799a1fc8eb7536737a271a1131ccf9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person in a light blue shirt is holding their chin, appearing thoughtful or contemplative.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "curiosity",
+          "questions",
+          "exploration",
+          "science"
+        ],
+        "context_relation": "The image complements the text by illustrating the idea of thinking deeply and asking questions about nature.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20017,9 +20817,30 @@
       "asset_path": "assets/e069eea7e6e78d0d18225ec87987cf8b7804baf299d3fbd36ca5d2455ee69996.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A basket filled with various fruits and vegetables, with arrows pointing towards it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "basket",
+          "fruits",
+          "vegetables",
+          "arrows",
+          "exploration",
+          "science",
+          "curiosity",
+          "questions",
+          "unknown",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image represents the theme of exploration and curiosity in science, as described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the fruits and vegetables."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20035,9 +20856,23 @@
       "asset_path": "assets/679cf1fe55c35aa2e75a772ce40e62e9483933ee53008031a5288b4df7a7aa1f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a sequence of fruits and vegetables, possibly representing a food chain or a sequence of transformations.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "food chain",
+          "transformations",
+          "sequence",
+          "sequence of events"
+        ],
+        "context_relation": "The image likely represents a sequence of events or transformations in nature, possibly related to the educational content about science and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the sequence or transformations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20053,9 +20888,28 @@
       "asset_path": "assets/05fcc9be0ba84f0c824610f0f7748a0cf35d7012fcc8a53596cdb5e35257eac2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the nature of science as a process involving curiosity, questioning, and openness to the unknown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown.",
+          "In Grade 7, we will try to ask deeper questions: How do things work? Why do events happen the way they do? And what can we learn from the patterns that we see in nature?"
+        ],
+        "concepts": [
+          "Science as a process",
+          "Curiosity",
+          "Questioning",
+          "Openness to the unknown",
+          "Exploration",
+          "Patterns in nature"
+        ],
+        "context_relation": "The page discusses the nature of science as a process involving curiosity, questioning, and openness to the unknown, which is a continuation of the concepts introduced in Grade 6.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20071,9 +20925,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The text discusses the nature of science and its approach to learning and understanding the world.",
+        "limitations": [
+          "No visual elements are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20089,9 +20965,32 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "exploration",
+          "discovering new facts",
+          "learning about nature",
+          "science as a process",
+          "curiosity",
+          "asking questions",
+          "open to the unknown",
+          "Grade 6",
+          "Grade 7",
+          "ask deeper questions",
+          "how things work",
+          "why events happen",
+          "patterns in nature"
+        ],
+        "context_relation": "The image is a full page with no visible text or images.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20107,9 +21006,43 @@
       "asset_path": "page-0022.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+        ],
+        "concepts": [
+          "science",
+          "exploration",
+          "curiosity",
+          "questions",
+          "unknown",
+          "process",
+          "environment",
+          "society",
+          "human activities",
+          "environmental challenges",
+          "sustainability",
+          "properties of materials",
+          "discovery",
+          "interconnected",
+          "scientific ideas",
+          "discoveries",
+          "questions",
+          "environment",
+          "society",
+          "human activities"
+        ],
+        "context_relation": "exploration and understanding of natural phenomena",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20125,9 +21058,16 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple diagram of a paper airplane flying through the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of flight or aerodynamics.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20143,9 +21083,16 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20161,9 +21108,16 @@
       "asset_path": "assets/c16d237029e049cee3379504c30be14b82a93a53cd83c81a869a3bb9e07cfb65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue sky with a building in the foreground.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20179,9 +21133,18 @@
       "asset_path": "assets/03b34baa2674c668ae72824a0d20218a20937e864c8f65f6ad063283275a94ff.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly in a mountainous or hilly area.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context related to the educational content.",
+        "limitations": [
+          "The image is not clear and may be difficult to interpret without additional context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20197,9 +21160,31 @@
       "asset_path": "assets/203c90e1b0f917c6a7b9e9c604ee3e3b24f246a9a458a3b5a48e35db3770f6ee.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires, likely exploring the properties of materials.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific materials or their properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20215,9 +21200,27 @@
       "asset_path": "assets/9b3a41cb1a45edaa135160be51c22ec3c210681a12339bccbeccab8d812694a3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "batteries",
+          "lamps",
+          "wires",
+          "materials",
+          "properties",
+          "classification"
+        ],
+        "context_relation": "The image shows a practical experiment related to the text about classifying materials based on their properties.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20233,9 +21236,20 @@
       "asset_path": "assets/f115bfebeb89d25df4dc81956c69303e6c42889fd3aa3f498d709665a06e53c9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in a room, possibly in a classroom or auditorium, with some individuals holding objects that could be batteries, lamps, or wires.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where students or participants are engaged in an activity involving batteries, lamps, and wires, possibly as part of a science experiment or demonstration.",
+        "limitations": [
+          "The image is blurry and the details are not clearly visible.",
+          "The text in the image is not fully legible, making it difficult to determine the exact nature of the objects being held.",
+          "The context is incomplete, as the visible text does not provide additional information about the activity or the setting."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20251,9 +21265,18 @@
       "asset_path": "assets/a0b313bb199e9d662f302b73d51e9e6a1f6fa14b19d933ad35306f6157525dec.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with small leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not clear enough to identify the specific type of plant or its properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20269,9 +21292,31 @@
       "asset_path": "assets/f0f203ae7b3a23704ceffb6f5680d8ef332ca3d8970291771ff501f6af34a904.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A classroom setting with students sitting in rows, facing the front of the room, possibly during a science lesson.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "Science",
+          "Materials",
+          "Properties",
+          "Classification"
+        ],
+        "context_relation": "The image is related to the educational content of a science lesson focusing on the properties of materials and their classification.",
+        "limitations": [
+          "The image does not provide specific details about the materials being used or the exact setup of the classroom."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20287,9 +21332,31 @@
       "asset_path": "assets/6006147b5bba825e42be4c17070d933eb47a7f7fb7509d493464182effc2a4c7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students in a classroom setting, possibly engaged in an experiment or activity involving batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiments"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the students' actions or the experiment in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20305,9 +21372,18 @@
       "asset_path": "assets/52069d76c7e571b0328082b7e76a0f01c154002683d32b940435c6d89440de17.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of children playing with electric batteries, lamps, and wires in a grassy outdoor setting.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows children engaged in an educational activity involving electricity and materials, likely related to the topic of classifying materials based on their properties.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the properties being classified."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20323,9 +21399,31 @@
       "asset_path": "assets/7058c255d017b04c49fea7fda69260f32e6898ff5d0f0f74e55e90326c32aa8f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is slightly blurred and not entirely clear."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20341,9 +21439,32 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification of materials",
+          "electricity",
+          "properties of lamps"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "The image does not show any diagrams, charts, or equations.",
+          "The text is a narrative and does not provide visual aids."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20359,9 +21480,32 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and how they can be used to make a lamp glow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "lamp",
+          "properties of materials"
+        ],
+        "context_relation": "exploration and understanding of material properties",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20377,9 +21521,32 @@
       "asset_path": "assets/82a96192fe906d1e9a882595dd61a6f036ba966eef4db56f6a3960ea61486c65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an experiment involving electric batteries, lamps, and wires.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "experiment"
+        ],
+        "context_relation": "The image shows a practical activity related to the text, focusing on the properties of materials and electricity.",
+        "limitations": [
+          "The image is blurry and not very clear.",
+          "The text is partially obscured and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20395,9 +21562,21 @@
       "asset_path": "assets/1480b50a75c685b42e971186ae1a01cec5c6ab72ea8e72c63a2c82d74a6e65bb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of people standing in a field with greenery and trees in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text content related to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20413,9 +21592,18 @@
       "asset_path": "assets/f3dcc2ee904233fbf4deab9e3c50ba5598a2cc153ab7ec916b93784aa4f1adf0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An aerial view of a city with buildings and trees, possibly representing a cityscape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image is an aerial view and does not show any specific objects or details that can be related to the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20431,9 +21619,20 @@
       "asset_path": "assets/d302cc211029899aac09fbaa969fb263e610ba694c378a5eb912205947de436e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not a page with text or a page with a formula."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20449,9 +21648,19 @@
       "asset_path": "assets/a592ad1cbc81de69af14541d08360bdbc246c8afba0bb2c55ac727e88384e0f8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant with leaves and stems.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure.",
+          "No visible text or labels to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20467,9 +21676,16 @@
       "asset_path": "assets/2d0a9423ee6c440e19a3ac907219152ee45717b08e3127495b1e377fba24b5bc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20485,9 +21701,16 @@
       "asset_path": "assets/f0003be02130c951b4725242b89494314be7a3dcb72008af8ccb7d6a64f9d83a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20503,9 +21726,22 @@
       "asset_path": "assets/2ee80d59162303ff6439af3ed3db8bf287a6ea1dc5f9ef0886a44afb4d3665d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of students sitting in a circle, with a lit candle in the center, and one student holding a lit candle in front of the group.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "classifying materials based on properties",
+          "properties of materials",
+          "electricity and materials"
+        ],
+        "context_relation": "The image illustrates the concept of classifying materials based on their properties, which is a part of the educational content about electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the materials being classified."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20521,9 +21757,29 @@
       "asset_path": "assets/303ef7a7503a88073470a896f8e8c16b22b6a9c37b5a3d352f9aea2e66a87436.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, wires, a lamp, and a metal spoon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Battery",
+          "Wires",
+          "Lamp",
+          "Metal spoon"
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Battery",
+          "Wires",
+          "Lamp",
+          "Metal spoon"
+        ],
+        "context_relation": "The image is related to the educational content about classifying materials based on their properties.",
+        "limitations": [
+          "The image does not show the actual setup of the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20539,9 +21795,18 @@
       "asset_path": "assets/b8298d6fe31f995e101268d5dcc72aae558676465de05943b7ebe6f54899bf3f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sunny day with rain falling, mountains, trees, and a river.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a sunny day with rain falling, mountains, trees, and a river, which could be used to discuss weather patterns or natural landscapes.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the content or context of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20557,9 +21822,16 @@
       "asset_path": "assets/36bb406039c19c6dc4ecc0e94350b8d138222ba20c579b40fb91a306f68f4656.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue gradient background with a white vertical line on the left side.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20575,9 +21847,18 @@
       "asset_path": "assets/4fd9f5f85377dd6b51fb8c9f8e1842f7ac88c868a97eee10ac5ad5069d6569a8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient blue background with a faint blue line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a blank page or a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20593,9 +21874,16 @@
       "asset_path": "assets/d3e628e838f42d59d34404c6c0943300ffd3bf44b89a396d2990c5ce7d1cd826.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue gradient background with no visible text or objects.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20611,9 +21899,20 @@
       "asset_path": "assets/9f3f23fadb9217f678a1b537452cc32bf6968101145aca55989b35a944517302.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with a gradient effect, possibly representing a sky or ocean.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for an educational content, possibly related to science or physics.",
+        "limitations": [
+          "The image does not contain any specific text or content related to the textbook's content.",
+          "The image is a gradient background, which may not be directly related to the educational content.",
+          "The image does not provide any specific information about the textbook or its content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20629,9 +21928,33 @@
       "asset_path": "assets/3231c8fee446b7c7e216ba4b764018d0d5c932840c5c33b0b395eb6c339cbf65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with a white vertical stripe on the left side.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3",
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "lamp",
+          "properties of materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific image is provided, only a text description."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20647,9 +21970,18 @@
       "asset_path": "assets/4e2a83c28c5fec675f6742b97e991b6e0fe7671e468ab65db796268d31502a2c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp with a blue sky in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a lamp with a blue sky in the background, which is related to the topic of materials and their properties.",
+        "limitations": [
+          "The image does not provide any specific information about the lamp or its properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20665,9 +21997,19 @@
       "asset_path": "assets/a77e0f6523a6ea9ecfeda8a6fcae88fa7a5ab232a456a659799eaf08c8c098e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp with a clear blue sky in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a lamp with a clear blue sky in the background, which is related to the topic of materials and their properties.",
+        "limitations": [
+          "The image does not provide any specific information about the materials or their properties.",
+          "The image does not show any other objects or elements that could provide additional context or information about the topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20737,9 +22079,16 @@
       "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized figure of a person with a dotted line around it, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual representation of a thought or idea, possibly related to the text about changes in bodies and life processes.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20755,9 +22104,16 @@
       "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly flying in the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20773,9 +22129,16 @@
       "asset_path": "assets/00aca81dec7bff13a501396787881bb5c64fd8806b05098ebe90688124e39e58.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a tennis court with a green grassy area in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20791,9 +22154,24 @@
       "asset_path": "assets/6c0d833f3ea97488ff3133ea46ce3b1aca734c7be4536037ed449f58d5861ca9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two runners on a track, one in blue shorts and the other in blue shorts and a belt, running on a grassy field.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "track",
+          "grass",
+          "athletes",
+          "running shoes"
+        ],
+        "context_relation": "The image is related to the topic of physical activity and sports, specifically focusing on running and track events.",
+        "limitations": [
+          "The image does not provide specific details about the runners' actions or the track's features."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20809,9 +22187,23 @@
       "asset_path": "assets/1d6e2514fc7e3caacc7a046622620718dcb0a3441b3d6f7fb077d7f40f8dd1e5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three people running on a track, with one person in the lead and two others close behind.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "track",
+          "competition",
+          "athletics"
+        ],
+        "context_relation": "The image is related to the topic of physical activity and sports, specifically running on a track.",
+        "limitations": [
+          "The image does not provide specific details about the running event or the participants."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20827,9 +22219,19 @@
       "asset_path": "assets/0b9e567241faa2a69630f0ca07eb290dfbf4283d730c9a2c6ec3da6a1f7963f4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two athletes running on a track, with one athlete in the lead.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration of athletes running on a track, which is not directly related to the text about changes in materials and water.",
+        "limitations": [
+          "The image does not provide specific information about the text's content.",
+          "The image is a cartoon, which may not accurately represent the complexity of the text's concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20845,9 +22247,24 @@
       "asset_path": "assets/3b83be402e4d3c13af6c2d65fe595052d93edddb0d8551e06558291a3315f6d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a sundial, showing the position of the sun at a specific time.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "sundial",
+          "time",
+          "sun",
+          "position"
+        ],
+        "context_relation": "The image is likely used to teach about the concept of time and the position of the sun.",
+        "limitations": [
+          "The image does not provide specific measurements or angles.",
+          "The image does not include any additional context or information about the sundial."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20863,9 +22280,16 @@
       "asset_path": "assets/dd712d62e3a67419ab7b1fa31d1d36103a75f3f8c7b476d726585e8d51e30014.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20881,9 +22305,18 @@
       "asset_path": "assets/e137cf428064b983b974b583a68451cdf25bafe1a30798e7396bb359b4396399.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a faint green line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The image is a blank page with no visible text or content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20899,9 +22332,16 @@
       "asset_path": "assets/9e449fc2eefdbe9a0f020799953b43f4bc0f00ef76ec4ad227ba511d4f5b4081.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and white background with a curved line.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20917,9 +22357,19 @@
       "asset_path": "assets/4ffa1567f37ca452d7f6625e83ad712ea829538348f8ab1b92022523b055394e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and white striped object, possibly a tent or canopy, with a blue base.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a part of a larger educational content, possibly related to a textbook or educational material.",
+        "limitations": [
+          "The image is partially obscured and not fully visible.",
+          "The text in the image is not readable or relevant to the content being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20935,9 +22385,16 @@
       "asset_path": "assets/b2571ac1815c0430846cf0291d60c7efd94931c36c1d0562d1ae6ab9937ad23d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white background with a curved green line at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20953,9 +22410,25 @@
       "asset_path": "assets/19aa8e920f7933389e0b34edcfb33b73262de0639cd2ea804a24aa38c2014a36.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sunflower growing in the soil with the sun shining above it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant growth",
+          "sunflower",
+          "soil",
+          "sun",
+          "growth",
+          "environment"
+        ],
+        "context_relation": "The image illustrates the growth of a sunflower in the soil, with the sun shining above it, highlighting the importance of sunlight in plant growth.",
+        "limitations": [
+          "The image does not provide specific details about the plant's growth stages or the specific benefits of sunlight for plant growth."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
