@@ -1,5 +1,7 @@
 'use client';
 
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
+
 import AdminSidebar from '../components/AdminSidebar';
 import { Fragment } from 'react';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -209,7 +211,7 @@ export default function AdminCertificatesPage() {
                       <td><strong>{row.recipient_name}</strong><small>{row.certificate_number}</small><small>{t('admin.certificates.classStudent', { classCode: row.class_code, studentId: row.student_id })}</small></td>
                       <td><strong>{row.achievement_title}</strong><small>{t('admin.certificates.classSubject', { classCode: row.class_code, subject: row.subject_name || row.subject_code || t('admin.certificates.subjectUnavailable') })}</small><small>{row.achievement_type === 'SUBJECT_COMPLETION' ? t('admin.certificates.subjectCompletion') : t('admin.certificates.assessmentPass')}</small></td>
                       <td>{row.template_id}<small>{row.language === 'hi' ? t('admin.certificates.hindi') : t('admin.certificates.english')}</small></td>
-                      <td>{new Date(row.issued_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')}</td>
+                      <td>{formatUserTimestamp(row.issued_at)}</td>
                       <td><span className={row.status === 'ISSUED' ? styles.valid : styles.revoked}>{row.status === 'ISSUED' ? t('admin.certificates.statusIssued') : row.status === 'REVOKED' ? t('admin.certificates.statusRevoked') : row.status}</span>
                         {row.revocation_reason && <small className={styles.reason}>{row.revocation_reason}</small>}</td>
                       <td>
@@ -244,7 +246,7 @@ export default function AdminCertificatesPage() {
                             {auditLoading ? <p>{t('admin.certificates.loadingAuditEvents')}</p> : auditRows.length ? (
                               <ol>{auditRows.map((event: any) => (
                                 <li key={event.id}>
-                                  <span>{String(event.action || '').replaceAll('_', ' ')} · {event.actor_role} · {new Date(event.occurred_at).toLocaleString(locale === 'english' ? 'en-IN' : 'hi-IN')}</span>
+                                  <span>{String(event.action || '').replaceAll('_', ' ')} · {event.actor_role} · {formatUserTimestamp(event.occurred_at)}</span>
                                   <small>{typeof event.detail === 'string' ? event.detail : JSON.stringify(event.detail || {})}</small>
                                 </li>
                               ))}</ol>
