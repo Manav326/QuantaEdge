@@ -155,6 +155,17 @@ fun StructuredLessonResourcesPanel(
                 error = t("इस संसाधन का सुरक्षित संदर्भ उपलब्ध नहीं है।", "The secure reference for this resource is missing.")
             }
             documentId > 0L && source == "LEARNING_DOCUMENT" -> onOpenLearningDocument(documentId)
+            type in setOf("VIDEO", "AUDIO") -> {
+                val mediaPath = item.optString("streamUrl").ifBlank { external }
+                if (mediaPath.startsWith("/api/v1/learning/resources/") || isSafeHttpsResource(mediaPath)) {
+                    clearPreview()
+                    notice = ""
+                    error = ""
+                    activeMediaId = resourceId
+                } else {
+                    error = t("इस मीडिया के लिए सुरक्षित प्लेयर लिंक उपलब्ध नहीं है।", "A secure media stream is unavailable for this item.")
+                }
+            }
             source == "EXTERNAL_URL" || source == "CONTENT_ASSET" -> {
                 if (!openHttpsResource(context, external)) {
                     error = t("यह बाहरी संसाधन सुरक्षित HTTPS लिंक नहीं है।", "This external resource is not a safe HTTPS link.")
@@ -465,6 +476,7 @@ private fun StructuredResourceMediaPlayer(
     val assignmentId = item.optLong("assignmentId", 0L)
     val initialPosition = item.optLong("lastPositionSeconds", 0L).coerceAtLeast(0L)
     val durationSeconds = item.optLong("durationSeconds", 0L).coerceAtLeast(0L)
+    val context = LocalContext.current
     var playbackEnded by remember(resourceId) { mutableStateOf(false) }
     var positionSeconds by remember(resourceId) { mutableStateOf(initialPosition) }
     var watchedSeconds by remember(resourceId) { mutableStateOf(item.optLong("watchedSeconds", 0L).coerceAtLeast(0L)) }
@@ -475,7 +487,7 @@ private fun StructuredResourceMediaPlayer(
         }
         val mediaUrl = ApiClient.mediaUrl(path)
         val factory = OkHttpDataSource.Factory(ApiClient.authenticatedHttpClient())
-        ExoPlayer.Builder(LocalContext.current)
+        ExoPlayer.Builder(context)
             .setMediaSourceFactory(DefaultMediaSourceFactory(factory))
             .build().apply {
                 setMediaItem(MediaItem.fromUri(mediaUrl))
@@ -646,13 +658,18 @@ private fun formatResourceSize(bytes: Long): String =
     if (bytes >= 1024L * 1024L) String.format("%.1f MB", bytes.toDouble() / (1024.0 * 1024.0))
     else maxOf(1L, bytes / 1024L).toString() + " KB"
 
+private fun isSafeHttpsResource(value: String): Boolean {
+    val uri = runCatching { Uri.parse(value.trim()) }.getOrNull() ?: return false
+    return uri.scheme.equals("https", true) && !uri.host.isNullOrBlank() && uri.userInfo == null
+}
+
 private fun openHttpsResource(context: android.content.Context, value: String): Boolean {
     val uri = runCatching { Uri.parse(value.trim()) }.getOrNull() ?: return false
-    if (!uri.scheme.equals("https", true) || uri.host.isNullOrBlank() || uri.userInfo != null) return false
+    if (!isSafeHttpsResource(value)) return false
     return try {
         context.startActivity(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         true
-    } catch (_: ActivityNotFoundException) {
+    } catch (_: Exception) {
         false
     }
 }

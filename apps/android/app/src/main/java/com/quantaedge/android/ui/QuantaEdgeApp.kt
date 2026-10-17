@@ -1537,6 +1537,22 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun openAssignedLearningDocument(documentId: Long) {
+        if (documentId <= 0L) {
+            error = if (language == "hi") "यह PDF पहचान में नहीं आई।" else "This PDF could not be identified."
+            return
+        }
+        documentFullscreen = false
+        documentThumbnailImages = emptyMap()
+        documentThumbnailRequests = emptySet()
+        runTask {
+            selectedDocument = ApiClient.getObject("/api/v1/learning/documents/" + documentId)
+            documentPage = selectedDocument.optInt("last_page", 1).coerceAtLeast(1)
+            loadPage(documentPage)
+            route = AppRoute.DOCUMENT_READER
+        }
+    }
+
     fun retryDocumentPage() {
         val page = documentPage
         runTask { loadPage(page, forceRefresh = true) }
@@ -2761,7 +2777,7 @@ fun QuantaEdgeApp() {
                         onOpenStructuredLessons = ::openStructuredLessons
                     )
                     AppRoute.LESSON -> if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
-                        Box(modifier = Modifier.weight(1f)) {
+                        Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
                             StructuredLessonRenderer(
                         lesson = lesson,
                         language = learningLanguage,
@@ -2816,6 +2832,11 @@ fun QuantaEdgeApp() {
                                 }
                             }
                         }
+                            )
+                            StructuredLessonResourcesPanel(
+                                artifactId = structuredLessonArtifactId,
+                                language = learningLanguage,
+                                onOpenLearningDocument = ::openAssignedLearningDocument
                             )
                         }
                         TopicNavigationBar(

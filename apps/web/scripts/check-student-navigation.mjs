@@ -201,6 +201,9 @@ assert.ok(androidScanner.includes('ScannerMode.QR_ONLY') && androidScanner.inclu
 // Source assertions complement builds/unit tests; they do not claim live-account/device E2E.
 const adminClasses = read('../../admin/app/classes/page.tsx');
 const studentClasses = read('../app/student/classes/ClassesClient.tsx');
+const assignedResources = read('../app/student/structured-lessons/AssignedLearningResources.tsx');
+const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidLessonResources = read('../../android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonResourcesPanel.kt');
 const androidClasses = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
 const androidBroadcastPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/LiveBroadcastPlayerScreen.kt');
 const androidRecordedPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/RecordedPlayerScreen.kt');
@@ -230,5 +233,9 @@ assert.ok(offlineVideoWorker.includes('Range') && offlineVideoWorker.includes('C
 assert.ok(offlineVideoStore.includes('filesDir, "offline_learning_videos/"') && offlineVideoStore.includes('removeOfflineCopy') && offlineVideoStore.includes('pendingProgressUploads'), 'Offline video files must stay in account-namespaced app-private storage, support deletion and preserve unsynced progress.');
 assert.ok(offlineVideoContract.includes('MAX_VIDEO_BYTES') && offlineVideoContract.includes('parseContentRange') && offlineVideoTests.includes('interruptedTransferCanAppendOnlyAtTheExactAuthorizedOffset'), 'Offline transfer size/range boundaries must have unit coverage.');
 assert.ok(androidClasses.includes('offlineDownloadedIds') && androidClasses.includes('onDownloadRecording') && androidClasses.includes('onRemoveOfflineRecording'), 'Android recorded-class UI must expose permitted download, local playback state and local-copy removal.');
+assert.ok(androidApp.includes('StructuredLessonResourcesPanel(') && androidApp.includes('onOpenLearningDocument = ::openAssignedLearningDocument'), 'Android structured lessons must expose the published resource catalogue and reuse the protected document reader.');
+assert.ok(androidLessonResources.includes('/api/v1/learning/resources?artifactId=') && androidLessonResources.includes('/progress?assignmentId=') && androidLessonResources.includes('renderPdfPreviewPage'), 'Android lesson resources must load only assigned published resources, save media progress and preview private PDFs in-app.');
+assert.ok(androidLessonResources.includes('downloadAllowed') && androidLessonResources.includes('/download') && androidLessonResources.includes('openLocalFile'), 'Android may hand a resource to an external file viewer only through the authorized download endpoint when downloads are enabled.');
+assert.ok(assignedResources.includes("item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE'") && assignedResources.includes('Open resource online'), 'Student web must be able to open a private assigned document online even when download is disabled.');
 
-console.log('Navigation, localization, live-class authorization and resumable offline-video source contracts passed.');
+console.log('Navigation, localization, live-class authorization, resumable offline-video and student resource parity source contracts passed.');

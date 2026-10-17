@@ -146,6 +146,8 @@ export default function AssignedLearningResources({ artifactId, language }: { ar
           {kind === 'PDF' && item.learningDocumentId && <Link className={styles.openLink} href="/student/textbooks">{t('पाठ्यपुस्तक लाइब्रेरी में खोलें', 'Open textbook library')} ↗</Link>}
           {item.sourceKind === 'CONTENT_ASSET' && item.assetUrl && !isVideo && !isAudio && kind !== 'IMAGE' &&
             <a className={styles.openLink} href={item.assetUrl} target="_blank" rel="noopener noreferrer">{t('संसाधन खोलें', 'Open resource')} ↗</a>}
+          {item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE' && !item.learningDocumentId && !item.assetUrl && !item.externalUrl &&
+            <a className={styles.openLink} href={item.streamUrl} target="_blank" rel="noopener noreferrer">{t('संसाधन ऑनलाइन खोलें', 'Open resource online')} ↗</a>}
           {item.downloadUrl && item.downloadAllowed && <a className={styles.downloadLink} href={item.downloadUrl} download>{t('डिवाइस पर डाउनलोड करें', 'Download to device')} ↓</a>}
           {(isVideo || isAudio) && !item.streamUrl && !item.externalUrl && <p className={styles.muted}>{t('इस संसाधन के लिए ऑनलाइन प्लेयर उपलब्ध नहीं है।', 'An online player is not available for this resource.')}</p>}
           {item.completed && <p className={styles.completed}>{t('देखना पूरा हुआ', 'Completed')}</p>}
