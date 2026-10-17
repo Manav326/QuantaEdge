@@ -1458,3 +1458,61 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
   .qe-account-identity-settings__form{grid-template-columns:1fr;padding:13px}
   .qe-account-identity-settings__form h3,.qe-account-identity-settings__form .auth-note{grid-column:auto}
 }
+
+
+/* Family marketplace: clear separation of requests, buying decisions and irreversible transfers. */
+.parent-courses-page{padding:clamp(18px,3vw,32px) 0 44px}
+.parent-courses-page__wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,3vw,28px);display:grid;gap:22px}
+.parent-courses-page__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;padding:clamp(20px,3.5vw,34px);border-radius:24px;background:linear-gradient(125deg,#fff 0%,#fff8f2 100%);border:1px solid #f1dfd1;box-shadow:0 16px 48px rgba(32,39,73,.055)}
+.parent-courses-page__heading h1{margin:7px 0 10px;font-size:clamp(25px,3vw,36px);line-height:1.13;letter-spacing:-.04em;max-width:660px}
+.parent-courses-page__heading p{margin:0;max-width:660px;color:#68738a;font-size:12px;line-height:1.7}
+.parent-courses-page__heading-actions{display:flex;flex-direction:column;align-items:stretch;gap:9px;min-width:155px}
+.parent-courses-page__section{padding:clamp(16px,2.7vw,24px);border-radius:20px;background:#fff;border:1px solid #e6e9f0;box-shadow:0 10px 32px rgba(32,39,73,.04)}
+.parent-courses-page__section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:15px}
+.parent-courses-page__section-heading h2{margin:0 0 6px;font-size:17px;letter-spacing:-.02em}
+.parent-courses-page__section-heading p{margin:0;color:#747e92;font-size:11px;line-height:1.5}
+.parent-courses-page__count{min-width:30px;height:30px;padding:0 8px;border-radius:999px;background:#fff0e5;color:#9a3412;display:grid;place-items:center;font-size:11px;font-weight:900}
+.parent-courses-page__empty{padding:19px;border-radius:13px;border:1px dashed #dfe3ed;color:#747e92;text-align:center;font-size:11px;line-height:1.6;margin:0}
+.parent-courses-page__requests{display:grid;gap:10px}
+.parent-courses-page__request{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px;border:1px solid #e8ebf2;border-radius:14px;background:#fff}
+.parent-courses-page__request>div:first-child{display:grid;gap:5px;min-width:0}
+.parent-courses-page__request strong{font-size:12px}
+.parent-courses-page__request span,.parent-courses-page__request small{font-size:10px;color:#68738a;line-height:1.5}
+.parent-courses-page__request-actions,.parent-courses-page__transfer-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.parent-courses-page__quiet{border:0;background:transparent;padding:6px;color:#9a3412;font-size:10px;font-weight:800;cursor:pointer}
+.parent-courses-page__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.parent-courses-page__course{min-width:0;display:flex;flex-direction:column;gap:11px;padding:17px;border:1px solid #e7eaf1;border-radius:17px;background:#fff;transition:transform .16s ease,border-color .16s ease}
+.parent-courses-page__course:hover{transform:translateY(-2px);border-color:#fdba74}
+.parent-courses-page__course-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.parent-courses-page__course-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;color:#9a3412;background:#fff0e5;border:1px solid #fed7aa;font-size:17px}
+.parent-courses-page__price{font-size:12px;font-weight:900;color:#16223a}
+.parent-courses-page__course h3{font-size:16px;line-height:1.35;margin:0;letter-spacing:-.02em}
+.parent-courses-page__course-code{font-size:9px;color:#8991a3;letter-spacing:.06em;text-transform:uppercase}
+.parent-courses-page__course>p{margin:0;color:#68738a;font-size:11px;line-height:1.6}
+.parent-courses-page__subjects{display:flex;flex-wrap:wrap;gap:6px}
+.parent-courses-page__subjects span{padding:5px 8px;border:1px solid #e8ebf2;border-radius:999px;background:#f8f9fc;color:#68738a;font-size:9px;font-weight:700}
+.parent-courses-page__buy-actions{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:9px;margin-top:auto;padding-top:8px}
+.parent-courses-page__buy-actions label{display:grid;gap:5px;color:#68738a;font-size:10px;font-weight:800;min-width:0}
+.parent-courses-page__buy-actions select,.parent-courses-page__transfer-actions select{min-height:38px;max-width:100%;padding:8px 9px;border-radius:10px;border:1px solid #dfe3ed;background:#fff;font-size:11px;color:#152038}
+.parent-courses-page__buy-actions .button:first-child{grid-column:1/-1;justify-self:start}
+.parent-courses-page__buy-actions .button:last-child{justify-self:start}
+.parent-courses-page__owned-note{margin-top:auto!important;padding:10px;border-radius:11px;background:#f5f7fb;color:#68738a!important}
+.parent-courses-page__alert{padding:12px 14px;border:1px solid #c8eadb;border-radius:12px;background:#eefaf4;color:#247554;font-size:11px;line-height:1.6}
+.parent-courses-page__alert.is-error{border-color:#f1c5bd;background:#fff4f1;color:#a13f2c}
+.parent-courses-page__verify{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px;border-radius:16px;background:#fff7ed;border:1px solid #fed7aa}
+.parent-courses-page__verify strong{font-size:12px}
+.parent-courses-page__verify p{font-size:10px;line-height:1.55;color:#8f3e10;margin:5px 0 0}
+.parent-courses-page__footnote{margin:0;padding:0 5px;color:#7b8497;font-size:10px;line-height:1.7}
+@media(max-width:760px){
+  .parent-courses-page__heading{flex-direction:column}
+  .parent-courses-page__heading-actions{flex-direction:row;flex-wrap:wrap;min-width:0;width:100%}
+  .parent-courses-page__grid{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+  .parent-courses-page__request{align-items:flex-start;flex-direction:column}
+  .parent-courses-page__request-actions,.parent-courses-page__transfer-actions{width:100%;justify-content:flex-start}
+  .parent-courses-page__buy-actions{grid-template-columns:1fr}
+  .parent-courses-page__buy-actions .button:first-child{grid-column:auto}
+  .parent-courses-page__buy-actions label,.parent-courses-page__buy-actions select{width:100%}
+  .parent-courses-page__verify{align-items:flex-start;flex-direction:column}
+}
