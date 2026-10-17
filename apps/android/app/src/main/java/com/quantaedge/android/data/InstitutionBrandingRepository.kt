@@ -13,7 +13,8 @@ data class InstitutionBrandIdentity(
     val displayName: String,
     val logo: Bitmap? = null,
     val appIcon: Bitmap? = null,
-    val brandingVersion: Long = 1L
+    val brandingVersion: Long = 1L,
+    val themeTokensJson: String
 )
 
 /**
@@ -72,7 +73,9 @@ object InstitutionBrandingRepository {
         val version = data.optLong("brandingVersion", 1L).coerceAtLeast(1L)
         val logo = loadApprovedImage(data.optString("logoUrl"), code, "logo")
         val appIcon = loadApprovedImage(data.optString("appIconUrl"), code, "app-icon")
-        return InstitutionBrandIdentity(code, displayName, logo, appIcon, version)
+        val themeTokens = data.optJSONObject("themeTokens")?.toString()
+            ?: throw IOException("The institution colour theme is unavailable.")
+        return InstitutionBrandIdentity(code, displayName, logo, appIcon, version, themeTokens)
     }
 
     suspend fun soleActiveMembershipCode(): String? {
