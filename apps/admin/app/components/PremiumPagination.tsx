@@ -110,6 +110,9 @@ export default function PremiumPagination({
   });
   const disabledButton: CSSProperties = { ...buttonBase, color: '#aab2c0', background: palette.soft, cursor: 'not-allowed' };
 
+  // Match student-web policy: compact lists do not need pagination controls.
+  if (safeTotal <= 10) return null;
+
   return (
     <nav aria-label={t('common.pagination.navigationForItems',{ items: itemLabel })} style={shell}>
       <div style={{ display: 'grid', gap: 3, minWidth: 160 }}>
