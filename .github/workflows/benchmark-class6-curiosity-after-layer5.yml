@@ -83,7 +83,10 @@ jobs:
         run: |
           set -euo pipefail
           for model in qwen2.5:1.5b qwen2.5:3b qwen3:4b; do
-            docker exec quantaedge-class6-curiosity-benchmark-ollama ollama pull "$model"
+            # One unavailable model must not discard a benchmark if another candidate is usable.
+            if ! docker exec quantaedge-class6-curiosity-benchmark-ollama ollama pull "$model"; then
+              echo "::warning::Could not pull $model; the benchmark will record its failures and continue with the other candidates."
+            fi
           done
       - name: Benchmark the same source-bound NCERT segments under the current contract
         shell: bash
