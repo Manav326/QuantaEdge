@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - ".github/workflows/textbook-visual-candidates-v3.yml"
+      - ".github/workflows/resume-textbook-visual-layers-*.yml"
+      - "tests/test_workflow_resume_entrypoints.py"
       - ".github/workflows/textbook-extraction-pilot.yml"
       - "scripts/prepare_visual_candidates_v3.py"
       - "scripts/prepare_visual_candidate_batch.py"
@@ -58,6 +60,25 @@ on:
         options: ["1", "2", "5"]
         default: "5"
 
+  workflow_call:
+    inputs:
+      class_no:
+        description: "Class of the complete bilingual source set"
+        required: true
+        type: string
+      analysis_mode:
+        description: "Shared internal execution mode chosen by the dedicated entrypoint"
+        required: true
+        type: string
+      vision_model:
+        description: "Exact vision model used for Layer 4 analysis"
+        required: true
+        type: string
+      checkpoint_batch_size:
+        description: "Assets between durable checkpoint savepoints"
+        required: true
+        type: string
+
 permissions:
   contents: write
   packages: write
@@ -96,10 +117,11 @@ jobs:
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
           python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
     name: Prepare full bilingual Class ${{ inputs.class_no }} candidate set
     runs-on: ubuntu-latest
     timeout-minutes: 360
