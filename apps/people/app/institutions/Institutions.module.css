@@ -90,3 +90,19 @@
 .brandAssetPreview{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--qe-border,#e5e7eb);border-radius:12px;background:var(--qe-surface,#fff)}
 .brandAssetPreview span{font-size:12px;color:var(--qe-muted,#667085);flex:1}.brandAssetPreview img{max-width:180px;max-height:84px;object-fit:contain;border-radius:8px;background:#fff;padding:6px;border:1px solid #e5e7eb}
 .brandAssetPreview img[src*="app-icon"]{width:64px;height:64px}
+
+
+/* Preview colours are returned by the canonical API generator so the preview and saved palette match exactly. */
+.themePreviewMeta{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.themePreviewMeta strong{font-size:11px}
+.themePreviewMeta>span{max-width:58%;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.themePreviewCard{display:grid;gap:8px;min-width:0;padding:12px;border:1px solid;border-radius:10px}
+.themePreviewCard>small{font-size:9px;font-weight:750;letter-spacing:.4px}
+.themePreviewCard>strong{font-size:12px;line-height:1.3}
+.themePreviewCard>p{margin:0;font-size:10px;line-height:1.45}
+.themePreviewPrimary,.themePreviewSelected{display:inline-flex;align-items:center;justify-content:center;justify-self:start;max-width:100%;min-height:30px;padding:7px 10px;border-radius:7px;font-size:10px;font-weight:800;overflow-wrap:anywhere}
+.themePreviewSelected{border:1px solid}
+.themePreviewStates{display:flex;gap:5px;flex-wrap:wrap}
+.themePreviewStates span{display:inline-flex;align-items:center;padding:5px 7px;border-radius:6px;font-size:9px;font-weight:800}
+.themePreviewNotice{grid-column:1/-1;margin:0;padding:18px;border:1px dashed #cbd5e1;border-radius:10px;color:#596579;font-size:11px;line-height:1.6}
+@media(max-width:650px){.themePreviewMeta{align-items:flex-start;flex-direction:column}.themePreviewMeta>span{max-width:100%}.themePreviewCard{padding:10px}}
