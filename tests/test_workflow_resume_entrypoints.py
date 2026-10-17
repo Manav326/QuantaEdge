@@ -31,7 +31,16 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertNotIn("VISION_MODEL: ${{ inputs.vision_model }}", workflow)
         self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '1'", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
-        self.assertIn("!contains(github.event.head_commit.message || '', 'marker')", workflow.replace("[resume-visual-layers-4-5-classes-7-8]", "marker"))
+        self.assertIn("'classes-7-8-resume'", workflow)
+
+    def test_marked_push_can_resume_class7_independently_of_class8(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        marker = "[resume-visual-layers-4-5-class-7]"
+        self.assertIn(marker, workflow)
+        self.assertIn("fromJSON(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '[\"7\"]'", workflow)
+        self.assertIn("'class-7-resume'", workflow)
+        self.assertIn("(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]'))", workflow)
+        self.assertIn("max-parallel: 1", workflow)
 
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
