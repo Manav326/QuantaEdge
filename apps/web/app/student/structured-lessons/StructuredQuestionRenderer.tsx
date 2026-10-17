@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useLocale } from '../../components/LanguageProvider';
+import { translateUi, type MessageKey } from '../../i18n/catalog';
 import type { LessonLocale, StructuredLesson, StructuredQuestion } from './contract';
 import { findQuestionVisual, isQuestionVisualApproved } from './contract';
 import { StructuredDiagramView } from './StructuredLessonContent';
@@ -22,33 +24,42 @@ type Props = {
   onSubmit: () => void;
 };
 
-const labels = (locale: LessonLocale) => ({
-  selectOne: locale === 'hi' ? 'एक उत्तर चुनें' : 'Choose one answer',
-  selectMany: locale === 'hi' ? 'सभी सही विकल्प चुनें' : 'Select all that apply',
-  trueLabel: locale === 'hi' ? 'सही' : 'True',
-  falseLabel: locale === 'hi' ? 'गलत' : 'False',
-  matchPlaceholder: locale === 'hi' ? 'जोड़ी चुनें' : 'Choose a match',
-  answerPlaceholder: locale === 'hi' ? 'अपना उत्तर लिखें' : 'Write your answer',
-  submit: locale === 'hi' ? 'उत्तर जमा करें' : 'Submit answer',
-  correct: locale === 'hi' ? 'सही उत्तर' : 'Correct',
-  incorrect: locale === 'hi' ? 'उत्तर सही नहीं है' : 'Not correct yet',
-  partial: locale === 'hi' ? 'आंशिक रूप से सही' : 'Partly correct',
-  pending: locale === 'hi' ? 'जाँच लंबित है' : 'Pending review',
-  submitting: locale === 'hi' ? 'उत्तर भेजा जा रहा है…' : 'Submitting answer…',
+const labels = (locale: unknown) => ({
+  selectOne: translateUi(locale, 'legacy.web.choose.one.answer.367999bc'),
+  selectMany: translateUi(locale, 'legacy.web.select.all.that.apply.d4c9340b'),
+  trueLabel: translateUi(locale, 'legacy.web.true.518b6548'),
+  falseLabel: translateUi(locale, 'legacy.web.false.3b047c99'),
+  matchPlaceholder: translateUi(locale, 'legacy.web.choose.a.match.9c22c9b4'),
+  answerPlaceholder: translateUi(locale, 'legacy.web.write.your.answer.a8dac402'),
+  submit: translateUi(locale, 'legacy.web.submit.answer.10965fb7'),
+  correct: translateUi(locale, 'legacy.web.correct.079f9a56'),
+  incorrect: translateUi(locale, 'legacy.web.not.correct.yet.38443af3'),
+  partial: translateUi(locale, 'legacy.web.partly.correct.b2b468f7'),
+  pending: translateUi(locale, 'legacy.web.pending.review.f9989033'),
+  submitting: translateUi(locale, 'legacy.web.submitting.answer.8ab447ff'),
+  visualNotApproved: translateUi(locale, 'legacy.web.the.visual.for.this.question.has.not.b.f56c5b2d'),
+  scenario: translateUi(locale, 'legacy.web.scenario.81774341'),
+  approvedVisual: translateUi(locale, 'legacy.web.approved.visual.e8f0de71'),
+  visualReviewPending: translateUi(locale, 'legacy.web.visual.review.pending.bbde27cf'),
+  chooseTrueFalse: translateUi(locale, 'legacy.web.choose.true.or.false.73c071ab'),
+  answerGuide: translateUi(locale, 'legacy.web.answer.guide.5960084f'),
+  correctOptionIds: translateUi(locale, 'legacy.web.correct.option.ids.review.only.e304f315'),
+  correctAnswerReview: translateUi(locale, 'legacy.web.correct.answer.review.only.af6c2a42'),
+  responseSavedReview: translateUi(locale, 'legacy.web.your.response.has.been.saved.for.revie.29ae2032'),
 });
 
-function typeLabel(type: string, locale: LessonLocale): string {
-  const names: Record<string, { en: string; hi: string }> = {
-    multiple_choice: { en: 'Multiple choice', hi: 'बहुविकल्पीय प्रश्न' },
-    multiple_select: { en: 'Select all that apply', hi: 'सभी सही विकल्प चुनें' },
-    true_false: { en: 'True or false', hi: 'सही या गलत' },
-    matching: { en: 'Matching', hi: 'मिलान करें' },
-    fill_blank: { en: 'Fill in the blank', hi: 'रिक्त स्थान भरें' },
-    image_observation: { en: 'Image observation', hi: 'चित्र का अवलोकन' },
-    short_answer: { en: 'Short answer', hi: 'लघु उत्तरीय प्रश्न' },
-    scenario_based: { en: 'Scenario question', hi: 'परिस्थिति-आधारित प्रश्न' },
+function typeLabel(type: string, uiLocale: unknown): string {
+  const names: Record<string, MessageKey> = {
+    multiple_choice: 'legacy.web.multiple.choice.649280af',
+    multiple_select: 'legacy.web.select.all.that.apply.d4c9340b',
+    true_false: 'legacy.web.true.or.false.43e5661e',
+    matching: 'legacy.web.matching.9edd43bf',
+    fill_blank: 'legacy.web.fill.in.the.blank.3f05ce89',
+    image_observation: 'legacy.web.image.observation.a3688e63',
+    short_answer: 'legacy.web.short.answer.b3e52c23',
+    scenario_based: 'legacy.web.scenario.question.ed58e553',
   };
-  return names[type]?.[locale] || (locale === 'hi' ? 'प्रश्न' : 'Question');
+  return translateUi(uiLocale, names[type] || 'legacy.web.question.a06d34df');
 }
 
 function text(value: unknown, locale: LessonLocale): string {
@@ -64,7 +75,8 @@ export default function StructuredQuestionRenderer({
   question, lesson, locale, mode = 'student', response, result, submitted = false, submitting = false, disabled = false,
   onResponseChange, onSubmit,
 }: Props) {
-  const ui = labels(locale);
+  const { locale: uiLocale } = useLocale();
+  const ui = labels(uiLocale);
   const options = Array.isArray(question.options) ? question.options : [];
   const selected = Array.isArray(response) ? response : [];
   const mapResponse = response && typeof response === 'object' && !Array.isArray(response) ? response as Record<string, string> : {};
@@ -80,21 +92,21 @@ export default function StructuredQuestionRenderer({
   if (question.type === 'image_observation' && !visualApproved && mode === 'student') {
     return <section className="qe-structured-question qe-structured-question--blocked" role="status">
       <h3>{text(question.prompt_by_locale, locale)}</h3>
-      <p>{locale === 'hi' ? 'इस प्रश्न का चित्र अभी समीक्षा के लिए तैयार नहीं है।' : 'The visual for this question has not been approved yet.'}</p>
+      <p>{ui.visualNotApproved}</p>
     </section>;
   }
 
   return <section className="qe-structured-question" aria-labelledby={'question-' + question.id}>
     <div className="qe-structured-question__header">
-      <span className="qe-structured-question__type">{typeLabel(question.type, locale)}</span>
+      <span className="qe-structured-question__type">{typeLabel(question.type, uiLocale)}</span>
       {question.difficulty && <span className="qe-structured-question__difficulty">{question.difficulty}</span>}
     </div>
     {question.type === 'scenario_based' && question.scenario_by_locale && <div className="qe-structured-scenario">
-      <strong>{locale === 'hi' ? 'स्थिति' : 'Scenario'}</strong>
+      <strong>{ui.scenario}</strong>
       <p>{text(question.scenario_by_locale, locale)}</p>
     </div>}
     {question.type === 'image_observation' && mode === 'admin-preview' && <div className="qe-structured-muted">
-      {visualApproved ? (locale === 'hi' ? 'स्वीकृत दृश्य' : 'Approved visual') : (locale === 'hi' ? 'दृश्य समीक्षा लंबित' : 'Visual review pending')}
+      {visualApproved ? ui.approvedVisual : ui.visualReviewPending}
     </div>}
     {question.type === 'image_observation' && (visualApproved || mode === 'admin-preview') && visualBlock?.type === 'image' && typeof (visualBlock.asset as any)?.url === 'string' &&
       <StructuredImageLightbox url={String((visualBlock.asset as any).url)} alt={text((visualBlock.asset as any).alt_by_locale, locale)} caption={text((visualBlock.asset as any).caption_by_locale, locale) || text(visualBlock.caption_by_locale, locale)} locale={locale} />}
@@ -122,7 +134,7 @@ export default function StructuredQuestionRenderer({
     </fieldset>}
 
     {question.type === 'true_false' && <fieldset className="qe-structured-choice-group" disabled={disabled || submitted}>
-      <legend>{locale === 'hi' ? 'सही या गलत चुनें' : 'Choose true or false'}</legend>
+      <legend>{ui.chooseTrueFalse}</legend>
       {[true, false].map(value => <label className="qe-structured-choice" key={String(value)}>
         <input type="radio" name={'answer-' + question.id} checked={response === value} onChange={() => onResponseChange(value)} />
         <span>{value ? ui.trueLabel : ui.falseLabel}</span>
@@ -154,18 +166,18 @@ export default function StructuredQuestionRenderer({
     </label>}
 
     {mode === 'admin-preview' && question.type === 'short_answer' && question.answer_guide_by_locale && <details>
-      <summary>{locale === 'hi' ? 'मूल्यांकन मार्गदर्शिका' : 'Answer guide'}</summary>
+      <summary>{ui.answerGuide}</summary>
       <p>{text(question.answer_guide_by_locale[locale]?.sample_answer, locale)}</p>
       {Array.isArray(question.answer_guide_by_locale[locale]?.key_points) &&
         <ul>{question.answer_guide_by_locale[locale]!.key_points!.map((point, i) => <li key={i}>{point}</li>)}</ul>}
     </details>}
 
     {mode === 'admin-preview' && question.correct_answer_ids && <details>
-      <summary>{locale === 'hi' ? 'सही विकल्प IDs (समीक्षा हेतु)' : 'Correct option IDs (review only)'}</summary>
+      <summary>{ui.correctOptionIds}</summary>
       <code>{question.correct_answer_ids.join(', ')}</code>
     </details>}
     {mode === 'admin-preview' && question.type === 'true_false' && <details>
-      <summary>{locale === 'hi' ? 'सही उत्तर (समीक्षा हेतु)' : 'Correct answer (review only)'}</summary>
+      <summary>{ui.correctAnswerReview}</summary>
       <strong>{question.correct_answer ? ui.trueLabel : ui.falseLabel}</strong>
     </details>}
 
@@ -176,7 +188,7 @@ export default function StructuredQuestionRenderer({
         {typeof result.score === 'number' && typeof result.maxScore === 'number' && <small>{result.score} / {result.maxScore}</small>}
       </div>}
     {question.type === 'short_answer' && result && <div className="qe-structured-feedback qe-structured-feedback--pending_review" role="status">
-      <strong>{statusLabel || ui.pending}</strong><p>{result.feedbackByLocale?.[locale] || result.feedback || (locale === 'hi' ? 'आपका उत्तर जाँच के लिए सहेजा गया है।' : 'Your response has been saved for review.')}</p>
+      <strong>{statusLabel || ui.pending}</strong><p>{result.feedbackByLocale?.[locale] || result.feedback || ui.responseSavedReview}</p>
     </div>}
 
     {!submitted && <button type="button" className="qe-structured-submit" disabled={!canSubmit || disabled || submitting} onClick={onSubmit}>
