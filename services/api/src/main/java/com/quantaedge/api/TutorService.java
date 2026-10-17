@@ -92,10 +92,18 @@ public class TutorService {
 
     String responseLanguage=detectTutorResponseLanguage(tutorLanguage,normalized);
     String languageReminder=buildLearningLanguageReminder(tutorLanguage,responseLanguage);
+    String tutorIdentityLabel=learnerTutorIdentityLabel(context.studentId());
     String directAnswer=currentTutorDirectAnswer(responseLanguage,normalized);
     if(directAnswer!=null){
       String directText=appendLanguageReminder(directAnswer,languageReminder);
       TutorReply direct=new TutorReply(directText,null,0,0).withModelLabel("TUTOR_RULES");
+      conversationWriter.persistTurn(sessionId,mode,normalized,direct);
+      return Map.of("message",direct.text(),"mode",mode);
+    }
+    String directIdentityAnswer=currentTutorMetaAnswer(responseLanguage,normalized,null,tutorIdentityLabel);
+    if(directIdentityAnswer!=null){
+      String directText=appendLanguageReminder(directIdentityAnswer,languageReminder);
+      TutorReply direct=new TutorReply(directText,null,0,0).withModelLabel("TUTOR_IDENTITY");
       conversationWriter.persistTurn(sessionId,mode,normalized,direct);
       return Map.of("message",direct.text(),"mode",mode);
     }
@@ -205,6 +213,11 @@ public class TutorService {
     String languageInstruction = responseLanguage.equals("en")
         ? "Answer only in clear, age-appropriate English."
         : "केवल सरल, उम्र के अनुकूल हिन्दी में उत्तर दें।";
+    if (!"QuantaEdge".equals(tutorIdentityLabel)) {
+      languageInstruction += " The learner-facing school identity is " + tutorIdentityLabel
+          + ". Do not mention QuantaEdge or the underlying software provider in ordinary tutoring replies. "
+          + "If asked who you are, identify yourself as the AI tutor in the learner's school learning space.";
+    }
     String instructions="""
       You are a helpful tutor for school learners aged 11–14.
       %s Never switch languages. Answer only the latest learner message, directly and accurately.
@@ -246,7 +259,7 @@ public class TutorService {
 
     // Exact context questions should be answered from the lesson record, not left to
     // a small model that may ignore context and ask which lesson the learner means.
-    String directMetaAnswer=currentTutorMetaAnswer(responseLanguage,normalized,currentTopic);
+    String directMetaAnswer=currentTutorMetaAnswer(responseLanguage,normalized,currentTopic,tutorIdentityLabel);
     long inferenceMillis=0L;
     TutorReply reply;
     if(contextOnlyAnswer){
@@ -415,7 +428,30 @@ public class TutorService {
         || normalized.matches("^(?:अभी )?(?:हम )?कौन सा (?:टॉपिक|विषय|पाठ|अध्याय) (?:पढ़ रहे हैं|पढ़ रहे है|सीख रहे हैं)$");
   }
 
+  private String learnerTutorIdentityLabel(long studentId) {
+    List<Map<String,Object>> schools=jdbc.queryForList("""
+        select coalesce(nullif(trim(b.display_name),''),t.display_name) as display_name
+        from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        left join institution_branding b on b.institution_id=t.id
+        where m.student_id=? and m.status='ACTIVE'
+        order by t.id limit 2
+        """,studentId);
+    if (schools.isEmpty()) return "QuantaEdge";
+    // The request carries no tenant selector. Never guess between two school identities
+    // or reveal either school's name in a generic tutor response.
+    if (schools.size()!=1) return "your school";
+    String displayName=String.valueOf(schools.getFirst().getOrDefault("display_name","")).trim()
+        .replaceAll("[\\p{Cntrl}]"," ").replaceAll("\\s+"," ");
+    if (displayName.isBlank()) return "your school";
+    return displayName.length()>180?displayName.substring(0,180):displayName;
+  }
+
   static String currentTutorMetaAnswer(String language, String message, String topic) {
+    return currentTutorMetaAnswer(language,message,topic,"QuantaEdge");
+  }
+
+  static String currentTutorMetaAnswer(String language, String message, String topic, String tutorIdentityLabel) {
     if (message == null || message.isBlank() || message.length() > 160) return null;
     String normalized = message.toLowerCase(Locale.ROOT)
         .replaceAll("[^\\p{L}\\p{M}\\p{N}]+", " ").trim().replaceAll("\\s+", " ");
@@ -426,13 +462,26 @@ public class TutorService {
           ? "I’m responding in English right now. You can switch to Hindi using the language selector."
           : "मैं अभी हिन्दी में उत्तर दे रहा हूँ। आप भाषा चयनक से English चुन सकते हैं।";
     }
-    boolean identifiesTutor = normalized.matches("^(you are (the )?quantaedge (ai )?tutor|you re (the )?quantaedge (ai )?tutor|who are you)$")
-        || normalized.matches("^(आप क्वांटाएज एआई ट्यूटर हैं|तुम क्वांटाएज एआई ट्यूटर हो|आप कौन हैं)$");
+    boolean identifiesTutor = normalized.matches("^(you are (the )?quantaedge (ai )?tutor|you re (the )?quantaedge (ai )?tutor|are you quantaedge|are you the quantaedge (ai )?tutor|who are you)$")
+        || normalized.matches("^(आप क्वांटाएज एआई ट्यूटर हैं|तुम क्वांटाएज एआई ट्यूटर हो|क्या आप क्वांटाएज( एआई)? ट्यूटर हैं|आप कौन हैं)$");
     if (!identifiesTutor) return null;
     String safeTopic = firstNonBlank(topic, "this lesson");
+    boolean platformIdentity = "QuantaEdge".equals(tutorIdentityLabel);
+    String introductionEn;
+    String introductionHi;
+    if (platformIdentity) {
+      introductionEn = "Yes, I’m QuantaEdge’s AI tutor.";
+      introductionHi = "हाँ, मैं QuantaEdge AI Tutor हूँ।";
+    } else if ("your school".equalsIgnoreCase(tutorIdentityLabel)) {
+      introductionEn = "I’m the AI tutor in your school’s learning space.";
+      introductionHi = "मैं आपके विद्यालय के learning space का AI tutor हूँ।";
+    } else {
+      introductionEn = "I’m the AI tutor for " + tutorIdentityLabel + ".";
+      introductionHi = "मैं " + tutorIdentityLabel + " का AI tutor हूँ।";
+    }
     return "en".equalsIgnoreCase(language)
-        ? "Yes, I’m QuantaEdge’s AI tutor. We’re studying “" + safeTopic + "”. Ask me a question about this lesson."
-        : "हाँ, मैं QuantaEdge AI Tutor हूँ। अभी हम “" + safeTopic + "” पढ़ रहे हैं। इस पाठ से जुड़ा प्रश्न पूछें।";
+        ? introductionEn + " We’re studying “" + safeTopic + "”. Ask me a question about this lesson."
+        : introductionHi + " अभी हम “" + safeTopic + "” पढ़ रहे हैं। इस पाठ से जुड़ा प्रश्न पूछें।";
   }
 
   static String currentTopicAnswer(String language,String topic,String chapter,String subject){
