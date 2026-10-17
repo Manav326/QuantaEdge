@@ -54,6 +54,10 @@ For `run` and `resume`, keep the class, exact `source_book_id`, generation model
 
 The workflow concurrency group treats `run` and `resume` as the same generation lane for a given class/source. This prevents an ordinary run and an explicit resume from racing over the same checkpoint. Benchmarking is a separate lane.
 
+## Generation preflight update
+
+Both `run` and `resume` validate the source and checkpoint fingerprint before Ollama or model downloads. `resume` requires an exact saved checkpoint match; `run` may initialize a new checkpoint only when none exists, and rejects a conflicting checkpoint early. If the checkpoint is already terminal, the workflow reconciles outputs without downloading Ollama or making model calls. Draft approval is checked before inference startup.
+
 ## Recovery matrix
 
 | Event | Correct action |
