@@ -224,7 +224,7 @@ export default function PracticePage(){
     <section className="practice-wrap">
       <div className="eyebrow"><UiText message="legacy.web.learn.practise.bb602a9d" /></div>
       <h1><UiText message="legacy.web.start.with.a.lesson.936fa9e6" /></h1>
-      <p><UiText message="legacy.web.after.the.lesson.mcqs.you.will.go.stra.c270ef80" /></p>
+      <p>{locale==='english'?'After the lesson MCQs, you will practise the same micro-topic. The app selects the questions automatically.':'Lesson MCQ के बाद आप उसी micro-topic का अभ्यास करेंगे। App प्रश्न अपने-आप चुनेगा।'}</p>
       <div className="concept-card"><Link href="/student/learn" className="button button-dark"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link></div>
     </section>
   </main>;
@@ -238,7 +238,7 @@ export default function PracticePage(){
       <div className="eyebrow">{lesson?.subject_name||(locale==='english'?'Practice':'अभ्यास')} · {lesson?.chapter_name||translateUi(locale, 'legacy.web.chapter.0a3bff81')}</div>
       <h1><UiText message="legacy.web.practice.set.is.not.available.yet.d6b87368" /></h1>
       <p>{notice}</p>
-      <div className="concept-card"><h2>{lesson?.title||translateUi(locale, 'legacy.web.this.micro.topic.0b4594d6')}</h2><p><UiText message="legacy.web.instead.of.showing.questions.from.an.u.bfb8bb28" /></p></div>
+      <div className="concept-card"><h2>{lesson?.title||translateUi(locale, 'legacy.web.this.micro.topic.0b4594d6')}</h2><p>{locale==='english'?'Practice starts only when approved questions for the correct micro-topic are available. Your lesson answers are saved.':'सही micro-topic के approved प्रश्न उपलब्ध होने पर ही अभ्यास शुरू होगा। आपके lesson के उत्तर सुरक्षित हैं।'}</p></div>
       {recap.map(block=>{
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><UiText message="legacy.web.recap.d07fa8cc" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
@@ -292,7 +292,7 @@ export default function PracticePage(){
             <span className="qe-question-type">{questionTypeLabel}</span>
             <span className="qe-question-context">{current.exam_format||translateUi(locale, 'legacy.web.topic.practice.3f8b0ab5')}{current.marks?' · '+current.marks+' '+translateUi(locale, 'legacy.web.marks.57368a8d'):''}</span>
           </div>
-          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:<UiText message="legacy.web.quantaedge.question.57836f8f" />}</span>
+          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:{locale==='english'?'Practice question':'अभ्यास प्रश्न'}}</span>
         </div>
 
         <div className="qe-question-card__prompt"><MathText text={current.prompt}/></div>
