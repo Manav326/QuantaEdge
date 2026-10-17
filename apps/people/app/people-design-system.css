@@ -160,7 +160,7 @@ button:disabled,
 .qe-people-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:19px;font-weight:800;line-height:1;letter-spacing:-.04em}
 .qe-people-brand-lockup .qe-brand__name-quant,.qe-people-login-brand-lockup .qe-brand__name-quant{color:#152038}
 .qe-people-brand-lockup .qe-brand__name-edge,.qe-people-login-brand-lockup .qe-brand__name-edge{color:#F97316}
-.qe-people-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:6.4px;line-height:1.25;letter-spacing:0;white-space:nowrap}
+.qe-people-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:7.2px;line-height:1.25;letter-spacing:0;white-space:nowrap}
 .qe-people-brand-lockup--collapsed{flex:0 0 42px;width:42px}
 .qe-people-brand-lockup--collapsed .qe-brand__copy{display:none}
 .qe-people-brand-lockup--collapsed .qe-brand__lockup{justify-content:center;padding:2px}
@@ -1513,12 +1513,12 @@ button:disabled,
 .qe-people-mobile-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-size:16px;font-weight:800;line-height:1;letter-spacing:-.04em}
 .qe-people-mobile-brand-lockup .qe-brand__name-quant{color:#152038}
 .qe-people-mobile-brand-lockup .qe-brand__name-edge{color:#F97316}
-.qe-people-mobile-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:6px;line-height:1.2;letter-spacing:0;white-space:nowrap}
+.qe-people-mobile-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:7px;line-height:1.2;letter-spacing:0;white-space:nowrap}
 .qe-people-mobile-brand-lockup:focus-visible{outline:3px solid #C2410C;outline-offset:3px;border-radius:7px}
 @media(max-width:390px){
   .qe-people-workspace.is-collapsed .qe-people-brand{flex:0 0 100%;align-items:center}
   .qe-people-mobile-brand-lockup .qe-brand__name{font-size:15px}
-  .qe-people-mobile-brand-lockup .qe-brand__tagline{font-size:5.8px}
+  .qe-people-mobile-brand-lockup .qe-brand__tagline{font-size:6.8px}
 }
 @media(max-width:900px){
   .qe-people-header-context{min-width:0;max-width:190px;gap:3px}

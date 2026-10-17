@@ -993,7 +993,7 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-admin-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans',Arial,sans-serif;font-size:20px;font-weight:800;line-height:1;letter-spacing:-.04em}
 .qe-admin-brand-lockup .qe-brand__name-quant{color:#152038}
 .qe-admin-brand-lockup .qe-brand__name-edge{color:#F97316}
-.qe-admin-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:6.9px;line-height:1.25;letter-spacing:0;white-space:nowrap}
+.qe-admin-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:7.2px;line-height:1.25;letter-spacing:0;white-space:nowrap}
 .qe-admin-brand-lockup--collapsed{flex:0 0 45px;width:45px}
 .qe-admin-brand-lockup--collapsed .qe-brand__copy{display:none}
 .qe-admin-brand-lockup--collapsed .qe-brand__lockup{justify-content:center;padding:3px}
@@ -1001,7 +1001,7 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-shared-sidebar.is-collapsed .qe-admin-brand-stack{flex:0 0 auto;align-items:center}
 .qe-shared-sidebar.is-collapsed .qe-admin-brand-context{display:none}
 .qe-admin-brand-lockup:focus-visible{outline:3px solid #fdba74;outline-offset:3px;border-radius:9px}
-@media(max-width:980px){.qe-admin-brand-lockup .qe-brand__name{font-size:18px}.qe-admin-brand-lockup .qe-brand__tagline{font-size:6.1px}}
+@media(max-width:980px){.qe-admin-brand-lockup .qe-brand__name{font-size:18px}.qe-admin-brand-lockup .qe-brand__tagline{font-size:7px}}
 
 
 /* Mobile workspace header uses the same canonical brand component as the desktop sidebar. */
@@ -1013,7 +1013,7 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-admin-global-brand .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:800;line-height:1;letter-spacing:-.04em}
 .qe-admin-global-brand .qe-brand__name-quant{color:#152038}
 .qe-admin-global-brand .qe-brand__name-edge{color:#F97316}
-.qe-admin-global-brand .qe-brand__tagline{display:block;color:#566176;font-size:5.8px;line-height:1.2;letter-spacing:0;white-space:nowrap}
+.qe-admin-global-brand .qe-brand__tagline{display:block;color:#566176;font-size:7px;line-height:1.2;letter-spacing:0;white-space:nowrap}
 .qe-admin-global-brand:focus-visible{outline:3px solid #fdba74;outline-offset:3px;border-radius:7px}
 @media(max-width:900px){
   .qe-admin-global-context-label{display:none}
