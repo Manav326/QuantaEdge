@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 298,
+    "assets_selected": 25,
     "assets_processed_this_run": 25,
-    "assets_analyzed": 298,
-    "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 273,
+    "assets_analyzed": 294,
+    "assets_failed": 6,
+    "assets_skipped_from_checkpoint": 0,
     "publication_allowed": false
   },
   "results": [
@@ -24,6 +24,7 @@
       "source_pdf_page_number": 1,
       "asset_path": "assets/78e9ec2ce66237e7a28616dda4c3a8076805a5fb301846a1031d986e4df395c2.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "796e7fcec4ffb2973589182ba58edb85df2ac49f46e0184912c0bfabba0cf37c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -34,16 +35,16 @@
           "0877"
         ],
         "concepts": [],
-        "context_relation": "The QR code is likely related to the content of the textbook.",
+        "context_relation": "The QR code is likely related to educational content or a resource for the textbook.",
         "limitations": [
-          "The QR code may not directly relate to the content of the textbook."
+          "The QR code may not be directly related to the content of the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:33:37Z"
+      "checkpointed_at": "2026-10-17T01:30:19Z"
     },
     {
       "asset_id": "b5f8a1ccb19f9b82e9529733",
@@ -53,31 +54,32 @@
       "source_pdf_page_number": 1,
       "asset_path": "assets/bafede34b617687104090bdf68fec922f37293730e9de652e86fb27be56222de.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "796e7fcec4ffb2973589182ba58edb85df2ac49f46e0184912c0bfabba0cf37c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A group of children and an adult are conducting a science experiment outdoors in a lush green field with animals and trees in the background.",
+        "visual_summary": "A group of children and an adult are engaged in an outdoor science experiment in a lush green field with animals and trees in the background.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [
           "science experiment",
           "outdoor learning",
-          "environmental study",
+          "environmental awareness",
           "animal observation",
           "plant study"
         ],
-        "context_relation": "The image depicts a science lesson or activity being conducted in a natural setting, likely as part of a science curriculum for grade 8.",
+        "context_relation": "The image depicts a science lesson or activity being conducted in a natural setting, emphasizing the importance of learning about nature and its components.",
         "limitations": [
           "The image does not provide specific details about the experiment being conducted.",
-          "The text 'Curiosity' and 'Textbook of Science for Grade 8' are present but do not contribute to the visual content."
+          "The animals and plants in the background are not labeled or described."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:37:07Z"
+      "checkpointed_at": "2026-10-17T01:34:51Z"
     },
     {
       "asset_id": "6fd6770a4400457303bd35e6",
@@ -119,11 +121,12 @@
       "source_pdf_page_number": 1,
       "asset_path": "page-0001.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "796e7fcec4ffb2973589182ba58edb85df2ac49f46e0184912c0bfabba0cf37c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The cover of a science textbook for Grade 8, featuring a cartoon illustration of children conducting experiments in a natural setting.",
+        "visual_summary": "The cover of a science textbook for Grade 8, featuring an illustration of children conducting experiments in a natural setting.",
         "visual_type": "illustration",
         "visible_text": [
           "Curiosity",
@@ -136,7 +139,7 @@
           "Children conducting experiments",
           "Natural setting"
         ],
-        "context_relation": "The cover of the textbook",
+        "context_relation": "The image is the cover of a science textbook for Grade 8.",
         "limitations": [
           "The image does not provide specific details about the content or structure of the textbook."
         ]
@@ -145,7 +148,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:50:16Z"
+      "checkpointed_at": "2026-10-17T01:38:32Z"
     },
     {
       "asset_id": "ae9f75eed39fc864cfc39d4c",
@@ -154,25 +157,14 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 2,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "No visible content to analyze.",
-        "limitations": [
-          "No visible content to analyze."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:50:26Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "471113272e25489f4f1bbb74",
@@ -181,25 +173,14 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 2,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "unclear",
-        "limitations": [
-          "unclear"
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:50:35Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "4f3610a77df0fdd36813e502",
@@ -208,76 +189,14 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 2,
       "asset_path": "page-0002.jpg",
-      "asset_kind": "page_preview",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page from a textbook with publication details and rights information.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "0877 – Curiosity",
-          "Textbook of Science for Grade 8",
-          "ISBN 978-93-5729-772-1",
-          "First Edition",
-          "June 2025 Ashadha 1947",
-          "Reprinted",
-          "January 2026 Magha 1947",
-          "PD 730T SM",
-          "© National Council of Educational Research and Training, 2025",
-          "OFFICES OF THE PUBLICATION DIVISION, NCERT",
-          "NCERT Campus",
-          "Sri Aurobindo Marg",
-          "New Delhi 110 016",
-          "108, 100 Feet Road",
-          "Hodskaree Halli Extension",
-          "Banashankari III Stage",
-          "Bengaluru 560 085",
-          "Navjivan Trust Building",
-          "P.O.Navjivan",
-          "Ahmedabad 380 014",
-          "CWC Campus",
-          "Opp. Dhankal Bus Stop",
-          "Panihat",
-          "Kolkata 700 114",
-          "CWC Complex",
-          "Maligaon",
-          "Guwahati 781 021",
-          "Phone : 011-26562708",
-          "Phone : 080-26725740",
-          "Phone : 079-27541446"
-        ],
-        "concepts": [
-          "NCERT",
-          "Textbook",
-          "Science",
-          "Grade 8",
-          "Rights Reserved",
-          "Publication Details",
-          "Offices of the Publication Division",
-          "Head, Publication Division",
-          "Chief Editor",
-          "Chief Business Manager",
-          "Chief Production Officer",
-          "Editor",
-          "Assistant Production Officer",
-          "Cover, Layout, and Illustrations",
-          "NCERT watermark",
-          "Printed on 80 GSM paper",
-          "Published by the Secretary, National Council of Educational Research and Training",
-          "Printed at Laxmi Offset Printers"
-        ],
-        "context_relation": "The page contains detailed information about a textbook, including its publication details, rights information, and the publication team.",
-        "limitations": [
-          "No specific limitations are mentioned in the visible text.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:54:26Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "d0aa90e7f8b10b4444cff7ee",
@@ -287,6 +206,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3eb6f03dd656f8662bc95fd045786620d8b0d4a019ac0d0a0962a9656b560197",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -305,7 +225,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:54:45Z"
+      "checkpointed_at": "2026-10-17T01:55:55Z"
     },
     {
       "asset_id": "9aa57e3c567670eda61b31bd",
@@ -315,6 +235,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3eb6f03dd656f8662bc95fd045786620d8b0d4a019ac0d0a0962a9656b560197",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -323,7 +244,7 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its goals for education in India.",
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its vision for education in India.",
         "limitations": [
           "No visible text or images on the page.",
           "No specific content or information provided in the image."
@@ -333,7 +254,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:55:00Z"
+      "checkpointed_at": "2026-10-17T01:56:14Z"
     },
     {
       "asset_id": "ddb513b8545f5507c015f4d6",
@@ -342,53 +263,14 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 3,
       "asset_path": "page-0003.jpg",
-      "asset_kind": "page_preview",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Foreword section of a textbook discussing the National Education Policy (NEP) 2020 and its curriculum framework.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Foreword",
-          "The National Education Policy (NEP) 2020 envisages a system of\neducation in the country that is rooted in an Indian ethos and\nits civilisational accomplishments in all fields of knowledge and\nhuman endeavour. At the same time, it aims to prepare students to\nengage constructively with the opportuniti",
-          "The NCF-SE 2023, at the Middle Stage, aims to equip students\nwith the skills that are needed to grow, as they advance in their\nlives. It strives to enhance their analytical, descriptive, and\nnarrative capabilities, and to prepare them for the challenges and\nopportunities that await them. A diverse c",
-          "Such a transformative learning culture requires certain essential\nconditions. One of them is to have appropriate textbooks in different\ncurricular areas, as these textbooks are intended to play a central role\nin mediating between content and pedagogy—a role that helps strike\na judicious balance betw",
-          "The National Council of Educational Research and Training, on\nits part, is committed to providing students with such high-quality\ntextbooks. Various Curricular Area Groups, which have been\nconstituted for this purpose, comprising notable subject-experts,\npedagogues, and practising teachers as their "
-        ],
-        "concepts": [
-          "National Education Policy (NEP) 2020",
-          "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "pañchakośhas",
-          "Foundational and Preparatory Stages",
-          "Middle Stage",
-          "Preparatory and Secondary Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Transformative learning culture",
-          "Appropriate textbooks",
-          "Curricular areas",
-          "Direct instruction",
-          "Exploration and inquiry",
-          "Classroom arrangement",
-          "Teacher preparation",
-          "Conceptual connections",
-          "High-quality textbooks",
-          "Curricular Area Groups",
-          "Subject-experts",
-          "Pedagogues",
-          "Practising teachers"
-        ],
-        "context_relation": "The foreword discusses the NEP 2020, its curriculum framework, and the development of textbooks that align with these goals.",
-        "limitations": [
-          "The foreword does not provide specific details about the textbook's content or structure.",
-          "The foreword does not include any visual elements or graphics."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:58:58Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "758345af6dc5da782fccebec",
@@ -398,6 +280,7 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e452250b9ff32a6858e0a21eb1c684fce08ab42cfc4291908666132f0c6ee147",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -416,7 +299,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:59:11Z"
+      "checkpointed_at": "2026-10-17T02:01:12Z"
     },
     {
       "asset_id": "dee677a43bc8cccd9824bb89",
@@ -426,11 +309,12 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e452250b9ff32a6858e0a21eb1c684fce08ab42cfc4291908666132f0c6ee147",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -443,7 +327,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T13:59:21Z"
+      "checkpointed_at": "2026-10-17T02:01:25Z"
     },
     {
       "asset_id": "e9b08c9cec818875a26aaf1a",
@@ -453,11 +337,12 @@
       "source_pdf_page_number": 4,
       "asset_path": "page-0004.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "e452250b9ff32a6858e0a21eb1c684fce08ab42cfc4291908666132f0c6ee147",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the integration of real-world contexts, hands-on activities, and collaborative learning in science education.",
+        "visual_summary": "A page from a textbook discussing the integration of real-world contexts, hands-on activities, and collaborative learning in educational materials.",
         "visual_type": "uncertain",
         "visible_text": [
           "and understand scientific concepts through real-world contexts.",
@@ -497,9 +382,11 @@
           "decision-making skills",
           "school libraries",
           "parents and teachers",
-          "suggestions and feedback"
+          "learning resources",
+          "stakeholders",
+          "improvement"
         ],
-        "context_relation": "The page discusses the integration of real-world contexts, hands-on activities, and collaborative learning in science education.",
+        "context_relation": "The page discusses the integration of real-world contexts, hands-on activities, and collaborative learning in educational materials.",
         "limitations": [
           "The page does not provide specific details about the textbook or its content.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -509,7 +396,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:02:41Z"
+      "checkpointed_at": "2026-10-17T02:05:49Z"
     },
     {
       "asset_id": "e5224e5068361eeca13f4472",
@@ -519,11 +406,12 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/6ac0c3d0cf47792bf332f85a63d674f84bf85867a04a5a267ecef7ef7d944f93.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character holding a book and a pencil, with a determined expression.",
+        "visual_summary": "An animated character holding a book and a pencil, with a determined expression.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
@@ -536,7 +424,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:03:49Z"
+      "checkpointed_at": "2026-10-17T02:07:22Z"
     },
     {
       "asset_id": "d8531cf6217a6afdc3801b09",
@@ -546,22 +434,23 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/2900db2b5da7897a8e5e3f6b74f6d9687e08426cb5a6c00fddb77107f13425d3.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon illustration of a boy holding a smartphone and a pen, possibly engaged in an activity.",
+        "visual_summary": "A cartoon illustration of a boy holding a small object in each hand, smiling.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "context_relation": "The image is unrelated to the text provided.",
         "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:04:54Z"
+      "checkpointed_at": "2026-10-17T02:08:51Z"
     },
     {
       "asset_id": "21a37850b299d6f36c468c7b",
@@ -571,22 +460,25 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/e3ce24440bceb42889963c0de7cce373ff65b054d962780f9c102a3cbfaffa40.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character holding a book and a pen, smiling.",
+        "visual_summary": "A cartoon illustration of a person holding a pen and a notebook.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is related to the educational content of the textbook.",
-        "limitations": []
+        "context_relation": "The image is likely related to the educational content of the textbook, specifically focusing on writing or note-taking skills.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the textbook it is associated with."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:06:00Z"
+      "checkpointed_at": "2026-10-17T02:10:22Z"
     },
     {
       "asset_id": "a12de38ebf492401fe02869c",
@@ -596,6 +488,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/8e1b1616d882e5f04f569ad74e19c3f45d4e07cc444c2920a587a37908e85bbc.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -603,23 +496,17 @@
         "visual_summary": "A cartoon scientist with a white lab coat and a blue shirt, gesturing with his hands.",
         "visual_type": "cartoon",
         "visible_text": [],
-        "concepts": [
-          "science",
-          "education",
-          "curiosity",
-          "National Education Policy (NEP) 2020",
-          "National Curriculum Framework for School Education (NCF-SE) 2023"
-        ],
-        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "concepts": [],
+        "context_relation": "The image is related to the theme of science and education, specifically the Grade 8 science textbook.",
         "limitations": [
-          "The image does not provide specific details about the textbook content or the curriculum framework."
+          "The image does not provide specific details about the textbook content or the National Education Policy (NEP) 2020 and the National Curriculum Framework for School Education (NCF-SE) 2023."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:07:16Z"
+      "checkpointed_at": "2026-10-17T02:12:03Z"
     },
     {
       "asset_id": "1bee5e0d260a9ed7e6b3ca9a",
@@ -629,30 +516,30 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/f8b438f240cd21b29a1d52714b5616d98784c01a2cf2442ca2dc286fcb991e30.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Illustration of a female scientist wearing a lab coat and a blue sari, holding a clipboard and gesturing with her right hand.",
+        "visual_summary": "A cartoon illustration of a scientist wearing a lab coat and a blue sari, holding a clipboard and gesturing with one hand.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [
-          "science",
-          "research",
-          "education",
-          "National Education Policy (NEP) 2020",
-          "National Curriculum Framework for School Education (NCF-SE) 2023"
+          "scientist",
+          "lab coat",
+          "clipboard",
+          "sari"
         ],
-        "context_relation": "The image represents a character from the 'Curiosity' series, which is part of the science curriculum for Grade 8.",
+        "context_relation": "The image is related to the theme of science and education, as it depicts a scientist in a lab coat and sari, which are common attire in scientific settings.",
         "limitations": [
-          "The image does not provide specific details about the character's actions or the context of the scene."
+          "The image does not provide specific details about the scientist's actions or the context in which they are depicted."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:08:33Z"
+      "checkpointed_at": "2026-10-17T02:13:41Z"
     },
     {
       "asset_id": "e08b15a474f8e644f272241c",
@@ -662,33 +549,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page is a blank page with no visible content.",
-        "limitations": [
-          "The page is a blank page with no visible content."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:08:47Z"
-    },
-    {
-      "asset_id": "79ea5e0572e2fbbd321e39cf",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 5,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -706,7 +567,35 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:09:00Z"
+      "checkpointed_at": "2026-10-17T02:13:57Z"
+    },
+    {
+      "asset_id": "79ea5e0572e2fbbd321e39cf",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T02:14:11Z"
     },
     {
       "asset_id": "9c07b85e8698783a7b8f3525",
@@ -716,12 +605,13 @@
       "source_pdf_page_number": 5,
       "asset_path": "page-0005.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "a5abc6ee3d841cbbb58d87b2ff0bff8d16fed133d1fa7e32c3c891e37ec36854",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Introduction to a science textbook for Grade 8.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "About this Book",
           "After exploring the Curiosity, Grade 7 textbook, we hope you discovered new ideas and found yourself wondering even more about the world around you! Our journey of exploration continues in Curiosity for Grade 8, where you will learn to ask deeper questions, design investigations, and think like real",
@@ -755,15 +645,14 @@
         "context_relation": "Introduction to a science textbook for Grade 8",
         "limitations": [
           "The image does not provide specific details about the content or structure of the textbook.",
-          "The image does not show the actual textbook or its contents.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not show any visual aids or illustrations from the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:12:54Z"
+      "checkpointed_at": "2026-10-17T02:19:10Z"
     },
     {
       "asset_id": "694ed3c3dfe778c00e40e5c7",
@@ -773,31 +662,31 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/5cb8be5bfcc4d256b56d873f2d49a34c6748907ded30c69aad56ec8089ba3543.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Two cartoon scientists giving a thumbs up.",
         "visual_type": "cartoon",
-        "visible_text": [
-          "thumbs up"
-        ],
+        "visible_text": [],
         "concepts": [
           "scientists",
-          "gloves",
+          "thumbs up",
           "goggles",
-          "thumbs up"
+          "gloves",
+          "lab coats"
         ],
-        "context_relation": "The image represents a scientific theme, possibly related to a chapter on critical thinking or curiosity in a textbook.",
+        "context_relation": "The image represents a scientific theme, possibly related to a chapter on critical thinking or curiosity in a science textbook.",
         "limitations": [
-          "The image does not provide specific details about the textbook or chapter it is related to."
+          "The image does not provide specific information about the textbook or chapter it is related to."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:14:04Z"
+      "checkpointed_at": "2026-10-17T02:20:43Z"
     },
     {
       "asset_id": "92645a50ae9746ffd54367d9",
@@ -807,29 +696,31 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/5cb8be5bfcc4d256b56d873f2d49a34c6748907ded30c69aad56ec8089ba3543.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Two cartoon scientists giving a thumbs up.",
         "visual_type": "cartoon",
-        "visible_text": [
-          "two cartoon scientists giving a thumbs up."
-        ],
+        "visible_text": [],
         "concepts": [
           "scientists",
-          "thumbs up"
+          "thumbs up",
+          "goggles",
+          "gloves",
+          "lab coats"
         ],
-        "context_relation": "The image represents a visual representation of scientists giving a thumbs up, which is a common gesture of approval or agreement.",
+        "context_relation": "The image represents a scientific theme, possibly related to a chapter on critical thinking or curiosity in a textbook.",
         "limitations": [
-          "The image does not provide specific details about the scientists or their actions."
+          "The image does not provide specific information about the textbook or chapter it is related to."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:14:13Z"
+      "checkpointed_at": "2026-10-17T02:20:53Z"
     },
     {
       "asset_id": "44eece26b8a0cb3f6b143941",
@@ -839,24 +730,28 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/1102f6613c2ca2e59d8f453e9a6f9b4a707cd426960d256861ea6645109f86eb.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character with a blue top and a braid, pointing upwards with one finger.",
+        "visual_summary": "A cartoon illustration of a person pointing upwards with one finger.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
-          "The image does not provide any specific information about the text or the educational content editor's role."
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any educational content or questions.",
+          "The image does not depict any specific educational concept or question."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:15:25Z"
+      "checkpointed_at": "2026-10-17T02:22:30Z"
     },
     {
       "asset_id": "871aa922af40a61cd22d1fd8",
@@ -866,11 +761,12 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/150d90ea435445e3ccb850848abba6b062cd9e3fdad29b0a42f83d9653ee21d7.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character is holding a phone to his ear and pointing upwards with his right hand.",
+        "visual_summary": "A cartoon character is holding a phone to his ear and pointing upwards with his other hand.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
@@ -883,7 +779,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:16:46Z"
+      "checkpointed_at": "2026-10-17T02:24:07Z"
     },
     {
       "asset_id": "7873e0bd5e8a9af924d64855",
@@ -893,24 +789,35 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/c0bfa4d3401ccc2febb0ea45e45f369399278a2f597e084b48037f6d5a1eec3b.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A cartoon character holding a book and a pencil, with a cheerful expression.",
         "visual_type": "cartoon",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is related to educational content, specifically a textbook page about open-ended questions.",
+        "visible_text": [
+          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
+          "Probe and ponder",
+          "They will help you link different concepts and deepen your curiosity, and perhaps help you understand the"
+        ],
+        "concepts": [
+          "open-ended questions",
+          "critical thinking",
+          "curiosity",
+          "linking concepts",
+          "understanding"
+        ],
+        "context_relation": "The image is related to the text discussing the benefits of open-ended questions in education.",
         "limitations": [
-          "The image does not provide specific details about the textbook content or the questions being discussed."
+          "The image does not provide specific details about the textbook or chapter it is related to."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:17:58Z"
+      "checkpointed_at": "2026-10-17T02:25:55Z"
     },
     {
       "asset_id": "9f0239c3eaff6e2ffc62b6e0",
