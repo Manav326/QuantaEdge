@@ -39,6 +39,7 @@ fun ParentChildCreateScreen(
     var science by rememberSaveable { mutableStateOf(true) }
     var consent by rememberSaveable { mutableStateOf(false) }
     val institutionBrand = LocalInstitutionBrandIdentity.current
+    val institutionContextPending = LocalInstitutionBrandResolutionPending.current
     val tracks = listOfNotNull("maths".takeIf { maths }, "science".takeIf { science })
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
@@ -49,8 +50,8 @@ fun ParentChildCreateScreen(
         if (remainingSlots <= 0) {
             EmptyState(
                 "छात्र प्रोफ़ाइल सीमा पूरी हो गई",
-                if (institutionBrand != null) "और खाते बनाने के लिए अपने विद्यालय के प्रशासक से संपर्क करें।"
-                else "और खाते बनाने के लिए QuantaEdge support से संपर्क करें।"
+                if (institutionBrand != null || institutionContextPending) "और खाते बनाने के लिए अपने विद्यालय के प्रशासक से संपर्क करें।"
+                else "और खाते बनाने के लिए support से संपर्क करें।"
             )
         } else {
             OutlinedTextField(value = name, onValueChange = { name = it.take(120) },
