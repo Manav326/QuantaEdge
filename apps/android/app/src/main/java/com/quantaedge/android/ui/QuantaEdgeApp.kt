@@ -86,6 +86,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.quantaedge.android.R
+import com.quantaedge.android.RazorpayCourseCheckoutHost
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
@@ -210,6 +211,10 @@ fun QuantaEdgeApp() {
     var studentPrograms by remember { mutableStateOf(emptyList<JSONObject>()) }
     var studentProgramsLoadFailed by remember { mutableStateOf(false) }
     var courseProgress by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
+    var marketplaceOffers by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var marketplaceLoading by remember { mutableStateOf(false) }
+    var marketplaceLoadFailed by remember { mutableStateOf(false) }
+    var marketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
     var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var studentTextbookDocumentsLoadFailed by remember { mutableStateOf(false) }
     var accountLifecycle by remember { mutableStateOf(JSONObject()) }
@@ -469,8 +474,16 @@ fun QuantaEdgeApp() {
         studentProgramsLoadFailed = response.isFailure
         val programs = response.getOrDefault(emptyList())
         studentPrograms = programs
+        val ownedPrograms = programs.filter {
+            it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
+        }
+        if (currentCourseId <= 0L || ownedPrograms.none { it.longAny("id", "course_id") == currentCourseId }) {
+            currentCourseId = ownedPrograms.firstOrNull {
+                it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
+            }?.longAny("id", "course_id") ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
+        }
         val progress = linkedMapOf<Long, JSONObject>()
-        programs.filter { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }.forEach { program ->
+        ownedPrograms.forEach { program ->
             val id = program.longAny("id", "course_id")
             if (id > 0L) runCatching {
                 ApiClient.getObject("/api/v1/students/me?courseId=" + id)
@@ -511,6 +524,9 @@ fun QuantaEdgeApp() {
                 preferences.edit().putString("contentLanguage", savedLearningLanguage).apply()
             }
             refreshStudentPrograms()
+            if (currentCourseId > 0L) {
+                studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
+            }
             refreshStudentTextbookDocuments()
             recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
             route = AppRoute.STUDENT_HOME
@@ -602,23 +618,136 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun activateCourse(courseId: Long) {
+        if (courseId <= 0L) return
+        val course = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == courseId &&
+                (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+        }
+        if (course == null) {
+            error = if (language == "hi") "यह course आपके खाते में उपलब्ध नहीं है।" else "This course is not available to your account."
+            return
+        }
+        runTask {
+            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+            currentCourseId = courseId
+            route = AppRoute.STUDENT_HOME
+            status = if (language == "hi") "सीखने का course बदल गया।" else "Learning course changed."
+        }
+    }
+
+    fun openAllCourses() {
+        error = ""
+        status = ""
+        route = AppRoute.ALL_COURSES
+        runTask { refreshStudentPrograms() }
+    }
+
+    fun refreshMarketplace() {
+        marketplaceLoading = true
+        marketplaceLoadFailed = false
+        runTask {
+            try {
+                marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                marketplaceLoadFailed = false
+            } catch (_: Exception) {
+                marketplaceOffers = emptyList()
+                marketplaceLoadFailed = true
+            } finally {
+                marketplaceLoading = false
+            }
+        }
+    }
+
+    fun openMarketplace() {
+        error = ""
+        status = ""
+        route = AppRoute.MARKETPLACE
+        refreshMarketplace()
+    }
+
+    fun purchaseMarketplaceCourse(courseId: Long) {
+        if (courseId <= 0L || marketplaceBusyCourseId > 0L) return
+        marketplaceBusyCourseId = courseId
+        runTask {
+            try {
+                val order = ApiClient.postObject("/api/v1/marketplace/courses/" + courseId + "/orders")
+                val host = context as? RazorpayCourseCheckoutHost
+                    ?: throw IOException("Razorpay checkout is not available on this device.")
+                val localOrderId = order.optLong("localOrderId", 0L)
+                if (localOrderId <= 0L) throw IOException("The course order could not be identified. Please retry.")
+                host.launchCourseCheckout(order) { checkoutResult ->
+                    val paymentId = checkoutResult.paymentId.orEmpty()
+                    val orderId = checkoutResult.orderId.orEmpty()
+                    val signature = checkoutResult.signature.orEmpty()
+                    if (!checkoutResult.userMessage.isNullOrBlank()) {
+                        marketplaceBusyCourseId = 0L
+                        status = checkoutResult.userMessage.orEmpty()
+                    } else if (paymentId.isBlank() || orderId.isBlank() || signature.isBlank()) {
+                        marketplaceBusyCourseId = 0L
+                        status = if (language == "hi") "भुगतान की पुष्टि अधूरी है। दोबारा प्रयास करें।"
+                            else "The payment confirmation is incomplete. Please retry."
+                    } else {
+                        runTask {
+                            try {
+                                ApiClient.postObject(
+                                    "/api/v1/marketplace/orders/" + localOrderId + "/verify",
+                                    JSONObject().put("paymentId", paymentId).put("orderId", orderId).put("signature", signature)
+                                )
+                                currentCourseId = courseId
+                                refreshStudentPrograms()
+                                studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+                                marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                                route = AppRoute.STUDENT_HOME
+                                status = if (language == "hi") "भुगतान सत्यापित है। आपका course तैयार है।"
+                                    else "Payment verified. Your course is ready."
+                            } finally {
+                                marketplaceBusyCourseId = 0L
+                            }
+                        }
+                    }
+                }
+            } catch (exception: Exception) {
+                marketplaceBusyCourseId = 0L
+                throw exception
+            }
+        }
+    }
+
+    fun joinFreeMarketplaceCourse(courseId: Long) {
+        runTask {
+            if (courseId <= 0L) throw IOException("Choose a valid course.")
+            ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            refreshStudentPrograms()
+            currentCourseId = courseId
+            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+            route = AppRoute.STUDENT_HOME
+            status = if (language == "hi") "Free course आपके Courses में जोड़ दिया गया।" else "Free course added to your Courses."
+        }
+    }
+
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
         structuredLessonMode = false
         currentSubject = subjectCode
-        currentCourseId = courseId.coerceAtLeast(0L)
+        val targetCourseId = courseId.takeIf { it > 0L } ?: currentCourseId
+        currentCourseId = targetCourseId.coerceAtLeast(0L)
         lessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
-            if (studentProfile.length() == 0) studentProfile = ApiClient.getObject("/api/v1/students/me")
+            if (targetCourseId > 0L) {
+                studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + targetCourseId)
+            } else if (studentProfile.length() == 0) {
+                studentProfile = ApiClient.getObject("/api/v1/students/me")
+            }
             var classCode = studentProfile.textAny("class_code", "classCode")
             if (classCode.isBlank()) {
                 val profile = ApiClient.getObject("/api/v1/students/me/profile")
                 classCode = profile.textAny("class_code", "classCode")
             }
             if (classCode.isBlank()) throw IOException("आपकी कक्षा API से नहीं मिली। अपने खाते की जानकारी जाँचें।")
-            val path = if (courseId > 0L) {
+            val path = if (targetCourseId > 0L) {
                 "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode) +
-                    "&language=" + learningContentLanguage + "&courseId=" + courseId
+                    "&language=" + learningContentLanguage + "&courseId=" + targetCourseId
             } else {
                 "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
                     "&subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
@@ -2302,7 +2431,7 @@ fun QuantaEdgeApp() {
             AppRoute.WELCOME -> AppRoute.WELCOME
             AppRoute.LOGIN -> AppRoute.WELCOME
             AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
-            AppRoute.CERTIFICATES, AppRoute.LEADERBOARD -> AppRoute.STUDENT_HOME
+            AppRoute.CERTIFICATES, AppRoute.LEADERBOARD, AppRoute.ALL_COURSES, AppRoute.MARKETPLACE -> AppRoute.STUDENT_HOME
             AppRoute.ACCOUNT_LIFECYCLE -> AppRoute.PROFILE
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
             AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
@@ -2692,6 +2821,9 @@ fun QuantaEdgeApp() {
                         profile = studentProfile,
                         recommendation = recommendation,
                         programs = studentPrograms,
+                        activeCourseId = currentCourseId,
+                        onAllCourses = ::openAllCourses,
+                        onMarketplace = ::openMarketplace,
                         programsLoadFailed = studentProgramsLoadFailed,
                         courseProgress = courseProgress,
                         onEnrollCourse = ::enrollCourse,
@@ -2701,7 +2833,7 @@ fun QuantaEdgeApp() {
                         onOpenDocument = ::openDocument,
                         language = language,
                         busy = busy,
-                        onSubject = ::openSubject,
+                        onSubject = { code -> openSubject(code, currentCourseId) },
                         onDiagnostic = ::openDiagnostic,
                         onTests = ::openAssessments,
                         onResources = ::openResources,
@@ -2716,6 +2848,30 @@ fun QuantaEdgeApp() {
                         } },
                         onOpenRecommendation = { recommended -> openLesson(recommended) },
                         onClasses = ::openClasses
+                    )
+                    AppRoute.ALL_COURSES -> StudentAllCoursesScreen(
+                        programs = studentPrograms,
+                        programsLoadFailed = studentProgramsLoadFailed,
+                        courseProgress = courseProgress,
+                        activeCourseId = currentCourseId,
+                        language = language,
+                        busy = busy,
+                        onActivateCourse = ::activateCourse,
+                        onOpenSubject = ::openSubject,
+                        onMarketplace = ::openMarketplace,
+                        onRefresh = { runTask { refreshStudentPrograms() } }
+                    )
+                    AppRoute.MARKETPLACE -> StudentMarketplaceScreen(
+                        offers = marketplaceOffers,
+                        loading = marketplaceLoading,
+                        loadFailed = marketplaceLoadFailed,
+                        language = language,
+                        busyCourseId = marketplaceBusyCourseId.takeIf { it > 0L },
+                        busy = busy || marketplaceBusyCourseId > 0L,
+                        onBuy = ::purchaseMarketplaceCourse,
+                        onJoinFree = ::joinFreeMarketplaceCourse,
+                        onRefresh = ::refreshMarketplace,
+                        onAllCourses = ::openAllCourses
                     )
                     AppRoute.PARENT_HOME -> ParentHomeScreen(
                         parent = parentAccount,
