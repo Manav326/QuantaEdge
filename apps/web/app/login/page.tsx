@@ -1,224 +1,162 @@
 'use client';
 
-import { UiText, useUiTranslation } from '../i18n/useUiTranslation';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
-import { LanguageSwitcher } from '../components/LanguageProvider';
+import GoogleSignInButton from '../components/GoogleSignInButton';
+import { LanguageSwitcher, useLocale } from '../components/LanguageProvider';
 
-type Mode = 'login' | 'register' | 'reset';
-type Step = 'mobile' | 'otp';
-type LoginMethod = 'password' | 'otp';
+type Method = 'mobile' | 'username';
 
-async function readApi(response: Response, unexpectedResponse: (status: number) => string): Promise<any> {
-  const raw = await response.text();
-  if (!raw.trim()) return {};
-  try { return JSON.parse(raw); }
-  catch { throw new Error(unexpectedResponse(response.status)); }
+async function readJson(response: Response): Promise<any> {
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.message || body.detail || body.error || 'The request could not be completed.');
+  return body;
 }
 
-export default function ParentLoginPage() {
-  const t = useUiTranslation();
-  const [mode, setMode] = useState<Mode>('login');
-  const [loginMethod, setLoginMethod] = useState<LoginMethod>('password');
-  const [step, setStep] = useState<Step>('mobile');
+function destination(body: any): string {
+  if (body.workspace === 'PARENT' && body.role === 'PARENT' && Number(body.userId) > 0) return '/parent';
+  if (body.workspace === 'STUDENT' && body.role === 'STUDENT' && Number(body.studentId) > 0) return '/student';
+  throw new Error('QuantaEdge could not confirm this account session. Please sign in again.');
+}
+
+export default function LoginPage() {
+  const { locale } = useLocale();
+  const english = locale === 'english';
+  const [method, setMethod] = useState<Method>('mobile');
   const [mobile, setMobile] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [otp, setOtp] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [devCode, setDevCode] = useState('');
+  const [otpRequested, setOtpRequested] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const otpFlow = mode !== 'login' || loginMethod === 'otp';
 
-  function resetState(next: Mode) {
-    setMode(next); setLoginMethod('password'); setStep('mobile'); setOtp(''); setDevCode('');
-    setError(''); setNotice(''); setPassword(''); setConfirmPassword('');
-    setNewPassword(''); setConfirmNewPassword('');
+  function changeMethod(next: Method) {
+    setMethod(next); setOtp(''); setDevCode(''); setOtpRequested(false); setError(''); setNotice('');
+    setMobile(''); setUsername(''); setPassword('');
   }
 
-  function switchLoginMethod(next: LoginMethod) {
-    setLoginMethod(next); setStep('mobile'); setOtp(''); setDevCode('');
-    setError(''); setNotice('');
-  }
-
-  async function signInWithPassword() {
-    setBusy(true); setError(''); setNotice('');
-    try {
-      const response = await fetch('/api/v1/auth/parent-login', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile: mobile.trim(), password }),
-      });
-      const body = await readApi(response, status => t('parent.login.unexpectedResponse', { status }));
-      if (!response.ok) {
-        const message = String(body.message || '');
-        if (message.toLowerCase().includes('password has not been set')) {
-          throw new Error(t('parent.login.passwordNotSet'));
-        }
-        throw new Error(message || t('parent.login.invalidCredentials'));
-      }
-      if (body.role !== 'PARENT' || body.workspace !== 'PARENT' || Number(body.userId) <= 0 || Number(body.studentId) > 0) {
-        throw new Error(t('parent.login.sessionNotConfirmed'));
-      }
-      window.location.replace('/parent');
-    } catch (e: any) {
-      setError(e?.message || t('parent.login.signInFailed'));
-    } finally { setBusy(false); }
-  }
-
-  async function requestOtp() {
-    setError(''); setNotice('');
-    if (mode === 'register') {
-      if (displayName.trim().length < 2) { setError(t('parent.login.enterName')); return; }
-      if (password.length < 8) { setError(t('parent.login.passwordMinimum')); return; }
-      if (password !== confirmPassword) { setError(t('parent.login.passwordMismatch')); return; }
+  async function mobileSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setError(''); setNotice('');
+    if (!otpRequested && mobile.length !== 10) {
+      setError(english ? 'Enter a valid 10-digit mobile number.' : 'मान्य 10 अंकों का मोबाइल नंबर दर्ज करें।');
+      return;
+    }
+    if (otpRequested && otp.length !== 6) {
+      setError(english ? 'Enter the 6-digit OTP.' : '6 अंकों का OTP दर्ज करें।');
+      return;
     }
     setBusy(true);
     try {
-      const purpose = mode === 'register' ? 'SIGNUP' : mode === 'reset' ? 'PASSWORD_RESET' : 'LOGIN';
-      const response = await fetch('/api/v1/auth/request-otp', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile: mobile.trim(), purpose }),
-      });
-      const body = await readApi(response, status => t('parent.login.unexpectedResponse', { status }));
-      if (!response.ok) throw new Error(body.message || t('parent.login.sendVerificationFailed'));
-      setDevCode(body.devCode || ''); setOtp(''); setStep('otp');
-      setNotice(mode === 'register'
-        ? t('parent.login.otpSentSignup')
-        : mode === 'reset'
-          ? t('parent.login.otpSentReset')
-          : t('parent.login.otpSentLogin'));
-    } catch (e: any) {
-      setError(e?.message || t('parent.login.sendVerificationFailed'));
+      if (!otpRequested) {
+        const body = await readJson(await fetch('/api/v1/auth/request-otp', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile, purpose: 'LOGIN' }),
+        }));
+        setDevCode(String(body.devCode || ''));
+        setOtpRequested(true);
+        setNotice(english ? 'Enter the code sent to your verified mobile number.' : 'सत्यापित मोबाइल नंबर पर आया कोड दर्ज करें।');
+        return;
+      }
+      const body = await readJson(await fetch('/api/v1/auth/verify-otp', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile, otp, purpose: 'LOGIN' }),
+      }));
+      window.location.replace(destination(body));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Mobile sign-in could not be completed.');
     } finally { setBusy(false); }
   }
 
-  async function verifyOtp() {
-    setError(''); setNotice('');
-    if (otp.trim().length !== 6) { setError(t('parent.login.invalidOtp')); return; }
-    if (mode === 'reset') {
-      if (newPassword.length < 8) { setError(t('parent.login.passwordMinimum')); return; }
-      if (newPassword !== confirmNewPassword) { setError(t('parent.login.newPasswordMismatch')); return; }
+  async function usernameSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setError(''); setNotice('');
+    if (username.trim().length < 3 || !password) {
+      setError(english ? 'Enter your username and password.' : 'यूज़रनेम और पासवर्ड दर्ज करें।');
+      return;
     }
     setBusy(true);
     try {
-      const purpose = mode === 'register' ? 'SIGNUP' : mode === 'reset' ? 'PASSWORD_RESET' : 'LOGIN';
-      const payload: Record<string, string> = { mobile: mobile.trim(), otp: otp.trim(), purpose };
-      if (mode === 'register') {
-        payload.displayName = displayName.trim();
-        payload.password = password;
-      } else if (mode === 'reset') {
-        payload.password = newPassword;
-      }
-      const response = await fetch('/api/v1/auth/verify-otp', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
-      });
-      const body = await readApi(response, status => t('parent.login.unexpectedResponse', { status }));
-      if (!response.ok) throw new Error(body.message || t('parent.login.verificationFailed'));
-      if (body.role !== 'PARENT' || body.workspace !== 'PARENT' || Number(body.userId) <= 0 || Number(body.studentId) > 0) {
-        throw new Error(t('parent.login.sessionNotConfirmed'));
-      }
-      window.location.replace(mode === 'register' ? '/parent/children' : '/parent');
-    } catch (e: any) {
-      setError(e?.message || t('parent.login.verificationFailed'));
+      const body = await readJson(await fetch('/api/v1/auth/account-login', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username.trim(), password }),
+      }));
+      window.location.replace(destination(body));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Username/password sign-in could not be completed.');
     } finally { setBusy(false); }
   }
-
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (mode === 'login' && loginMethod === 'password') await signInWithPassword();
-    else if (step === 'mobile') await requestOtp();
-    else await verifyOtp();
-  }
-
-  const submitLabel = mode === 'login'
-    ? loginMethod === 'password'
-      ? (busy ? t('parent.login.signingIn') : t('parent.login.signIn'))
-      : busy
-        ? (step === 'mobile' ? t('parent.login.sendingLoginOtp') : t('parent.login.verifying'))
-        : step === 'mobile' ? t('parent.login.sendLoginOtp') : t('parent.login.verifyOtpAndSignIn')
-    : mode === 'register'
-      ? busy
-        ? (step === 'mobile' ? t('parent.login.sendingOtp') : t('parent.login.creatingAccount'))
-        : step === 'mobile' ? t('parent.login.verifyMobile') : t('parent.login.createAccount')
-      : busy
-        ? (step === 'mobile' ? t('parent.login.sendingOtp') : t('parent.login.resettingPassword'))
-        : step === 'mobile' ? t('parent.login.sendResetOtp') : t('parent.login.resetPassword');
 
   return (
     <main className="auth-page">
       <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
-      <section className="auth-card parent-auth-card">
-        <Link href="/" className="auth-back-link"><UiText message="legacy.web.back.to.quantaedge.afca99d4" /></Link>
-        <span className="eyebrow">{mode === 'login' ? <UiText message="legacy.web.parent.guardian.70a181bd" /> : mode === 'register' ? <UiText message="legacy.web.create.family.account.48f9b3ad" /> : <UiText message="legacy.web.account.recovery.1b09ce51" />}</span>
-        <h1>{mode === 'login' ? <UiText message="legacy.web.welcome.back.ab75bbfd" /> : mode === 'register' ? <UiText message="legacy.web.your.family.learning.space.6fdbe315" /> : <UiText message="legacy.web.create.a.new.password.582ed665" />}</h1>
-        <p>{mode === 'login'
-          ? <UiText message="legacy.web.sign.in.with.your.registered.mobile.nu.2cd44b58" />
-          : mode === 'register'
-            ? <UiText message="legacy.web.verify.your.mobile.number.and.create.a.8707e1ec" />
-            : <UiText message="legacy.web.verify.the.otp.sent.to.your.registered.573234e4" />}</p>
+      <section className="auth-card parent-auth-card" aria-labelledby="login-heading">
+        <Link href="/" className="auth-back-link">{english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ'}</Link>
+        <span className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपकी सीखने की जगह'}</span>
+        <h1 id="login-heading">{english ? 'Welcome back' : 'वापसी पर स्वागत है'}</h1>
+        <p>{english ? 'Sign in with verified Gmail, mobile OTP, or your username and password.' : 'सत्यापित Gmail, मोबाइल OTP या यूज़रनेम और पासवर्ड से साइन इन करें।'}</p>
         {error && <div className="auth-message is-error" role="alert">{error}</div>}
         {notice && <div className="auth-message" role="status">{notice}</div>}
-
-        <form className="auth-form" onSubmit={submit}>
-          {mode === 'register' && <label><UiText message="legacy.web.parent.guardian.name.1ab0447b" />
-            <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder={t('parent.login.fullNamePlaceholder')} autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
-          </label>}
-          <label><UiText message="legacy.web.registered.mobile.number.65c4e773" />
-            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder={t('parent.login.mobilePlaceholder')} inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
-          </label>
-          {mode === 'login' && loginMethod === 'password' && <label><UiText message="legacy.web.password.dc78b30b" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('parent.login.passwordPlaceholder')} autoComplete="current-password" required />
-          </label>}
-          {mode === 'register' && step === 'mobile' && <>
-            <label><UiText message="legacy.web.create.password.b06eaef9" />
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('parent.login.passwordMinimumPlaceholder')} autoComplete="new-password" minLength={8} required />
-            </label>
-            <label><UiText message="legacy.web.re.enter.password.541a6b9c" />
-              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder={t('parent.login.confirmPasswordPlaceholder')} autoComplete="new-password" minLength={8} required />
-            </label>
-          </>}
-          {otpFlow && step === 'otp' && <>
-            {devCode && <div className="auth-dev-code"><span><UiText message="legacy.web.local.development.otp.51756e69" /></span><strong>{devCode}</strong></div>}
-            <label><UiText message="legacy.web.6.digit.otp.7a404f31" />
-              <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder={t('parent.login.otpPlaceholder')} inputMode="numeric" autoComplete="one-time-code" required />
-            </label>
-            {mode === 'reset' && <>
-              <label><UiText message="legacy.web.new.password.32a2f216" />
-                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder={t('parent.login.passwordMinimumPlaceholder')} autoComplete="new-password" minLength={8} required />
-              </label>
-              <label><UiText message="legacy.web.re.enter.new.password.37b05353" />
-                <input type="password" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} placeholder={t('parent.login.confirmPasswordPlaceholder')} autoComplete="new-password" minLength={8} required />
+        <GoogleSignInButton locale={english ? 'en' : 'hi'} context="signin" />
+        <div className="auth-separator"><span>{english ? 'OR SIGN IN WITH' : 'या इससे साइन इन करें'}</span></div>
+        <div className="auth-method-switch" role="tablist" aria-label={english ? 'Sign-in method' : 'साइन-इन तरीका'}>
+          <button type="button" role="tab" aria-selected={method === 'mobile'} className={method === 'mobile' ? 'is-active' : ''}
+            onClick={() => changeMethod('mobile')}>{english ? 'Mobile OTP' : 'मोबाइल OTP'}</button>
+          <button type="button" role="tab" aria-selected={method === 'username'} className={method === 'username' ? 'is-active' : ''}
+            onClick={() => changeMethod('username')}>{english ? 'Username & password' : 'यूज़रनेम और पासवर्ड'}</button>
+        </div>
+        {method === 'mobile' ? (
+          <form className="auth-form" onSubmit={mobileSubmit}>
+            {!otpRequested && <label>{english ? 'Verified mobile number' : 'सत्यापित मोबाइल नंबर'}
+              <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                placeholder={english ? '10-digit mobile number' : '10 अंकों का मोबाइल नंबर'}
+                inputMode="numeric" autoComplete="tel-national" required />
+            </label>}
+            {otpRequested && <>
+              <p className="auth-note">{english ? 'Code sent to: ' : 'कोड भेजा गया: '}+91 {mobile}</p>
+              {devCode && <div className="auth-dev-code"><span>{english ? 'Development OTP' : 'डेवलपमेंट OTP'}</span><strong>{devCode}</strong></div>}
+              <label>{english ? '6-digit OTP' : '6 अंकों का OTP'}
+                <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  inputMode="numeric" autoComplete="one-time-code" maxLength={6} required />
               </label>
             </>}
-          </>}
-          <button type="submit" className="button button-dark full" disabled={busy || mobile.length !== 10 ||
-            (mode === 'login' && loginMethod === 'password' && !password) ||
-            (mode === 'register' && step === 'mobile' && (displayName.trim().length < 2 || password.length < 8 || password !== confirmPassword)) ||
-            (otpFlow && step === 'otp' && otp.length !== 6) ||
-            (mode === 'reset' && step === 'otp' && (newPassword.length < 8 || newPassword !== confirmNewPassword))}>
-            {submitLabel}
-          </button>
-          {otpFlow && step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}><UiText message="legacy.web.change.mobile.number.a4e4ee0c" /></button>}
-        </form>
-
-        <div className="auth-mode-links">
-          {mode === 'login' ? <>
-            <button type="button" onClick={() => resetState('reset')}><UiText message="legacy.web.forgot.password.0815b893" /></button>
-            <button type="button" onClick={() => switchLoginMethod(loginMethod === 'password' ? 'otp' : 'password')}>
-              {loginMethod === 'password' ? <UiText message="legacy.web.sign.in.with.otp.8d79c836" /> : <UiText message="legacy.web.sign.in.with.password.55ae7710" />}
+            <button type="submit" className="button button-dark full" disabled={busy || (!otpRequested && mobile.length !== 10) || (otpRequested && otp.length !== 6)}>
+              {busy ? (english ? 'Please wait…' : 'कृपया प्रतीक्षा करें…') : otpRequested
+                ? (english ? 'Verify and sign in' : 'सत्यापित करें और साइन इन करें')
+                : (english ? 'Send OTP' : 'OTP भेजें')}
             </button>
-            <button type="button" onClick={() => resetState('register')}><UiText message="legacy.web.create.parent.account.ee2209e1" /></button>
-          </> : <button type="button" onClick={() => resetState('login')}><UiText message="legacy.web.back.to.parent.sign.in.0cfae1e3" /></button>}
+            {otpRequested && <button type="button" className="auth-secondary-action" disabled={busy} onClick={() => {
+              setOtpRequested(false); setOtp(''); setDevCode(''); setError(''); setNotice('');
+            }}>{english ? 'Change mobile number' : 'मोबाइल नंबर बदलें'}</button>}
+          </form>
+        ) : (
+          <form className="auth-form" onSubmit={usernameSubmit}>
+            <label>{english ? 'Username' : 'यूज़रनेम'}
+              <input value={username} onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 32))}
+                autoComplete="username" required />
+            </label>
+            <label>{english ? 'Password' : 'पासवर्ड'}
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                autoComplete="current-password" required />
+            </label>
+            <button type="submit" className="button button-dark full" disabled={busy || username.trim().length < 3 || !password}>
+              {busy ? (english ? 'Signing in…' : 'साइन इन हो रहा है…') : (english ? 'Sign in' : 'साइन इन करें')}
+            </button>
+          </form>
+        )}
+        <div className="auth-mode-links">
+          <Link href="/signup">{english ? 'Create an account' : 'खाता बनाएँ'}</Link>
+          <Link href="/login/student">{english ? 'Young Learner sign-in' : 'बाल शिक्षार्थी साइन-इन'}</Link>
         </div>
-        <div className="auth-separator"><span><UiText message="legacy.web.or.5dca2d83" /></span></div>
-        <Link href="/login/student" className="auth-alt-link"><UiText message="legacy.web.student.login.9541c2d5" /> <span>→</span></Link>
-        <small className="auth-note"><UiText message="legacy.web.otp.is.required.for.registration.and.p.2af964c6" /></small>
+        <p className="auth-note">{english
+          ? 'Gmail is marked verified only after Google verifies the identity token. Mobile is marked verified only after a successful OTP.'
+          : 'Google पहचान की पुष्टि के बाद ही Gmail और सफल OTP के बाद ही मोबाइल सत्यापित दिखेगा।'}</p>
       </section>
     </main>
   );
