@@ -31,6 +31,9 @@ function requireInteractionBaseline(source, app) {
 const branding = read('docs/branding.md');
 const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
 const tenantBrandingProvider = read('apps/web/app/components/TenantBrandingProvider.tsx');
+const schoolEntryPage = read('apps/web/app/school/[institutionCode]/page.tsx');
+const hrmsInstitutionPage = read('apps/people/app/institutions/page.tsx');
+const androidBuildConfig = read('apps/android/app/build.gradle.kts');
 const androidTenantBrand = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeBrand.kt');
 const androidTenantRepository = read('apps/android/app/src/main/java/com/quantaedge/android/data/InstitutionBrandingRepository.kt');
 const androidAppManifest = read('apps/android/app/src/main/AndroidManifest.xml');
@@ -66,7 +69,11 @@ assert(!/\.style\.setProperty\(['"]--qe-(?:brand-orange|color-)/.test(tenantBran
 assert(!workspaceLayout.includes('/student/institutions') && !workspaceLayout.includes('mySchool'), 'Learner navigation must not expose a school/institution selector; school identity is implicit in the branded app.');
 assert(androidTenantBrand.includes('LocalInstitutionBrandIdentity') && androidTenantBrand.includes('institution.displayName'), 'Android shared brand lockup must render a resolved institution name.');
 assert(androidTenantRepository.includes('/api/v1/institution/public/branding/') && androidTenantRepository.includes('/api/v1/institution/join'), 'Android must resolve public school branding and use the membership join API.');
-assert(androidAppManifest.includes('qe-institution') && androidAppManifest.includes('/institution'), 'Android must declare institution invitation/deep-link entry points.');
+assert(tenantBrandingProvider.includes('tenantCodeFromSchoolPath') && tenantBrandingProvider.includes('JOIN_TENANT_SESSION_KEY'), 'Web branding must bind invitation context to the school-specific path across sign-in redirects.');
+assert(schoolEntryPage.includes('brand.displayName') && schoolEntryPage.includes('/login/student') && schoolEntryPage.includes('/signup'), 'A direct school invitation must show the school brand before learner authentication.');
+assert(hrmsInstitutionPage.includes('schoolLearningLink') && hrmsInstitutionPage.includes("new URL('/school/" ) && hrmsInstitutionPage.includes('Copy school learning link'), 'HRMS must generate a shareable school-branded invite URL rather than only exposing the raw join code.');
+assert(androidAppManifest.includes('${institutionLinkPath}') && androidAppManifest.includes('${applicationLabel}') && androidAppManifest.includes('${applicationIcon}'), 'Android launcher identity and app-link route must be configured per branded build.');
+assert(androidBuildConfig.includes('configuredInstitutionApplicationId') && androidBuildConfig.includes('configuredInstitutionIconPath') && androidBuildConfig.includes('institutionLinkPath'), 'Android per-school builds must use a unique package ID, supplied school icon and school-scoped link path.');
 assert(androidTenantMigration.includes('CREATE TABLE institution_branding_asset') && androidTenantMigration.includes('image_bytes'), 'Institution branding image storage must be tenant-scoped and bounded.');
 assert(institutionTenantController.includes('/assets/{assetType}') && institutionTenantController.includes('assetUrl(normalized'), 'The API must serve verified logo and app-icon assets only through the resolved tenant.');
 assert(institutionPlatformController.includes('ownedBrandAssetKey') && institutionPlatformController.includes('uploadBrandingAsset'), 'Only uploaded, tenant-owned branding assets may be selected from HRMS.');
