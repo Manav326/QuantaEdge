@@ -273,7 +273,7 @@ def run_analysis(
             and existing.get("asset_sha256") == asset.get("asset_sha256")
             and existing.get("model") == model
             and existing.get("prompt_version") == PROMPT_VERSION
-            and existing.get("page_text_context_sha256", hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest())
+            and existing.get("page_text_context_sha256")
                 == hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest()
         ):
             skipped_from_checkpoint += 1
