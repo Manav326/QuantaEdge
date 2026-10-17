@@ -1,5 +1,7 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
+import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
@@ -38,7 +40,7 @@ export default function DiagnosticPage(){
         const response=await fetch('/api/v1/diagnostic',{cache:'no-store'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body:DiagnosticPayload=await readJson(response);
-        if(!response.ok)throw new Error(body.detail||body.message||tx('Diagnostic load नहीं हो पाया','Unable to load diagnostic'));
+        if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.load.diagnostic.f6a469cb'));
         if(body.completed){router.replace('/student');return;}
         const questions=Array.isArray(body.questions)?body.questions:[];
         if(!live)return;
@@ -51,10 +53,10 @@ export default function DiagnosticPage(){
         if(firstUnanswered<0&&questions.length&&body.attemptId){
           const submitted=await fetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit',{method:'POST',cache:'no-store'});
           const submitBody=await readJson(submitted);
-          if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||tx('Diagnostic submit नहीं हो पाया','Unable to submit diagnostic'));
+          if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
           if(live)router.replace('/student');
         }
-      }catch(e:any){if(live)setError(e?.message||tx('Diagnostic load नहीं हो पाया','Unable to load diagnostic'));}
+      }catch(e:any){if(live)setError(e?.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.load.diagnostic.f6a469cb'));}
       finally{if(live)setLoading(false);}
     }
     void load();
@@ -62,7 +64,7 @@ export default function DiagnosticPage(){
   },[router,locale]);
 
   const q=qs[idx];
-  const shownResult=result || (q?.answered&&typeof q.lastCorrect==='boolean'?{correct:q.lastCorrect,feedback:tx('यह उत्तर पहले जाँचा गया था।','This answer was checked earlier.')}:null);
+  const shownResult=result || (q?.answered&&typeof q.lastCorrect==='boolean'?{correct:q.lastCorrect,feedback:translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.answer.was.checked.earlier.f93c0c7f')}:null);
   let options:any[]=[];
   try{options=JSON.parse(q?.options||'[]')}catch{}
 
@@ -75,10 +77,10 @@ export default function DiagnosticPage(){
       });
       const body=await readJson(response);
       if(response.status===401||response.status===403){router.replace('/login/student');return;}
-      if(!response.ok)throw new Error(body.detail||body.message||tx('Answer save नहीं हुआ','Could not save this answer'));
+      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.could.not.save.this.answer.f5a71de8'));
       setValue(v);setResult(body);
       setQs(old=>old.map(item=>item.id===q.id?{...item,answered:true,lastCorrect:body.correct,selectedAnswer:v}:item));
-    }catch(e:any){setError(e?.message||tx('Answer submit नहीं हो पाया','Answer could not be submitted'));}
+    }catch(e:any){setError(e?.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.could.not.be.submitted.05e16fa5'));}
     finally{setSaving(false);}
   }
 
@@ -92,22 +94,22 @@ export default function DiagnosticPage(){
     try{
       const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit',{method:'POST'});
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.detail||body.message||tx('Diagnostic submit नहीं हो पाया','Unable to submit diagnostic'));
+      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
       router.replace('/student');
-    }catch(e:any){setError(e?.message||tx('Diagnostic submit नहीं हो पाया','Unable to submit diagnostic'));}
+    }catch(e:any){setError(e?.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));}
     finally{setSubmitting(false);}
   }
 
-  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="आपका saved diagnostic खोल रहे हैं…" english="Loading your saved diagnostic…" /></div></section></main>;
-  if(error&&!q)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><LocaleText hinglish="Diagnostic load नहीं हो पाया" english="Unable to load diagnostic" /></h1><p>{error}</p><button type="button" className="button button-dark" onClick={()=>window.location.reload()}><LocaleText hinglish="दोबारा कोशिश करें" english="Try again" /></button><Link href="/student" className="text-link"><LocaleText hinglish="← वापस" english="← Back" /></Link></div></section></main>;
-  if(unavailable||!q)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="INITIAL DIAGNOSTIC" english="INITIAL DIAGNOSTIC" /></div><h1><LocaleText hinglish="Diagnostic अभी उपलब्ध नहीं है" english="Diagnostic is not available yet" /></h1><p><LocaleText hinglish="आपकी class और enrolled subjects के लिए पर्याप्त approved questions उपलब्ध होने पर diagnostic दिखाई देगा। आपकी progress सुरक्षित है।" english="The diagnostic will appear when enough approved questions are available for your class and enrolled subjects. Your progress is preserved." /></p><Link href="/student" className="button button-dark"><LocaleText hinglish="Student home →" english="Student home →" /></Link></section></main>;
+  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.loading.your.saved.diagnostic.b2912d85" /></div></section></main>;
+  if(error&&!q)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.diagnostic.f6a469cb" /></h1><p>{error}</p><button type="button" className="button button-dark" onClick={()=>window.location.reload()}><UiText message="legacy.web.try.again.c3572b4c" /></button><Link href="/student" className="text-link"><UiText message="legacy.web.back.97062f29" /></Link></div></section></main>;
+  if(unavailable||!q)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.initial.diagnostic.6c007aef" /></div><h1><UiText message="legacy.web.diagnostic.is.not.available.yet.33d8f4ec" /></h1><p><UiText message="legacy.web.the.diagnostic.will.appear.when.enough.04469512" /></p><Link href="/student" className="button button-dark"><UiText message="legacy.web.student.home.15fbe96d" /></Link></section></main>;
 
   return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span><LocaleText hinglish="Initial diagnostic ·" english="Initial diagnostic ·" /> {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
+    <header className="lesson-header"><Link href="/student" className="back"><UiText message="legacy.web.today.1a73c870" /></Link><span><UiText message="legacy.web.initial.diagnostic.a2e9a619" /> {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
-      <div className="eyebrow"><LocaleText hinglish="आपका saved diagnostic" english="Your saved diagnostic" /></div>
+      <div className="eyebrow"><UiText message="legacy.web.your.saved.diagnostic.b83de56d" /></div>
       <h1>{q.prompt}</h1>
-      <p><LocaleText hinglish="यह छोटा assessment आपकी शुरुआती learning recommendation बनाने में मदद करता है। आप बाद में लौटेंगे तो उत्तर सुरक्षित रहेंगे।" english="This short assessment helps create your starting learning recommendation. Your saved answers will remain available if you return later." /></p>
+      <p><UiText message="legacy.web.this.short.assessment.helps.create.you.4f499f99" /></p>
       <div className="option-grid">{options.map(o=>{
         const chosen=value===o.key;
         const outcome=chosen?shownResult?.correct:null;
@@ -117,12 +119,12 @@ export default function DiagnosticPage(){
       {error&&<p role="alert" className="feedback feedback-incorrect">{error}</p>}
       {shownResult&&<AnswerFeedback
         outcome={shownResult.correct===true?'correct':shownResult.correct===false?'incorrect':'ungraded'}
-        title={shownResult.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:shownResult.correct===false?<LocaleText hinglish="उत्तर गलत है" english="Incorrect answer" />:<LocaleText hinglish="उत्तर save हो गया" english="Answer saved" />}
-        message={shownResult.feedback||tx('यह उत्तर पहले save किया गया था।','This answer was saved earlier.')}
+        title={shownResult.correct===true?<UiText message="legacy.web.correct.420829f6" />:shownResult.correct===false?<UiText message="legacy.web.incorrect.answer.72e67de0" />:<UiText message="legacy.web.answer.saved.a1a333eb" />}
+        message={shownResult.feedback||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.answer.was.saved.earlier.39c393b2')}
         explanation={q.explanation||undefined}
-        explanationLabel={<LocaleText hinglish="समझें क्यों" english="Explanation" />}
+        explanationLabel={<UiText message="legacy.web.explanation.162bf3ec" />}
       />}
-      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button type="button" className="button button-dark" disabled={submitting} onClick={()=>void next()}>{submitting?<LocaleText hinglish="Submit कर रहे हैं…" english="Submitting…" />:idx+1<qs.length?<LocaleText hinglish="अगला →" english="Next →" />:<LocaleText hinglish="Diagnostic पूरा करें →" english="Finish diagnostic →" />}</button></div>}
+      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button type="button" className="button button-dark" disabled={submitting} onClick={()=>void next()}>{submitting?<UiText message="legacy.web.submitting.91654fbd" />:idx+1<qs.length?<UiText message="legacy.web.next.046e02fa" />:<UiText message="legacy.web.finish.diagnostic.08e35ac6" />}</button></div>}
     </section>
   </main>;
 }

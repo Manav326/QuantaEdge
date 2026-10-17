@@ -1,4 +1,6 @@
 'use client';
+import { UiText } from '../../i18n/useUiTranslation';
+import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -29,12 +31,12 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         ]);
         if ([lessonResponse, savedResponse].some(r => r.status === 401 || r.status === 403)) { router.replace('/login/student'); return; }
         const body = await lessonResponse.json();
-        if (!lessonResponse.ok) throw new Error(body.message || body.detail || body.error || tx('यह lesson अभी उपलब्ध नहीं है।', 'This lesson is not available yet.'));
+        if (!lessonResponse.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.lesson.is.not.available.yet.09b6c21c'));
         const savedBody = savedResponse.ok ? await savedResponse.json() : {};
-        if (!savedResponse.ok && savedResponse.status !== 404) throw new Error(savedBody.message || savedBody.detail || tx('Saved progress load नहीं हुआ।', 'Saved progress could not be loaded.'));
+        if (!savedResponse.ok && savedResponse.status !== 404) throw new Error(savedBody.message || savedBody.detail || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.saved.progress.could.not.be.loaded.72d606a2'));
         if (active) { setLesson(body as StructuredLesson); setSaved(savedBody || {}); }
       } catch (error) {
-        if (active) setError(error instanceof Error ? error.message : tx('Lesson load नहीं हो पाया।', 'The lesson could not be loaded.'));
+        if (active) setError(error instanceof Error ? error.message : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.lesson.could.not.be.loaded.1765a64a'));
       } finally { if (active) setBusy(false); }
     })();
     return () => { active = false; };
@@ -46,7 +48,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         body: JSON.stringify({ response }),
       });
     const body = await http.json();
-    if (!http.ok) throw new Error(body.message || body.detail || body.error || tx('उत्तर सहेजा नहीं गया।', 'The response was not saved.'));
+    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.response.was.not.saved.05e6bba1'));
     return { status: body.status, score: body.score, maxScore: body.maxScore, autoGraded: body.autoGraded,
       feedback: body.feedback, feedbackByLocale: body.feedbackByLocale } as QuestionResult;
   }
@@ -57,7 +59,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         body: JSON.stringify({ response: value }),
       });
     const body = await http.json();
-    if (!http.ok) throw new Error(body.message || body.detail || body.error || tx('Activity response सहेजा नहीं गया।', 'Activity response was not saved.'));
+    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
   }
   const responses: Record<string, QuestionResponse> = {};
   const results: Record<string, QuestionResult> = {};
@@ -68,10 +70,10 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     submitted[id] = value.status === 'correct' || value.status === 'pending_review';
   });
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading"><Link href="/student/structured-lessons" className="back-link">← {tx('सभी structured lessons', 'All structured lessons')}</Link>
+    <header className="content-heading"><Link href="/student/structured-lessons" className="back-link">← {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.all.structured.lessons.5f389f55')}</Link>
       {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}</header>
-    {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{tx('वापस जाएँ', 'Go back')}</Link></> :
-      busy || !lesson ? <p role="status" className="eyebrow">{tx('Lesson खुल रहा है…', 'Loading lesson…')}</p> :
+    {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.go.back.f75fdd65')}</Link></> :
+      busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
       <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
         onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
         initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />}
