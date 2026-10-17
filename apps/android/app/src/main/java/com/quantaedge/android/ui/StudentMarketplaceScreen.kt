@@ -33,6 +33,7 @@ fun StudentMarketplaceScreen(
     busy: Boolean,
     onBuy: (Long) -> Unit,
     onJoinFree: (Long) -> Unit,
+    onAskParent: (Long) -> Unit,
     onRefresh: () -> Unit,
     onAllCourses: () -> Unit
 ) {
@@ -110,6 +111,12 @@ fun StudentMarketplaceScreen(
                         owned -> Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.small) {
                             Text(if (hi) "यह course आपके Courses में है।" else "This course is already in your Courses.",
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+                        }
+                        pricePaise > 0L && currency == "INR" && offer.optBoolean("parent_managed") -> Button(
+                            onClick = { onAskParent(id) }, enabled = !busy && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(if (busyCourseId == id) { if (hi) "अनुरोध भेज रहा है…" else "Sending request…" }
+                                else if (hi) "अभिभावक से खरीदने को कहें" else "Ask parent to buy")
                         }
                         pricePaise > 0L && currency == "INR" -> Button(
                             onClick = { onBuy(id) }, enabled = !busy && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
