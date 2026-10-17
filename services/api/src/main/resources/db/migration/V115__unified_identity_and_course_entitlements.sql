@@ -4,6 +4,7 @@ ALTER TABLE user_account ALTER COLUMN mobile_e164 DROP NOT NULL;
 
 ALTER TABLE user_account
   ADD COLUMN IF NOT EXISTS email varchar(320),
+  ADD COLUMN IF NOT EXISTS contact_email varchar(320),
   ADD COLUMN email_verified_at timestamptz,
   ADD COLUMN google_subject varchar(255),
   ADD COLUMN google_picture_url text,
@@ -14,6 +15,18 @@ ALTER TABLE user_account
   ADD COLUMN username varchar(32),
   ADD COLUMN username_changed_at timestamptz,
   ADD COLUMN preferred_locale varchar(32) NOT NULL DEFAULT 'hinglish';
+
+-- The email column existed before Google login and was an editable parent contact field.
+-- Preserve those values as contact_email before reserving email exclusively for a
+-- server-verified Google identity. Never treat legacy contact data as verified Gmail.
+UPDATE user_account
+SET contact_email=email
+WHERE contact_email IS NULL AND email IS NOT NULL
+  AND email_verified_at IS NULL AND google_subject IS NULL;
+
+UPDATE user_account
+SET email=NULL
+WHERE email_verified_at IS NULL AND google_subject IS NULL;
 
 -- All currently provisioned end-user mobiles were accepted through the OTP signup flow.
 -- Keep this separate from Gmail verification; no email is marked verified by this backfill.
