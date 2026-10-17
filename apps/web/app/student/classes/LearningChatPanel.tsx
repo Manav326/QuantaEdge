@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './Classes.module.css';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 
 type Conversation = {
   conversationId:number; conversationType:'CLASSROOM'|'STUDENT_TEACHER'; status:string;
@@ -29,8 +30,7 @@ function clientMessageId() {
   });
 }
 function dateLabel(value:string, locale:string) {
-  const parsed=new Date(value);
-  return Number.isNaN(parsed.getTime())?'':parsed.toLocaleTimeString(locale==='english'?'en-IN':'hi-IN',{hour:'numeric',minute:'2-digit'});
+  return formatUserTimestamp(value);
 }
 
 export default function LearningChatPanel({sessionId,locale}:{sessionId:number;locale:string}) {
