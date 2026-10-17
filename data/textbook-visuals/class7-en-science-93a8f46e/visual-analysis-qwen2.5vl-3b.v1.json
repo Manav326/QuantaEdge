@@ -11,10 +11,10 @@
     "assets_selected": 336,
     "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 336,
-    "assets_remaining": 7152,
+    "assets_analyzed": 337,
+    "assets_remaining": 7151,
     "assets_completion_percent": 4.5,
-    "assets_failed": 14,
+    "assets_failed": 13,
     "assets_skipped_from_checkpoint": 335,
     "batch_limit": 1,
     "publication_allowed": false
@@ -4638,7 +4638,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f"
     },
     {
       "asset_id": "1e176e2e70e26c49d8c76c83",
@@ -4715,15 +4716,51 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 18,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text acknowledging support from various individuals and departments.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "acknowledges the support provided by the APC office and administrative staff of DESM, NCERT, New Delhi.",
+          "The Council acknowledges the contribution of Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT;",
+          "Sachin Tanwar, Manish Kumar, Naresh Kumar, Manoj Kumar, DTP Operators (Contractual);",
+          "Ilma Nasir, Editor (Contractual), and Ariba Usman, Praveen Kumar, and Ambuj Mishra, Proofreaders (Contractual), Publication Division, NCERT, New Delhi for giving",
+          "the final proofread",
+          "and the final proofread"
+        ],
+        "concepts": [
+          "support",
+          "APC office",
+          "administrative staff",
+          "DESM",
+          "NCERT",
+          "DTP Cell",
+          "Publication Division",
+          "Pawan Kumar Barriar",
+          "Sachin Tanwar",
+          "Manish Kumar",
+          "Naresh Kumar",
+          "Manoj Kumar",
+          "Ilma Nasir",
+          "Ariba Usman",
+          "Praveen Kumar",
+          "Ambuj Mishra",
+          "proofreaders"
+        ],
+        "context_relation": "acknowledgment of contributions and support",
+        "limitations": [
+          "No specific visual elements are present."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "17a33815020d83ed92cb3d7af3909c25b0c66c4ef45ec7e67de5b67cebe0fc5f"
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T08:27:44Z"
     },
     {
       "asset_id": "4e4ae7fe5a2d72d9cb0fa50e",
