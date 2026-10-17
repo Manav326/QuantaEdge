@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
@@ -4299,7 +4300,22 @@ private fun LessonScreen(
     val lessonId = lesson.longAny("id", "lesson_id")
     val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
     val questions = lesson.optJSONArray("questions")?.objectItems() ?: emptyList()
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().pointerInput(lessonId, hasPreviousTopic, hasNextTopic) {
+        var dragX = 0f
+        detectHorizontalDragGestures(
+            onHorizontalDrag = { change, dragAmount ->
+                dragX += dragAmount
+                change.consume()
+            },
+            onDragEnd = {
+                val threshold = 72.dp.toPx()
+                if (dragX >= threshold && hasPreviousTopic) onPreviousTopic()
+                else if (dragX <= -threshold && hasNextTopic) onNextTopic()
+                dragX = 0f
+            },
+            onDragCancel = { dragX = 0f }
+        )
+    }) {
         Column(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
