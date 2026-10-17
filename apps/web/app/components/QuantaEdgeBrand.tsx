@@ -7,7 +7,7 @@ function approvedLogoUrl(url: string | null | undefined, code: string | undefine
   if (!url || !code) return false;
   const prefix = '/api/v1/institution/public/branding/' + code + '/assets/logo?v=';
   if (!url.startsWith(prefix)) return false;
-  return /^\d+$/.test(url.slice(prefix.length));
+  return /^\\d+$/.test(url.slice(prefix.length));
 }
 
 type BrandVariant = 'header' | 'compact' | 'footer' | 'auth';
@@ -25,11 +25,11 @@ export default function QuantaEdgeBrand({
   className = '',
 }: QuantaEdgeBrandProps) {
   const { brand } = useTenantBranding();
-  const tenantName = brand?.displayName?.trim();
+  const tenantName = brand && brand.displayName ? brand.displayName.trim() : '';
   const accessibleLabel = tenantName || BRAND_LABEL;
-  const logoUrl = approvedLogoUrl(brand?.logoUrl, brand?.institutionCode) ? brand.logoUrl : null;
+  const logoUrl = approvedLogoUrl(brand && brand.logoUrl, brand && brand.institutionCode) ? brand!.logoUrl! : null;
   const lockup = (
-    <span className={\`qe-brand qe-brand--\${variant}\`}>
+    <span className={'qe-brand qe-brand--' + variant}>
       <span className="qe-brand__lockup">
         {brand
           ? logoUrl
@@ -51,8 +51,8 @@ export default function QuantaEdgeBrand({
   );
 
   if (href === null) {
-    return <div className={\`qe-brand-static \${className}\`.trim()} role="img" aria-label={accessibleLabel}>{lockup}</div>;
+    return <div className={'qe-brand-static ' + className} role="img" aria-label={accessibleLabel}>{lockup}</div>;
   }
 
-  return <Link href={href} className={\`qe-brand-link \${className}\`.trim()} aria-label={accessibleLabel}>{lockup}</Link>;
+  return <Link href={href} className={'qe-brand-link ' + className} aria-label={accessibleLabel}>{lockup}</Link>;
 }
