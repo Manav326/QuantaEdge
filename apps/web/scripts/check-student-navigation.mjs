@@ -204,6 +204,10 @@ const studentClasses = read('../app/student/classes/ClassesClient.tsx');
 const androidClasses = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
 const androidBroadcastPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/LiveBroadcastPlayerScreen.kt');
 const androidRecordedPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/RecordedPlayerScreen.kt');
+const offlineVideoContract = read('../../android/app/src/main/java/com/quantaedge/android/data/OfflineLearningVideoContract.kt');
+const offlineVideoStore = read('../../android/app/src/main/java/com/quantaedge/android/data/OfflineLearningVideoStore.kt');
+const offlineVideoWorker = read('../../android/app/src/main/java/com/quantaedge/android/data/OfflineLearningVideoDownloadWorker.kt');
+const offlineVideoTests = read('../../android/app/src/test/java/com/quantaedge/android/data/OfflineLearningVideoContractTest.kt');
 const learningClassesApi = read('../../../services/api/src/main/java/com/quantaedge/api/LearningClassController.java');
 const learningClassesApiTests = read('../../../services/api/src/test/java/com/quantaedge/api/LearningClassControllerTest.java');
 
@@ -219,6 +223,12 @@ assert.ok(learningClassesApi.includes('result.put("youtubeVideoId", session.get(
 assert.ok(learningClassesApiTests.includes('youtubeBroadcastJoinReturnsVideoIdAndRecordsAttendanceWithoutMeetingUrl'), 'API must test the YouTube join/attendance contract.');
 assert.ok(androidClasses.includes('item.textAny("provider") == "YOUTUBE_LIVE"') && androidClasses.includes('t("Watch live broadcast", "लाइव प्रसारण देखें")'), 'Android class catalogue must support YouTube start/reopen.');
 assert.ok(androidBroadcastPlayer.includes('isValidYouTubeVideoId(videoId)') && androidBroadcastPlayer.includes('https://www.youtube-nocookie.com/embed/$videoId') && androidBroadcastPlayer.includes('settings.allowFileAccess = false') && androidBroadcastPlayer.includes('settings.allowContentAccess = false'), 'Android must validate the broadcast ID and restrict the in-app player.');
-assert.ok(androidRecordedPlayer.includes('/api/v1/learning/recorded-classes/') && studentClasses.includes('/stream') && adminClasses.includes('/api/v1/admin/recorded-classes'), 'Admin upload, web stream and Android playback contracts must remain wired.');
+assert.ok(androidRecordedPlayer.includes('/api/v1/learning/recorded-classes/') && androidRecordedPlayer.includes('offlineFile') && androidRecordedPlayer.includes('DefaultDataSource.Factory') && studentClasses.includes('/stream') && adminClasses.includes('/api/v1/admin/recorded-classes'), 'Admin upload, web stream, Android online playback and local-file replay contracts must remain wired.');
+assert.ok(learningClassesApi.includes('left join lateral (') && learningClassesApi.includes('download.resource_id as download_resource_id') && learningClassesApi.includes('r.download_allowed=true') && learningClassesApi.includes("a.status='PUBLISHED'"), 'Android download references must originate only from a published catalogue placement with downloads explicitly enabled.');
+assert.ok(learningClassesApiTests.includes('recordedListingCarriesPublishedDownloadReferenceOnlyWhenCatalogueAllowsIt'), 'API must cover recorded-class download metadata.');
+assert.ok(offlineVideoWorker.includes('Range') && offlineVideoWorker.includes('Content-Range') && offlineVideoWorker.includes('sha256(partial)') && offlineVideoWorker.includes('authenticatedHttpClient') && offlineVideoWorker.includes('markComplete'), 'Offline transfer must use authenticated resumable HTTP and checksum verification before marking a file complete.');
+assert.ok(offlineVideoStore.includes('filesDir, "offline_learning_videos/"') && offlineVideoStore.includes('removeOfflineCopy') && offlineVideoStore.includes('pendingProgressUploads'), 'Offline video files must stay in account-namespaced app-private storage, support deletion and preserve unsynced progress.');
+assert.ok(offlineVideoContract.includes('MAX_VIDEO_BYTES') && offlineVideoContract.includes('parseContentRange') && offlineVideoTests.includes('interruptedTransferCanAppendOnlyAtTheExactAuthorizedOffset'), 'Offline transfer size/range boundaries must have unit coverage.');
+assert.ok(androidClasses.includes('offlineDownloadedIds') && androidClasses.includes('onDownloadRecording') && androidClasses.includes('onRemoveOfflineRecording'), 'Android recorded-class UI must expose permitted download, local playback state and local-copy removal.');
 
-console.log('Navigation/language contract passed: five student groups, three parent destinations, orientation, independent language preferences, and Android-only offline/security features.');
+console.log('Navigation, localization, live-class authorization and resumable offline-video source contracts passed.');
