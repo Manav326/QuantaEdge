@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 301,
-    "successful_visual_analyses": 298,
-    "missing_visual_analyses": 1777,
+    "raw_analysis_result_rows": 304,
+    "successful_visual_analyses": 301,
+    "missing_visual_analyses": 1774,
     "failed_visual_analyses": 3,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1780,
+    "unresolved_count": 1777,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -16521,9 +16521,18 @@
       "asset_path": "assets/dc18be6d1b5d19d123c13e63cbd828fc0e727e053d5b672eda1273c9931ada3f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16539,9 +16548,16 @@
       "asset_path": "assets/00ec54f0d05213bae02d846349b2cb2c1092ee1646d90a153313dc95cea5c91e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16557,9 +16573,21 @@
       "asset_path": "assets/0ed2be9b22be4215b8b97ca65b9828ae8755ef693fa105a442e5a31a920c982b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow background",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
