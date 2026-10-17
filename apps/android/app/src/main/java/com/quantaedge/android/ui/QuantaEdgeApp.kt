@@ -336,6 +336,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     preferences.edit().remove("institutionCode").apply()
                 }
             }
+            // For existing accounts, show a neutral/current-school mark only after membership resolution.
+            if (code != null && institutionBrandIdentity?.institutionCode != code) {
+                institutionBrandIdentity = fallbackInstitutionIdentity(code)
+            }
             if (code == null) {
                 institutionBrandIdentity = null
                 themeController.clearInstitutionTheme()
