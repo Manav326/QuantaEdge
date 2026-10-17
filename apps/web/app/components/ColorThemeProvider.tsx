@@ -86,7 +86,6 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
   for (const role of roles) root.style.setProperty(cssToken(role), palette[role]);
 
   // These aliases keep existing components themed while they are migrated to semantic tokens.
-  root.style.setProperty('--ink', palette.text);
   root.style.setProperty('--muted', palette.textMuted);
   root.style.setProperty('--paper', palette.background);
   root.style.setProperty('--card', palette.surface);
@@ -129,12 +128,10 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
     const legacyAccent = safeColor(rawTokens.accent ?? rawTokens.brandAccent);
     const legacyBackground = safeColor(rawTokens.background);
     const legacySurface = safeColor(rawTokens.surface);
-    const legacyText = safeColor(rawTokens.text);
     if (legacyPrimary) root.style.setProperty('--qe-brand-orange', legacyPrimary);
     if (legacyAccent) root.style.setProperty('--qe-brand-orange-deep', legacyAccent);
     if (legacyBackground) root.style.setProperty('--paper', legacyBackground);
     if (legacySurface) root.style.setProperty('--card', legacySurface);
-    if (legacyText) root.style.setProperty('--ink', legacyText);
   } else if (!rawTokens) {
     // Remove tenant inline aliases so the canonical QuantaEdge defaults in CSS take over.
     for (const variable of [
