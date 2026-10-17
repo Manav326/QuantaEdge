@@ -41,7 +41,7 @@ function redirectAfterLogin(body: any): void {
 
 export default function LoginPage() {
   const { locale } = useLocale();
-  const { brand } = useTenantBranding();
+  const { brand, institutionContextRequested } = useTenantBranding();
   const english = locale === 'english';
   const [method, setMethod] = useState<Method>('mobile');
   const [mobile, setMobile] = useState('');
@@ -117,7 +117,7 @@ export default function LoginPage() {
       <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
       <section className="auth-card parent-auth-card" aria-labelledby="login-heading">
-        <Link href="/" className="auth-back-link">{brand ? (english ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : (english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ')}</Link>
+        <Link href="/" className="auth-back-link">{brand ? (english ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : institutionContextRequested ? (english ? 'Back to learning space' : 'सीखने के स्थान पर वापस जाएँ') : (english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ')}</Link>
         <span className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपकी सीखने की जगह'}</span>
         <h1 id="login-heading">{english ? 'Welcome back' : 'वापसी पर स्वागत है'}</h1>
         <p>{english ? 'Sign in with verified Gmail, mobile OTP, or your username and password.' : 'सत्यापित Gmail, मोबाइल OTP या यूज़रनेम और पासवर्ड से साइन इन करें।'}</p>
