@@ -103,7 +103,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertLess(model_pull, generate)
         self.assertIn('ledger.get("ledger_status") != "COMPLETE"', workflow)
         self.assertIn('row.get("lesson_contract_valid_rate", 0) > 0', workflow)
-        self.assertIn('row.get("production_model") is not None', workflow)
+        self.assertIn('report.get("production_model") is not None', workflow)
         self.assertIn("--checkpoint-every 1", workflow)
         self.assertIn("--allow-experimental-model", workflow)
         self.assertNotIn(".github/triggers/generate-class6-curiosity.trigger", workflow)
