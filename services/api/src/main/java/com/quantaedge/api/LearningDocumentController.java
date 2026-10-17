@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HexFormat;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -596,6 +597,56 @@ public class LearningDocumentController {
     document.remove("asset_file_size_bytes");
     document.put("last_page", lastPage);
     return document;
+  }
+
+  /**
+   * Delivers a bounded batch of rendered pages for reader thumbnails.
+   * The final batch intentionally contains fewer than {@code limit} items when
+   * the document ends; end-of-document is not an error.
+   */
+  @GetMapping("/learning/documents/{documentId}/pages")
+  public Map<String, Object> studentDocumentPageBatch(
+      @PathVariable long documentId,
+      @RequestParam(value = "startPage", defaultValue = "1") int startPage,
+      @RequestParam(value = "limit", defaultValue = "10") int limit,
+      @RequestParam(value = "rendition", defaultValue = "thumbnail") String rendition,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    if (startPage < 1) throw badRequest("The first page must be at least 1.");
+    if (limit < 1) throw badRequest("The page batch size must be at least 1.");
+    int boundedLimit = Math.min(limit, 10);
+    Map<String, Object> metadata = readableDocument(documentId, context.studentId());
+    int sourceStart = ((Number) metadata.get("page_start")).intValue();
+    int sourceEnd = ((Number) metadata.get("page_end")).intValue();
+    int visibleCount = sourceEnd - sourceStart + 1;
+    float renderDpi = switch (rendition == null ? "thumbnail" : rendition.trim().toLowerCase(Locale.ROOT)) {
+      case "full" -> PAGE_RENDER_DPI;
+      case "thumbnail" -> THUMBNAIL_RENDER_DPI;
+      default -> throw badRequest("PDF rendition must be full or thumbnail.");
+    };
+
+    List<Map<String, Object>> pages = new ArrayList<>();
+    // startPage past the end returns a successful empty page list, not a reader error.
+    long assetId = ((Number) metadata.get("pdf_asset_id")).longValue();
+    String assetSha = String.valueOf(metadata.get("asset_sha256"));
+    long assetBytes = ((Number) metadata.get("asset_file_size_bytes")).longValue();
+    int lastPage = Math.min(visibleCount, startPage + boundedLimit - 1);
+    for (int pageNumber = startPage; pageNumber <= lastPage; pageNumber++) {
+      int sourceIndex = sourceStart + pageNumber - 2;
+      byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, renderDpi, assetBytes);
+      Map<String, Object> page = new LinkedHashMap<>();
+      page.put("pageNumber", pageNumber);
+      page.put("contentType", MediaType.IMAGE_PNG_VALUE);
+      page.put("contentBase64", Base64.getEncoder().encodeToString(rendered));
+      pages.add(page);
+    }
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("documentId", documentId);
+    result.put("startPage", startPage);
+    result.put("requestedLimit", boundedLimit);
+    result.put("pageCount", visibleCount);
+    result.put("items", pages);
+    return result;
   }
 
   /** Delivers a single rendered PNG page, never the source PDF bytes. */
