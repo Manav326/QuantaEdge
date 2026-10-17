@@ -91,6 +91,8 @@ import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
 import com.quantaedge.android.data.OfflineAssessmentStore
 import com.quantaedge.android.data.OfflineAssessmentSyncWorker
+import com.quantaedge.android.data.OfflineLearningVideoStore
+import com.quantaedge.android.data.OfflineLearningVideoDownloadWorker
 import androidx.work.WorkManager
 import com.quantaedge.android.data.optLongAny
 import kotlinx.coroutines.Dispatchers
@@ -112,6 +114,30 @@ private data class ResourceDownloadUiState(
     val progress: Float? = null,
     val active: Boolean = false
 )
+
+private fun offlineVideoDownloadLabel(work: androidx.work.WorkInfo, language: String): String {
+    val bytes = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+        work.outputData.getLong("bytesDownloaded", work.progress.getLong("bytesDownloaded", 0L))
+    } else work.progress.getLong("bytesDownloaded", 0L)
+    val total = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+        work.outputData.getLong("totalBytes", work.progress.getLong("totalBytes", 0L))
+    } else work.progress.getLong("totalBytes", 0L)
+    fun size(value: Long): String = if (value >= 1_048_576L) {
+        "%.1f MB".format(java.util.Locale.ROOT, value / 1_048_576.0)
+    } else (value / 1024L).coerceAtLeast(1L).toString() + " KB"
+    val hindi = language == "hi"
+    return when (work.state) {
+        androidx.work.WorkInfo.State.ENQUEUED,
+        androidx.work.WorkInfo.State.BLOCKED -> if (hindi) "डाउनलोड कतार में है" else "Queued for offline download"
+        androidx.work.WorkInfo.State.RUNNING -> if (total > 0L) {
+            if (hindi) "डाउनलोड: " + size(bytes) + " / " + size(total)
+            else "Downloading: " + size(bytes) + " / " + size(total)
+        } else if (hindi) "डाउनलोड चल रहा है" else "Downloading video"
+        androidx.work.WorkInfo.State.SUCCEEDED -> if (hindi) "Offline डाउनलोड पूरा" else "Offline download complete"
+        androidx.work.WorkInfo.State.FAILED -> if (hindi) "डाउनलोड विफल — फिर प्रयास करें" else "Download failed — tap to retry"
+        androidx.work.WorkInfo.State.CANCELLED -> if (hindi) "डाउनलोड रद्द" else "Download cancelled"
+    }
+}
 
 private data class AppNavItem(val key: String, val label: String, val glyph: String)
 
@@ -160,6 +186,7 @@ fun QuantaEdgeApp() {
         .ifBlank { auth.textAny("role", "displayName", "display_name").ifBlank { "anonymous" } }
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
+    val offlineVideoStore = remember(resourceOwner) { OfflineLearningVideoStore(context, resourceOwner) }
     val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
 
     var route by rememberSaveable { mutableStateOf(AppRoute.WELCOME) }
@@ -239,6 +266,8 @@ fun QuantaEdgeApp() {
     var tutorLoadingOlderMessages by remember { mutableStateOf(false) }
     var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var offlineRecordingIds by remember { mutableStateOf(offlineVideoStore.downloadedRecordingIds()) }
+    val videoDownloadStates = remember { mutableStateMapOf<Long, String>() }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
     var liveBroadcastVideoId by rememberSaveable { mutableStateOf("") }
     var liveBroadcastTitle by rememberSaveable { mutableStateOf("") }
@@ -345,6 +374,43 @@ fun QuantaEdgeApp() {
         } else {
             // Don't retain document-specific progress after leaving the library or switching accounts.
             if (resourceDownloadStates.isNotEmpty()) resourceDownloadStates.clear()
+        }
+    }
+
+    LaunchedEffect(route, resourceOwner, recordedClasses, language) {
+        if (route == AppRoute.CLASSES) {
+            val ids = recordedClasses.filter { it.optBoolean("download_allowed") }
+                .map { it.longAny("recorded_class_id", "recordingId", "id") }
+                .filter { it > 0L }.distinct()
+            coroutineScope {
+                ids.forEach { recordingId ->
+                    launch {
+                        val name = OfflineLearningVideoDownloadWorker.uniqueWorkName(resourceOwner, recordingId)
+                        WorkManager.getInstance(context.applicationContext)
+                            .getWorkInfosForUniqueWorkFlow(name)
+                            .collectLatest { workInfos ->
+                                val work = workInfos.lastOrNull()
+                                if (work == null) {
+                                    val manifest = offlineVideoStore.recording(recordingId)
+                                    if (manifest?.optString("download_state") == "FAILED") {
+                                        videoDownloadStates[recordingId] =
+                                            if (language == "hi") "डाउनलोड विफल — फिर प्रयास करें" else "Download failed — tap to retry"
+                                    } else {
+                                        videoDownloadStates.remove(recordingId)
+                                    }
+                                } else {
+                                    videoDownloadStates[recordingId] = offlineVideoDownloadLabel(work, language)
+                                    if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+                                        offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
+                                    }
+                                }
+                            }
+                    }
+                }
+                awaitCancellation()
+            }
+        } else {
+            videoDownloadStates.clear()
         }
     }
 
@@ -977,16 +1043,72 @@ fun QuantaEdgeApp() {
         liveBroadcastSessionId = 0L
         currentSubject = subjectCode
         liveClasses = emptyList()
-        recordedClasses = emptyList()
+        recordedClasses = offlineVideoStore.downloadedRecordings()
+        offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
         route = AppRoute.CLASSES
         runTask {
             liveClasses = ApiClient.getObject(
                 "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
             ).optJSONArray("items").objectItems()
-            recordedClasses = ApiClient.getObject(
+            val onlineRows = ApiClient.getObject(
                 "/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
             ).optJSONArray("items").objectItems()
+            val localRows = offlineVideoStore.downloadedRecordings()
+            val localById = localRows.associateBy { it.longAny("recorded_class_id", "recordingId", "id") }
+            recordedClasses = (onlineRows + localRows).distinctBy {
+                it.longAny("recorded_class_id", "recordingId", "id")
+            }.map { item ->
+                val copy = JSONObject(item.toString())
+                val id = item.longAny("recorded_class_id", "recordingId", "id")
+                val local = localById[id]
+                if (local != null) {
+                    copy.put("offline_downloaded", true)
+                    if (local.optLong("last_position_seconds") > copy.optLong("last_position_seconds")) {
+                        copy.put("last_position_seconds", local.optLong("last_position_seconds"))
+                        copy.put("watched_seconds", local.optLong("watched_seconds"))
+                        copy.put("completed", local.optBoolean("completed"))
+                    }
+                }
+                copy
+            }
+            offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
+            for (pending in offlineVideoStore.pendingProgressUploads()) {
+                val id = pending.longAny("recorded_class_id")
+                try {
+                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                        JSONObject().put("positionSeconds", pending.optLong("last_position_seconds"))
+                            .put("watchedSeconds", pending.optLong("watched_seconds"))
+                            .put("completed", pending.optBoolean("completed")))
+                    offlineVideoStore.markProgressSynced(id)
+                } catch (_: Exception) {
+                    break
+                }
+            }
             route = AppRoute.CLASSES
+        }
+    }
+
+    fun downloadRecordingOffline(item: JSONObject) {
+        runTask {
+            if (resourceOwner == "guest") throw IOException("Sign in before downloading a video for offline playback.")
+            OfflineLearningVideoDownloadWorker.enqueue(context.applicationContext, resourceOwner, item)
+            val id = item.longAny("recorded_class_id", "recordingId", "id")
+            videoDownloadStates[id] = if (language == "hi") "डाउनलोड कतार में है" else "Queued for offline download"
+            status = if (language == "hi") "वीडियो सुरक्षित डाउनलोड के लिए कतार में जुड़ गया।" else "Video queued for a protected offline download."
+        }
+    }
+
+    fun removeOfflineRecording(item: JSONObject) {
+        runTask {
+            val id = item.longAny("recorded_class_id", "recordingId", "id")
+            if (id <= 0L) throw IOException("Recording ID is missing.")
+            WorkManager.getInstance(context.applicationContext)
+                .cancelUniqueWork(OfflineLearningVideoDownloadWorker.uniqueWorkName(resourceOwner, id))
+            withContext(Dispatchers.IO) { offlineVideoStore.removeOfflineCopy(id) }
+            offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
+            videoDownloadStates.remove(id)
+            status = if (language == "hi") "इस डिवाइस की offline copy हटाई गई; server पर recording सुरक्षित है。"
+                else "Offline copy removed from this device; the server recording remains unchanged."
         }
     }
 
@@ -1285,40 +1407,76 @@ fun QuantaEdgeApp() {
         runTask {
             val id = item.longAny("recorded_class_id", "recordingId", "id")
             if (id <= 0L) throw IOException("Recording की पहचान नहीं मिली।")
-            selectedRecording = ApiClient.getObject("/api/v1/learning/recorded-classes/" + id)
+            if (offlineVideoStore.completedFileForRecording(id) != null) {
+                selectedRecording = offlineVideoStore.recording(id) ?: JSONObject(item.toString())
+                route = AppRoute.RECORDING_PLAYER
+                return@runTask
+            }
+            val details = ApiClient.getObject("/api/v1/learning/recorded-classes/" + id)
+            for (key in listOf("download_resource_id", "download_assignment_id", "download_allowed",
+                "download_sha256", "media_type", "file_size_bytes")) {
+                if (item.has(key) && !item.isNull(key)) details.put(key, item.opt(key))
+            }
+            selectedRecording = details
             route = AppRoute.RECORDING_PLAYER
         }
     }
 
     fun saveRecordingProgress(positionSeconds: Long, watchedSeconds: Long, completed: Boolean) {
+        val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
+        if (offlineVideoStore.completedFileForRecording(id) != null) {
+            offlineVideoStore.savePlaybackProgress(id, positionSeconds, watchedSeconds, completed)
+            recordedClasses = recordedClasses.map { row ->
+                if (row.longAny("recorded_class_id", "recordingId", "id") == id) JSONObject(row.toString())
+                    .put("last_position_seconds", positionSeconds).put("watched_seconds", watchedSeconds).put("completed", completed)
+                else row
+            }
+            scope.launch {
+                try {
+                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                        JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
+                            .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
+                    offlineVideoStore.markProgressSynced(id)
+                } catch (_: Exception) { /* keep durable local progress for next connectivity */ }
+            }
+            return
+        }
         runTask {
-            val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
             ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
                 JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
                     .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
             recordedClasses = recordedClasses.map { row ->
                 if (row.longAny("recorded_class_id", "recordingId", "id") == id) {
-                    JSONObject(row.toString())
-                        .put("last_position_seconds", positionSeconds)
-                        .put("watched_seconds", watchedSeconds)
-                        .put("completed", completed)
+                    JSONObject(row.toString()).put("last_position_seconds", positionSeconds)
+                        .put("watched_seconds", watchedSeconds).put("completed", completed)
                 } else row
             }
         }
     }
 
     fun saveRecordingProgressAndBack(positionSeconds: Long, watchedSeconds: Long, completed: Boolean) {
+        val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
+        if (offlineVideoStore.completedFileForRecording(id) != null) {
+            offlineVideoStore.savePlaybackProgress(id, positionSeconds, watchedSeconds, completed)
+            route = AppRoute.CLASSES
+            scope.launch {
+                try {
+                    ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                        JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
+                            .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
+                    offlineVideoStore.markProgressSynced(id)
+                } catch (_: Exception) { /* sync after connectivity returns */ }
+            }
+            return
+        }
         runTask {
-            val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
             ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
                 JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
                     .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
             recordedClasses = recordedClasses.map { row ->
                 if (row.longAny("recorded_class_id", "recordingId", "id") == id) {
-                    JSONObject(row.toString())
-                        .put("last_position_seconds", positionSeconds)
-                        .put("watched_seconds", watchedSeconds)
-                        .put("completed", completed)
+                    JSONObject(row.toString()).put("last_position_seconds", positionSeconds)
+                        .put("watched_seconds", watchedSeconds).put("completed", completed)
                 } else row
             }
             route = AppRoute.CLASSES
@@ -2915,13 +3073,19 @@ fun QuantaEdgeApp() {
                         onRefresh = { openClasses(currentSubject) },
                         onJoin = ::joinLiveClass,
                         onLeave = ::leaveLiveClass,
-                        onRecording = ::openRecording
+                        onRecording = ::openRecording,
+                        offlineDownloadedIds = offlineRecordingIds,
+                        videoDownloadStates = videoDownloadStates,
+                        onDownloadRecording = ::downloadRecordingOffline,
+                        onRemoveOfflineRecording = ::removeOfflineRecording
                     )
                     AppRoute.RECORDING_PLAYER -> RecordedPlayerScreen(
                         recording = selectedRecording,
                         startPositionSeconds = selectedRecording.optLongAny("last_position_seconds", "lastPositionSeconds"),
                         onSaveProgress = ::saveRecordingProgress,
-                        onSaveAndBack = ::saveRecordingProgressAndBack
+                        onSaveAndBack = ::saveRecordingProgressAndBack,
+                        offlineFile = offlineVideoStore.completedFileForRecording(
+                            selectedRecording.longAny("recorded_class_id", "recordingId", "id"))
                     )
                 }
                 }
