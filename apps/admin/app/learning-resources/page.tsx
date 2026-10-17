@@ -1,5 +1,7 @@
 'use client';
 
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
+
 import AdminSidebar from '../components/AdminSidebar';
 import Link from 'next/link';
 import {useCallback,useEffect,useMemo,useState} from 'react';
@@ -23,7 +25,7 @@ const types=['VIDEO','PDF','WORKSHEET','SLIDES','AUDIO','IMAGE','OTHER'];
 const sources=['PRIVATE_UPLOAD','RECORDED_CLASS','LEARNING_DOCUMENT','CONTENT_ASSET','EXTERNAL_URL'];
 const label=(s:string)=>s.replaceAll('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
 const sizeText=(n?:number|null)=>!n?'—':n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
-const dateText=(v?:string|null)=>{if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString();};
+const dateText=(v?:string|null)=>formatUserTimestamp(v);
 
 export default function LearningResourcesPage(){
  const router=useRouter();
