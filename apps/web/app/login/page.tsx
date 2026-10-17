@@ -5,6 +5,7 @@ import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 import { LanguageSwitcher, useLocale } from '../components/LanguageProvider';
+import { useTenantBranding } from '../components/TenantBrandingProvider';
 
 type Method = 'mobile' | 'username';
 
@@ -30,16 +31,17 @@ function redirectAfterLogin(body: any): void {
   // This unified login page can serve both roles, but must never route a mismatched
   // role/workspace pair into either authenticated area.
   if (body.role !== 'PARENT' && body.role !== 'STUDENT') {
-    throw new Error('QuantaEdge could not confirm a Parent- or Student-scoped session.');
+    throw new Error('The app could not confirm a Parent- or Student-scoped session.');
   }
   if (body.workspace !== 'PARENT' && body.workspace !== 'STUDENT') {
-    throw new Error('QuantaEdge could not confirm a Parent- or Student-scoped workspace.');
+    throw new Error('The app could not confirm a Parent- or Student-scoped workspace.');
   }
-  throw new Error('QuantaEdge could not confirm this account session. Please sign in again.');
+  throw new Error('The account session could not be confirmed. Please sign in again.');
 }
 
 export default function LoginPage() {
   const { locale } = useLocale();
+  const { brand } = useTenantBranding();
   const english = locale === 'english';
   const [method, setMethod] = useState<Method>('mobile');
   const [mobile, setMobile] = useState('');
@@ -115,7 +117,7 @@ export default function LoginPage() {
       <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
       <section className="auth-card parent-auth-card" aria-labelledby="login-heading">
-        <Link href="/" className="auth-back-link">{english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ'}</Link>
+        <Link href="/" className="auth-back-link">{brand ? (english ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : (english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ')}</Link>
         <span className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपकी सीखने की जगह'}</span>
         <h1 id="login-heading">{english ? 'Welcome back' : 'वापसी पर स्वागत है'}</h1>
         <p>{english ? 'Sign in with verified Gmail, mobile OTP, or your username and password.' : 'सत्यापित Gmail, मोबाइल OTP या यूज़रनेम और पासवर्ड से साइन इन करें।'}</p>
