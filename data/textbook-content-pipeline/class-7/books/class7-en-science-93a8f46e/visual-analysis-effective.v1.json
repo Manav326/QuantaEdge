@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f56439973c05c2a9348f78fdd88f227aa151a52b0300a10cb1455699cc0c9bce",
+  "raw_analysis_sha256": "260c7573a9db122802e507cff02973e219bda428fc1b7fe03961063b21e793e2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -3408,6 +3408,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3417,15 +3418,26 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:46Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:16:40Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3436,6 +3448,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3445,15 +3458,26 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:50Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:16:46Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3464,6 +3488,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3473,15 +3498,26 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:54Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:16:52Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3492,6 +3528,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3501,15 +3538,26 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:58Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:16:58Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3520,6 +3568,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3529,15 +3578,26 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:02Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:17:05Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3548,26 +3608,36 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page appears to be a blank page in a textbook.",
+        "context_relation": "The page appears to be a blank page with no visible content.",
         "limitations": [
-          "The page is blank and does not contain any text or images."
+          "No visible text or images on the page."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:15Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:17:21Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3578,6 +3648,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3586,18 +3657,27 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page appears to be a blank page in a textbook or educational material.",
+        "context_relation": "The page appears to be a blank page in a textbook.",
         "limitations": [
-          "The page is blank and does not contain any visible text or images."
+          "The page contains no visible text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:24Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:17:31Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a textbook.",
+        "limitations": [
+          "The page contains no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3608,36 +3688,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "No specific context or content is visible.",
-        "limitations": [
-          "No visible text or content is present on the page."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:36Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "c604902e3242d33946e65f7c",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 9,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3648,16 +3699,65 @@
         "concepts": [],
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page is completely black and lacks any visible text, images, or other elements."
+          "The page is completely black and does not contain any text, images, or other visual elements."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:49Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:17:49Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and does not contain any text, images, or other visual elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c604902e3242d33946e65f7c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:18:05Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3668,6 +3768,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "page-0009.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3713,20 +3814,68 @@
           "Department of Education in Languages",
           "Department of Curriculum Studies and Development"
         ],
-        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC)",
+        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
         "limitations": [
           "The list includes members from various fields such as education, music, and sports.",
-          "The list includes members from different institutions and departments.",
-          "The list includes members from different states and countries."
+          "The members are from different institutions and departments.",
+          "The list does not provide specific details about their roles or responsibilities."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:56:39Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:22:45Z",
+      "effective_analysis": {
+        "visual_summary": "List of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching\nLearning Material Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning\nand Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University,\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the\nPrime Minister (EAC – PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shankar Mahadevan, Music Maestro, Mumbai",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy,\nBengaluru",
+          "9. Michel Danino, Visiting Professor, IIT – Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General, HIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti,\nMinistry of Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime\nMinister (EAC – PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusha Kumar Mandal, Professor, Department of Education in\nSocial Sciences, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor, Department of Education in Science\nand Mathematics, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT, (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Chancellor",
+          "Professor",
+          "Economic Advisory Council to the Prime Minister (EAC – PM)",
+          "Distinguished Professor",
+          "Music Maestro",
+          "IAS (Retd.)",
+          "Ministry of Education",
+          "Economic Advisory Council to the Prime Minister (EAC – PM)",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Department of Education in Science and Mathematics",
+          "Department of Education in Languages",
+          "Department of Curriculum Studies and Development"
+        ],
+        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list includes members from various fields such as education, music, and sports.",
+          "The members are from different institutions and departments.",
+          "The list does not provide specific details about their roles or responsibilities."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3737,11 +3886,12 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/29a1d8d1a26013d947449413cf905c2741adc90bbafd19cc63e6258a2686529e.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Preamble of the Constitution of India.",
+        "visual_summary": "Preamble of the Indian Constitution.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "THE CONSTITUTION OF INDIA",
@@ -3756,7 +3906,7 @@
           "2. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2, for \"Unity of the Nation\" (w.e.f. 3.1.1977)"
         ],
         "concepts": [
-          "Constitution of India",
+          "Indian Constitution",
           "Preamble",
           "Sovereign Socialist Secular Democratic Republic",
           "Justice",
@@ -3765,21 +3915,47 @@
           "Fraternity",
           "Unity and Integrity of the Nation"
         ],
-        "context_relation": "Introduction of the Constitution of India",
+        "context_relation": "The preamble outlines the foundational principles and goals of the Indian Constitution.",
         "limitations": [
-          "The image does not show any specific diagram, chart, or graph.",
-          "The image does not contain any cartoon or illustration.",
-          "The image does not display any table or map.",
-          "The image does not show any equation or formula."
+          "The image does not provide visual elements such as charts, graphs, or cartoons."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:16Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:24:45Z",
+      "effective_analysis": {
+        "visual_summary": "Preamble of the Indian Constitution.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "THE CONSTITUTION OF INDIA",
+          "PREAMBLE",
+          "WE, THE PEOPLE OF INDIA, having solemnly resolved to constitute India into a 'SOVEREIGN SOCIALIST SECULAR DEMOCRATIC REPUBLIC' and to secure to all its citizens:",
+          "JUSTICE, social, economic and political;",
+          "LIBERTY of thought, expression, belief, faith and worship;",
+          "EQUALITY of status and of opportunity;",
+          "and to promote among them all FRATERNITY assuring the dignity of the individual and the 'unity and integrity of the Nation];",
+          "IN OUR CONSTITUENT ASSEMBLY this twenty-sixth day of November, 1949 do HEREBY ADOPT, ENACT AND GIVE TO OURSELVES THIS CONSTITUTION.",
+          "1. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2, for \"Sovereign Democratic Republic\" (w.e.f. 3.1.1977)",
+          "2. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2, for \"Unity of the Nation\" (w.e.f. 3.1.1977)"
+        ],
+        "concepts": [
+          "Indian Constitution",
+          "Preamble",
+          "Sovereign Socialist Secular Democratic Republic",
+          "Justice",
+          "Liberty",
+          "Equality",
+          "Fraternity",
+          "Unity and Integrity of the Nation"
+        ],
+        "context_relation": "The preamble outlines the foundational principles and goals of the Indian Constitution.",
+        "limitations": [
+          "The image does not provide visual elements such as charts, graphs, or cartoons."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3790,6 +3966,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3798,7 +3975,7 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely part of a textbook or educational content.",
+        "context_relation": "The page is likely part of a textbook or educational material.",
         "limitations": [
           "The page is blank and does not contain any text or images."
         ]
@@ -3807,9 +3984,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:26Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:24:56Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3820,6 +4006,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3837,9 +4024,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:34Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:25:05Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content editing.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or visual elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3850,26 +4046,36 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is a blank page with no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and has no visible text, images, or other elements."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:44Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:25:15Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3880,6 +4086,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "page-0010.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3901,16 +4108,36 @@
         ],
         "context_relation": "The Preamble of the Indian Constitution",
         "limitations": [
-          "The text is a full page and not a cropped figure."
+          "The text is a full page, not a cropped figure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:01:59Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:29:24Z",
+      "effective_analysis": {
+        "visual_summary": "The Preamble of the Indian Constitution.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "THE CONSTITUTION OF\nINDIA\nPREAMBLE\nWE, THE PEOPLE OF INDIA, having\nsolemnly resolved to constitute India into a\n'SOBEREIGN SOCIALIST SECULAR\nDEMOCRATIC REPUBLIC' and to secure\nto all its citizens:\nJUSTICE, social, economic and\npolitical;\nLIBERTY of thought, expression, belief,\nfaith and worship;\nEQU",
+          "PREAMBLE"
+        ],
+        "concepts": [
+          "Indian Constitution",
+          "Sovereign Socialist Secular Democratic Republic",
+          "Justice",
+          "Liberty",
+          "Equality",
+          "Fraternity",
+          "Unity of the Nation"
+        ],
+        "context_relation": "The Preamble of the Indian Constitution",
+        "limitations": [
+          "The text is a full page, not a cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3921,6 +4148,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3929,18 +4157,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual representation of a rope, possibly used in a physics or chemistry context.",
+        "context_relation": "The image is a visual representation of a rope, likely used as an illustration in a textbook.",
         "limitations": [
-          "The image does not provide specific details about the rope's properties or uses."
+          "The image does not provide any specific information or context beyond its visual representation of a rope."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:08Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:29:37Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual representation of a rope."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3951,6 +4188,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3959,18 +4197,23 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual representation of a rope, possibly used as a symbol or an illustration in a textbook.",
-        "limitations": [
-          "The image does not provide any specific information or context beyond its visual representation of a rope."
-        ]
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:29:49Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3981,26 +4224,36 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_summary": "A yellow rope with a spiral pattern.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of a physics or engineering textbook, possibly discussing the properties or uses of twisted ropes.",
+        "context_relation": "The image is a visual element in an educational content.",
         "limitations": [
-          "The image does not provide specific details about the rope's material, thickness, or application."
+          "The image does not provide any specific information or data that can be analyzed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:29Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:30:01Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in an educational content.",
+        "limitations": [
+          "The image does not provide any specific information or data that can be analyzed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4011,24 +4264,36 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:38Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:30:09Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4039,24 +4304,36 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:41Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:30:17Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4067,24 +4344,36 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:45Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:30:26Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4095,24 +4384,36 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:48Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:30:34Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4123,11 +4424,12 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green border.",
+        "visual_summary": "A blank page with a light green background and a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -4140,9 +4442,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:01Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:30:52Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4153,6 +4464,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4170,9 +4482,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:09Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:31:01Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4183,6 +4504,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4193,16 +4515,25 @@
         "concepts": [],
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
-          "The page is completely black and does not contain any visible text or images."
+          "The page is completely black and does not contain any visible text, images, or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:22Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:31:19Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and does not contain any visible text, images, or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

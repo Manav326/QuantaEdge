@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 73,
+    "assets_selected": 98,
     "assets_processed_this_run": 25,
     "assets_analyzed": 335,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 48,
+    "assets_skipped_from_checkpoint": 73,
     "publication_allowed": false
   },
   "results": [
@@ -2362,6 +2362,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2371,13 +2372,15 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:46Z"
+      "checkpointed_at": "2026-10-17T03:16:40Z"
     },
     {
       "asset_id": "48134320edb38b4983052604",
@@ -2387,6 +2390,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2396,13 +2400,15 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:50Z"
+      "checkpointed_at": "2026-10-17T03:16:46Z"
     },
     {
       "asset_id": "d786a90f832a0c134751cd43",
@@ -2412,6 +2418,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2421,13 +2428,15 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:54Z"
+      "checkpointed_at": "2026-10-17T03:16:52Z"
     },
     {
       "asset_id": "8f68c2f06a86adb0227b4930",
@@ -2437,6 +2446,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2446,13 +2456,15 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:58Z"
+      "checkpointed_at": "2026-10-17T03:16:58Z"
     },
     {
       "asset_id": "5fec6e79c86af3dcd9327896",
@@ -2462,6 +2474,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2471,13 +2484,15 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
-        "limitations": []
+        "limitations": [
+          "The image is a single object and does not represent any specific concept or relationship."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:02Z"
+      "checkpointed_at": "2026-10-17T03:17:05Z"
     },
     {
       "asset_id": "2ec5e05534356dd55b825d3a",
@@ -2487,6 +2502,35 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:17:21Z"
+    },
+    {
+      "asset_id": "f85b477412b2a2fc5e28467b",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2497,41 +2541,14 @@
         "concepts": [],
         "context_relation": "The page appears to be a blank page in a textbook.",
         "limitations": [
-          "The page is blank and does not contain any text or images."
+          "The page contains no visible text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:15Z"
-    },
-    {
-      "asset_id": "f85b477412b2a2fc5e28467b",
-      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 9,
-      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page appears to be a blank page in a textbook or educational material.",
-        "limitations": [
-          "The page is blank and does not contain any visible text or images."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:24Z"
+      "checkpointed_at": "2026-10-17T03:17:31Z"
     },
     {
       "asset_id": "7d264ad51b277ca7381dbe80",
@@ -2541,33 +2558,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "No specific context or content is visible.",
-        "limitations": [
-          "No visible text or content is present on the page."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:36Z"
-    },
-    {
-      "asset_id": "c604902e3242d33946e65f7c",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 9,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2578,14 +2569,42 @@
         "concepts": [],
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page is completely black and lacks any visible text, images, or other elements."
+          "The page is completely black and does not contain any text, images, or other visual elements."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:52:49Z"
+      "checkpointed_at": "2026-10-17T03:17:49Z"
+    },
+    {
+      "asset_id": "c604902e3242d33946e65f7c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:18:05Z"
     },
     {
       "asset_id": "b53120ae10dab9ebbf484f49",
@@ -2595,6 +2614,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "page-0009.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2640,18 +2660,18 @@
           "Department of Education in Languages",
           "Department of Curriculum Studies and Development"
         ],
-        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC)",
+        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
         "limitations": [
           "The list includes members from various fields such as education, music, and sports.",
-          "The list includes members from different institutions and departments.",
-          "The list includes members from different states and countries."
+          "The members are from different institutions and departments.",
+          "The list does not provide specific details about their roles or responsibilities."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:56:39Z"
+      "checkpointed_at": "2026-10-17T03:22:45Z"
     },
     {
       "asset_id": "7374848c6b290390b0a10a76",
@@ -2661,11 +2681,12 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/29a1d8d1a26013d947449413cf905c2741adc90bbafd19cc63e6258a2686529e.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Preamble of the Constitution of India.",
+        "visual_summary": "Preamble of the Indian Constitution.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "THE CONSTITUTION OF INDIA",
@@ -2680,7 +2701,7 @@
           "2. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2, for \"Unity of the Nation\" (w.e.f. 3.1.1977)"
         ],
         "concepts": [
-          "Constitution of India",
+          "Indian Constitution",
           "Preamble",
           "Sovereign Socialist Secular Democratic Republic",
           "Justice",
@@ -2689,19 +2710,16 @@
           "Fraternity",
           "Unity and Integrity of the Nation"
         ],
-        "context_relation": "Introduction of the Constitution of India",
+        "context_relation": "The preamble outlines the foundational principles and goals of the Indian Constitution.",
         "limitations": [
-          "The image does not show any specific diagram, chart, or graph.",
-          "The image does not contain any cartoon or illustration.",
-          "The image does not display any table or map.",
-          "The image does not show any equation or formula."
+          "The image does not provide visual elements such as charts, graphs, or cartoons."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:16Z"
+      "checkpointed_at": "2026-10-17T03:24:45Z"
     },
     {
       "asset_id": "d21a8da4855dac94dd62b106",
@@ -2711,6 +2729,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2719,7 +2738,7 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely part of a textbook or educational content.",
+        "context_relation": "The page is likely part of a textbook or educational material.",
         "limitations": [
           "The page is blank and does not contain any text or images."
         ]
@@ -2728,7 +2747,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:26Z"
+      "checkpointed_at": "2026-10-17T03:24:56Z"
     },
     {
       "asset_id": "075e1e0025d74831282b46e0",
@@ -2738,6 +2757,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2755,7 +2775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:34Z"
+      "checkpointed_at": "2026-10-17T03:25:05Z"
     },
     {
       "asset_id": "6fe086441f1de39458501020",
@@ -2765,24 +2785,25 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is a blank page with no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and has no visible text, images, or other elements."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:58:44Z"
+      "checkpointed_at": "2026-10-17T03:25:15Z"
     },
     {
       "asset_id": "d710b9347e4cd9a2b4f1a764",
@@ -2792,6 +2813,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "page-0010.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "0f1833ba42c429cf68e53230d7bfa6579d4efc87d1a94e608615c988798ae320",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2813,14 +2835,14 @@
         ],
         "context_relation": "The Preamble of the Indian Constitution",
         "limitations": [
-          "The text is a full page and not a cropped figure."
+          "The text is a full page, not a cropped figure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:01:59Z"
+      "checkpointed_at": "2026-10-17T03:29:24Z"
     },
     {
       "asset_id": "1eaba5f91acd37cb8ff1d7a1",
@@ -2830,6 +2852,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2838,16 +2861,16 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual representation of a rope, possibly used in a physics or chemistry context.",
+        "context_relation": "The image is a visual representation of a rope, likely used as an illustration in a textbook.",
         "limitations": [
-          "The image does not provide specific details about the rope's properties or uses."
+          "The image does not provide any specific information or context beyond its visual representation of a rope."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:08Z"
+      "checkpointed_at": "2026-10-17T03:29:37Z"
     },
     {
       "asset_id": "8a63af2c4b52fd2637d24baf",
@@ -2857,6 +2880,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2865,16 +2889,14 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual representation of a rope, possibly used as a symbol or an illustration in a textbook.",
-        "limitations": [
-          "The image does not provide any specific information or context beyond its visual representation of a rope."
-        ]
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:18Z"
+      "checkpointed_at": "2026-10-17T03:29:49Z"
     },
     {
       "asset_id": "7677493b2357bfa6cbc797dc",
@@ -2884,24 +2906,25 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_summary": "A yellow rope with a spiral pattern.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of a physics or engineering textbook, possibly discussing the properties or uses of twisted ropes.",
+        "context_relation": "The image is a visual element in an educational content.",
         "limitations": [
-          "The image does not provide specific details about the rope's material, thickness, or application."
+          "The image does not provide any specific information or data that can be analyzed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:29Z"
+      "checkpointed_at": "2026-10-17T03:30:01Z"
     },
     {
       "asset_id": "07dcfa8655f89eec7da74ffd",
@@ -2911,22 +2934,25 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:38Z"
+      "checkpointed_at": "2026-10-17T03:30:09Z"
     },
     {
       "asset_id": "a14b6a4e35750e8bfd32b01f",
@@ -2936,22 +2962,25 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:41Z"
+      "checkpointed_at": "2026-10-17T03:30:17Z"
     },
     {
       "asset_id": "9da00ba5a4a9f1f9254972ec",
@@ -2961,22 +2990,25 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:45Z"
+      "checkpointed_at": "2026-10-17T03:30:26Z"
     },
     {
       "asset_id": "5bca998a5ee198f0bff14d1b",
@@ -2986,22 +3018,25 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "None",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the rope or its use in the textbook content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:02:48Z"
+      "checkpointed_at": "2026-10-17T03:30:34Z"
     },
     {
       "asset_id": "b8e47fee1ef8f07368198e95",
@@ -3011,11 +3046,12 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green border.",
+        "visual_summary": "A blank page with a light green background and a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -3028,7 +3064,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:01Z"
+      "checkpointed_at": "2026-10-17T03:30:52Z"
     },
     {
       "asset_id": "19968804a41d11127d37b8dd",
@@ -3038,6 +3074,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3055,7 +3092,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:09Z"
+      "checkpointed_at": "2026-10-17T03:31:01Z"
     },
     {
       "asset_id": "14511be4fa853011c9182159",
@@ -3065,6 +3102,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3075,14 +3113,14 @@
         "concepts": [],
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
-          "The page is completely black and does not contain any visible text or images."
+          "The page is completely black and does not contain any visible text, images, or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:22Z"
+      "checkpointed_at": "2026-10-17T03:31:19Z"
     },
     {
       "asset_id": "0f2ed31343644946a6c167fc",
