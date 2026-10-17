@@ -724,11 +724,15 @@ fun QuantaEdgeApp() {
             val verifiedMethods = session.optJSONArray("verifiedMethods")
             val gmailMethodVerified = verifiedMethods != null &&
                 (0 until verifiedMethods.length()).any { verifiedMethods.optString(it) == "GMAIL" }
-            if (workspace !in setOf("PARENT", "STUDENT") ||
-                (workspace == "PARENT" && session.optString("role") != "PARENT") ||
-                (workspace == "STUDENT" && session.optLong("studentId") <= 0L) ||
+            val parentSessionConfirmed = workspace == "PARENT" &&
+                session.optString("role") == "PARENT" && session.optLong("userId") > 0L
+            val learnerSessionConfirmed = workspace == "STUDENT" &&
+                session.optString("role") == "STUDENT" && session.optLong("studentId") > 0L
+            if (!session.optBoolean("authenticated") ||
+                (!parentSessionConfirmed && !learnerSessionConfirmed) ||
                 !session.optBoolean("gmailVerified") || !gmailMethodVerified) {
-                ApiClient.postObject("/api/v1/auth/logout", JSONObject())
+                // Preserve the session-validation error even if the best-effort logout call fails.
+                runCatching { ApiClient.postObject("/api/v1/auth/logout", JSONObject()) }
                 ApiClient.clearSession()
                 throw IOException("QuantaEdge could not confirm the verified Google account.")
             }
@@ -3280,7 +3284,9 @@ fun QuantaEdgeApp() {
                         language = language,
                         onToggleLanguage = ::toggleLanguage,
                         busy = busy,
+                        error = error,
                         status = status,
+                        onGoogleSignIn = ::signInWithGoogle,
                         onRequestOtp = ::requestAccountSignupOtp,
                         onVerify = ::verifyAccountSignupOtp,
                         onBackToLogin = { route = AppRoute.LOGIN }
@@ -4129,7 +4135,9 @@ private fun AccountSignupScreen(
     language: String,
     onToggleLanguage: () -> Unit,
     busy: Boolean,
+    error: String,
     status: String,
+    onGoogleSignIn: (Context) -> Unit,
     onRequestOtp: (String, (String?) -> Unit) -> Unit,
     onVerify: (String, String, String) -> Unit,
     onBackToLogin: () -> Unit
@@ -4139,6 +4147,7 @@ private fun AccountSignupScreen(
     var otp by rememberSaveable { mutableStateOf("") }
     var requested by rememberSaveable { mutableStateOf(false) }
     var devCode by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 16.dp),
@@ -4155,6 +4164,16 @@ private fun AccountSignupScreen(
             "पूरा नाम और मोबाइल नंबर दर्ज करें। सफल OTP सत्यापन के बाद मोबाइल सत्यापित दिखेगा।"
             else "Enter your full name and mobile number. Your mobile is marked verified only after a successful OTP.",
             style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp, bottom = 14.dp))
+        OutlinedButton(
+            onClick = { onGoogleSignIn(context) },
+            enabled = !busy,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Text(t("Sign up with Google", "Google से साइन अप करें"))
+        }
+        Text(if(language=="hi") "या मोबाइल OTP से जारी रखें" else "Or continue with mobile OTP",
+            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.padding(bottom = 6.dp))
         if (!requested) {
             OutlinedTextField(value = displayName, onValueChange = { displayName = it.take(120) },
                 label = { Text(if(language=="hi") "पूरा नाम" else "Full name") },
@@ -4186,6 +4205,8 @@ private fun AccountSignupScreen(
                 Text(if(language=="hi") "मोबाइल नंबर बदलें" else "Change mobile number")
             }
         }
+        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 8.dp))
         if (status.isNotBlank()) Text(localizedUiText(status),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.padding(top = 8.dp))
