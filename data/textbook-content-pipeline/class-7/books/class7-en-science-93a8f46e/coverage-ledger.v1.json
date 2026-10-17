@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 325,
-    "successful_visual_analyses": 315,
-    "missing_visual_analyses": 7163,
-    "failed_visual_analyses": 10,
+    "raw_analysis_result_rows": 350,
+    "successful_visual_analyses": 337,
+    "missing_visual_analyses": 7138,
+    "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7173,
+    "unresolved_count": 7151,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21849,9 +21849,29 @@
       "asset_path": "assets/303ef7a7503a88073470a896f8e8c16b22b6a9c37b5a3d352f9aea2e66a87436.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit with a battery, wires, a lamp, and a metal spoon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Battery",
+          "Wires",
+          "Lamp",
+          "Metal spoon"
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Battery",
+          "Wires",
+          "Lamp",
+          "Metal spoon"
+        ],
+        "context_relation": "The image is related to the educational content about classifying materials based on their properties.",
+        "limitations": [
+          "The image does not show the actual setup of the circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21867,9 +21887,18 @@
       "asset_path": "assets/b8298d6fe31f995e101268d5dcc72aae558676465de05943b7ebe6f54899bf3f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sunny day with rain falling, mountains, trees, and a river.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a sunny day with rain falling, mountains, trees, and a river, which could be used to discuss weather patterns or natural landscapes.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the content or context of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21885,9 +21914,16 @@
       "asset_path": "assets/36bb406039c19c6dc4ecc0e94350b8d138222ba20c579b40fb91a306f68f4656.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue gradient background with a white vertical line on the left side.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21903,9 +21939,18 @@
       "asset_path": "assets/4fd9f5f85377dd6b51fb8c9f8e1842f7ac88c868a97eee10ac5ad5069d6569a8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient blue background with a faint blue line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a blank page or a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21921,9 +21966,16 @@
       "asset_path": "assets/d3e628e838f42d59d34404c6c0943300ffd3bf44b89a396d2990c5ce7d1cd826.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue gradient background with no visible text or objects.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21939,9 +21991,20 @@
       "asset_path": "assets/9f3f23fadb9217f678a1b537452cc32bf6968101145aca55989b35a944517302.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with a gradient effect, possibly representing a sky or ocean.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for an educational content, possibly related to science or physics.",
+        "limitations": [
+          "The image does not contain any specific text or content related to the textbook's content.",
+          "The image is a gradient background, which may not be directly related to the educational content.",
+          "The image does not provide any specific information about the textbook or its content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21957,9 +22020,33 @@
       "asset_path": "assets/3231c8fee446b7c7e216ba4b764018d0d5c932840c5c33b0b395eb6c339cbf65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with a white vertical stripe on the left side.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3",
+          "We then move on and play with some",
+          "electric batteries, lamps and wires to try to",
+          "ﬁ nd other kinds of properties of materials.",
+          "What kind of materials do we need to make a",
+          "lamp glow? This will lead us to classifying",
+          "materials based on their properties — and we",
+          "will enter the world of met"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification",
+          "electricity",
+          "lamp",
+          "properties of materials"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific image is provided, only a text description."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21975,9 +22062,18 @@
       "asset_path": "assets/4e2a83c28c5fec675f6742b97e991b6e0fe7671e468ab65db796268d31502a2c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp with a blue sky in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a lamp with a blue sky in the background, which is related to the topic of materials and their properties.",
+        "limitations": [
+          "The image does not provide any specific information about the lamp or its properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21993,9 +22089,19 @@
       "asset_path": "assets/a77e0f6523a6ea9ecfeda8a6fcae88fa7a5ab232a456a659799eaf08c8c098e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a lamp with a clear blue sky in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a lamp with a clear blue sky in the background, which is related to the topic of materials and their properties.",
+        "limitations": [
+          "The image does not provide any specific information about the materials or their properties.",
+          "The image does not show any other objects or elements that could provide additional context or information about the topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22011,7 +22117,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -22029,7 +22135,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -22047,7 +22153,7 @@
       "asset_path": "page-0023.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -22065,9 +22171,16 @@
       "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized figure of a person with a dotted line around it, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual representation of a thought or idea, possibly related to the text about changes in bodies and life processes.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22083,9 +22196,16 @@
       "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly flying in the air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22101,9 +22221,16 @@
       "asset_path": "assets/00aca81dec7bff13a501396787881bb5c64fd8806b05098ebe90688124e39e58.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a tennis court with a green grassy area in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22119,9 +22246,24 @@
       "asset_path": "assets/6c0d833f3ea97488ff3133ea46ce3b1aca734c7be4536037ed449f58d5861ca9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two runners on a track, one in blue shorts and the other in blue shorts and a belt, running on a grassy field.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "track",
+          "grass",
+          "athletes",
+          "running shoes"
+        ],
+        "context_relation": "The image is related to the topic of physical activity and sports, specifically focusing on running and track events.",
+        "limitations": [
+          "The image does not provide specific details about the runners' actions or the track's features."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22137,9 +22279,23 @@
       "asset_path": "assets/1d6e2514fc7e3caacc7a046622620718dcb0a3441b3d6f7fb077d7f40f8dd1e5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three people running on a track, with one person in the lead and two others close behind.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "running",
+          "track",
+          "competition",
+          "athletics"
+        ],
+        "context_relation": "The image is related to the topic of physical activity and sports, specifically running on a track.",
+        "limitations": [
+          "The image does not provide specific details about the running event or the participants."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22155,9 +22311,19 @@
       "asset_path": "assets/0b9e567241faa2a69630f0ca07eb290dfbf4283d730c9a2c6ec3da6a1f7963f4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two athletes running on a track, with one athlete in the lead.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration of athletes running on a track, which is not directly related to the text about changes in materials and water.",
+        "limitations": [
+          "The image does not provide specific information about the text's content.",
+          "The image is a cartoon, which may not accurately represent the complexity of the text's concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22173,9 +22339,24 @@
       "asset_path": "assets/3b83be402e4d3c13af6c2d65fe595052d93edddb0d8551e06558291a3315f6d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a sundial, showing the position of the sun at a specific time.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "sundial",
+          "time",
+          "sun",
+          "position"
+        ],
+        "context_relation": "The image is likely used to teach about the concept of time and the position of the sun.",
+        "limitations": [
+          "The image does not provide specific measurements or angles.",
+          "The image does not include any additional context or information about the sundial."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22191,9 +22372,16 @@
       "asset_path": "assets/dd712d62e3a67419ab7b1fa31d1d36103a75f3f8c7b476d726585e8d51e30014.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22209,9 +22397,18 @@
       "asset_path": "assets/e137cf428064b983b974b583a68451cdf25bafe1a30798e7396bb359b4396399.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a faint green line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The image is a blank page with no visible text or content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22227,9 +22424,16 @@
       "asset_path": "assets/9e449fc2eefdbe9a0f020799953b43f4bc0f00ef76ec4ad227ba511d4f5b4081.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and white background with a curved line.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22245,9 +22449,19 @@
       "asset_path": "assets/4ffa1567f37ca452d7f6625e83ad712ea829538348f8ab1b92022523b055394e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and white striped object, possibly a tent or canopy, with a blue base.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a part of a larger educational content, possibly related to a textbook or educational material.",
+        "limitations": [
+          "The image is partially obscured and not fully visible.",
+          "The text in the image is not readable or relevant to the content being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22263,9 +22477,16 @@
       "asset_path": "assets/b2571ac1815c0430846cf0291d60c7efd94931c36c1d0562d1ae6ab9937ad23d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white background with a curved green line at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22281,9 +22502,25 @@
       "asset_path": "assets/19aa8e920f7933389e0b34edcfb33b73262de0639cd2ea804a24aa38c2014a36.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sunflower growing in the soil with the sun shining above it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant growth",
+          "sunflower",
+          "soil",
+          "sun",
+          "growth",
+          "environment"
+        ],
+        "context_relation": "The image illustrates the growth of a sunflower in the soil, with the sun shining above it, highlighting the importance of sunlight in plant growth.",
+        "limitations": [
+          "The image does not provide specific details about the plant's growth stages or the specific benefits of sunlight for plant growth."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

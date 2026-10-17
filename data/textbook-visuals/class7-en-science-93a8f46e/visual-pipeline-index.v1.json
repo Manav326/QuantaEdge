@@ -18,7 +18,7 @@
   "inventory_bundle": {
     "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
     "tag": "inventory-layer1-class7-class7-en-science-93a8f46e-sha040de505bafd-run-38904464438",
-    "tar_sha256": "ff8a10e1236a90038a01ec12ccd26e0ef4501c650e24d029871db3b8a38566dd"
+    "tar_sha256": "0a95a83857eedab18c296278c2ba1c474f001e601c61f788532176fb4bd948a9"
   },
   "analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
   "effective_analysis_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-effective.v1.json",
