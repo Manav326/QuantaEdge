@@ -20,6 +20,7 @@ const platformApi = read('services/api/src/main/java/com/quantaedge/api/Platform
 const tenantApi = read('services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java');
 const apiTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionThemeTokensTest.java');
 const tintContrastTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionThemeTintContrastTest.java');
+const accentContrastTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionThemeAccentContrastTest.java');
 const editor = read('apps/people/app/institutions/page.tsx');
 const webRuntime = read('apps/web/app/components/ColorThemeProvider.tsx');
 const webLayout = read('apps/web/app/layout.tsx');
@@ -38,12 +39,14 @@ assert(apiTheme.includes('SCHEMA_VERSION = 2'), 'API theme schema must be explic
 assert(apiTheme.includes('public static List<Map<String, Object>> presets()'), 'Server must expose a curated palette catalogue.');
 assert(apiTheme.includes('"quantaedge-orange"') && apiTheme.includes('"custom"'), 'QuantaEdge default and custom presets must be supported.');
 assert(apiTheme.includes('contrastRatio') && apiTheme.includes('ensureContrast'), 'Generated foregrounds must be contrast-aware.');
+assert(apiTheme.includes('c.put("accentContainer", accentContainer)') && apiTheme.includes('c.put("onAccentContainer", bestContrastText(accentContainer))'), 'API must expose the accent container and readable foreground.');
 assert(platformApi.includes('"/theme-presets"') && platformApi.includes('InstitutionThemeTokens.presets()'), 'Preset API must remain owner-controlled.');
 assert(platformApi.includes('"/theme-preview"') && platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Palette preview and save must use the owner-protected canonical normalizer.');
 assert(tenantApi.includes('InstitutionThemeTokens.normalize'), 'Public tenant API must return generated palettes.');
 assert(apiTests.includes('alreadyMaterializedThemeCanBeReadAndNormalizedAgain'), 'Theme round-trip regression test is required.');
 assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'Palette contrast coverage must include curated presets.');
 assert(tintContrastTests.includes('primaryTextKeepsAccessibleContrastOnLightAndDarkTintedContainers'), 'Tinted-container contrast regression test must remain in CI.');
+assert(accentContrastTests.includes('accentTextAndForegroundsRemainReadableOnAccentContainersForEveryPreset'), 'Accent-container contrast regression test must remain in CI.');
 
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-presets'), 'Institution editor must load server-owned presets.');
 assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && editor.includes('brandAccent'), 'Institution editor must save schema v2 source colours.');
@@ -53,7 +56,7 @@ assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes(
 assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens'), 'Web runtime must map tenant tokens to semantic CSS roles.');
 assert(webLayout.includes('<ColorThemeProvider>'), 'Learner web root must install the theme provider.');
 assert(webWorkspace.includes('<AppearanceModeButton />'), 'Learner/parent workspace must provide appearance control.');
-for (const role of ['background', 'surface', 'text-muted', 'primary-container', 'success-container', 'error-container']) {
+for (const role of ['background', 'surface', 'text-muted', 'primary-container', 'accent-container', 'on-accent-container', 'success-container', 'error-container']) {
   assert(webCss.includes('--qe-color-' + role), 'Web CSS is missing semantic role: ' + role);
 }
 assert(webCss.includes('html[data-qe-appearance="dark"]'), 'Web CSS must define dark-mode surfaces/states.');
