@@ -126,7 +126,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
           {showOverview ? (
             <Link
               href={ADMIN_OVERVIEW_ITEM.href}
-              title={collapsed ? ADMIN_OVERVIEW_ITEM.english : undefined}
+              title={collapsed ? adminNavLabel(ADMIN_OVERVIEW_ITEM, locale, visibleRole) : undefined}
               className={'qe-nav-link' + (active === 'overview' ? ' active' : '')}
               aria-current={active === 'overview' ? 'page' : undefined}
             >

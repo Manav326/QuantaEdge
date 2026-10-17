@@ -38,7 +38,7 @@ assert(workspace.includes('className="qe-people-mobile-brand-lockup"'), 'HRMS mo
 assert(!workspace.includes('<span>QUANTAEDGE</span>'), 'HRMS mobile workspace must not hard-code a duplicate brand name.');
 assert(!workspace.includes('quantaedge-wordmark.png'), 'HRMS workspace must not reference the invalid legacy wordmark PNG.');
 assert(workspace.includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"), 'HRMS access management must be permission-gated in navigation.');
-assert(workspace.includes("label: 'Access governance'"), 'Access management must have a distinct Access Governance navigation group.');
+assert(workspace.includes("message: 'people.navigation.group.access'"), 'Access management must have a distinct centralized Access Governance navigation group.');
 assert(workspace.includes("permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE']"), 'Teaching-assignment navigation must match the page authorization contract.');
 
 assert(workspace.includes("'TEACHING_ASSIGNMENT_VIEW'"), 'Teaching classes/assignment navigation must honor TEACHING_ASSIGNMENT_VIEW.');
