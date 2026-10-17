@@ -41,6 +41,7 @@ const studentNavGroups: StudentNavGroup[] = [
 ];
 const parentItems: Item[] = [
  { href: '/parent', message: 'web.navigation.parent.familyReport', icon: '⌂', match: '/parent' },
+ { href: '/parent/courses', message: 'web.navigation.parent.familyCourses', icon: '✦' },
  { href: '/parent/children', message: 'web.navigation.parent.childrenProfiles', icon: '♧' },
  { href: '/parent/profile', message: 'web.navigation.parent.profile', icon: '◉' },
 ];
