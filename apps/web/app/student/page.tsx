@@ -53,8 +53,8 @@ export default function StudentHome(){
           const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true);
           const serverActive=ownedRows.find((course:any)=>course.is_enrolled===true);
           const activeId=serverActive?Number(serverActive.id):null;
-          setActiveCourseId(Number.isSafeInteger(activeId)&&activeId>0?activeId:null);
-          if(activeId&&Number.isSafeInteger(activeId)&&activeId>0) {
+          setActiveCourseId(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0 ? activeId : null);
+          if(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0) {
             try { window.localStorage.setItem('qe:student:activeCourseId',String(activeId)); } catch {}
           }
         }
