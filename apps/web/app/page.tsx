@@ -1,7 +1,7 @@
 'use client';
 
 import { UiText } from './i18n/useUiTranslation';
-import { LanguageSwitcher, LocaleText } from './components/LanguageProvider';
+import { LanguageSwitcher, LocaleText, useLocale } from './components/LanguageProvider';
 import Link from 'next/link';
 import QuantaEdgeBrand from './components/QuantaEdgeBrand';
 import { useTenantBranding } from './components/TenantBrandingProvider';
