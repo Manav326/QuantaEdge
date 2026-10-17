@@ -136,7 +136,7 @@ public class LearningResourceController {
       }
       default -> throw badRequest("Choose a supported resource source.");
     }
-    Long id=jdbc.query("""
+    Long id=jdbc.queryForObject("""
       insert into learning_resource(resource_type,title,description,language,source_kind,recorded_class_id,
         learning_document_id,content_asset_id,external_url,source_reference,download_allowed,status,version_no,created_by_staff_id)
       values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?) returning id
@@ -171,7 +171,7 @@ public class LearningResourceController {
     }
     PrivateLearningResourceStorageService.StoredResource stored=resourceStorage.store(file,kind);
     try {
-      Long id=jdbc.query("""
+      Long id=jdbc.queryForObject("""
         insert into learning_resource(resource_type,title,description,language,source_kind,storage_key,original_filename,
           media_type,file_size_bytes,sha256,download_allowed,status,version_no,supersedes_resource_id,created_by_staff_id)
         values(?,?,?,?, 'PRIVATE_UPLOAD',?,?,?,?,?,?,'DRAFT',?,?,?) returning id
@@ -338,7 +338,7 @@ public class LearningResourceController {
     }
     validateResourceTargetScope(resource,chapterId);
     try {
-      Long id=jdbc.query("""
+      Long id=jdbc.queryForObject("""
         insert into learning_resource_assignment(resource_id,target_kind,chapter_id,lesson_id,artifact_id,sort_order,status,created_by_staff_id)
         values(?,?,?,?,?,?,'DRAFT',?) returning id
         """,(rs,rowNum)->rs.getLong(1),resourceId,targetKind,chapterId,lessonId,artifactId,sortOrder,context.staffId());
@@ -656,12 +656,12 @@ public class LearningResourceController {
     String kind=String.valueOf(resource.get("source_kind"));
     if("RECORDED_CLASS".equals(kind)) {
       Object sid=resource.get("recording_subject_id"),cid=resource.get("recording_chapter_id");
-      if(!(sid instanceof Number n)||n.longValue()!=subjectId)throw badRequest("The recording and target chapter must belong to the same subject.");
-      if(cid instanceof Number n&&n.longValue()!=chapterId)throw badRequest("This recording is already chapter-specific and cannot be assigned to another chapter.");
+      if(!(sid instanceof Number recordingSubjectId)||recordingSubjectId.longValue()!=subjectId)throw badRequest("The recording and target chapter must belong to the same subject.");
+      if(cid instanceof Number recordingChapterId&&recordingChapterId.longValue()!=chapterId)throw badRequest("This recording is already chapter-specific and cannot be assigned to another chapter.");
     } else if("LEARNING_DOCUMENT".equals(kind)) {
       Object sid=resource.get("document_subject_id"),cid=resource.get("document_chapter_id");
-      if(!(sid instanceof Number n)||n.longValue()!=subjectId)throw badRequest("The PDF document and target chapter must belong to the same subject.");
-      if(cid instanceof Number n&&n.longValue()!=chapterId)throw badRequest("This chapter PDF can only be assigned to its canonical chapter.");
+      if(!(sid instanceof Number documentSubjectId)||documentSubjectId.longValue()!=subjectId)throw badRequest("The PDF document and target chapter must belong to the same subject.");
+      if(cid instanceof Number documentChapterId&&documentChapterId.longValue()!=chapterId)throw badRequest("This chapter PDF can only be assigned to its canonical chapter.");
     }
   }
 

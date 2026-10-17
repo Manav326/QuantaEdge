@@ -293,3 +293,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Added 44 semantic admin.assessments messages. Canonical catalogs now have **2530 keys per locale**, with identical key sets and matching interpolation placeholders; all six app-local JSON copies are synchronized from the canonical sources.
 - Backend APIs, status payloads, grader permissions, attempt snapshots, mark validation, certificate rules, and result-release decisions remain unchanged.
 - Expanded the CI literal guard to cover representative tabs, filters, grader assignment, queue search, and review-dialog strings. The current code commit's build and browser acceptance remain pending.
+
+
+## Build blocker repair — Learning resource API compilation (2026-10-17)
+
+- CI run [#3042](https://github.com/Manav326/QuantaEdge/actions/runs/39005066760) exposed a Java compile failure in `LearningResourceController.java`, inherited from the provider-neutral learning-resource catalogue changes; the failure was unrelated to the UI-localization commits.
+- Corrected three INSERT...RETURNING id calls to use `JdbcTemplate.queryForObject` (the scalar `Long` result is required rather than the `List` returned by `query`) and gave the recording/document subject and chapter pattern variables distinct names.
+- Request bodies, SQL, authorization and scope validation rules were otherwise left unchanged. This is a compile-fix only; the next full workflow must verify the fix before build status is marked green.
