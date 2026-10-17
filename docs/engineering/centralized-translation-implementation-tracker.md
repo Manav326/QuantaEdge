@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Current `main` head reviewed: `7c57daccaa2a4f6c6cf8e2cf76cc3b5a6d13d458`. [Latest main commit](https://github.com/Manav326/QuantaEdge/commit/7c57daccaa2a4f6c6cf8e2cf76cc3b5a6d13d458). Latest localization-code full build: [Actions run #3021](https://github.com/Manav326/QuantaEdge/actions/runs/38996750050), commit `66a2c3d0b0a9b9685210b199b536cbdb145f30f3`, all required jobs passed. Newer main commits after that are textbook-content checkpoints; they did not add newer localization changes.
+**Baseline reviewed before the route-inventory continuation:** [`8ba4f10c6f60c05da77719039d3a7700822fefae`](https://github.com/Manav326/QuantaEdge/commit/8ba4f10c6f60c05da77719039d3a7700822fefae). Latest successful full localization-code build remains [Actions #3021](https://github.com/Manav326/QuantaEdge/actions/runs/38996750050) for commit `66a2c3d0b0a9b9685210b199b536cbdb145f30f3`; it validates that older localization-code commit, not the new inventory changes.
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -95,7 +95,7 @@ Preserve these rules when implementing the next phase:
 
 ### P1 — Complete route and static-string coverage
 
-- [ ] Build a complete machine-readable route inventory from the Next.js app trees for web, admin and People Operations.
+- [ ] Validate the CI-generated machine-readable route inventory for web, admin and People Operations, then turn it into a route-by-route localization coverage matrix (generator and artifact wiring added; see latest continuation).
 - [x] Migrate admin login and overview/dashboard first pass, plus the Language Review workflow page. Validate all with CI before considering these routes complete.
 - [x] Migrate first pass of Student directory, Account Lifecycle and Parent directory copy into the central catalog; verify these routes in browser after CI is green.
 - [ ] Migrate remaining admin page body text: Content Studio, questions, resources, source ingestion, assessments/tests/grading, live classes, staff, certificates, structured lesson preview, session and all dialogs/forms/tables.
@@ -239,3 +239,13 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - The People Operations first-pass coverage now includes directory, access governance, academic assignments/classes, payroll, attendance/leave, workforce lifecycle and employee self-service, in addition to sign-in/password setup. Remaining route/dialog field-level copy still needs a coverage audit and acceptance pass.
 - Current implementation is **not complete end-to-end**. The centralized UI catalog and cross-app locale preference bridge exist, but an automated hardcoded-string coverage inventory, all remaining admin/People/student deep-route strings, browser-level locale-persistence tests, and the dedicated server-side AI translation/cache boundary for eligible dynamic content remain open. Reuse the existing versioned, context-aware, review-gated curriculum translator rather than introducing a duplicate service.
 - Resume from current `main` and this tracker. Next work: inventory remaining app routes/components, fix any CI regression immediately, continue safe message extraction, and update this tracker and catalog parity proof after each batch.
+
+
+## Latest continuation — machine-readable UI route inventory (2026-10-17)
+
+- Baseline reviewed before this continuation: [`8ba4f10c6f60c05da77719039d3a7700822fefae`](https://github.com/Manav326/QuantaEdge/commit/8ba4f10c6f60c05da77719039d3a7700822fefae). This was a content-pipeline checkpoint; no existing UI localization implementation was overwritten.
+- Added `scripts/inventory_ui_routes.mjs` to enumerate Next.js App Router `page.*` screens and `route.*` handlers under `apps/web/app`, `apps/admin/app`, and `apps/people/app`. The inventory preserves route-group and parallel-slot metadata, dynamic route segments, intercepting-route metadata and route-file paths; it skips Next.js private folders.
+- Added `scripts/inventory_ui_routes.test.mjs`. Local validation passed **9/9 tests**, including a temporary fixture-tree scan spanning all three application roots, route groups, dynamic routes, parallel slots, intercepting routes, private folders and route handlers.
+- Updated `.github/workflows/ci.yml` to run those tests, generate JSON at `$RUNNER_TEMP/ui-localization-route-inventory.json`, and upload a `ui-localization-route-inventory` artifact for 14 days on each CI run.
+- The report explicitly says inventory is not translation certification. It also records primary-route duplicates for follow-up rather than automatically labelling any page as translated.
+- **CI validation of this implementation is pending.** After the commit's run finishes, inspect the inventory artifact and update the checklist with the actual route counts. Next implementation step is to use that inventory to audit route-by-route message coverage; continue reusing the existing translation runtime and do not introduce a duplicate AI translation service.

@@ -33,6 +33,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Node.js for localization route inventory
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test UI route inventory generator
+        run: node --test scripts/inventory_ui_routes.test.mjs
+
+      - name: Generate machine-readable UI route inventory
+        run: node scripts/inventory_ui_routes.mjs --output "$RUNNER_TEMP/ui-localization-route-inventory.json"
+
+      - name: Upload UI localization route inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-localization-route-inventory
+          path: ${{ runner.temp }}/ui-localization-route-inventory.json
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Enforce data-only storage for generated pipeline artifacts
         run: python scripts/validate_pipeline_data_locations.py --repo-root .
 
