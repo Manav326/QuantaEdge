@@ -36,6 +36,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("if: inputs.mode == 'refresh_benchmark'", refresh_step)
         self.assertIn("python scripts/quantaedge_layers_6_8.py refresh-benchmark", refresh_step)
         self.assertIn("--commit-checkpoints", refresh_step)
+        self.assertIn("Guard fixed Class 6 benchmark and refresh modes", workflow)
+        self.assertIn("ncert-c6-english-fecu1", workflow)
         ollama_step = workflow[ollama:workflow.index("- name: Pull only candidate models", ollama)]
         self.assertIn("inputs.mode == 'benchmark'", ollama_step)
         self.assertNotIn("refresh_benchmark", ollama_step)

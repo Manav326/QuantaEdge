@@ -161,6 +161,19 @@ jobs:
           python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
           python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
           python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
+      - name: Guard fixed Class 6 benchmark and refresh modes
+        if: inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark'
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+        run: |
+          set -euo pipefail
+          [[ "$CLASS_NO" == "6" && "$SOURCE_BOOK_ID" == "ncert-c6-english-fecu1" ]] || {
+            echo "::error::Benchmark and refresh_benchmark are pinned to Class 6 English NCERT Curiosity (ncert-c6-english-fecu1)." >&2
+            exit 2
+          }
+
       - name: Preflight generation checkpoint before model download
         if: inputs.mode == 'run' || inputs.mode == 'resume'
         id: generation_preflight
@@ -275,11 +288,13 @@ jobs:
       - name: Refresh saved benchmark samples without model inference
         if: inputs.mode == 'refresh_benchmark'
         shell: bash
+        env:
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
         run: |
           set -euo pipefail
           python scripts/quantaedge_layers_6_8.py refresh-benchmark \
             --repo-root "$GITHUB_WORKSPACE" \
-            --source-book-id ncert-c6-english-fecu1 \
+            --source-book-id "$SOURCE_BOOK_ID" \
             --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --commit-checkpoints
 
