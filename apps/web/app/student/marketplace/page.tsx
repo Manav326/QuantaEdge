@@ -120,7 +120,10 @@ export default function StudentMarketplacePage() {
       const order = await readJson(await fetch('/api/v1/marketplace/courses/' + courseId + '/orders', {
         method: 'POST',
         credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': crypto.randomUUID(),
+        },
         body: '{}',
       })) as CheckoutResponse;
       if (!order.orderId || !Number.isSafeInteger(Number(order.localOrderId)) || Number(order.localOrderId) <= 0 ||
