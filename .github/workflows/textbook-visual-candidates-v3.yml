@@ -36,10 +36,10 @@ on:
         options: ["6", "7", "8"]
         default: "7"
       analysis_mode:
-        description: "Run Layers 1–3 only or continue through full Layer 4 analysis and Layer 5 coverage"
+        description: "Prepare candidates, run all stages, or resume Layers 4–5 from saved checkpoints without rebuilding candidate packs"
         required: true
         type: choice
-        options: ["prepare_only", "analyze_all"]
+        options: ["prepare_only", "analyze_all", "resume_layers_4_5"]
         default: "analyze_all"
       vision_model:
         description: "Ollama vision model used in Layer 4"
@@ -107,7 +107,7 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
-          [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" ]] || { echo "Invalid analysis_mode"; exit 2; }
+          [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
           python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
@@ -230,7 +230,32 @@ jobs:
           PY
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
+      - name: Rebuild only Layer 1 visual inventories for checkpoint resume
+        if: inputs.analysis_mode == 'resume_layers_4_5'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$GITHUB_WORKSPACE" <<'PY'
+          import json, subprocess, sys
+          from pathlib import Path
+          selection_path, source_root_arg, repo_arg = sys.argv[1:]
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          source_root, repo = Path(source_root_arg), Path(repo_arg)
+          for source in selection["sources"]:
+              slug = source["book_slug"]
+              work = source_root / slug
+              invdir = work / "inventory"
+              subprocess.run([sys.executable, "scripts/extract_visual_asset_inventory.py", "--pdf", str(work / "source.pdf"), "--manifest", str(work / "source.manifest.json"), "--output-dir", str(invdir), "--preview-width", "1200"], cwd=repo, check=True)
+              inventory = json.loads((invdir / "visual-inventory.v1.json").read_text(encoding="utf-8"))
+              if inventory.get("source", {}).get("pdf_sha256") != source.get("sha256"):
+                  raise SystemExit(f"{slug}: resumed inventory source hash mismatch.")
+              if not isinstance(inventory.get("assets"), list):
+                  raise SystemExit(f"{slug}: resumed inventory has no assets list.")
+              print(json.dumps({"book_id": source["book_id"], "slug": slug, "inventory_assets": len(inventory["assets"]), "candidate_pack_rebuild": False}))
+          PY
+
       - name: Build review-only candidate packs and attachment manifests for all six source books
+        if: inputs.analysis_mode != 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -311,6 +336,7 @@ jobs:
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
       - name: Publish immutable per-book candidate packs and persist bundle indexes
+        if: inputs.analysis_mode != 'resume_layers_4_5'
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
@@ -362,6 +388,7 @@ jobs:
           PY
 
       - name: Rebuild the catalog, test candidate-to-content contracts, and commit the full batch
+        if: inputs.analysis_mode != 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -387,7 +414,7 @@ jobs:
 
 
       - name: Start Ollama container and load vision model for Layer 4
-        if: inputs.analysis_mode == 'analyze_all'
+        if: inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -402,7 +429,7 @@ jobs:
           docker exec quantaedge-ollama ollama pull "$VISION_MODEL"
 
       - name: Run exhaustive, resumable Layers 4–5 for the selected class
-        if: inputs.analysis_mode == 'analyze_all'
+        if: inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -416,11 +443,11 @@ jobs:
             --batch-size 5
 
       - name: Stop Ollama container
-        if: always() && inputs.analysis_mode == 'analyze_all'
+        if: always() && (inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5')
         run: docker rm -f quantaedge-ollama >/dev/null 2>&1 || true
 
       - name: Summarize integrated eight-layer pipeline
-        if: always() && inputs.analysis_mode == 'analyze_all'
+        if: always() && (inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5')
         shell: bash
         run: |
           {
