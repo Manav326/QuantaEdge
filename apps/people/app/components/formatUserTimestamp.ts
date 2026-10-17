@@ -7,11 +7,11 @@ export function formatUserTimestamp(value?: string | number | Date | null): stri
   const date = value instanceof Date ? value : new Date(value);
   if (!Number.isFinite(date.getTime())) return '—';
   const parts = new Intl.DateTimeFormat('en-IN', {
-    weekday: 'short', day: '2-digit', month: 'short', year: 'numeric',
+    weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata',
   }).formatToParts(date);
   const read = (type: Intl.DateTimeFormatPartTypes) => parts.find(part => part.type === type)?.value ?? '';
   const formattedTime = new Intl.DateTimeFormat('en-IN', {
-    hour: 'numeric', minute: '2-digit', hour12: true,
+    hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata',
   }).format(date);
   const time = formattedTime.replace(/\b(am|pm)\b/i, period => period.toUpperCase());
   return `${read('weekday')} ${read('day')} ${read('month')} ${read('year')}, ${time}`;
