@@ -26,7 +26,7 @@ The institution editor saves the preset, default appearance and primary/accent c
 
 - `TenantBrandingProvider` resolves institution context and supplies API-normalized `themeTokens`.
 - `ColorThemeProvider` chooses light/dark from the user's explicit appearance preference or the system preference and maps semantic CSS variables on the document root.
-- `AppearanceModeButton` switches between System, Dark and Light in the learner/parent workspace.
+- `AppearanceModeButton` cycles through School default, System, Dark and Light in the learner/parent workspace. School default always re-applies the institution's configured appearance after a user override.
 - Existing CSS aliases are bridged to semantic roles during migration; new components should consume `--qe-color-*` roles rather than add fixed colours.
 - Canonical QuantaEdge logo/name assets are not recoloured by this system.
 
@@ -41,6 +41,6 @@ The institution editor saves the preset, default appearance and primary/accent c
 
 ## Contrast, safety and acceptance
 
-All input colours are six-digit hexadecimal values and tenant configuration cannot submit arbitrary CSS. Generated foreground colours are selected centrally. API tests cover schema handling, legacy migration, round trips, curated preset palettes and contrast. Normal text targets at least 4.5:1 contrast; large text and relevant focus/control indicators target at least 3:1. These checks do not substitute for visual verification of actual components.
+All input colours are six-digit hexadecimal values and tenant configuration cannot submit arbitrary CSS. Generated foreground colours are selected centrally. The navigation background is darkened further when necessary to maintain 4.5:1 contrast with navigation text, including bright custom primary colours. API tests cover schema handling, legacy migration, round trips, curated preset palettes and contrast. Normal text targets at least 4.5:1 contrast; large text and relevant focus/control indicators target at least 3:1. These checks do not substitute for visual verification of actual components.
 
 CI runs `scripts/check-color-theme-contract.mjs` to assert that API, HRMS editor, web provider/CSS, Android controller/settings and tenant resolution remain connected. Release acceptance still requires a green exact-commit CI run plus browser/Android rendering checks; static source checks alone are not proof of visual correctness.
