@@ -99,11 +99,17 @@ class CandidateBundleCheckpointTests(unittest.TestCase):
         self.assertTrue(missing_artifact("Error: HTTP 404 manifest not found"))
         self.assertTrue(missing_artifact("MANIFEST_UNKNOWN: registry has no matching artifact"))
         reference = "ghcr.io/manav326/quantaedge-textbook-visuals:visual-inventory-v1-class6-class6-en-science-test"
+        tag = reference.rsplit(":", 1)[-1]
+        # Match the actual ORAS/GHCR response from the failed Class 6 run:
+        # "failed to resolve <tag>: <package>:<tag>: not found".
         self.assertTrue(missing_artifact(
-            f"Error response from registry: failed to resolve {reference}: {reference}: not found",
+            f"Error response from registry: failed to resolve {tag}: {reference}: not found",
             reference,
         ))
-        self.assertFalse(missing_artifact(f"failed to resolve {reference}: HTTP 401: access denied", reference))
+        self.assertFalse(missing_artifact(f"failed to resolve {tag}: HTTP 401: access denied", reference))
+        self.assertFalse(missing_artifact(
+            f"failed to resolve {tag}-different: {reference}: not found", reference
+        ))
         self.assertFalse(missing_artifact(f"upstream proxy says {reference} not found", reference))
         self.assertFalse(missing_artifact("HTTP 500: upstream resource not found"))
         self.assertFalse(missing_artifact("HTTP 401: access denied"))
