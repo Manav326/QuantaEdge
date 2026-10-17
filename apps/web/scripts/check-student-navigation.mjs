@@ -84,10 +84,11 @@ assert.notEqual(arrayEnd, -1, 'Parent menu must follow the student navigation co
 const studentGroups = layout.slice(arrayStart, arrayEnd);
 
 const groupIds = [...studentGroups.matchAll(/\bid: '(today|learn|practice|progress|library)'/g)].map((match) => match[1]);
-assert.deepEqual(groupIds, ['today', 'learn', 'practice', 'progress', 'library'], 'Student navigation must have exactly five ordered top-level groups.');
+assert.deepEqual(groupIds, ['today', 'courses', 'learn', 'practice', 'progress', 'library'], 'Student navigation must expose Courses & Marketplace beside the existing learning groups.');
 
 const requiredGroupRoutes = [
   { group: 'today', routes: ['/student'] },
+  { group: 'courses', routes: ['/student/courses', '/student/marketplace'] },
   { group: 'learn', routes: ['/student/learn', '/student/classes'] },
   { group: 'practice', routes: ['/student/practice', '/student/tests', '/student/diagnostic'] },
   { group: 'progress', routes: ['/student/progress', '/student/certificates'] },
@@ -115,6 +116,21 @@ const parentItems = layout.slice(parentStart, parentEnd);
 for (const route of ['/parent', '/parent/children', '/parent/profile']) {
   assert.ok(parentItems.includes(route), `Parent route ${route} must remain configured.`);
 }
+
+const coursePage = read('../app/student/courses/page.tsx');
+const marketplacePage = read('../app/student/marketplace/page.tsx');
+const dashboardPage = read('../app/student/page.tsx');
+assert.ok(coursePage.includes("'/api/v1/students/me/programs'"), 'All Courses must load the authoritative learner course catalogue.');
+assert.ok(coursePage.includes("'/api/v1/students/me/programs/id/'"), 'Switching the active course must go through the server-owned enrolment transition.');
+assert.ok(marketplacePage.includes("'/api/v1/marketplace/courses/'") && marketplacePage.includes("'/api/v1/marketplace/orders/'"),
+  'Marketplace checkout must use server-created Razorpay orders and server-side payment verification.');
+assert.ok(dashboardPage.includes('qe-active-course-section') && dashboardPage.includes('/student/courses') && dashboardPage.includes('/student/marketplace'),
+  'Dashboard must show the active course and link to dedicated Courses and Marketplace screens.');
+assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
+assert.ok(androidApp.includes('FloatingTutorDock(') && androidApp.includes('route == AppRoute.LESSON && tutorOpen'),
+  'Android AI Tutor must be a floating overlay scoped to the active lesson.');
+assert.ok(androidApp.includes('StudentAllCoursesScreen(') && androidApp.includes('StudentMarketplaceScreen('),
+  'Android must have dedicated All Courses and Marketplace routes.');
 
 assert.ok(layout.includes('visibleStudentNavGroups.map(group => group.href ?'), 'Desktop student navigation must use the grouped configuration.');
 assert.ok(layout.includes('qe-student-mobile-nav'), 'Mobile student navigation must use the grouped configuration.');
