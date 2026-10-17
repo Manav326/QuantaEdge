@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.Copy
+import java.security.MessageDigest
 
 plugins {
     id("com.android.application")
@@ -42,7 +43,7 @@ val tenantPackageSlug = configuredInstitutionCode.lowercase()
     .filter { it in 'a'..'z' || it in '0'..'9' }
     .take(24).ifBlank { "school" }
 val tenantPackageHash = if (configuredInstitutionCode.isBlank()) "" else
-    java.security.MessageDigest.getInstance("SHA-256")
+    MessageDigest.getInstance("SHA-256")
         .digest(configuredInstitutionCode.toByteArray(Charsets.UTF_8))
         .take(4).joinToString("") { "%02x".format(it) }
 val configuredInstitutionApplicationId = providers.gradleProperty("quantaedgeInstitutionApplicationId")
