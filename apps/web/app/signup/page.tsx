@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 import { LanguageSwitcher, useLocale } from '../components/LanguageProvider';
+import { useTenantBranding } from '../components/TenantBrandingProvider';
 
 async function readJson(response: Response): Promise<any> {
   const body = await response.json().catch(() => ({}));
@@ -16,6 +17,7 @@ async function readJson(response: Response): Promise<any> {
 export default function SignupPage() {
   const router = useRouter();
   const { locale } = useLocale();
+  const { brand } = useTenantBranding();
   const [method, setMethod] = useState<'choice' | 'mobile'>('choice');
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
@@ -74,7 +76,7 @@ export default function SignupPage() {
       <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
       <section className="auth-card parent-auth-card" aria-labelledby="signup-heading">
-        <Link href="/" className="auth-back-link">{english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ'}</Link>
+        <Link href="/" className="auth-back-link">{brand ? (english ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : (english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ')}</Link>
         <span className="eyebrow">{english ? 'YOUR LEARNING STARTS HERE' : 'आपकी सीखने की शुरुआत'}</span>
         <h1 id="signup-heading">{english ? 'Create your account' : 'अपना खाता बनाएँ'}</h1>
         <p>{english ? 'Use a verified Gmail account, or verify your mobile number with a one-time code.' : 'सत्यापित Gmail खाते का उपयोग करें या OTP से मोबाइल नंबर सत्यापित करें।'}</p>
