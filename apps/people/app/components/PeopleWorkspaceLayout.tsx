@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
 type StaffSession = {
   staffId?: number;
@@ -13,88 +14,45 @@ type StaffSession = {
 };
 
 type NavigationItem = {
-  label: string;
+  message: string;
   href: string;
   icon: string;
   permissions?: string[];
 };
 
 type NavigationGroup = {
-  label: string;
+  message: string;
   items: NavigationItem[];
 };
 
 const NAVIGATION: NavigationGroup[] = [
-  {
-    label: 'People and organization',
-    items: [
-      { label: 'Employee directory', href: '/', icon: '◉', permissions: ['HR_EMPLOYEE_VIEW'] },
-      {
-        label: 'Workforce lifecycle',
-        href: '/workforce',
-        icon: '↗',
-        permissions: [
-          'HR_RECRUITMENT_VIEW', 'HR_RECRUITMENT_MANAGE',
-          'HR_PERFORMANCE_VIEW', 'HR_PERFORMANCE_MANAGE',
-          'HR_ASSET_VIEW', 'HR_ASSET_MANAGE',
-          'HR_EXIT_VIEW', 'HR_EXIT_MANAGE',
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Access governance',
-    items: [
-      { label: 'Employee login access', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
-    ],
-  },
-  {
-    label: 'Time and leave',
-    items: [
-      {
-        label: 'Attendance and leave',
-        href: '/attendance',
-        icon: '▦',
-        permissions: [
-          'HR_ATTENDANCE_VIEW', 'HR_ATTENDANCE_MANAGE',
-          'HR_LEAVE_VIEW', 'HR_LEAVE_MANAGE',
-          'HR_ATTENDANCE_CORRECTION_REVIEW',
-          'HR_APPROVAL_POLICY_MANAGE',
-          'HR_HOLIDAY_VIEW', 'HR_HOLIDAY_MANAGE',
-          'HR_LEAVE_BALANCE_VIEW', 'HR_LEAVE_BALANCE_MANAGE',
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Payroll',
-    items: [
-      {
-        label: 'Payroll and compensation',
-        href: '/payroll',
-        icon: '₹',
-        permissions: ['HR_PAYROLL_VIEW', 'HR_PAYROLL_MANAGE', 'HR_PAYROLL_APPROVE', 'HR_PAYROLL_PAY'],
-      },
-    ],
-  },
-  {
-    label: 'Academic workforce',
-    items: [
-      {
-        label: 'Teaching assignments',
-        href: '/assignments',
-        icon: '◇',
-        permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE'],
-      },
-      { label: 'My teaching classes', href: '/my-classes', icon: '▤', permissions: ['TEACHING_ASSIGNMENT_VIEW'] },
-    ],
-  },
-  {
-    label: 'My employment',
-    items: [
-      { label: 'Employee self-service', href: '/self-service', icon: '○' },
-    ],
-  },
+  { message: 'people.navigation.group.organization', items: [
+    { message: 'people.navigation.employeeDirectory', href: '/', icon: '◉', permissions: ['HR_EMPLOYEE_VIEW'] },
+    { message: 'people.navigation.workforceLifecycle', href: '/workforce', icon: '↗', permissions: [
+      'HR_RECRUITMENT_VIEW', 'HR_RECRUITMENT_MANAGE', 'HR_PERFORMANCE_VIEW', 'HR_PERFORMANCE_MANAGE',
+      'HR_ASSET_VIEW', 'HR_ASSET_MANAGE', 'HR_EXIT_VIEW', 'HR_EXIT_MANAGE',
+    ] },
+  ] },
+  { message: 'people.navigation.group.access', items: [
+    { message: 'people.navigation.loginAccess', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
+  ] },
+  { message: 'people.navigation.group.timeLeave', items: [
+    { message: 'people.navigation.attendanceLeave', href: '/attendance', icon: '▦', permissions: [
+      'HR_ATTENDANCE_VIEW', 'HR_ATTENDANCE_MANAGE', 'HR_LEAVE_VIEW', 'HR_LEAVE_MANAGE',
+      'HR_ATTENDANCE_CORRECTION_REVIEW', 'HR_APPROVAL_POLICY_MANAGE', 'HR_HOLIDAY_VIEW',
+      'HR_HOLIDAY_MANAGE', 'HR_LEAVE_BALANCE_VIEW', 'HR_LEAVE_BALANCE_MANAGE',
+    ] },
+  ] },
+  { message: 'people.navigation.group.payroll', items: [
+    { message: 'people.navigation.payrollCompensation', href: '/payroll', icon: '₹', permissions: ['HR_PAYROLL_VIEW', 'HR_PAYROLL_MANAGE', 'HR_PAYROLL_APPROVE', 'HR_PAYROLL_PAY'] },
+  ] },
+  { message: 'people.navigation.group.academic', items: [
+    { message: 'people.navigation.teachingAssignments', href: '/assignments', icon: '◇', permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE'] },
+    { message: 'people.navigation.myClasses', href: '/my-classes', icon: '▤', permissions: ['TEACHING_ASSIGNMENT_VIEW'] },
+  ] },
+  { message: 'people.navigation.group.selfService', items: [
+    { message: 'people.navigation.employeeSelfService', href: '/self-service', icon: '○' },
+  ] },
 ];
 
 function roleLabel(role?: string): string {
@@ -113,6 +71,7 @@ function initials(name: string): string {
 export default function PeopleWorkspaceLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname() || '/';
   const router = useRouter();
+  const { locale, setLocale, t } = useUiTranslation();
   const publicRoute = pathname === '/login' || pathname.startsWith('/login/') || pathname === '/change-password';
   const [session, setSession] = useState<StaffSession | null>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -264,10 +223,10 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
 
   function renderNavigation(mobile = false) {
     return (
-      <nav className="qe-people-navigation" aria-label="People Operations navigation">
+      <nav className="qe-people-navigation" aria-label={t('people.navigation.label')}>
         {visibleGroups.map(group => (
-          <section className="qe-people-navigation-group" key={group.label}>
-            <h2 className="qe-people-navigation-heading">{group.label}</h2>
+          <section className="qe-people-navigation-group" key={group.message}>
+            <h2 className="qe-people-navigation-heading">{t(group.message)}</h2>
             {group.items.map(item => {
               const isActive = item.href === pathname;
               return (
@@ -276,11 +235,11 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
                   href={item.href}
                   className={'qe-people-navigation-link' + (isActive ? ' is-active' : '')}
                   aria-current={isActive ? 'page' : undefined}
-                  title={collapsed && !mobile ? item.label : undefined}
+                  title={collapsed && !mobile ? t(item.message) : undefined}
                   onClick={mobile ? () => setMobileMenuOpen(false) : undefined}
                 >
                   <span className="qe-people-navigation-icon" aria-hidden="true">{item.icon}</span>
-                  <span className="qe-people-navigation-label">{item.label}</span>
+                  <span className="qe-people-navigation-label">{t(item.message)}</span>
                 </Link>
               );
             })}
@@ -292,7 +251,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
 
   return (
     <div className={'qe-people-workspace' + (collapsed ? ' is-collapsed' : '')}>
-      <a className="qe-people-skip-link" href="#main-content">Skip to main content</a>
+      <a className="qe-people-skip-link" href="#main-content">{t('people.skipToMain')}</a>
       <aside className="qe-people-sidebar" aria-label="Primary workspace">
         <div className="qe-people-brand-row">
           <div className="qe-people-brand">
@@ -301,20 +260,20 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
               variant={collapsed ? 'compact' : 'header'}
               className={'qe-people-brand-lockup' + (collapsed ? ' qe-people-brand-lockup--collapsed' : '')}
             />
-            {!collapsed && <span>PEOPLE OPERATIONS</span>}
+            {!collapsed && <span>{t('people.brand.operations')}</span>}
           </div>
           <button
             type="button"
             className="qe-people-collapse-button"
             onClick={toggleCollapsed}
-            aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+            aria-label={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')}
             aria-expanded={!collapsed}
-            title={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+            title={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')}
           >{collapsed ? '»' : '«'}</button>
         </div>
 
         <div className="qe-people-sidebar-scroll">
-          <div className="qe-people-workspace-label">WORKSPACE</div>
+          <div className="qe-people-workspace-label">{t('people.workspace.label')}</div>
           {renderNavigation()}
         </div>
 
@@ -329,8 +288,8 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
             className="qe-people-logout"
             onClick={() => void logout()}
             disabled={loggingOut}
-            title={loggingOut ? 'Signing out' : 'Sign out'}
-            aria-label={loggingOut ? 'Signing out' : 'Sign out'}
+            title={t(loggingOut ? 'people.account.signingOut' : 'people.account.signOut')}
+            aria-label={t(loggingOut ? 'people.account.signingOut' : 'people.account.signOut')}
           >{loggingOut ? '…' : '↪'}</button>
         </footer>
       </aside>
@@ -345,15 +304,22 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
               onClick={() => setMobileMenuOpen(open => !open)}
               aria-expanded={mobileMenuOpen}
               aria-controls="qe-people-mobile-menu"
-              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-label={t(mobileMenuOpen ? 'people.navigation.close' : 'people.navigation.open')}
             >{mobileMenuOpen ? '×' : '☰'}</button>
             <div className="qe-people-header-context">
               <QuantaEdgeBrand href="/" variant="compact" className="qe-people-mobile-brand-lockup" />
-              <strong>People Operations</strong>
+              <strong>{t('people.brand.title')}</strong>
             </div>
           </div>
           <div className="qe-people-header-actions">
-            <span className="qe-people-workspace-pill"><i aria-hidden="true" /> Staff workspace</span>
+            <label className="qe-people-language-select">
+              <span>{t('common.language.label')}</span>
+              <select value={locale} onChange={event => setLocale(event.target.value as typeof locale)} aria-label={t('common.language.label')}>
+                <option value="hinglish">{t('common.language.hinglish')}</option>
+                <option value="english">{t('common.language.english')}</option>
+              </select>
+            </label>
+            <span className="qe-people-workspace-pill"><i aria-hidden="true" /> {t('people.workspace.staff')}</span>
             <span className="qe-people-header-user" title={displayName}>{displayName}</span>
           </div>
         </header>
@@ -369,7 +335,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
             type="button"
             className="qe-people-mobile-backdrop"
             onClick={() => setMobileMenuOpen(false)}
-            aria-label="Close navigation menu"
+            aria-label={t('people.navigation.close')}
             tabIndex={-1}
           />
           <section
@@ -378,14 +344,14 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
             ref={mobileMenuRef}
             role="dialog"
             aria-modal="true"
-            aria-label="People Operations navigation"
+            aria-label={t('people.navigation.label')}
           >
             <header className="qe-people-mobile-menu-header">
               <div>
-                <strong>People Operations</strong>
-                <small>Browse by workflow</small>
+                <strong>{t('people.brand.title')}</strong>
+                <small>{t('people.navigation.browseByWorkflow')}</small>
               </div>
-              <button type="button" onClick={() => setMobileMenuOpen(false)} aria-label="Close navigation">×</button>
+              <button type="button" onClick={() => setMobileMenuOpen(false)} aria-label={t('people.navigation.close')}>×</button>
             </header>
             <div className="qe-people-mobile-menu-scroll">
               {renderNavigation(true)}
@@ -399,7 +365,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
                 </div>
               </div>
               <button type="button" onClick={() => void logout()} disabled={loggingOut}>
-                {loggingOut ? 'Signing out…' : '↪ Sign out'}
+                {loggingOut ? t('people.account.signingOut') : '↪ ' + t('people.account.signOut')}
               </button>
             </footer>
           </section>

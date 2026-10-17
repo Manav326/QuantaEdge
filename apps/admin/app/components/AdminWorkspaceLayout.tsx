@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { translateUi } from '../i18n/catalog';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
 import {
   ADMIN_NAV_GROUPS,
@@ -38,6 +39,22 @@ function activeSection(pathname: string): AdminSection {
   return 'overview';
 }
 
+function normalizeAdminLocale(value: unknown): AdminLocale | null {
+  const raw = String(value ?? '').trim().toLowerCase();
+  if (raw === 'english' || raw === 'en') return 'english';
+  if (raw === 'hinglish' || raw === 'hindi' || raw === 'hi') return 'hinglish';
+  return null;
+}
+function readSharedAdminLocale(): AdminLocale | null {
+  const match = document.cookie.match(/(?:^|;\\s*)qe-locale=([^;]+)/);
+  return match ? normalizeAdminLocale(decodeURIComponent(match[1])) : null;
+}
+function persistAdminLocale(locale: AdminLocale) {
+  try { window.localStorage.setItem('qe-locale', locale); } catch {}
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = 'qe-locale=' + locale + '; Path=/; Max-Age=31536000; SameSite=Lax' + secure;
+}
+
 export default function AdminWorkspaceLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const publicRoute = pathname === '/login' || pathname === '/session';
@@ -48,14 +65,21 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const mobileMoreButtonRef = useRef<HTMLButtonElement | null>(null);
   const mobileMenuWasOpen = useRef(false);
   const router = useRouter();
+  const t = (key: string, values: Record<string, string | number> = {}) => translateUi(locale, key, values);
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem('qe-locale');
-      if (saved === 'hinglish' || saved === 'english') setLocale(saved);
-    } catch { /* Keep the default locale if storage is unavailable. */ }
+    let saved: AdminLocale | null = null;
+    try { saved = readSharedAdminLocale() ?? normalizeAdminLocale(window.localStorage.getItem('qe-locale')); } catch {}
+    if (saved) {
+      setLocale(saved);
+      document.documentElement.lang = saved === 'english' ? 'en' : 'hi';
+      if (!readSharedAdminLocale()) persistAdminLocale(saved);
+    }
     const onStorage = (event: StorageEvent) => {
-      if (event.key === 'qe-locale' && (event.newValue === 'hinglish' || event.newValue === 'english')) setLocale(event.newValue);
+      if (event.key === 'qe-locale') {
+        const next = normalizeAdminLocale(event.newValue);
+        if (next) { setLocale(next); document.documentElement.lang = next === 'english' ? 'en' : 'hi'; }
+      }
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
@@ -129,7 +153,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   function changeLocale(next: AdminLocale) {
     setLocale(next);
     if (typeof document !== 'undefined') document.documentElement.lang = next === 'hinglish' ? 'hi' : 'en';
-    try { window.localStorage.setItem('qe-locale', next); } catch { /* Keep the in-memory preference. */ }
+    persistAdminLocale(next);
   }
 
   async function logout() {
@@ -175,14 +199,14 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           <div className="qe-admin-global-context">
             <span className="qe-admin-global-context-label">QUANTAEDGE</span>
             <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-global-brand" />
-            <strong>Staff workspace</strong>
+            <strong>{t('admin.workspace.staff')}</strong>
           </div>
           <div className="qe-admin-global-actions">
             <label className="qe-admin-language-switcher">
-              <span aria-hidden="true">文</span><span className="qe-admin-language-label">भाषा / Language</span>
-              <select value={locale} onChange={event => changeLocale(event.target.value as AdminLocale)} aria-label="भाषा चुनें / Choose language">
-                <option value="hinglish">Hinglish (हिन्दी + English)</option>
-                <option value="english">English</option>
+              <span aria-hidden="true">文</span><span className="qe-admin-language-label">{t('admin.language.label')}</span>
+              <select value={locale} onChange={event => changeLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
+                <option value="hinglish">{t('common.language.hinglish')}</option>
+                <option value="english">{t('common.language.english')}</option>
               </select>
             </label>
           </div>
@@ -204,19 +228,19 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
             className="qe-admin-mobile-menu"
             role="dialog"
             aria-modal="true"
-            aria-label={locale === 'english' ? 'All workspace tools' : 'सभी workspace विकल्प'}
+            aria-label={t('common.navigation.allWorkspaceTools')}
           >
             <header className="qe-admin-mobile-menu-header">
               <div>
-                <strong>{locale === 'english' ? 'All workspace tools' : 'सभी workspace विकल्प'}</strong>
-                <small>{locale === 'english' ? 'Browse by workflow' : 'काम के अनुसार विकल्प'}</small>
+                <strong>{t('common.navigation.allWorkspaceTools')}</strong>
+                <small>{t('common.navigation.browseByWorkflow')}</small>
               </div>
-              <button type="button" autoFocus onClick={() => setMobileMenuOpen(false)} aria-label={locale === 'english' ? 'Close menu' : 'मेनू बंद करें'}>×</button>
+              <button type="button" autoFocus onClick={() => setMobileMenuOpen(false)} aria-label={t('common.navigation.close')}>×</button>
             </header>
             <div className="qe-admin-mobile-menu-scroll">
               {visibleOverviewItems.map(item => (
                 <section className="qe-admin-mobile-menu-group qe-admin-mobile-menu-overview" key={item.key}>
-                  <h2>{locale === 'english' ? 'Workspace' : 'Workspace'}</h2>
+                  <h2>{t('common.navigation.workspace')}</h2>
                   <div className="qe-admin-mobile-menu-items">
                     <Link href={adminNavHref(item, value.role)} onClick={() => setMobileMenuOpen(false)} aria-current={active === item.key ? 'page' : undefined} className={active === item.key ? 'is-active' : ''}>
                       <span className="qe-admin-mobile-menu-icon" aria-hidden="true">{item.icon}</span>
@@ -241,14 +265,14 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
             </div>
             <footer className="qe-admin-mobile-menu-footer">
               <div className="qe-admin-mobile-user">
-                <strong title={session?.displayName || (locale === 'english' ? 'Staff account' : 'स्टाफ खाता')}>{session?.displayName || (locale === 'english' ? 'Staff account' : 'स्टाफ खाता')}</strong>
-                <span className={'qe-staff-role-badge qe-staff-role-' + adminRoleClass(value.role)} aria-label={'Assigned role: ' + adminRoleLabel(value.role)}>
+                <strong title={session?.displayName || (t('common.account.staff'))}>{session?.displayName || (t('common.account.staff'))}</strong>
+                <span className={'qe-staff-role-badge qe-staff-role-' + adminRoleClass(value.role)} aria-label={t('common.account.assignedRole', { role: adminRoleLabel(value.role, locale) })}>
                   <span className="qe-staff-role-dot" aria-hidden="true" />
-                  {adminRoleLabel(value.role)}
+                  {adminRoleLabel(value.role, locale)}
                 </span>
               </div>
               <button type="button" onClick={() => void logout()} disabled={loggingOut}>
-                <span aria-hidden="true">↪</span>{loggingOut ? (locale === 'english' ? 'Logging out…' : 'लॉग आउट हो रहा है…') : (locale === 'english' ? 'Log out' : 'लॉग आउट')}
+                <span aria-hidden="true">↪</span>{loggingOut ? (t('common.actions.signingOut')) : (t('common.actions.signOut'))}
               </button>
             </footer>
           </section>
@@ -275,10 +299,10 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           onClick={() => setMobileMenuOpen(open => !open)}
           aria-expanded={mobileMenuOpen}
           aria-controls="qe-admin-mobile-menu"
-          aria-label={locale === 'english' ? 'More navigation options' : 'और विकल्प'}
+          aria-label={t('admin.language.more')}
         >
           <span aria-hidden="true">{mobileMenuOpen ? '×' : '☷'}</span>
-          <small>{locale === 'english' ? 'More' : 'और'}</small>
+          <small>{t('common.navigation.more')}</small>
         </button>
       </nav>
     </div>

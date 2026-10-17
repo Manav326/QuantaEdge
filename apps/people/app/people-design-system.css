@@ -1528,3 +1528,9 @@ button:disabled,
 /* In the collapsed desktop rail, center the brand mark independently of its hidden text. */
 .qe-people-workspace.is-collapsed .qe-people-brand{flex:0 0 auto;align-items:center}
 .qe-people-workspace.is-collapsed .qe-people-brand-lockup{align-self:center}
+
+
+/* Shared interface-language control; preference is persisted with the other QuantaEdge web apps. */
+.qe-people-language-select{display:flex;align-items:center;gap:8px;min-width:0;color:var(--muted);font-size:12px;font-weight:650;white-space:nowrap}
+.qe-people-language-select select{width:auto;max-width:220px;min-height:38px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font:inherit}
+@media(max-width:760px){.qe-people-language-select>span{display:none}.qe-people-language-select select{max-width:160px}}
