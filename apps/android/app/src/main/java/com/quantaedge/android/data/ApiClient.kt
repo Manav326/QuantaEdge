@@ -40,6 +40,8 @@ object ApiClient {
 
     suspend fun getObject(path: String): JSONObject =
         JSONObject(request(path, "GET", null).toString(StandardCharsets.UTF_8))
+    suspend fun getObject(path: String, additionalHeaders: Map<String, String>): JSONObject =
+        JSONObject(request(path, "GET", null, additionalHeaders).toString(StandardCharsets.UTF_8))
     suspend fun getArray(path: String): JSONArray =
         JSONArray(request(path, "GET", null).toString(StandardCharsets.UTF_8))
     suspend fun postObject(path: String, body: JSONObject = JSONObject()): JSONObject =
@@ -53,6 +55,8 @@ object ApiClient {
     suspend fun deleteObject(path: String): JSONObject =
         JSONObject(request(path, "DELETE", null).toString(StandardCharsets.UTF_8))
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
+    suspend fun getBytes(path: String, additionalHeaders: Map<String, String>): ByteArray =
+        request(path, "GET", null, additionalHeaders)
     fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
     fun absoluteUrl(path: String): String = BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
     fun setWorkspace(workspace: String) {
@@ -67,6 +71,8 @@ object ApiClient {
         if (url.startsWith("https://", true) || url.startsWith("http://", true)) url else absoluteUrl(url)
 
     suspend fun getMediaBytes(url: String): ByteArray = request(url, "GET", null)
+    suspend fun getMediaBytes(url: String, additionalHeaders: Map<String, String>): ByteArray =
+        request(url, "GET", null, additionalHeaders)
 
     fun authenticatedHttpClient(): OkHttpClient =
         (client ?: throw IOException("API client is not initialized.")).newBuilder()
