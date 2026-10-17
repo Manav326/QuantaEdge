@@ -81,7 +81,6 @@ export default function StudentHome(){
             try { window.localStorage.setItem('qe:student:activeCourseId',String(activeId)); } catch {}
           }
         }
-        const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true);
         const metrics=await Promise.all(ownedRows.map(async(course:any)=>{
           const id=Number(course.id);
           if(!Number.isSafeInteger(id)||id<=0)return null;
