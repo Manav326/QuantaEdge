@@ -10,7 +10,7 @@ import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import {useRouter} from 'next/navigation';
 
-type ParentRow={id:number;display_name:string;mobile_e164:string;active:boolean;created_at:string;active_children:number;linked_children:number};
+type ParentRow={id:number;display_name:string;mobile_e164:string|null;contact_email?:string|null;google_email?:string|null;gmail_verified:boolean;mobile_verified:boolean;username?:string|null;active:boolean;created_at:string;active_children:number;linked_children:number};
 type ChildRow={id:number;display_name:string;class_code:string;board:string;language:string;student_active:boolean;relationship_active:boolean;consent_status:string;track_codes:string;public_id:string};
 const tracks=[{code:'maths'},{code:'science'}];
 
@@ -137,7 +137,11 @@ export default function AdminParents(){
             {visible.map(parent=><article className="parent-admin-row" key={parent.id}>
               <div className="parent-admin-summary">
                 <div className="admin-parent-avatar">{(parent.display_name||'?').trim().slice(0,1).toUpperCase()}</div>
-                <div className="parent-admin-identity"><strong>{parent.display_name||t('admin.parents.parentFallback')}</strong><span>{parent.mobile_e164}</span><small>{t('admin.parents.joined',{date:parent.created_at?formatUserTimestamp(parent.created_at):'—'})}</small></div>
+                <div className="parent-admin-identity"><strong>{parent.display_name||t('admin.parents.parentFallback')}</strong><span>{parent.mobile_e164||'—'}</span>
+                  <small>{parent.gmail_verified && parent.google_email ? 'Gmail ✓ ' + parent.google_email : (locale === 'english' ? 'Gmail not verified' : 'Gmail सत्यापित नहीं')}</small>
+                  <small>{parent.mobile_verified ? (locale === 'english' ? 'Mobile verified' : 'मोबाइल सत्यापित') : (locale === 'english' ? 'Mobile not verified' : 'मोबाइल सत्यापित नहीं')}</small>
+                  {parent.username&&<small>{(locale === 'english' ? 'Username: ' : 'यूज़रनेम: ')+parent.username}</small>}
+                  <small>{t('admin.parents.joined',{date:parent.created_at?formatUserTimestamp(parent.created_at):'—'})}</small></div>
                 <div className="parent-admin-count"><strong>{parent.active_children}</strong><span>{t('admin.parents.activeChildren')}</span></div>
                 <span className={`admin-status-pill ${parent.active?'active':'inactive'}`}>{parent.active?t('admin.parents.active'):t('admin.parents.suspended')}</span>
                 <button className="parent-secondary-button" onClick={()=>toggleExpand(parent.id)}>{expanded===parent.id?t('admin.parents.hideChildren'):t('admin.parents.viewChildren')} <span>{expanded===parent.id?'↑':'↓'}</span></button>
