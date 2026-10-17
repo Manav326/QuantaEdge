@@ -33,6 +33,17 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("!contains(github.event.head_commit.message || '', 'marker')", workflow.replace("[resume-visual-layers-4-5-classes-7-8]", "marker"))
 
+    def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        preflight = workflow.index("- name: Preflight and restore matching Layer 4 checkpoints before loading the vision model")
+        inventory = workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories")
+        self.assertLess(preflight, inventory, "Do not rebuild missing Layer 1 inventory before validating saved Layer 4 checkpoints.")
+        preflight_step = workflow[preflight:inventory]
+        self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", preflight_step)
+        self.assertIn("resume_preflight", preflight_step)
+        self.assertIn("prior_analysis_started", preflight_step)
+        self.assertIn("refusing to redoing inference", preflight_step) if "refusing to redoing inference" in preflight_step else self.assertIn("refusing to silently redoing inference", preflight_step)
+
     def test_layers_6_to_8_has_all_modes_in_one_entrypoint(self):
         workflow = read("quantaedge-layers-6-8.yml")
         self.assertIn("workflow_dispatch:", workflow)
