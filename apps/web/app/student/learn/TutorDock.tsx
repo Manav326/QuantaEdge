@@ -1,4 +1,5 @@
 'use client';
+import { translateUi } from '../../i18n/catalog';
 
 import {
   useEffect, useRef, useState,
@@ -19,19 +20,12 @@ type MessageBlock =
   | { kind: 'ordered' | 'unordered'; text: string; items: string[] }
   | { kind: 'table'; text: string; headers: string[]; rows: string[][] };
 
-const englishModeLabels: Record<Mode, string> = {
-  HINT: 'Hint',
-  EXPLAIN: 'Explain',
-  EXAMPLE: 'Example',
-  STEP_BY_STEP: 'Step-by-step',
-  CHECK_MY_WORK: 'Check my work',
-};
-const hindiModeLabels: Record<Mode, string> = {
-  HINT: 'संकेत',
-  EXPLAIN: 'समझाएँ',
-  EXAMPLE: 'उदाहरण',
-  STEP_BY_STEP: 'चरण-दर-चरण',
-  CHECK_MY_WORK: 'मेरी जाँच करें',
+const modeLabelKeys: Record<Mode, string> = {
+  HINT: 'legacy.web.hint.1d6232e2',
+  EXPLAIN: 'legacy.web.explain.a2e9d22d',
+  EXAMPLE: 'legacy.web.example.4b2669a8',
+  STEP_BY_STEP: 'legacy.web.step.by.step.9605bcac',
+  CHECK_MY_WORK: 'legacy.web.check.my.work.e1fdf6e4',
 };
 const modeIcons: Record<Mode, string> = {
   HINT: '💡',
@@ -111,29 +105,25 @@ function responseError(response: Response, body: ApiBody, english: boolean, fall
   const code = typeof body.error === 'string' ? body.error : '';
   const message = typeof body.message === 'string' ? body.message.toLowerCase() : '';
   if (code === 'TUTOR_PROVIDER_ERROR' || response.status === 502) {
-    return english
-      ? 'The tutor could not generate a reliable reply this time. Your question is back in the input so you can retry.'
-      : 'ट्यूटर इस बार सही उत्तर नहीं बना सका। आपका प्रश्न इनपुट में वापस है; आप फिर प्रयास कर सकते हैं।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.tutor.could.not.generate.a.reliabl.be4f6d7c');
   }
   if (response.status >= 500 || typeof body.rawText === 'string') {
-    return english
-      ? 'The AI tutor service had a temporary error. Your question is back in the input so you can retry.'
-      : 'AI ट्यूटर सेवा में अस्थायी समस्या आई। आपका प्रश्न इनपुट में वापस है; आप फिर प्रयास कर सकते हैं।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.ai.tutor.service.had.a.temporary.e.6c5debe4');
   }
   if (response.status === 401 || code === 'UNAUTHENTICATED') {
-    return english ? 'Your session may have expired. Please sign in again.' : 'आपका सत्र समाप्त हो गया हो सकता है। कृपया फिर से लॉग इन करें।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.your.session.may.have.expired.please.s.acf06c10');
   }
   if (response.status === 403 || code === 'FORBIDDEN') {
-    return english ? 'You do not have access to this lesson or tutor session.' : 'आपको इस पाठ या ट्यूटर सत्र की अनुमति नहीं है।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.you.do.not.have.access.to.this.lesson..cebc61c5');
   }
   if (message.includes('usage limit') || message.includes('daily tutor')) {
-    return english ? 'You have reached the tutor usage limit. Please try again later.' : 'ट्यूटर उपयोग की सीमा पूरी हो गई है। कृपया बाद में फिर प्रयास करें।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.you.have.reached.the.tutor.usage.limit.58cc47c5');
   }
   if (message.includes('too long')) {
-    return english ? 'Please shorten your message and try again.' : 'कृपया अपना संदेश छोटा करके फिर भेजें।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.please.shorten.your.message.and.try.ag.8e72ae22');
   }
   if (code === 'TUTOR_UNAVAILABLE' || response.status === 503) {
-    return english ? 'The AI tutor is not enabled right now. Please try again later.' : 'AI ट्यूटर अभी चालू नहीं है। कृपया बाद में फिर प्रयास करें।';
+    return translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.ai.tutor.is.not.enabled.right.now..9d74bf87');
   }
   return english ? fallbackEn : fallbackHi;
 }
@@ -235,7 +225,7 @@ function renderInlineText(text: string, english: boolean): ReactNode[] {
       return <code key={key} className="tutor-inline-code">{piece.slice(1, -1)}</code>;
     }
     if (piece.startsWith('$') && piece.endsWith('$')) {
-      return <span key={key} className="tutor-inline-math" role="math" aria-label={english ? 'Math expression' : 'गणितीय व्यंजक'}>{piece.slice(1, -1)}</span>;
+      return <span key={key} className="tutor-inline-math" role="math" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.math.expression.dbeaedb1')}>{piece.slice(1, -1)}</span>;
     }
     if (piece.startsWith('*') && piece.endsWith('*')) return <em key={key}>{piece.slice(1, -1)}</em>;
     return <span key={key}>{piece}</span>;
@@ -257,7 +247,7 @@ function TutorMessageBody({ message, english }: { message: string; english: bool
         return <div className="tutor-table-wrap" key={index}><table className="tutor-table"><thead><tr>{block.headers.map((cell, cellIndex) => <th scope="col" key={cellIndex}>{renderInlineText(cell, english)}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{block.headers.map((_, cellIndex) => <td key={cellIndex}>{renderInlineText(row[cellIndex] || '', english)}</td>)}</tr>)}</tbody></table></div>;
       }
       if (block.kind === 'equation') {
-        return <div className="tutor-equation" role="math" aria-label={english ? 'Math expression' : 'गणितीय व्यंजक'} key={index}>{block.text}</div>;
+        return <div className="tutor-equation" role="math" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.math.expression.dbeaedb1')} key={index}>{block.text}</div>;
       }
       if (block.kind === 'code') return <pre className="tutor-code" key={index}><code>{block.text}</code></pre>;
       return <p key={index}>{renderInlineText(block.text, english)}</p>;
@@ -278,7 +268,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   const responseLanguage = learningLanguage;
   const languageRef = useRef({ english, responseLanguage });
   languageRef.current = { english, responseLanguage };
-  const labels = english ? englishModeLabels : hindiModeLabels;
+  const labels = Object.fromEntries(Object.entries(modeLabelKeys).map(([mode, key]) => [mode, translateUi(english ? 'english' : 'hinglish', key)])) as Record<Mode, string>;
 
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [available, setAvailable] = useState<boolean | null>(null);
@@ -341,17 +331,13 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         const nextSessionId = Number(body.sessionId);
         if (!Number.isFinite(nextSessionId) || nextSessionId <= 0) {
           setAvailable(false);
-          setError(languageRef.current.english
-            ? 'The tutor returned an invalid session. Please reopen the tutor.'
-            : 'ट्यूटर से सही सत्र जानकारी नहीं मिली। कृपया इसे दोबारा खोलें।');
+          setError(languageRef.current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.tutor.returned.an.invalid.session..56b40f2f'));
           return;
         }
         setAvailable(Boolean(body.available));
         setSessionId(nextSessionId);
         if (!body.available) {
-          setError(languageRef.current.english
-            ? 'AI tutor is not enabled for this environment yet.'
-            : 'इस वातावरण में AI ट्यूटर अभी चालू नहीं है।');
+          setError(languageRef.current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.ai.tutor.is.not.enabled.for.this.envir.fee73b3a'));
           return;
         }
         const historyResponse = await fetch('/api/v1/tutor/sessions/' + nextSessionId + '/messages?limit=30', {
@@ -558,9 +544,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       setMode('EXPLAIN');
       if (!body.available) {
         const current = languageRef.current;
-        setError(current.english
-          ? 'A new chat was created, but the tutor is currently unavailable.'
-          : 'नई चैट बन गई है, लेकिन ट्यूटर अभी उपलब्ध नहीं है।');
+        setError(current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.a.new.chat.was.created.but.the.tutor.i.a993d078'));
       }
     } catch {
       const current = languageRef.current;
@@ -617,9 +601,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       if (typeof body.message !== 'string' || !body.message.trim()) {
         setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
         setInput(message);
-        setError(current.english
-          ? 'The tutor returned an empty answer. Please try again.'
-          : 'ट्यूटर से खाली उत्तर मिला। कृपया फिर प्रयास करें।');
+        setError(current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.tutor.returned.an.empty.answer.ple.1947ed0d'));
         return;
       }
       setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string, created_at: new Date().toISOString() }]);
@@ -657,8 +639,8 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       type="button"
       className="tutor-minimized"
       style={bubbleStyle}
-      aria-label={english ? 'Restore QuantaEdge Tutor' : 'क्वांटाएज ट्यूटर फिर खोलें'}
-      title={english ? 'Restore tutor' : 'ट्यूटर फिर खोलें'}
+      aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
+      title={translateUi(english ? 'english' : 'hinglish', 'legacy.web.restore.tutor.c620078d')}
       onPointerDown={beginBubbleDrag}
       onPointerMove={moveBubble}
       onPointerUp={endBubbleDrag}
@@ -677,11 +659,11 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       <div className="tutor-head tutor-head--compact">
         <div className="tutor-head-main">
           <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
-          <strong className="tutor-head-title">{english ? 'Your tutor' : 'आपका ट्यूटर'}</strong>
+          <strong className="tutor-head-title">{translateUi(english ? 'english' : 'hinglish', 'legacy.web.your.tutor.d7215bed')}</strong>
           <span className="tutor-ai-badge" aria-label="AI tutor"><span aria-hidden="true">✦</span><small>AI</small></span>
         </div>
         <div className="tutor-head-controls">
-          <button type="button" className="tutor-control-btn tutor-close" aria-label={english ? 'Close tutor' : 'ट्यूटर बंद करें'} title={english ? 'Close' : 'बंद करें'} onClick={onClose}>×</button>
+          <button type="button" className="tutor-control-btn tutor-close" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.close.tutor.fcba8f87')} title={translateUi(english ? 'english' : 'hinglish', 'common.actions.close')} onClick={onClose}>×</button>
         </div>
       </div>
       <div className="tutor-language-loading-body"><span className="tutor-spinner" aria-hidden="true" /></div>
@@ -705,30 +687,30 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     >
       <div className="tutor-head-main">
         <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
-        <strong className="tutor-head-title">{english ? 'Your tutor' : 'आपका ट्यूटर'}</strong>
-        <span className="tutor-ai-badge" aria-label="AI tutor" title={english ? 'AI tutor' : 'AI ट्यूटर'}><span aria-hidden="true">✦</span><small>AI</small></span>
+        <strong className="tutor-head-title">{translateUi(english ? 'english' : 'hinglish', 'legacy.web.your.tutor.d7215bed')}</strong>
+        <span className="tutor-ai-badge" aria-label="AI tutor" title={translateUi(english ? 'english' : 'hinglish', 'legacy.web.ai.tutor.26ba6c37')}><span aria-hidden="true">✦</span><small>AI</small></span>
         <span className="tutor-language-indicator" title="The tutor responds only in this learning language">
           Learning: {responseLanguage === 'hi' ? 'Hindi' : 'English'}
         </span>
       </div>
       <div className="tutor-head-controls">
-        <button type="button" className="tutor-control-btn" aria-label={english ? 'Start a new chat' : 'नई चैट शुरू करें'} title={english ? 'New chat' : 'नई चैट'} disabled={busy || available !== true} onClick={() => void startNewChat()}>＋</button>
-        <button type="button" className="tutor-control-btn" aria-label={english ? 'Minimize tutor' : 'ट्यूटर छोटा करें'} title={english ? 'Minimize' : 'छोटा करें'} onClick={() => setMinimized(true)}>−</button>
-        <button type="button" className="tutor-control-btn tutor-close" aria-label={english ? 'Close tutor' : 'ट्यूटर बंद करें'} title={english ? 'Close' : 'बंद करें'} onClick={onClose}>×</button>
+        <button type="button" className="tutor-control-btn" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.start.a.new.chat.37104458')} title={translateUi(english ? 'english' : 'hinglish', 'legacy.web.new.chat.ceef0f36')} disabled={busy || available !== true} onClick={() => void startNewChat()}>＋</button>
+        <button type="button" className="tutor-control-btn" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.minimize.tutor.3b3c2cce')} title={translateUi(english ? 'english' : 'hinglish', 'legacy.web.minimize.8947c2a4')} onClick={() => setMinimized(true)}>−</button>
+        <button type="button" className="tutor-control-btn tutor-close" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.close.tutor.fcba8f87')} title={translateUi(english ? 'english' : 'hinglish', 'common.actions.close')} onClick={onClose}>×</button>
       </div>
     </div>
 
     {available === null
-      ? <div className="tutor-connecting"><span className="tutor-spinner" aria-hidden="true" /><strong>{english ? 'Connecting to your lesson…' : 'आपके पाठ से जुड़ रहे हैं…'}</strong></div>
+      ? <div className="tutor-connecting"><span className="tutor-spinner" aria-hidden="true" /><strong>{translateUi(english ? 'english' : 'hinglish', 'legacy.web.connecting.to.your.lesson.cd4369ab')}</strong></div>
       : available === false
         ? <div className="tutor-unavailable">
             <span className="tutor-icon" aria-hidden="true">✦</span>
-            <h3>{english ? 'Tutor is temporarily unavailable' : 'ट्यूटर अभी उपलब्ध नहीं है'}</h3>
-            <p>{error || (english ? 'Please try again in a moment.' : 'कृपया थोड़ी देर बाद फिर प्रयास करें।')}</p>
-            <button type="button" className="tutor-retry" onClick={() => { setAvailable(null); setError(''); setSessionId(null); setRetryAttempt(value => value + 1); }}>{english ? 'Retry connection' : 'फिर से जोड़ें'}</button>
+            <h3>{translateUi(english ? 'english' : 'hinglish', 'legacy.web.tutor.is.temporarily.unavailable.515f8e08')}</h3>
+            <p>{error || (translateUi(english ? 'english' : 'hinglish', 'legacy.web.please.try.again.in.a.moment.55780873'))}</p>
+            <button type="button" className="tutor-retry" onClick={() => { setAvailable(null); setError(''); setSessionId(null); setRetryAttempt(value => value + 1); }}>{translateUi(english ? 'english' : 'hinglish', 'legacy.web.retry.connection.09db0333')}</button>
           </div>
         : <>
-            <div className="tutor-modes" aria-label={english ? 'Tutor help mode' : 'ट्यूटर सहायता का तरीका'}>
+            <div className="tutor-modes" aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.tutor.help.mode.0506ae43')}>
               {(Object.keys(labels) as Mode[]).map(currentMode =>
                 <button
                   type="button"
@@ -746,20 +728,20 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
             </div>
             <div className="tutor-messages" aria-live="polite" aria-relevant="additions text">
               {hasOlderMessages && <button type="button" className="tutor-load-older" disabled={loadingOlder} onClick={() => void loadOlderMessages()}>
-                {loadingOlder ? (english ? 'Loading older messages…' : 'पुराने संदेश लोड हो रहे हैं…') : (english ? '↑ Load older messages' : '↑ पुराने संदेश लोड करें')}
+                {loadingOlder ? (translateUi(english ? 'english' : 'hinglish', 'legacy.web.loading.older.messages.1e9aca49')) : (translateUi(english ? 'english' : 'hinglish', 'legacy.web.load.older.messages.74c68414'))}
               </button>}
               {messages.length === 0 && <div className="tutor-welcome">
-                <strong>{english ? 'Ask me about this lesson.' : 'इस पाठ के बारे में पूछें।'}</strong>
+                <strong>{translateUi(english ? 'english' : 'hinglish', 'legacy.web.ask.me.about.this.lesson.5cb2d886')}</strong>
               </div>}
               {messages.map((item, index) => {
                 const timestamp = item.created_at || item.createdAt;
                 return <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || item.clientId || index}>
-                  <span className="tutor-role">{item.role === 'ASSISTANT' ? (english ? 'Tutor' : 'ट्यूटर') : (english ? 'You' : 'आप')}</span>
+                  <span className="tutor-role">{item.role === 'ASSISTANT' ? (translateUi(english ? 'english' : 'hinglish', 'legacy.web.tutor.b7fae56f')) : (translateUi(english ? 'english' : 'hinglish', 'legacy.web.you.cd8c04dc'))}</span>
                   <TutorMessageBody message={item.message} english={english} />
                   {timestamp && <time className="tutor-message-time" dateTime={typeof timestamp === 'number' ? new Date(timestamp).toISOString() : timestamp}>{formatTutorTimestamp(timestamp)}</time>}
                 </article>;
               })}
-              {busy && <article className="tutor-message assistant tutor-thinking"><span className="tutor-role">{english ? 'Tutor' : 'ट्यूटर'}</span><p>{english ? 'Thinking…' : 'सोच रहा हूँ…'} <span className="tutor-thinking-dots" aria-hidden="true"><i /><i /><i /></span></p></article>}
+              {busy && <article className="tutor-message assistant tutor-thinking"><span className="tutor-role">{translateUi(english ? 'english' : 'hinglish', 'legacy.web.tutor.b7fae56f')}</span><p>{translateUi(english ? 'english' : 'hinglish', 'legacy.web.thinking.41f162d5')} <span className="tutor-thinking-dots" aria-hidden="true"><i /><i /><i /></span></p></article>}
               <div ref={endRef} />
             </div>
             {error && <div className="tutor-error" role="alert">{error}</div>}
@@ -771,11 +753,11 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
                   maxLength={1200}
                   onChange={event => setInput(event.target.value.slice(0, 1200))}
                   onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void send(); } }}
-                  placeholder={english ? 'Ask about this lesson…' : 'इस पाठ के बारे में पूछें…'}
-                  aria-label={english ? 'Your message to the tutor' : 'ट्यूटर के लिए आपका संदेश'}
+                  placeholder={translateUi(english ? 'english' : 'hinglish', 'legacy.web.ask.about.this.lesson.e2984454')}
+                  aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.your.message.to.the.tutor.a5985cd7')}
                 />
               </label>
-              <button className="tutor-send" type="submit" disabled={!input.trim() || busy || available !== true} aria-label={english ? 'Send message' : 'संदेश भेजें'} title={english ? 'Send' : 'भेजें'}>
+              <button className="tutor-send" type="submit" disabled={!input.trim() || busy || available !== true} aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.send.message.f99262f8')} title={translateUi(english ? 'english' : 'hinglish', 'legacy.web.send.b7757d8e')}>
                 <span aria-hidden="true">{busy ? '…' : '↑'}</span>
               </button>
             </form>
@@ -783,8 +765,8 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     {!mobileViewport && <button
       className="tutor-resize-grip"
       type="button"
-      aria-label={english ? 'Resize tutor window' : 'ट्यूटर विंडो का आकार बदलें'}
-      title={english ? 'Resize window' : 'विंडो का आकार बदलें'}
+      aria-label={translateUi(english ? 'english' : 'hinglish', 'legacy.web.resize.tutor.window.b4f8c092')}
+      title={translateUi(english ? 'english' : 'hinglish', 'legacy.web.resize.window.05068870')}
       onPointerDown={beginPanelResize}
       onPointerMove={resizePanel}
       onPointerUp={endPanelResize}
