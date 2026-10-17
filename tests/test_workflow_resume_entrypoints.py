@@ -94,6 +94,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("inputs.mode == 'benchmark'", ollama_step)
         self.assertNotIn("refresh_benchmark", ollama_step)
 
+    def test_benchmark_checks_layer5_before_starting_or_downloading_models(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        preflight = workflow.index("- name: Preflight benchmark source and Layer 5 before model download")
+        ollama = workflow.index("- name: Start loopback-only Ollama service")
+        pull = workflow.index("- name: Pull only candidate models for this invocation")
+        self.assertLess(preflight, ollama)
+        self.assertLess(preflight, pull)
+        step = workflow[preflight:workflow.index("- name: Preflight generation checkpoint before model download", preflight)]
+        self.assertIn("if: inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark'", step)
+        self.assertIn("python scripts/quantaedge_layers_6_8.py preflight", step)
+        self.assertIn("--source-book-id ncert-c6-english-fecu1", step)
+
     def test_layers_6_to_8_preflights_run_and_resume_before_model_download(self):
         workflow = read("quantaedge-layers-6-8.yml")
         preflight = workflow.index("- name: Preflight generation checkpoint before model download")
