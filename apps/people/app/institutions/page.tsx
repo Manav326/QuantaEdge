@@ -228,7 +228,7 @@ export default function InstitutionsAdminPage() {
   function schoolLearningLink(): string {
     if(!detail||!joinCode||joinCodeInstitutionId!==detail.id)return '';
     const url=new URL('/school/'+encodeURIComponent(detail.tenant_code)+'/',learnerAppOrigin());
-    url.searchParams.set('joinCode',joinCode);
+    url.hash=new URLSearchParams({join:joinCode}).toString();
     return url.toString();
   }
   async function copyCode(){
