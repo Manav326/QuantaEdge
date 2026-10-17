@@ -21,6 +21,6 @@ export function formatUserTimestamp(value?: string | number | Date | null): stri
     hour12: true,
     timeZone: 'Asia/Kolkata',
   }).format(date);
-  const time = formattedTime.replace(/\\b(am|pm)\\b/i, period => period.toUpperCase());
+  const time = formattedTime.replace(/\b(am|pm)\b/i, period => period.toUpperCase());
   return `${read('weekday')} ${read('day')} ${read('month')} ${read('year')}, ${time}`;
 }
