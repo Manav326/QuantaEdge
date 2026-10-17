@@ -328,13 +328,15 @@ export default function InstitutionsAdminPage() {
                   <strong>Fractions and decimals</strong>
                   <p style={{color:view.palette.textMuted}}>Continue where you left off.</p>
                   <span className={styles.themePreviewPrimary} style={{background:view.palette.primary,color:view.palette.onPrimary}}>Start lesson</span>
+                  <span className={styles.themePreviewSelected} style={{background:view.palette.accentContainer,color:view.palette.onAccentContainer,borderColor:view.palette.borderSubtle}}>Secondary action</span>
                   <span className={styles.themePreviewSelected} style={{background:view.palette.selectedBackground,color:view.palette.selectedText,borderColor:view.palette.borderSubtle}}>Selected lesson</span>
                   <div className={styles.themePreviewStates}>
                     <span style={{background:view.palette.successContainer,color:view.palette.onSuccessContainer}}>Correct</span>
                     <span style={{background:view.palette.warningContainer,color:view.palette.onWarningContainer}}>Review</span>
                     <span style={{background:view.palette.errorContainer,color:view.palette.onErrorContainer}}>Incorrect</span>
                   </div>
-                  <small style={{color:view.palette.primaryText}}>Theme accent · accessible text</small>
+                  <small style={{color:view.palette.primaryText}}>Primary text · accessible contrast</small>
+                  <small style={{color:view.palette.accentText}}>Accent text · accessible contrast</small>
                 </div>
               </section>):<p className={styles.themePreviewNotice} role="status">
                 {themePreviewLoading?'Generating the exact server palette…':'Live preview is unavailable. Saving still uses the API-validated palette generator.'}
