@@ -160,6 +160,24 @@ jobs:
               out.write(f"retryable_segments={int(report['retryable_segments'])}\n")
           PY
 
+      - name: Reconcile saved Layers 6–8 outputs without model inference
+        if: inputs.mode == 'resume' && steps.resume_preflight.outputs.retryable_segments == '0'
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+          MODEL: "${{ inputs.generation_model }}"
+          MAX_MODEL_CALLS: "${{ inputs.max_model_calls }}"
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py run \
+            --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
+            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
+            --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
+            --checkpoint-every 2 --request-timeout 180 \
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --allow-experimental-model --rebuild-outputs-only --commit-checkpoints
+
       - name: Start loopback-only Ollama service
         if: inputs.mode != 'resume' || steps.resume_preflight.outputs.retryable_segments != '0'
         shell: bash
