@@ -71,6 +71,7 @@ fun ParentProfileScreen(
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(t("Parent profile", "अभिभावक प्रोफ़ाइल"), style = MaterialTheme.typography.headlineSmall)
+        ColorThemeSettingsCard(language = language)
         ProfilePhotoPickerInput(
             profilePhotoUrl = profile.textAny("profile_image_url", "profileImageUrl"),
             busy = busy,
