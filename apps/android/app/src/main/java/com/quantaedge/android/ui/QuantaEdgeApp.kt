@@ -642,7 +642,17 @@ fun QuantaEdgeApp() {
                 studentTextbookDocuments = emptyList()
                 recommendation = JSONObject()
                 route = AppRoute.MARKETPLACE
-                refreshMarketplace()
+                marketplaceLoading = true
+                marketplaceLoadFailed = false
+                try {
+                    marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                    marketplaceLoadFailed = false
+                } catch (_: Exception) {
+                    marketplaceOffers = emptyList()
+                    marketplaceLoadFailed = true
+                } finally {
+                    marketplaceLoading = false
+                }
             } else {
                 if (currentCourseId > 0L) {
                     studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
