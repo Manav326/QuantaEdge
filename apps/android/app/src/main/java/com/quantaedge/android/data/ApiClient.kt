@@ -44,6 +44,8 @@ object ApiClient {
         JSONArray(request(path, "GET", null).toString(StandardCharsets.UTF_8))
     suspend fun postObject(path: String, body: JSONObject = JSONObject()): JSONObject =
         JSONObject(request(path, "POST", body.toString()).toString(StandardCharsets.UTF_8))
+    suspend fun postObject(path: String, body: JSONObject, additionalHeaders: Map<String, String>): JSONObject =
+        JSONObject(request(path, "POST", body.toString(), additionalHeaders).toString(StandardCharsets.UTF_8))
     suspend fun putObject(path: String, body: JSONObject): JSONObject =
         JSONObject(request(path, "PUT", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun patchObject(path: String, body: JSONObject): JSONObject =
@@ -110,7 +112,12 @@ object ApiClient {
         activeWorkspace = "STUDENT"
     }
 
-    private suspend fun request(path: String, method: String, body: String?): ByteArray =
+    private suspend fun request(
+        path: String,
+        method: String,
+        body: String?,
+        additionalHeaders: Map<String, String> = emptyMap()
+    ): ByteArray =
         withContext(Dispatchers.IO) {
             val currentClient = client ?: throw IOException("API client is not initialized.")
             val absoluteRequestUrl = path.startsWith("https://", true) || path.startsWith("http://", true)
@@ -119,6 +126,12 @@ object ApiClient {
             if (!absoluteRequestUrl) {
                 builder.header("X-QE-Workspace", currentWorkspace())
                     .header("X-QE-Client", "ANDROID")
+            }
+            additionalHeaders.forEach { (name, value) ->
+                require(name.matches(Regex("[A-Za-z0-9-]{1,64}")) && !value.contains('\r') && !value.contains('\n')) {
+                    "Invalid request header."
+                }
+                builder.header(name, value)
             }
             val requestBody = body?.toRequestBody(jsonType)
             when (method) {
