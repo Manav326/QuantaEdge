@@ -55,6 +55,8 @@
   "common.language.english": "English",
   "common.language.hinglish": "Hinglish (हिन्दी + English)",
   "common.language.label": "Interface language",
+  "common.learningLanguage.changeHelp": "पाठ, प्रश्न, किताबें और AI Tutor के जवाब बदलता है।",
+  "common.learningLanguage.label": "पढ़ाई की सामग्री की भाषा",
   "common.navigation.allWorkspaceTools": "सभी workspace विकल्प",
   "common.navigation.browseByWorkflow": "काम के अनुसार देखें",
   "common.navigation.close": "Navigation menu बंद करें",

@@ -55,6 +55,8 @@
   "common.language.english": "English",
   "common.language.hinglish": "Hinglish (हिन्दी + English)",
   "common.language.label": "Interface language",
+  "common.learningLanguage.changeHelp": "Changes lessons, questions, books and AI Tutor replies.",
+  "common.learningLanguage.label": "Learning content language",
   "common.navigation.allWorkspaceTools": "All workspace tools",
   "common.navigation.browseByWorkflow": "Browse by workflow",
   "common.navigation.close": "Close navigation menu",

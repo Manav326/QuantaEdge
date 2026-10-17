@@ -19,7 +19,7 @@ function normalize(value: unknown): UiLocale | null {
 }
 function cookieLocale(): UiLocale | null {
   if (typeof document === 'undefined') return null;
-  const match = document.cookie.match(/(?:^|;\\s*)qe-locale=([^;]+)/);
+  const match = document.cookie.match(/(?:^|;\s*)qe-locale=([^;]+)/);
   return match ? normalize(decodeURIComponent(match[1])) : null;
 }
 function persist(locale: UiLocale) {

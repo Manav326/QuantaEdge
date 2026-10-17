@@ -46,7 +46,7 @@ function normalizeAdminLocale(value: unknown): AdminLocale | null {
   return null;
 }
 function readSharedAdminLocale(): AdminLocale | null {
-  const match = document.cookie.match(/(?:^|;\\s*)qe-locale=([^;]+)/);
+  const match = document.cookie.match(/(?:^|;\s*)qe-locale=([^;]+)/);
   return match ? normalizeAdminLocale(decodeURIComponent(match[1])) : null;
 }
 function persistAdminLocale(locale: AdminLocale) {
