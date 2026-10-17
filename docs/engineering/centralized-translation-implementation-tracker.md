@@ -452,3 +452,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Centralized header/status text, navigation labels, summary-card labels, curriculum search/filter controls, empty/loading states, chapter/topic counts and library footer.
 - Mapped the known persisted chapter/topic status codes to semantic translated labels while preserving unknown server codes as readable fallback text.
 - Added catalog parity and CI regressions for the old shell/filter phrases. Editor forms and learner preview remain the next scope.
+
+
+## Admin Content Studio — workspace and new-content forms
+
+- Centralized workspace mode/status, permission notices, chapter/micro-topic creation fields, source metadata labels and placeholders, actions, and initial loading state.
+- Mathematics/Science options now use catalog labels. Dynamic class/subject/chapter names remain data-driven.
+- Added paired catalog messages and regression checks. Existing chapter-edit fields, publishing readiness, block/question authoring and learner preview still require localization.
