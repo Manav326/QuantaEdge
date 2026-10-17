@@ -82,6 +82,8 @@ const assignmentsSource = read('apps/people/app/assignments/page.tsx');
 assert(assignmentsSource.includes("tone={Number(x.approved_assignment_count)>0?'success':'danger'}"), 'Class and subject coverage must visibly distinguish covered and missing coverage.');
 
 const accessRouteSource = read('apps/people/app/access/page.tsx');
+assert(!selfServiceSource.includes('replace(/\\\\b\\\\w/g'), 'Self-service status formatter must not double-escape regex word boundaries.');
+assert(!accessRouteSource.includes('replace(/\\\\b\\\\w/g'), 'Access governance status formatter must not double-escape regex word boundaries.');
 assert(accessRouteSource.includes('HR_ACCESS_MANAGE'), 'Access governance page must retain its permission check.');
 assert(accessRouteSource.includes('<PeopleButton variant='), 'Access governance actions must use shared People buttons.');
 

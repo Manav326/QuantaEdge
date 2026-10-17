@@ -20,7 +20,7 @@ async function api(path:string,init:RequestInit={}) {
 }
 const localDate=(date:Date)=>date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
 const initialRange=():Range=>{const now=new Date();return {from:localDate(new Date(now.getFullYear(),now.getMonth(),1)),to:localDate(now)}};
-const pretty=(value:string)=>String(value||'').replaceAll('_',' ').toLowerCase().replace(/\\b\\w/g,c=>c.toUpperCase());
+const pretty=(value:string)=>String(value||'').replaceAll('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
 export default function EmployeeSelfServicePage(){
   const router=useRouter();
   const [session,setSession]=useState<Session|null>(null);

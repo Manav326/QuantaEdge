@@ -41,7 +41,7 @@ async function api(path: string, init: RequestInit = {}) {
   return data;
 }
 
-const pretty = (value: unknown) => String(value ?? '—').replaceAll('_', ' ').toLowerCase().replace(/\\b\\w/g, (c) => c.toUpperCase());
+const pretty = (value: unknown) => String(value ?? '—').replaceAll('_', ' ').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 const reserved = (row: AccessUser) => row.username?.toLowerCase() === 'hrms_admin';
 
 export default function HrmsAccessPage() {
