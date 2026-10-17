@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b3cd67aefa7d209dc573e15482f28c0360c56f9876b47506825b4d29ecd3f7e1",
+  "raw_analysis_sha256": "bf5b9a203d0773bdcf9e8d29e06d7ed86c29e9a1b337ae266a58757cdf60e61f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -9422,6 +9422,7 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/b7fafd8e35f4b34bc0a453c69fde9b6870ae217c2d3db648fc8257a6c76f8855.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -9430,7 +9431,7 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a blank page from a textbook.",
+        "context_relation": "The page is likely a blank page in a textbook.",
         "limitations": [
           "The page is blank and does not contain any visual elements or text."
         ]
@@ -9439,9 +9440,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:33:15Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:29:44Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -9452,20 +9462,21 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6'.",
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a tagline 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
           "Science",
           "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
+          "We hope you enjoyed your adventures with Curiosity in",
           "Grade 6, and are now ready to continue our journey into the",
           "wonderful world of science. This again, is not just a textbook with",
-          "facts — it is an invitation to question"
+          "facts — it is an invitation to question."
         ],
         "concepts": [
           "Science",
@@ -9473,18 +9484,40 @@
           "Grade 6",
           "Invitation to question"
         ],
-        "context_relation": "The image is a cover page of a textbook, likely related to a science curriculum for Grade 6.",
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to engage with it by questioning.",
         "limitations": [
-          "The image does not show any specific content or illustrations."
+          "The image does not provide specific details about the content or structure of the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:34:34Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:31:36Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a tagline 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to engage with it by questioning.",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -9495,94 +9528,7 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Ever-Evolving  1      World of Science",
-          "Science",
-          "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
-          "Grade 6, and are now ready to continue our journey into the",
-          "wonderful world of science. This again, is not just a textbook with",
-          "facts — it is an invitation to question."
-        ],
-        "concepts": [
-          "textbook cover",
-          "science",
-          "curiosity",
-          "grade 6",
-          "questioning"
-        ],
-        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
-        "limitations": [
-          "The image does not show any specific content or illustrations."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:34:52Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "2e7fedac66b05f21c3b5c1e9",
-      "asset_sha256": "f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Ever-Evolving  1      World of Science",
-          "Science",
-          "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
-          "Grade 6, and are now ready to continue our journey into the",
-          "wonderful world of science. This again, is not just a textbook with",
-          "facts — it is an invitation to question."
-        ],
-        "concepts": [
-          "textbook cover",
-          "science",
-          "curiosity",
-          "grade 6",
-          "questioning"
-        ],
-        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
-        "limitations": [
-          "The image does not show any specific content or illustrations."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:35:11Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "e413a69879f7aa75cbfab393",
-      "asset_sha256": "e6d226e296fb6ababe277f724e3878c7374c9a532e70d9a3879daaad42f73d0b",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/e6d226e296fb6ababe277f724e3878c7374c9a532e70d9a3879daaad42f73d0b.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -9605,65 +9551,18 @@
           "grade 6",
           "questioning"
         ],
-        "context_relation": "introduction to science",
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
         "limitations": [
-          "no specific visual elements"
+          "The image does not show any specific content or illustrations."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:36:32Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "d9c685996b2ce51c9118aaf8",
-      "asset_sha256": "712d4a8dd02690e0b843f666a34deccaececff25b2f2d989c549ae09ed9bd7bd",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/712d4a8dd02690e0b843f666a34deccaececff25b2f2d989c549ae09ed9bd7bd.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light gray background.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a blank page, possibly a title or introduction page.",
-        "limitations": [
-          "The page is blank and does not contain any visual elements or text.",
-          "The page does not provide any specific information or content.",
-          "The page is likely intended to be used as a title or introduction page for a textbook or educational content."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:37:39Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "0f79d1806b94c6770008c7c9",
-      "asset_sha256": "36e9578698efb4d8bb19676b3401c2d1cc165a39aa765223b926560dc372b17c",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/36e9578698efb4d8bb19676b3401c2d1cc165a39aa765223b926560dc372b17c.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The text below the title reads, 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+      "checkpointed_at": "2026-10-17T05:32:01Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
@@ -9681,33 +9580,96 @@
           "grade 6",
           "questioning"
         ],
-        "context_relation": "The image is a part of the textbook cover, providing an introduction to the content and encouraging curiosity.",
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
         "limitations": [
-          "The image does not show any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
+          "The image does not show any specific content or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e7fedac66b05f21c3b5c1e9",
+      "asset_sha256": "f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:39:03Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:32:25Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
-      "asset_id": "752133755d020965de00dcba",
-      "asset_sha256": "c1045baf9a7d9bb24a6c6c3b2926420075a204abb2c95147405fcadf94af177b",
+      "asset_id": "e413a69879f7aa75cbfab393",
+      "asset_sha256": "e6d226e296fb6ababe277f724e3878c7374c9a532e70d9a3879daaad42f73d0b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
-      "asset_path": "assets/c1045baf9a7d9bb24a6c6c3b2926420075a204abb2c95147405fcadf94af177b.png",
+      "asset_path": "assets/e6d226e296fb6ababe277f724e3878c7374c9a532e70d9a3879daaad42f73d0b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A full page of a textbook with a title and a brief introduction to the subject of science.",
+        "visual_summary": "A full page of a textbook with a blue background and white text.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
@@ -9719,154 +9681,23 @@
           "facts — it is an invitation to question"
         ],
         "concepts": [
-          "science",
-          "curiosity",
-          "grade 6",
-          "invitation to question"
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
         ],
-        "context_relation": "introduction to the subject of science",
+        "context_relation": "Introduction to the subject matter",
         "limitations": [
-          "no specific visual elements are described"
+          "No specific visual elements are described."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:40:21Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "5a24c851a86677e015b6833d",
-      "asset_sha256": "b5bc46af74110d0cbc0e37b11cae30b51bb6b10d6b0ae959300dccf649d4904f",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/b5bc46af74110d0cbc0e37b11cae30b51bb6b10d6b0ae959300dccf649d4904f.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light gray background.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a blank page from a textbook.",
-        "limitations": [
-          "The page is blank and does not contain any visual elements or text."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:41:26Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "87649c72bf6082ddcad1001e",
-      "asset_sha256": "f2b70c3a4f45af9e39b6f81dc1a3530bcb0caa8d1944f4e71a6e4244d5fb54a8",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/f2b70c3a4f45af9e39b6f81dc1a3530bcb0caa8d1944f4e71a6e4244d5fb54a8.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a light gray background.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "introduction to the world of science",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:42:33Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "16adb83855c5bd6ff8a7a7b5",
-      "asset_sha256": "90733477a495a459dcfb1be7582fcd768ae88e0590f82ee85cd41a4248baab7d",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/90733477a495a459dcfb1be7582fcd768ae88e0590f82ee85cd41a4248baab7d.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A gradient background transitioning from gray to white.",
-        "visual_type": "photo",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Introduction to the world of science",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:43:36Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "da927781ddd9b16898bd1c41",
-      "asset_sha256": "abb1c6e21ba313d5a05dd933379cf9b2bc4a1442f9a591e2d096d84611e708fe",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/abb1c6e21ba313d5a05dd933379cf9b2bc4a1442f9a591e2d096d84611e708fe.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a light blue background and a faint, faintly visible text that appears to be a title or heading.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is likely a title or heading for a section or chapter in a textbook.",
-        "limitations": [
-          "The text is too faint to read clearly, making it difficult to determine the exact content or purpose of the image."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:44:43Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "22ec9f690bf8efd4a40e8fb7",
-      "asset_sha256": "80d0b2c3f9033453d879da2b3c7e1d7e67b46347bf58e624ddf2b2709d49c08c",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/80d0b2c3f9033453d879da2b3c7e1d7e67b46347bf58e624ddf2b2709d49c08c.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a small image of a globe and a text that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+      "checkpointed_at": "2026-10-17T05:34:10Z",
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a blue background and white text.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
@@ -9875,43 +9706,36 @@
           "We hope you enjoyed your adventures with  Curiosity  in",
           "Grade 6, and are now ready to continue our journey into the",
           "wonderful world of science. This again, is not just a textbook with",
-          "facts — it is an invitation to question."
+          "facts — it is an invitation to question"
         ],
         "concepts": [
-          "textbook cover",
-          "science",
-          "curiosity",
-          "grade 6",
-          "world of science",
-          "invitation to question"
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
         ],
-        "context_relation": "The image is a part of the textbook cover, providing an introduction to the subject matter and encouraging further exploration.",
+        "context_relation": "Introduction to the subject matter",
         "limitations": [
-          "The image does not show any specific content or illustrations related to the subject matter."
+          "No specific visual elements are described."
         ]
       },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:46:09Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
-      "asset_id": "9abf5a02b7b99dd6c72ff614",
-      "asset_sha256": "bdac225a62ffcd98640a44c1f664b099ff729b139a3aba2b5d97afe4231f3c88",
+      "asset_id": "d9c685996b2ce51c9118aaf8",
+      "asset_sha256": "712d4a8dd02690e0b843f666a34deccaececff25b2f2d989c549ae09ed9bd7bd",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
-      "asset_path": "assets/bdac225a62ffcd98640a44c1f664b099ff729b139a3aba2b5d97afe4231f3c88.png",
+      "asset_path": "assets/712d4a8dd02690e0b843f666a34deccaececff25b2f2d989c549ae09ed9bd7bd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light blue background.",
+        "visual_summary": "A blank page with a light gray background.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -9924,194 +9748,34 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:47:14Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "cdde650dca441a1fc7e38672",
-      "asset_sha256": "a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a solid gray background.",
+      "checkpointed_at": "2026-10-17T05:35:40Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a full page of a textbook.",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:48:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "8ed91065f80903bd0c479f66",
-      "asset_sha256": "a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a solid gray background.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a full page of a textbook.",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:48:22Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "59540bf3ff7d6b259362f97f",
-      "asset_sha256": "a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a solid gray background.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a full page of a textbook.",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:48:32Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "85f2c855a119d0df5ca5c3a8",
-      "asset_sha256": "b41a638433c4b98c327d2740c590ee24066c5908c71c027637eb7121cf54d9df",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/b41a638433c4b98c327d2740c590ee24066c5908c71c027637eb7121cf54d9df.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook introducing the concept of 'The Ever-Evolving World of Science' with a focus on curiosity and questioning.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Ever-Evolving  1      World of Science",
-          "Science",
-          "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
-          "Grade 6, and are now ready to continue our journey into the",
-          "wonderful world of science. This again, is not just a textbook with",
-          "facts — it is an invitation to question,"
-        ],
-        "concepts": [
-          "Science",
-          "Curiosity",
-          "Questioning"
-        ],
-        "context_relation": "Introduction to the concept of science and the importance of curiosity and questioning in learning.",
+        "context_relation": "The page is likely a blank page in a textbook.",
         "limitations": [
-          "No specific images or diagrams are visible in the text."
+          "The page is blank and does not contain any visual elements or text."
         ]
       },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:49:51Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
-      "asset_id": "2ec10982dbbd79c0a7ece2c0",
-      "asset_sha256": "09d9ffb6f70638e2a82e4c1ef033883c281df7c98767866a64298e9792b3cbc3",
+      "asset_id": "0f79d1806b94c6770008c7c9",
+      "asset_sha256": "36e9578698efb4d8bb19676b3401c2d1cc165a39aa765223b926560dc372b17c",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
-      "asset_path": "assets/09d9ffb6f70638e2a82e4c1ef033883c281df7c98767866a64298e9792b3cbc3.png",
+      "asset_path": "assets/36e9578698efb4d8bb19676b3401c2d1cc165a39aa765223b926560dc372b17c.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Ever-Evolving  1      World of Science",
-          "Science",
-          "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
-          "Grade 6, and are now ready to continue our journey into the",
-          "wonderful world of science. This again, is not just a textbook with",
-          "facts — it is an invitation to question."
-        ],
-        "concepts": [
-          "textbook cover",
-          "science",
-          "curiosity",
-          "grade 6",
-          "questioning"
-        ],
-        "context_relation": "The cover of the textbook is the main focus, with the subtitle providing additional context about the educational journey and the invitation to question.",
-        "limitations": [
-          "The image does not show any specific content or illustrations related to the textbook."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:51:16Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "36322b71bb72c1eae473f4ed",
-      "asset_sha256": "d84ce7715e197102fd44154da560404aac4b16f762c41439286e071d59e4bf5c",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 21,
-      "asset_path": "assets/d84ce7715e197102fd44154da560404aac4b16f762c41439286e071d59e4bf5c.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a light blue background and a white text area in the center.",
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The text is in a light blue color on a white background.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
@@ -10128,59 +9792,111 @@
           "Grade 6",
           "Invitation to question"
         ],
-        "context_relation": "Introduction to the subject of science",
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to question and explore.",
         "limitations": [
-          "No specific visual elements are described."
+          "The image does not show any specific content or illustrations related to the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:52:29Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:37:29Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The text is in a light blue color on a white background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to question and explore.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
-      "asset_id": "f5bef749a2cb0ab8eea4e8ea",
-      "asset_sha256": "185f0eb4b582426046ef9b108947ee9d9aefe5221b28443889dc0836121d85d1",
+      "asset_id": "752133755d020965de00dcba",
+      "asset_sha256": "c1045baf9a7d9bb24a6c6c3b2926420075a204abb2c95147405fcadf94af177b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
-      "asset_path": "assets/185f0eb4b582426046ef9b108947ee9d9aefe5221b28443889dc0836121d85d1.png",
+      "asset_path": "assets/c1045baf9a7d9bb24a6c6c3b2926420075a204abb2c95147405fcadf94af177b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light gray background.",
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a blank page, not a visual representation of any concept or data.",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
         "limitations": [
-          "The page is blank and does not contain any visual elements or text.",
-          "The image does not provide any information or data that can be analyzed."
+          "The image does not provide specific details about the content or structure of the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:53:35Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:39:18Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
-      "asset_id": "8dce266270947c5c598b1453",
-      "asset_sha256": "00577e5dce355ed8341e7fe56281fc7375a0e4b74a40458e4bf6254b56704f9a",
+      "asset_id": "5a24c851a86677e015b6833d",
+      "asset_sha256": "b5bc46af74110d0cbc0e37b11cae30b51bb6b10d6b0ae959300dccf649d4904f",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
-      "asset_path": "assets/00577e5dce355ed8341e7fe56281fc7375a0e4b74a40458e4bf6254b56704f9a.png",
+      "asset_path": "assets/b5bc46af74110d0cbc0e37b11cae30b51bb6b10d6b0ae959300dccf649d4904f.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -10191,16 +9907,550 @@
         "concepts": [],
         "context_relation": "The page is likely a blank page in a textbook.",
         "limitations": [
-          "The page is blank and does not contain any visual or textual content."
+          "The page is blank and does not contain any visual elements or text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:54:43Z",
+      "checkpointed_at": "2026-10-17T05:40:45Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "87649c72bf6082ddcad1001e",
+      "asset_sha256": "f2b70c3a4f45af9e39b6f81dc1a3530bcb0caa8d1944f4e71a6e4244d5fb54a8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/f2b70c3a4f45af9e39b6f81dc1a3530bcb0caa8d1944f4e71a6e4244d5fb54a8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a light blue background and a small, unreadable text in the center.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook, possibly a page with a title or heading.",
+        "limitations": [
+          "The text is too small and unreadable to extract meaningful information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:42:20Z",
+      "effective_analysis": {
+        "visual_summary": "A full page with a light blue background and a small, unreadable text in the center.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook, possibly a page with a title or heading.",
+        "limitations": [
+          "The text is too small and unreadable to extract meaningful information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16adb83855c5bd6ff8a7a7b5",
+      "asset_sha256": "90733477a495a459dcfb1be7582fcd768ae88e0590f82ee85cd41a4248baab7d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/90733477a495a459dcfb1be7582fcd768ae88e0590f82ee85cd41a4248baab7d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from gray to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:43:46Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from gray to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "da927781ddd9b16898bd1c41",
+      "asset_sha256": "abb1c6e21ba313d5a05dd933379cf9b2bc4a1442f9a591e2d096d84611e708fe",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/abb1c6e21ba313d5a05dd933379cf9b2bc4a1442f9a591e2d096d84611e708fe.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a light blue background and a faint, faintly visible text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page with a light blue background and faint text.",
+        "limitations": [
+          "The text is not legible and cannot be read."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:45:14Z",
+      "effective_analysis": {
+        "visual_summary": "A full page with a light blue background and a faint, faintly visible text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page with a light blue background and faint text.",
+        "limitations": [
+          "The text is not legible and cannot be read."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22ec9f690bf8efd4a40e8fb7",
+      "asset_sha256": "80d0b2c3f9033453d879da2b3c7e1d7e67b46347bf58e624ddf2b2709d49c08c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/80d0b2c3f9033453d879da2b3c7e1d7e67b46347bf58e624ddf2b2709d49c08c.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
       "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9abf5a02b7b99dd6c72ff614",
+      "asset_sha256": "bdac225a62ffcd98640a44c1f664b099ff729b139a3aba2b5d97afe4231f3c88",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/bdac225a62ffcd98640a44c1f664b099ff729b139a3aba2b5d97afe4231f3c88.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:48:29Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cdde650dca441a1fc7e38672",
+      "asset_sha256": "a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a solid gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:49:56Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a solid gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8ed91065f80903bd0c479f66",
+      "asset_sha256": "a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page contains no visible text or images.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:50:04Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page contains no visible text or images.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "59540bf3ff7d6b259362f97f",
+      "asset_sha256": "a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page contains no visible text or images.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:50:12Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": [
+          "The page contains no visible text or images.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "85f2c855a119d0df5ca5c3a8",
+      "asset_sha256": "b41a638433c4b98c327d2740c590ee24066c5908c71c027637eb7121cf54d9df",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/b41a638433c4b98c327d2740c590ee24066c5908c71c027637eb7121cf54d9df.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook titled 'The Ever-Evolving World of Science', inviting readers to continue their journey into the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the next chapter of a science textbook",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:51:59Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook titled 'The Ever-Evolving World of Science', inviting readers to continue their journey into the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the next chapter of a science textbook",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2ec10982dbbd79c0a7ece2c0",
+      "asset_sha256": "09d9ffb6f70638e2a82e4c1ef033883c281df7c98767866a64298e9792b3cbc3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/09d9ffb6f70638e2a82e4c1ef033883c281df7c98767866a64298e9792b3cbc3.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a light gray background and a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook, likely a page with a title or heading.",
+        "limitations": [
+          "The image does not contain any specific visual elements or text that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:53:35Z",
+      "effective_analysis": {
+        "visual_summary": "A full page with a light gray background and a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook, likely a page with a title or heading.",
+        "limitations": [
+          "The image does not contain any specific visual elements or text that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "36322b71bb72c1eae473f4ed",
+      "asset_sha256": "d84ce7715e197102fd44154da560404aac4b16f762c41439286e071d59e4bf5c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/d84ce7715e197102fd44154da560404aac4b16f762c41439286e071d59e4bf5c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:55:02Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f5bef749a2cb0ab8eea4e8ea",
+      "asset_sha256": "185f0eb4b582426046ef9b108947ee9d9aefe5221b28443889dc0836121d85d1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/185f0eb4b582426046ef9b108947ee9d9aefe5221b28443889dc0836121d85d1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:56:30Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8dce266270947c5c598b1453",
+      "asset_sha256": "00577e5dce355ed8341e7fe56281fc7375a0e4b74a40458e4bf6254b56704f9a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/00577e5dce355ed8341e7fe56281fc7375a0e4b74a40458e4bf6254b56704f9a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T05:58:04Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -10211,17 +10461,18 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
           "Science",
           "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
+          "We hope you enjoyed your adventures with Curiosity in",
           "Grade 6, and are now ready to continue our journey into the",
           "wonderful world of science. This again, is not just a textbook with",
           "facts — it is an invitation to question."
@@ -10233,7 +10484,7 @@
           "grade 6",
           "questioning"
         ],
-        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
         "limitations": [
           "The image does not show any specific content or illustrations."
         ]
@@ -10242,9 +10493,32 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:55:02Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:58:30Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -10255,17 +10529,18 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The Ever-Evolving  1      World of Science",
           "Science",
           "of",
-          "We hope you enjoyed your adventures with  Curiosity  in",
+          "We hope you enjoyed your adventures with Curiosity in",
           "Grade 6, and are now ready to continue our journey into the",
           "wonderful world of science. This again, is not just a textbook with",
           "facts — it is an invitation to question."
@@ -10277,7 +10552,7 @@
           "grade 6",
           "questioning"
         ],
-        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
         "limitations": [
           "The image does not show any specific content or illustrations."
         ]
@@ -10286,9 +10561,32 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:55:21Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T05:58:54Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of questioning and curiosity.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -10299,6 +10597,7 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/fbac51b490e5062089def72537c464229ba9655e0578eb5fb2c8f6cb42c0fb15.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -10307,7 +10606,7 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a blank page, likely from a textbook.",
+        "context_relation": "The page is likely a blank page in a textbook.",
         "limitations": [
           "The page is blank and does not contain any visual elements or text."
         ]
@@ -10316,9 +10615,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:56:30Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T06:00:30Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
