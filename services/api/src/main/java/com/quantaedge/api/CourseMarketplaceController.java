@@ -356,15 +356,15 @@ public class CourseMarketplaceController {
           .timeout(java.time.Duration.ofSeconds(15))
           .header("Authorization", "Basic " + basic)
           .header("Accept", "application/json");
-      if (body == null) {
+      if ("GET".equalsIgnoreCase(method)) {
         builder.GET();
-      } else {
+      } else if ("POST".equalsIgnoreCase(method)) {
         builder.header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8));
+            .POST(HttpRequest.BodyPublishers.ofString(body == null ? "" : body, StandardCharsets.UTF_8));
+      } else {
+        throw new IllegalArgumentException("Unsupported payment-provider request method.");
       }
-      HttpResponse<String> response = httpClient.send(builder.method(method, body == null
-          ? HttpRequest.BodyPublishers.noBody()
-          : HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8)).build(),
+      HttpResponse<String> response = httpClient.send(builder.build(),
           HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
       if (response.statusCode() < 200 || response.statusCode() >= 300) {
         throw new IllegalStateException("Payment provider could not complete the request (HTTP "
