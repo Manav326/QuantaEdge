@@ -1324,3 +1324,29 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 .tutor-message-time{align-self:flex-end;margin-top:1px;color:#8a93a2;font-size:9px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
 .tutor-message.user .tutor-message-time{color:#9b735d}
 @media(max-width:390px){.tutor-language-indicator{max-width:110px;padding:3px 5px;font-size:8px}.tutor-head-main{column-gap:6px;row-gap:4px}}
+
+
+/* Workspace interaction and data overflow baseline — preserve the existing orange brand tokens. */
+:where(.site, .app-shell, .parent-app, .practice-page, .progress-page) :where(input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"]) {
+  border-color: var(--qe-answer-incorrect-text, #b42318);
+  box-shadow: 0 0 0 1px var(--qe-answer-incorrect-text, #b42318);
+}
+:where(.app-shell, .parent-app, .practice-page, .progress-page) :where(.concept-card, .mastery-card, .app-task, .practice-wrap, .parent-report-switcher, .parent-report-switcher__profiles) {
+  min-width: 0;
+}
+:where(.app-shell, .parent-app, .practice-page, .progress-page) :where(.table-wrap, .table-scroll, [data-scroll-region]) {
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+:where(.app-shell, .parent-app, .practice-page, .progress-page) :where(img, video, iframe) {
+  max-width: 100%;
+}
+:where(.app-shell, .parent-app, .practice-page, .progress-page) :where(.concept-card, .practice-wrap, .mastery-card, .parent-report-switcher) :where(p, a, strong, small, label) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  :where(.app-shell, .parent-app, .practice-page, .progress-page) :where(.table-wrap, .table-scroll, [data-scroll-region]) {
+    -webkit-overflow-scrolling: touch;
+  }
+}

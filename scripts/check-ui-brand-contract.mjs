@@ -1,0 +1,81 @@
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+
+const root = process.cwd();
+const failures = [];
+let checks = 0;
+
+function assert(condition, message) {
+  checks += 1;
+  if (!condition) failures.push(message);
+}
+
+function read(path) {
+  const file = join(root, path);
+  assert(existsSync(file), 'Required UI contract file is missing: ' + path);
+  return existsSync(file) ? readFileSync(file, 'utf8') : '';
+}
+
+function requireBrandTokens(source, app) {
+  assert(/--qe-brand-orange\s*:\s*#f97316\b/i.test(source), app + ' must preserve canonical QuantaEdge orange (#F97316).');
+  assert(/--qe-brand-orange-deep\s*:\s*#c2410c\b/i.test(source), app + ' must preserve canonical deep orange (#C2410C).');
+}
+
+function requireInteractionBaseline(source, app) {
+  assert(/focus-visible/i.test(source), app + ' must retain a visible keyboard focus treatment.');
+  assert(/prefers-reduced-motion\s*:\s*reduce/i.test(source), app + ' must honor reduced-motion preferences.');
+  assert(/forced-colors\s*:\s*active/i.test(source), app + ' must provide a forced-colors focus fallback.');
+  assert(/@media\s*\(\s*max-width\s*:\s*\d+px\s*\)/i.test(source), app + ' must include responsive breakpoint rules.');
+}
+
+const branding = read('docs/branding.md');
+const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
+const webLayout = read('apps/web/app/layout.tsx');
+const adminLayout = read('apps/admin/app/layout.tsx');
+const peopleLayout = read('apps/people/app/layout.tsx');
+const webStyles = read('apps/web/app/globals.css');
+const adminStyles = read('apps/admin/app/globals.css');
+const peopleBaseStyles = read('apps/people/app/globals.css');
+const peopleStyles = read('apps/people/app/people-design-system.css');
+
+for (const token of ['#F97316', '#C2410C', '#FFF0E5', 'Smarter Decisions. Greater Growth.']) {
+  assert(branding.includes(token), 'Canonical brand documentation must include ' + token + '.');
+}
+assert(brandComponent.includes('/branding/quantaedge-icon.png'), 'Live QuantaEdge brand component must use the canonical Q-mark asset.');
+assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'Live QuantaEdge brand component must retain the unchanged tagline.');
+assert(webLayout.includes('/branding/quantaedge-icon.png'), 'Learner web must configure the canonical browser/app icon.');
+assert(adminLayout.includes('/branding/quantaedge-icon.png'), 'Admin must configure the canonical browser/app icon.');
+assert(peopleLayout.includes('/branding/quantaedge-icon.png'), 'People Operations must configure the canonical browser/app icon.');
+requireBrandTokens(webStyles, 'Learner web');
+requireBrandTokens(adminStyles, 'Admin');
+assert(/--brand\s*:\s*#f97316\b/i.test(peopleStyles), 'People Operations must use canonical orange as its primary brand token.');
+assert(/--brand2\s*:\s*#c2410c\b/i.test(peopleStyles), 'People Operations must use canonical deep orange for its strong brand token.');
+assert(/--brand-soft\s*:\s*#fff0e5\b/i.test(peopleStyles), 'People Operations must use the canonical soft-orange surface.');
+requireInteractionBaseline(webStyles, 'Learner web');
+requireInteractionBaseline(adminStyles, 'Admin');
+requireInteractionBaseline(peopleStyles, 'People Operations');
+assert(/--qe-answer-incorrect-text\s*:\s*#b42318\b/i.test(webStyles), 'Learner web must retain distinct incorrect-answer feedback styling.');
+assert(/--qe-answer-incorrect-text\s*:\s*#b42318\b/i.test(adminStyles), 'Admin preview must retain distinct incorrect-answer feedback styling.');
+assert(/\.practice-feedback-incorrect/.test(webStyles), 'Practice UI must retain the explicit incorrect-answer feedback treatment.');
+assert(/\.qe-people-status--success/.test(peopleStyles) && /\.qe-people-status--danger/.test(peopleStyles), 'People Operations must retain distinct success and error status variants.');
+assert(/overscroll-behavior-inline:\s*contain/.test(webStyles), 'Learner surfaces must protect horizontal scroll regions on touch devices.');
+assert(/overscroll-behavior-inline:\s*contain/.test(adminStyles), 'Admin data/preview surfaces must protect horizontal scroll regions.');
+assert(/tbody tr:focus-within/.test(peopleStyles), 'People tables must keep keyboard focus within rows discoverable.');
+assert(!/(#244c9a|#17376f|#10264b|#3569c8|#6e94d6)/i.test(peopleBaseStyles + peopleStyles), 'People Operations must not regress to its former blue palette.');
+
+for (const asset of [
+  'apps/web/public/branding/quantaedge-icon.png',
+  'apps/admin/public/branding/quantaedge-icon.png',
+  'apps/people/public/branding/quantaedge-icon.png',
+]) {
+  const path = join(root, asset);
+  assert(existsSync(path) && statSync(path).size > 0, 'Missing packaged canonical brand asset: ' + asset);
+}
+
+if (failures.length) {
+  console.error('QuantaEdge cross-app UI/brand contract failed (' + failures.length + '/' + checks + ' checks):');
+  for (const failure of failures) console.error('- ' + failure);
+  process.exitCode = 1;
+} else {
+  console.log('QuantaEdge cross-app UI/brand contract passed: ' + checks + ' checks across learner web, Admin, People Operations, and official brand assets.');
+}

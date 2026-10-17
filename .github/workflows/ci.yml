@@ -36,6 +36,9 @@ jobs:
       - name: Enforce data-only storage for generated pipeline artifacts
         run: python scripts/validate_pipeline_data_locations.py --repo-root .
 
+      - name: Verify cross-app UI and brand contract
+        run: node scripts/check-ui-brand-contract.mjs
+
       - name: Detect changed paths
         id: detect
         shell: bash

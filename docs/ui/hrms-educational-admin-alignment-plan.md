@@ -239,3 +239,13 @@ Run `38372164855` validates commit `ddc83a1` (HRMS auth branding/components). Th
 - Extended the People Operations UI contract to guard the warm-orange theme, readable numeric values, semantic invalid-form styling, horizontal table scrolling, and keyboard focus within table rows. The contract also now checks that Admin and learner web retain the canonical orange/deep-orange tokens and that HRMS does not regress to the former blue palette.
 - Latest theme and UI polish require the GitHub Actions run for the resulting commit. Browser screenshots, real viewport interaction checks, keyboard/screen-reader review, and end-to-end HR workflows remain separate verification gates and are not marked complete until actually exercised.
 - Scope note: this pass improves the shared People UI foundation. It does not claim that every page-specific workflow or all three applications have completed visual QA; those checks remain tracked above.
+
+
+## Execution continuation — October 17, 2026
+
+The user explicitly directed implementation of the full cross-app UI/UX plan, including previously approval-gated placement refinements. This permission is limited to the documented presentation and interaction scope.
+
+- Maintain the official QuantaEdge orange-led palette in learner web, Admin, and People Operations; do not alter canonical assets, wordmark, tagline, or language behavior.
+- Implement only app-scoped responsive/accessibility refinements and shared contract checks; preserve current APIs, data, authorization, curriculum, scoring, HR permissions, payroll, attendance, and audit semantics.
+- The final CI run must use the latest main SHA after concurrent pipeline commits settle. Cancelled earlier runs are not evidence of a successful build.
+- Browser/device visual verification remains a distinct gate; do not mark it complete on the basis of source inspection or a CI build alone.

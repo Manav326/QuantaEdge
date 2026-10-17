@@ -1,6 +1,6 @@
 # QuantaEdge Web UI/UX Design System and Rollout Plan
 
-**Status:** UX polish direction approved; proposed placement/layout changes require user approval before implementation.  
+**Status:** implementation approved by the user on 2026-10-17; proceed through the documented route-by-route rollout on the main branch.  
 **Scope:** All QuantaEdge web interfaces: learner/public web, Admin/Content Studio, and People Operations (HRMS).  
 **Branch policy:** Work on `main` only unless the user explicitly changes this instruction.  
 **Primary rule:** Improve presentation and interaction quality without changing business logic, authorization, API contracts, persistence semantics, curriculum behaviour, or existing workflows.
@@ -13,7 +13,7 @@ Use a **premium hybrid** visual language:
 - Consistent typography, spacing, borders, radii, focus styles, component states, and motion across all three applications.
 - A single QuantaEdge identity. Do not independently restyle or translate the logo, wordmark, tagline, or canonical brand colours per application or language.
 
-This is a restrained, polished education product—not a neon/glassmorphism theme. Effects should improve hierarchy and perceived quality, not compete with content. **Keep the existing orange-led QuantaEdge palette unchanged.** Do not introduce a blue-led palette or alter canonical logo/wordmark/tagline colours. Layout, spacing, typography, navigation, card/form structure and interaction polish may be proposed, but obtain the user's approval on placement changes before implementation.
+This is a restrained, polished education product—not a neon/glassmorphism theme. Effects should improve hierarchy and perceived quality, not compete with content. **Keep the existing orange-led QuantaEdge palette unchanged.** Do not introduce a blue-led palette or alter canonical logo/wordmark/tagline colours. Layout, spacing, typography, navigation, card/form structure and interaction polish are approved for implementation under this plan, preserving current brand colours and product workflows.
 
 ## 2. Canonical brand tokens
 
@@ -32,7 +32,7 @@ The existing approved brand system in `docs/branding.md` remains authoritative. 
 | Muted text | `#667085` | Secondary metadata, after contrast verification |
 | Success / warning / error | Existing semantic tokens first | Status and validation meaning, never decorative branding |
 
-No new colour palette is approved. Existing CSS/design tokens and the orange-led identity are the source of truth; do not add blue palette tokens or shift primary actions from orange to blue. Reconcile any proposed neutral/semantic token adjustments against the actual code and contrast-test them. Keep logo, wordmark and tagline assets unchanged. Layout/placement proposals are for review only until the user approves them.
+No new colour palette is approved. Existing CSS/design tokens and the orange-led identity are the source of truth; do not add blue palette tokens or shift primary actions from orange to blue. Reconcile any proposed neutral/semantic token adjustments against the actual code and contrast-test them. Keep logo, wordmark and tagline assets unchanged. Layout/placement changes may now be implemented within this approved plan; record unverified visual results separately from source implementation and CI.
 
 ## 3. Visual and interaction foundations
 
@@ -175,3 +175,14 @@ For every route, check real data, empty data, loading, server errors, permission
 
 - **2026-10-16:** User clarified that the existing orange-led QuantaEdge palette must remain unchanged. Layout and placement improvements may be proposed, but must be approved before implementation. Documentation updates do not mean UI code has been implemented or visually verified.
 - **Next action:** execute Phase 0 against the current `main` tree, then implement the shared foundation before route-by-route rollout.
+
+
+## Execution record — October 17, 2026
+
+The user explicitly directed implementation of the planned UI/UX work end to end. This authorizes the layout and placement changes previously held for approval, subject to the non-negotiable requirement to preserve the existing orange-led brand palette and all business behavior.
+
+- Learner/public web: scoped inline-validation, overflow resilience, and narrow-screen scroll improvements for existing learner, practice, progress and parent surfaces.
+- Educational Admin/Content Studio: scoped invalid-control presentation, responsive action clusters, data-row hover/focus states, and visual-source/provenance overflow handling.
+- People Operations: orange-led alignment and shared form/table/pagination responsive polish, retaining its separate product shell.
+- Cross-app automation: a lightweight, dependency-free contract verifies official brand assets/lockup, palette parity, responsive breakpoints and accessibility baseline, then runs in CI.
+- Verification gate remains evidence-based: builds and structural contracts are not the same as browser screenshots, screen-reader testing, or end-to-end HR workflow testing. Mark those only after they are actually exercised.

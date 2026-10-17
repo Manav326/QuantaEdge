@@ -929,3 +929,55 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-admin-visual-lightbox{position:fixed;inset:0;z-index:5000;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:12px;padding:20px;background:rgba(15,23,42,.9)}
 .qe-admin-visual-lightbox button{border:1px solid rgba(255,255,255,.45);border-radius:9px;padding:8px 14px;background:#fff;color:#172033;font:inherit;font-weight:800;cursor:pointer}
 .qe-admin-visual-lightbox img{align-self:center;max-width:94vw;max-height:82vh;object-fit:contain;border-radius:10px;background:#fff}
+
+
+/* Content Studio and staff workspace interaction polish — no workflow changes. */
+.admin-main :where(input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"], [contenteditable="true"][aria-invalid="true"]) {
+  border-color: var(--qe-answer-incorrect-text, #b42318);
+  box-shadow: 0 0 0 1px var(--qe-answer-incorrect-text, #b42318);
+}
+.admin-main :where(.admin-panel, .admin-grid > *, .studio-layout > *, .qe-visual-candidate-card, .qe-visual-provenance) {
+  min-width: 0;
+}
+.admin-main :where(.tr:not(.th), table tbody tr) {
+  transition: background-color .12s ease;
+}
+.admin-main :where(.tr:not(.th), table tbody tr):hover {
+  background-color: #fffaf6;
+}
+.admin-main :where(.tr:not(.th), table tbody tr):focus-within {
+  background-color: #fff7ed;
+}
+.admin-main :where(.qe-visual-source-note, .qe-visual-candidate-copy, .qe-visual-provenance, .qe-rich-helper) {
+  overflow-wrap: anywhere;
+}
+.admin-main :where(.studio-actions, .panel-head, .admin-top-actions) {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.admin-main :where(.studio-actions, .panel-head, .admin-top-actions) > * {
+  max-width: 100%;
+}
+.admin-main :where(.table-wrap, .table-scroll, [data-scroll-region]) {
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+@media (max-width: 720px) {
+  .admin-main :where(.studio-layout, .qe-visual-provenance) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .admin-main :where(.admin-top, .panel-head, .studio-actions, .admin-top-actions) {
+    gap: 10px;
+  }
+  .admin-main :where(.studio-actions, .admin-top-actions) > button {
+    flex: 1 1 135px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-main :where(.tr:not(.th), table tbody tr) {
+    transition: none;
+  }
+}
