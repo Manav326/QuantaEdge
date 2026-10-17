@@ -419,3 +419,9 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Centralized confirmation, saved-preview version, draft creation, curriculum/textbook verification, chapter/micro-topic publication and review-submission feedback.
 - Revision numbers and content type use placeholders; dynamic API diagnostics remain preserved.
 - Added paired catalog keys and CI regression checks. More feedback, validation prompts, block/question editing and preview labels remain open.
+
+
+## Build repair — Admin Employees/Governance JSX
+
+- The first full validation run for the Employees copy migration failed while parsing the actor-role JSX expression: an extra opening brace had been inserted during translation extraction.
+- Removed the extra brace. Permission checks, staff role mapping, and audit data handling are unchanged. The route remains CI-pending until a new full run succeeds.

@@ -319,7 +319,7 @@ export default function AdminStaffPage() {
         <div className="qe-audit-list">
           {audit.map(row=><article key={row.id} className="qe-audit-row">
             <span className={'qe-audit-status '+(row.response_status>=200&&row.response_status<400?'success':'failure')}>{row.response_status}</span>
-            <div className="qe-audit-event"><strong>{row.actor_name} <small>{{roleLabel(t,row.actor_role)}</small></strong><span><b>{row.http_method}</b> {row.request_path}</span><small>{prettyDate(row.created_at,workspace.locale,key=>t(key))} · {row.remote_address||t('admin.employees.ipUnavailable')}</small>{row.details&&<small className="qe-audit-detail">{row.details}</small>}</div>
+            <div className="qe-audit-event"><strong>{row.actor_name} <small>{roleLabel(t,row.actor_role)}</small></strong><span><b>{row.http_method}</b> {row.request_path}</span><small>{prettyDate(row.created_at,workspace.locale,key=>t(key))} · {row.remote_address||t('admin.employees.ipUnavailable')}</small>{row.details&&<small className="qe-audit-detail">{row.details}</small>}</div>
             <button type="button" className="qe-audit-info" title={row.user_agent||t('admin.employees.noUserAgentRecorded')} onClick={()=>window.alert((row.user_agent||t('admin.employees.noUserAgentRecorded'))+'\n'+(row.remote_address||t('admin.employees.ipUnavailable')))} >{t('admin.employees.details')}</button>
           </article>)}
           {!audit.length&&<div className="qe-library-empty"><strong>{t('admin.employees.noActivity')}</strong><p>{t('admin.employees.newActivityHelp')}</p></div>}
