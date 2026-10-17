@@ -112,7 +112,7 @@ class QuantaEdgeThemeController(context: Context) {
         require(root.optInt("schemaVersion", -1) == 2) { "Institution theme schema version 2 is required." }
         val requiredRoles = listOf(
             "primary", "onPrimary", "primaryText", "primaryContainer", "onPrimaryContainer",
-            "accent", "onAccent", "accentText", "background", "onBackground", "surface", "onSurface",
+            "accent", "onAccent", "accentText", "accentContainer", "onAccentContainer", "background", "onBackground", "surface", "onSurface",
             "surfaceElevated", "onSurfaceElevated", "text", "textMuted", "border", "borderSubtle", "focus",
             "success", "onSuccess", "successContainer", "onSuccessContainer",
             "warning", "onWarning", "warningContainer", "onWarningContainer",
