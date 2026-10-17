@@ -43,7 +43,7 @@ function approvedAssetUrl(url: unknown, code: string, type: 'logo' | 'app-icon')
   if (typeof url !== 'string') return false;
   const prefix = '/api/v1/institution/public/branding/' + code + '/assets/' + type + '?v=';
   if (!url.startsWith(prefix)) return false;
-  return /^\\d+$/.test(url.slice(prefix.length));
+  return /^\d+$/.test(url.slice(prefix.length));
 }
 
 /** Update identity metadata only; theme tokens/presets are managed by ColorThemeProvider. */
