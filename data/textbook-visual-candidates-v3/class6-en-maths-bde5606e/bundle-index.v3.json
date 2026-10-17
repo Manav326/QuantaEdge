@@ -426,7 +426,19 @@
   "publication_allowed": false,
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
-  "version_tag": "candidates-v3-class6-class6-en-maths-bde5606e-run-38896695297",
-  "bundle_tar_sha256": "1ea4d58e2234f0790d432d37ce8a546f783ef912835c1d0161f35096ef862ea2",
-  "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
+  "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+  "version_tag": "candidates-v3-class6-class6-en-maths-bde5606e-prep-bdf44a91a8c10f8c505691ed",
+  "bundle_tar_sha256": "8cdd2f7290caff1760ea68f2115ac2bfe585336a14d7b9dca422a9a0923f6ab1",
+  "restore_note": "Pull this exact ORAS artifact and verify bundle_tar_sha256 plus the embedded per-file manifest before reuse.",
+  "preparation_fingerprint": "bdf44a91a8c10f8c505691eda7e53b61624b9a4f863caf37f19c9d107ffb3a12",
+  "candidate_pack_sha256": "442cf7584554411eb9baca106d57dd083331a0b82699299b9a7d82438ef03b30",
+  "bundle_manifest_sha256": "aa653a7aab673c6e438c554dc6c291c1243f11e660d91963c7d5dc9f83424b6b",
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class6-class6-en-maths-bde5606e-prep-e8d6d893dc8b9d3556a1aa2f",
+    "bundle_tar_sha256": "3574718ad2d6a4d9dcf923e5d6e007ac7b26b6731834eb03153e70e47f59aa47",
+    "preparation_fingerprint": "e8d6d893dc8b9d3556a1aa2f64e0ff521eac9b5e6dea068a912d8c01fb77befb",
+    "inventory_json_sha256": "27d41ff1143d997b836374fcd047ccbb648b28114760799ef6b77e7ff55203a2"
+  }
 }

@@ -286,7 +286,19 @@
   "publication_allowed": false,
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
-  "version_tag": "candidates-v3-class6-class6-en-science-9c1315ba-run-38896695297",
-  "bundle_tar_sha256": "3027e927021224188b7abdbbf55c253f23839476cdf224a4b3f69a9c5bd494f8",
-  "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
+  "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
+  "version_tag": "candidates-v3-class6-class6-en-science-9c1315ba-prep-6b057ca6308a8e048573f4cd",
+  "bundle_tar_sha256": "baa9c664a3c268a177bf781fac745b485c701b2cf13537a603f15d3dbf122ddf",
+  "restore_note": "Pull this exact ORAS artifact and verify bundle_tar_sha256 plus the embedded per-file manifest before reuse.",
+  "preparation_fingerprint": "6b057ca6308a8e048573f4cd374382c496012379b7d045983ec8123b1a0cc9e6",
+  "candidate_pack_sha256": "54fbafcef010913da7e833a14a0b1d8a29f8b8d52b32e3b6e89e406a3bd9902d",
+  "bundle_manifest_sha256": "2cef66d2687fafa9c346dbb8122ac3a0c04d19fdeab3d793e45de7a184554197",
+  "layer1_inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+    "version_tag": "visual-inventory-v1-class6-class6-en-science-9c1315ba-prep-f55b8c2ca25adbf70b437b75",
+    "bundle_tar_sha256": "14fcefd5a27409f59ae8bb78ae0ba89318743b3e5f5375f250a349b8b6e103ea",
+    "preparation_fingerprint": "f55b8c2ca25adbf70b437b756c1a610e2bdc8074c7144c187c1ddca6569fd5aa",
+    "inventory_json_sha256": "0052b62e694ed1cdc58c141a6297d6fe3f673d884c8e5646ba611b0cd9724c1b"
+  }
 }
