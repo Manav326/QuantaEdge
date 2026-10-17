@@ -981,3 +981,24 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
     transition: none;
   }
 }
+
+
+/* Canonical QuantaEdge brand lockup in Admin: shared Q mark and live-text wordmark. */
+.qe-admin-brand-stack{display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;gap:3px}
+.qe-admin-brand-lockup{display:inline-flex;min-width:0;max-width:100%;color:#fff;text-decoration:none}
+.qe-admin-brand-lockup .qe-brand{display:flex;min-width:0;max-width:100%;flex-direction:column;align-items:flex-start;gap:2px}
+.qe-admin-brand-lockup .qe-brand__lockup{display:flex;align-items:center;gap:8px;min-width:0;max-width:100%;padding:6px 8px;border:1px solid #f1e5de;border-radius:8px;background:#fff}
+.qe-admin-brand-lockup .qe-brand__icon{display:block;flex:0 0 35px;width:35px;height:35px;object-fit:contain}
+.qe-admin-brand-lockup .qe-brand__copy{display:flex;min-width:0;max-width:100%;flex-direction:column;gap:3px}
+.qe-admin-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans',Arial,sans-serif;font-size:20px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.qe-admin-brand-lockup .qe-brand__name-quant{color:#152038}
+.qe-admin-brand-lockup .qe-brand__name-edge{color:#F97316}
+.qe-admin-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:6.9px;line-height:1.25;letter-spacing:0;white-space:nowrap}
+.qe-admin-brand-lockup--collapsed{flex:0 0 45px;width:45px}
+.qe-admin-brand-lockup--collapsed .qe-brand__copy{display:none}
+.qe-admin-brand-lockup--collapsed .qe-brand__lockup{justify-content:center;padding:3px}
+.qe-admin-brand-context{display:block;margin:0 0 0 5px;color:#8490a7;font-size:6.2px;line-height:1.3;letter-spacing:1.2px}
+.qe-shared-sidebar.is-collapsed .qe-admin-brand-stack{flex:0 0 auto;align-items:center}
+.qe-shared-sidebar.is-collapsed .qe-admin-brand-context{display:none}
+.qe-admin-brand-lockup:focus-visible{outline:3px solid #fdba74;outline-offset:3px;border-radius:9px}
+@media(max-width:980px){.qe-admin-brand-lockup .qe-brand__name{font-size:18px}.qe-admin-brand-lockup .qe-brand__tagline{font-size:6.1px}}

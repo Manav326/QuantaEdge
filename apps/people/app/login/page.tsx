@@ -1,5 +1,6 @@
 'use client';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
+import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -51,7 +52,7 @@ export default function PeopleLogin() {
   return (
     <main className="login-wrap">
       <aside className="login-story">
-        <div className="brand qe-people-login-brand"><img src="/branding/quantaedge-wordmark.png" alt="QuantaEdge" width={196} height={31} /><span>PEOPLE OPERATIONS</span></div>
+        <div className="qe-people-login-brand"><QuantaEdgeBrand href={null} variant="auth" className="qe-people-login-brand-lockup" /><span>PEOPLE OPERATIONS</span></div>
         <div>
           <div className="eyebrow">SECURE HRMS WORKSPACE</div>
           <h1>Great learning starts with great people.</h1>

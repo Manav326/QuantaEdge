@@ -21,6 +21,7 @@ const workspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const sessionBoundary = read('apps/people/app/components/PeopleSessionBoundary.tsx');
 const components = read('apps/people/app/components/PeopleUI.tsx');
 const styles = read('apps/people/app/people-design-system.css');
+const brandComponent = read('apps/people/app/components/QuantaEdgeBrand.tsx');
 const adminStyles = read('apps/admin/app/globals.css');
 const webStyles = read('apps/web/app/globals.css');
 const alignmentPlan = read('docs/ui/hrms-educational-admin-alignment-plan.md');
@@ -32,6 +33,8 @@ assert(workspace.includes("X-QE-Workspace': 'HRMS'"), 'Workspace session request
 assert(sessionBoundary.includes("'HRMS'"), 'Session boundary must preserve HRMS workspace validation.');
 assert(workspace.includes("pathname === '/change-password'"), 'Forced password-change route must remain outside the workspace chrome.');
 assert(workspace.includes('id="main-content" tabIndex={-1}'), 'Skip link target must be programmatically focusable.');
+assert(workspace.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'HRMS workspace must use the shared canonical brand component.');
+assert(!workspace.includes('quantaedge-wordmark.png'), 'HRMS workspace must not reference the invalid legacy wordmark PNG.');
 assert(workspace.includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"), 'HRMS access management must be permission-gated in navigation.');
 assert(workspace.includes("label: 'Access governance'"), 'Access management must have a distinct Access Governance navigation group.');
 assert(workspace.includes("permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE']"), 'Teaching-assignment navigation must match the page authorization contract.');
@@ -126,11 +129,14 @@ for (const [route, path] of [
   ['/change-password', 'apps/people/app/change-password/page.tsx'],
 ]) {
   const source = read(path);
-  assert(source.includes('src="/branding/quantaedge-wordmark.png"'), `${route} must render the packaged QuantaEdge wordmark as an image.`);
+  assert(source.includes('<QuantaEdgeBrand href={null} variant="auth"'), `${route} must render the canonical shared QuantaEdge brand lockup.`);
+  assert(!source.includes('quantaedge-wordmark.png'), `${route} must not use the invalid legacy wordmark PNG.`);
   assert(source.includes('<PeopleButton variant="primary"'), `${route} must use the shared primary button.`);
   assert(source.includes('<PeopleFeedback tone="danger" role="alert">'), `${route} must use accessible shared error feedback.`);
 }
-assert(styles.includes('.login-story .brand img'), 'Login wordmark must have responsive presentation styles.');
+assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'People Operations must use the unchanged official brand tagline.');
+assert(styles.includes('.qe-people-login-brand-lockup .qe-brand__icon'), 'Login brand lockup must size the canonical Q mark.');
+assert(styles.includes('.qe-people-login-brand-lockup .qe-brand__tagline'), 'Login brand lockup must keep the official tagline readable.');
 assert(styles.includes('.login-card .qe-people-button'), 'Authentication primary actions must retain adequate button sizing.');
 
 

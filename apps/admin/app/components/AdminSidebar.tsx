@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminWorkspaceContext } from './AdminWorkspaceContext';
+import QuantaEdgeBrand from './QuantaEdgeBrand';
 import {
   ADMIN_NAV_GROUPS,
   ADMIN_OVERVIEW_ITEM,
@@ -103,17 +104,12 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
   return (
     <aside className={'admin-sidebar qe-shared-sidebar' + (collapsed ? ' is-collapsed' : '')}>
       <div className="qe-sidebar-brand-row">
-        <Link href="/" className="admin-brand qe-admin-brand" aria-label="QuantaEdge — Smarter Decisions. Greater Growth.">
-          {collapsed ? (
-            <img className="qe-admin-brand-mark" src="/branding/quantaedge-icon.png" alt="" width={35} height={35} aria-hidden="true" />
-          ) : (
-            <span className="qe-admin-brand-copy">
-              <img className="qe-admin-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
-              <small className="qe-admin-brand-tagline">Smarter Decisions. Greater Growth.</small>
-              <small className="qe-admin-brand-context">{variant === 'content' ? 'ACADEMIC CONSOLE' : 'ADMIN CONSOLE'}</small>
-            </span>
-          )}
-        </Link>
+        <QuantaEdgeBrand
+          href="/"
+          variant={collapsed ? 'compact' : 'header'}
+          className={'qe-admin-brand-lockup' + (collapsed ? ' qe-admin-brand-lockup--collapsed' : '')}
+        />
+        {!collapsed ? <small className="qe-admin-brand-context">{variant === 'content' ? 'ACADEMIC CONSOLE' : 'ADMIN CONSOLE'}</small> : null}
         <button
           type="button"
           className="qe-sidebar-toggle"

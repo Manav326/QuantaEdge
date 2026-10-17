@@ -249,3 +249,11 @@ The user explicitly directed implementation of the full cross-app UI/UX plan, in
 - Implement only app-scoped responsive/accessibility refinements and shared contract checks; preserve current APIs, data, authorization, curriculum, scoring, HR permissions, payroll, attendance, and audit semantics.
 - The final CI run must use the latest main SHA after concurrent pipeline commits settle. Cancelled earlier runs are not evidence of a successful build.
 - Browser/device visual verification remains a distinct gate; do not mark it complete on the basis of source inspection or a CI build alone.
+
+
+## Canonical brand rendering — October 17, 2026
+
+- Admin and People Operations now use the canonical `QuantaEdgeBrand` component rather than rendering the legacy wordmark PNG as a live image.
+- The component is copied byte-identically into independently built app bundles; the contract checks exact component parity and byte-identical canonical Q-mark assets.
+- Login and forced-password-change screens use the same Q mark, wordmark text and tagline. App-scoped white lockup surfaces preserve the approved navy/orange wordmark and tagline treatment.
+- The older wordmark PNG remains a legacy/export asset and is not used in these live lockups.

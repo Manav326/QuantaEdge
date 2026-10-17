@@ -152,18 +152,21 @@ button:disabled,
   text-decoration: none;
 }
 
-.qe-people-brand img {
-  display: block;
-  width: 166px;
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  background: #fff;
-  border-radius: 7px;
-  padding: 4px 5px;
-}
+.qe-people-brand-lockup{display:inline-flex;min-width:0;max-width:100%;color:#fff;text-decoration:none}
+.qe-people-brand-lockup .qe-brand{display:flex;min-width:0;max-width:100%;flex-direction:column;align-items:flex-start;gap:2px}
+.qe-people-brand-lockup .qe-brand__lockup{display:flex;align-items:center;gap:8px;min-width:0;max-width:100%;padding:6px 8px;border:1px solid #f1e5de;border-radius:8px;background:#fff}
+.qe-people-brand-lockup .qe-brand__icon{display:block;flex:0 0 34px;width:34px;height:34px;object-fit:contain}
+.qe-people-brand-lockup .qe-brand__copy{display:flex;min-width:0;max-width:100%;flex-direction:column;gap:3px}
+.qe-people-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:19px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.qe-people-brand-lockup .qe-brand__name-quant,.qe-people-login-brand-lockup .qe-brand__name-quant{color:#152038}
+.qe-people-brand-lockup .qe-brand__name-edge,.qe-people-login-brand-lockup .qe-brand__name-edge{color:#F97316}
+.qe-people-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:6.4px;line-height:1.25;letter-spacing:0;white-space:nowrap}
+.qe-people-brand-lockup--collapsed{flex:0 0 42px;width:42px}
+.qe-people-brand-lockup--collapsed .qe-brand__copy{display:none}
+.qe-people-brand-lockup--collapsed .qe-brand__lockup{justify-content:center;padding:2px}
+.qe-people-brand-lockup--collapsed .qe-brand__icon{width:36px;height:36px}
 
-.qe-people-brand span {
+.qe-people-brand > span {
   color: #c4ccda;
   font-size: 9px;
   font-weight: 800;
@@ -819,13 +822,13 @@ button:disabled,
   justify-content: center;
 }
 
-.qe-people-workspace.is-collapsed .qe-people-brand img {
+.qe-people-workspace.is-collapsed .qe-people-brand-lockup .qe-brand__icon {
   width: 36px;
   height: 36px;
   object-fit: contain;
 }
 
-.qe-people-workspace.is-collapsed .qe-people-brand span,
+.qe-people-workspace.is-collapsed .qe-people-brand > span,
 .qe-people-workspace.is-collapsed .qe-people-navigation-heading,
 .qe-people-workspace.is-collapsed .qe-people-navigation-label,
 .qe-people-workspace.is-collapsed .qe-people-workspace-label,
@@ -1480,4 +1483,22 @@ button:disabled,
 }
 @media (prefers-reduced-motion: reduce) {
   .qe-people-page-slot tbody tr { transition: none; }
+}
+
+
+/* Shared canonical lockup sizing for HRMS authentication screens. */
+.qe-people-login-brand{display:grid;justify-items:start;gap:9px;max-width:100%}
+.qe-people-login-brand-lockup{display:inline-flex;max-width:100%;color:inherit;text-decoration:none}
+.qe-people-login-brand-lockup .qe-brand{display:flex;min-width:0;max-width:100%;flex-direction:column;align-items:flex-start;gap:2px}
+.qe-people-login-brand-lockup .qe-brand__lockup{display:flex;align-items:center;gap:10px;min-width:0;max-width:100%;padding:8px 10px;border:1px solid #f1e5de;border-radius:10px;background:#fff}
+.qe-people-login-brand-lockup .qe-brand__copy{display:flex;min-width:0;max-width:100%;flex-direction:column;gap:3px}
+.qe-people-login-brand-lockup .qe-brand__icon{display:block;flex:0 0 42px;width:42px;height:42px;object-fit:contain}
+.qe-people-login-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-size:26px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.qe-people-login-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:9.4px;line-height:1.25;letter-spacing:0;white-space:nowrap}
+.qe-people-login-brand > span{color:#c4ccda;font-size:9px;font-weight:800;letter-spacing:.15em}
+@media(max-width:390px){
+  .qe-people-login-brand-lockup .qe-brand__lockup{gap:7px;padding:7px 8px}
+  .qe-people-login-brand-lockup .qe-brand__icon{flex-basis:36px;width:36px;height:36px}
+  .qe-people-login-brand-lockup .qe-brand__name{font-size:22px}
+  .qe-people-login-brand-lockup .qe-brand__tagline{font-size:7.6px}
 }

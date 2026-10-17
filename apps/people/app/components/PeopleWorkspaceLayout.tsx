@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import QuantaEdgeBrand from './QuantaEdgeBrand';
 
 type StaffSession = {
   staffId?: number;
@@ -294,12 +295,14 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
       <a className="qe-people-skip-link" href="#main-content">Skip to main content</a>
       <aside className="qe-people-sidebar" aria-label="Primary workspace">
         <div className="qe-people-brand-row">
-          <Link href="/" className="qe-people-brand" aria-label="QuantaEdge People Operations home">
-            {collapsed
-              ? <img src="/branding/quantaedge-icon.png" alt="" width={36} height={36} />
-              : <img src="/branding/quantaedge-wordmark.png" alt="QuantaEdge" width={200} height={32} />}
+          <div className="qe-people-brand">
+            <QuantaEdgeBrand
+              href="/"
+              variant={collapsed ? 'compact' : 'header'}
+              className={'qe-people-brand-lockup' + (collapsed ? ' qe-people-brand-lockup--collapsed' : '')}
+            />
             {!collapsed && <span>PEOPLE OPERATIONS</span>}
-          </Link>
+          </div>
           <button
             type="button"
             className="qe-people-collapse-button"

@@ -30,6 +30,12 @@ function requireInteractionBaseline(source, app) {
 
 const branding = read('docs/branding.md');
 const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
+const adminBrandComponent = read('apps/admin/app/components/QuantaEdgeBrand.tsx');
+const peopleBrandComponent = read('apps/people/app/components/QuantaEdgeBrand.tsx');
+const adminSidebar = read('apps/admin/app/components/AdminSidebar.tsx');
+const peopleWorkspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
+const peopleLogin = read('apps/people/app/login/page.tsx');
+const peopleChangePassword = read('apps/people/app/change-password/page.tsx');
 const webLayout = read('apps/web/app/layout.tsx');
 const adminLayout = read('apps/admin/app/layout.tsx');
 const peopleLayout = read('apps/people/app/layout.tsx');
@@ -43,6 +49,13 @@ for (const token of ['#F97316', '#C2410C', '#FFF0E5', 'Smarter Decisions. Greate
 }
 assert(brandComponent.includes('/branding/quantaedge-icon.png'), 'Live QuantaEdge brand component must use the canonical Q-mark asset.');
 assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'Live QuantaEdge brand component must retain the unchanged tagline.');
+assert(adminBrandComponent === brandComponent, 'Admin must use a byte-identical copy of the canonical QuantaEdge brand component.');
+assert(peopleBrandComponent === brandComponent, 'People Operations must use a byte-identical copy of the canonical QuantaEdge brand component.');
+assert(adminSidebar.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin sidebar must use the canonical shared brand component.');
+assert(peopleWorkspace.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'People workspace must use the canonical shared brand component.');
+assert(!adminSidebar.includes('quantaedge-wordmark.png'), 'Admin sidebar must not render the invalid legacy wordmark PNG.');
+assert(!peopleWorkspace.includes('quantaedge-wordmark.png') && !peopleLogin.includes('quantaedge-wordmark.png') && !peopleChangePassword.includes('quantaedge-wordmark.png'), 'People workspace and authentication must not render the invalid legacy wordmark PNG.');
+assert(peopleLogin.includes('<QuantaEdgeBrand href={null} variant="auth"') && peopleChangePassword.includes('<QuantaEdgeBrand href={null} variant="auth"'), 'HRMS login and password-change screens must use the shared brand lockup.');
 assert(webLayout.includes('/branding/quantaedge-icon.png'), 'Learner web must configure the canonical browser/app icon.');
 assert(adminLayout.includes('/branding/quantaedge-icon.png'), 'Admin must configure the canonical browser/app icon.');
 assert(peopleLayout.includes('/branding/quantaedge-icon.png'), 'People Operations must configure the canonical browser/app icon.');
@@ -63,13 +76,18 @@ assert(/overscroll-behavior-inline:\s*contain/.test(adminStyles), 'Admin data/pr
 assert(/tbody tr:focus-within/.test(peopleStyles), 'People tables must keep keyboard focus within rows discoverable.');
 assert(!/(#244c9a|#17376f|#10264b|#3569c8|#6e94d6)/i.test(peopleBaseStyles + peopleStyles), 'People Operations must not regress to its former blue palette.');
 
-for (const asset of [
+const brandAssetPaths = [
   'apps/web/public/branding/quantaedge-icon.png',
   'apps/admin/public/branding/quantaedge-icon.png',
   'apps/people/public/branding/quantaedge-icon.png',
-]) {
-  const path = join(root, asset);
-  assert(existsSync(path) && statSync(path).size > 0, 'Missing packaged canonical brand asset: ' + asset);
+];
+const brandAssets = brandAssetPaths.map(path => {
+  const absolute = join(root, path);
+  assert(existsSync(absolute) && statSync(absolute).size > 0, 'Missing packaged canonical brand asset: ' + path);
+  return existsSync(absolute) ? readFileSync(absolute) : Buffer.alloc(0);
+});
+if (brandAssets.every(asset => asset.length > 0)) {
+  assert(brandAssets[0].equals(brandAssets[1]) && brandAssets[0].equals(brandAssets[2]), 'All app contexts must package a byte-identical canonical Q-mark asset.');
 }
 
 if (failures.length) {
