@@ -1,10 +1,12 @@
 'use client';
 
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
+import { useUiTranslation } from '../../i18n/useUiTranslation';
 import { useEffect, useRef, useState } from 'react';
 import styles from './Verify.module.css';
 
 export default function CertificateVerifyPage() {
+  const t = useUiTranslation();
   const [code, setCode] = useState('');
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState('');
@@ -38,15 +40,15 @@ export default function CertificateVerifyPage() {
 
   async function verify(value = code) {
     const normalized = value.trim().toUpperCase();
-    if (!normalized) { setError('Enter the certificate ID printed on the document.'); return; }
+    if (!normalized) { setError(t('certificate.verify.enterId')); return; }
     setBusy(true); setError(''); setData(null);
     try {
       const response = await fetch('/api/v1/certificates/verify/' + encodeURIComponent(normalized), { cache: 'no-store' });
       const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(response.status === 404 ? 'No certificate record matches this ID.' : (body.message || 'Verification could not be completed.'));
+      if (!response.ok) throw new Error(response.status === 404 ? t('certificate.verify.notFound') : t('certificate.verify.failed'));
       setData(body);
     } catch (e: any) {
-      setError(e?.message || 'Verification could not be completed.');
+      setError(t('certificate.verify.failed'));
     } finally { setBusy(false); }
   }
 
@@ -80,11 +82,11 @@ export default function CertificateVerifyPage() {
     setScannerHint('');
     const Detector = (window as any).BarcodeDetector;
     if (!Detector || !scanFormats.length) {
-      setScannerHint('Camera scanning is unavailable in this browser. You can still type the certificate number or use a handheld barcode scanner focused on the Certificate ID field.');
+      setScannerHint(t('certificate.verify.scannerUnavailable'));
       return;
     }
     if (!navigator.mediaDevices?.getUserMedia) {
-      setScannerHint('This browser cannot access a camera here. Open the verifier over HTTPS, or enter the certificate number manually.');
+      setScannerHint(t('certificate.verify.cameraUnavailable'));
       return;
     }
     try {
@@ -96,10 +98,10 @@ export default function CertificateVerifyPage() {
       scannerStreamRef.current = stream;
       scannerRunningRef.current = true;
       setScanning(true);
-      setScannerHint('Point the camera at the certificate QR code or barcode.');
+      setScannerHint(t('certificate.verify.pointCamera'));
       await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       const video = videoRef.current;
-      if (!video) throw new Error('Camera preview could not be initialized.');
+      if (!video) throw new Error(t('certificate.verify.cameraPreviewFailed'));
       video.srcObject = stream;
       await video.play();
       while (scannerRunningRef.current) {
@@ -122,8 +124,8 @@ export default function CertificateVerifyPage() {
     } catch (e: any) {
       stopScanner();
       setScannerHint(e?.name === 'NotAllowedError'
-        ? 'Camera permission was denied. Allow camera access or enter the certificate number manually.'
-        : 'The camera could not scan this certificate. Use the certificate number field or a handheld barcode scanner.');
+        ? t('certificate.verify.cameraDenied')
+        : t('certificate.verify.cameraFailed'));
     }
   }
 
@@ -132,35 +134,35 @@ export default function CertificateVerifyPage() {
       <section className={styles.page}>
         <QuantaEdgeBrand href="/" variant="header" className={styles.brandLockup} />
         <div className={styles.card}>
-          <span className={styles.kicker}>AUTHENTICITY CHECK</span>
-          <h1>Verify a certificate</h1>
-          <p>Enter the certificate ID shown on a QuantaEdge PDF or PNG. Only the certificate's visible details are displayed.</p>
+          <span className={styles.kicker}>{t('certificate.verify.kicker')}</span>
+          <h1>{t('certificate.verify.title')}</h1>
+          <p>{t('certificate.verify.description')}</p>
           <form className={styles.form} onSubmit={(event) => { event.preventDefault(); void verify(); }}>
-            <label htmlFor="certificate-code">Certificate ID</label>
+            <label htmlFor="certificate-code">{t('certificate.verify.idLabel')}</label>
             <input id="certificate-code" value={code} onChange={(event) => setCode(event.target.value)}
               placeholder="QE-2026-ABCDEF1234567890" autoComplete="off" maxLength={40} />
-            <button className="button button-dark" disabled={busy}>{busy ? 'Checking…' : 'Verify certificate'}</button>
+            <button className="button button-dark" disabled={busy}>{busy ? t('certificate.verify.checking') : t('certificate.verify.action')}</button>
           </form>
           <div className={styles.scanControls}>
             <button type="button" className="button button-light" onClick={() => void startScanner()}
               disabled={busy || scanning || scanFormats.length === 0}>
-              {scanning ? 'Scanning…' : 'Scan QR code or barcode'}
+              {scanning ? t('certificate.verify.scanning') : t('certificate.verify.scanAction')}
             </button>
-            {scanning && <button type="button" className="button button-light" onClick={stopScanner}>Stop camera</button>}
+            {scanning && <button type="button" className="button button-light" onClick={stopScanner}>{t('certificate.verify.stopCamera')}</button>}
           </div>
           <p className={styles.scannerHint}>
-            A QR code opens this verifier automatically. You can also scan the printed Code 128 barcode with a supported camera or handheld scanner, or enter the certificate ID above.
+            {t('certificate.verify.scannerHelp')}
           </p>
           {scanning && (
             <div className={styles.scannerPanel}>
-              <video ref={videoRef} className={styles.scannerVideo} muted playsInline autoPlay aria-label="Live certificate code scanner" />
+              <video ref={videoRef} className={styles.scannerVideo} muted playsInline autoPlay aria-label={t('certificate.verify.videoLabel')} />
             </div>
           )}
           {(scannerHint || scanFormats.length === 0) && (
             <p className={styles.scannerHint}>
-              {scannerHint || 'Camera scanning is not supported in this browser. Enter the certificate ID, or connect a handheld barcode scanner and scan into the field above.'}
+              {scannerHint || t('certificate.verify.cameraUnsupported')}
               {scanFormats.length > 0 && (
-                <span> Supported camera formats: {[
+                <span> {t('certificate.verify.supportedFormatsPrefix')}: {[
                   scanFormats.includes('qr_code') ? 'QR code' : '',
                   scanFormats.includes('code_128') ? 'Code 128 barcode' : '',
                 ].filter(Boolean).join(' and ')}.</span>
@@ -171,17 +173,17 @@ export default function CertificateVerifyPage() {
           {data && <section className={styles.result} aria-live="polite">
             <div className={data.verified ? styles.statusValid : styles.statusRevoked}>
               <span aria-hidden="true">{data.verified ? '✓' : '!'}</span>
-              <strong>{data.verified ? 'Valid certificate' : 'Certificate revoked'}</strong>
+              <strong>{data.verified ? t('certificate.verify.valid') : t('certificate.verify.revoked')}</strong>
             </div>
             <dl>
-              <div><dt>Certificate ID</dt><dd>{data.certificateNumber}</dd></div>
-              <div><dt>Recipient</dt><dd>{data.recipientName}</dd></div>
-              <div><dt>Achievement</dt><dd>{data.achievementTitle}</dd></div>
-              <div><dt>Class</dt><dd>{data.classCode ? 'Class ' + data.classCode : '—'}</dd></div>
-              <div><dt>Subject track</dt><dd>{data.subjectTrack || '—'}</dd></div>
-              <div><dt>Issue date</dt><dd>{data.issuedAt ? new Date(data.issuedAt).toLocaleDateString() : '—'}</dd></div>
+              <div><dt>{t('certificate.verify.idLabel')}</dt><dd>{data.certificateNumber}</dd></div>
+              <div><dt>{t('certificate.verify.recipient')}</dt><dd>{data.recipientName}</dd></div>
+              <div><dt>{t('certificate.verify.achievement')}</dt><dd>{data.achievementTitle}</dd></div>
+              <div><dt>Class</dt><dd>{data.classCode ? t('certificate.verify.class', { classCode: data.classCode }) : '—'}</dd></div>
+              <div><dt>{t('certificate.verify.subject')}</dt><dd>{data.subjectTrack || '—'}</dd></div>
+              <div><dt>{t('certificate.verify.issueDate')}</dt><dd>{data.issuedAt ? new Date(data.issuedAt).toLocaleDateString() : '—'}</dd></div>
             </dl>
-            <p className={styles.privacy}>This check confirms the current certificate status; it does not disclose the student's profile or assessment history.</p>
+            <p className={styles.privacy}>{t('certificate.verify.privacy')}</p>
           </section>}
         </div>
       </section>
