@@ -40,6 +40,10 @@ const androidAppManifest = read('apps/android/app/src/main/AndroidManifest.xml')
 const androidTenantMigration = read('services/api/src/main/resources/db/migration/V121__institution_branding_asset_storage.sql');
 const institutionTenantController = read('services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java');
 const institutionPlatformController = read('services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java');
+const institutionAuthService = read('services/api/src/main/java/com/quantaedge/api/InstitutionAuthService.java');
+const androidCertificateScreen = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
+const tutorService = read('services/api/src/main/java/com/quantaedge/api/TutorService.java');
+const colorThemeProvider = read('apps/web/app/components/ColorThemeProvider.tsx');
 const adminBrandComponent = read('apps/admin/app/components/QuantaEdgeBrand.tsx');
 const peopleBrandComponent = read('apps/people/app/components/QuantaEdgeBrand.tsx');
 const adminSidebar = read('apps/admin/app/components/AdminSidebar.tsx');
@@ -70,6 +74,12 @@ assert(!workspaceLayout.includes('/student/institutions') && !workspaceLayout.in
 assert(androidTenantBrand.includes('LocalInstitutionBrandIdentity') && androidTenantBrand.includes('institution.displayName'), 'Android shared brand lockup must render a resolved institution name.');
 assert(androidTenantRepository.includes('/api/v1/institution/public/branding/') && androidTenantRepository.includes('/api/v1/institution/join'), 'Android must resolve public school branding and use the membership join API.');
 assert(tenantBrandingProvider.includes('tenantCodeFromSchoolPath') && tenantBrandingProvider.includes('JOIN_TENANT_SESSION_KEY'), 'Web branding must bind invitation context to the school-specific path across sign-in redirects.');
+assert(tenantBrandingProvider.includes('window.location.hash') && tenantBrandingProvider.includes('history.replaceState'), 'Invitation codes must travel in URL fragments and be removed from browser history after safe capture.');
+assert(institutionTenantController.includes('value(body,"institutionCode")') && institutionAuthService.includes("and (?='' or t.tenant_code=?)"), 'Server redemption must bind a join code to the expected school when the link specifies one.');
+assert(institutionTenantController.includes('RequestParam(value="institutionCode"') && institutionTenantController.includes('requiresInstitutionContext'), 'The learner membership endpoint must scope to a school and avoid multi-school disclosure.');
+assert(androidCertificateScreen.includes('institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }'), 'Android certificate issuance must preserve the current school issuer context.');
+assert(tutorService.includes('You are a helpful tutor for school learners') && !tutorService.includes('You are QuantaEdge Tutor for school learners'), 'Generated tutor answers must not identify QuantaEdge as the learner-facing tutor.');
+assert(colorThemeProvider.includes('brand?.themeTokens') && colorThemeProvider.includes('applyPalette(actual, tokens)'), 'Tenant identity must continue to feed the existing shared v2 theme provider without a parallel palette system.');
 assert(schoolEntryPage.includes('brand.displayName') && schoolEntryPage.includes('/login/student') && schoolEntryPage.includes('/signup'), 'A direct school invitation must show the school brand before learner authentication.');
 assert(hrmsInstitutionPage.includes('schoolLearningLink') && hrmsInstitutionPage.includes("new URL('/school/" ) && hrmsInstitutionPage.includes('Copy school learning link'), 'HRMS must generate a shareable school-branded invite URL rather than only exposing the raw join code.');
 assert(androidAppManifest.includes('${institutionLinkPath}') && androidAppManifest.includes('${applicationLabel}') && androidAppManifest.includes('${applicationIcon}'), 'Android launcher identity and app-link route must be configured per branded build.');
