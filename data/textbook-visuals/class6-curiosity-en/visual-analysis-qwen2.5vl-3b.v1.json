@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 62,
+    "assets_selected": 71,
     "assets_processed_this_run": 10,
     "assets_analyzed": 169,
     "assets_failed": 4,
-    "assets_skipped_from_checkpoint": 52,
+    "assets_skipped_from_checkpoint": 61,
     "publication_allowed": false
   },
   "results": [
@@ -401,7 +401,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38994583378",
-      "checkpointed_at": "2026-10-17T03:54:54Z"
+      "checkpointed_at": "2026-10-17T04:09:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -2203,6 +2203,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2dda13f097444900abfef3a5152f237842412cdae789bc1edd09871facda62d4.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2224,8 +2225,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:58:11Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:11:22Z"
     },
     {
       "asset_id": "c69d4d68c2b470c0964f40a6",
@@ -2235,6 +2236,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2aa0b2b20783414944630b221601e8ed170d19adc58d81908752649761e15b7b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2251,8 +2253,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:59:38Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:12:47Z"
     },
     {
       "asset_id": "1823e9e073f9ef554498f8a7",
@@ -2262,6 +2264,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/ff0faef63dd4213fe7c50fb852a496bc73557e0643cceaa95fc579fb9993b6d1.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2280,8 +2283,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:01:13Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:14:19Z"
     },
     {
       "asset_id": "bab84f5054483c1ee589f5da",
@@ -2291,6 +2294,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/b5b4b2636a6e6b2689defe3a54d9b66741a3c712e4bae2bd2b03b48628b656cc.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2307,8 +2311,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:02:47Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:15:49Z"
     },
     {
       "asset_id": "259432731a10bb47ff9ba58d",
@@ -2318,6 +2322,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/dc6fb20ed0404b50cb59f52e240f5c5e85435c8cbc1236b63c59a284a9d780f7.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2334,8 +2339,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:04:27Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:17:27Z"
     },
     {
       "asset_id": "a48e669518255c0038a4121c",
@@ -2345,6 +2350,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/1ed137499d78e146b5d4b55a89971718b6ae87403390ebe68d40c7d47981f5ca.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2361,8 +2367,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:05:57Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:18:52Z"
     },
     {
       "asset_id": "1ede912f83cb746298ba01f4",
@@ -2372,6 +2378,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c79ae7d144fad7e02c59441d27b36926a9af79c0609e028a8cdc6921f12ca57b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2388,8 +2395,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:07:28Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:20:21Z"
     },
     {
       "asset_id": "5c4108fcc599f2f207c3c5bc",
@@ -2399,6 +2406,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/61cabfac624a633491799e52bd0320df576ae2031fee6d934e30af6bba941264.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2423,8 +2431,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:09:06Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:21:56Z"
     },
     {
       "asset_id": "bc8bf0628ca6918e2a5f6d2b",
@@ -2434,6 +2442,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d5d50c185ace6f86619ae00e283a1dfbec4e164316afa3423fd13ae0eaf1e7e8.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2456,8 +2465,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:10:42Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:23:29Z"
     },
     {
       "asset_id": "2887e2147ae0d1ca0297a870",
