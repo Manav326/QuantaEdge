@@ -14,8 +14,8 @@ type InstitutionMembership = {
   authorized_courses?: number;
 };
 
-async function loadLearnerMemberships(): Promise<InstitutionMembership[]> {
-  const response = await fetch('/api/v1/institution/memberships/me', {
+async function loadLearnerMemberships(institutionCode: string): Promise<InstitutionMembership[]> {
+  const response = await fetch('/api/v1/institution/memberships/me?institutionCode=' + encodeURIComponent(institutionCode), {
     credentials: 'same-origin',
     cache: 'no-store',
     headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' },
@@ -36,12 +36,18 @@ export default function StudentSchoolPage() {
   const [error, setError] = useState('');
 
   const refresh = useCallback(async () => {
+    const institutionCode = brand?.institutionCode;
+    if (!institutionCode) {
+      setMemberships([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError('');
-    try { setMemberships(await loadLearnerMemberships()); }
+    try { setMemberships(await loadLearnerMemberships(institutionCode)); }
     catch (problem) { setError(problem instanceof Error ? problem.message : 'School enrollment could not be checked.'); }
     finally { setLoading(false); }
-  }, []);
+  }, [brand?.institutionCode]);
 
   useEffect(() => { void refresh(); }, [refresh]);
 
