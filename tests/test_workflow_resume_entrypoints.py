@@ -72,6 +72,24 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("steps.generation_preflight.outputs.retryable_segments != '0'", approval_step)
         self.assertIn("ALLOW_EXPERIMENTAL_MODEL", approval_step)
 
+    def test_class6_benchmark_runs_only_after_layer5_recovery_and_fails_closed(self):
+        workflow = read("benchmark-class6-curiosity-after-layer5.yml")
+        self.assertIn("workflow_run:", workflow)
+        self.assertIn('workflows: ["Resume Class 6 NCERT Curiosity Layers 1-5 evidence ledger"]', workflow)
+        gate = workflow.index("- name: Require a real COMPLETE Class 6 Curiosity Layer 5 ledger")
+        ollama = workflow.index("- name: Start loopback-only Ollama")
+        benchmark = workflow.index("- name: Benchmark the same source-bound NCERT segments under the current contract")
+        require_valid = workflow.index("- name: Require at least one contract-valid candidate before allowing generation")
+        self.assertLess(gate, ollama)
+        self.assertLess(ollama, benchmark)
+        self.assertLess(benchmark, require_valid)
+        self.assertIn('assert ledger.get("ledger_status") == "COMPLETE"', workflow)
+        self.assertIn('"qwen2.5:1.5b,qwen2.5:3b,qwen3:4b"', workflow)
+        self.assertIn('row.get("successful_samples", 0) >= 1', workflow)
+        self.assertIn('row.get("lesson_contract_valid_rate", 0) > 0', workflow)
+        self.assertIn('"production_model_selection": report.get("production_model_selection")', workflow)
+        self.assertIn('"publication_allowed": report.get("publication_allowed")', workflow)
+
     def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
         workflow = read("quantaedge-layers-6-8.yml")
         self.assertIn("workflow_call:", workflow)
