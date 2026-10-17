@@ -43,7 +43,8 @@ public class AuthorizationService {
     boolean hrmsPermission = permission.startsWith("HR_")
         || "HR_SELF_SERVICE_VIEW".equals(permission)
         || "TEACHING_ASSIGNMENT_VIEW".equals(permission)
-        || "CLASS_SCHEDULE_POLICY_MANAGE".equals(permission);
+        || "CLASS_SCHEDULE_POLICY_MANAGE".equals(permission)
+        || "QE_PLATFORM_OWNER".equals(permission);
     // The Education Admin global bypass can never satisfy an HRMS-only capability,
     // even if an endpoint is reached through an unexpected URL or proxy path.
     if (hrmsPermission && !"HRMS".equals(AuthService.normalizeWorkspace(context.workspace()))) return false;
