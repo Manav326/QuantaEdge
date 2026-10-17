@@ -3264,7 +3264,6 @@ fun QuantaEdgeApp() {
                         language = language,
                         busy = busy,
                         onIssueCertificate = ::issueCertificateForAttempt,
-                        onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = { question, answer, afterSaved -> saveAssessmentAnswer(question, answer, afterSaved) },
                         onSubmit = ::submitAssessment,

@@ -32,8 +32,7 @@ fun StudentProgressScreen(
     certificateEligibility: Map<Long, JSONObject>,
     onRefresh: () -> Unit,
     onIssueCertificate: (Long) -> Unit,
-    onViewCertificate: (Long) -> Unit,
-    onDownloadCertificate: (Long, String) -> Unit
+    onViewCertificate: (Long) -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     val compact = LocalConfiguration.current.screenWidthDp < 390
@@ -184,24 +183,9 @@ fun StudentProgressScreen(
                             certificateStatus == "ISSUED" && certificateId > 0L -> {
                                 Text(t("Certificate issued", "प्रमाणपत्र जारी"), color = MaterialTheme.colorScheme.primary,
                                     style = MaterialTheme.typography.labelMedium)
-                                if (compact) {
-                                    Column(verticalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.fillMaxWidth()) {
-                                        OutlinedButton(onClick = { onViewCertificate(certificateId) }, enabled = !busy,
-                                            modifier = Modifier.fillMaxWidth()) { Text(t("View certificate", "प्रमाणपत्र देखें")) }
-                                        OutlinedButton(onClick = { onDownloadCertificate(certificateId, "pdf") }, enabled = !busy,
-                                            modifier = Modifier.fillMaxWidth()) { Text(t("Save PDF", "PDF सेव करें")) }
-                                        OutlinedButton(onClick = { onDownloadCertificate(certificateId, "png") }, enabled = !busy,
-                                            modifier = Modifier.fillMaxWidth()) { Text(t("Save PNG", "PNG सेव करें")) }
-                                    }
-                                } else {
-                                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                                        OutlinedButton(onClick = { onViewCertificate(certificateId) }, enabled = !busy,
-                                            modifier = Modifier.weight(1f)) { Text(t("View", "देखें")) }
-                                        OutlinedButton(onClick = { onDownloadCertificate(certificateId, "pdf") }, enabled = !busy,
-                                            modifier = Modifier.weight(1f)) { Text(t("Save PDF", "PDF सेव करें")) }
-                                        OutlinedButton(onClick = { onDownloadCertificate(certificateId, "png") }, enabled = !busy,
-                                            modifier = Modifier.weight(1f)) { Text(t("Save PNG", "PNG सेव करें")) }
-                                    }
+                                OutlinedButton(onClick = { onViewCertificate(certificateId) }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("View certificate", "प्रमाणपत्र देखें"))
                                 }
                             }
                             certificateStatus == "REVOKED" || eligibility?.textAny("eligibility_reason") == "CERTIFICATE_REVOKED" -> {
