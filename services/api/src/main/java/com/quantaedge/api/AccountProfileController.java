@@ -43,8 +43,16 @@ public class AccountProfileController {
       select u.id,u.role,u.display_name,u.email,u.email_verified_at,u.google_subject,
         u.google_picture_url,u.google_given_name,u.google_family_name,u.google_locale,
         u.mobile_e164,u.mobile_verified_at,u.username,u.username_changed_at,
+        (u.password_hash is not null and btrim(u.password_hash)<>'') as password_set,
         u.preferred_locale,u.created_at,u.updated_at,
-        st.id as linked_student_id,st.class_code,st.board,st.language
+        st.id as linked_student_id,st.class_code,st.board,st.language,
+        case
+          when st.profile_image_data_url is not null
+            then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from st.profile_updated_at)*1000)::bigint::text
+          when u.profile_image_data_url is not null
+            then '/api/v1/guardians/profile-photo?v=' || floor(extract(epoch from u.profile_updated_at)*1000)::bigint::text
+          else u.google_picture_url
+        end as resolved_profile_image_url
       from user_account u
       left join student st on st.user_account_id=u.id and st.active=true and st.environment='PRODUCTION'
       where u.id=? and u.active=true
@@ -75,7 +83,8 @@ public class AccountProfileController {
     result.put("mobile", row.get("mobile_e164"));
     result.put("mobileVerified", mobileVerified);
     result.put("verifiedMethods", verifiedMethods);
-    result.put("profileImageUrl", row.get("google_picture_url"));
+    result.put("profileImageUrl", row.get("resolved_profile_image_url"));
+    result.put("passwordSet", Boolean.TRUE.equals(row.get("password_set")));
     result.put("googleGivenName", row.get("google_given_name"));
     result.put("googleFamilyName", row.get("google_family_name"));
     result.put("googleLocale", row.get("google_locale"));
@@ -214,6 +223,7 @@ public class AccountProfileController {
     result.put("mobileVerified", false);
     result.put("verifiedMethods", List.of());
     result.put("profileImageUrl", null);
+    result.put("passwordSet", false);
     result.put("username", row.get("username"));
     result.put("usernameCanChange", false);
     result.put("usernameCanChangeAt", null);
