@@ -235,7 +235,7 @@ export default function PracticePage(){
 
   if(noPractice)return <main className="practice-page">
     <section className="practice-wrap">
-      <div className="eyebrow">{lesson?.subject_name||translateUi(locale, 'legacy.web.practice.a9de3f16')} · {lesson?.chapter_name||translateUi(locale, 'legacy.web.chapter.0a3bff81')}</div>
+      <div className="eyebrow">{lesson?.subject_name||(locale==='english'?'Practice':'अभ्यास')} · {lesson?.chapter_name||translateUi(locale, 'legacy.web.chapter.0a3bff81')}</div>
       <h1><UiText message="legacy.web.practice.set.is.not.available.yet.d6b87368" /></h1>
       <p>{notice}</p>
       <div className="concept-card"><h2>{lesson?.title||translateUi(locale, 'legacy.web.this.micro.topic.0b4594d6')}</h2><p><UiText message="legacy.web.instead.of.showing.questions.from.an.u.bfb8bb28" /></p></div>
