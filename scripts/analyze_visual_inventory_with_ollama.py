@@ -11,6 +11,9 @@ import base64
 import hashlib
 import json
 import mimetypes
+import math
+import os
+import shutil
 import sys
 import time
 import urllib.error
@@ -28,6 +31,131 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+
+def _read_proc_values(path: Path) -> dict[str, int]:
+    """Read numeric values from Linux proc/cgroup files without optional packages."""
+    values: dict[str, int] = {}
+    try:
+        for line in Path(path).read_text(encoding="utf-8").splitlines():
+            parts = line.split()
+            if len(parts) < 2:
+                continue
+            try:
+                values[parts[0].rstrip(":")] = int(parts[1])
+            except ValueError:
+                continue
+    except (OSError, UnicodeError):
+        pass
+    return values
+
+
+def _format_bytes(value: int | None) -> str:
+    if value is None or value < 0:
+        return "n/a"
+    amount = float(value)
+    for unit in ("B", "KiB", "MiB", "GiB", "TiB"):
+        if amount < 1024.0 or unit == "TiB":
+            return f"{amount:.1f} {unit}"
+        amount /= 1024.0
+    return f"{amount:.1f} TiB"
+
+
+def resource_snapshot() -> dict[str, Any]:
+    """Return best-effort runner RAM, process RSS, swap, CPU and workspace disk stats."""
+    result: dict[str, Any] = {"cpu_count": os.cpu_count() or 1}
+
+    meminfo = _read_proc_values(Path("/proc/meminfo"))
+    total_kib = meminfo.get("MemTotal")
+    available_kib = meminfo.get("MemAvailable")
+    if total_kib is not None and available_kib is not None:
+        result["ram_total_bytes"] = total_kib * 1024
+        result["ram_available_bytes"] = available_kib * 1024
+        result["ram_used_bytes"] = max(0, (total_kib - available_kib) * 1024)
+        result["ram_used_percent"] = round(100 * (total_kib - available_kib) / total_kib, 1) if total_kib else None
+    swap_total_kib, swap_free_kib = meminfo.get("SwapTotal"), meminfo.get("SwapFree")
+    if swap_total_kib is not None and swap_free_kib is not None:
+        result["swap_total_bytes"] = swap_total_kib * 1024
+        result["swap_used_bytes"] = max(0, (swap_total_kib - swap_free_kib) * 1024)
+
+    process_status = _read_proc_values(Path("/proc/self/status"))
+    if "VmRSS" in process_status:
+        result["python_rss_bytes"] = process_status["VmRSS"] * 1024
+    if "VmHWM" in process_status:
+        result["python_peak_rss_bytes"] = process_status["VmHWM"] * 1024
+
+    # cgroup values, when exposed by the runner, help identify container/job limits.
+    cgroup_candidates = (
+        (Path("/sys/fs/cgroup/memory.current"), Path("/sys/fs/cgroup/memory.max")),
+        (Path("/sys/fs/cgroup/memory/memory.usage_in_bytes"), Path("/sys/fs/cgroup/memory/memory.limit_in_bytes")),
+    )
+    for used_path, limit_path in cgroup_candidates:
+        try:
+            used_raw = used_path.read_text(encoding="utf-8").strip()
+            limit_raw = limit_path.read_text(encoding="utf-8").strip()
+            if not used_raw.isdigit() or not limit_raw.isdigit():
+                continue
+            used_bytes, limit_bytes = int(used_raw), int(limit_raw)
+            # Large sentinel limits mean the cgroup has no meaningful cap.
+            if 0 < limit_bytes < (1 << 60):
+                result["cgroup_used_bytes"] = used_bytes
+                result["cgroup_limit_bytes"] = limit_bytes
+                result["cgroup_used_percent"] = round(100 * used_bytes / limit_bytes, 1)
+                break
+        except (OSError, UnicodeError):
+            continue
+
+    try:
+        disk = shutil.disk_usage(Path.cwd())
+        result["disk_total_bytes"] = disk.total
+        result["disk_used_bytes"] = disk.used
+        result["disk_free_bytes"] = disk.free
+    except OSError:
+        pass
+
+    try:
+        result["load_average"] = os.getloadavg()
+    except (AttributeError, OSError):
+        pass
+    return result
+
+
+def format_resource_status(snapshot: dict[str, Any] | None = None) -> str:
+    """Format a compact, readable resource line for Actions logs."""
+    values = snapshot if snapshot is not None else resource_snapshot()
+    parts: list[str] = []
+    if "ram_total_bytes" in values:
+        parts.append(
+            f"Runner RAM {_format_bytes(values.get('ram_used_bytes'))}/"
+            f"{_format_bytes(values.get('ram_total_bytes'))} used "
+            f"({_format_bytes(values.get('ram_available_bytes'))} available, "
+            f"{values.get('ram_used_percent', 'n/a')}%)"
+        )
+    else:
+        parts.append("Runner RAM unavailable on this platform")
+    if "python_rss_bytes" in values:
+        parts.append(f"Analyzer process {_format_bytes(values['python_rss_bytes'])} RSS")
+    if "cgroup_limit_bytes" in values:
+        parts.append(
+            f"Job/container memory {_format_bytes(values['cgroup_used_bytes'])}/"
+            f"{_format_bytes(values['cgroup_limit_bytes'])} "
+            f"({values['cgroup_used_percent']}%)"
+        )
+    if "swap_total_bytes" in values:
+        parts.append(
+            f"Swap {_format_bytes(values['swap_used_bytes'])}/"
+            f"{_format_bytes(values['swap_total_bytes'])} used"
+        )
+    parts.append(f"CPU cores {values.get('cpu_count', 'n/a')}")
+    if "load_average" in values:
+        parts.append("load avg " + "/".join(f"{x:.2f}" for x in values["load_average"]))
+    if "disk_free_bytes" in values:
+        parts.append(
+            f"Workspace disk {_format_bytes(values['disk_free_bytes'])} free/"
+            f"{_format_bytes(values['disk_total_bytes'])}"
+        )
+    return "[resources] " + " | ".join(parts)
 
 
 def _json_object_from_response(value: Any) -> dict[str, Any]:
@@ -303,12 +431,22 @@ def run_analysis(
 
     def checkpoint() -> dict[str, Any]:
         ordered_results = list(results_by_id.values())
+        analyzed_count = sum(
+            1 for item in ordered_results
+            if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+            and item.get("model") == model
+            and item.get("prompt_version") == PROMPT_VERSION
+        )
         summary = {
             "assets_selected": len(selected) + skipped_from_checkpoint,
             "assets_processed_this_run": processed_this_run,
-            "assets_analyzed": sum(1 for item in ordered_results if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW" and item.get("model") == model and item.get("prompt_version") == PROMPT_VERSION),
+            "assets_eligible": len(seen),
+            "assets_analyzed": analyzed_count,
+            "assets_remaining": max(0, len(seen) - analyzed_count),
+            "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 100.0,
             "assets_failed": sum(1 for item in ordered_results if item.get("analysis_status") == "ANALYSIS_ERROR"),
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
+            "batch_limit": max_assets,
             "publication_allowed": False,
         }
         result = {
@@ -342,6 +480,26 @@ def run_analysis(
         f"run_id={run_id or 'local'}",
         flush=True,
     )
+    total_eligible = result["summary"]["assets_eligible"]
+    print(
+        f"[progress] {source.get('book_id')}: "
+        f"{result['summary']['assets_analyzed']:,}/{total_eligible:,} analyzed "
+        f"({result['summary']['assets_completion_percent']:.1f}%) | "
+        f"remaining: {result['summary']['assets_remaining']:,} | "
+        f"failures recorded: {result['summary']['assets_failed']:,} | "
+        f"this pass: 0/{len(selected)} | "
+        + (
+            f"estimated passes remaining: {math.ceil(result['summary']['assets_remaining'] / max_assets):,} "
+            f"at {max_assets} visuals/pass"
+            if max_assets else "all remaining visuals in one pass"
+        ),
+        flush=True,
+    )
+    print(
+        "[resources] Scope: this GitHub Actions runner only; parallel workflows run on separate runners.",
+        flush=True,
+    )
+    print(format_resource_status(), flush=True)
     if not selected:
         print(f"[visual-analysis] NO_PENDING_ASSETS book={source.get('book_id')} run_id={run_id or 'local'}", flush=True)
     for asset_index, asset in enumerate(selected, start=1):
@@ -354,6 +512,7 @@ def run_analysis(
             f"run_id={run_id or 'local'}",
             flush=True,
         )
+        print(format_resource_status(), flush=True)
         # The selection pass above is authoritative: it already rejects reusable
         # checkpoints whose asset hash, source, model, prompt or page-text context
         # differs. Do not perform a weaker second check here, or stale successful
@@ -401,10 +560,27 @@ def run_analysis(
             f"failed_total={result['summary']['assets_failed']}",
             flush=True,
         )
+        print(
+            f"[progress] {source.get('book_id')}: "
+            f"{result['summary']['assets_analyzed']:,}/{total_eligible:,} analyzed "
+            f"({result['summary']['assets_completion_percent']:.1f}%) | "
+            f"remaining: {result['summary']['assets_remaining']:,} | "
+            f"failures recorded: {result['summary']['assets_failed']:,} | "
+            f"this pass: {processed_this_run}/{len(selected)}"
+            + (
+                f" | estimated passes remaining: {math.ceil(result['summary']['assets_remaining'] / max_assets):,} "
+                f"at {max_assets} visuals/pass"
+                if max_assets else ""
+            ),
+            flush=True,
+        )
+        print(format_resource_status(), flush=True)
     print(
         f"[visual-analysis] BATCH_COMPLETE book={source.get('book_id')} "
         f"processed_this_batch={processed_this_run} selected_this_batch={len(selected)} "
-        f"analyzed_total={result['summary']['assets_analyzed']} failed_total={result['summary']['assets_failed']}",
+        f"analyzed_total={result['summary']['assets_analyzed']} failed_total={result['summary']['assets_failed']} "
+        f"remaining={result['summary']['assets_remaining']} "
+        f"completion={result['summary']['assets_completion_percent']:.1f}%",
         flush=True,
     )
     return result

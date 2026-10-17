@@ -359,6 +359,25 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         )
         self.assertEqual([None], observed_timeouts)
 
+    def test_progress_and_resource_report_are_human_friendly(self):
+        progress = io.StringIO()
+        with redirect_stdout(progress):
+            result = run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+                opener=self._opener,
+            )
+        output = progress.getvalue()
+        self.assertIn("[progress] book-c6-science:", output)
+        self.assertIn("1/1 analyzed (100.0%)", output)
+        self.assertIn("remaining: 0", output)
+        self.assertIn("[resources] Scope: this GitHub Actions runner only", output)
+        self.assertIn("[resources] Runner RAM", output)
+        self.assertEqual(1, result["summary"]["assets_eligible"])
+        self.assertEqual(1, result["summary"]["assets_analyzed"])
+        self.assertEqual(0, result["summary"]["assets_remaining"])
+        self.assertEqual(100.0, result["summary"]["assets_completion_percent"])
+
     def test_cli_timeout_zero_disables_per_request_timeout(self):
         with patch("sys.argv", [
             "analyze_visual_inventory_with_ollama.py",
