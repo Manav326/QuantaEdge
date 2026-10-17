@@ -21,6 +21,10 @@ spring:
       port: ${SPRING_DATA_REDIS_PORT:6379}
 app:
   environment: ${APP_ENVIRONMENT:local}
+  razorpay:
+    key-id: ${APP_RAZORPAY_KEY_ID:}
+    key-secret: ${APP_RAZORPAY_KEY_SECRET:}
+    base-url: ${APP_RAZORPAY_BASE_URL:https://api.razorpay.com/v1}
   media:
     storage-dir: ${APP_MEDIA_STORAGE_DIR:/var/lib/quantaedge/media}
   certificates:
