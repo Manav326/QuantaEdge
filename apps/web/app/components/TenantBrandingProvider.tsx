@@ -155,14 +155,17 @@ function readPendingJoinTenantCode(): string | null {
 
 function joinCodeFromCurrentUrl(): string | null {
   const query = new URLSearchParams(window.location.search);
-  const raw = query.get('joinCode') || query.get('join_code') || query.get('join');
+  const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const raw = query.get('joinCode') || query.get('join_code') || query.get('join')
+    || fragment.get('joinCode') || fragment.get('join_code') || fragment.get('join');
   const value = raw?.trim() || '';
   return value.length >= 12 && value.length <= 256 && !hasControlCharacters(value) ? value : null;
 }
 
 function urlHasJoinParam(): boolean {
   const query = new URLSearchParams(window.location.search);
-  return ['joinCode', 'join_code', 'join'].some(key => query.has(key));
+  const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  return ['joinCode', 'join_code', 'join'].some(key => query.has(key) || fragment.has(key));
 }
 
 function readPendingJoinCode(): string | null {
