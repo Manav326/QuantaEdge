@@ -72,19 +72,19 @@ class LearningClassControllerTest {
   void scheduledClassesUseTheSameTwentyFourHourVisibilityRuleForItemsAndCount() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("select cs.id as session_id"),
-        eq(7L), eq(""), eq(""), eq(25), eq(0))).thenReturn(List.of());
+        eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0))).thenReturn(List.of());
     when(jdbc.queryForObject(contains("select count(*) from learning_class_session"),
-        eq(Long.class), eq(7L), eq(""), eq(""))).thenReturn(0L);
+        eq(Long.class), eq(7L), eq(""), eq(""), eq(0L), eq(0L))).thenReturn(0L);
 
     Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, student);
 
     assertEquals(0L, result.get("total"));
     verify(jdbc).queryForList(
         contains("cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours'"),
-        eq(7L), eq(""), eq(""), eq(25), eq(0));
+        eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verify(jdbc).queryForObject(
         contains("cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours'"),
-        eq(Long.class), eq(7L), eq(""), eq(""));
+        eq(Long.class), eq(7L), eq(""), eq(""), eq(0L), eq(0L));
   }
 
   @Test
@@ -309,14 +309,14 @@ class LearningClassControllerTest {
   @Test
   void recordedListingCarriesPublishedDownloadReferenceOnlyWhenCatalogueAllowsIt() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), eq(7L), eq(""), eq(""), eq(25), eq(0)))
+    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "title", "Fractions revision", "subject_name", "Mathematics",
             "media_type", "video/mp4", "file_size_bytes", 1024L, "sha256", "a".repeat(64),
             "download_resource_id", 501L, "download_assignment_id", 700L,
             "download_allowed", true, "download_sha256", "a".repeat(64))));
     when(jdbc.queryForObject(contains("select count(*) from recorded_class"), eq(Long.class),
-        eq(7L), eq(""), eq(""))).thenReturn(1L);
+        eq(7L), eq(""), eq(""), eq(0L), eq(0L))).thenReturn(1L);
 
     Map<String,Object> result = controller.studentRecordedClasses(null, null, 25, 0, student);
 
@@ -325,7 +325,7 @@ class LearningClassControllerTest {
     assertEquals(501L, row.get("download_resource_id"));
     assertEquals(700L, row.get("download_assignment_id"));
     assertEquals(true, row.get("download_allowed"));
-    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(""), eq(""), eq(25), eq(0));
+    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verifyNoInteractions(staffAudit, mediaStorage);
   }
 
