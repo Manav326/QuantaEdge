@@ -194,7 +194,7 @@ public class InstitutionTenantController {
             join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
             where e.institution_id=? and e.status='ACTIVE' and e.valid_from<=now()
               and (e.valid_until is null or e.valid_until>now())) as authorized_courses,
-          (select count(distinct p.lesson_id) from institution_membership m
+          (select count(distinct (p.student_id,p.lesson_id)) from institution_membership m
             join student_lesson_progress p on p.student_id=m.student_id
             join lesson l on l.id=p.lesson_id and l.active=true and l.status='PUBLISHED'
             join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
@@ -203,7 +203,7 @@ public class InstitutionTenantController {
               and e.program_id=sub.program_id and e.status='ACTIVE' and e.valid_from<=now()
               and (e.valid_until is null or e.valid_until>now())
             where m.institution_id=? and m.status='ACTIVE') as lessons_with_activity,
-          (select count(distinct p.lesson_id) from institution_membership m
+          (select count(distinct (p.student_id,p.lesson_id)) from institution_membership m
             join student_lesson_progress p on p.student_id=m.student_id and p.status='COMPLETED'
             join lesson l on l.id=p.lesson_id and l.active=true and l.status='PUBLISHED'
             join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
@@ -213,11 +213,15 @@ public class InstitutionTenantController {
               and (e.valid_until is null or e.valid_until>now())
             where m.institution_id=? and m.status='ACTIVE') as completed_lessons,
           (select count(*) from institution_billable_event be
+            join institution_billing_contract bc on bc.id=be.contract_id
             where be.institution_id=? and be.event_type='CHARGE'
-              and be.billing_period_start=date_trunc('month',current_date)::date) as current_period_billable_events,
+              and be.billing_period_start=case when bc.billing_cadence='ANNUAL'
+                then date_trunc('year',current_date)::date else date_trunc('month',current_date)::date end) as current_period_billable_events,
           (select coalesce(sum(be.amount_paise),0) from institution_billable_event be
+            join institution_billing_contract bc on bc.id=be.contract_id
             where be.institution_id=? and be.event_type='CHARGE'
-              and be.billing_period_start=date_trunc('month',current_date)::date) as current_period_amount_paise
+              and be.billing_period_start=case when bc.billing_cadence='ANNUAL'
+                then date_trunc('year',current_date)::date else date_trunc('month',current_date)::date end) as current_period_amount_paise
         """, principal.institutionId(), principal.institutionId(), principal.institutionId(),
         principal.institutionId(), principal.institutionId(), principal.institutionId(), principal.institutionId());
     return rows.getFirst();
