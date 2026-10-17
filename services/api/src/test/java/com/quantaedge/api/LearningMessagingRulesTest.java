@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,4 +53,15 @@ class LearningMessagingRulesTest {
     request.setParameter("workspace", "LEARNING");
     assertNull(AuthFilter.requestedWorkspace(request));
   }
+  @Test
+  void handshakeParsesOnlyRequestedCookieFromRealCookieHeaders() {
+    assertEquals(List.of("student-token"), LearningMessagingHandshakeInterceptor.cookieValues(
+        List.of("theme=light; QE_STUDENT_SESSION=student-token; QE_SESSION=legacy"),
+        "QE_STUDENT_SESSION"));
+    assertEquals(List.of(), LearningMessagingHandshakeInterceptor.cookieValues(
+        List.of("QE_SESSION=legacy; malformed-cookie"), "QE_STUDENT_SESSION"));
+    assertEquals(List.of("quoted-token"), LearningMessagingHandshakeInterceptor.cookieValues(
+        List.of("QE_STUDENT_SESSION=\"quoted-token\""), "QE_STUDENT_SESSION"));
+  }
+
 }

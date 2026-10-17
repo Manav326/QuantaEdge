@@ -239,3 +239,26 @@ assert.ok(androidLessonResources.includes('downloadAllowed') && androidLessonRes
 assert.ok(assignedResources.includes("item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE'") && assignedResources.includes('Open resource online'), 'Student web must be able to open a private assigned document online even when download is disabled.');
 
 console.log('Navigation, localization, live-class authorization, resumable offline-video and student resource parity source contracts passed.');
+
+
+// Native messaging contract across API, student web, staff moderation and Android.
+const studentChat = read('../app/student/classes/LearningChatPanel.tsx');
+const staffChat = read('../../admin/app/classes/StaffLearningChatPanel.tsx');
+const messagingApi = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMessagingController.java');
+const messagingService = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMessagingService.java');
+const messagingSocket = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMessagingWebSocketConfig.java');
+const messagingSchema = read('../../../services/api/src/main/resources/db/migration/V112__durable_learning_messaging.sql');
+assert.ok(studentChat.includes('/learning/live-classes/') && studentChat.includes('/messages') && studentChat.includes('clientMessageId'), 'Student web messaging must open a class conversation, load history and use retry-safe sends.');
+assert.ok(staffChat.includes('/moderation') && staffChat.includes('/reports') && staffChat.includes('/settings') && staffChat.includes('/mute'), 'Staff messaging must expose moderation, reports, slow mode and mute routes.');
+assert.ok(messagingApi.includes('/learning/live-classes/{sessionId}/conversations') && messagingApi.includes('/learning/conversations/{conversationId}/messages'), 'The durable messaging REST endpoints must be present.');
+assert.ok(messagingService.includes('student_track_enrollment') && messagingService.includes('teaching_assignment_id') && messagingService.includes('clientMessageId'), 'Messaging access must be bound to enrollment/assignment and idempotent message IDs.');
+assert.ok(messagingSocket.includes('assertCanReadConversation') && messagingSocket.includes('/user/queue/learning-conversations/'), 'Realtime chat subscriptions must be membership-checked and conversation-scoped.');
+assert.ok(messagingSchema.includes('learning_conversation_read_state') && messagingSchema.includes('learning_message_report') && messagingSchema.includes('learning_message_audit'), 'Messaging persistence must include read state, reports and moderation audit.');
+assert.ok(androidClasses.includes('LearningChatPanel(sessionId = chatSessionId') && androidClasses.includes('/api/v1/learning/conversations/$activeConversationId/messages'), 'Android lecture cards must connect to durable messaging history and send endpoints.');
+
+assert.ok(studentChat.includes('new WebSocket') && studentChat.includes('retryDelay') && studentChat.includes('SUBSCRIBE'), 'Student web chat must subscribe to realtime messages and retry failed WebSocket connections.');
+assert.ok(staffChat.includes('new WebSocket') && staffChat.includes('retryDelay') && staffChat.includes('SUBSCRIBE'), 'Staff moderation chat must subscribe to realtime messages and retry failed WebSocket connections.');
+assert.ok(androidClasses.includes('newWebSocket') && androidClasses.includes('realtimeReconnectToken') && androidClasses.includes('onClosed'), 'Android chat must subscribe to realtime messages and retry failed WebSocket connections.');
+
+const messagingHandshake = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMessagingHandshakeInterceptor.java');
+assert.ok(messagingHandshake.includes('getOrEmpty(HttpHeaders.COOKIE)') && !messagingHandshake.includes('request.getCookies()'), 'WebSocket handshake must read cookies from ServerHttpRequest headers, not a nonexistent cookie API.');

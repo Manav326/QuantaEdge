@@ -7,6 +7,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import org.json.JSONArray
+import com.quantaedge.android.data.ApiClient
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.CancellationException
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +28,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import okhttp3.WebSocketListener
+import okhttp3.WebSocket
+import okhttp3.Response
+import okhttp3.Request
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -180,6 +196,10 @@ fun LearningClassesScreen(
                             if (item.optBoolean("has_recording")) {
                                 Text(localizedUiText("इस class की published recording भी उपलब्ध है।"), style = MaterialTheme.typography.bodySmall)
                             }
+                            val chatSessionId = item.longAny("session_id", "sessionId")
+                            if (chatSessionId > 0L) {
+                                LearningChatPanel(sessionId = chatSessionId, locale = language, busy = busy)
+                            }
                         }
                     }
                 }
@@ -236,6 +256,232 @@ fun LearningClassesScreen(
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun LearningChatPanel(sessionId: Long, locale: String, busy: Boolean) {
+    fun t(en: String, hi: String) = if (locale == "hi") hi else en
+    var expanded by rememberSaveable(sessionId) { mutableStateOf(false) }
+    var conversations by remember(sessionId) { mutableStateOf<List<JSONObject>>(emptyList()) }
+    var activeConversationId by rememberSaveable(sessionId) { mutableStateOf(0L) }
+    var messages by remember(sessionId) { mutableStateOf<List<JSONObject>>(emptyList()) }
+    var draft by rememberSaveable(sessionId) { mutableStateOf("") }
+    var loading by remember { mutableStateOf(false) }
+    var sending by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    var realtimeReconnectToken by remember { mutableStateOf(0) }
+    var realtimeRetryDelay by remember { mutableStateOf(2_000L) }
+
+    fun scheduleRealtimeReconnect(stillActive: () -> Boolean) {
+        scope.launch {
+            delay(realtimeRetryDelay)
+            if (stillActive()) {
+                realtimeRetryDelay = (realtimeRetryDelay * 2).coerceAtMost(30_000L)
+                realtimeReconnectToken += 1
+            }
+        }
+    }
+
+    suspend fun loadConversations(): List<JSONObject> {
+        val array = ApiClient.getArray("/api/v1/learning/live-classes/$sessionId/conversations")
+        val result = ArrayList<JSONObject>()
+        for (index in 0 until array.length()) array.optJSONObject(index)?.let(result::add)
+        conversations = result
+        return result
+    }
+
+    suspend fun openConversation(type: String) {
+        error = ""
+        val row = ApiClient.postObject(
+            "/api/v1/learning/live-classes/$sessionId/conversations",
+            JSONObject().put("conversationType", type)
+        )
+        activeConversationId = row.optLong("conversationId", 0L)
+        loadConversations()
+    }
+
+    LaunchedEffect(expanded, sessionId) {
+        if (!expanded) return@LaunchedEffect
+        loading = true
+        error = ""
+        try {
+            val list = loadConversations()
+            val classroom = list.firstOrNull { it.optString("conversationType") == "CLASSROOM" }
+            if (classroom != null) {
+                activeConversationId = classroom.optLong("conversationId", 0L)
+            } else {
+                openConversation("CLASSROOM")
+            }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (failure: Exception) {
+            error = failure.message ?: t("Chat could not be loaded.", "चैट लोड नहीं हो सकी।")
+        } finally {
+            loading = false
+        }
+    }
+
+    LaunchedEffect(expanded, activeConversationId, sessionId) {
+        if (!expanded || activeConversationId <= 0L) return@LaunchedEffect
+        while (isActive) {
+            try {
+                val response = ApiClient.getObject(
+                    "/api/v1/learning/conversations/$activeConversationId/messages?limit=60"
+                )
+                val array = response.optJSONArray("messages") ?: JSONArray()
+                val latest = ArrayList<JSONObject>()
+                for (index in 0 until array.length()) array.optJSONObject(index)?.let(latest::add)
+                messages = latest
+                error = ""
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (failure: Exception) {
+                error = failure.message ?: t("Messages could not be refreshed.", "संदेश रीफ़्रेश नहीं हो सके।")
+            }
+            delay(4_000)
+        }
+    }
+
+    // Native WebSocket delivery is low-latency; API polling above recovers messages after reconnect.
+    DisposableEffect(expanded, activeConversationId, sessionId, realtimeReconnectToken) {
+        var socket: WebSocket? = null
+        var disposed = false
+        if (expanded && activeConversationId > 0L) {
+            val workspace = ApiClient.workspaceName()
+            val httpUrl = ApiClient.absoluteUrl("/api/v1/learning-chat/ws?workspace=" + ApiClient.encodeQuery(workspace))
+            val wsUrl = httpUrl.replaceFirst("https://", "wss://").replaceFirst("http://", "ws://")
+            val request = Request.Builder().url(wsUrl)
+                .header("X-QE-Workspace", workspace)
+                .header("X-QE-Client", "ANDROID")
+                .build()
+            socket = ApiClient.authenticatedHttpClient().newWebSocket(request, object : WebSocketListener() {
+                override fun onOpen(webSocket: WebSocket, response: Response) {
+                    scope.launch { realtimeRetryDelay = 2_000L }
+                    webSocket.send("CONNECT\naccept-version:1.2\nheart-beat:0,0\n\n\u0000")
+                }
+
+                override fun onMessage(webSocket: WebSocket, text: String) {
+                    for (raw in text.split('\u0000')) {
+                        val frame = raw.trimStart('\n', '\r')
+                        if (frame.startsWith("CONNECTED")) {
+                            webSocket.send(
+                                "SUBSCRIBE\nid:qe-android-$sessionId-$activeConversationId\n" +
+                                    "destination:/user/queue/learning-conversations/$activeConversationId\n" +
+                                    "ack:auto\n\n\u0000"
+                            )
+                        } else if (frame.startsWith("MESSAGE")) {
+                            val split = frame.indexOf("\n\n")
+                            if (split >= 0) {
+                                runCatching { JSONObject(frame.substring(split + 2)) }.getOrNull()?.let { message ->
+                                    scope.launch {
+                                        if (message.optLong("messageId") > 0L &&
+                                            messages.none { it.optLong("messageId") == message.optLong("messageId") }) {
+                                            messages = (messages + message).takeLast(60)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                    scheduleRealtimeReconnect { !disposed }
+                }
+
+                override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                    scheduleRealtimeReconnect { !disposed }
+                }
+            })
+        }
+        onDispose {
+            disposed = true
+            runCatching { socket?.send("DISCONNECT\n\n\u0000") }
+            runCatching { socket?.close(1000, "chat panel changed") }
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+        TextButton(onClick = { expanded = !expanded }, enabled = !busy) {
+            Text(if (expanded) t("Hide class chat −", "कक्षा चैट छिपाएँ −") else t("Class chat & message teacher +", "कक्षा चैट और शिक्षक को संदेश +"))
+        }
+        if (expanded) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                        Button(
+                            onClick = { scope.launch { runCatching { openConversation("CLASSROOM") }.onFailure { error = it.message ?: t("Could not open class chat.", "कक्षा चैट नहीं खुली।") } } },
+                            enabled = !busy && !loading,
+                            modifier = Modifier.weight(1f)
+                        ) { Text(t("Class chat", "कक्षा चैट")) }
+                        Button(
+                            onClick = { scope.launch { runCatching { openConversation("STUDENT_TEACHER") }.onFailure { error = it.message ?: t("Could not open private thread.", "निजी बातचीत नहीं खुली।") } } },
+                            enabled = !busy && !loading,
+                            modifier = Modifier.weight(1f)
+                        ) { Text(t("Private teacher", "शिक्षक को निजी संदेश")) }
+                    }
+                    if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    if (loading) Text(t("Loading messages…", "संदेश लोड हो रहे हैं…"), style = MaterialTheme.typography.bodySmall)
+                    Column(
+                        modifier = Modifier.fillMaxWidth().heightIn(max = 230.dp).verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(7.dp)
+                    ) {
+                        val visible = messages.takeLast(30)
+                        if (visible.isEmpty()) {
+                            Text(t("No messages yet. Start the conversation.", "अभी संदेश नहीं हैं। बातचीत शुरू करें।"),
+                                style = MaterialTheme.typography.bodySmall)
+                        } else visible.forEach { message ->
+                            Column(modifier = Modifier.fillMaxWidth().padding(7.dp)) {
+                                Text(
+                                    message.optString("senderName").ifBlank { t("Member", "सदस्य") } +
+                                        if (message.optBoolean("pinned")) " · 📌" else "",
+                                    style = MaterialTheme.typography.labelMedium
+                                )
+                                Text(message.optString("body"), style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = androidx.compose.ui.Alignment.Bottom) {
+                        OutlinedTextField(
+                            value = draft, onValueChange = { draft = it.take(4000) },
+                            modifier = Modifier.weight(1f), maxLines = 3,
+                            label = { Text(t("Message", "संदेश")) }
+                        )
+                        Button(onClick = {
+                            val body = draft.trim()
+                            if (body.isNotEmpty() && activeConversationId > 0L && !sending) {
+                                scope.launch {
+                                    sending = true
+                                    error = ""
+                                    try {
+                                        val saved = ApiClient.postObject(
+                                            "/api/v1/learning/conversations/$activeConversationId/messages",
+                                            JSONObject()
+                                                .put("clientMessageId", java.util.UUID.randomUUID().toString())
+                                                .put("body", body)
+                                                .put("messageType", "TEXT")
+                                        )
+                                        draft = ""
+                                        messages = (messages.filterNot { it.optLong("messageId") == saved.optLong("messageId") } + saved)
+                                            .takeLast(60)
+                                    } catch (failure: Exception) {
+                                        error = failure.message ?: t("Message could not be sent.", "संदेश नहीं भेजा जा सका।")
+                                    } finally { sending = false }
+                                }
+                            }
+                        }, enabled = !busy && !loading && !sending && draft.isNotBlank() && activeConversationId > 0L) {
+                            Text(if (sending) t("Sending…", "भेज रहे हैं…") else t("Send", "भेजें"))
+                        }
+                    }
+                    Text(t("Messages refresh automatically. Do not share passwords or personal contact details.",
+                        "संदेश अपने आप रीफ़्रेश होते हैं। पासवर्ड या व्यक्तिगत संपर्क विवरण साझा न करें।"),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                 }
             }
         }

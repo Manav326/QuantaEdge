@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
@@ -36,13 +35,9 @@ public class LearningMessagingHandshakeInterceptor implements HandshakeIntercept
     }
     String hint = workspaceHint(request);
     List<String> cookies = cookiePriority(hint, learningOrigin, staffOrigin);
-    MultiValueMap<String,HttpCookie> requestCookies = request.getCookies();
+    List<String> cookieHeaders = request.getHeaders().getOrEmpty(HttpHeaders.COOKIE);
     for (String cookieName : cookies) {
-      List<HttpCookie> values = requestCookies.get(cookieName);
-      if (values == null) continue;
-      for (HttpCookie cookie : values) {
-        String token = cookie.getValue();
-        if (token == null || token.isBlank()) continue;
+      for (String token : cookieValues(cookieHeaders, cookieName)) {
         AuthContext context;
         try { context = auth.current(token); } catch (RuntimeException ignored) { context = null; }
         if (!isMessagingIdentity(context) || !matchesHint(context, hint)
@@ -54,6 +49,24 @@ public class LearningMessagingHandshakeInterceptor implements HandshakeIntercept
     }
     response.setStatusCode(HttpStatus.UNAUTHORIZED);
     return false;
+  }
+
+  static List<String> cookieValues(List<String> headers, String cookieName) {
+    if (headers == null || cookieName == null || cookieName.isBlank()) return List.of();
+    List<String> result = new ArrayList<>();
+    for (String header : headers) {
+      if (header == null || header.isBlank()) continue;
+      for (String pair : header.split(";")) {
+        int equals = pair.indexOf('=');
+        if (equals <= 0 || !cookieName.equals(pair.substring(0, equals).trim())) continue;
+        String value = pair.substring(equals + 1).trim();
+        if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
+          value = value.substring(1, value.length() - 1);
+        }
+        if (!value.isBlank()) result.add(value);
+      }
+    }
+    return List.copyOf(result);
   }
 
   @Override

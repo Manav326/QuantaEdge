@@ -59,6 +59,7 @@ object ApiClient {
         activeWorkspace = normalized
         cookies?.setWorkspace(normalized)
     }
+    fun workspaceName(): String = currentWorkspace()
     private fun currentWorkspace(): String = activeWorkspace
     fun mediaUrl(url: String): String =
         if (url.startsWith("https://", true) || url.startsWith("http://", true)) url else absoluteUrl(url)
