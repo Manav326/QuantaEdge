@@ -456,7 +456,7 @@ public class PlatformInstitutionController {
           institution_id,membership_id,student_id,contract_id,billing_period_start,billing_period_end,
           event_type,amount_paise,currency,idempotency_key,description)
         select ?,m.id,m.student_id,?,?,?,'CHARGE',?,?, 
-          'institution:'||?||':membership:'||m.id||':period:'||?||':charge',
+          'institution:'||?::text||':membership:'||m.id||':period:'||?::text||':charge',
           'Active institution enrollment'
         from institution_membership m
         where m.institution_id=? and m.joined_at<=now()
