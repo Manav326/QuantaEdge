@@ -109,7 +109,7 @@ export default function StudentHome(){
     setDashboardClassesError('');
     (async()=>{
       try {
-        const query='courseId='+encodeURIComponent(String(activeCourseId))+'&limit=100&offset=0';
+        const query='courseId='+encodeURIComponent(String(activeCourseId))+'&includeFuture=true&limit=100&offset=0';
         const response=await fetch('/api/v1/learning/live-classes?'+query,{credentials:'same-origin',cache:'no-store'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json().catch(()=>({}));
