@@ -294,7 +294,7 @@ fun PremiumCodeScannerScreen(
                 Card(Modifier.fillMaxWidth().height(frameHeight), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = scanPanel)) {
                     Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("▦", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 48.sp, fontWeight = FontWeight.Light)
-                        Text(if (hindi) "कैमरा अनुमति चाहिए" else "Camera access needed", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                        Text(if (hindi) "कैमरा अनुमति चाहिए" else "Camera access needed", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                         Text(
                             if (hindi) "QR या बारकोड पढ़ने के लिए QuantaEdge को कैमरा अनुमति दें। तस्वीरें सेव या अपलोड नहीं होतीं।"
                             else "Allow camera access to read QR codes and barcodes. Images are not saved or uploaded.",
@@ -307,7 +307,7 @@ fun PremiumCodeScannerScreen(
                                 else { askedForPermission = true; permissionLauncher.launch(Manifest.permission.CAMERA) }
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = scanPrimary, contentColor = scanText)
+                            colors = ButtonDefaults.buttonColors(containerColor = scanPrimary, contentColor = scanOnPrimary)
                         ) { Text(if (permanentlyDenied) { if (hindi) "सेटिंग्स खोलें" else "Open settings" } else { if (hindi) "कैमरा चालू करें" else "Enable camera" }) }
                     }
                 }
@@ -335,7 +335,7 @@ fun PremiumCodeScannerScreen(
                             drawLine(orange, androidx.compose.ui.geometry.Offset(r, b-c), androidx.compose.ui.geometry.Offset(r, b), s, cap = StrokeCap.Round)
                             val y = size.height * lineY
                             drawLine(orange.copy(alpha = 0.25f), androidx.compose.ui.geometry.Offset(12.dp.toPx(), y), androidx.compose.ui.geometry.Offset(size.width-12.dp.toPx(), y), 9.dp.toPx(), cap = StrokeCap.Round)
-                            drawLine(Color(0xFFFFC28A), androidx.compose.ui.geometry.Offset(12.dp.toPx(), y), androidx.compose.ui.geometry.Offset(size.width-12.dp.toPx(), y), 2.dp.toPx(), cap = StrokeCap.Round)
+                            drawLine(scanFocus, androidx.compose.ui.geometry.Offset(12.dp.toPx(), y), androidx.compose.ui.geometry.Offset(size.width-12.dp.toPx(), y), 2.dp.toPx(), cap = StrokeCap.Round)
                         }
                     }
                     Surface(Modifier.align(Alignment.BottomCenter).padding(bottom = 14.dp), color = Color.Black.copy(alpha = 0.66f), contentColor = Color.White, shape = RoundedCornerShape(50)) {
