@@ -255,7 +255,7 @@ fun PremiumCodeScannerScreen(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                 Surface(color = scanPanel, shape = CircleShape) {
                     TextButton(onClick = onBack, modifier = Modifier.size(46.dp), contentPadding = PaddingValues(0.dp)) {
-                        Text("×", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Light)
+                        Text("×", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 30.sp, fontWeight = FontWeight.Light)
                     }
                 }
             }
@@ -286,19 +286,19 @@ fun PremiumCodeScannerScreen(
                         modifier = Modifier.weight(1f).height(40.dp),
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
                         border = BorderStroke(1.dp, scanBorder),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = scanText)
                     ) { Text(label, fontSize = 13.sp, maxLines = 1) }
                 }
             }
             if (!permissionGranted) {
                 Card(Modifier.fillMaxWidth().height(frameHeight), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = scanPanel)) {
                     Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("▦", color = ScanOrange, fontSize = 48.sp, fontWeight = FontWeight.Light)
+                        Text("▦", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 48.sp, fontWeight = FontWeight.Light)
                         Text(if (hindi) "कैमरा अनुमति चाहिए" else "Camera access needed", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                         Text(
                             if (hindi) "QR या बारकोड पढ़ने के लिए QuantaEdge को कैमरा अनुमति दें। तस्वीरें सेव या अपलोड नहीं होतीं।"
                             else "Allow camera access to read QR codes and barcodes. Images are not saved or uploaded.",
-                            color = ScanMuted, style = MaterialTheme.typography.bodyMedium
+                            color = scanMuted, style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(Modifier.height(14.dp))
                         Button(
@@ -307,14 +307,14 @@ fun PremiumCodeScannerScreen(
                                 else { askedForPermission = true; permissionLauncher.launch(Manifest.permission.CAMERA) }
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = ScanOrange, contentColor = Color.White)
+                            colors = ButtonDefaults.buttonColors(containerColor = scanPrimary, contentColor = scanText)
                         ) { Text(if (permanentlyDenied) { if (hindi) "सेटिंग्स खोलें" else "Open settings" } else { if (hindi) "कैमरा चालू करें" else "Enable camera" }) }
                     }
                 }
             } else {
                 Box(
                     Modifier.fillMaxWidth().height(frameHeight).clip(RoundedCornerShape(28.dp))
-                        .border(1.dp, Color.White.copy(alpha = 0.18f), RoundedCornerShape(28.dp)).background(Color.Black),
+                        .border(1.dp, scanFocus.copy(alpha = 0.18f), RoundedCornerShape(28.dp)).background(Color.Black),
                     contentAlignment = Alignment.Center
                 ) {
                     AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
@@ -353,12 +353,12 @@ fun PremiumCodeScannerScreen(
                 OutlinedButton(
                     onClick = { torchEnabled = !torchEnabled },
                     enabled = camera?.cameraInfo?.hasFlashUnit() == true,
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.25f)),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
+                    border = BorderStroke(1.dp, scanBorder),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = scanText)
                 ) { Text(if (torchEnabled) { if (hindi) "टॉर्च चालू" else "Flash on" } else { if (hindi) "टॉर्च" else "Flashlight" }) }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(if (hindi) "कैमरा आपके डिवाइस पर ही रहता है" else "Camera stays on your device", color = scanText, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
-                    Text(if (hindi) "केवल मान्य प्रमाणपत्र कोड सत्यापन के लिए भेजा जाता है।" else "Only an accepted certificate code is sent for verification.", color = ScanMuted, style = MaterialTheme.typography.labelSmall)
+                    Text(if (hindi) "केवल मान्य प्रमाणपत्र कोड सत्यापन के लिए भेजा जाता है।" else "Only an accepted certificate code is sent for verification.", color = scanMuted, style = MaterialTheme.typography.labelSmall)
                 }
             }
         }
