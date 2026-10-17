@@ -1,5 +1,6 @@
 package com.quantaedge.android.ui
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.content.Intent
@@ -96,7 +97,10 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.quantaedge.android.BuildConfig
 import com.quantaedge.android.R
+import com.quantaedge.android.ui.LocalInstitutionBrandIdentity
 import com.quantaedge.android.RazorpayCourseCheckoutHost
+import com.quantaedge.android.data.InstitutionBrandingRepository
+import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
@@ -216,10 +220,45 @@ fun QuantaEdgeApp() {
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
+    val launchIntent = remember(context) { (context as? Activity)?.intent }
+    val launchTenantCode = remember(context) { InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent) }
+    var activeTenantCode by rememberSaveable {
+        mutableStateOf(launchTenantCode ?: preferences.getString("institutionCode", null).orEmpty())
+    }
+    var pendingInstitutionJoinCode by rememberSaveable {
+        mutableStateOf(InstitutionBrandingRepository.joinCodeFromIntent(launchIntent).orEmpty())
+    }
+    var institutionBrandIdentity by remember { mutableStateOf<InstitutionBrandIdentity?>(null) }
     val saveableStateHolder = rememberSaveableStateHolder()
     val stateOwnerKey = auth.textAny("user_id", "userId", "id", "account_id", "mobile_e164")
         .ifBlank { auth.textAny("role", "displayName", "display_name").ifBlank { "anonymous" } }
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
+    LaunchedEffect(activeTenantCode, pendingInstitutionJoinCode, stateOwnerKey) {
+        val role = auth.optString("role").uppercase()
+        var code = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
+        try {
+            if (pendingInstitutionJoinCode.isNotBlank() && role == "STUDENT" && stateOwnerKey != "anonymous") {
+                val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode)
+                pendingInstitutionJoinCode = ""
+                code = InstitutionBrandingRepository.normalizeCode(joined.optString("institutionCode")) ?: code
+                if (code != null) {
+                    activeTenantCode = code
+                    preferences.edit().putString("institutionCode", code).apply()
+                }
+            }
+            if (code == null && role == "STUDENT" && stateOwnerKey != "anonymous") {
+                code = InstitutionBrandingRepository.soleActiveMembershipCode()
+                if (code != null) {
+                    activeTenantCode = code
+                    preferences.edit().putString("institutionCode", code).apply()
+                }
+            }
+            institutionBrandIdentity = code?.let { InstitutionBrandingRepository.fetch(it) }
+        } catch (_: Exception) {
+            // A missing/invalid school link must never block ordinary sign-in or learning.
+            institutionBrandIdentity = null
+        }
+    }
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
     val offlineVideoStore = remember(resourceOwner) { OfflineLearningVideoStore(context, resourceOwner) }
     val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
@@ -3019,7 +3058,7 @@ fun QuantaEdgeApp() {
         modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
         color = MaterialTheme.colorScheme.background
     ) {
-        CompositionLocalProvider(LocalQuantaLanguage provides language) {
+        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalInstitutionBrandIdentity provides institutionBrandIdentity) {
         Row(modifier = Modifier.fillMaxSize()) {
             if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
