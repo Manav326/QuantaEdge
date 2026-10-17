@@ -343,7 +343,13 @@ jobs:
                   invdir.mkdir(parents=True,exist_ok=True)
                   subprocess.run([sys.executable,"scripts/extract_visual_asset_inventory.py","--pdf",str(work/"source.pdf"),"--manifest",str(work/"source.manifest.json"),"--output-dir",str(invdir),"--preview-width","1200"],cwd=repo,check=True)
                   inv=validate_inventory(work,source)
-                  print(json.dumps({"book_id":source["book_id"],"inventory":"BUILT_BECAUSE_NO_VERIFIED_BUNDLE","asset_count":len(inv["assets"]),"candidate_pack_rebuild":False}))
+                  if matching:
+                      prior_inventory_path=repo/"data"/"textbook-visuals"/slug/"visual-inventory.v1.json"
+                      if not prior_inventory_path.is_file():
+                          raise SystemExit(f"{slug}: prior Layer 4 work exists but neither its ORAS inventory nor committed inventory is available; refusing unverified resume.")
+                      if sha(prior_inventory_path)!=sha(invdir/"visual-inventory.v1.json"):
+                          raise SystemExit(f"{slug}: rebuilt Layer 1 inventory differs from the inventory bound to the saved checkpoint. Use analyze_all to deliberately rebuild and reanalyze.")
+                  print(json.dumps({"book_id":source["book_id"],"inventory":"BUILT_BECAUSE_NO_VERIFIED_BUNDLE","asset_count":len(inv["assets"]),"prior_inventory_byte_match":bool(matching),"candidate_pack_rebuild":False}))
               candidate_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json"
               if candidate_path.is_file():
                   pack=json.loads(candidate_path.read_text(encoding="utf-8"))
