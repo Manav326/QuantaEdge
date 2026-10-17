@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useLocale } from '../../components/LanguageProvider';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
+import { TenantBrandMark, useTenantBranding } from '../../components/TenantBrandingProvider';
 
 type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string; created_at?: string | number; createdAt?: string | number };
 type Mode = 'HINT' | 'EXPLAIN' | 'EXAMPLE' | 'STEP_BY_STEP' | 'CHECK_MY_WORK';
@@ -247,7 +248,8 @@ function TutorMessageBody({ message, locale }: { message: string; locale: string
   </div>;
 }
 
-export default function TutorDock({ lessonId, open, onClose, currentQuestionId }: {
+export default function TutorDock({
+  const { brand } = useTenantBranding(); lessonId, open, onClose, currentQuestionId }: {
   lessonId: number;
   open: boolean;
   onClose: () => void;
@@ -613,7 +615,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       type="button"
       className="tutor-minimized"
       style={bubbleStyle}
-      aria-label={translateUi(locale, 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
+      aria-label={brand ? 'Restore ' + brand.displayName + ' tutor' : translateUi(locale, 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
       title={translateUi(locale, 'legacy.web.restore.tutor.c620078d')}
       onPointerDown={beginBubbleDrag}
       onPointerMove={moveBubble}
@@ -632,7 +634,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     return <section className="tutor-dock open tutor-language-loading" aria-label="AI tutor">
       <div className="tutor-head tutor-head--compact">
         <div className="tutor-head-main">
-          <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
+          <TenantBrandMark className="tutor-q-mark" />
           <strong className="tutor-head-title">{translateUi(locale, 'legacy.web.your.tutor.d7215bed')}</strong>
           <span className="tutor-ai-badge" aria-label="AI tutor"><span aria-hidden="true">✦</span><small>AI</small></span>
         </div>
@@ -649,7 +651,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     className="tutor-dock open"
     role="dialog"
     aria-modal={mobileViewport ? true : undefined}
-    aria-label="QUANTAEDGE TUTOR"
+    aria-label={brand ? brand.displayName + ' tutor' : 'QUANTAEDGE TUTOR'}
     style={panelStyle}
   >
     <div
