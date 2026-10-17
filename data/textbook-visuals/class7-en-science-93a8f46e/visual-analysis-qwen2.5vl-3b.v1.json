@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 98,
+    "assets_selected": 123,
     "assets_processed_this_run": 25,
     "assets_analyzed": 335,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 73,
+    "assets_skipped_from_checkpoint": 98,
     "publication_allowed": false
   },
   "results": [
@@ -3130,6 +3130,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3140,14 +3141,14 @@
         "concepts": [],
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
-          "No visible content or text on the page."
+          "The page is completely black and lacks any visible content or text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:34Z"
+      "checkpointed_at": "2026-10-17T03:31:42Z"
     },
     {
       "asset_id": "6357cc7785fd257aec74adf7",
@@ -3157,6 +3158,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "page-0011.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3191,7 +3193,7 @@
           "Education in Science and Mathematics, NCERT, New Delhi",
           "B.K. Tripathi, Former Professor, Department of Education in Science",
           "and Mathematics, NCERT, New Delhi",
-          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram,",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram",
           "Haryana",
           "C.V. Shimray, Associate Professor, Department of Education in Science"
         ],
@@ -3215,14 +3217,14 @@
         ],
         "context_relation": "List of contributors to a textbook development team.",
         "limitations": [
-          "No specific limitations mentioned."
+          "The image does not provide specific details about the textbook or its content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:17Z"
+      "checkpointed_at": "2026-10-17T03:36:34Z"
     },
     {
       "asset_id": "74da95eba2f975b6b4030e82",
@@ -3232,6 +3234,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3240,16 +3243,17 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page appears to be a blank page with no visible content.",
+        "context_relation": "The image is a blank page, likely intended for text or content to be added.",
         "limitations": [
-          "No visible text or images are present on the page."
+          "The page is blank and requires content to be added.",
+          "The page does not contain any specific visual elements or data points."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:30Z"
+      "checkpointed_at": "2026-10-17T03:36:53Z"
     },
     {
       "asset_id": "c68854503d53c53cca104d8e",
@@ -3259,6 +3263,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3276,7 +3281,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:38Z"
+      "checkpointed_at": "2026-10-17T03:37:03Z"
     },
     {
       "asset_id": "b111716bdb9605a9f2cd2ccd",
@@ -3286,6 +3291,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3294,16 +3300,17 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "No visible content to analyze.",
+        "context_relation": "uncertain",
         "limitations": [
-          "No visible content to analyze."
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:49Z"
+      "checkpointed_at": "2026-10-17T03:37:20Z"
     },
     {
       "asset_id": "622aaa095a26260d434873f7",
@@ -3313,6 +3320,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3321,16 +3329,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is blank and contains no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and lacks any visible text or images."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:08:01Z"
+      "checkpointed_at": "2026-10-17T03:37:34Z"
     },
     {
       "asset_id": "10cd9db7a895d38d30bc959c",
@@ -3340,11 +3348,12 @@
       "source_pdf_page_number": 12,
       "asset_path": "page-0012.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_summary": "List of names and their respective positions in educational institutions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
@@ -3369,17 +3378,20 @@
         ],
         "concepts": [
           "educational institutions",
-          "roles",
+          "positions",
+          "departments",
+          "institutes",
           "professors",
-          "scientists",
           "teachers",
-          "educational organizations",
-          "science education",
-          "rehabilitation professionals"
+          "scientists",
+          "assistant professors",
+          "scientific officers",
+          "rehabilitation professionals",
+          "visual impairment"
         ],
         "context_relation": "list of educational professionals",
         "limitations": [
-          "names and roles are listed without specific details about their positions or departments",
+          "names and positions are listed without specific details about their roles or departments",
           "the list does not include any specific educational content or topics"
         ]
       },
@@ -3387,7 +3399,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:11:37Z"
+      "checkpointed_at": "2026-10-17T03:42:06Z"
     },
     {
       "asset_id": "724531199f18cf90480f9f6f",
@@ -3397,38 +3409,12 @@
       "source_pdf_page_number": 13,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page appears to be a blank page with no visible content.",
-        "limitations": [
-          "The page is blank and does not contain any text or images."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:11:51Z"
-    },
-    {
-      "asset_id": "97e6060ac937a9674b412a63",
-      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 13,
-      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green border.",
+        "visual_summary": "A blank page with a light green background and a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -3441,7 +3427,35 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:11:58Z"
+      "checkpointed_at": "2026-10-17T03:42:24Z"
+    },
+    {
+      "asset_id": "97e6060ac937a9674b412a63",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:42:34Z"
     },
     {
       "asset_id": "ee745cdaf0d6c40695e639ee",
@@ -3451,6 +3465,7 @@
       "source_pdf_page_number": 13,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3461,14 +3476,14 @@
         "concepts": [],
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page is completely black and lacks any visible text, images, or other elements."
+          "The page is completely black and lacks any visible text, images, or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:12:12Z"
+      "checkpointed_at": "2026-10-17T03:42:52Z"
     },
     {
       "asset_id": "c13aab6e92c82a4c050a4594",
@@ -3478,6 +3493,7 @@
       "source_pdf_page_number": 13,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3488,14 +3504,14 @@
         "concepts": [],
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page is completely black and lacks any visible text, images, or other elements."
+          "No visible text or images are present on the page."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:12:25Z"
+      "checkpointed_at": "2026-10-17T03:43:09Z"
     },
     {
       "asset_id": "0c4b0b5bccedd94b3e27f27a",
@@ -3505,6 +3521,7 @@
       "source_pdf_page_number": 13,
       "asset_path": "page-0013.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3536,7 +3553,17 @@
           "positions",
           "departments",
           "institutes",
-          "locations"
+          "schools",
+          "professors",
+          "assistant professors",
+          "associate professors",
+          "PGT",
+          "Principal",
+          "Director",
+          "Head",
+          "Coordinator",
+          "Physics",
+          "Biology"
         ],
         "context_relation": "List of educational professionals and their positions",
         "limitations": [
@@ -3547,7 +3574,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:15:59Z"
+      "checkpointed_at": "2026-10-17T03:47:43Z"
     },
     {
       "asset_id": "2cc0c6f669354cfce5006a71",
@@ -3557,6 +3584,7 @@
       "source_pdf_page_number": 14,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3574,7 +3602,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:12Z"
+      "checkpointed_at": "2026-10-17T03:48:00Z"
     },
     {
       "asset_id": "52a30843c6ffa588ca17ffd2",
@@ -3584,24 +3612,25 @@
       "source_pdf_page_number": 14,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page appears to be a blank page in a document or textbook.",
+        "context_relation": "The page appears to be a blank page with no visible content.",
         "limitations": [
-          "The page is blank and does not contain any visible text or images."
+          "The page is blank and does not contain any text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:21Z"
+      "checkpointed_at": "2026-10-17T03:48:09Z"
     },
     {
       "asset_id": "a05f97f5a0f04af2c755d64b",
@@ -3611,6 +3640,36 @@
       "source_pdf_page_number": 14,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "No visible content on the page.",
+          "No text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:48:25Z"
+    },
+    {
+      "asset_id": "7ddf9cf3483f7dddbfeb266f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3622,41 +3681,14 @@
         "context_relation": "No specific context or relation provided.",
         "limitations": [
           "No visible content on the page.",
-          "No visible text or images to analyze."
+          "No visible text or images present."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:33Z"
-    },
-    {
-      "asset_id": "7ddf9cf3483f7dddbfeb266f",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 14,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "No specific context or relation provided in the image.",
-        "limitations": [
-          "The image is completely black and does not contain any visible content or text."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:45Z"
+      "checkpointed_at": "2026-10-17T03:48:41Z"
     },
     {
       "asset_id": "12a9e4b969142af2a31592b8",
@@ -3666,6 +3698,7 @@
       "source_pdf_page_number": 14,
       "asset_path": "page-0014.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3693,36 +3726,20 @@
           "M.S. Sriram, Former Professor and Head, Department of Theoretical Physics, University of Madras, Chennai and President, KV. Sarma Research Foundation, Chennai"
         ],
         "concepts": [
-          "Curriculum Studies",
-          "Earth Science",
-          "Chemistry",
-          "Science Education",
-          "Bioinformatics",
-          "National Centre for Cell Science",
-          "Princeton University",
-          "Azim Premji Foundation",
-          "Samvit Research Foundation",
-          "Homi Bhabha Centre for Science Education",
-          "TIFR",
-          "KET's V.G. Vaze College of Arts",
-          "Government College",
-          "Hansraj College",
-          "Navyug School",
-          "Sarojini Nagar",
-          "University of Madras",
-          "Chennai",
-          "KV. Sarma Research Foundation"
+          "curriculum development",
+          "educational roles",
+          "science education"
         ],
-        "context_relation": "The page lists various educators and their roles in the curriculum development.",
+        "context_relation": "List of names and their roles in the curriculum development",
         "limitations": [
-          "The page does not provide specific details about the roles or responsibilities of the listed individuals."
+          "names and roles are listed without specific details about their responsibilities or contributions"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:20:29Z"
+      "checkpointed_at": "2026-10-17T03:53:06Z"
     },
     {
       "asset_id": "06375d4522abf9dea01ec904",
@@ -3732,6 +3749,7 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3749,7 +3767,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:20:42Z"
+      "checkpointed_at": "2026-10-17T03:53:23Z"
     },
     {
       "asset_id": "aaf787214cfe6853c597f209",
@@ -3759,15 +3777,16 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely intended for text insertion.",
+        "context_relation": "The page is likely intended for content insertion.",
         "limitations": [
           "The page is blank and requires content to be added."
         ]
@@ -3776,7 +3795,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:20:55Z"
+      "checkpointed_at": "2026-10-17T03:53:32Z"
     },
     {
       "asset_id": "4e7c07ab1e4aa52b0060406f",
@@ -3786,11 +3805,12 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -3803,7 +3823,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:21:08Z"
+      "checkpointed_at": "2026-10-17T03:53:51Z"
     },
     {
       "asset_id": "132fd14443b8f134071cfdbb",
@@ -3813,24 +3833,25 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is blank and contains no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and lacks any visible text or images."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:21:21Z"
+      "checkpointed_at": "2026-10-17T03:54:06Z"
     },
     {
       "asset_id": "7f4245bb922055de28c94f25",
@@ -3840,6 +3861,7 @@
       "source_pdf_page_number": 15,
       "asset_path": "page-0015.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3865,22 +3887,34 @@
           "Yukti Sharma, Professor, Department of Education (CIE), University of Delhi, Delhi"
         ],
         "concepts": [
-          "Educational professionals",
-          "Titles",
-          "Institutions",
-          "Departments",
-          "Educational roles"
+          "Scientist",
+          "Associate Editor",
+          "Assistant Professor",
+          "Principal",
+          "Head of Department",
+          "Linguistics",
+          "Professor",
+          "National Centre for Biological Sciences",
+          "TIFR",
+          "Indian Institute of Science Education and Research",
+          "Homi Bhabha Centre for Science Education",
+          "Agharkar Research Institute",
+          "Department of Physics and Astrophysics",
+          "Zakir Husain Delhi College",
+          "Department of Education in Science and Mathematics",
+          "CIE"
         ],
-        "context_relation": "List of educational professionals and their roles",
+        "context_relation": "List of educational professionals and their respective institutions and roles.",
         "limitations": [
-          "The list is incomplete, as it only shows names and titles of a few professionals."
+          "The text does not provide specific details about the roles or responsibilities of these professionals.",
+          "The text does not include any visual elements or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:24:51Z"
+      "checkpointed_at": "2026-10-17T03:58:48Z"
     },
     {
       "asset_id": "c8580c0a73b71f9bafa5c78a",
@@ -3890,48 +3924,7 @@
       "source_pdf_page_number": 16,
       "asset_path": "assets/70489484f265580068eeff859bd8a306d82b3a94631dfec38f12f8812f4f4ee0.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Constitution of India",
-          "Part IV A (Article 51 A)",
-          "Fundamental Duties",
-          "It shall be the duty of every citizen of India —",
-          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
-          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
-        ],
-        "concepts": [
-          "Fundamental Duties",
-          "Constitution of India",
-          "Article 51A",
-          "Citizenship",
-          "National Flag",
-          "National Anthem",
-          "National Struggle for Freedom"
-        ],
-        "context_relation": "Article 51A of the Indian Constitution",
-        "limitations": [
-          "No specific image or diagram is present."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:26:09Z"
-    },
-    {
-      "asset_id": "f59a4224be4a5fa80d1d992a",
-      "asset_sha256": "a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 16,
-      "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3943,8 +3936,8 @@
           "Part IV A (Article 51 A)",
           "Fundamental Duties",
           "It shall be the duty of every citizen of India —",
-          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
-          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
         ],
         "concepts": [
           "Fundamental Duties",
@@ -3962,7 +3955,48 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:27:29Z"
+      "checkpointed_at": "2026-10-17T04:00:33Z"
+    },
+    {
+      "asset_id": "f59a4224be4a5fa80d1d992a",
+      "asset_sha256": "a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties of citizens.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Citizenship",
+          "Constitution of India",
+          "National Flag",
+          "National Anthem"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T04:02:20Z"
     },
     {
       "asset_id": "8a7f57e4dae3f79e5e4277e2",
@@ -3972,6 +4006,7 @@
       "source_pdf_page_number": 16,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3980,17 +4015,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
+        "context_relation": "The image is a blank page with no visible text or content.",
         "limitations": [
-          "The page is blank and does not contain any visual elements or text.",
-          "The visible text is incomplete and does not provide specific information about the content of the page."
+          "The page is blank and does not contain any text or content related to the Constitution of India or its fundamental duties."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:27:42Z"
+      "checkpointed_at": "2026-10-17T04:02:35Z"
     },
     {
       "asset_id": "d92e53bf5a4d0b5e4d95a621",

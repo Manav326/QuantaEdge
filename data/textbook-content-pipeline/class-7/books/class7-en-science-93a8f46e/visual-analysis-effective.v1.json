@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "260c7573a9db122802e507cff02973e219bda428fc1b7fe03961063b21e793e2",
+  "raw_analysis_sha256": "d0e1c1fd17280c695bf48b98cb221feba9cba844c8247ec657c6ce3436810f29",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -4544,6 +4544,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4554,16 +4555,25 @@
         "concepts": [],
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
-          "No visible content or text on the page."
+          "The page is completely black and lacks any visible content or text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:03:34Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:31:42Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4574,6 +4584,7 @@
       "source_pdf_page_number": 11,
       "asset_path": "page-0011.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "8f3be89b34ea7a94e491eb03a82e72a13b8a8347a7721a4471a826b826f26629",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4608,7 +4619,7 @@
           "Education in Science and Mathematics, NCERT, New Delhi",
           "B.K. Tripathi, Former Professor, Department of Education in Science",
           "and Mathematics, NCERT, New Delhi",
-          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram,",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram",
           "Haryana",
           "C.V. Shimray, Associate Professor, Department of Education in Science"
         ],
@@ -4632,16 +4643,73 @@
         ],
         "context_relation": "List of contributors to a textbook development team.",
         "limitations": [
-          "No specific limitations mentioned."
+          "The image does not provide specific details about the textbook or its content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:17Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:36:34Z",
+      "effective_analysis": {
+        "visual_summary": "List of contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science",
+          "Education (HBCSE), Tata Institute of Fundamental Research (TIFR)",
+          "Mumbai; Professor, Department of Condensed Matter Physics and",
+          "Material Science, TIFR, Mumbai (Team Leader and Leader, Physics",
+          "Sub-group)",
+          "Saroj Ghaskadbi, Former Senior Professor, Savitribai Phule Pune",
+          "University, Pune (Leader, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian",
+          "Institute of Science, Bengaluru (Leader, Chemistry Sub-group)",
+          "R. Shankar, Adviser, International Geoscience Education Organisation",
+          "Coordinator, International Earth Science Olympiad and Former",
+          "Professor, Mangalore University, Mangaluru (Leader, Earth Science",
+          "Sub-group)",
+          "Abhay Kumar, Assistant Professor, Central Institute of Educational",
+          "Technology, NCERT, New Delhi",
+          "Anand Arya, Associate Professor, Regional Institute of Education",
+          "NCERT, Ajmer",
+          "Animesh Kumar Mohapatra, Former Professor, Department of",
+          "Education in Science and Mathematics, RIE, Bhubaneswar",
+          "Arun Pratap Sikarwar, Associate Professor, Department of Education",
+          "in Science and Mathematics, NCERT, New Delhi",
+          "Ashish Kumar Srivastava, Assistant Professor, Department of",
+          "Education in Science and Mathematics, NCERT, New Delhi",
+          "B.K. Tripathi, Former Professor, Department of Education in Science",
+          "and Mathematics, NCERT, New Delhi",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram",
+          "Haryana",
+          "C.V. Shimray, Associate Professor, Department of Education in Science"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Saroj Ghaskadbi",
+          "Uday Maitra",
+          "R. Shankar",
+          "Abhay Kumar",
+          "Anand Arya",
+          "Animesh Kumar Mohapatra",
+          "Arun Pratap Sikarwar",
+          "Ashish Kumar Srivastava",
+          "B.K. Tripathi",
+          "Charu Maini",
+          "C.V. Shimray",
+          "Dinesh Kumar",
+          "Fanindra Sharma"
+        ],
+        "context_relation": "List of contributors to a textbook development team.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4652,6 +4720,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4660,18 +4729,29 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page appears to be a blank page with no visible content.",
+        "context_relation": "The image is a blank page, likely intended for text or content to be added.",
         "limitations": [
-          "No visible text or images are present on the page."
+          "The page is blank and requires content to be added.",
+          "The page does not contain any specific visual elements or data points."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:30Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:36:53Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely intended for text or content to be added.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page does not contain any specific visual elements or data points."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4682,6 +4762,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4699,9 +4780,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:38Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:37:03Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4712,6 +4802,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4720,18 +4811,29 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "No visible content to analyze.",
+        "context_relation": "uncertain",
         "limitations": [
-          "No visible content to analyze."
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:07:49Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:37:20Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4742,6 +4844,7 @@
       "source_pdf_page_number": 12,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4750,18 +4853,27 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is blank and contains no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and lacks any visible text or images."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:08:01Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:37:34Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4772,11 +4884,12 @@
       "source_pdf_page_number": 12,
       "asset_path": "page-0012.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "4b0ed4dba2c22685d22811d049d268514a51c021007b246fb279614485a62b7c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_summary": "List of names and their respective positions in educational institutions.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
@@ -4801,17 +4914,20 @@
         ],
         "concepts": [
           "educational institutions",
-          "roles",
+          "positions",
+          "departments",
+          "institutes",
           "professors",
-          "scientists",
           "teachers",
-          "educational organizations",
-          "science education",
-          "rehabilitation professionals"
+          "scientists",
+          "assistant professors",
+          "scientific officers",
+          "rehabilitation professionals",
+          "visual impairment"
         ],
         "context_relation": "list of educational professionals",
         "limitations": [
-          "names and roles are listed without specific details about their positions or departments",
+          "names and positions are listed without specific details about their roles or departments",
           "the list does not include any specific educational content or topics"
         ]
       },
@@ -4819,9 +4935,51 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:11:37Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:42:06Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and their respective positions in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Gauri Roy, PGT (Physics), Demonstration Multipurpose School, Regional Institute of Education, Mysuru",
+          "Indrani Das Sen, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Karthick Balasubramanian, Scientist E, Agharkar Research Institute, Pune",
+          "Lalminthang Kipgen, Assistant Professor, Division of Educational Kits, NCERT, New Delhi",
+          "Linto Alappat, Assistant Professor, Christ College Autonomous, Irinjalakuda, Thrissur, Kerala",
+          "L.K. Tiwary, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Manasi Goswami, Professor, Regional Institute of Education, NCERT, Bhubaneswar",
+          "Manjushree Chaudhuri, Former PGT (Physics), St. Columba's School, New Delhi and La Grande Boissière Campus of International School of Geneva, Switzerland",
+          "Meher Wan, Scientist, CSIR-National Institute of Science Communication and Policy Research, New Delhi",
+          "Munindra Ruwali, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Neeraja Dashaputre, Principal Technical Officer (Education), Indian Institute of Science Education and Research, Pune",
+          "Nicole Ann Fae Sequeira, Assistant Professor, Goa University, Goa",
+          "Poonam Katyal, Former TGT, Zeenat Mahal Sarvodaya Kanya Vidyalaya, Jafrabad, Delhi",
+          "Pramila Tanwar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Praveen Pathak, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Preeti Khanna, Rehabilitation Professional (Visual Impairment), National Association for the Blind, New Delhi",
+          "Puneet Sharma, Assistant Professor, Division of Educational Kits, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "educational institutions",
+          "positions",
+          "departments",
+          "institutes",
+          "professors",
+          "teachers",
+          "scientists",
+          "assistant professors",
+          "scientific officers",
+          "rehabilitation professionals",
+          "visual impairment"
+        ],
+        "context_relation": "list of educational professionals",
+        "limitations": [
+          "names and positions are listed without specific details about their roles or departments",
+          "the list does not include any specific educational content or topics"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4832,41 +4990,12 @@
       "source_pdf_page_number": 13,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page appears to be a blank page with no visible content.",
-        "limitations": [
-          "The page is blank and does not contain any text or images."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:11:51Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "97e6060ac937a9674b412a63",
-      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 13,
-      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green border.",
+        "visual_summary": "A blank page with a light green background and a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -4879,9 +5008,58 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:11:58Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:42:24Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "97e6060ac937a9674b412a63",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:42:34Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4892,6 +5070,7 @@
       "source_pdf_page_number": 13,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4902,16 +5081,25 @@
         "concepts": [],
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page is completely black and lacks any visible text, images, or other elements."
+          "The page is completely black and lacks any visible text, images, or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:12:12Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:42:52Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4922,6 +5110,7 @@
       "source_pdf_page_number": 13,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4932,16 +5121,25 @@
         "concepts": [],
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page is completely black and lacks any visible text, images, or other elements."
+          "No visible text or images are present on the page."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:12:25Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:43:09Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4952,6 +5150,7 @@
       "source_pdf_page_number": 13,
       "asset_path": "page-0013.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "6031730c89fe39fd3f79d34b790c90ee6db7e4932370111ac8d39bf10cc35dc0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4983,7 +5182,17 @@
           "positions",
           "departments",
           "institutes",
-          "locations"
+          "schools",
+          "professors",
+          "assistant professors",
+          "associate professors",
+          "PGT",
+          "Principal",
+          "Director",
+          "Head",
+          "Coordinator",
+          "Physics",
+          "Biology"
         ],
         "context_relation": "List of educational professionals and their positions",
         "limitations": [
@@ -4994,9 +5203,53 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:15:59Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:47:43Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and positions of educational professionals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Pushp Lata Verma, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "P.V. Raghavendra, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravijot Sandhu, PGT (Chemistry), Navyug School, Laxmibai Nagar, New Delhi",
+          "Ravindra Kumar Parashar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravi S. Nanjundiah, Professor, Centre for Atmospheric and Oceanic Sciences (CAOS), Indian Institute of Science, Bengaluru",
+          "Reena Mohapatra, Former PGT (Biology), DAV School, Bhubaneswar",
+          "Ritika Anand, Principal, St. Mark's Senior Secondary Public School, Meera Bagh, New Delhi",
+          "Ruchi Verma, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Sarat Phukan, Professor, Department of Geological Sciences, Gauhati University, Guwahati",
+          "Sarita Kumar, Professor, Acharya Narendra Dev College, University of Delhi, Delhi",
+          "Sarita Vig, Professor, Indian Institute of Space Science and Technology (IIST), Thiruvananthapuram",
+          "Smita Chaturvedi, Assistant Professor, Interdisciplinary School of Science, Savitribai Phule Pune University, Pune",
+          "Sudesh Kumar, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Surhud More, Professor, Inter-University Centre for Astronomy and Astrophysics (IUCAA), Pune",
+          "Tarun Choubisa, Director, Pedagogy, Seed2Sapling Education Foundation; and Senior Consultant, Programme Office, NSTC, NCERT, New Delhi",
+          "T.A. Viswanath, Former Associate Professor, Goa University, Goa",
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Rachna Garg, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Physics Sub-group)"
+        ],
+        "concepts": [
+          "educational professionals",
+          "positions",
+          "departments",
+          "institutes",
+          "schools",
+          "professors",
+          "assistant professors",
+          "associate professors",
+          "PGT",
+          "Principal",
+          "Director",
+          "Head",
+          "Coordinator",
+          "Physics",
+          "Biology"
+        ],
+        "context_relation": "List of educational professionals and their positions",
+        "limitations": [
+          "The list is incomplete, as it only shows names and positions of professionals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5007,6 +5260,7 @@
       "source_pdf_page_number": 14,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5024,9 +5278,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:12Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:48:00Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5037,26 +5300,36 @@
       "source_pdf_page_number": 14,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page appears to be a blank page in a document or textbook.",
+        "context_relation": "The page appears to be a blank page with no visible content.",
         "limitations": [
-          "The page is blank and does not contain any visible text or images."
+          "The page is blank and does not contain any text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:21Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:48:09Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5067,6 +5340,49 @@
       "source_pdf_page_number": 14,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "No visible content on the page.",
+          "No text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:48:25Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "No visible content on the page.",
+          "No text or images to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ddf9cf3483f7dddbfeb266f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5078,46 +5394,26 @@
         "context_relation": "No specific context or relation provided.",
         "limitations": [
           "No visible content on the page.",
-          "No visible text or images to analyze."
+          "No visible text or images present."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:33Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "7ddf9cf3483f7dddbfeb266f",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 14,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
+      "checkpointed_at": "2026-10-17T03:48:41Z",
+      "effective_analysis": {
         "visual_summary": "A black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "No specific context or relation provided in the image.",
+        "context_relation": "No specific context or relation provided.",
         "limitations": [
-          "The image is completely black and does not contain any visible content or text."
+          "No visible content on the page.",
+          "No visible text or images present."
         ]
       },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:16:45Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5128,6 +5424,7 @@
       "source_pdf_page_number": 14,
       "asset_path": "page-0014.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "1d4cd62e71b07b434d6d94cf379b9db6a9bb06ec2e4517d5f9caa51f00ad7246",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5155,38 +5452,54 @@
           "M.S. Sriram, Former Professor and Head, Department of Theoretical Physics, University of Madras, Chennai and President, KV. Sarma Research Foundation, Chennai"
         ],
         "concepts": [
-          "Curriculum Studies",
-          "Earth Science",
-          "Chemistry",
-          "Science Education",
-          "Bioinformatics",
-          "National Centre for Cell Science",
-          "Princeton University",
-          "Azim Premji Foundation",
-          "Samvit Research Foundation",
-          "Homi Bhabha Centre for Science Education",
-          "TIFR",
-          "KET's V.G. Vaze College of Arts",
-          "Government College",
-          "Hansraj College",
-          "Navyug School",
-          "Sarojini Nagar",
-          "University of Madras",
-          "Chennai",
-          "KV. Sarma Research Foundation"
+          "curriculum development",
+          "educational roles",
+          "science education"
         ],
-        "context_relation": "The page lists various educators and their roles in the curriculum development.",
+        "context_relation": "List of names and their roles in the curriculum development",
         "limitations": [
-          "The page does not provide specific details about the roles or responsibilities of the listed individuals."
+          "names and roles are listed without specific details about their responsibilities or contributions"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:20:29Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:53:06Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and their respective roles in the curriculum development.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "R.R. Koireng, Associate Professor, Department of Curriculum Studies and Development, NCERT, New Delhi (Coordinator, Earth Science Sub-group)",
+          "Anjni Koul, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi (Member-Coordinator and Coordinator, Chemistry Sub-group)",
+          "Reviewers",
+          "Shekhar C. Mande, FNA, FASc, FNASc, Former Director General, CSIR, Distinguished Professor, Bioinformatics Centre, Savitribai Phule Pune University, Honorary Distinguished Scientist, National Centre for Cell Science, Pune (Chairperson, Curricular Area Group: Science)",
+          "Manjul Bhargava, Professor, Princeton University and Co-Chairperson, NSTC",
+          "Anurag Behar, CEO, Azim Premji Foundation, Member, National Curriculum Framework Oversight Committee",
+          "Gajanan Londhe, Director, Samvit Research Foundation, Bengaluru",
+          "Adithi Muralidhar, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Ankush Gupta, Associate Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "B.K. Sharma, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "K.K. Arora, Former Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "K.V. Sridevi, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Lakshmy Ravishankar, Former Professor, KET's V.G. Vaze College of Arts, Science and Commerce, Mumbai",
+          "Manoj Yadav, Professor, Government College, Ajmer",
+          "Mayuri Rege, Reader, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Monika Koul, Professor, Hansraj College, University of Delhi, Delhi",
+          "Mridula Arora, Principal, Navyug School, Sarojini Nagar, New Delhi",
+          "M.S. Sriram, Former Professor and Head, Department of Theoretical Physics, University of Madras, Chennai and President, KV. Sarma Research Foundation, Chennai"
+        ],
+        "concepts": [
+          "curriculum development",
+          "educational roles",
+          "science education"
+        ],
+        "context_relation": "List of names and their roles in the curriculum development",
+        "limitations": [
+          "names and roles are listed without specific details about their responsibilities or contributions"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5197,6 +5510,7 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5214,9 +5528,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:20:42Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:53:23Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for text insertion.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5227,15 +5550,16 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely intended for text insertion.",
+        "context_relation": "The page is likely intended for content insertion.",
         "limitations": [
           "The page is blank and requires content to be added."
         ]
@@ -5244,9 +5568,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:20:55Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:53:32Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for content insertion.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5257,11 +5590,12 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -5274,9 +5608,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:21:08Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:53:51Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5287,26 +5630,36 @@
       "source_pdf_page_number": 15,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is blank and contains no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and lacks any visible text or images."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:21:21Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:54:06Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5317,6 +5670,7 @@
       "source_pdf_page_number": 15,
       "asset_path": "page-0015.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "ab595022ef2cb14da85e7630908b979627fa4845f28453644f61ead5c579fe4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5342,24 +5696,80 @@
           "Yukti Sharma, Professor, Department of Education (CIE), University of Delhi, Delhi"
         ],
         "concepts": [
-          "Educational professionals",
-          "Titles",
-          "Institutions",
-          "Departments",
-          "Educational roles"
+          "Scientist",
+          "Associate Editor",
+          "Assistant Professor",
+          "Principal",
+          "Head of Department",
+          "Linguistics",
+          "Professor",
+          "National Centre for Biological Sciences",
+          "TIFR",
+          "Indian Institute of Science Education and Research",
+          "Homi Bhabha Centre for Science Education",
+          "Agharkar Research Institute",
+          "Department of Physics and Astrophysics",
+          "Zakir Husain Delhi College",
+          "Department of Education in Science and Mathematics",
+          "CIE"
         ],
-        "context_relation": "List of educational professionals and their roles",
+        "context_relation": "List of educational professionals and their respective institutions and roles.",
         "limitations": [
-          "The list is incomplete, as it only shows names and titles of a few professionals."
+          "The text does not provide specific details about the roles or responsibilities of these professionals.",
+          "The text does not include any visual elements or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:24:51Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:58:48Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and titles of various educational professionals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Paramananda Barman, Scientist and Associate Editor, NIScPR, CSIR, New Delhi",
+          "Pooja Gokhale Sinha, Assistant Professor, Sri Venkateswara College, University of Delhi, New Delhi",
+          "Pushpanjali Bhagat, Principal, Sarvodaya Kanya Vidyalaya, Pushp Vihar, New Delhi",
+          "Pushpa Tyagi, Former Head of Department (Physics), Sanskriti School, Chanakyapuri, New Delhi and Former PGT (Physics), Kendriya Vidyalaya, Delhi",
+          "Saket Bahuguna, Assistant Professor (Linguistics), Central Institute of Hindi, Delhi Centre, Ministry of Education, Government of India",
+          "Sanjay P. Sane, Professor, National Centre for Biological Sciences, TIFR, Bengaluru",
+          "Sanjeev Kumar, Professor, School of Sciences, Indira Gandhi National Open University, New Delhi",
+          "Santosh Gharpure, Professor, IIT Bombay, Mumbai",
+          "Satyajit Rath, Visiting Professor, Indian Institute of Science Education and Research, Pune",
+          "Savita Ladage, Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Sujata Bhargava, Former Professor, Savitribai Phule Pune University, Pune",
+          "Surendra Ghaskadbi, Former Scientist G, Agharkar Research Institute, Pune",
+          "V.B. Bhatia, Former Professor, Department of Physics and Astrophysics, University of Delhi, Delhi",
+          "Vijay Sarda, Former Associate Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "V.P. Srivastava, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Yukti Sharma, Professor, Department of Education (CIE), University of Delhi, Delhi"
+        ],
+        "concepts": [
+          "Scientist",
+          "Associate Editor",
+          "Assistant Professor",
+          "Principal",
+          "Head of Department",
+          "Linguistics",
+          "Professor",
+          "National Centre for Biological Sciences",
+          "TIFR",
+          "Indian Institute of Science Education and Research",
+          "Homi Bhabha Centre for Science Education",
+          "Agharkar Research Institute",
+          "Department of Physics and Astrophysics",
+          "Zakir Husain Delhi College",
+          "Department of Education in Science and Mathematics",
+          "CIE"
+        ],
+        "context_relation": "List of educational professionals and their respective institutions and roles.",
+        "limitations": [
+          "The text does not provide specific details about the roles or responsibilities of these professionals.",
+          "The text does not include any visual elements or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5370,51 +5780,7 @@
       "source_pdf_page_number": 16,
       "asset_path": "assets/70489484f265580068eeff859bd8a306d82b3a94631dfec38f12f8812f4f4ee0.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Constitution of India",
-          "Part IV A (Article 51 A)",
-          "Fundamental Duties",
-          "It shall be the duty of every citizen of India —",
-          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
-          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
-        ],
-        "concepts": [
-          "Fundamental Duties",
-          "Constitution of India",
-          "Article 51A",
-          "Citizenship",
-          "National Flag",
-          "National Anthem",
-          "National Struggle for Freedom"
-        ],
-        "context_relation": "Article 51A of the Indian Constitution",
-        "limitations": [
-          "No specific image or diagram is present."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:26:09Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "f59a4224be4a5fa80d1d992a",
-      "asset_sha256": "a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 16,
-      "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5426,8 +5792,8 @@
           "Part IV A (Article 51 A)",
           "Fundamental Duties",
           "It shall be the duty of every citizen of India —",
-          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
-          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
         ],
         "concepts": [
           "Fundamental Duties",
@@ -5445,9 +5811,97 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:27:29Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:00:33Z",
+      "effective_analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties of citizens.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Citizenship",
+          "Constitution of India",
+          "National Flag",
+          "National Anthem"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f59a4224be4a5fa80d1d992a",
+      "asset_sha256": "a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties of citizens.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Citizenship",
+          "Constitution of India",
+          "National Flag",
+          "National Anthem"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T04:02:20Z",
+      "effective_analysis": {
+        "visual_summary": "Article 51A of the Indian Constitution outlining fundamental duties of citizens.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b) to cherish and follow the noble ideals which inspired our national struggle for freedom;"
+        ],
+        "concepts": [
+          "Fundamental Duties",
+          "Citizenship",
+          "Constitution of India",
+          "National Flag",
+          "National Anthem"
+        ],
+        "context_relation": "Article 51A of the Indian Constitution",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -5458,6 +5912,7 @@
       "source_pdf_page_number": 16,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5466,19 +5921,27 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is related to the Constitution of India and its fundamental duties.",
+        "context_relation": "The image is a blank page with no visible text or content.",
         "limitations": [
-          "The page is blank and does not contain any visual elements or text.",
-          "The visible text is incomplete and does not provide specific information about the content of the page."
+          "The page is blank and does not contain any text or content related to the Constitution of India or its fundamental duties."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:27:42Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:02:35Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The page is blank and does not contain any text or content related to the Constitution of India or its fundamental duties."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
