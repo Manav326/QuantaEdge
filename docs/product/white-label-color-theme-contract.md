@@ -18,9 +18,9 @@ The normalized record keeps legacy `primary`, `accent`, `background`, `surface`,
 
 ## Catalogue and configuration
 
-The platform owner can select from 16 presets, including QuantaEdge Orange (the QuantaEdge default), Academic Blue, Forest Green, Royal Violet, Teal, Burgundy, Navy & Gold, Graphite, Indigo, Emerald, Plum, Maroon, Raspberry, Cobalt, Slate and Custom. Custom selection configures primary/accent colours; surrounding semantic values are generated centrally. The preset catalogue is exposed from the owner-protected `GET /api/v1/hrms/platform/institutions/theme-presets` endpoint.
+The platform owner can select from 16 presets, including QuantaEdge Orange (the QuantaEdge default), Academic Blue, Forest Green, Royal Violet, Teal, Burgundy, Navy & Gold, Graphite, Indigo, Emerald, Plum, Maroon, Raspberry, Cobalt, Slate and Custom. Custom selection configures primary/accent colours; surrounding semantic values are generated centrally. The preset catalogue is exposed from the owner-protected `GET /api/v1/hrms/platform/institutions/theme-presets` endpoint. `POST /api/v1/hrms/platform/institutions/theme-preview` accepts a candidate `themeTokens` source object and returns the normalized generated palette without saving it.
 
-The institution editor saves the preset, default appearance and primary/accent colours. Its previews are illustrative. QuantaEdge operator/Admin/HRMS brand identity remains on the canonical orange palette; tenant palettes belong only to trusted tenant-facing workspaces.
+The institution editor saves the preset, default appearance and primary/accent colours. Its live learner preview calls the owner-protected preview endpoint, which runs the same server normalizer as save; it shows light/dark surfaces, a course card, selected state, primary action and success/warning/error feedback. QuantaEdge operator/Admin/HRMS brand identity remains on the canonical orange palette; tenant palettes belong only to trusted tenant-facing workspaces.
 
 ## Web implementation
 
