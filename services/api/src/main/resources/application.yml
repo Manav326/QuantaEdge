@@ -37,6 +37,7 @@ app:
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
   auth:
+    google-client-id: ${APP_AUTH_GOOGLE_CLIENT_ID:}
     session-hours: ${APP_AUTH_SESSION_HOURS:4}
     staff-absolute-hours: ${APP_AUTH_STAFF_ABSOLUTE_HOURS:8}
     learning-absolute-days: ${APP_AUTH_LEARNING_ABSOLUTE_DAYS:30}

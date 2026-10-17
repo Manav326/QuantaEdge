@@ -152,6 +152,8 @@ jobs:
       - name: Verify Android UI localization contract
         run: node scripts/check-android-ui-localization.mjs
       - name: Run Android unit tests and build debug APK
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: gradle -p apps/android testDebugUnitTest assembleDebug
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
@@ -299,6 +301,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
 

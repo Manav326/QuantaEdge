@@ -8,6 +8,9 @@ RUN --mount=type=cache,target=/root/.npm npm install --prefer-offline --no-audit
 FROM node:22-alpine AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+# Google Identity Services client ID is public configuration, but must be inlined at build time.
+ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID=""
+ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

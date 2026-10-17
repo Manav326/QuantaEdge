@@ -87,8 +87,22 @@ export default function GoogleSignInButton({
       if (body.gmailVerified !== true || !Array.isArray(body.verifiedMethods) || !body.verifiedMethods.includes('GMAIL')) {
         throw new Error('Google sign-in did not confirm a verified Gmail identity.');
       }
-      onAuthenticated?.(body as Record<string, unknown>);
-      if (!onAuthenticated) window.location.assign(body.workspace === 'PARENT' ? '/parent' : '/student');
+      if (onAuthenticated) {
+        // Account-linking flows return verified identity data without issuing a new session.
+        onAuthenticated(body as Record<string, unknown>);
+      } else {
+        // Never redirect based on a caller-controlled or incomplete role/workspace response.
+        const parentSession =
+          body.authenticated === true && body.workspace === 'PARENT' &&
+          body.role === 'PARENT' && Number(body.userId) > 0;
+        const learnerSession =
+          body.authenticated === true && body.workspace === 'STUDENT' &&
+          body.role === 'STUDENT' && Number(body.studentId) > 0;
+        if (!parentSession && !learnerSession) {
+          throw new Error('QuantaEdge could not confirm a valid account session. Please sign in again.');
+        }
+        window.location.assign(parentSession ? '/parent' : '/student');
+      }
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Google sign-in could not be completed.');
     } finally {
