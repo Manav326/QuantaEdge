@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import GoogleSignInButton from './GoogleSignInButton';
 import { useLocale } from './LanguageProvider';
 import { UI_LOCALE_OPTIONS, resolveUiLocale } from '../i18n/catalog';
 
@@ -68,6 +69,20 @@ export default function AccountIdentitySettings() {
   }, [locale]);
 
   useEffect(() => { void load(); }, [load]);
+
+  const onGmailLinked = useCallback(async () => {
+    setBusy('gmail');
+    setError('');
+    try {
+      setNotice(english ? 'Gmail verified and connected to this account.' : 'Gmail सत्यापित होकर इसी खाते से जुड़ गया।');
+      await load();
+      window.dispatchEvent(new Event('qe:profile-updated'));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Gmail could not be connected.');
+    } finally {
+      setBusy('');
+    }
+  }, [english, load]);
 
   async function saveProfile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -181,6 +196,21 @@ export default function AccountIdentitySettings() {
             ? 'Verification is recorded separately for each method. A Google photo or name does not verify a mobile number, and a mobile OTP does not verify Gmail.'
             : 'हर तरीके का सत्यापन अलग दर्ज होता है। Google की फ़ोटो या नाम मोबाइल सत्यापित नहीं करता और मोबाइल OTP Gmail को सत्यापित नहीं करता।'}</p>
         </div>
+
+        {!profile.gmailVerified && !profile.credentialsManagedByParent && (
+          <div className="qe-account-identity-settings__managed">
+            <strong>{english ? 'Connect a verified Gmail' : 'सत्यापित Gmail जोड़ें'}</strong>
+            <p>{english
+              ? 'This links Google to your current account; it does not create a second account. Only Gmail verified by Google will be marked verified.'
+              : 'इससे Google आपके मौजूदा खाते से जुड़ेगा; दूसरा खाता नहीं बनेगा। केवल Google द्वारा सत्यापित Gmail ही सत्यापित दिखेगा।'}</p>
+            <GoogleSignInButton
+              locale={english ? 'en' : 'hi'}
+              context="use"
+              endpoint="/api/v1/auth/google/link"
+              onAuthenticated={onGmailLinked}
+            />
+          </div>
+        )}
 
         {profile.credentialsManagedByParent ? (
           <div className="qe-account-identity-settings__managed" role="note">
