@@ -173,7 +173,14 @@ fun LearningClassesScreen(
                             Text(item.textAny("title").ifBlank { "Live class" }, style = MaterialTheme.typography.titleMedium)
                             Text(item.textAny("chapter_name", "subject_name", "description"),
                                 style = MaterialTheme.typography.bodyMedium)
-                            Text(localizedUiText("शिक्षक: ") + item.textAny("host_staff_name").ifBlank { "QuantaEdge शिक्षक" },
+                            val schoolName = LocalInstitutionBrandIdentity.current?.displayName?.takeIf { it.isNotBlank() }
+                            val teacherFallback = when {
+                                schoolName != null -> if (language == "hi") "$schoolName के शिक्षक" else "$schoolName teacher"
+                                LocalInstitutionBrandResolutionPending.current -> if (language == "hi") "शिक्षक" else "Teacher"
+                                language == "hi" -> "QuantaEdge शिक्षक"
+                                else -> "QuantaEdge teacher"
+                            }
+                            Text(localizedUiText("शिक्षक: ") + item.textAny("host_staff_name").ifBlank { teacherFallback },
                                 style = MaterialTheme.typography.bodySmall)
                             val startLabel = formatLiveClassTimestamp(item.textAny("starts_at", "startsAt"), language)
                             val endLabel = formatLiveClassTimestamp(item.textAny("ends_at", "endsAt"), language)
