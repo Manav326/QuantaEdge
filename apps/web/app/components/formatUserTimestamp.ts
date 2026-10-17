@@ -14,10 +14,11 @@ export function formatUserTimestamp(value?: string | number | Date | null): stri
     year: 'numeric',
   }).formatToParts(date);
   const read = (type: Intl.DateTimeFormatPartTypes) => parts.find(part => part.type === type)?.value ?? '';
-  const time = new Intl.DateTimeFormat('en-IN', {
+  const formattedTime = new Intl.DateTimeFormat('en-IN', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
   }).format(date);
+  const time = formattedTime.replace(/\\b(am|pm)\\b/i, period => period.toUpperCase());
   return `${read('weekday')} ${read('day')} ${read('month')} ${read('year')}, ${time}`;
 }
