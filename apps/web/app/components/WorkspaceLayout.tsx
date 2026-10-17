@@ -8,6 +8,7 @@ import { translateUi } from '../i18n/catalog';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
+import { AppearanceModeButton } from './ColorThemeProvider';
 
 type Item = { href: string; message: string; icon: string; match?: string };
 type StudentNavLink = { href: string; message: string; icon: string };
@@ -246,6 +247,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       <header className="qe-workspace-topbar">
         <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
         <div className="qe-workspace-topbar-actions">
+          <AppearanceModeButton />
           {role === 'student'
             ? <StudentAccountMenu displayName={profile?.display_name || t('web.workspace.studentFallbackName')} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
             : <ParentAccountMenu displayName={profile?.display_name || t('web.workspace.parentFallbackName')} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
