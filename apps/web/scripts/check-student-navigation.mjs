@@ -254,7 +254,7 @@ assert.ok(androidLessonResources.includes('/api/v1/learning/resources?artifactId
 assert.ok(androidLessonResources.includes('downloadAllowed') && androidLessonResources.includes('downloadUrl') && androidLessonResources.includes('allowDownload = true') && androidLessonResources.includes('openLocalFile'), 'Android may hand a resource to an external file viewer only through the API-supplied download URL when downloads are enabled.');
 assert.ok(assignedResources.includes("item.streamUrl && !isVideo && !isAudio && kind !== 'IMAGE'") && assignedResources.includes('Open resource online'), 'Student web must be able to open a private assigned document online even when download is disabled.');
 
-console.log('Navigation, localization, live-class authorization, resumable offline-video and student resource parity source contracts passed.');
+
 
 
 // Native messaging contract across API, student web, staff moderation and Android.
@@ -337,3 +337,4 @@ assert.ok(androidApp.includes('&includeFuture=true') &&
   issue66LiveClassTestsContract.includes('eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0)'),
   'Android dashboard and API tests must exercise the full-schedule query mode.');
 
+console.log('Navigation, localization, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
