@@ -65,6 +65,14 @@ def _json_object_from_response(value: Any) -> dict[str, Any]:
     }
 
 
+def _saved_analysis_is_valid(value: Any) -> bool:
+    """Return true only for an already-normalized analysis payload from this schema."""
+    try:
+        return _json_object_from_response(value) == value
+    except (TypeError, ValueError):
+        return False
+
+
 def analyze_one(
     inventory_dir: Path,
     asset: dict[str, Any],
@@ -239,10 +247,14 @@ def run_analysis(
         saved_results = saved.get("results")
         if not isinstance(saved_results, list):
             raise ValueError("Cannot resume: checkpoint results must be a list.")
+        seen_saved_ids: set[str] = set()
         for item in saved_results:
             if not isinstance(item, dict) or not item.get("asset_id"):
                 continue
             asset_id = str(item["asset_id"])
+            if asset_id in seen_saved_ids:
+                raise ValueError(f"Cannot resume: checkpoint contains duplicate asset_id {asset_id}.")
+            seen_saved_ids.add(asset_id)
             if asset_id not in current_asset_hashes:
                 continue
             if item.get("asset_sha256") != current_asset_hashes[asset_id]:
@@ -270,6 +282,7 @@ def run_analysis(
         existing = previous.get(str(asset_id), {})
         if (
             existing.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+            and _saved_analysis_is_valid(existing.get("analysis"))
             and existing.get("asset_sha256") == asset.get("asset_sha256")
             and existing.get("model") == model
             and existing.get("prompt_version") == PROMPT_VERSION
