@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "620f6f3e918a0a7b3660c10c8cadc02454bc483e9e107a6745ccbf8c39f2d398",
+  "raw_analysis_sha256": "f56439973c05c2a9348f78fdd88f227aa151a52b0300a10cb1455699cc0c9bce",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -2248,6 +2248,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/ae48c0861367311a934dc2d30c7c84cf9a3c7b8bccc169fc64a2173ae0a85c58.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2256,16 +2257,23 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is related to the theme of 'Innovation' and 'Discovery' as mentioned in the 'In a Nutshell' section.",
+        "context_relation": "The image is a visual representation of the concept of 'Innovation' and 'Discovery' from the chapter.",
         "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:29:11Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:53:15Z",
+      "effective_analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of the concept of 'Innovation' and 'Discovery' from the chapter.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2276,6 +2284,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/2e552343a2d3ab72e4690bd403776a89d568da93304ef5fa978bda6a29ddabc9.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2291,9 +2300,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:30:15Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:54:41Z",
+      "effective_analysis": {
+        "visual_summary": "A girl climbing a rope ladder with ice blocks.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a chapter summary.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2304,24 +2320,38 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/d1240b8d84ed1d37903378b54ddf4d0bc8b2fe46de75aea9f458dc8a7a9776bc.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A coiled rope with a blue loop at the end.",
+        "visual_summary": "A coiled rope with a blue loop at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
-        "limitations": []
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a simple illustration and does not convey any specific information or concept related to the text content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:31:21Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:56:13Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a simple illustration and does not convey any specific information or concept related to the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2332,11 +2362,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/c4eb054ebaa00c1ac93256813ba27ef42e6461fb82e12604adaa149f925d17e4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A rope ladder with blue rings.",
+        "visual_summary": "A rope ladder with multiple rungs and loops.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
@@ -2347,9 +2378,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:32:27Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:57:44Z",
+      "effective_analysis": {
+        "visual_summary": "A rope ladder with multiple rungs and loops.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope ladder.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2360,6 +2398,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/8361c7c9fdb0097a4032ab6a02d7f35d8c0ca01b1f251232aa611f81fb1872d3.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2369,15 +2408,26 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "uncertain",
-        "limitations": []
+        "limitations": [
+          "unclear if the image is part of a larger educational content"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:33:29Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:59:10Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is part of a larger educational content"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2388,6 +2438,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2403,9 +2454,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:33:35Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:59:17Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2416,6 +2474,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2424,19 +2483,29 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a visual aid for learning.",
+        "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
-          "The image does not provide specific details about the chapter or topic it is related to.",
-          "The image is a single object and does not represent a complex concept or relationship."
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:33:45Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:59:28Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2447,6 +2516,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/492106d78406c86daf92a723fdeb67b71a7a6a57c03c65ace992fba85922119f.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2455,18 +2525,29 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Unclear",
+        "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
-          "The image may be a full page, not a cropped figure."
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or idea."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:34:52Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:01:00Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or idea."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2477,11 +2558,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A spiral or helical structure with yellow and black colors.",
+        "visual_summary": "A spiral or helical structure made of yellow and black elements.",
         "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
@@ -2492,9 +2574,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:35:54Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:02:26Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helical structure made of yellow and black elements.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2505,11 +2594,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A spiral or helical structure with a yellow and black color scheme.",
+        "visual_summary": "A spiral or helical structure made of yellow and black elements.",
         "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
@@ -2520,9 +2610,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:35:58Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:02:31Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helical structure made of yellow and black elements.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2533,6 +2630,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2541,18 +2639,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely a part of an educational content, possibly related to a chapter summary or a discovery concept.",
+        "context_relation": "Unclear",
         "limitations": [
-          "The image does not provide specific details about the chapter or concept it represents."
+          "Unclear if the image is a full page or a cropped figure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:36:06Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:02:39Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2563,24 +2670,36 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/80353240f6c1548aa4321353cc508c26f377a3586da11ff04b7456b2cbd86a40.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_summary": "A rope with a blue loop at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
-        "limitations": []
+        "context_relation": "The image is a visual representation of a rope, possibly used to illustrate a concept or idea in the context of the educational content.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its use, so it cannot be used to infer specific information about the educational content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:37:13Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:04:13Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used to illustrate a concept or idea in the context of the educational content.",
+        "limitations": [
+          "The image does not provide specific details about the rope or its use, so it cannot be used to infer specific information about the educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2591,6 +2710,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/f4627cf9b0ff2a2379b228e1a4d498c985103759c9fd6dd6e8beca05208d16c3.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2599,16 +2719,29 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
-        "limitations": []
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or idea."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:38:20Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:05:45Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration and does not convey any specific concept or idea."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2619,11 +2752,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green border.",
+        "visual_summary": "A blank page with a light green background and a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -2634,9 +2768,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:38:28Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:05:56Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2647,24 +2788,38 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green border.",
+        "visual_summary": "A blank page with a light green background and a black border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
         "context_relation": "summary",
-        "limitations": []
+        "limitations": [
+          "unclear content",
+          "no specific elements visible"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:38:34Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:06:04Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": [
+          "unclear content",
+          "no specific elements visible"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2675,24 +2830,36 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a black and white page from a textbook, likely a page from a chapter summary or an introduction section.",
+        "visual_summary": "An empty page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "summary",
-        "limitations": []
+        "context_relation": "empty",
+        "limitations": [
+          "No visible content on the page."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:38:43Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:06:15Z",
+      "effective_analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "empty",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2703,27 +2870,32 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible text or images.",
+        "visual_summary": "The image is a black and white page from a textbook, likely a page from a chapter summary or an overview of key ideas.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
         "context_relation": "summary",
-        "limitations": [
-          "unclear content",
-          "no visible text or images"
-        ]
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:38:53Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:06:27Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black and white page from a textbook, likely a page from a chapter summary or an overview of key ideas.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "summary",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2734,11 +2906,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "page-0007.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "a3c7066d7588001f7203de890547580842b7dcf595d2adfbda20838d21973813",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook explaining the features and activities included in the book, such as 'In a Nutshell' and 'Let Us Enhance Our Learning'.",
+        "visual_summary": "A page from a textbook explaining the features and activities included in the book.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In a Nutshell",
@@ -2747,7 +2920,7 @@
           "‘Let Us Enhance Our Learning’ includes a range of exercises, from pictorial questions and puzzles to multiple-choice questions, offering a challenging and engaging experience.",
           "These questions not only help in self-evaluation but also evaluate the competencies developed in each chapter. We recommend that questions for evaluation be similar to the ones in this section.",
           "Exploratory Projects",
-          "A unique feature of the book is 'Exploratory Projects', which involves activities designed to encourage the interaction of learners with their peers, parents, teachers, experts, and the community.",
+          "A unique feature of the book is ‘Exploratory Projects’, which involves activities designed to encourage the interaction of learners with their peers, parents, teachers, experts, and the community.",
           "Learners are encouraged to gather diverse information and draw their own conclusions. Some projects may require prior preparation and collaboration.",
           "The textbook is just one way to learn. Learners should also explore and observe their surroundings. Information and Communication Technology (ICT) can further enhance learning when used appropriately. The QR codes across the textbook provide access to interactive resources like audio and video clips",
           "The journey of each learner through this science textbook is expected to be filled with joy. We hope that the curiosity sparked by this book will continue in the higher grades! We express our gratitude to all the members of the Textbook Development Committee for their contributions in shaping this t",
@@ -2755,39 +2928,84 @@
           "vii"
         ],
         "concepts": [
-          "Innovation",
-          "Discovery",
-          "Enquiry",
-          "Exploration",
-          "Curiosity",
-          "History",
-          "Art",
-          "Geography",
-          "Society",
-          "Economy",
-          "Information and Communication Technology (ICT)",
-          "QR codes",
           "Exploratory Projects",
+          "ICT",
+          "QR codes",
+          "Information and Communication Technology",
+          "Curiosity",
+          "Self-evaluation",
+          "Competencies",
           "Learners",
-          "Peers",
-          "Parents",
-          "Teachers",
-          "Experts",
-          "Community",
-          "Information"
+          "Peer interaction",
+          "Parent interaction",
+          "Teacher interaction",
+          "Expert interaction",
+          "Community interaction",
+          "Information gathering",
+          "Conclusion drawing",
+          "Project preparation",
+          "ICT enhancement",
+          "QR codes access",
+          "Interactive resources",
+          "Audio and video clips"
         ],
-        "context_relation": "The page provides an overview of the features and activities included in the textbook, such as 'In a Nutshell' and 'Let Us Enhance Our Learning'.",
+        "context_relation": "The page explains the features and activities included in the textbook, emphasizing the importance of self-evaluation, exploration, and interaction with various stakeholders.",
         "limitations": [
-          "The page does not provide specific details about the textbook or its content."
+          "The page does not provide specific details about the exercises or projects included in the textbook.",
+          "The page does not include images or diagrams to illustrate the concepts discussed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:42:31Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:10:53Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining the features and activities included in the book.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In a Nutshell",
+          "'In a Nutshell' presents the summary of a chapter, offering an overview of the key ideas discussed.",
+          "Let Us Enhance Our Learning",
+          "‘Let Us Enhance Our Learning’ includes a range of exercises, from pictorial questions and puzzles to multiple-choice questions, offering a challenging and engaging experience.",
+          "These questions not only help in self-evaluation but also evaluate the competencies developed in each chapter. We recommend that questions for evaluation be similar to the ones in this section.",
+          "Exploratory Projects",
+          "A unique feature of the book is ‘Exploratory Projects’, which involves activities designed to encourage the interaction of learners with their peers, parents, teachers, experts, and the community.",
+          "Learners are encouraged to gather diverse information and draw their own conclusions. Some projects may require prior preparation and collaboration.",
+          "The textbook is just one way to learn. Learners should also explore and observe their surroundings. Information and Communication Technology (ICT) can further enhance learning when used appropriately. The QR codes across the textbook provide access to interactive resources like audio and video clips",
+          "The journey of each learner through this science textbook is expected to be filled with joy. We hope that the curiosity sparked by this book will continue in the higher grades! We express our gratitude to all the members of the Textbook Development Committee for their contributions in shaping this t",
+          "TEXTBOOK DEVELOPMENT TEAM",
+          "vii"
+        ],
+        "concepts": [
+          "Exploratory Projects",
+          "ICT",
+          "QR codes",
+          "Information and Communication Technology",
+          "Curiosity",
+          "Self-evaluation",
+          "Competencies",
+          "Learners",
+          "Peer interaction",
+          "Parent interaction",
+          "Teacher interaction",
+          "Expert interaction",
+          "Community interaction",
+          "Information gathering",
+          "Conclusion drawing",
+          "Project preparation",
+          "ICT enhancement",
+          "QR codes access",
+          "Interactive resources",
+          "Audio and video clips"
+        ],
+        "context_relation": "The page explains the features and activities included in the textbook, emphasizing the importance of self-evaluation, exploration, and interaction with various stakeholders.",
+        "limitations": [
+          "The page does not provide specific details about the exercises or projects included in the textbook.",
+          "The page does not include images or diagrams to illustrate the concepts discussed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2836,30 +3054,38 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
-        "concepts": [
-          "blank page",
-          "light green background",
-          "black border"
-        ],
-        "context_relation": "The page is likely part of a textbook or educational material.",
+        "concepts": [],
+        "context_relation": "The page is likely part of a larger document or textbook discussing the Constitution of India and its fundamental rights.",
         "limitations": [
-          "No specific content or text is visible on the page."
+          "The page is blank and does not contain any text or images.",
+          "The page does not provide specific information about the content or structure of the document."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:47:31Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:11:09Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a larger document or textbook discussing the Constitution of India and its fundamental rights.",
+        "limitations": [
+          "The page is blank and does not contain any text or images.",
+          "The page does not provide specific information about the content or structure of the document."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2870,6 +3096,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2881,16 +3108,26 @@
         "context_relation": "The page is likely part of a textbook discussing the Constitution of India and its fundamental rights.",
         "limitations": [
           "The page is blank and does not contain any text or images.",
-          "The visible text is incomplete and does not provide specific information about the page's content."
+          "The visible text is incomplete and does not provide specific information about the content of the page."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:47:42Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:11:22Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook discussing the Constitution of India and its fundamental rights.",
+        "limitations": [
+          "The page is blank and does not contain any text or images.",
+          "The visible text is incomplete and does not provide specific information about the content of the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2901,6 +3138,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2909,19 +3147,27 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is related to the Constitution of India, specifically Articles 12-35.",
+        "context_relation": "The page is part of a textbook discussing the Constitution of India and its guarantees of Fundamental Rights.",
         "limitations": [
-          "The page is completely black and has no visible content.",
-          "No visible text or images are present on the page."
+          "The page is completely black and contains no visible text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:47:55Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:11:36Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is part of a textbook discussing the Constitution of India and its guarantees of Fundamental Rights.",
+        "limitations": [
+          "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2932,12 +3178,13 @@
       "source_pdf_page_number": 8,
       "asset_path": "page-0008.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Page from the Constitution of India outlining Fundamental Rights.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "CONSTITUTION OF INDIA",
           "Part III (Articles 12 – 35)",
@@ -2973,24 +3220,70 @@
           "Fundamental Rights",
           "Equality",
           "Freedom",
-          "Exploitation",
           "Religion",
-          "Cultural and Educational Rights",
+          "Education",
+          "Cultural Rights",
           "Constitutional Remedies"
         ],
         "context_relation": "The page outlines various fundamental rights guaranteed by the Constitution of India.",
         "limitations": [
-          "The page does not provide specific details about the conditions or exceptions mentioned.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific details about the conditions or exceptions mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:19Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:15:51Z",
+      "effective_analysis": {
+        "visual_summary": "Page from the Constitution of India outlining Fundamental Rights.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "CONSTITUTION OF INDIA",
+          "Part III (Articles 12 – 35)",
+          "(Subject to certain conditions, some exceptions and reasonable restrictions)",
+          "guarantees these",
+          "Fundamental Rights",
+          "Right to Equality",
+          "• before law and equal protection of laws;",
+          "• irrespective of religion, race, caste, sex or place of birth;",
+          "• of opportunity in public employment;",
+          "• by abolition of untouchability and titles.",
+          "Right to Freedom",
+          "• of expression, assembly, association, movement, residence and profession;",
+          "• of certain protections in respect of conviction for offences;",
+          "• of protection of life and personal liberty;",
+          "• of free and compulsory education for children between the age of six and fourteen years;",
+          "• of protection against arrest and detention in certain cases.",
+          "Right against Exploitation",
+          "• for prohibition of traffic in human beings and forced labour;",
+          "• for prohibition of employment of children in hazardous jobs.",
+          "Right to Freedom of Religion",
+          "• freedom of conscience and free profession, practice and propagation of religion;",
+          "• freedom to manage religious affairs;",
+          "• freedom as to payment of taxes for promotion of any particular religion;",
+          "• freedom as to attendance at religious instruction or religious worship in educational institutions wholly maintained by the State.",
+          "Cultural and Educational Rights",
+          "• for protection of interests of minorities to conserve their language, script and culture;",
+          "• for minorities to establish and administer educational institutions of their choice.",
+          "Right to Constitutional Remedies",
+          "• by issuance of directions or orders or writs by the Supreme Court and High Courts for enforcement of these Fundamental Rights."
+        ],
+        "concepts": [
+          "Fundamental Rights",
+          "Equality",
+          "Freedom",
+          "Religion",
+          "Education",
+          "Cultural Rights",
+          "Constitutional Remedies"
+        ],
+        "context_relation": "The page outlines various fundamental rights guaranteed by the Constitution of India.",
+        "limitations": [
+          "The page does not provide specific details about the conditions or exceptions mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3001,39 +3294,12 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A rope with a blue loop at one end.",
-        "visual_type": "illustration",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Not applicable",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:26Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "96288b18bd1c7b195a0dca17",
-      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 9,
-      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A coiled rope with a blue ring at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
@@ -3044,24 +3310,32 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:34Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:16:02Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
-      "asset_id": "e8e6a03ec71d92ed792f8788",
-      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "asset_id": "96288b18bd1c7b195a0dca17",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 9,
-      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_summary": "A coiled rope with a blue ring at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
@@ -3072,9 +3346,58 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T14:51:42Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:16:13Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e8e6a03ec71d92ed792f8788",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e24d79a4ee2649183c6e2bdaf8362360a604f5a160a23a53240f8aea70315b49",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T03:16:28Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
