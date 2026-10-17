@@ -153,6 +153,9 @@ public final class InstitutionThemeTokens {
     String navBackground = darken(brandPrimary, 0.22);
     // Keep nav chrome intentionally dark even for light mode; its contents remain contrast-safe.
     String navActiveBackground = brandPrimary;
+    String selectedBackground = mix(background, brandPrimary, darkMode ? 0.32 : 0.10);
+    String selectedText = ensureContrast(ensureContrast(brandPrimary, surface, 4.5, !darkMode),
+        selectedBackground, 4.5, !darkMode);
     String onPrimary = bestContrastText(brandPrimary);
     String onAccent = bestContrastText(brandAccent);
 
@@ -188,8 +191,8 @@ public final class InstitutionThemeTokens {
     c.put("onError", darkMode ? "#450A0A" : "#FFFFFF");
     c.put("errorContainer", darkMode ? "#7F1D1D" : "#FEE2E2");
     c.put("onErrorContainer", darkMode ? "#FEE2E2" : "#7F1D1D");
-    c.put("selectedBackground", mix(background, brandPrimary, darkMode ? 0.32 : 0.10));
-    c.put("selectedText", primaryText);
+    c.put("selectedBackground", selectedBackground);
+    c.put("selectedText", selectedText);
     c.put("navBackground", navBackground);
     c.put("navText", "#FFFFFF");
     c.put("navActiveBackground", navActiveBackground);
