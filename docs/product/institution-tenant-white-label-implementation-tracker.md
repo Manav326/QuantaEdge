@@ -1,10 +1,28 @@
 # Institution tenancy, client reporting and white-label delivery — implementation tracker
 
-Status: **LOCKED SPECIFICATION; implementation not yet complete.**  
+Status: **IMPLEMENTATION IN PROGRESS; mandatory security, billing, web/Android and CI acceptance gates remain open.**  
 Canonical epic: [#67 — HRMS-owned institutional tenancy, white-label app and enrollment billing](https://github.com/Manav326/QuantaEdge/issues/67)  
 Repository: `Manav326/QuantaEdge`; target branch: `main`.
 
 Keep this file in sync with #67 on every handoff. Do not check off a task because a route or UI placeholder exists: require API authorization, persistence, migration/upgrade compatibility, negative-path tests and the acceptance evidence stated below.
+
+## Current implementation checkpoint — 2026-10-17
+
+This is a working implementation slice, **not a release approval**. The following has been added to `main`; acceptance boxes below remain unchecked until CI and negative-path tests prove it.
+
+| Area | Current code / behavior landed | Still must be verified or finished |
+|---|---|---|
+| Tenant schema | Tenant, separate institution-admin account/session, tenant branding, centrally granted course entitlements, join codes, learner memberships, membership/audit events, billing contracts and append-only billable events in `V120__institution_tenant_white_label_foundation.sql`. | Apply V120 on a clean database and an upgraded database; review FK/constraint correctness, grants, accounting rules and rollback/recovery. No tenant/sample data was seeded. |
+| Identity boundary | Added the `INSTITUTION` workspace/cookie path to existing auth scoping; institution sessions use their own session table and do not become staff/HR identities. `QE_PLATFORM_OWNER` is an explicit permission key scoped to HRMS. | Prove login, refresh, logout, password change, session revocation, origin/CSRF checks, and API denial for HRMS non-owner and cross-workspace callers. Verify the intended owner grant maps to the actual HRMS bootstrap account. |
+| Institution APIs | `InstitutionAuthService.java`, `InstitutionTenantController.java` and `PlatformInstitutionController.java` implement separate login, tenant-only reports, code redemption, owner-only provisioning/status/admin/course/brand/contract operations and audit. | Compile/integration tests; ensure every query matches production schema; prove tenant A cannot read tenant B; harden report pagination and high-volume limits. Exact home addresses are not currently in the learner profile—the roster currently exposes city/state only. |
+| Membership/course gates | The current branch also contains institution membership and course grant enforcement in the course/learning paths, including checks against inactive/suspended institution grants, plus learner self-service institution membership UI. | Audit all remaining lesson, structured-lesson, assessments, tutor, downloadable media, live class, certificates, marketplace purchase, progress and Android endpoints for alternate paths. Existing personal purchases must remain valid when unrelated to institution access. |
+| HRMS owner UI | `apps/people/app/institutions/page.tsx` and `Institutions.module.css`; navigation is gated on `QE_PLATFORM_OWNER`. It provides tenant overview, provisioning, course entitlement, admin, branding, contract, join-code and audit controls. | Run type/lint/build and role-matrix tests. Asset storage/upload and launcher icon switching are not delivered by storing an asset key. Verify every owner action has a corresponding server permission check. |
+| Institution portal | `apps/web/app/institution/page.tsx` provides institution identity resolution, separate sign-in, initial-password change, read-only roster/progress/authorised-course views and code copy/share. `SessionBoundary.tsx` handles the institution workspace header. | Verify cookie behavior and refresh/logout, data fetch after first password change, live brand logo/theme rendering, empty/denied states, tenant switch/cache isolation, responsive/accessibility tests, and route smoke tests. |
+| Runtime configuration | Added `APP_INSTITUTION_CODE_ENCRYPTION_KEY` wiring to application config and Compose examples, plus an institution-origin setting. Join codes are hash-indexed and encrypted for controlled reveal/copy. | Configure secrets in each actual deployment; prove rotating/redeploying with the same secret works and secret rotation has an explicit re-encryption/revocation plan. Never commit a real secret. |
+| Migration sequencing | Initial migration name conflicted with the existing V102. It has been moved atomically to `V120__institution_tenant_white_label_foundation.sql` after inspecting the live migration directory (V119 was the highest existing version). | Confirm the current tree still has exactly one migration per version and that Flyway validates/applies it successfully. |
+
+**Latest known CI at this checkpoint:** [QuantaEdge Build and Publish run #39046383655](https://github.com/Manav326/QuantaEdge/actions/runs/39046383655) was *in progress* for commit `4406fc5e34dc8ac0bae5adb8bbfef3290641a146` when last checked. The earlier run for learner self-service commit `3034cfc18dfee6e2228c3fc1d48e36a9385bb784` failed: [run #39046023710](https://github.com/Manav326/QuantaEdge/actions/runs/39046023710). Its root cause and the newer commit's final result must be recorded after inspecting the jobs/logs. There is no green-CI claim yet.
+
 
 ## 1. Domain model and source of authority
 
@@ -135,26 +153,34 @@ The approved QuantaEdge central branding system remains intact for QuantaEdge op
 - [ ] Run API unit/integration tests, web lint/build/tests, Android build/tests, migration checks and applicable accessibility checks.
 - [ ] Verify GitHub Actions against exact `main` SHA; record commit, run links, statuses and blockers here and in issue #67. Leave tasks unchecked if code/tests/CI are not verified.
 
-## 4. Verified integration touchpoints found during initial remote audit
+## 4. Verified integration touchpoints found during remote audit
 
-These are observed files, not a complete route inventory; finish T0 before editing.
+This is a focused list, not a substitute for completing T0/T11 route enumeration.
 
-- `services/api/src/main/java/com/quantaedge/api/AuthContext.java` — current principal represents user/student/staff and workspace; no institution-admin principal exists yet.
-- `services/api/src/main/java/com/quantaedge/api/AuthService.java` — current session/workspace/cookie handling; institution workspace is not currently listed.
-- `services/api/src/main/java/com/quantaedge/api/AuthorizationService.java` — existing staff permission/workspace checks; platform-owner needs explicit HRMS-scoped grant and separate institution authorization.
-- `services/api/src/main/java/com/quantaedge/api/StudentController.java` — student profile/progress surfaces; institution reporting must not simply expose the self profile API.
-- `services/api/src/main/java/com/quantaedge/api/StudentProgramController.java` — current course catalogue and student enrollment uses `student_program_enrollment` and `student_track_enrollment`.
-- `services/api/src/main/java/com/quantaedge/api/AdminStaffController.java` — education-platform staff management; institution clients must not be added to this API.
-- `apps/people` — separate HRMS/People Operations UI.
-- `apps/admin` — existing central Admin workspace and CMS controls.
-- `apps/web` and `apps/android` — learner clients that need tenant-aware branded entry and cache isolation.
-- Current remote source index showed a Flyway migration named `V96__ghcr_textbook_source_book_index.sql`; this is **not proof it is the latest migration**. T0 must confirm the current highest migration on main before creating the next one.
+- `services/api/src/main/java/com/quantaedge/api/AuthContext.java` — core identity principal still models staff/user/student; institution admins deliberately use a separate principal record and token/session table.
+- `services/api/src/main/java/com/quantaedge/api/AuthService.java` and `AuthFilter.java` — standard workspace normalization, cookie selection, origin checks and workspace routing. Institution workspace is now reserved from ordinary staff/learner sessions and restricted to its API namespace.
+- `services/api/src/main/java/com/quantaedge/api/AuthorizationService.java` — explicit `QE_PLATFORM_OWNER` permission is recognised; every platform-owner API must also require the HRMS workspace.
+- `services/api/src/main/java/com/quantaedge/api/InstitutionAuthService.java` — separate password/session auth, rate-limit counters, join-code hashing + encrypted reveal, membership redemption and billable-event creation/reconciliation helper.
+- `services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java` — client sign-in, password change, tenant-only roster/course/summary reports, branding lookup and learner code redemption.
+- `services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java` — HRMS owner API for tenant/admin lifecycle, central course entitlement, branding, contracts, join-code rotation, scoped roster/audit and ledger reconciliation.
+- `services/api/src/main/resources/db/migration/V120__institution_tenant_white_label_foundation.sql` — additive schema. The remote migration directory had V119 as its highest existing migration; V120 is the new tenant migration. Flyway execution is still unverified.
+- `services/api/src/main/java/com/quantaedge/api/StudentProgramController.java` and `LearningController.java` — existing course enrollment and learning runtime where institution grant gating intersects with consumer purchase/access behavior. Review every path, including structured learning and assessments.
+- `services/api/src/main/java/com/quantaedge/api/AdminStaffController.java` — existing education-platform staff management; institution clients must not be added to this API.
+- `apps/people/app/institutions/page.tsx`, `apps/people/app/institutions/Institutions.module.css` and `apps/people/app/components/PeopleWorkspaceLayout.tsx` — owner console and permission-gated HRMS navigation.
+- `apps/web/app/institution/page.tsx` and `apps/web/app/components/SessionBoundary.tsx` — institution-branded customer workspace and session header selection.
+- `apps/web` and `apps/android` — further learner views and brand/cache paths still require end-to-end review. Android white-label launcher/icon switching is not complete.
+- `.env.example`, `.env.production.example`, `docker-compose.yml`, `docker-compose.prod.yml` and `services/api/src/main/resources/application.yml` — runtime secret/origin wiring; live deployment configuration still needs secure secret provisioning.
+
 
 ## 5. Implementation journal
 
 | Date | Status | Evidence / next action |
 |---|---|---|
-| 2026-10-17 | Specification and epic locked on GitHub | Issue #67 created. Remote inspection confirmed the existing HRMS/education-staff identity boundary and course enrollment tables. No tenant runtime code or CI pass is claimed by this tracker commit. Next: finish T0 and start T1/T2 with tests before wiring UIs. |
+| 2026-10-17 | Specification and epic locked on GitHub | Issue #67 created. |
+| 2026-10-17 | Initial backend/schema and web/HRMS UI slice committed to `main` | Separate institution accounts and session table; tenant membership/course entitlement/branding/audit/ledger schema; institution and HRMS-owner API controllers; HRMS owner page; institution portal; config; explicit workspace/permission boundary. See the current implementation checkpoint above. All acceptance boxes remain open pending tests and CI. |
+| 2026-10-17 | Migration version conflict discovered and corrected | Existing V102 was already used by `V102__additive_public_user_id.sql`; the tenant foundation was atomically moved to V120 after reading the live migration directory (highest prior file V119). Commit: [4406fc5e](https://github.com/Manav326/QuantaEdge/commit/4406fc5e34dc8ac0bae5adb8bbfef3290641a146). Build-and-publish run #39046383655 was in progress at last check. |
+| 2026-10-17 | Tenant course access integration also appeared on current `main` | Commits [edecb93](https://github.com/Manav326/QuantaEdge/commit/edecb9386cf7e846a1aff34aca54171778eb1f26), [2362fbf](https://github.com/Manav326/QuantaEdge/commit/2362fbfdcf5ace517e9f9ed7b9773d64761438c1), [d524313](https://github.com/Manav326/QuantaEdge/commit/d52431363e59648a01df46104143b10730e4ed9d) and [3034cfc](https://github.com/Manav326/QuantaEdge/commit/3034cfc18dfee6e2228c3fc1d48e36a9385bb784) extend tenant-derived learning access, suspended-tenant handling and learner institution self-service. Their full regression coverage and the failed Actions run #39046023710 still need review. |
+| 2026-10-17 | Next | Inspect the failed Actions job logs; validate the current run; add service/controller/authorization and migration tests; finish audit of every alternate course-access endpoint; implement Android branding; complete billing reconciliation/invoice lifecycle and close each acceptance gate only with evidence. |
 
 ## 6. Definition of done
 
