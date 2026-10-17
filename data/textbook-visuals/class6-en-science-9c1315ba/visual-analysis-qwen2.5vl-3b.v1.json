@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 256,
+    "assets_selected": 259,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 256,
-    "assets_remaining": 1822,
-    "assets_completion_percent": 12.3,
+    "assets_analyzed": 259,
+    "assets_remaining": 1819,
+    "assets_completion_percent": 12.5,
     "assets_failed": 3,
-    "assets_skipped_from_checkpoint": 251,
+    "assets_skipped_from_checkpoint": 254,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -351,7 +351,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T07:47:59Z"
+      "checkpointed_at": "2026-10-17T07:55:31Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -935,7 +935,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T07:49:36Z"
+      "checkpointed_at": "2026-10-17T07:57:10Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -7752,6 +7752,98 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
       "checkpointed_at": "2026-10-17T07:53:42Z"
+    },
+    {
+      "asset_id": "9953be525cb5f7816768be42",
+      "asset_sha256": "bbbf5e285ef38b4df5985d3c6982a75580cbcca127574b1de2cc729c91666e4f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/bbbf5e285ef38b4df5985d3c6982a75580cbcca127574b1de2cc729c91666e4f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light orange to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T07:58:21Z"
+    },
+    {
+      "asset_id": "f1d0c8f4f87d63724a3758cc",
+      "asset_sha256": "25647a6bef3609edf7583497dc1f99a8d251dd792f3192a5b7f60c7eaf974f3b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/25647a6bef3609edf7583497dc1f99a8d251dd792f3192a5b7f60c7eaf974f3b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and white striped background with a black line running horizontally across the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "black line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T07:59:45Z"
+    },
+    {
+      "asset_id": "ca238bfdfc7d6a50172aeb00",
+      "asset_sha256": "01e58263b3f85f63744eaeadf1654d6ef66e3f4b95d707b6e23b14e42ad68bd9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/01e58263b3f85f63744eaeadf1654d6ef66e3f4b95d707b6e23b14e42ad68bd9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal line"
+        ],
+        "context_relation": "The line and gradient background are likely part of a design element in the textbook.",
+        "limitations": [
+          "The image does not provide specific content or information about the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T08:01:06Z"
     }
   ]
 }
