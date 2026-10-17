@@ -2,6 +2,7 @@
 
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import Link from 'next/link';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -501,7 +502,7 @@ function StudentCertificatesContent() {
                     <strong>{certificate.achievement_title}</strong>
                     <span>{translateUi(locale, 'legacy.web.class.3f617911')}{certificate.class_code} · {localizedTrackName(certificate.subject_code, certificate.subject_name, certificate.language || 'en')}</span>
                     <span>{certificate.certificate_number}</span>
-                    <small>{translateUi(locale, 'legacy.web.issued.454de9e4')}: {new Date(certificate.issued_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')} · {certificate.language === 'hi' ? translateUi(locale, 'legacy.web.hindi.197af92c') : 'English'}</small>
+                    <small>{translateUi(locale, 'legacy.web.issued.454de9e4')}: {formatUserTimestamp(certificate.issued_at)} · {certificate.language === 'hi' ? translateUi(locale, 'legacy.web.hindi.197af92c') : 'English'}</small>
                   </div>
                   <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status === 'ISSUED' ? translateUi(locale, 'legacy.web.issued.454de9e4') : translateUi(locale, 'legacy.web.revoked.e75eac7b')}</span>
                   <div className={styles.downloads}>
