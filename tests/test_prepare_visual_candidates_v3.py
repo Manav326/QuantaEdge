@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 
 from scripts.extract_visual_asset_inventory import build_inventory
 from scripts.prepare_visual_candidates_v3 import prepare_candidates
