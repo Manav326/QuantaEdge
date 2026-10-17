@@ -810,11 +810,18 @@ fun QuantaEdgeApp() {
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
         structuredLessonMode = false
         currentSubject = subjectCode
+        val previousCourseId = currentCourseId
         val targetCourseId = courseId.takeIf { it > 0L } ?: currentCourseId
+        val shouldActivateCourse = targetCourseId > 0L && previousCourseId != targetCourseId
         currentCourseId = targetCourseId.coerceAtLeast(0L)
         lessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
+            if (shouldActivateCourse) {
+                ApiClient.postObject("/api/v1/students/me/programs/id/" + targetCourseId + "/enroll", JSONObject())
+                refreshStudentPrograms()
+                preferences.edit().putLong("activeCourseId", targetCourseId).apply()
+            }
             if (targetCourseId > 0L) {
                 studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + targetCourseId)
             } else if (studentProfile.length() == 0) {
