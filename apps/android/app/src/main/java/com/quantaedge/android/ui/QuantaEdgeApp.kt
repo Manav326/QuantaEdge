@@ -82,6 +82,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -271,6 +272,12 @@ fun QuantaEdgeApp() {
     var assessmentCertificateEligibility by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var pendingCertificateBytes by remember { mutableStateOf<ByteArray?>(null) }
     var pendingCertificateFilename by remember { mutableStateOf("quantaedge-certificate.pdf") }
+    var certificatePreviewOpen by rememberSaveable { mutableStateOf(false) }
+    var certificatePreviewFile by remember { mutableStateOf<java.io.File?>(null) }
+    var certificatePreviewBitmap by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
+    var certificatePreviewPage by rememberSaveable { mutableStateOf(0) }
+    var certificatePreviewPageCount by rememberSaveable { mutableStateOf(0) }
+    var certificatePreviewLoading by remember { mutableStateOf(false) }
     var progressData by remember { mutableStateOf(JSONObject()) }
     var documents by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
@@ -1224,6 +1231,24 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun showCertificatePreviewPage(pageIndex: Int) {
+        val file = certificatePreviewFile ?: return
+        if (pageIndex !in 0 until certificatePreviewPageCount) return
+        certificatePreviewLoading = true
+        runTask {
+            try {
+                val rendered = withContext(Dispatchers.IO) {
+                    renderCertificatePreviewPage(file, pageIndex)
+                }
+                certificatePreviewBitmap = rendered.first.asImageBitmap()
+                certificatePreviewPage = pageIndex
+                certificatePreviewPageCount = rendered.second
+            } finally {
+                certificatePreviewLoading = false
+            }
+        }
+    }
+
     fun viewResultCertificate(certificateId: Long) {
         runTask {
             if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
@@ -1235,15 +1260,12 @@ fun QuantaEdgeApp() {
             if (!directory.exists() && !directory.mkdirs()) throw IOException("Could not prepare certificate preview.")
             val file = java.io.File(directory, "quantaedge-certificate-" + certificateId + ".pdf")
             withContext(Dispatchers.IO) { file.writeBytes(bytes) }
-            val uri = androidx.core.content.FileProvider.getUriForFile(
-                context, context.packageName + ".fileprovider", file
-            )
-            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
-                .setDataAndType(uri, "application/pdf")
-                .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            context.startActivity(android.content.Intent.createChooser(
-                intent, if (language == "hi") "प्रमाणपत्र देखें" else "View certificate"
-            ))
+            val rendered = withContext(Dispatchers.IO) { renderCertificatePreviewPage(file, 0) }
+            certificatePreviewFile = file
+            certificatePreviewBitmap = rendered.first.asImageBitmap()
+            certificatePreviewPage = 0
+            certificatePreviewPageCount = rendered.second
+            certificatePreviewOpen = true
         }
     }
 
@@ -3450,6 +3472,70 @@ fun QuantaEdgeApp() {
                     }
 
                 }
+                if (certificatePreviewOpen) {
+                    val availableHeight = (LocalConfiguration.current.screenHeightDp.dp * 0.86f).coerceAtLeast(280.dp)
+                    Dialog(onDismissRequest = { certificatePreviewOpen = false }) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(0.98f).heightIn(min = 320.dp, max = availableHeight),
+                            shape = RoundedCornerShape(18.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize().padding(12.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                        Text(if (language == "hi") "प्रमाणपत्र पूर्वावलोकन" else "Certificate preview",
+                                            style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                                        if (certificatePreviewPageCount > 1) {
+                                            Text(
+                                                (certificatePreviewPage + 1).toString() + " / " + certificatePreviewPageCount,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+                                    TextButton(onClick = { certificatePreviewOpen = false }) {
+                                        Text(if (language == "hi") "बंद करें" else "Close")
+                                    }
+                                }
+                                Box(
+                                    modifier = Modifier.weight(1f).fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    val previewBitmap = certificatePreviewBitmap
+                                    if (previewBitmap != null) {
+                                        Image(
+                                            bitmap = previewBitmap,
+                                            contentDescription = if (language == "hi") "प्रमाणपत्र" else "Certificate",
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier.fillMaxSize().padding(4.dp)
+                                        )
+                                    }
+                                    if (certificatePreviewLoading) CircularProgressIndicator()
+                                }
+                                if (certificatePreviewPageCount > 1) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        OutlinedButton(
+                                            onClick = { showCertificatePreviewPage(certificatePreviewPage - 1) },
+                                            enabled = !certificatePreviewLoading && certificatePreviewPage > 0
+                                        ) { Text(if (language == "hi") "पिछला" else "Previous") }
+                                        OutlinedButton(
+                                            onClick = { showCertificatePreviewPage(certificatePreviewPage + 1) },
+                                            enabled = !certificatePreviewLoading && certificatePreviewPage < certificatePreviewPageCount - 1
+                                        ) { Text(if (language == "hi") "अगला" else "Next") }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar {
                 navItems.forEach { item ->
@@ -3461,6 +3547,35 @@ fun QuantaEdgeApp() {
     }
         }
     }
+}
+
+private fun renderCertificatePreviewPage(
+    file: java.io.File,
+    requestedPageIndex: Int
+): Pair<android.graphics.Bitmap, Int> {
+    if (!file.isFile || file.length() <= 0L) throw IOException("Certificate preview file is unavailable.")
+    val descriptor = android.os.ParcelFileDescriptor.open(
+        file, android.os.ParcelFileDescriptor.MODE_READ_ONLY
+    )
+    var result: Pair<android.graphics.Bitmap, Int>? = null
+    descriptor.use { parcel ->
+        android.graphics.pdf.PdfRenderer(parcel).use { renderer ->
+            if (renderer.pageCount < 1) throw IOException("This certificate has no pages to preview.")
+            val pageIndex = requestedPageIndex.coerceIn(0, renderer.pageCount - 1)
+            renderer.openPage(pageIndex).use { page ->
+                val scale = minOf(1600f / page.width, 1100f / page.height, 2f)
+                val width = (page.width * scale).toInt().coerceAtLeast(1)
+                val height = (page.height * scale).toInt().coerceAtLeast(1)
+                val bitmap = android.graphics.Bitmap.createBitmap(
+                    width, height, android.graphics.Bitmap.Config.ARGB_8888
+                )
+                bitmap.eraseColor(android.graphics.Color.WHITE)
+                page.render(bitmap, null, null, android.graphics.pdf.PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                result = bitmap to renderer.pageCount
+            }
+        }
+    }
+    return result ?: throw IOException("Certificate preview could not be rendered.")
 }
 
 @Composable
