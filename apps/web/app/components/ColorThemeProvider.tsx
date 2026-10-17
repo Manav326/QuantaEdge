@@ -3,7 +3,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTenantBranding } from './TenantBrandingProvider';
 
-export type AppearanceMode = 'system' | 'light' | 'dark';
+export type AppearanceMode = 'institution' | 'system' | 'light' | 'dark';
+type ConfiguredAppearanceMode = Exclude<AppearanceMode, 'institution'>;
 
 type ColorThemeContextValue = {
   mode: AppearanceMode;
@@ -11,7 +12,7 @@ type ColorThemeContextValue = {
 };
 
 const APPEARANCE_KEY = 'qe.appearance-mode.v1';
-const modes: AppearanceMode[] = ['system', 'light', 'dark'];
+const modes: AppearanceMode[] = ['institution', 'system', 'dark', 'light'];
 const roles = [
   'primary', 'onPrimary', 'primaryText', 'primaryContainer', 'onPrimaryContainer',
   'accent', 'onAccent', 'accentText', 'accentContainer', 'onAccentContainer', 'background', 'onBackground', 'surface', 'onSurface',
@@ -53,12 +54,16 @@ const defaultPalette = {
 } satisfies Record<'light' | 'dark', Record<(typeof roles)[number], string>>;
 
 const ColorThemeContext = createContext<ColorThemeContextValue>({
-  mode: 'system',
+  mode: 'institution',
   setMode: () => undefined,
 });
 
 function isMode(value: unknown): value is AppearanceMode {
   return typeof value === 'string' && modes.includes(value as AppearanceMode);
+}
+
+function isConfiguredMode(value: unknown): value is ConfiguredAppearanceMode {
+  return value === 'system' || value === 'light' || value === 'dark';
 }
 
 function safeColor(value: unknown): string | null {
@@ -69,8 +74,9 @@ function cssToken(role: string): string {
   return '--qe-color-' + role.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase());
 }
 
-function effectiveMode(mode: AppearanceMode, systemDark: boolean): 'light' | 'dark' {
-  return mode === 'system' ? (systemDark ? 'dark' : 'light') : mode;
+function effectiveMode(mode: AppearanceMode, configuredMode: ConfiguredAppearanceMode, systemDark: boolean): 'light' | 'dark' {
+  const selectedMode = mode === 'institution' ? configuredMode : mode;
+  return selectedMode === 'system' ? (systemDark ? 'dark' : 'light') : selectedMode;
 }
 
 function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown> | null) {
@@ -151,8 +157,10 @@ export function ColorThemeProvider({ children }: { children: ReactNode }) {
   const { brand } = useTenantBranding();
   const [savedMode, setSavedMode] = useState<AppearanceMode | null>(null);
   const rawConfiguredMode = brand?.themeTokens?.appearance;
-  const configuredMode: AppearanceMode = isMode(rawConfiguredMode) ? rawConfiguredMode : 'system';
-  const mode = savedMode ?? configuredMode;
+  const configuredMode: ConfiguredAppearanceMode = isConfiguredMode(rawConfiguredMode) ? rawConfiguredMode : 'system';
+  // Keep the user's choice separate from the institution's default. This lets them return to
+  // the school's configured light/dark/system policy after temporarily overriding it.
+  const mode = savedMode ?? 'institution';
 
   useEffect(() => {
     try {
@@ -172,7 +180,7 @@ export function ColorThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const apply = () => {
-      const actual = effectiveMode(mode, media.matches);
+      const actual = effectiveMode(mode, configuredMode, media.matches);
       root.dataset.qeAppearance = actual;
       root.style.colorScheme = actual;
       const tokens = brand?.themeTokens && typeof brand.themeTokens === 'object'
@@ -191,20 +199,26 @@ export function ColorThemeProvider({ children }: { children: ReactNode }) {
 
 export function AppearanceModeButton() {
   const { mode, setMode } = useContext(ColorThemeContext);
-  const nextMode: AppearanceMode = mode === 'system' ? 'dark' : mode === 'dark' ? 'light' : 'system';
-  const label = mode === 'system' ? 'System appearance' : mode === 'dark' ? 'Dark appearance' : 'Light appearance';
-  const icon = mode === 'system' ? '◐' : mode === 'dark' ? '☾' : '☀';
+  const nextMode: AppearanceMode =
+    mode === 'institution' ? 'system' : mode === 'system' ? 'dark' : mode === 'dark' ? 'light' : 'institution';
+  const modeName: Record<AppearanceMode, string> = {
+    institution: 'School', system: 'System', dark: 'Dark', light: 'Light',
+  };
+  const label = mode === 'institution'
+    ? 'School appearance setting'
+    : modeName[mode] + ' appearance';
+  const icon = mode === 'institution' ? '⌂' : mode === 'system' ? '◐' : mode === 'dark' ? '☾' : '☀';
   return (
     <button
       type="button"
       className="qe-appearance-toggle"
       onClick={() => setMode(nextMode)}
-      aria-label={label + '. Activate to switch to ' + nextMode + ' appearance.'}
-      title={label + ' · next: ' + nextMode}
+      aria-label={label + '. Activate to switch to ' + modeName[nextMode] + ' appearance.'}
+      title={label + ' · next: ' + modeName[nextMode]}
       aria-live="polite"
     >
       <span aria-hidden="true">{icon}</span>
-      <span className="qe-appearance-toggle-label">{mode === 'system' ? 'System' : mode === 'dark' ? 'Dark' : 'Light'}</span>
+      <span className="qe-appearance-toggle-label">{modeName[mode]}</span>
     </button>
   );
 }
