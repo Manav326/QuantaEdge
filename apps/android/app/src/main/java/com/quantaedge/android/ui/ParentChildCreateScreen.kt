@@ -38,6 +38,7 @@ fun ParentChildCreateScreen(
     var maths by rememberSaveable { mutableStateOf(true) }
     var science by rememberSaveable { mutableStateOf(true) }
     var consent by rememberSaveable { mutableStateOf(false) }
+    val institutionBrand = LocalInstitutionBrandIdentity.current
     val tracks = listOfNotNull("maths".takeIf { maths }, "science".takeIf { science })
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
@@ -46,7 +47,11 @@ fun ParentChildCreateScreen(
         Text(localizedUiText("Choose the learning language. Guardian consent is required."),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         if (remainingSlots <= 0) {
-            EmptyState("छात्र प्रोफ़ाइल सीमा पूरी हो गई", "और खाते बनाने के लिए QuantaEdge support से संपर्क करें।")
+            EmptyState(
+                "छात्र प्रोफ़ाइल सीमा पूरी हो गई",
+                if (institutionBrand != null) "और खाते बनाने के लिए अपने विद्यालय के प्रशासक से संपर्क करें।"
+                else "और खाते बनाने के लिए QuantaEdge support से संपर्क करें।"
+            )
         } else {
             OutlinedTextField(value = name, onValueChange = { name = it.take(120) },
                 label = { Text(localizedUiText("छात्र का पूरा नाम")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
