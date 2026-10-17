@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import AdminSidebar from '../components/AdminSidebar';
+import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import styles from './Translations.module.css';
 
@@ -119,6 +120,7 @@ function badgeClass(status: string) {
 }
 
 export default function TranslationsPage() {
+  const { locale } = useContext(AdminWorkspaceContext);
   const t = useUiTranslation();
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [items, setItems] = useState<Row[]>([]);

@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `980a7414883a5b3e63b5ba3b526ddc46425030f8`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/980a7414883a5b3e63b5ba3b526ddc46425030f8).
+**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `6ba9aebc2d4be30035062eb54bdf94d6a01271a2`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/6ba9aebc2d4be30035062eb54bdf94d6a01271a2).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -183,3 +183,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Role codes, permission keys, reserved-account checks, API access enforcement, session revocation behavior and credential rules are unchanged. The initial-password minimum remains 12 characters; the client message is catalog-backed, while explicit server response messages remain visible so operational errors are not hidden.
 - The canonical catalogs will contain 1702 keys per locale once this change is committed. The commit also refreshes all six app-local JSON copies and updates this tracker.
 - Still outstanding in People Operations: deep copy in access dialogs, attendance/leave, payroll, workforce lifecycle, academic assignments/classes and self-service. The access route is a first migration pass, not full route certification.
+
+
+## Latest continuation — Admin locale-formatting CI correction
+
+- At reviewed `main` baseline `6ba9aebc2d4be30035062eb54bdf94d6a01271a2`, the shared catalogs contain 1,702 English keys and 1,702 Hinglish keys; the directory/access commits refresh all six app-local catalog copies in sync.
+- Inspected [full build run #3005](https://github.com/Manav326/QuantaEdge/actions/runs/38994942266). Android, content safeguards, and the People image passed; the Admin image failed TypeScript at `apps/admin/app/translations/page.tsx:339` with `Cannot find name 'locale'`. Web image and API verification had not finished when inspected.
+- Root cause: Language Review adopted `useUiTranslation()` for messages, but number formatting still referenced `locale` without reading it. This patch obtains `locale` from the existing `AdminWorkspaceContext`, preserving the shared source of truth and localized number formatting.
+- A fresh non-cancelled full build must verify the correction. CI was not all green at the time of diagnosis; do not mark P0 complete until the Admin image and every required job pass.
+- People Operations now has first migration passes for public sign-in/password setup, employee directory and access governance. Remaining People routes/forms and the wider Admin route audit remain in progress.
