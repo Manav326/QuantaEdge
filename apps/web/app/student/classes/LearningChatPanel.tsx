@@ -158,7 +158,7 @@ export default function LearningChatPanel({sessionId,locale}:{sessionId:number;l
     </button>
     {expanded&&<section className={styles.chatPanel} aria-label={tr('Class messages','कक्षा संदेश')}>
       <div className={styles.chatHeader}>
-        <strong>{tr('QuantaEdge classroom','QuantaEdge कक्षा')}</strong>
+        <strong>{tr('Classroom','कक्षा')}</strong>
         <div className={styles.chatTabs}>
           <button type="button" className={active?.conversationType==='CLASSROOM'?styles.chatActive:''} disabled={loading||sending}
             onClick={()=>void openConversation('CLASSROOM')}>{tr('Class chat','कक्षा चैट')}</button>
