@@ -39,21 +39,28 @@ public class AdminController {
     if(term.length()>120)term=term.substring(0,120);
     String pattern="%"+term+"%";
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at,
+      select u.id,u.display_name,u.mobile_e164,u.contact_email,
+        u.email as google_email,u.email_verified_at,u.google_subject,
+        (u.email_verified_at is not null and u.google_subject is not null) as gmail_verified,
+        (u.mobile_verified_at is not null and u.mobile_e164 is not null) as mobile_verified,
+        u.username,u.active,u.created_at,u.updated_at,
         count(distinct case when gs.active=true and gs.consent_status='CONSENTED' and st.active=true then st.id end) as active_children,
         count(distinct case when gs.active=true and gs.consent_status='CONSENTED' then st.id end) as linked_children
       from user_account u
       left join guardian_student gs on gs.guardian_user_id=u.id
       left join student st on st.id=gs.student_id and st.environment='PRODUCTION'
       where u.role='PARENT'
-        and (?='' or coalesce(u.display_name,'') ilike ? or coalesce(u.mobile_e164,'') ilike ?)
-      group by u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at
+        and (?='' or coalesce(u.display_name,'') ilike ? or coalesce(u.mobile_e164,'') ilike ?
+          or coalesce(u.email,'') ilike ? or coalesce(u.contact_email,'') ilike ? or coalesce(u.username,'') ilike ?)
+      group by u.id,u.display_name,u.mobile_e164,u.contact_email,u.email,u.email_verified_at,u.google_subject,
+        u.mobile_verified_at,u.username,u.active,u.created_at,u.updated_at
       order by u.created_at desc,u.id desc limit ? offset ?
-      """,term,pattern,pattern,rowLimit,rowOffset);
+      """,term,pattern,pattern,pattern,pattern,pattern,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from user_account
-      where role='PARENT' and (?='' or coalesce(display_name,'') ilike ? or coalesce(mobile_e164,'') ilike ?)
-      """,Long.class,term,pattern,pattern);
+      where role='PARENT' and (?='' or coalesce(display_name,'') ilike ? or coalesce(mobile_e164,'') ilike ?
+        or coalesce(email,'') ilike ? or coalesce(contact_email,'') ilike ? or coalesce(username,'') ilike ?)
+      """,Long.class,term,pattern,pattern,pattern,pattern,pattern);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
