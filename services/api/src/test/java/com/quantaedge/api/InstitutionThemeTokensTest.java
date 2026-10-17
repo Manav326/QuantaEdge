@@ -43,6 +43,10 @@ class InstitutionThemeTokensTest {
     assertTrue(presets.stream().anyMatch(p -> "academic-blue".equals(p.get("id"))));
     assertTrue(presets.stream().anyMatch(p -> "custom".equals(p.get("id"))));
     assertFalse(presets.stream().anyMatch(p -> p.get("themeTokens") == null));
+    for (Map<String, Object> preset : presets) {
+      Map<String, Object> normalized = InstitutionThemeTokens.normalize(preset.get("themeTokens"));
+      assertAccessible(normalized, "preset " + preset.get("id"));
+    }
   }
 
   @Test
@@ -98,6 +102,35 @@ class InstitutionThemeTokensTest {
     assertTrue(contrast((String) dark.get("primaryText"), (String) dark.get("surface")) >= 4.5);
     assertTrue(contrast((String) light.get("navText"), (String) light.get("navBackground")) >= 4.5);
     assertTrue(contrast((String) dark.get("navText"), (String) dark.get("navBackground")) >= 4.5);
+    assertAccessible(theme, "custom yellow/purple");
+  }
+
+  @Test
+  void alreadyMaterializedThemeCanBeReadAndNormalizedAgain() {
+    Map<String, Object> original = InstitutionThemeTokens.normalize(Map.of(
+        "schemaVersion", 2, "presetId", "academic-blue", "appearance", "dark"));
+    Map<String, Object> loaded = InstitutionThemeTokens.normalize(original);
+    assertEquals(original, loaded);
+  }
+
+  private static void assertAccessible(Map<String, Object> theme, String description) {
+    for (String mode : List.of("light", "dark")) {
+      Map<?, ?> colors = (Map<?, ?>) theme.get(mode);
+      for (String pair : List.of(
+          "text|background", "text|surface", "textMuted|background", "textMuted|surface",
+          "primaryText|surface", "accentText|surface", "onPrimary|primary", "onAccent|accent",
+          "onPrimaryContainer|primaryContainer", "onSuccess|success", "onWarning|warning",
+          "onError|error", "onSuccessContainer|successContainer",
+          "onWarningContainer|warningContainer", "onErrorContainer|errorContainer",
+          "selectedText|selectedBackground", "navText|navBackground",
+          "navActiveText|navActiveBackground", "disabledText|disabledBackground")) {
+        String[] roles = pair.split("\\|");
+        assertTrue(contrast((String) colors.get(roles[0]), (String) colors.get(roles[1])) >= 4.5,
+            description + " " + mode + " contrast " + pair);
+      }
+      assertTrue(contrast((String) colors.get("focus"), (String) colors.get("surface")) >= 3.0,
+          description + " " + mode + " focus contrast");
+    }
   }
 
   private static double contrast(String first, String second) {
