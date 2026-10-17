@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "491766d25d86e5b89a7321a4c44ecebe4eccc3d521f4c5e085ff724765943b04",
+  "raw_analysis_sha256": "c80b1e671889a745a76ac631584e9193d08b95c4f9feb78910e6db5721f9dd8c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -6486,6 +6486,7 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082",
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
@@ -6533,17 +6534,37 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 17,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T08:19:05Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

@@ -11,10 +11,10 @@
     "assets_selected": 335,
     "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 335,
-    "assets_remaining": 7153,
+    "assets_analyzed": 336,
+    "assets_remaining": 7152,
     "assets_completion_percent": 4.5,
-    "assets_failed": 15,
+    "assets_failed": 14,
     "assets_skipped_from_checkpoint": 334,
     "batch_limit": 1,
     "publication_allowed": false
@@ -4335,7 +4335,8 @@
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "page_text_context_sha256": "f25fad9d0d7d27f048d6ce8974a9f862b72ae68a7b0c2dd5df198511ffefb082"
     },
     {
       "asset_id": "b229a75462bb7152cbc2131d",
@@ -4370,15 +4371,26 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 17,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "c2a53d0e7972048c3048276a01af66bbd2f09b002c9698e2eb641b1c1c9bccf0"
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T08:19:05Z"
     },
     {
       "asset_id": "951e41f9f65aae6540dfbfe4",
