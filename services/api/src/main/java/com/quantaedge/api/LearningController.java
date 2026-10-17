@@ -55,6 +55,7 @@ public class LearningController {
           ? "Active enrolment in this course is required."
           : "This course code is ambiguous; use its numeric course ID.");
       programId=((Number)scopedPrograms.getFirst().get("id")).longValue();
+      assertInstitutionCourseEntitlement(context.studentId(), programId);
     } else {
       if(!"maths".equals(normalizedSubject) && !"science".equals(normalizedSubject))
         throw new IllegalArgumentException("Unknown legacy subject track");
@@ -207,6 +208,7 @@ public class LearningController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     language=normalizeLanguage(language);
+    ensureStudentLessonAccess(context.studentId(),lessonId);
     List<Map<String,Object>> lessons=jdbc.queryForList("""
       select l.id,l.code,coalesce(lt.title,l.title) as title,coalesce(lt.summary,l.summary) as summary,
              l.estimated_minutes,l.status,
@@ -473,6 +475,54 @@ public class LearningController {
         )
       """,Long.class,studentId,lessonId);
     if(count==null||count==0) throw new SecurityException("Lesson access denied");
+    Long programId=jdbc.queryForObject("""
+      select s.program_id from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      where l.id=?
+      """,Long.class,lessonId);
+    if(programId!=null) assertInstitutionCourseEntitlement(studentId,programId);
+  }
+
+  /**
+   * Institution memberships add a strict, server-side course allow-list. Personal/direct
+   * purchasers and published free offers remain usable; a revoked tenant grant cannot be
+   * bypassed by a stale student_program_enrollment or student_track_enrollment row.
+   */
+  private void assertInstitutionCourseEntitlement(long studentId,long programId) {
+    Boolean hasActiveInstitution=jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where m.student_id=? and m.status='ACTIVE'
+      )
+      """,Boolean.class,studentId);
+    if(!Boolean.TRUE.equals(hasActiveInstitution)) return;
+
+    Boolean allowed=jdbc.queryForObject("""
+      select
+        exists(
+          select 1
+          from institution_membership m
+          join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+          join institution_course_entitlement e on e.institution_id=m.institution_id
+            and e.program_id=? and e.status='ACTIVE' and e.valid_from<=now()
+            and (e.valid_until is null or e.valid_until>now())
+          where m.student_id=? and m.status='ACTIVE'
+        )
+        or exists(
+          select 1 from course_purchase cp
+          where cp.student_id=? and cp.course_id=?
+        )
+        or exists(
+          select 1 from course_marketplace_offer o
+          where o.course_id=? and o.status='PUBLISHED'
+            and o.price_paise=0 and o.currency='INR'
+        )
+      """,Boolean.class,programId,studentId,studentId,programId,programId);
+    if(!Boolean.TRUE.equals(allowed)) {
+      throw new SecurityException("This course is not authorised for your institution or direct purchase.");
+    }
   }
 
 }
