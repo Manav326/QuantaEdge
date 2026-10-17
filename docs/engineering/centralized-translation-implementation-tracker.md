@@ -95,7 +95,9 @@ Preserve these rules when implementing the next phase:
 
 ### P1 — Complete route and static-string coverage
 
-- [ ] Validate the CI-generated machine-readable route inventory for web, admin and People Operations, then turn it into a route-by-route localization coverage matrix (generator and artifact wiring added; see latest continuation).
+- [x] Generate and validate a machine-readable route inventory in CI for web, admin and People Operations; [run #3025](https://github.com/Manav326/QuantaEdge/actions/runs/39001656781) reported 50 page routes (Web 23, Admin 17, People 10), 0 route handlers and 0 duplicate primary routes.
+- [x] Add the route-by-route localization coverage matrix at `docs/engineering/ui-localization-route-coverage.md`; first-pass migration is not route certification.
+- [ ] Complete the route-by-route raw-string, dialog, accessibility and browser-acceptance audit against that matrix.
 - [x] Migrate admin login and overview/dashboard first pass, plus the Language Review workflow page. Validate all with CI before considering these routes complete.
 - [x] Migrate first pass of Student directory, Account Lifecycle and Parent directory copy into the central catalog; verify these routes in browser after CI is green.
 - [ ] Migrate remaining admin page body text: Content Studio, questions, resources, source ingestion, assessments/tests/grading, live classes, staff, certificates, structured lesson preview, session and all dialogs/forms/tables.
@@ -249,3 +251,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Updated `.github/workflows/ci.yml` to run those tests, generate JSON at `$RUNNER_TEMP/ui-localization-route-inventory.json`, and upload a `ui-localization-route-inventory` artifact for 14 days on each CI run.
 - The report explicitly says inventory is not translation certification. It also records primary-route duplicates for follow-up rather than automatically labelling any page as translated.
 - **CI validation of this implementation is pending.** After the commit's run finishes, inspect the inventory artifact and update the checklist with the actual route counts. Next implementation step is to use that inventory to audit route-by-route message coverage; continue reusing the existing translation runtime and do not introduce a duplicate AI translation service.
+
+## Latest continuation — Admin Certificates first-pass localization (2026-10-17)
+
+- Added the semantic `admin.certificates.*` namespace and migrated the Admin `/certificates` page headings, filters, table labels, empty/loading states, action labels, revocation validation/success feedback, audit states and pagination. Dynamic API error messages, certificate/student identifiers, audit details, authorization redirects, filter values, endpoint contracts, and unknown server status values remain data-driven and unchanged.
+- Certificate issue timestamps and audit-event times now use the shared Admin UI locale (`en-IN` for English and `hi-IN` for Hinglish). The certificate-language filter remains independent of UI and learning-content language.
+- Added `scripts/check-admin-certificates-i18n.mjs` to check central-hook use, presence of every used semantic key in both catalogs, matching placeholders and removal of representative embedded English UI literals. CI invokes this guard in the localization validation job.
+- Added `docs/engineering/ui-localization-route-coverage.md` from the CI inventory. It records all 50 actual UI routes and their evidence level; first-pass migration is not route certification.
+- This commit adds 57 semantic messages. The build and route guard results must be read from the Actions run triggered by this commit; the previously successful localization-code build does not validate these new changes.
