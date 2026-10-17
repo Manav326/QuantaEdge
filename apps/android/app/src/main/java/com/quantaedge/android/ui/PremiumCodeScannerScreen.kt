@@ -260,7 +260,7 @@ fun PremiumCodeScannerScreen(
                 }
             }
             Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(if (hindi) "स्मार्ट स्कैन" else "SMART SCAN", color = scanFocus, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.8.sp)
+                Text(if (hindi) "स्मार्ट स्कैन" else "SMART SCAN", color = scanMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.8.sp)
                 Text(if (hindi) "QR और बारकोड स्कैन करें" else "Scan QR & barcodes", color = scanText, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                 if (!landscape) Text(
                     if (hindi) "प्रमाणपत्र का कोड फ्रेम में रखें। उसकी स्थिति QuantaEdge सर्वर से सत्यापित होगी।"
