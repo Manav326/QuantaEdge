@@ -95,14 +95,14 @@ object InstitutionBrandingRepository {
         return activeCodes.singleOrNull()
     }
 
-    suspend fun join(code: String): JSONObject {
+    suspend fun join(code: String, expectedTenantCode: String? = null): JSONObject {
         val cleaned = code.trim()
         if (cleaned.length !in 12..256 || cleaned.any(Char::isISOControl)) {
             throw IOException("The institution join code is invalid.")
         }
         return ApiClient.postObject(
             "/api/v1/institution/join",
-            JSONObject().put("code", cleaned),
+            JSONObject().put("code", cleaned).put("institutionCode", normalizeCode(expectedTenantCode) ?: ""),
             mapOf("X-QE-Workspace" to "STUDENT")
         )
     }
