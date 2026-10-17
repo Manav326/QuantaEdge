@@ -57,6 +57,7 @@ class StudentProgramControllerTest {
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
     when(jdbc.queryForList(contains("where ps.program_id=? order by"), eq(91L)))
         .thenReturn(List.of(Map.of("id",901L,"code","maths"),Map.of("id",902L,"code","science")));
+    when(jdbc.update(contains("update student_program_enrollment set status='PAUSED'"), eq(7L), eq(91L))).thenReturn(0);
     when(jdbc.update(contains("insert into student_program_enrollment"), eq(7L), eq(91L))).thenReturn(1);
     when(jdbc.update(contains("insert into student_track_enrollment"), eq(7L), eq(901L))).thenReturn(1);
     when(jdbc.update(contains("insert into student_track_enrollment"), eq(7L), eq(902L))).thenReturn(1);
