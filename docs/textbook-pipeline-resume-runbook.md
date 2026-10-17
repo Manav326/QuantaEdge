@@ -12,9 +12,12 @@ Open **Actions → Prepare textbook visual candidates v3 (additive) → Run work
 
 Select the class and the exact vision model used by the checkpoint. Set **analysis_mode** to one of:
 
-- `prepare_only`: prepare and persist candidate packs/catalogs; do not run vision analysis.
-- `analyze_all`: prepare candidate packs/catalogs, then run Layers 4–5. Use for a new source set or when candidate packs must genuinely be rebuilt.
-- `resume_layers_4_5`: skip candidate-pack generation, attachment-manifest rebuild, candidate GHCR publication and catalog rebuild. Resolve and verify the same whole-book sources, rebuild only the temporary visual inventory required by Layer 4, preflight the per-book/model checkpoints, restore valid checkpoints from Git/GHCR, and continue Layers 4–5.
+- `prepare_only`: restore or build the per-book candidate bundles and persist metadata/catalogs; stop before vision analysis.
+- `analyze_all`: ensure each book has a matching candidate bundle, then run Layers 4–5. It naturally restores matching deterministic bundles, so it does not mean “force rebuild everything.”
+- `resume_preparation`: resume a cancellation during Layers 1–3. The workflow fingerprints the current source PDF, extraction manifest, page JSONL, generated inventory and preparation scripts. It attempts to restore each book's deterministic GHCR artifact; if it cannot find a matching artifact, it rebuilds and pushes only that book before moving on. A completed book is saved in GHCR before the final Git catalog commit, so interruption between books does not discard its preparation work.
+- `resume_layers_4_5`: skip candidate-pack generation, attachment-manifest rebuild, candidate GHCR publication and catalog rebuild. Verify the same sources, restore Layer 1 inventory and Layer 4 analysis checkpoints, process only missing/error/stale-context assets, then regenerate Layer 5 from the raw analysis and current corrections.
+
+Per-book preparation bundles have deterministic tags derived from the whole-book source hash, extraction inputs, current Layer 1 inventory, relevant script hashes, Python/PyMuPDF versions, crop/preview settings and candidate schema. Each archive contains a manifest with file hashes. A bundle is only reused if the fingerprint, source identity, candidate schema, every bundled file hash, candidate count and all candidate asset paths verify. A registry 404 means the matching artifact is absent and that book may be rebuilt; a corrupt bundle, hash mismatch or non-404 registry error fails closed rather than pretending a resume worked.
 
 The resume action is intentionally conservative:
 - It validates the selected whole-book PDF SHA-256 against the committed extraction manifest before analysis.
@@ -42,7 +45,7 @@ The workflow concurrency group treats `run` and `resume` as the same generation 
 
 | Event | Correct action |
 |---|---|
-| Runner cancelled during Layers 1–3 | Use `analyze_all` only if candidate packs are missing, invalid or intentionally being rebuilt. Otherwise use `resume_layers_4_5`. |
+| Runner cancelled during Layers 1–3 | Choose `resume_preparation`; matching books are restored from immutable GHCR bundles and only missing/unmatched books are rebuilt. |
 | Runner cancelled during Layer 4 | Use `resume_layers_4_5` with the same class, source set and vision model. Completed asset results should be skipped; failed or missing assets are retried according to the analyzer's checkpoint rules. |
 | Runner cancelled during Layer 5 | Use `resume_layers_4_5`; Layer 5 is derived from the raw Layer 4 analysis and corrections, so it can be rebuilt without repeating successful vision calls. |
 | Some books never started | Resume may start only those books without a checkpoint while reusing checkpoints for already-started books. |

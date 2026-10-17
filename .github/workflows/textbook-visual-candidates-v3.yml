@@ -83,13 +83,14 @@ jobs:
       - name: Install extraction dependency
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
       - name: Compile preparation and validation scripts
-        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
       - name: Test source selection, extraction integrity and candidate preparation
         run: |
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
