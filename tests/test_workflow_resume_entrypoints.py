@@ -42,7 +42,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", preflight_step)
         self.assertIn("resume_preflight", preflight_step)
         self.assertIn("prior_analysis_started", preflight_step)
-        self.assertIn("refusing to redoing inference", preflight_step) if "refusing to redoing inference" in preflight_step else self.assertIn("refusing to silently redoing inference", preflight_step)
+        self.assertIn("resume stopped instead of silently redoing inference", preflight_step)
 
     def test_layers_6_to_8_has_all_modes_in_one_entrypoint(self):
         workflow = read("quantaedge-layers-6-8.yml")
