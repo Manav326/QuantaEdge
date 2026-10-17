@@ -90,6 +90,8 @@ class LearningControllerTest {
 
   @Test
   void lessonBlocksStripAnswerKeysRecursively() {
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+        .thenReturn(1L);
     when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "class_code", "7", "subject_code", "maths",
@@ -108,6 +110,20 @@ class LearningControllerTest {
     assertEquals(true, lesson.get("translation_complete"));
     assertEquals(List.of(), lesson.get("translation_gaps"));
     assertEquals(0L, ((Map<?,?>) lesson.get("translation_coverage")).get("blocks_published"));
+  }
+
+  @Test
+  void revokedInstitutionCourseEntitlementBlocksPreviouslyEnrolledLesson() {
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+        .thenReturn(1L);
+    when(jdbc.queryForObject(contains("select s.program_id from lesson l"), eq(Long.class), eq(42L)))
+        .thenReturn(91L);
+    when(jdbc.queryForObject(contains("from institution_membership m"), eq(Boolean.class), eq(7L)))
+        .thenReturn(true);
+    when(jdbc.queryForObject(contains("from course_marketplace_offer o"), eq(Boolean.class),
+        eq(91L), eq(7L), eq(7L), eq(91L), eq(91L))).thenReturn(false);
+
+    assertThrows(SecurityException.class, () -> controller.lesson(42L, "hi", student));
   }
 
   @Test
