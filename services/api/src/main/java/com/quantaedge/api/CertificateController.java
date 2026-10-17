@@ -842,9 +842,13 @@ public class CertificateController {
     snapshot.put("artifactCorrection", "CERTIFICATE_RENDERER_V5");
     snapshot.put("artifactCorrectionReason", "Re-rendered with verified Devanagari font coverage, source-preserved dynamic text, canonical branding artwork, and localized fixed wording.");
     CertificateRenderer.CertificateDetails details = certificateDetails(snapshot, achievementType, language, classCode, title);
-    CertificateRenderer.RenderedCertificate rendered = renderer.render(clean(certificate.get("template_id")),
-        language, clean(certificate.get("recipient_name")), title, originalSummary, certificateNumber,
-        toOffsetDateTime(certificate.get("issued_at")), details, false, certificateBrandingFromSnapshot(snapshot));
+    CertificateRenderer.CertificateBranding issuer = certificateBrandingFromSnapshot(snapshot);
+    // Legacy snapshots with no tenant issuer must use the canonical platform render overload.
+    CertificateRenderer.RenderedCertificate rendered = issuer == null
+        ? renderer.render(clean(certificate.get("template_id")), language, clean(certificate.get("recipient_name")),
+            title, originalSummary, certificateNumber, toOffsetDateTime(certificate.get("issued_at")), details, false)
+        : renderer.render(clean(certificate.get("template_id")), language, clean(certificate.get("recipient_name")),
+            title, originalSummary, certificateNumber, toOffsetDateTime(certificate.get("issued_at")), details, false, issuer);
     CertificateArtifactStorage.StoredArtifact pdf = null, png = null;
     String reason = "Re-rendered with verified Devanagari font coverage, source-preserved dynamic text, canonical branding artwork, and localized fixed wording.";
     try {
