@@ -543,8 +543,9 @@ fun QuantaEdgeApp() {
         var requestFailed = false
         listOf("maths", "science").forEach { subjectCode ->
             val response = runCatching {
+                val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
                 ApiClient.getArray("/api/v1/learning/documents?subjectCode=" +
-                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage).objectItems()
+                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage + courseQuery).objectItems()
             }
             if (response.isFailure) requestFailed = true
             loaded.addAll(response.getOrDefault(emptyList()))
@@ -719,6 +720,7 @@ fun QuantaEdgeApp() {
             currentCourseId = courseId
             preferences.edit().putLong("activeCourseId", courseId).apply()
             studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+            refreshStudentTextbookDocuments()
             route = AppRoute.STUDENT_HOME
             status = if (language == "hi") "सीखने का course बदल गया।" else "Learning course changed."
         }
@@ -1729,7 +1731,9 @@ fun QuantaEdgeApp() {
         runTask {
             val local = resourceStore.downloadedDocuments()
             val online = runCatching {
-                val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
+                val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
+                val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(subjectCode) +
+                    "&language=" + learningContentLanguage + courseQuery
                 ApiClient.getArray(path).objectItems()
             }.getOrElse {
                 status = "ऑफ़लाइन: केवल इस डिवाइस पर पहले डाउनलोड की गई सामग्री दिखाई जा रही है।"
