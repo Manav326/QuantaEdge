@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 226,
-    "successful_visual_analyses": 223,
-    "missing_visual_analyses": 1852,
+    "raw_analysis_result_rows": 229,
+    "successful_visual_analyses": 226,
+    "missing_visual_analyses": 1849,
     "failed_visual_analyses": 3,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1855,
+    "unresolved_count": 1852,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -14386,9 +14386,18 @@
       "asset_path": "assets/021fd4a8950a1fd6c39891b4a7d637d22bda52b6687f27b0e2418434eac2afa9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid-colored rectangular shape with a gradient effect transitioning from light brown to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a cover or background image for a textbook.",
+        "limitations": [
+          "The image does not contain any text or symbols that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14404,9 +14413,24 @@
       "asset_path": "assets/79432e34596e1c34107238d92ffe655d94e2008dddb135cac6c4e3d96c185706.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm orange color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "color transition"
+        ],
+        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background and the text 'Reprint 2026-27'."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14422,9 +14446,16 @@
       "asset_path": "assets/9f03070f4745151b6434afde239d850c64dfdbaabe939b40d37446942249f9e2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
