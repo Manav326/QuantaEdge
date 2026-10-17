@@ -154,7 +154,7 @@ public final class InstitutionThemeTokens {
     String error = darkMode ? "#FDA4AF" : "#B42318";
     String disabledBg = darkMode ? "#273244" : "#E5E7EB";
     String disabledText = darkMode ? "#9CA3AF" : "#4B5563";
-    String navBackground = darken(brandPrimary, 0.22);
+    String navBackground = ensureContrast(darken(brandPrimary, 0.22), "#FFFFFF", 4.5, true);
     // Keep nav chrome intentionally dark even for light mode; its contents remain contrast-safe.
     String navActiveBackground = brandPrimary;
     String selectedBackground = mix(background, brandPrimary, darkMode ? 0.32 : 0.10);
