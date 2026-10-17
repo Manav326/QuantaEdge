@@ -278,3 +278,39 @@ assert.ok(androidClasses.includes('newWebSocket') && androidClasses.includes('re
 
 const messagingHandshake = read('../../../services/api/src/main/java/com/quantaedge/api/LearningMessagingHandshakeInterceptor.java');
 assert.ok(messagingHandshake.includes('getOrEmpty(HttpHeaders.COOKIE)') && !messagingHandshake.includes('request.getCookies()'), 'WebSocket handshake must read cookies from ServerHttpRequest headers, not a nonexistent cookie API.');
+
+
+// Issue #66 regression guards for course purchase ownership and retry-safe checkout.
+const courseEnrollmentApiContract = read('../../../services/api/src/main/java/com/quantaedge/api/StudentProgramController.java');
+const courseMarketplaceApiContract = read('../../../services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java');
+const coursePaymentSchemaContract = read('../../../services/api/src/main/resources/db/migration/V114__course_payment_order_idempotency.sql');
+const androidApiClientContract = read('../../android/app/src/main/java/com/quantaedge/android/data/ApiClient.kt');
+const androidMarketplaceContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidFloatingTutorContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/FloatingTutorDock.kt');
+const studentMarketplaceContract = read('../app/student/marketplace/page.tsx');
+
+assert.ok(courseEnrollmentApiContract.includes("o.status='PUBLISHED'") &&
+  courseEnrollmentApiContract.includes("o.price_paise=0") &&
+  courseEnrollmentApiContract.includes("o.currency='INR'") &&
+  courseEnrollmentApiContract.includes('course_purchase cp') &&
+  courseEnrollmentApiContract.includes("e.status in ('ACTIVE','PAUSED')"),
+  'New self-enrolment must require an explicitly published free offer; existing enrollment/purchase may be resumed.');
+assert.ok(courseMarketplaceApiContract.includes('@RequestHeader(value = "Idempotency-Key", required = false)') &&
+  courseMarketplaceApiContract.includes("status in ('CREATING','PENDING')") &&
+  courseMarketplaceApiContract.includes('client_request_key') &&
+  courseMarketplaceApiContract.includes('isReusablePendingOrder'),
+  'Checkout order creation must recover stale creation rows, validate idempotency keys and reuse an existing pending provider order.');
+assert.ok(coursePaymentSchemaContract.includes('client_request_key varchar(64)') &&
+  coursePaymentSchemaContract.includes('uq_course_payment_order_request_key'),
+  'Checkout idempotency must be persisted and unique for each learner/course/request key.');
+assert.ok(studentMarketplaceContract.includes("'Idempotency-Key': crypto.randomUUID()"),
+  'Student web checkout must supply a unique idempotency key to the server.');
+assert.ok(androidApiClientContract.includes('additionalHeaders: Map<String, String>') &&
+  androidApiClientContract.includes('additionalHeaders.forEach'),
+  'Android API client must support the request header required for checkout idempotency.');
+assert.ok(androidMarketplaceContract.includes('"Idempotency-Key" to java.util.UUID.randomUUID().toString()'),
+  'Android course checkout must supply an idempotency key.');
+assert.ok(androidFloatingTutorContract.includes('userResized') &&
+  androidFloatingTutorContract.includes('if (compact && !userResized)') &&
+  androidFloatingTutorContract.includes('userResized = true'),
+  'The floating tutor must honour resize gestures on compact screens as well as wide screens.');
