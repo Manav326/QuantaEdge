@@ -1,9 +1,13 @@
 package com.quantaedge.android.ui
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -88,6 +92,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.quantaedge.android.BuildConfig
 import com.quantaedge.android.R
 import com.quantaedge.android.RazorpayCourseCheckoutHost
 import com.quantaedge.android.data.ApiClient
@@ -654,16 +661,66 @@ fun QuantaEdgeApp() {
             if (mode == "PARENT") {
                 ApiClient.postObject("/api/v1/auth/parent-login", JSONObject()
                     .put("mobile", mobile.trim()).put("password", password))
-            } else if (mode == "LEARNER") {
-                ApiClient.postObject("/api/v1/auth/learner-login", JSONObject()
-                    .put("mobile", mobile.trim()).put("password", password))
+            } else if (mode == "LEARNER" || mode == "LEARNER_USERNAME") {
+                if (mode == "LEARNER_USERNAME") {
+                    ApiClient.postObject("/api/v1/auth/account-login", JSONObject()
+                        .put("username", username.trim()).put("password", password))
+                } else {
+                    ApiClient.postObject("/api/v1/auth/learner-login", JSONObject()
+                        .put("mobile", mobile.trim()).put("password", password))
+                }
             } else {
                 ApiClient.postObject("/api/v1/auth/student-login", JSONObject()
-                    .put("parentMobile", parentMobile.trim())
+                    .put("parentIdentifier", parentMobile.trim())
                     .put("username", username.trim()).put("password", password))
             }
             refreshUser()
             // Remove unauthenticated form state (including saved password/OTP drafts) once login succeeds.
+            AppRoute.values().forEach { savedRoute ->
+                saveableStateHolder.removeState("anonymous:${savedRoute.name}")
+            }
+        }
+    }
+
+    fun signInWithGoogle(context: Context) {
+        runTask {
+            val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID.trim()
+            if (webClientId.isBlank()) {
+                throw IOException("Google sign-in is not configured. Set GOOGLE_WEB_CLIENT_ID to the Google OAuth Web client ID.")
+            }
+            val credentialManager = CredentialManager.create(context)
+            val googleOption = GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(webClientId)
+                .setAutoSelectEnabled(false)
+                .build()
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(googleOption)
+                .build()
+            val credential = credentialManager.getCredential(context, request).credential
+            if (credential !is CustomCredential ||
+                credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                throw IOException("Google did not return a supported ID token. Please try again.")
+            }
+            val googleCredential = try {
+                GoogleIdTokenCredential.createFrom(credential.data)
+            } catch (e: Exception) {
+                throw IOException("Google's sign-in response could not be read. Please try again.", e)
+            }
+            val session = ApiClient.postObject("/api/v1/auth/google",
+                JSONObject().put("credential", googleCredential.idToken))
+            val workspace = session.optString("workspace").uppercase()
+            if (workspace !in setOf("PARENT", "STUDENT") ||
+                (workspace == "PARENT" && session.optString("role") != "PARENT") ||
+                (workspace == "STUDENT" && session.optLong("studentId") <= 0L) ||
+                !session.optBoolean("gmailVerified") ||
+                !session.optJSONArray("verifiedMethods").orEmptyContains("GMAIL")) {
+                ApiClient.postObject("/api/v1/auth/logout", JSONObject())
+                ApiClient.clearSession()
+                throw IOException("QuantaEdge could not confirm the verified Google account.")
+            }
+            ApiClient.setWorkspace(workspace)
+            refreshUser()
             AppRoute.values().forEach { savedRoute ->
                 saveableStateHolder.removeState("anonymous:${savedRoute.name}")
             }
@@ -2969,6 +3026,7 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         error = error,
                         onSignIn = ::signIn,
+                        onGoogleSignIn = ::signInWithGoogle,
                         onRequestOtp = { number, callback -> requestParentOtp("LOGIN", number, callback) },
                         onVerifyOtp = { number, otp -> verifyParentOtp("LOGIN", number, "", otp, "") },
                         onSignup = { route = AppRoute.PARENT_SIGNUP },
@@ -3601,6 +3659,7 @@ private fun LoginScreen(
     busy: Boolean,
     error: String,
     onSignIn: (String, String, String, String, String) -> Unit,
+    onGoogleSignIn: (Context) -> Unit,
     onRequestOtp: (String, (String?) -> Unit) -> Unit,
     onVerifyOtp: (String, String) -> Unit,
     onSignup: () -> Unit,
@@ -3615,6 +3674,7 @@ private fun LoginScreen(
     var otp by rememberSaveable { mutableStateOf("") }
     var otpRequested by rememberSaveable { mutableStateOf(false) }
     var devCode by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 14.dp),
@@ -3627,6 +3687,20 @@ private fun LoginScreen(
         }
         Text(if (language == "hi") "साइन इन करें" else "Sign in",
             style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+        OutlinedButton(
+            onClick = { onGoogleSignIn(context) },
+            enabled = !busy,
+            modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
+        ) {
+            Text(if (language == "hi") "Google से जारी रखें" else "Continue with Google")
+        }
+        Text(
+            if (language == "hi") "सत्यापन केवल Google की पुष्टि किए गए Gmail के लिए होगा।" 
+            else "Only a Google-verified Gmail address can receive the Gmail verified status.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.padding(top = 5.dp)
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 6.dp)) {
             if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
             else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
