@@ -85,6 +85,21 @@ The sample is not a full historical query. Manual deployment, release and audit 
 
 For the general textbook lesson data pipeline, operators now have **two primary workflows**. Use the separate textbook cache/extraction artifact workflows only when the upstream source/page artifact itself must be created or repaired. Use artifact audit/export workflows only for their named artifact. Do not add another workflow just to expose a button for a mode already supported by a core workflow; add a mode/input to the canonical entrypoint instead.
 
+## Deferred TODO: user-friendly source selection for Layers 6–8
+
+**Status: TODO — do not block the current pipeline failure/debugging work on this UI improvement.**
+
+Replace the current manually entered `source_book_id` input with dependent, human-readable choices for the existing NCERT mode:
+1. Choose **class** (6, 7, or 8).
+2. Choose **language** (only languages with available source books for that class).
+3. Choose the **book** from the matching committed extraction manifests, displaying its title, subject, edition, and part where applicable.
+4. Resolve the selected book's exact `book_id` internally; never ask the operator to type or guess IDs.
+5. Before enabling run/resume, show the source readiness (matching extraction, complete Layer 5 ledger, matching benchmark/checkpoint as appropriate) and actionable blockers. Resume must still fail closed for a missing/mismatched checkpoint rather than silently starting over.
+
+Discover options from the canonical manifests under `data/textbook-extractions/class-N/**/pages/*.manifest.json`, not from a duplicated hard-coded list. The inventory UI must show only real whole-book source options and must distinguish similarly named parts/editions. Do not advertise a book as ready merely because an extraction manifest exists; the Layer 5 and benchmark/checkpoint gates remain enforced by the pipeline.
+
+**Future extension point:** add a separate source type such as **NCERT textbook** vs **My PDF**. The future PDF path should upload/identify the original PDF, calculate and persist its SHA-256, run the same validated stage contracts through Layer 8, and keep all generated outputs/review checkpoints under `data/`. It must not weaken the source identity, completeness, resume, privacy, or human-review gates. This PDF upload path is future scope, not part of the current NCERT dropdown task.
+
 ## Deferred TODO: four resumable textbook-pipeline entrypoints
 
 **Status: TODO — intentionally blocked until the current Layers 6–8 generation has produced its intended output and the full Layers 1–8 data flow has been verified.**
