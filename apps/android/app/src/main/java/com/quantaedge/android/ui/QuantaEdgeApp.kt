@@ -123,7 +123,7 @@ private fun parseCourseTimestamp(value: String): Long? {
     if (value.isBlank()) return null
     return runCatching { java.time.OffsetDateTime.parse(value).toInstant().toEpochMilli() }.getOrNull()
         ?: runCatching { java.time.Instant.parse(value).toEpochMilli() }.getOrNull()
-        ?: runCatching { java.time.LocalDateTime.parse(value).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli() }.getOrNull()
+        ?: runCatching { java.time.LocalDateTime.parse(value).atZone(java.time.ZoneId.of("Asia/Kolkata")).toInstant().toEpochMilli() }.getOrNull()
 }
 
 private fun courseSessionTimestamp(item: JSONObject): Long? = parseCourseTimestamp(item.textAny(
@@ -139,7 +139,7 @@ private fun courseReadableTimestamp(item: JSONObject, language: String): String 
     val instant = courseSessionTimestamp(item) ?: return ""
     val locale = if (language == "hi") java.util.Locale("hi", "IN") else java.util.Locale.ENGLISH
     val formatter = java.time.format.DateTimeFormatter.ofPattern("EEE dd MMM yyyy, h:mm a", locale)
-        .withZone(java.time.ZoneId.systemDefault())
+        .withZone(java.time.ZoneId.of("Asia/Kolkata"))
     return formatter.format(java.time.Instant.ofEpochMilli(instant))
 }
 
