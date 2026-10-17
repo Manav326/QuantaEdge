@@ -865,11 +865,23 @@ fun QuantaEdgeApp() {
 
     fun openStructuredLessons() {
         structuredLessonMode = true
-        currentSubject = "science"
         structuredLessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
-            val array = ApiClient.getArray("/api/v1/learning/structured-lessons?language=" + learningLanguage)
+            val profile = if (studentProfile.length() == 0) {
+                ApiClient.getObject("/api/v1/students/me")
+            } else studentProfile
+            val classCode = profile.textAny("class_code", "classCode")
+            val classNumber = classCode.filter(Char::isDigit)
+            val params = mutableListOf(
+                "language=" + ApiClient.encodeQuery(learningLanguage),
+                "subjectCode=" + ApiClient.encodeQuery(currentSubject)
+            )
+            if (classNumber.isNotBlank()) params += "classNumber=" + classNumber
+            if (currentCourseId > 0L) params += "courseId=" + currentCourseId
+            val array = ApiClient.getArray(
+                "/api/v1/learning/structured-lessons?" + params.joinToString("&")
+            )
             structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
         }
     }
