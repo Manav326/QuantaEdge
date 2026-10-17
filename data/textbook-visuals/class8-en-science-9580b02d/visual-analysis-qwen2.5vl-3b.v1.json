@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 46,
+    "assets_selected": 69,
     "assets_processed_this_run": 25,
     "assets_analyzed": 294,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 21,
+    "assets_skipped_from_checkpoint": 44,
     "publication_allowed": false
   },
   "results": [
@@ -1004,11 +1004,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
-        "visual_type": "uncertain",
+        "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
+          "Safety first",
           "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
@@ -1018,23 +1019,33 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
+          "inclusive",
           "safety precautions",
-          "ever heard of",
-          "step further",
+          "peer interactions",
+          "assessing understanding",
+          "analyzing concepts",
+          "safety first",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
+          "fascinating facts",
+          "interesting observations",
+          "curiosity-driven questions",
+          "advanced concepts",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "context_relation": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The text does not provide specific examples or details about the activities or questions."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-17T02:37:11Z"
+      "checkpointed_at": "2026-10-17T03:06:46Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1548,7 +1559,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
+        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -1564,26 +1575,20 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "Keywords",
           "NEP 2020",
-          "Indian texts",
-          "pictorial questions",
-          "puzzles",
-          "multiple choice questions",
-          "challenging and engaging experience",
-          "competencies",
-          "evaluation"
+          "Keywords",
+          "scientific activities"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
+        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
         "limitations": [
-          "The page does not provide specific examples or exercises for the exercises mentioned."
+          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-17T03:04:04Z"
+      "checkpointed_at": "2026-10-17T03:07:34Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -1621,24 +1626,25 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/a80610c3ae132d907370e10793a914273693686e3814ce0f1a9d8f25ba6eb291.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A person holding a large piece of paper or a book, possibly presenting or showing something.",
-        "visual_type": "illustration",
+        "visual_summary": "A cartoon character holding a large piece of paper.",
+        "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image likely represents a student or teacher presenting information, possibly related to the educational activities mentioned in the text.",
+        "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
-          "The image does not provide specific details about the content of the paper or book being held."
+          "The image does not provide specific information about the educational content editor's role or responsibilities."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:47:26Z"
+      "checkpointed_at": "2026-10-17T03:07:40Z"
     },
     {
       "asset_id": "1427d0017581b96c32703bd1",
@@ -1648,22 +1654,25 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/d608849bb6a018d5a6452e7fcb1f9d78b83490c2d1836bc92e8cab179756c30e.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A person holding a large green hexagon.",
-        "visual_type": "cartoon",
+        "visual_summary": "A person holding a large green octagonal object.",
+        "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
-        "limitations": []
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:48:31Z"
+      "checkpointed_at": "2026-10-17T03:09:12Z"
     },
     {
       "asset_id": "358d4ec1a9f26df003b8cb85",
@@ -1673,24 +1682,25 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/d608849bb6a018d5a6452e7fcb1f9d78b83490c2d1836bc92e8cab179756c30e.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A person holding a large green octagonal object.",
+        "visual_summary": "A person holding a large green hexagon.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is related to educational content, possibly a textbook illustration.",
+        "context_relation": "The image is not directly related to the text.",
         "limitations": [
-          "The image does not provide specific details about the educational content or activities it represents."
+          "The image does not provide specific information about the text's content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:48:37Z"
+      "checkpointed_at": "2026-10-17T03:09:18Z"
     },
     {
       "asset_id": "0ab3f229a9c16edbe1b28f5e",
@@ -1700,22 +1710,25 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/1f9e7dd9f724e6db77db9ee60253d3cad4b0a4629748b37a08a66e6acd6737a2.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character holding a yellow board.",
+        "visual_summary": "A cartoon character holding a yellow board, possibly for displaying information.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is related to educational content, specifically a cartoon character holding a board.",
-        "limitations": []
+        "context_relation": "The image is related to educational content, possibly for a textbook.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or activities it represents."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:49:44Z"
+      "checkpointed_at": "2026-10-17T03:10:49Z"
     },
     {
       "asset_id": "aeccc5afecd52c816a3366a6",
@@ -1725,22 +1738,25 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/1f9e7dd9f724e6db77db9ee60253d3cad4b0a4629748b37a08a66e6acd6737a2.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character holding a yellow board.",
+        "visual_summary": "A cartoon character holding a yellow board, possibly for displaying information.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is related to educational content, specifically a cartoon character holding a board.",
-        "limitations": []
+        "context_relation": "The image is related to educational content, specifically a textbook activity involving interaction with experts, teachers, parents, and the community.",
+        "limitations": [
+          "The image does not provide specific details about the textbook activity or the content being displayed on the board."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:49:49Z"
+      "checkpointed_at": "2026-10-17T03:10:57Z"
     },
     {
       "asset_id": "307b3f9e61d816f05e3e6b2a",
@@ -1750,24 +1766,25 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible text or images.",
+        "visual_summary": "The image is a black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "context_relation": "The image is a black page with no visible content.",
         "limitations": [
-          "The page is completely black and has no visible text or images."
+          "The image is a black page with no visible content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:50:00Z"
+      "checkpointed_at": "2026-10-17T03:11:11Z"
     },
     {
       "asset_id": "74fe0e3052c2ffceffd07d45",
@@ -1777,11 +1794,12 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a black and white page from a textbook, possibly a page from a science or society textbook. The page contains text that discusses the importance of interaction with experts, teachers, parents, and the community in educational activities.",
+        "visual_summary": "The image is a black and white page from a textbook, likely a page from a science textbook, discussing the concept of 'Discover, design, and debate' in the context of science education.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A key feature of the book is Discover, design, and debate, which",
@@ -1790,24 +1808,21 @@
           "encouraged to gather diverse information and"
         ],
         "concepts": [
-          "interaction",
-          "experts",
-          "teachers",
-          "parents",
-          "community",
-          "educational activities",
-          "diverse information"
+          "Discover, design, and debate",
+          "science education",
+          "interaction with experts, teachers, parents, and the community",
+          "gathering diverse information"
         ],
-        "context_relation": "The text discusses the importance of interaction with experts, teachers, parents, and the community in educational activities.",
+        "context_relation": "The image is a page from a textbook discussing the importance of interactive learning in science education.",
         "limitations": [
-          "The image is a black and white page, so details such as colors, images, or specific text are not visible."
+          "The image does not show any visual aids or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:50:28Z"
+      "checkpointed_at": "2026-10-17T03:11:40Z"
     },
     {
       "asset_id": "48d8819485a9220b3e463844",
@@ -1817,12 +1832,13 @@
       "source_pdf_page_number": 8,
       "asset_path": "page-0008.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A page from a textbook discussing the features of a science book, including interactive activities and projects.",
-        "visual_type": "uncertain",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A key feature of the book is Discover, design, and debate, which",
           "includes activities/projects designed to encourage interaction with",
@@ -1853,21 +1869,23 @@
         "concepts": [
           "Discover, design, and debate",
           "Interactive activities",
-          "Information and Communication Technology (ICT)",
+          "Projects",
+          "Interaction with experts, teachers, parents, and the community",
+          "Development of thoughtful, active, and compassionate learners",
+          "ICT (Information and Communication Technology)",
           "QR codes",
-          "Curiosity"
+          "Exploring at their own pace"
         ],
-        "context_relation": "The page discusses the features of a science textbook, including interactive activities and projects.",
+        "context_relation": "The page discusses the features of a science textbook, including interactive activities and projects designed to engage students and make science more fun and meaningful.",
         "limitations": [
-          "The page does not provide specific details about the textbook or its content.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific details about the textbook or its content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:53:37Z"
+      "checkpointed_at": "2026-10-17T03:16:01Z"
     },
     {
       "asset_id": "ab19d33f64f5b3e257b6df68",
@@ -1877,46 +1895,25 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e3b756175b1abd3cd8ad7b52c7c60276e91fb96dbfd59d5869ef265b5ad260",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook listing the members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_summary": "A black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "National Syllabus and Teaching Learning",
-          "Material Committee (NSTC)",
-          "1. M.C. Pant, Chancellor, National Institute of Educational Planning",
-          "and Administration (NIEPA), (Chairperson)",
-          "2. Manjul Bhargava, Professor, Princeton University, (Co-Chairperson)",
-          "3. Sudha Murty, Acclaimed Writer and Educationist",
-          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the Prime Minister (EAC-PM)",
-          "5. Shekhar Mande, Former Director General, CSIR; Distinguished Professor, Savitribai Phule Pune University, Pune",
-          "6. Sujatha Ramdorai, Professor, University of British Columbia"
-        ],
-        "concepts": [
-          "National Syllabus and Teaching Learning Material Committee",
-          "NSTC",
-          "Members of the NSTC",
-          "Chairperson",
-          "Co-Chairperson",
-          "Acclaimed Writer and Educationist",
-          "Economic Advisory Council to the Prime Minister",
-          "Former Director General, CSIR",
-          "Distinguished Professor",
-          "University of British Columbia"
-        ],
-        "context_relation": "The page is part of an educational textbook, listing the members of the NSTC.",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "The page does not contain any visual elements.",
-          "The page does not provide any specific information about the NSTC's role or responsibilities."
+          "The page is completely black and does not contain any text, images, or other visual elements."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:54:20Z"
+      "checkpointed_at": "2026-10-17T03:16:19Z"
     },
     {
       "asset_id": "0081e35bc239d9ec3e847610",
@@ -1926,6 +1923,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0e3b756175b1abd3cd8ad7b52c7c60276e91fb96dbfd59d5869ef265b5ad260",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1934,16 +1932,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "No specific context or relation provided in the image.",
+        "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
-          "No visible content or text present in the image."
+          "No visible text or images are present on the page."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:54:32Z"
+      "checkpointed_at": "2026-10-17T03:16:36Z"
     },
     {
       "asset_id": "59a34bf77a050422e42aa907",
@@ -1953,32 +1951,34 @@
       "source_pdf_page_number": 9,
       "asset_path": "page-0009.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "b0e3b756175b1abd3cd8ad7b52c7c60276e91fb96dbfd59d5869ef265b5ad260",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "List of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
-        "visual_type": "table",
+        "visual_type": "uncertain",
         "visible_text": [
-          "1. M.C. Pant, Chancellor, National Institute of Educational Planning and Administration (NIEPA), (Chairperson)",
-          "2. Manjul Bhargava, Professor, Princeton University, (Co-Chairperson)",
+          "National Syllabus and Teaching Learning\nMaterial Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning\nand Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University,\n(Co-Chairperson)",
           "3. Sudha Murty, Acclaimed Writer and Educationist",
-          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the Prime Minister (EAC-PM)",
-          "5. Shekhar Mande, Former Director General, CSIR; Distinguished Professor, Savitribai Phule Pune University, Pune",
-          "6. Sujatha Ramdorai, Professor, University of British Columbia, Canada",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the\nPrime Minister (EAC-PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
           "7. Shankar Mahadevan, Music Maestro, Mumbai",
-          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy, Bengaluru",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy,\nBengaluru",
           "9. Michel Danino, Visiting Professor, IIT-Gandhinagar",
           "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General, HIPA",
-          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti, Ministry of Education",
-          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime Minister (EAC-PM)",
+          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti,\nMinistry of Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime\nMinister (EAC-PM)",
           "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
           "14. Gajanan Londhe, Head, Programme Office, NSTC",
           "15. Rabin Chhetri, Director, SCERT, Sikkim",
-          "16. Pratyusha Kumar Mandal, Professor, Department of Education in Social Sciences, NCERT, New Delhi",
-          "17. Dinesh Kumar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
-          "18. Kirti Kapur, Professor, Department of Education in Languages, NCERT, New Delhi",
-          "19. Ranjana Arora, Professor and Head, Department of Curriculum Studies and Development, NCERT, (Member-Secretary)"
+          "16. Pratyusha Kumar Mandal, Professor, Department of Education in\nSocial Sciences, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor, Department of Education in Science\nand Mathematics, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT, (Member-Secretary)"
         ],
         "concepts": [
           "National Syllabus and Teaching Learning Material Committee (NSTC)",
@@ -1992,21 +1992,26 @@
           "IAS (Retd.)",
           "Head",
           "Member",
+          "Chairperson",
+          "Ministry of Education",
           "Department of Education",
           "Department of Science and Mathematics",
           "Department of Languages",
           "Department of Curriculum Studies and Development"
         ],
-        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "context_relation": "The image is a page from a textbook or document listing the members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
         "limitations": [
-          "The list is limited to the members mentioned in the image."
+          "The image does not provide any visual elements or diagrams.",
+          "The image does not contain any mathematical equations or formulas.",
+          "The image does not depict any cartoon characters or animals.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:58:05Z"
+      "checkpointed_at": "2026-10-17T03:21:27Z"
     },
     {
       "asset_id": "1f36ca4ee97d0b83c89fd740",
@@ -2016,6 +2021,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2031,7 +2037,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:59:11Z"
+      "checkpointed_at": "2026-10-17T03:22:58Z"
     },
     {
       "asset_id": "d7bd7682fbe801dda8ddde0f",
@@ -2041,24 +2047,25 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with no visible content.",
+        "visual_summary": "A blank page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is a blank page with no visible content.",
+        "context_relation": "The page is a blank page with no visible text or images.",
         "limitations": [
-          "The page is blank and does not contain any visible content or text."
+          "The page is blank and does not contain any visual elements or text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:00:22Z"
+      "checkpointed_at": "2026-10-17T03:24:33Z"
     },
     {
       "asset_id": "247de931ad02e2667be0d2a3",
@@ -2068,22 +2075,23 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A yellow background with a gradient effect transitioning from light to dark.",
-        "visual_type": "photo",
+        "visual_summary": "A yellow and orange gradient background with a black border.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Background or cover design for a book or educational content.",
+        "context_relation": "background",
         "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:01:28Z"
+      "checkpointed_at": "2026-10-17T03:26:04Z"
     },
     {
       "asset_id": "e96a7bc2cf627f5936494c6b",
@@ -2093,90 +2101,12 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background with warm colors transitioning from light orange to dark orange.",
-        "visual_type": "photo",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Background for educational content",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:02:31Z"
-    },
-    {
-      "asset_id": "527eb4de7f11631c2d7d9db4",
-      "asset_sha256": "38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A gradient background transitioning from light orange to yellow.",
-        "visual_type": "photo",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Background for educational content",
-        "limitations": [
-          "No specific text or content visible in the image."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:03:35Z"
-    },
-    {
-      "asset_id": "e3b7a33705603a27ddf9affb",
-      "asset_sha256": "fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A gradient background transitioning from light beige to a warm yellow.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image appears to be a background or cover page for a textbook.",
-        "limitations": [
-          "The image does not contain any specific content or text that can be analyzed for educational content."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:04:40Z"
-    },
-    {
-      "asset_id": "880df7888c68e290958c0630",
-      "asset_sha256": "0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_summary": "A gradient background transitioning from light brown to dark orange.",
         "visual_type": "photo",
         "visible_text": [],
         "concepts": [],
@@ -2189,7 +2119,91 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:05:43Z"
+      "checkpointed_at": "2026-10-17T03:27:32Z"
+    },
+    {
+      "asset_id": "527eb4de7f11631c2d7d9db4",
+      "asset_sha256": "38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:28:59Z"
+    },
+    {
+      "asset_id": "e3b7a33705603a27ddf9affb",
+      "asset_sha256": "fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or labels are visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:30:28Z"
+    },
+    {
+      "asset_id": "880df7888c68e290958c0630",
+      "asset_sha256": "0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light yellow to a darker shade of yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or content that can be analyzed for educational content editing. The visible text is empty, and there are no discernible concepts or relationships present in the image. The image is a gradient background with no additional elements or information visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:31:57Z"
     },
     {
       "asset_id": "742b46d9817e90f7a2d9b967",
@@ -2199,32 +2213,25 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/23f807fdb3087675e1d4319c2c0f229c3ffe1207b5596d72f4d1fc334ea95910.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A gradient background with warm colors transitioning from light beige to dark brown.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "background",
-          "gradient",
-          "color",
-          "beige",
-          "brown"
-        ],
-        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
         "limitations": [
-          "No specific content or information is provided within the image."
+          "No specific content or text is visible in the image."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:06:53Z"
+      "checkpointed_at": "2026-10-17T03:33:27Z"
     },
     {
       "asset_id": "2f58e2166cb02fa1fe59f17b",
@@ -2234,6 +2241,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/f0ceac7c356550391c15d3d95b6d8413b36571dd39e1f2abfe89d00bb8195012.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2242,17 +2250,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
         "limitations": [
-          "The page does not contain any text or images.",
-          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+          "The page contains no visible text, images, or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:08:00Z"
+      "checkpointed_at": "2026-10-17T03:34:54Z"
     },
     {
       "asset_id": "ee635b67551576eb842bae3b",
@@ -2262,27 +2269,25 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/9e94478c8e82a9b36758bb0c2406569431e81a5d3f997f8e0e1b9893422524be.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A yellow background with a black horizontal line at the bottom.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "yellow background",
-          "black horizontal line"
-        ],
-        "context_relation": "background",
-        "limitations": []
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:09:11Z"
+      "checkpointed_at": "2026-10-17T03:36:28Z"
     },
     {
       "asset_id": "294513c774290774ce9b35f2",
@@ -2292,6 +2297,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/f6316d5187ab07d2a43a700ce37bd5c0de7f5433105f616c19b6a81b75ffa68e.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2300,16 +2306,14 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element in a textbook, likely used to illustrate a concept or serve as a decorative element.",
-        "limitations": [
-          "The image does not contain any text or labels that provide specific information about the concept it represents."
-        ]
+        "context_relation": "The image is a visual representation of a gradient bar, likely used as a design element or background for text.",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:10:19Z"
+      "checkpointed_at": "2026-10-17T03:37:59Z"
     },
     {
       "asset_id": "3da35bbef5c84dee74efcd4e",
@@ -2319,6 +2323,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d979c6cba3c257d639a05c2274f741c514c6bc6a9b93338e3674599c00cede0a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2327,17 +2332,16 @@
         "visual_type": "photo",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Unclear",
+        "context_relation": "Background for educational content",
         "limitations": [
-          "Unclear background details",
-          "No visible text or objects"
+          "Unclear content due to blurriness and gradient effect."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:11:29Z"
+      "checkpointed_at": "2026-10-17T03:39:32Z"
     },
     {
       "asset_id": "9eef5b9df904aaaf494f75a3",
