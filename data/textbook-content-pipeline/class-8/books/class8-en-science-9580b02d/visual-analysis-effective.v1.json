@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ae14a9036ae83a331f6f4f1647f12d620c7a81dcc8af8829190aaed2da04d09e",
+  "raw_analysis_sha256": "dbdaaca289e78ce259a350761815cf35a57b7ffae843aade2c166a2eb67951db",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1503,7 +1503,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-17T03:06:46Z",
+      "checkpointed_at": "2026-10-17T03:40:41Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2329,7 +2329,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-17T03:07:34Z",
+      "checkpointed_at": "2026-10-17T03:41:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -3489,6 +3489,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/0c0a73c4080068558eada4673c40e0b4b758deba5c343d867ad798a6ea9b2a10.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3502,18 +3503,32 @@
           "gradient background",
           "color transition"
         ],
-        "context_relation": "The background serves as a simple, unobtrusive backdrop for the text.",
+        "context_relation": "background",
         "limitations": [
-          "No specific objects or figures are present."
+          "No specific content or objects are visible."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:12:48Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:43:00Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a warm, golden color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or objects are visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3524,6 +3539,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/95201d97472cd53f6b93b45dc2aebc2f097955865c0c804b03cec8e0bfa86e40.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3532,16 +3548,27 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "uncertain",
-        "limitations": []
+        "context_relation": "Blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:13:52Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:44:30Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light pink background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3552,12 +3579,183 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/9c4be7d4f16a4be6c85a7fd9326ad85841647423fe2add4e1adddaeb4e089c46.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A gradient background transitioning from yellow to light blue.",
         "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:45:52Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to light blue.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "94bf1a6fff00bd685908c85e",
+      "asset_sha256": "57ea5c9493c3e89d19840edb86c44dcdb8b9ce3459a0cd0b72c6dd1ff3730312",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/57ea5c9493c3e89d19840edb86c44dcdb8b9ce3459a0cd0b72c6dd1ff3730312.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element used to enhance the page's design.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:47:28Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element used to enhance the page's design.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "846fceb6665c0f3051016c9b",
+      "asset_sha256": "181b37062a0751ab7dc31dda1cc13741b435bfe3006671e9b5a1d2ed08cf13bd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/181b37062a0751ab7dc31dda1cc13741b435bfe3006671e9b5a1d2ed08cf13bd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or border for the text.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:49:00Z",
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or border for the text.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5ef51fa09869afed03430b37",
+      "asset_sha256": "2def1e799ccc0f47d1e9ddaaa58453b0c083f96ea04a531c1a72045fdef03ad4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/2def1e799ccc0f47d1e9ddaaa58453b0c083f96ea04a531c1a72045fdef03ad4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow background",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T03:50:34Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow background",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44d16e34864e5a1d651af2bb",
+      "asset_sha256": "e8e9badff08f53d06b24a91e0e09b424e3b33bd12949e9a0d17db6bb06889c26",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e8e9badff08f53d06b24a91e0e09b424e3b33bd12949e9a0d17db6bb06889c26.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
         "visible_text": [],
         "concepts": [],
         "context_relation": "Background for educational content",
@@ -3569,133 +3767,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:14:53Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "94bf1a6fff00bd685908c85e",
-      "asset_sha256": "57ea5c9493c3e89d19840edb86c44dcdb8b9ce3459a0cd0b72c6dd1ff3730312",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/57ea5c9493c3e89d19840edb86c44dcdb8b9ce3459a0cd0b72c6dd1ff3730312.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A horizontal banner with a gradient background transitioning from white to gold, possibly representing a title or header.",
-        "visual_type": "illustration",
+      "checkpointed_at": "2026-10-17T03:51:59Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The banner likely serves as a header or title for the content that follows.",
-        "limitations": []
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:16:01Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "846fceb6665c0f3051016c9b",
-      "asset_sha256": "181b37062a0751ab7dc31dda1cc13741b435bfe3006671e9b5a1d2ed08cf13bd",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/181b37062a0751ab7dc31dda1cc13741b435bfe3006671e9b5a1d2ed08cf13bd.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A full page with a gradient background transitioning from beige to white.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page appears to be a blank or introductory page with no visible content.",
+        "context_relation": "Background for educational content",
         "limitations": [
-          "The page does not contain any text or images that can be analyzed for content or context."
+          "No specific content or text is visible in the image."
         ]
       },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:17:10Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "5ef51fa09869afed03430b37",
-      "asset_sha256": "2def1e799ccc0f47d1e9ddaaa58453b0c083f96ea04a531c1a72045fdef03ad4",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/2def1e799ccc0f47d1e9ddaaa58453b0c083f96ea04a531c1a72045fdef03ad4.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A yellow horizontal bar with a black border at the bottom.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a part of a textbook page.",
-        "limitations": [
-          "The image does not contain any text or data that can be analyzed for concepts or context."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:18:20Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "44d16e34864e5a1d651af2bb",
-      "asset_sha256": "e8e9badff08f53d06b24a91e0e09b424e3b33bd12949e9a0d17db6bb06889c26",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 10,
-      "asset_path": "assets/e8e9badff08f53d06b24a91e0e09b424e3b33bd12949e9a0d17db6bb06889c26.png",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "gradient background",
-          "warm colors",
-          "yellow to orange transition"
-        ],
-        "context_relation": "The background serves as a simple, unobtrusive backdrop for the text.",
-        "limitations": [
-          "No specific objects or figures are present."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:19:26Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3706,26 +3789,46 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d508b5cb200fa464570853152ac81ac26ad272bf909458736abb06d919c1705f.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background with a blend of white, beige, and orange colors.",
+        "visual_summary": "A gradient background transitioning from white to a warm, orange-brown color.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
         "limitations": [
-          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+          "No specific content or text is visible beyond the gradient background."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:20:34Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:53:29Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a warm, orange-brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3736,26 +3839,38 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/1d2f6921145c1f32f4889247731e3e3283e50195051b5ddb118c4544cc539e91.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A long horizontal banner with a gradient background transitioning from light brown to a darker shade, possibly gold or orange.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from light brown to a deeper brown.",
+        "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The banner likely serves as a decorative element or a header for the page.",
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or header for educational content.",
         "limitations": [
-          "The banner's content is not readable or relevant to the page's context."
+          "The image does not contain any specific text or data points that can be analyzed for educational content.",
+          "The image is a gradient bar and does not represent any measurable data or relationships."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:21:42Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:55:06Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from light brown to a deeper brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or header for educational content.",
+        "limitations": [
+          "The image does not contain any specific text or data points that can be analyzed for educational content.",
+          "The image is a gradient bar and does not represent any measurable data or relationships."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3766,24 +3881,46 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/99b464e48def161dae350b699ad094ac41b53c3d0a6e032485ddc143640c5671.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A gradient background transitioning from light beige to yellow, with a black horizontal line at the bottom.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image appears to be a background or cover page for a textbook.",
-        "limitations": []
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background gradient",
+          "horizontal line"
+        ],
+        "context_relation": "The background and line are likely part of a page layout, possibly a header or footer.",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient and line."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:22:52Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:56:42Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to yellow, with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background gradient",
+          "horizontal line"
+        ],
+        "context_relation": "The background and line are likely part of a page layout, possibly a header or footer.",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient and line."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3794,26 +3931,46 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c6008e9c0247f30c0d5045954a4b42daa3c10c54213941adfc557dbb30eecc41.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A horizontal gradient bar with a golden color transitioning from light to dark.",
-        "visual_type": "illustration",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a visual element used as a background or header for the page.",
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The visible text is a part of the banner's content.",
         "limitations": [
-          "The image does not contain any text or data points that can be analyzed for content or context."
+          "The image does not provide specific details about the content or context beyond the visible text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:24:08Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:58:23Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The visible text is a part of the banner's content.",
+        "limitations": [
+          "The image does not provide specific details about the content or context beyond the visible text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3824,24 +3981,48 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2dda13f097444900abfef3a5152f237842412cdae789bc1edd09871facda62d4.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A full page with a gradient background transitioning from white to gold.",
+        "visual_summary": "A gradient background with a golden color transitioning from light to dark.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a full page with a gradient background.",
-        "limitations": []
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "golden color",
+          "transitional effect"
+        ],
+        "context_relation": "The background serves as a visual element for the text 'Reprint 2026-27'.",
+        "limitations": [
+          "No specific content or information is provided beyond the text and background."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:25:15Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:59:59Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a golden color transitioning from light to dark.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "golden color",
+          "transitional effect"
+        ],
+        "context_relation": "The background serves as a visual element for the text 'Reprint 2026-27'.",
+        "limitations": [
+          "No specific content or information is provided beyond the text and background."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3852,6 +4033,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2aa0b2b20783414944630b221601e8ed170d19adc58d81908752649761e15b7b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -3867,9 +4049,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:26:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:01:23Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3880,26 +4069,36 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/ff0faef63dd4213fe7c50fb852a496bc73557e0643cceaa95fc579fb9993b6d1.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background transitioning from a light beige to a darker beige color.",
+        "visual_summary": "A gradient background with a warm, golden color transitioning to a lighter shade.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The background is likely a page from a textbook, possibly related to English literature or a similar subject.",
+        "context_relation": "Background for educational content",
         "limitations": [
-          "The image does not contain any text or visual elements that can be analyzed for content or context."
+          "No specific content or text is visible in the image."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:27:25Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:02:51Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning to a lighter shade.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3910,24 +4109,36 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/b5b4b2636a6e6b2689defe3a54d9b66741a3c712e4bae2bd2b03b48628b656cc.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background transitioning from light beige to yellow, possibly used as a cover or title page.",
+        "visual_summary": "A gradient background transitioning from light beige to yellow, with a black horizontal line at the bottom.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "cover or title page",
-        "limitations": []
+        "context_relation": "The image appears to be a full page from a textbook, possibly a title page or a blank page.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:28:31Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:04:22Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to yellow, with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook, possibly a title page or a blank page.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3938,24 +4149,46 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/dc6fb20ed0404b50cb59f52e240f5c5e85435c8cbc1236b63c59a284a9d780f7.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A horizontal gradient background with a warm, golden color transitioning from light to dark.",
-        "visual_type": "photo",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "Background for text or image",
-        "limitations": []
+        "visual_summary": "A horizontal gradient bar with a warm color palette transitioning from yellow to orange.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors"
+        ],
+        "context_relation": "The image is a visual representation of a color gradient used in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific information about the textbook or its content."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:29:39Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:05:59Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color palette transitioning from yellow to orange.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors"
+        ],
+        "context_relation": "The image is a visual representation of a color gradient used in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific information about the textbook or its content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3966,24 +4199,36 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/1ed137499d78e146b5d4b55a89971718b6ae87403390ebe68d40c7d47981f5ca.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background transitioning from orange to yellow.",
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
         "visual_type": "photo",
         "visible_text": [],
         "concepts": [],
         "context_relation": "Background for educational content",
-        "limitations": []
+        "limitations": [
+          "No specific text or content visible in the image."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:30:40Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:07:24Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or content visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -3994,6 +4239,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c79ae7d144fad7e02c59441d27b36926a9af79c0609e028a8cdc6921f12ca57b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -4009,9 +4255,16 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:31:46Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:08:52Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4022,26 +4275,46 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/61cabfac624a633491799e52bd0320df576ae2031fee6d934e30af6bba941264.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background transitioning from light beige to dark brown.",
+        "visual_summary": "A yellow and orange gradient background with a black horizontal line at the bottom.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and orange gradient",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
         "limitations": [
-          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+          "No specific content or text is visible beyond the gradient and line."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:32:57Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:10:27Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow and orange gradient background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and orange gradient",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient and line."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4052,31 +4325,46 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d5d50c185ace6f86619ae00e283a1dfbec4e164316afa3423fd13ae0eaf1e7e8.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A horizontal banner with a gradient background transitioning from yellow to orange.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "illustration",
         "visible_text": [
           "Reprint 2026-27"
         ],
         "concepts": [
-          "gradient background",
-          "horizontal banner"
+          "Reprint",
+          "2026-27"
         ],
-        "context_relation": "The banner likely serves as a header or footer for the page, possibly indicating a reprint or edition date.",
+        "context_relation": "The banner likely represents a reprint or edition date for a book or document.",
         "limitations": [
-          "The image does not provide specific content or information beyond the visible text."
+          "The image does not provide specific details about the content or purpose of the reprint."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:34:09Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:11:59Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from yellow to orange.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The banner likely represents a reprint or edition date for a book or document.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the reprint."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4087,24 +4375,36 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/aec30b5a721c440c11bbcb2d7bcf7624a84b8c5be38f937b091cc442b7c13fee.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A gradient background transitioning from white to a warm, golden color.",
-        "visual_type": "photo",
+        "visual_summary": "A gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Background for text or image",
-        "limitations": []
+        "context_relation": "The image is a background or header for the textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:35:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:13:32Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or header for the textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4115,26 +4415,50 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/ddc66c8a29651a274c73a0112bdbe0bb66528df085d84ffb4f85a48f7279ca41.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A long horizontal line with a gradient background transitioning from light brown to dark brown.",
         "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image appears to be a background or separator for the content.",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "line",
+          "gradient",
+          "background",
+          "text"
+        ],
+        "context_relation": "The text is placed at the bottom of the page.",
         "limitations": [
-          "The image does not contain any specific content or text that can be analyzed for educational purposes."
+          "The image does not provide any specific information about the content of the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:36:25Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T04:15:04Z",
+      "effective_analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from light brown to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "line",
+          "gradient",
+          "background",
+          "text"
+        ],
+        "context_relation": "The text is placed at the bottom of the page.",
+        "limitations": [
+          "The image does not provide any specific information about the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -4144,28 +4468,16 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 10,
       "asset_path": "assets/e44c91c3cd496ae586c2da8a22401d78fb7a7a210fd371863903bc1e3fd6f5a9.png",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A yellow and orange gradient background with no visible text or objects.",
-        "visual_type": "uncertain",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "No specific context or relation to the image is provided.",
-        "limitations": [
-          "No visible text or objects are present in the image.",
-          "The background is a gradient with no specific content or objects."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T15:37:30Z",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
       "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
