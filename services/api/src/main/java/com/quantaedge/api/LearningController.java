@@ -493,7 +493,6 @@ public class LearningController {
     Boolean hasActiveInstitution=jdbc.queryForObject("""
       select exists(
         select 1 from institution_membership m
-        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         where m.student_id=? and m.status='ACTIVE'
       )
       """,Boolean.class,studentId);
