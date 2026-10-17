@@ -558,3 +558,30 @@ html[data-qe-appearance="dark"] .parent-card{
 .qe-subject-reading-footer a, .qe-subject-reading-footer a:hover { color: var(--qe-color-primary-text); }
 .lesson-next, .lesson-media-caption { color: var(--qe-color-text-muted); }
 .lesson-visual-embed { background: var(--qe-color-nav-background); }
+
+
+/* Final interaction-state coverage for tenant learner dark/light palettes. */
+.tutor-load-older {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text-muted);
+}
+.tutor-send>span:first-child { color: var(--qe-color-on-primary); }
+.tutor-modes button.selected:hover,
+.tutor-modes button[aria-pressed=true]:hover {
+  border-color: var(--qe-color-primary);
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+}
+.tutor-mode-tooltip {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-nav-background);
+  color: var(--qe-color-nav-text);
+}
+.tutor-language-loading .tutor-head strong { color: var(--qe-color-on-surface); }
+.lesson-visual-media, .lesson-visual-video { background: var(--qe-color-surface-elevated); }
+html[data-qe-appearance="dark"] .button-dark:hover {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
