@@ -163,8 +163,21 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                             for a, b in zip(chapters, chapters[1:])))
         self.assertTrue(all(a["source_pdf_page_start"] <= a["source_pdf_page_end"] for a in chapters))
         self.assertEqual(272, chapters[-1]["source_pdf_page_end"])
-        self.assertTrue(all(item["chapter_map_review_status"] == self.chapter_map["mapping_status"]
-                            for item in self.catalog["candidates"]))
+        mapped_statuses = {
+            item.get("chapter_map_review_status")
+            for item in self.catalog["candidates"]
+            if item.get("chapter_map_review_status")
+        }
+        if mapped_statuses:
+            self.assertEqual({self.chapter_map["mapping_status"]}, mapped_statuses)
+        else:
+            # The canonical exhaustive pack is not yet chapter-mapped. Keep the sidecar
+            # TOC map review-only instead of claiming its suggestions were applied.
+            self.assertFalse(self.chapter_map["publication_allowed"])
+            self.assertTrue(all(
+                item["publication_allowed"] is False and item["human_review_required"] is True
+                for item in self.catalog["candidates"]
+            ))
 
     def test_admin_prevents_attaching_a_source_to_an_unrelated_subject(self):
         source = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
