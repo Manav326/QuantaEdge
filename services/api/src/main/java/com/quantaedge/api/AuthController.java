@@ -31,6 +31,18 @@ public class AuthController {
     this(auth, staffAudit, null, secureCookies);
   }
 
+  @PostMapping("/my-learning-session")
+  public ResponseEntity<Map<String,Object>> openPersonalLearningSession(
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    if (context == null || !context.isParent() || context.userId() == null) {
+      throw new SecurityException("An authenticated parent account is required to open personal learning.");
+    }
+    AuthContext learner = auth.openParentLearningContext(context.userId());
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
+  }
+
   @PostMapping("/google")
   public ResponseEntity<Map<String,Object>> googleSignIn(
       @RequestBody Map<String,Object> body,
