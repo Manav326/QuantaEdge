@@ -21,6 +21,7 @@ type Detail = Institution & {
 };
 type Overview = { institutions?: { institutions_total?: number; institutions_active?: number; institutions_suspended?: number }; billing?: { current_period_billable_enrollments?: number; amount_by_currency?: string } };
 type Learner = { learner_reference?: string; display_name?: string; class_code?: string; city?: string; state?: string; membership_status?: string; joined_at?: string; completed_lessons?: number; lessons_with_activity?: number; average_lesson_progress_percent?: number };
+type ThemePreset = { id: string; name: string; primary: string; accent: string; themeTokens?: Record<string, unknown> };
 type AuditEvent = { id: number; action: string; target_type: string; target_id?: string; details?: unknown; created_at?: string };
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -37,6 +38,16 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 function fmt(v?:string|null) { if(!v)return '—'; const d=new Date(v); return Number.isNaN(d.getTime())?v:d.toLocaleString('en-IN'); }
 function rupees(paise?:number,currency?:string|null) { if(paise===undefined||paise===null)return 'Not configured'; return new Intl.NumberFormat('en-IN',{style:'currency',currency:currency||'INR'}).format(paise/100); }
+function contrastTextForPreview(hex:string) {
+  const value=hex.replace('#','');
+  if(!/^[0-9a-fA-F]{6}$/.test(value))return '#172033';
+  const channel=(n:number)=>{const c=n/255;return c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);};
+  const r=parseInt(value.slice(0,2),16),g=parseInt(value.slice(2,4),16),b=parseInt(value.slice(4,6),16);
+  const luminance=0.2126*channel(r)+0.7152*channel(g)+0.0722*channel(b);
+  const blackContrast=(luminance+0.05)/0.05;
+  const whiteContrast=1.05/(luminance+0.05);
+  return blackContrast>=whiteContrast?'#111827':'#FFFFFF';
+}
 
 export default function InstitutionsAdminPage() {
   const router=useRouter();
@@ -60,7 +71,8 @@ export default function InstitutionsAdminPage() {
   const [codeExpiry,setCodeExpiry]=useState('');
   const [create,setCreate]=useState({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
   const [admin,setAdmin]=useState({username:'',displayName:'',initialPassword:''});
-  const [brand,setBrand]=useState({displayName:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',primary:'#F97316',accent:'#C2410C',background:'#F7F8FC',surface:'#FFFFFF',text:'#152038'});
+  const [brand,setBrand]=useState({displayName:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',presetId:'quantaedge-orange',appearance:'system',primary:'#F97316',accent:'#C2410C'});
+  const [themePresets,setThemePresets]=useState<ThemePreset[]>([]);
   const [billing,setBilling]=useState({currency:'INR',unitPriceRupees:'0.00',billingCadence:'MONTHLY',effectiveFrom:new Date().toISOString().slice(0,10),effectiveUntil:''});
   const owner=session?.permissions?.includes('QE_PLATFORM_OWNER')===true;
 
@@ -70,12 +82,13 @@ export default function InstitutionsAdminPage() {
       const me=await api<Session>('/api/v1/auth/me');setSession(me);setReady(true);
       if(!me.staffId){router.replace('/login');return;}
       if(!me.permissions?.includes('QE_PLATFORM_OWNER'))return;
-      const [o,i,c]=await Promise.all([
+      const [o,i,c,presets]=await Promise.all([
         api<Overview>('/api/v1/hrms/platform/institutions/overview'),
         api<Institution[]>('/api/v1/hrms/platform/institutions'),
         api<Course[]>('/api/v1/hrms/platform/institutions/catalog/courses'),
+        api<ThemePreset[]>('/api/v1/hrms/platform/institutions/theme-presets'),
       ]);
-      setOverview(o);setInstitutions(Array.isArray(i)?i:[]);setCatalog(Array.isArray(c)?c:[]);
+      setOverview(o);setInstitutions(Array.isArray(i)?i:[]);setCatalog(Array.isArray(c)?c:[]);setThemePresets(Array.isArray(presets)?presets:[]);
     }catch(e){const msg=e instanceof Error?e.message:'Platform tenant records could not be loaded.';setError(msg);if(/authentication|required|session expired/i.test(msg))router.replace('/login');}
     finally{setLoading(false);}
   },[router]);
@@ -91,9 +104,10 @@ export default function InstitutionsAdminPage() {
       setBrand({
         displayName:d.brand_display_name||d.display_name,logoAssetKey:d.logo_asset_key||'',
         appIconAssetKey:d.app_icon_asset_key||'',storeListingUrl:d.store_listing_url||'',
-        primary:d.themeTokens?.primary||'#F97316',accent:d.themeTokens?.accent||'#C2410C',
-        background:d.themeTokens?.background||'#F7F8FC',surface:d.themeTokens?.surface||'#FFFFFF',
-        text:d.themeTokens?.text||'#152038',
+        presetId:String(d.themeTokens?.presetId||'quantaedge-orange'),
+        appearance:String(d.themeTokens?.appearance||'system'),
+        primary:String(d.themeTokens?.brandPrimary||d.themeTokens?.primary||'#F97316'),
+        accent:String(d.themeTokens?.brandAccent||d.themeTokens?.accent||'#C2410C'),
       });
       setBilling({currency:d.currency||'INR',unitPriceRupees:d.unit_price_paise===undefined?'0.00':(d.unit_price_paise/100).toFixed(2),
         billingCadence:d.billing_cadence||'MONTHLY',effectiveFrom:new Date().toISOString().slice(0,10),effectiveUntil:d.effective_until?.slice(0,10)||''});
@@ -128,7 +142,7 @@ export default function InstitutionsAdminPage() {
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
       displayName:brand.displayName,logoAssetKey:brand.logoAssetKey,appIconAssetKey:brand.appIconAssetKey,storeListingUrl:brand.storeListingUrl,
-      themeTokens:{primary:brand.primary,accent:brand.accent,background:brand.background,surface:brand.surface,text:brand.text},
+      themeTokens:{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent},
     })});setNotice('Tenant branding settings saved.');await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Branding could not be saved.');}finally{setSaving(false);}
   }
@@ -214,7 +228,27 @@ export default function InstitutionsAdminPage() {
             <label>Logo storage key<input maxLength={500} value={brand.logoAssetKey} onChange={e=>setBrand(v=>({...v,logoAssetKey:e.target.value}))} placeholder="institution-assets/logo.png"/></label>
             <label>Launcher icon storage key<input maxLength={500} value={brand.appIconAssetKey} onChange={e=>setBrand(v=>({...v,appIconAssetKey:e.target.value}))} placeholder="institution-assets/icon.png"/></label>
             <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>
-            <div className={styles.colorGrid}>{(['primary','accent','background','surface','text'] as const).map(k=><label key={k}>{k}<input type="color" value={brand[k]} onChange={e=>setBrand(v=>({...v,[k]:e.target.value}))}/></label>)}</div>
+            <div className={styles.themeSettingsGrid}>
+              <label>Palette preset<select value={brand.presetId} onChange={e=>{const id=e.target.value;const preset=themePresets.find(item=>item.id===id);setBrand(v=>({...v,presetId:id,...(id!=='custom'&&preset?{primary:preset.primary,accent:preset.accent}:{})}));}}>
+                {themePresets.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+              </select></label>
+              <label>Default appearance<select value={brand.appearance} onChange={e=>setBrand(v=>({...v,appearance:e.target.value}))}>
+                <option value="system">Follow device preference</option><option value="light">Always light</option><option value="dark">Always dark</option>
+              </select></label>
+            </div>
+            <div className={styles.colorGrid}>
+              <label>Primary brand colour<input type="color" value={brand.primary} onChange={e=>setBrand(v=>({...v,presetId:'custom',primary:e.target.value}))}/></label>
+              <label>Accent colour<input type="color" value={brand.accent} onChange={e=>setBrand(v=>({...v,presetId:'custom',accent:e.target.value}))}/></label>
+            </div>
+            <div className={styles.themePreviewGrid} aria-label="Theme preview">
+              <section className={styles.themePreviewLight} style={{background:'#F8FAFC',color:'#172033'}}>
+                <strong>Light preview</strong><span style={{background:brand.primary,color:contrastTextForPreview(brand.primary)}}>Primary action</span><small style={{color:brand.accent}}>Accent text</small>
+              </section>
+              <section className={styles.themePreviewDark} style={{background:'#0B1220',color:'#F3F4F6'}}>
+                <strong>Dark preview</strong><span style={{background:brand.primary,color:contrastTextForPreview(brand.primary)}}>Primary action</span><small style={{color:brand.accent}}>Accent text</small>
+              </section>
+            </div>
+            <p className={styles.disclaimer}>Saving generates a versioned light and dark semantic palette for web and Android. Text colours are contrast-adjusted centrally; fixed brand artwork remains unchanged.</p>
             <div className={styles.formActions}><button className={styles.primary} disabled={saving}>Save branding</button></div>
             <p className={styles.disclaimer}>Google Play custom listings do not by themselves change the installed APK launcher icon. Asset storage, student brand switching and Android launcher alias tests remain separate delivery tasks.</p>
           </form></section>
