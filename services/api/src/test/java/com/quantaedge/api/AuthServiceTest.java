@@ -127,8 +127,8 @@ class AuthServiceTest {
     when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
         .thenReturn(List.of(otpRow));
     when(jdbc.queryForList(
-        "select id from user_account where mobile_e164=? and role='PARENT' and active=true", mobile))
-        .thenReturn(List.of(Map.of("id", userId)));
+        "select id,role from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true", mobile))
+        .thenReturn(List.of(Map.of("id", userId, "role", "PARENT")));
     when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", userId))
         .thenReturn(Map.of("role", "PARENT", "display_name", "Existing customer"));
 
@@ -144,10 +144,14 @@ class AuthServiceTest {
   void suspendedParentCannotRequestOtpForLogin() {
     String mobile = "+917070107483";
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
-    when(jdbc.queryForObject(contains("role='PARENT' and active=true"),
-        eq(Boolean.class), eq(mobile))).thenReturn(false);
+    when(jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true)",
+        Boolean.class, mobile)).thenReturn(false);
+    when(jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER'))",
+        Boolean.class, mobile)).thenReturn(true);
 
-    assertThrows(IllegalArgumentException.class, () -> auth.requestOtp("7070107483", "LOGIN"));
+    assertThrows(SecurityException.class, () -> auth.requestOtp("7070107483", "LOGIN"));
     verify(jdbc, never()).update(contains("insert into otp_challenge"), any(), any(), any());
   }
 
@@ -164,10 +168,11 @@ class AuthServiceTest {
     when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
         .thenReturn(List.of(otpRow));
     when(jdbc.queryForList(
-        "select id from user_account where mobile_e164=? and role='PARENT' and active=true", mobile))
+        "select id,role from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true", mobile))
         .thenReturn(List.of());
-    when(jdbc.queryForObject(contains("select exists(select 1 from user_account where mobile_e164=? and role='PARENT')"),
-        eq(Boolean.class), eq(mobile))).thenReturn(true);
+    when(jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER'))",
+        Boolean.class, mobile)).thenReturn(true);
 
     assertThrows(SecurityException.class, () -> auth.verifyOtp("7070107483", "123456", "LOGIN", null));
     verify(jdbc, never()).update(contains("update otp_challenge set consumed_at=now()"), any(Object[].class));
@@ -369,7 +374,8 @@ class AuthServiceTest {
   void studentPasswordLoginOpensOnlyTheMatchedChildAccount() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     String passwordHash = new BCryptPasswordEncoder(12).encode("StudentPass!2026");
-    when(jdbc.queryForList(contains("from user_account u"), eq("+917070107483"), eq("aarav07")))
+    when(jdbc.queryForList(contains("from user_account u"),
+        eq("+917070107483"), eq("+917070107483"), eq(""), eq(""), eq("aarav07")))
         .thenReturn(List.of(Map.of("student_id", 81L, "password_hash", passwordHash)));
     when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class),
         anyString(), eq("STUDENT"))).thenReturn(0L);
@@ -465,7 +471,8 @@ class AuthServiceTest {
   void passwordResetOtpUsesAValidPurposeAndStillEnforcesRateLimits() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     String mobile = "+917070107483";
-    when(jdbc.queryForObject(contains("role='PARENT'"), eq(Boolean.class), eq(mobile))).thenReturn(true);
+    when(jdbc.queryForObject(
+        contains("role in ('PARENT','LEARNER') and active=true"), eq(Boolean.class), eq(mobile)).thenReturn(true);
     when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class), eq(mobile), eq(60))).thenReturn(0L);
     when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(mobile))).thenReturn(0L);
 
