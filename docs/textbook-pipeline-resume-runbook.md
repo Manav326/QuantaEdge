@@ -58,6 +58,10 @@ The workflow concurrency group treats `run` and `resume` as the same generation 
 
 Both `run` and `resume` validate the source and checkpoint fingerprint before Ollama or model downloads. `resume` requires an exact saved checkpoint match; `run` may initialize a new checkpoint only when none exists, and rejects a conflicting checkpoint early. If the checkpoint is already terminal, the workflow reconciles outputs without downloading Ollama or making model calls. Draft approval is checked before inference startup.
 
+## Legacy Layer 4 checkpoint reconciliation
+
+When an older Layer 4 checkpoint lacks `page_text_context_sha256` and its matching inventory is not present in Git, the runner may restore that inventory from GHCR. Before backfilling legacy hashes, the pipeline must verify the restore marker against the prior pipeline index (book ID, PDF hash, registry package, immutable tag and tarball SHA-256). Only that exact restored inventory may be used to decide which successful analyses are reusable. If the binding is absent or conflicts, the pipeline fails closed instead of marking old results reusable or needlessly rerunning all visuals.
+
 ## Recovery matrix
 
 | Event | Correct action |
