@@ -35,7 +35,7 @@ The institution editor saves the preset, default appearance and primary/accent c
 - `InstitutionThemeTokens` generates the API contract.
 - `InstitutionBrandingRepository` returns the normalized theme payload as JSON alongside institution identity.
 - `QuantaEdgeThemeController` validates required roles, persists the user's appearance preference and caches palettes under institution-code-specific keys. The active tenant palette is activated only after the existing trusted tenant-resolution flow identifies the institution.
-- `QuantaEdgeTheme` maps the palette into Material 3 light/dark colour schemes.
+- `QuantaEdgeTheme` maps the palette into Material 3 light/dark colour schemes. Screen text uses the generated contrast-safe `primaryText`/`accentText` roles, while success, warning and error states use their own semantic roles; raw primary/accent colours are reserved for filled controls and other surfaces with a matching on-colour.
 - `ColorThemeSettingsCard` offers Institution, System, Light and Dark choices.
 - Invalid payloads or unresolved context clear the active tenant palette; a locally cached palette is not activated from an unvalidated URL alone.
 
