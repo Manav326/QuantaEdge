@@ -19,6 +19,17 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("resume_layers_4_5", workflow)
         self.assertIn("resume_preparation", workflow)
 
+    def test_marked_push_runs_resume_mode_for_both_classes_in_the_core_workflow(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        marker = "[resume-visual-layers-4-5-classes-7-8]"
+        self.assertIn(marker, workflow)
+        self.assertIn("matrix:", workflow)
+        self.assertIn("max-parallel: 1", workflow)
+        self.assertIn("fromJSON(contains(github.event.head_commit.message", workflow)
+        self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
+        self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
+        self.assertIn("!contains(github.event.head_commit.message || '', marker)", workflow.replace("[resume-visual-layers-4-5-classes-7-8]", "marker"))
+
     def test_layers_6_to_8_has_all_modes_in_one_entrypoint(self):
         workflow = read("quantaedge-layers-6-8.yml")
         self.assertIn("workflow_dispatch:", workflow)
@@ -78,6 +89,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             "agent-4-validation.yml",
             "android-build.yml",
             "commit-class6-extraction-artifact.yml",
+            "dispatch-visual-layers-4-5-classes-7-8.yml",
             "benchmark-class6-curiosity-after-layer5.yml",
             "quantaedge-layers-1-5-resume.yml",
             "quantaedge-layers-6-8-generate-once.yml",

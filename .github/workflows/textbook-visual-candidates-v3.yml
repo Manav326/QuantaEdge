@@ -83,12 +83,12 @@ permissions:
   packages: write
 
 concurrency:
-  group: textbook-visual-candidates-v3-class-${{ inputs.class_no || 'validation-only' }}
+  group: textbook-visual-candidates-v3-${{ inputs.class_no || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && 'classes-7-8-resume') || 'validation-only' }}
   cancel-in-progress: false
 
 jobs:
   validate:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]')
     name: Validate additive v3 preparation scripts
     runs-on: ubuntu-latest
     steps:
@@ -120,13 +120,18 @@ jobs:
           python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
-    name: Prepare full bilingual Class ${{ inputs.class_no }} candidate set
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]'))
+    name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        class_no: ${{ fromJSON(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '["7","8"]' || format('["{0}"]', inputs.class_no)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
-      CLASS_NO: ${{ inputs.class_no }}
-      ANALYSIS_MODE: ${{ inputs.analysis_mode }}
+      CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
+      ANALYSIS_MODE: ${{ inputs.analysis_mode || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && 'resume_layers_4_5') }}
       VISION_MODEL: ${{ inputs.vision_model }}
       CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size }}
     steps:
@@ -285,7 +290,7 @@ jobs:
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
       - name: Restore each matching Layer 1 inventory bundle or build only missing inventories
-        if: inputs.analysis_mode == 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE == 'resume_layers_4_5'
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
@@ -409,7 +414,7 @@ jobs:
           PY
 
       - name: Restore or build immutable per-book candidate checkpoints
-        if: inputs.analysis_mode != 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE != 'resume_layers_4_5'
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
@@ -426,7 +431,7 @@ jobs:
             --mode "$ANALYSIS_MODE"
 
       - name: Preflight and restore matching Layer 4 checkpoints before loading the vision model
-        if: inputs.analysis_mode == 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE == 'resume_layers_4_5'
         shell: bash
         env:
           VISION_MODEL: ${{ inputs.vision_model }}
@@ -510,7 +515,7 @@ jobs:
           PY
 
       - name: Verify per-book immutable candidate checkpoints before committing the catalog
-        if: inputs.analysis_mode != 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE != 'resume_layers_4_5'
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
@@ -555,7 +560,7 @@ jobs:
           PY
 
       - name: Rebuild the catalog, test candidate-to-content contracts, and commit the full batch
-        if: inputs.analysis_mode != 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE != 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -581,7 +586,7 @@ jobs:
 
 
       - name: Start Ollama container and load vision model for Layer 4
-        if: inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -596,7 +601,7 @@ jobs:
           docker exec quantaedge-ollama ollama pull "$VISION_MODEL"
 
       - name: Run exhaustive, resumable Layers 4–5 for the selected class
-        if: inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5'
+        if: env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5'
         shell: bash
         run: |
           set -euo pipefail
@@ -610,11 +615,11 @@ jobs:
             --batch-size "$CHECKPOINT_BATCH_SIZE"
 
       - name: Stop Ollama container
-        if: always() && (inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5')
+        if: always() && (env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5')
         run: docker rm -f quantaedge-ollama >/dev/null 2>&1 || true
 
       - name: Summarize integrated eight-layer pipeline
-        if: always() && (inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5')
+        if: always() && (env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5')
         shell: bash
         run: |
           {
