@@ -120,12 +120,21 @@ public class CourseMarketplaceController {
          or exists(select 1 from guardian_student gs
           join student_program_enrollment e on e.student_id=gs.student_id
           where gs.guardian_user_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
-            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')) as owned_by_child
+            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')) as owned_by_child,
+        (select coalesce(string_agg(distinct gs.student_id::text, ','), '')
+         from guardian_student gs
+         where gs.guardian_user_id=? and gs.active=true
+           and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+           and (exists(select 1 from course_entitlement ce
+                 where ce.course_id=p.id and ce.holder_student_id=gs.student_id)
+             or exists(select 1 from student_program_enrollment e
+                 where e.student_id=gs.student_id and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
+           )) as owned_child_ids
       from course_marketplace_offer o
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.status='PUBLISHED'
       order by p.display_name,p.id
-      """, parentId, parentId, parentId, parentId);
+      """, parentId, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
