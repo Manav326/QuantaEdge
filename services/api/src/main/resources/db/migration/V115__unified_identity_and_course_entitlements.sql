@@ -79,7 +79,7 @@ CREATE INDEX idx_course_payment_order_purchaser
   ON course_payment_order(purchaser_user_id, created_at DESC)
   WHERE purchaser_user_id IS NOT NULL;
 
-CREATE UNIQUE INDEX uq_course_payment_order_purchaser_open
+CREATE UNIQUE INDEX uq_course_payment_order_purchaser_idempotency
   ON course_payment_order(purchaser_user_id, course_id, client_request_key)
   WHERE purchaser_user_id IS NOT NULL;
 
