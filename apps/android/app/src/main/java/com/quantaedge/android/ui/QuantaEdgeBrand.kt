@@ -25,12 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.height
+import androidx.compose.ui.unit.width
 import androidx.compose.ui.unit.sp
 import com.quantaedge.android.R
 import com.quantaedge.android.data.InstitutionBrandIdentity
 
 /** Provided by the app after resolving an explicit school link or a learner's sole active membership. */
 val LocalInstitutionBrandIdentity = staticCompositionLocalOf<InstitutionBrandIdentity?> { null }
+val LocalInstitutionBrandResolutionPending = staticCompositionLocalOf { false }
 
 /**
  * Central identity lockup.
@@ -44,6 +47,7 @@ fun QuantaEdgeBrand(
     centered: Boolean = false
 ) {
     val institution = LocalInstitutionBrandIdentity.current
+    val resolvingTenant = LocalInstitutionBrandResolutionPending.current && institution == null
     val markSize = if (compact) 29.dp else 42.dp
     Column(
         modifier = modifier,
@@ -55,6 +59,7 @@ fun QuantaEdgeBrand(
             horizontalArrangement = Arrangement.spacedBy(if (compact) 6.dp else 8.dp)
         ) {
             when {
+                resolvingTenant -> Box(modifier = Modifier.size(markSize))
                 institution?.logo != null -> Image(
                     bitmap = institution.logo.asImageBitmap(),
                     contentDescription = null,
@@ -81,7 +86,9 @@ fun QuantaEdgeBrand(
                 )
             }
             Column(verticalArrangement = Arrangement.spacedBy(if (compact) 2.dp else 3.dp)) {
-                if (institution != null) {
+                if (resolvingTenant) {
+                    Box(modifier = Modifier.width(if (compact) 108.dp else 150.dp).height(if (compact) 22.dp else 30.dp))
+                } else if (institution != null) {
                     Text(
                         text = institution.displayName,
                         color = MaterialTheme.colorScheme.onSurface,
