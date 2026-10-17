@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Baseline before this documentation update: `8f50b81dca5d37f5cb0dec7584c0f0f7bcbefd6b`. [Baseline commit](https://github.com/Manav326/QuantaEdge/commit/8f50b81dca5d37f5cb0dec7584c0f0f7bcbefd6b).
+**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `780adccfd3b8f98c36c84776d0f6fb5a32dc1641`. [Baseline commit](https://github.com/Manav326/QuantaEdge/commit/780adccfd3b8f98c36c84776d0f6fb5a32dc1641).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -12,7 +12,7 @@
 - Canonical Hinglish catalog: `localization/catalogs/hinglish.json`.
 - Shared runtime and synchronization contract: `localization/runtime.ts`, `scripts/sync_ui_localization.py`.
 - Generated copies are stored under each independent Next.js Docker context: `apps/{web,admin,people}/app/i18n/catalogs/{english,hinglish}.json` and app-local `catalog.ts` files.
-- At the current baseline, the catalogs have **1,520 keys each**, identical key sets, no empty string values, and all six generated JSON copies match the canonical catalogs. Re-run `python3 scripts/sync_ui_localization.py --check` after any change; never hand-edit only one generated copy.
+- At the current baseline (`780adccfd3b8f98c36c84776d0f6fb5a32dc1641`), the catalogs have **1,578 keys each**, identical key sets, no empty string values, and all six generated JSON copies match the canonical catalogs. This was verified against repository files during the 2026-10-17 session; it is a source-level check, not a successful build claim. Re-run `python3 scripts/sync_ui_localization.py --check` after any change; never hand-edit only one generated copy.
 - CI invokes the synchronization/parity validator in `.github/workflows/ci.yml`. The check validates catalog parity, placeholder sets, and generated copies.
 - Static interface locale and learning-content locale are separate preferences. The web app keeps the existing `qe-learning-language` and `qe-certificate-language` behavior. The shared UI choice uses `qe-locale`, with `english` and `hinglish` as normalized cross-app values and backward compatibility for the older `hindi` value.
 - Hinglish means Hindi in Devanagari with commonly used English/Roman-script terms retained; it does not mean phonetic Hindi written in Roman letters.
@@ -30,7 +30,7 @@
 
 | Area | Current state | Evidence / notes |
 |---|---|---|
-| Central English/Hinglish UI catalogs | Done for foundation | 1,520 matched keys as of the baseline above; run the sync validator after every catalog update. |
+| Central English/Hinglish UI catalogs | Done for foundation; expanding | 1,578 matched keys as of `780adccfd3`; run the sync validator after every catalog update. |
 | Shared runtime, key fallback and interpolation | Implemented | `localization/runtime.ts`, copied into app-local `catalog.ts`. Placeholder and empty-key handling received follow-up fixes. |
 | Preference bridge | Implemented for shell-level selector | Shared `qe-locale` cookie/storage contract across web/admin/People; validate same-domain deployment and cross-app refresh behavior in browser tests. |
 | Shared shell/navigation labels | Partially migrated | Student/parent and admin navigation use catalog keys. People navigation labels use catalog messages and have a language selector. Some account/session labels still need coverage. |
@@ -65,7 +65,7 @@
 - [Admin Language Review page centralized catalog migration](https://github.com/Manav326/QuantaEdge/commit/b48733d0ac4380ce16f753672be48bb5145c9b17).
 - [Language Review JSX/status and catalog follow-up fixes](https://github.com/Manav326/QuantaEdge/commit/d188ac4fc09383b24514e45d1bf2ed26f5ab155a).
 - [Student directory and Account Lifecycle catalog migration](https://github.com/Manav326/QuantaEdge/commit/8f50b81dca5d37f5cb0dec7584c0f0f7bcbefd6b).
-- [Parent directory first-pass catalog migration](https://github.com/Manav326/QuantaEdge/commit/PENDING_PARENT_COMMIT).
+- [Parent directory first-pass catalog migration](https://github.com/Manav326/QuantaEdge/commit/780adccfd3b8f98c36c84776d0f6fb5a32dc1641).
 
 The catalog currently contains many stable, generated `legacy.web.*` keys from safely extracting existing English/Hinglish pairs. This is a transitional naming scheme, not the desired final authoring standard. Add semantic namespaces for new strings and gradually rename legacy keys with tests; do not change both content and identifiers blindly in bulk.
 
@@ -126,7 +126,16 @@ Preserve these rules when implementing the next phase:
 
 ## CI history and current validation status
 
-Recent runs exposed integration issues during the active migration. The earlier failures included duplicate `UiText` imports, a stale admin navigation property access after navigation items became key-based, and a People UI contract asserting the old inline label rather than the new catalog key; those were fixed in commit `07e72efdd2c99524b985b6a6886504bb36cc9498`. Run #2962 then surfaced four TutorDock TypeScript errors from incorrectly invoking the standalone translator as a property of `languageRef.current` / `current`; this was fixed in `fd5f1f725c6a25e875966e355edd7fdd29339298`. The follow-up run #2967 for admin login at `7cd22a47a9457738a7c7dc8672f8010e81c89220` was still running when the next changes were made. The current Language Review page is at `d188ac4fc09383b24514e45d1bf2ed26f5ab155a`; its build run #2970 was queued at last check. Catalog validation performed after this migration showed 1,467 keys in each locale, identical key sets, zero blank messages, and all six generated catalog copies byte-identical. This is a source-level parity check; the GitHub workflow must still pass before P0 is complete. Do not interpret cancelled superseded runs as successful validation.
+Recent runs exposed integration issues during the active migration. The earlier failures included duplicate `UiText` imports, a stale admin navigation property access after navigation items became key-based, and a People UI contract asserting the old inline label rather than the new catalog key; those were fixed in commit `07e72efdd2c99524b985b6a6886504bb36cc9498`. Run #2962 then surfaced four TutorDock TypeScript errors from incorrectly invoking the standalone translator as a property of `languageRef.current` / `current`; this was fixed in `fd5f1f725c6a25e875966e355edd7fdd29339298`. The follow-up run #2967 for admin login at `7cd22a47a9457738a7c7dc8672f8010e81c89220` was still running when the next changes were made. The current Language Review page is at `d188ac4fc09383b24514e45d1bf2ed26f5ab155a`; its build run #2970 was queued at last check. Catalog validation during the current session shows **1,578 keys per locale**, identical key sets, zero blank messages, and all six generated catalog copies byte-identical. Latest known full CI run is [#2981 on `780adccfd3`](https://github.com/Manav326/QuantaEdge/actions/runs/38993842189), which was still `in_progress` at the latest status check; only the initial `Checkout` steps for the first jobs had been observed, with no failure reported yet. Treat it as **pending**, not green, until all required jobs finish successfully. This is a source-level parity check; the GitHub workflow must still pass before P0 is complete. Do not interpret cancelled superseded runs as successful validation.
+
+## Latest session update — 2026-10-17
+
+- Checked the repository head before documenting progress: `780adccfd3b8f98c36c84776d0f6fb5a32dc1641` (`refactor(i18n): centralize admin parent directory copy`). Work remains on `main`; no new localization branch was created.
+- Verified canonical catalogs: **1,578 English keys and 1,578 Hinglish keys**, matching key sets, no blank values. All six app-local JSON copies are byte-for-byte equal to their corresponding canonical file.
+- The web UI language, Admin selector, and People Operations selector use the shared normalized `qe-locale` cookie/storage convention. Student learning-content and certificate preferences remain separate.
+- Latest Actions run: [#2981](https://github.com/Manav326/QuantaEdge/actions/runs/38993842189) for `780adccfd3b8f98c36c84776d0f6fb5a32dc1641` was `in_progress` when checked. Do not claim the full build is green until all required jobs finish successfully.
+- Coverage implemented to date includes shared navigation/shell labels, public landing/login, parent portal, broad student dashboard/lesson/practice/test/textbook/profile/progress/certificate/class/account-lifecycle messages, shared account/session components, AI Tutor controls, and first-pass Admin dashboard/Language Review/student/parent-directory migrations. These are meaningful milestones, not proof every route is complete.
+- Next: confirm the current Actions result; then continue route-by-route Admin and People Operations page-body migration. Audit raw UI literals and the dynamic-text translation service boundary before claiming end-to-end coverage.
 
 ## Resume instructions
 
