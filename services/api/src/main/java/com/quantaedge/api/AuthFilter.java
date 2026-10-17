@@ -111,7 +111,8 @@ public class AuthFilter extends OncePerRequestFilter {
             (educationOrigins.contains(origin) && ("STAFF".equals(workspace) || "EDUCATION_ADMIN".equals(workspace)))
             || (hrmsOriginSet.contains(origin) && "HRMS".equals(workspace))
             || (learningOriginSet.contains(origin)
-                && ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace)))
+                && ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace)
+                    || "INSTITUTION".equals(workspace)))
             || (institutionOriginSet.contains(origin) && "INSTITUTION".equals(workspace));
         boolean registeredOrigin = educationOrigins.contains(origin)
             || hrmsOriginSet.contains(origin) || learningOriginSet.contains(origin) || institutionOriginSet.contains(origin);
