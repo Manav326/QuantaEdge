@@ -1,0 +1,129 @@
+name: Benchmark Class 6 Curiosity after Layer 5 recovery
+
+on:
+  workflow_run:
+    workflows: ["Resume Class 6 NCERT Curiosity Layers 1-5 evidence ledger"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qe-class6-curiosity-benchmark
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    name: Verify evidence gate and benchmark local Ollama candidates
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run pipeline contract tests before model startup
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/quantaedge_layers_6_8.py scripts/quantaedge_textbook_pipeline.py scripts/analyze_visual_inventory_with_ollama.py
+          python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
+          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
+          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python -m unittest discover -s tests -p "test_pipeline_data_locations.py" -v
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
+      - name: Require a real COMPLETE Class 6 Curiosity Layer 5 ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.quantaedge_layers_6_8 import load_source, layer5_ledger
+          root = Path.cwd()
+          source = load_source(root, 6, "ncert-c6-english-fecu1")
+          ledger_path = layer5_ledger(root, source)
+          ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+          assert ledger.get("ledger_status") == "COMPLETE", f"Layer 5 is {ledger.get('ledger_status')!r}; benchmark blocked."
+          assert ledger.get("publication_allowed") is False and ledger.get("human_review_required") is True
+          assert ledger["source"].get("source_book_id") == "ncert-c6-english-fecu1"
+          assert str(ledger["source"].get("source_pdf_sha256", "")).lower() == source["source_pdf_sha256"]
+          print(json.dumps({
+              "source_book_id": source["book_id"],
+              "source_pdf_sha256": source["source_pdf_sha256"],
+              "layer5_ledger": str(ledger_path),
+              "ledger_status": ledger["ledger_status"],
+              "unresolved_count": ledger.get("summary", {}).get("unresolved_count"),
+              "publication_allowed": ledger.get("publication_allowed"),
+          }, indent=2))
+          PY
+      - name: Start loopback-only Ollama
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-class6-curiosity-benchmark-models >/dev/null
+          docker run -d --name quantaedge-class6-curiosity-benchmark-ollama \
+            -p 127.0.0.1:11434:11434 \
+            -v quantaedge-class6-curiosity-benchmark-models:/root/.ollama \
+            ollama/ollama:latest
+          ready=false
+          for attempt in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then ready=true; break; fi
+            sleep 2
+          done
+          [[ "$ready" == true ]] || { docker logs quantaedge-class6-curiosity-benchmark-ollama; exit 1; }
+      - name: Pull only bounded benchmark candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          for model in qwen2.5:1.5b qwen2.5:3b qwen3:4b; do
+            docker exec quantaedge-class6-curiosity-benchmark-ollama ollama pull "$model"
+          done
+      - name: Benchmark the same source-bound NCERT segments under the current contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py benchmark \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --source-book-id ncert-c6-english-fecu1 \
+            --endpoint http://127.0.0.1:11434 \
+            --models "qwen2.5:1.5b,qwen2.5:3b,qwen3:4b" \
+            --sample-segments 2 \
+            --request-timeout 300 \
+            --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --commit-checkpoints
+      - name: Require at least one contract-valid candidate before allowing generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json")
+          report = json.loads(path.read_text(encoding="utf-8"))
+          print(json.dumps({
+              "prompt_version": report.get("prompt_version"),
+              "lesson_contract_version": report.get("lesson_contract_version"),
+              "candidates": [{
+                  "model": row.get("model"),
+                  "successful_samples": row.get("successful_samples"),
+                  "lesson_contract_valid_rate": row.get("lesson_contract_valid_rate"),
+                  "average_seconds_per_sample": row.get("average_seconds_per_sample"),
+              } for row in report.get("models", [])],
+              "production_model_selection": report.get("production_model_selection"),
+              "publication_allowed": report.get("publication_allowed"),
+          }, indent=2))
+          eligible = [row for row in report.get("models", [])
+                      if row.get("successful_samples", 0) >= 1
+                      and row.get("lesson_contract_valid_rate", 0) > 0]
+          if not eligible:
+              raise SystemExit("No model passed the current lesson contract. Fresh benchmark report is committed for diagnosis; generation remains blocked.")
+          PY
+      - name: Stop local Ollama even after a failed benchmark
+        if: always()
+        run: docker rm -f quantaedge-class6-curiosity-benchmark-ollama >/dev/null 2>&1 || true
