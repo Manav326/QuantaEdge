@@ -6,18 +6,20 @@ A rerun is not automatically a resume. A resume must reuse verified completed wo
 
 All generated pipeline data and savepoints belong under `data/`. Application code, workflow definitions, and documentation must not become alternate locations for generated data. Candidate and generated lesson artifacts remain review-only; publication is never enabled by a resume action.
 
-## Dedicated resume buttons in Actions
+## One entrypoint per pipeline
 
-For recovery from a phone or desktop, use the dedicated **Resume** workflow in the repository's Actions list rather than launching the broad preparation workflow and relying on its default mode:
+The general Layers 1–8 content pipeline uses two main workflow entrypoints. Choose the operation in the workflow's **Run workflow** form; separate resume-only wrappers have been retired.
 
-| Layers | Actions entry | Locked execution mode |
+| Layers | Actions entry | Mode |
 |---|---|---|
-| 1–3 | [Resume textbook preparation (Layers 1–3)](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-textbook-visual-layers-1-3.yml) | `resume_preparation` |
-| 4–5 | [Resume textbook visual pipeline (Layers 4–5)](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-textbook-visual-layers-4-5.yml) | `resume_layers_4_5` |
-| 6–8 | [Resume QuantaEdge Layers 6–8](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-quantaedge-layers-6-8.yml) | `resume` |
+| 1–3 preparation | [Prepare textbook visual candidates v3](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) | `resume_preparation` |
+| 4–5 visual analysis | [Prepare textbook visual candidates v3](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) | `resume_layers_4_5` |
+| 1–5 full preparation and analysis | [Prepare textbook visual candidates v3](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) | `analyze_all` |
+| 6–8 generation | [QuantaEdge Layers 6–8](https://github.com/Manav326/QuantaEdge/actions/workflows/quantaedge-layers-6-8.yml) | `benchmark`, `run`, `resume`, or `refresh_benchmark` |
 
-These are small UI launchers over the same core workflows—not duplicate pipeline implementations. Each locks the operation to the relevant resume mode. The Layer 4–5 launcher defaults to one asset per checkpoint and skips candidate-pack/catalog rebuilding. The Layers 6–8 launcher requires the exact source book and model plus an explicit experimental-draft acknowledgement; its core preflight refuses to start if no matching checkpoint exists. Match the prior run's class, book/edition, and model. Do not use GitHub's **Re-run all jobs** action as a substitute for selecting the application's resume mode.
+For Layer 4–5 recovery, select the exact previous class, source edition, and vision model; use checkpoint batch size `1` to minimize work at risk. For Layers 6–8, keep the class, exact `source_book_id`, model, benchmark report and checkpoint settings identical to the interrupted run. The core workflow's preflight requires a matching saved checkpoint for `resume` and refuses an incompatible or missing checkpoint before model download.
 
+Do not use GitHub's **Re-run all jobs** action as a substitute for selecting the application's resume mode. A resume is an explicit data operation with source/model/contract validation, not a rerun of the previous runner.
 
 ## Workflow UI: Layers 1–5 visual pipeline
 

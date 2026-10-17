@@ -16,16 +16,15 @@ on:
       - "services/api/src/test/java/com/quantaedge/api/StructuredLessonArtifactServiceTest.java"
       - ".github/workflows/ci.yml"
       - ".github/workflows/quantaedge-layers-6-8.yml"
-      - ".github/workflows/resume-quantaedge-layers-6-8.yml"
       - "tests/test_workflow_resume_entrypoints.py"
       - "docs/textbook-content-pipeline-eight-layers.md"
       - "apps/admin/app/structured-lesson-preview/page.tsx"
   workflow_dispatch:
     inputs:
       mode:
-        description: "Benchmark models, start a budgeted generation run, or explicitly resume its matching saved checkpoints"
+        description: "Benchmark, run bounded draft generation, resume matching checkpoints, or refresh a saved benchmark without model inference"
         type: choice
-        options: ["benchmark", "run", "resume"]
+        options: ["benchmark", "run", "resume", "refresh_benchmark"]
         default: "benchmark"
         required: true
       class_no:
@@ -105,7 +104,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ (inputs.mode == 'benchmark' && 'benchmark') || 'generation' }}
+  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ ((inputs.mode == 'benchmark' || inputs.mode == 'refresh_benchmark') && 'benchmark') || 'generation' }}
   cancel-in-progress: false
 
 jobs:
@@ -273,6 +272,17 @@ jobs:
             --sample-segments 2 --request-timeout 300 \
             --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --commit-checkpoints
+      - name: Refresh saved benchmark samples without model inference
+        if: inputs.mode == 'refresh_benchmark'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py refresh-benchmark \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --source-book-id ncert-c6-english-fecu1 \
+            --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --commit-checkpoints
+
       - name: Run bounded single-book draft generation
         if: (inputs.mode == 'run' || inputs.mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
         shell: bash

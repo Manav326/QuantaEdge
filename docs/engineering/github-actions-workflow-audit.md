@@ -1,67 +1,79 @@
-# GitHub Actions workflow audit
+# GitHub Actions workflow audit and consolidation
 
 **Repository:** `Manav326/QuantaEdge`  
 **Audit date:** 2026-10-17  
-**Scope:** All workflow files under `.github/workflows/` on `main` (24 before this prune), their declared triggers, in-repository callers/documentation, and the latest 100 repository-wide Actions runs available during the audit.
+**Scope:** The workflow inventory on `main`, recent execution history (latest 100 repository-wide run records), caller/test/documentation references, and duplication between the current pipeline entrypoints.
 
-## Executive result
+## Decision rule
 
-The repository has several different classes of workflow: mandatory CI/release automation, source-data ingestion and validation, long-running textbook content generation, and dedicated recovery entrypoints. A workflow not appearing in the latest 100 run records is **not** proof that it is obsolete: manual release, audit, and resume workflows can be intentionally quiet.
+The number of workflow files is not the measure of how many independent operations the system needs. The audit distinguishes:
 
-**One confirmed obsolete workflow was removed:** `.github/workflows/quantaedge-layers-6-8-benchmark-once.yml`. It was a six-hour bootstrap benchmark triggered only by changes to its own workflow file, had no manual dispatch entrypoint, and had no references outside itself. The repository has a newer evidence-gated Class 6 benchmark stage (`benchmark-class6-curiosity-after-layer5.yml`) and the general `quantaedge-layers-6-8.yml` workflow already exposes a benchmark mode. Keeping the old self-triggered bootstrap created a duplicate path that could unexpectedly consume runner time when edited.
+1. **Primary content pipeline entrypoints** — at most one for Layers 1–5 and one for Layers 6–8. These expose their prepare/run/benchmark/resume modes directly.
+2. **Artifact producers and handoffs** — retained only when they create/validate a distinct artifact or transfer verified output to its next stage.
+3. **Product release/verification workflows** — CI, deployment and the signed Android release remain separate because they have different triggers, credentials and safety boundaries.
 
-The similarly named `quantaedge-layers-6-8-generate-once.yml` was **kept**: its successful-benchmark gate is documented in `docs/textbook-content-pipeline-eight-layers.md` and explicitly asserted by `tests/test_workflow_resume_entrypoints.py`. It is part of the evidence-gated chain, not an orphan. The current reusable `quantaedge-layers-6-8.yml` and its dedicated resume wrapper are also retained.
+A thin workflow whose only job is to set a mode on an existing reusable pipeline is a duplicate UI surface, not a separate capability. A one-time workflow that is superseded by the general mode selector is not retained.
 
-## Workflow-by-workflow decision
+## Canonical pipeline structure
 
-| Workflow | Decision | Purpose / evidence |
+| Pipeline | Single canonical entrypoint | Supported operation(s) |
 |---|---|---|
-| `agent-4-validation.yml` | **Keep** | Branch-specific validation for `agent/learning-content-ai-android`; the branch exists. Runs content regression tests, API verification, frontend builds, and Android tests/APK. It overlaps with core CI in some checks but protects a separate development branch. |
-| `ai-training-dataset-validation.yml` | **Keep** | Schema/quality validation on AI training dataset-related changes and manual dispatch. Different from exporting an audit sample. |
-| `ai-training-offline-dataset.yml` | **Keep** | API-key-free dataset generation and committed outputs. Required for the offline data-generation path. |
-| `android-build.yml` | **Keep** | Manual Android-only build fallback. Dispatch-only by design, avoiding an extra automatic APK build on every app push. |
-| `android-play-store-release.yml` | **Keep** | Separate signed release-bundle workflow using protected signing secrets. Not interchangeable with the debug APK build. |
-| `audit-ai-training-dataset.yml` | **Keep** | Read-only audit/sample export of existing training data. Does not generate or modify the dataset. |
-| `audit-content-package-completeness.yml` | **Keep** | Read-only ZIP content/package integrity audit plus tests; distinct from runtime import and dataset checks. |
-| `benchmark-class6-curiosity-after-layer5.yml` | **Keep** | Evidence-gated Class 6 benchmark; starts only after the specific Layer 1–5 recovery workflow succeeds, then verifies the real Layer 5 ledger before model startup. |
-| `ci.yml` | **Keep** | Canonical main/PR CI; includes contract checks, Android APK, API verification, and container builds. Required build provenance source for the APK installer. |
-| `commit-class6-extraction-artifact.yml` | **Keep** | Validates successful Class 7/8 extraction artifacts and mirrors them into the repository. This is the bridge between extraction artifacts and committed pipeline data. |
-| `curriculum-pipeline-audit.yml` | **Keep** | Offline/live registry and source-cache audit, including the textbook cache workflow handoff. Read-only diagnostics are distinct from ingestion. |
-| `deploy.yml` | **Keep** | Explicit manual production deployment. Do not delete based on low run frequency. |
-| `quantaedge-layers-1-5-resume.yml` | **Keep** | Dedicated recovery for the Class 6 Curiosity Layer 1–5 evidence ledger. A recent failure is a reason to fix/resume it, not remove it. |
-| `quantaedge-layers-6-8-benchmark-once.yml` | **Removed** | Obsolete duplicate bootstrap described above; no external references, no manual entrypoint, and a newer benchmark path exists. |
-| `quantaedge-layers-6-8-generate-once.yml` | **Keep** | Bounded generation after a successful fresh benchmark; cited by the pipeline runbook and covered by resume-entrypoint tests. The latest-100 sample included a skipped run, not evidence that its gate is unnecessary. |
-| `quantaedge-layers-6-8-refresh-benchmark.yml` | **Keep** | Revalidates saved benchmark samples against the current lesson contract without additional model inference. This is a different operation from running a new benchmark. |
-| `quantaedge-layers-6-8.yml` | **Keep** | Main reusable/manual pipeline for benchmark, bounded generation, and resume. Recent-100 snapshot showed repeated use, including successful runs. |
-| `resume-quantaedge-layers-6-8.yml` | **Keep** | Dedicated user-facing resume entrypoint that calls the reusable Layers 6–8 workflow with resume mode. |
-| `resume-textbook-visual-layers-1-3.yml` | **Keep** | Dedicated resume entrypoint for saved per-book preparation checkpoints; calls the v3 visual pipeline. |
-| `resume-textbook-visual-layers-4-5.yml` | **Keep** | Dedicated resume entrypoint for saved Layer 4–5 vision analysis; preserves the model and checkpoint batch settings. |
-| `textbook-cache.yml` | **Keep** | Maintains the whole-book cache/registry and repair queue used by downstream textbook workflows. |
-| `textbook-extraction-pilot.yml` | **Keep** | Extracts the selected Class 7/8 complete source books and publishes validated data as run artifacts for the mirror workflow. |
-| `textbook-visual-analysis.yml` | **Keep** | Specialized single-book analysis with custom vision model, explicit restart, and stable-tag publishing controls. It has a dedicated execution guide and is not the same as preparing a full bilingual v3 candidate set. |
-| `textbook-visual-candidates-v3.yml` | **Keep** | Main additive Layers 1–5 candidate pipeline for Classes 6–8. Implements prepare/analyze/resume modes and is the reusable target for the two visual resume entrypoints. |
+| Layers 1–5 (textbook visuals and candidates) | `.github/workflows/textbook-visual-candidates-v3.yml` | `prepare_only`, `analyze_all`, `resume_preparation`, `resume_layers_4_5`. Resume is selected from this workflow's own dispatch UI; separate resume wrappers are removed. |
+| Layers 6–8 (local Ollama generation) | `.github/workflows/quantaedge-layers-6-8.yml` | `benchmark`, `run`, `resume`, `refresh_benchmark`. Refresh is now a non-inference mode in the same workflow; no separate refresh workflow. |
 
-## Observed run activity
+The independent `.github/workflows/textbook-visual-analysis.yml` is retained as a specialist **single-book visual artifact** tool with a custom model/restart/stable-GHCR-publishing contract. It is not the class-wide Layers 1–5 launcher; its bespoke operation should be migrated before removing it. It is referenced by its execution guides. The main eight-layer learning-content path remains the two entrypoints in the table above.
 
-This is a **snapshot of the latest 100 repository-wide run records**, not a complete historical query for every workflow. Counts can include repeated checkpoint commits and cancellations caused by new commits arriving while work is queued; absence from this sample is not a basis for deleting a manual workflow.
+## Redundant workflows removed
 
-| Workflow | Observed in sample | Snapshot result |
-|---|---:|---|
-| `ci.yml` | 62 runs | 17 success, 8 failure, 35 cancelled, 2 pending/in progress |
-| `textbook-visual-candidates-v3.yml` | 22 runs | 11 success, 3 failure, 7 cancelled, 1 in progress |
-| `quantaedge-layers-6-8.yml` | 13 runs | 10 success, 1 failure, 2 cancelled |
-| `quantaedge-layers-6-8-generate-once.yml` | 1 run | Skipped by its gate |
-| `benchmark-class6-curiosity-after-layer5.yml` | 1 run | Skipped; the upstream recovery did not satisfy the success gate |
-| `quantaedge-layers-1-5-resume.yml` | 1 run | Failed; workflow remains needed for recovery |
+| Removed workflow | Reason |
+|---|---|
+| `agent-4-validation.yml` | Branch-specific validation duplicated by canonical CI for pull requests and no longer belongs to the main-branch release path. |
+| `android-build.yml` | Manual duplicate of the installable APK job in `ci.yml`; the APK fetcher relies on the verified canonical CI run. |
+| `quantaedge-layers-1-5-resume.yml` | Legacy hard-coded Class 6 Curiosity recovery path. Generic Layers 1–5 now exposes fingerprinted resume modes directly. |
+| `benchmark-class6-curiosity-after-layer5.yml` | One-off benchmark chained only to the retired Class 6 recovery workflow; the canonical Layers 6–8 entrypoint has benchmark mode. |
+| `quantaedge-layers-6-8-generate-once.yml` | One-time generation continuation already covered by the canonical `run`/ `resume` modes with preflight and explicit review-only acknowledgement. |
+| `quantaedge-layers-6-8-refresh-benchmark.yml` | Duplicate refresh-only workflow; the same no-inference operation is now `refresh_benchmark` in the canonical Layers 6–8 workflow. The report is not a push trigger, avoiding self-trigger loops. |
+| `resume-textbook-visual-layers-1-3.yml` | Thin launcher over `textbook-visual-candidates-v3.yml`; use `resume_preparation` in the main dispatch UI. |
+| `resume-textbook-visual-layers-4-5.yml` | Thin launcher over `textbook-visual-candidates-v3.yml`; use `resume_layers_4_5` in the main dispatch UI and choose the checkpoint batch size. |
+| `resume-quantaedge-layers-6-8.yml` | Thin launcher over `quantaedge-layers-6-8.yml`; use `resume` in the main dispatch UI. |
+| `.github/triggers/layers1-5-class6-curiosity.trigger` | Marker file existed solely to invoke the retired hard-coded Class 6 recovery workflow. |
 
-## Guardrails for future pruning
+## Remaining workflows and why each remains
 
-1. Prefer one reusable workflow plus thin, purpose-specific resume entrypoints; do not remove entrypoints relied upon by the UI/runbook/tests.
-2. Treat a manual release, deployment, audit, or resume workflow as needed unless its behavior is replaced and references are updated.
-3. Before deleting a workflow, search its filename and workflow **name** in the repository, inspect `workflow_run`/reusable-workflow callers, check script/data dependencies, and review actual run history.
-4. Do not infer "unused" from cancelled/skipped recent runs alone. In this repository, checkpoint commits and workflow gates naturally produce these statuses.
-5. Keep generated pipeline artifacts under the established `data/` tree and keep the Android fetcher fail-closed whenever any intervening commit changes app/build-relevant paths.
+| Workflow | Responsibility / why it is not another general Layers 1–8 pipeline |
+|---|---|
+| `ci.yml` | Required contract tests, API/web/Admin/People build and installable debug APK; canonical verified APK source. |
+| `deploy.yml` | Explicit production deployment with protected environment and SSH credentials. |
+| `android-play-store-release.yml` | Signed Play Store release bundle and signing secrets; distinct from debug APK. |
+| `ai-training-dataset-validation.yml` | Validates the AI training dataset schema/contract on relevant data changes. |
+| `ai-training-offline-dataset.yml` | Generates API-key-free review/draft dataset records and persists the artifact. |
+| `audit-ai-training-dataset.yml` | Read-only review sample/export of the existing dataset; it does not generate or rewrite training data. |
+| `audit-content-package-completeness.yml` | Read-only integrity/completeness audit for committed content ZIP artifacts. |
+| `textbook-cache.yml` | Source-of-truth whole-book GHCR cache and repair queue for textbook inputs. |
+| `curriculum-pipeline-audit.yml` | Audit report for textbook registry, cache/source presence and pipeline handoff integrity. |
+| `textbook-extraction-pilot.yml` | Extracts and validates Class 7/8 whole-book page data into run artifacts. |
+| `commit-class6-extraction-artifact.yml` | Validates and mirrors verified Class 7/8 extraction outputs from a source run to `data/`; the artifact handoff must not trust arbitrary workflow artifacts. |
+| `textbook-visual-analysis.yml` | Specialist single-book visual-analysis artifact flow, retained pending a deliberate migration into the class-wide pipeline. |
+| `textbook-visual-candidates-v3.yml` | Canonical Layers 1–5 pipeline. |
+| `quantaedge-layers-6-8.yml` | Canonical Layers 6–8 pipeline. |
 
-## Android APK fetcher hardening included with this audit
+## Usage findings
 
-The APK fetcher now queries the canonical `ci.yml` workflow specifically rather than searching the latest 100 runs from every workflow. This prevents frequent content-pipeline runs from crowding successful Android build runs out of the lookup window. It still prefers exact-head successful runs and allows an older artifact only after the strict remote commit comparison confirms that every intervening file is in the approved data-only/installer allowlist.
+The latest-100-run sample recorded:
+- `ci.yml`: 64 observed runs — 18 successes, 9 failures, 35 cancelled and 2 pending/in progress.
+- `textbook-visual-candidates-v3.yml`: 21 observed runs — 10 successes, 3 failures, 7 cancelled and 1 in progress.
+- `quantaedge-layers-6-8.yml`: 13 observed runs — 10 successes, 1 failure and 2 cancelled.
+- The obsolete `benchmark-class6-curiosity-after-layer5.yml` and `quantaedge-layers-6-8-generate-once.yml` each had only a skipped run in this sample. This agrees with the dependency graph: their upstream one-off chain was not the active general entrypoint.
+
+The sample is not a full historical query. Manual deployment, release and audit workflows can be correctly quiet, so usage frequency alone was not used to delete them.
+
+## Operational safeguards retained
+
+- Resume modes verify book identity, source PDF hash, model/prompt/contract fingerprints and saved checkpoint status before expensive model startup.
+- Generation remains review-only. A successful Actions run does not equal complete curriculum coverage or authorization to publish.
+- Generated pipeline outputs remain in `data/`; workflows/scripts/docs are not alternate output storage.
+- The APK downloader prefers a successful exact-head `ci.yml` run. It only accepts an older build after the compatibility checker confirms every intervening path is in the narrow approved data-only/installer allowlist; unexpected or incomplete comparisons fail closed.
+
+## Expected operating model
+
+For the general textbook lesson data pipeline, operators now have **two primary workflows**. Use the separate textbook cache/extraction artifact workflows only when the upstream source/page artifact itself must be created or repaired. Use artifact audit/export workflows only for their named artifact. Do not add another workflow just to expose a button for a mode already supported by a core workflow; add a mode/input to the canonical entrypoint instead.

@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - ".github/workflows/textbook-visual-candidates-v3.yml"
-      - ".github/workflows/resume-textbook-visual-layers-*.yml"
       - "tests/test_workflow_resume_entrypoints.py"
       - ".github/workflows/textbook-extraction-pilot.yml"
       - "scripts/prepare_visual_candidates_v3.py"

@@ -29,16 +29,14 @@ The manual workflow .github/workflows/quantaedge-layers-6-8.yml defaults to benc
 - Retrieval output has one row per original PDF page, including explicit non-retrievable rows for pages with no extractable text. Empty-text pages remain in `unresolved_text_pages` and cannot be counted as mapped even when they share a generation segment with readable pages. SFT output is separate from retrieval text, and source groups do not cross train/validation/test splits.
 - Budget exhaustion is resumable IN_PROGRESS, not false completion. Even after machine checks pass, outputs stay DRAFT_REQUIRES_HUMAN_REVIEW and publication_allowed remains false.
 
-## Recovering the existing Class 6 Curiosity Layer 5 checkpoint
+## Canonical workflow entrypoints
 
-The one-time workflow `.github/workflows/quantaedge-layers-1-5-resume.yml` is deliberately triggered by a separate marker-file commit under `.github/triggers/`. It retries the existing failed vision checkpoint using local `qwen2.5vl:3b` with an 8,192-token context, commits every small batch to `main`, and rebuilds the effective analysis plus actual Layer 5 ledger for the exact Curiosity PDF hash. It never writes `COMPLETE` itself: the ledger builder computes completeness from every page and eligible visual, and the workflow fails if any gap remains. A failed/incomplete run leaves its raw checkpoint and ledger committed for inspection/retry.
+The general textbook content pipeline now has two primary workflow entrypoints:
 
-## Execution order
+1. **Layers 1–5:** [Prepare textbook visual candidates v3](../.github/workflows/textbook-visual-candidates-v3.yml). Use `prepare_only` to create/restore per-book candidates, `analyze_all` for the full path, `resume_preparation` for saved Layers 1–3 bundles, or `resume_layers_4_5` to reuse the inventory and raw visual-analysis checkpoints without rebuilding candidates.
+2. **Layers 6–8:** [QuantaEdge Layers 6–8](../.github/workflows/quantaedge-layers-6-8.yml). Use `benchmark` to compare local Ollama candidates, `run` for a bounded review-only batch, `resume` to continue the same checkpoint, or `refresh_benchmark` to revalidate saved samples against the current renderer contract without model inference.
 
-1. Run Layers 1–5 and verify the source's Layer 5 coverage ledger is COMPLETE for the exact whole-book PDF hash.
-2. Dispatch the Layers 6–8 workflow in benchmark mode and review the committed comparison and sample output quality.
-3. Decide the production model separately after checking Hindi fluency, factual/math correctness, answer keys, source linkage and practical latency. Run mode requires a successful benchmark sample and a separate explicit experimental-draft acknowledgement.
-4. Use one book ID per run and repeat the same inputs until the per-book manifest has no pending segments. Review the map, lessons and both datasets; do not publish or fine-tune drafts.
+For generation, first verify the source's Layer 5 ledger is complete for the exact whole-book PDF hash and review the benchmark report. The benchmark must not select a production model automatically; model selection, lesson review and publication remain separate human decisions. The old hard-coded Class 6 marker-trigger recovery and one-time benchmark/generation chain were retired because the two general entrypoints now cover those modes. Do not commit marker files or launch retired one-off workflows.
 
 ## Correction overlay
 
@@ -61,10 +59,9 @@ The existing general-purpose SFT generator is also Ollama-first:
 
 ## First bounded Class 6 generation run
 
-The guarded Class 6 Curiosity pilot is an evidence-gated workflow chain. Commit `.github/triggers/layers1-5-class6-curiosity.trigger` to run `.github/workflows/quantaedge-layers-1-5-resume.yml`, which retries only missing/failed source-matched Layer 4 analyses and rebuilds the actual Layer 5 coverage ledger. After that workflow completes, `.github/workflows/benchmark-class6-curiosity-after-layer5.yml` verifies that the ledger is truly `COMPLETE` before it downloads Ollama, then benchmarks `qwen2.5:1.5b`, `qwen2.5:3b`, and `qwen3:4b` under the current prompt and renderer contract. The fresh report is committed under `data/`. If no candidate passes both schema and lesson-contract checks, generation remains blocked and the report is retained for diagnosis.
+Use the same two canonical entrypoints used for every other class. In the Layers 1–5 workflow, choose `analyze_all` or `resume_layers_4_5` with the exact Class 6 source inputs until the source-bound Layer 5 coverage ledger is `COMPLETE`. Then run the Layers 6–8 workflow in `benchmark` mode and review the committed report. If the prompt or lesson-renderer contract changed, use `refresh_benchmark` to revalidate existing benchmark samples without another model download/inference; if source segments or sample hashes changed, run a fresh `benchmark` instead.
 
-Only a successful fresh benchmark starts `.github/workflows/quantaedge-layers-6-8-generate-once.yml`. It rechecks the source, Layer 5 ledger, benchmark fingerprint, and production-selection safety, then chooses an eligible model only for a bounded experimental draft batch (six model calls). It does not set the production model, publish lessons, or approve content. Each model call is checkpointed to `data/`; an interrupted batch resumes from the durable matching segments. The run manifest remains `IN_PROGRESS` until the segment dataset is complete and valid.
-
+Only after a contract-valid benchmark and explicit experimental-draft acknowledgement should `run` start a bounded draft batch. A stopped batch is resumed by choosing `resume` with the exact same class, whole-book ID, model and benchmark fingerprint. Each model call is checkpointed under `data/`. The general workflows replace the previous hard-coded Class 6-only recovery → benchmark → generate workflow chain; do not invoke that retired chain. Outputs remain review-only, and incomplete runs remain `IN_PROGRESS` rather than being treated as complete.
 
 ### Context-driven practice and source coverage
 
@@ -130,9 +127,9 @@ The GitHub Actions UI exposes different actions for starting work and recovering
 
 The vision model name is part of checkpoint identity. A resume request must not silently turn into a different-model full rerun. If the selected model has no checkpoint while a prior Layer 4 run is recorded for that book, the preflight fails with an explanation; choose **analyze_all** only when deliberately beginning a different model/configuration run. The inventory's per-page text hashes are also compared with the current extraction JSONL; a same-PDF but revised extraction is not allowed to reuse old visual interpretations as though their model context were unchanged. Layer 5 explicitly marks stale-context checkpoints incomplete, and Layers 6–8 refuse to consume those ledgers.
 
-### Dedicated recovery UI entrypoints
+### Recovery modes in the two core workflows
 
-The Actions list also exposes fixed-mode launchers for [Layers 1–3](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-textbook-visual-layers-1-3.yml), [Layers 4–5](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-textbook-visual-layers-4-5.yml), and [Layers 6–8](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-quantaedge-layers-6-8.yml). They delegate to these shared workflows; they do not clone the execution steps or change the checkpoint contract. Pick the layer range where the interruption occurred, then preserve the exact class/book/edition/model/configuration from the prior attempt. For Layers 4–5, the launcher fixes the mode to `resume_layers_4_5`; for Layers 6–8, it fixes `mode=resume` and retains strict existing-checkpoint preflight.
+Resume options are modes inside the canonical workflow forms, not separate workflows. For Layers 1–3, choose `resume_preparation` in `textbook-visual-candidates-v3.yml`; for Layers 4–5, choose `resume_layers_4_5` and use the same class/source edition/model as the saved checkpoint. For Layers 6–8, choose `resume` in `quantaedge-layers-6-8.yml`. Each route runs the same fingerprint and checkpoint checks as the normal entrypoint. The Layers 6–8 `refresh_benchmark` mode revalidates existing benchmark samples without model inference and is serialized in the benchmark concurrency lane.
 
 ### Layers 6–8 UI choices
 

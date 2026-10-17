@@ -10,51 +10,35 @@ def read(name: str) -> str:
 
 
 class WorkflowResumeEntrypointTests(unittest.TestCase):
-    def test_visual_pipeline_accepts_reusable_workflow_inputs(self):
+    def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("workflow_dispatch:", workflow)
         self.assertIn("workflow_call:", workflow)
+        self.assertIn('options: ["prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"]', workflow)
         self.assertIn("github.event_name == 'workflow_call'", workflow)
         self.assertIn("resume_layers_4_5", workflow)
         self.assertIn("resume_preparation", workflow)
 
-    def test_class6_visual_recovery_has_source_preflight_and_per_asset_savepoints(self):
-        workflow = read("quantaedge-layers-1-5-resume.yml")
-        preflight = workflow.index("- name: Preflight durable source and coverage checkpoint before model startup")
-        model_cache = workflow.index("- name: Restore the model cache when available")
-        ollama_start = workflow.index("- name: Start local Ollama and load the existing vision model")
-        retry = workflow.index("- name: Retry pending/error visuals with one-asset durable savepoints")
-        self.assertLess(preflight, model_cache)
-        self.assertLess(model_cache, ollama_start)
-        self.assertLess(ollama_start, retry)
-        self.assertIn("steps.recovery_preflight.outputs.needs_repair == 'true'", workflow)
-        self.assertIn('ledger_status == "COMPLETE"', workflow)
-        self.assertIn("for batch in $(seq 1 80); do", workflow)
-        self.assertIn("--max-assets 1 --include-page-previews", workflow)
-        self.assertIn('[[ "$processed" == "0" ]]', workflow)
+    def test_layers_6_to_8_has_all_modes_in_one_entrypoint(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("workflow_call:", workflow)
+        self.assertIn('options: ["benchmark", "run", "resume", "refresh_benchmark"]', workflow)
+        self.assertIn("github.event_name == 'workflow_call'", workflow)
 
-    def test_layers_1_to_3_launcher_locks_resume_preparation(self):
-        wrapper = read("resume-textbook-visual-layers-1-3.yml")
-        self.assertIn("uses: ./.github/workflows/textbook-visual-candidates-v3.yml", wrapper)
-        self.assertIn("analysis_mode: resume_preparation", wrapper)
-        self.assertNotIn("analysis_mode: ${{ inputs.analysis_mode }}", wrapper)
-
-    def test_layers_4_to_5_launcher_locks_resume_mode(self):
-        wrapper = read("resume-textbook-visual-layers-4-5.yml")
-        self.assertIn("uses: ./.github/workflows/textbook-visual-candidates-v3.yml", wrapper)
-        self.assertIn("analysis_mode: resume_layers_4_5", wrapper)
-        self.assertIn('default: "1"', wrapper)
-        self.assertIn("${{ inputs.vision_model }}", wrapper)
-        self.assertNotIn("analysis_mode: ${{ inputs.analysis_mode }}", wrapper)
-
-    def test_layers_6_to_8_launcher_locks_resume_and_keeps_preflight_acknowledgement(self):
-        wrapper = read("resume-quantaedge-layers-6-8.yml")
-        self.assertIn("uses: ./.github/workflows/quantaedge-layers-6-8.yml", wrapper)
-        self.assertIn("mode: resume", wrapper)
-        self.assertIn("${{ inputs.source_book_id }}", wrapper)
-        self.assertIn("${{ inputs.generation_model }}", wrapper)
-        self.assertIn("${{ inputs.max_model_calls }}", wrapper)
-        self.assertIn("${{ inputs.allow_experimental_model }}", wrapper)
-        self.assertIn('default: false', wrapper)
+    def test_refresh_benchmark_is_in_core_workflow_and_does_not_start_ollama(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        refresh = workflow.index("- name: Refresh saved benchmark samples without model inference")
+        generation = workflow.index("- name: Run bounded single-book draft generation")
+        ollama = workflow.index("- name: Start loopback-only Ollama service")
+        self.assertLess(refresh, generation)
+        refresh_step = workflow[refresh:generation]
+        self.assertIn("if: inputs.mode == 'refresh_benchmark'", refresh_step)
+        self.assertIn("python scripts/quantaedge_layers_6_8.py refresh-benchmark", refresh_step)
+        self.assertIn("--commit-checkpoints", refresh_step)
+        ollama_step = workflow[ollama:workflow.index("- name: Pull only candidate models", ollama)]
+        self.assertIn("inputs.mode == 'benchmark'", ollama_step)
+        self.assertNotIn("refresh_benchmark", ollama_step)
 
     def test_layers_6_to_8_preflights_run_and_resume_before_model_download(self):
         workflow = read("quantaedge-layers-6-8.yml")
@@ -68,7 +52,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         preflight_step = workflow[preflight:output_only]
         self.assertIn("if: inputs.mode == 'run' || inputs.mode == 'resume'", preflight_step)
         self.assertIn('if [[ "$MODE" == "resume" ]]; then', preflight_step)
-        self.assertIn('args+=(--require-existing-checkpoint)', preflight_step)
+        self.assertIn("args+=(--require-existing-checkpoint)", preflight_step)
         self.assertIn('{"MATCHED_CHECKPOINT","NOT_STARTED"}', preflight_step)
         self.assertIn("preflight_state=", preflight_step)
         self.assertIn("steps.generation_preflight.outputs.preflight_state == 'MATCHED_CHECKPOINT'", workflow)
@@ -87,44 +71,22 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("steps.generation_preflight.outputs.retryable_segments != '0'", approval_step)
         self.assertIn("ALLOW_EXPERIMENTAL_MODEL", approval_step)
 
-    def test_class6_benchmark_runs_only_after_layer5_recovery_and_fails_closed(self):
-        workflow = read("benchmark-class6-curiosity-after-layer5.yml")
-        self.assertIn("workflow_run:", workflow)
-        self.assertIn('workflows: ["Resume Class 6 NCERT Curiosity Layers 1-5 evidence ledger"]', workflow)
-        self.assertIn("if: github.event.workflow_run.conclusion == 'success'", workflow)
-        gate = workflow.index("- name: Require a real COMPLETE Class 6 Curiosity Layer 5 ledger")
-        ollama = workflow.index("- name: Start loopback-only Ollama")
-        benchmark = workflow.index("- name: Benchmark the same source-bound NCERT segments under the current contract")
-        require_valid = workflow.index("- name: Require at least one contract-valid candidate before allowing generation")
-        self.assertLess(gate, ollama)
-        self.assertLess(ollama, benchmark)
-        self.assertLess(benchmark, require_valid)
-        self.assertIn('assert ledger.get("ledger_status") == "COMPLETE"', workflow)
-        self.assertIn('"qwen2.5:1.5b,qwen2.5:3b,qwen3:4b"', workflow)
-        self.assertIn("Could not pull $model", workflow)
-        self.assertIn("continue with the other candidates", workflow)
-        self.assertIn('row.get("successful_samples", 0) >= 1', workflow)
-        self.assertIn('row.get("lesson_contract_valid_rate", 0) > 0', workflow)
-        self.assertIn('"production_model_selection": report.get("production_model_selection")', workflow)
-        self.assertIn('"publication_allowed": report.get("publication_allowed")', workflow)
-
-    def test_class6_generation_waits_for_successful_fresh_benchmark(self):
-        workflow = read("quantaedge-layers-6-8-generate-once.yml")
-        self.assertIn('workflows: ["Benchmark Class 6 Curiosity after Layer 5 recovery"]', workflow)
-        self.assertIn("if: github.event.workflow_run.conclusion == 'success'", workflow)
-        preflight = workflow.index("- name: Verify complete Layer 5 evidence and select an eligible experimental candidate")
-        ollama = workflow.index("- name: Start loopback-only local Ollama")
-        model_pull = workflow.index("- name: Pull only the contract-valid experimental candidate")
-        generate = workflow.index("- name: Generate six review-only model calls with durable savepoints")
-        self.assertLess(preflight, ollama)
-        self.assertLess(ollama, model_pull)
-        self.assertLess(model_pull, generate)
-        self.assertIn('ledger.get("ledger_status") != "COMPLETE"', workflow)
-        self.assertIn('row.get("lesson_contract_valid_rate", 0) > 0', workflow)
-        self.assertIn('report.get("production_model") is not None', workflow)
-        self.assertIn("--checkpoint-every 1", workflow)
-        self.assertIn("--allow-experimental-model", workflow)
-        self.assertNotIn(".github/triggers/generate-class6-curiosity.trigger", workflow)
+    def test_retired_duplicate_entrypoints_are_absent(self):
+        retired = [
+            "agent-4-validation.yml",
+            "android-build.yml",
+            "benchmark-class6-curiosity-after-layer5.yml",
+            "quantaedge-layers-1-5-resume.yml",
+            "quantaedge-layers-6-8-generate-once.yml",
+            "quantaedge-layers-6-8-refresh-benchmark.yml",
+            "resume-quantaedge-layers-6-8.yml",
+            "resume-textbook-visual-layers-1-3.yml",
+            "resume-textbook-visual-layers-4-5.yml",
+        ]
+        for name in retired:
+            with self.subTest(name=name):
+                self.assertFalse((WORKFLOWS / name).exists(), f"{name} is a retired duplicate entrypoint")
+        self.assertFalse((ROOT / ".github" / "triggers" / "layers1-5-class6-curiosity.trigger").exists())
 
     def test_layers_6_to_8_core_accepts_reusable_workflow_calls(self):
         workflow = read("quantaedge-layers-6-8.yml")
