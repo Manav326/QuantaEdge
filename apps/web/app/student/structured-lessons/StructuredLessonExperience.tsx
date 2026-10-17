@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useLocale } from '../../components/LanguageProvider';
+import { translateUi } from '../../i18n/catalog';
 import type { LessonLocale, StructuredLesson, StructuredQuestion } from './contract';
 import { isQuestionVisualApproved, readLocale } from './contract';
 import StructuredLessonContent from './StructuredLessonContent';
@@ -19,8 +21,6 @@ type Props = {
   initialActivityResponses?: Record<string, Record<string, string>>;
 };
 
-const tx = (locale: LessonLocale, en: string, hi: string) => locale === 'hi' ? hi : en;
-
 function normalizeAnswer(value: string, locale: LessonLocale): string {
   const normalized = value.normalize('NFC').trim().replace(/\s+/g, ' ');
   return locale === 'en' ? normalized.toLocaleLowerCase('en') : normalized;
@@ -32,10 +32,10 @@ function sameSet(left: string[], right: string[]): boolean {
   return a.length === b.length && a.every((value, index) => value === b[index]);
 }
 
-function gradeAdminPreview(question: StructuredQuestion, response: QuestionResponse, locale: LessonLocale): QuestionResult {
-  const fallback = readLocale(question.feedback_by_locale, locale) || tx(locale, 'Answer checked in administrator preview.', 'प्रशासक पूर्वावलोकन में उत्तर जाँचा गया।');
+function gradeAdminPreview(question: StructuredQuestion, response: QuestionResponse, locale: LessonLocale, uiLocale: unknown): QuestionResult {
+  const fallback = readLocale(question.feedback_by_locale, locale) || translateUi(uiLocale, 'legacy.web.answer.checked.in.administrator.previe.022c5449');
   if (question.type === 'short_answer') {
-    return { status: 'pending_review', feedback: tx(locale, 'Short answers require a configured, validated grader or human review. No automatic score was invented.', 'लघु उत्तरीय प्रश्न के लिए सत्यापित मूल्यांकन या मानवीय समीक्षा चाहिए। स्वतः अंक नहीं दिए गए।') };
+    return { status: 'pending_review', feedback: translateUi(uiLocale, 'legacy.web.short.answers.require.a.configured.val.aafc7444') };
   }
   if (question.type === 'multiple_choice' || question.type === 'scenario_based' || question.type === 'image_observation') {
     const correct = typeof response === 'string' && Array.isArray(question.correct_answer_ids) && question.correct_answer_ids.includes(response);
@@ -65,13 +65,14 @@ function gradeAdminPreview(question: StructuredQuestion, response: QuestionRespo
       score: correctCount, maxScore, feedback: fallback, correctAnswer: pairs,
     };
   }
-  return { status: 'pending_review', feedback: tx(locale, 'This response type needs an explicit grading adapter.', 'इस उत्तर प्रकार के लिए स्पष्ट मूल्यांकन अडैप्टर चाहिए।') };
+  return { status: 'pending_review', feedback: translateUi(uiLocale, 'legacy.web.this.response.type.needs.an.explicit.g.d76f3e48') };
 }
 
 export default function StructuredLessonExperience({
   lesson, locale, mode = 'student', onActivitySave, onQuestionSubmit,
   initialResponses, initialResults, initialSubmitted, initialActivityResponses,
 }: Props) {
+  const { locale: uiLocale } = useLocale();
   const [index, setIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, QuestionResponse>>(() => initialResponses || {});
   const [results, setResults] = useState<Record<string, QuestionResult>>(() => initialResults || {});
@@ -110,20 +111,17 @@ export default function StructuredLessonExperience({
     try {
       let result: QuestionResult;
       if (mode === 'admin-preview') {
-        result = gradeAdminPreview(current, activeResponse, locale);
+        result = gradeAdminPreview(current, activeResponse, locale, uiLocale);
       } else if (onQuestionSubmit) {
         result = await onQuestionSubmit(current, activeResponse);
       } else {
-        setSubmitError(tx(locale,
-          'This learner preview is not connected to the learning-service submit endpoint yet. No score was saved.',
-          'यह विद्यार्थी पूर्वावलोकन अभी learning-service के उत्तर जमा करने वाले endpoint से जुड़ा नहीं है। कोई अंक सहेजे नहीं गए।'
-        ));
+        setSubmitError(translateUi(uiLocale, 'legacy.web.this.learner.preview.is.not.connected..3ff4cc37'));
         return;
       }
       setResults(previous => ({ ...previous, [current.id]: result }));
       setSubmitted(previous => ({ ...previous, [current.id]: result.status === 'correct' || result.status === 'pending_review' }));
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : tx(locale, 'Answer could not be submitted.', 'उत्तर जमा नहीं हो सका।'));
+      setSubmitError(error instanceof Error ? error.message : translateUi(uiLocale, 'legacy.web.answer.could.not.be.submitted.75ade80d'));
     } finally {
       setIsSubmitting(false);
     }
@@ -147,10 +145,10 @@ export default function StructuredLessonExperience({
 
   if (blockedByPublicationGate) {
     return <section className="qe-structured-muted" role="status">
-      <strong>{tx(locale, 'Lesson is not available for student rendering', 'यह पाठ विद्यार्थी के लिए अभी उपलब्ध नहीं है')}</strong>
+      <strong>{translateUi(uiLocale, 'legacy.web.lesson.is.not.available.for.student.re.6a09b450')}</strong>
       <p>{hasAnswerKeys
-        ? tx(locale, 'The delivered lesson payload still contains author-only answer or grading keys. The server must sanitize it before student display.', 'विद्यार्थी वाले डेटा में अभी लेखक के सही उत्तर या मूल्यांकन कुंजी शामिल हैं। दिखाने से पहले सर्वर को इन्हें हटाना होगा।')
-        : tx(locale, 'This lesson has not passed the publication gate yet.', 'इस पाठ को अभी प्रकाशन की स्वीकृति नहीं मिली है।')
+        ? translateUi(uiLocale, 'legacy.web.the.delivered.lesson.payload.still.con.2c56341c')
+        : translateUi(uiLocale, 'legacy.web.this.lesson.has.not.passed.the.publica.7d20d1ee')
       }</p>
     </section>;
   }
@@ -159,18 +157,18 @@ export default function StructuredLessonExperience({
     <StructuredLessonContent lesson={lesson} locale={locale} mode={mode} onActivitySave={onActivitySave} initialActivityResponses={initialActivityResponses} />
     <section className="qe-structured-practice" aria-labelledby="qe-structured-practice-title">
       <header className="qe-structured-practice__header">
-        <p className="qe-structured-eyebrow">{tx(locale, 'EXPLAIN → PRACTICE', 'समझें → अभ्यास करें')}</p>
-        <h2 id="qe-structured-practice-title">{readLocale(lesson.practice.title_by_locale, locale) || tx(locale, 'Practise what you learned', 'आपने जो सीखा उसका अभ्यास करें')}</h2>
-        <p>{tx(locale, 'One question at a time. Your response is stored by stable question ID, not by translated label.', 'एक समय में एक प्रश्न। उत्तर का संबंध स्थिर प्रश्न ID से है, अनुवादित विकल्प-लेबल से नहीं।')}</p>
+        <p className="qe-structured-eyebrow">{translateUi(uiLocale, 'legacy.web.explain.practice.be1cc225')}</p>
+        <h2 id="qe-structured-practice-title">{readLocale(lesson.practice.title_by_locale, locale) || translateUi(uiLocale, 'legacy.web.practise.what.you.learned.658c2550')}</h2>
+        <p>{translateUi(uiLocale, 'legacy.web.one.question.at.a.time.your.response.i.79d204de')}</p>
         {mode === 'admin-preview' && unavailableVisualCount > 0 && <p className="qe-structured-muted" role="status">
-          {unavailableVisualCount} {tx(locale, 'image-observation question(s) are blocked from student mode pending visual approval.', 'चित्र-अवलोकन प्रश्नों की दृश्य स्वीकृति लंबित है; वे विद्यार्थी मोड में अवरुद्ध हैं।')}
+          {unavailableVisualCount} {translateUi(uiLocale, 'legacy.web.image.observation.question.s.are.block.3a41534a')}
         </p>}
       </header>
       {!questions.length ? <div className="qe-structured-muted" role="status">
-        {tx(locale, 'No approved practice questions are available for this lesson yet.', 'इस पाठ के लिए अभी स्वीकृत अभ्यास प्रश्न उपलब्ध नहीं हैं।')}
+        {translateUi(uiLocale, 'legacy.web.no.approved.practice.questions.are.ava.0edf6991')}
       </div> : <>
-        <div className="qe-structured-progress" aria-label={tx(locale, 'Question progress', 'प्रश्न प्रगति')}>
-          <span>{tx(locale, 'Question', 'प्रश्न')} {index + 1} / {questions.length}</span>
+        <div className="qe-structured-progress" aria-label={translateUi(uiLocale, 'legacy.web.question.progress.ed856d19')}>
+          <span>{translateUi(uiLocale, 'legacy.web.question.a06d34df')} {index + 1} / {questions.length}</span>
           <progress value={index + 1} max={questions.length} />
         </div>
         <StructuredQuestionRenderer
@@ -188,14 +186,14 @@ export default function StructuredLessonExperience({
         />
         {submitError && <p className="qe-structured-error" role="alert">{submitError}</p>}
         {activeResult?.status === 'incorrect' && <button type="button" className="qe-structured-button-secondary" onClick={tryAgain}>
-          {tx(locale, 'Try again', 'फिर प्रयास करें')}
+          {translateUi(uiLocale, 'legacy.web.try.again.271e37a8')}
         </button>}
         {activeResult && <div className="qe-structured-navigation">
           <button type="button" className="qe-structured-button-secondary" disabled={index === 0} onClick={() => { setIndex(value => Math.max(0, value - 1)); setSubmitError(''); }}>
-            {tx(locale, 'Previous question', 'पिछला प्रश्न')}
+            {translateUi(uiLocale, 'legacy.web.previous.question.1bce3b9a')}
           </button>
           <button type="button" disabled={index >= questions.length - 1} onClick={() => { setIndex(value => Math.min(questions.length - 1, value + 1)); setSubmitError(''); }}>
-            {tx(locale, 'Next question', 'अगला प्रश्न')}
+            {translateUi(uiLocale, 'legacy.web.next.question.6f256664')}
           </button>
         </div>}
       </>}
