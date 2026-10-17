@@ -233,28 +233,120 @@ jobs:
           PY
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
-      - name: Rebuild only Layer 1 visual inventories for checkpoint resume
+      - name: Install ORAS for checkpoint recovery
         if: inputs.analysis_mode == 'resume_layers_4_5'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
-          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$GITHUB_WORKSPACE" <<'PY'
-          import json, subprocess, sys
-          from pathlib import Path
-          selection_path, source_root_arg, repo_arg = sys.argv[1:]
+          oras_archive="$RUNNER_TEMP/oras_1.2.0_linux_amd64.tar.gz"
+          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL \
+            "https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz" \
+            -o "$oras_archive"
+          tar -xzf "$oras_archive" -C "$RUNNER_TEMP" oras
+          sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
+          echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Restore each matching Layer 1 inventory bundle or build only missing inventories
+        if: inputs.analysis_mode == 'resume_layers_4_5'
+        shell: bash
+        env:
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$GITHUB_WORKSPACE" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
+          import hashlib, json, shutil, subprocess, sys, tarfile
+          from pathlib import Path, PurePosixPath
+          selection_path, source_root_arg, repo_arg, expected_package = sys.argv[1:]
           selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
           source_root, repo = Path(source_root_arg), Path(repo_arg)
+          def sha(path):
+              h=hashlib.sha256()
+              with path.open("rb") as stream:
+                  for chunk in iter(lambda: stream.read(1024*1024), b""): h.update(chunk)
+              return h.hexdigest()
+          def validate_inventory(work, source):
+              invdir=work/"inventory"
+              invpath=invdir/"visual-inventory.v1.json"
+              inv=json.loads(invpath.read_text(encoding="utf-8"))
+              source_meta=inv.get("source") or {}
+              if inv.get("schema_version")!="quantaedge.visual-inventory.v1" or source_meta.get("book_id")!=source["book_id"] or str(source_meta.get("pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
+                  raise SystemExit(f"{source['book_slug']}: restored inventory identity/schema mismatch.")
+              assets=inv.get("assets")
+              if not isinstance(assets,list): raise SystemExit(f"{source['book_slug']}: inventory assets are malformed.")
+              seen=set()
+              for asset in assets:
+                  if not isinstance(asset,dict): raise SystemExit(f"{source['book_slug']}: invalid inventory asset row.")
+                  aid=asset.get("asset_id")
+                  if not isinstance(aid,str) or not aid or aid in seen: raise SystemExit(f"{source['book_slug']}: missing/duplicate inventory asset ID.")
+                  seen.add(aid)
+                  if asset.get("kind") not in {"embedded_image","page_preview"}: continue
+                  rel=asset.get("asset_path")
+                  if not isinstance(rel,str) or not rel: raise SystemExit(f"{source['book_slug']}: eligible asset path missing.")
+                  target=(invdir/rel).resolve()
+                  if invdir.resolve() not in target.parents or not target.is_file(): raise SystemExit(f"{source['book_slug']}: unsafe/missing restored asset {rel!r}.")
+                  if sha(target)!=asset.get("asset_sha256"): raise SystemExit(f"{source['book_slug']}: restored asset SHA-256 mismatch for {aid}.")
+              return inv
           for source in selection["sources"]:
-              slug = source["book_slug"]
-              work = source_root / slug
-              invdir = work / "inventory"
-              subprocess.run([sys.executable, "scripts/extract_visual_asset_inventory.py", "--pdf", str(work / "source.pdf"), "--manifest", str(work / "source.manifest.json"), "--output-dir", str(invdir), "--preview-width", "1200"], cwd=repo, check=True)
-              inventory = json.loads((invdir / "visual-inventory.v1.json").read_text(encoding="utf-8"))
-              if inventory.get("source", {}).get("pdf_sha256") != source.get("sha256"):
-                  raise SystemExit(f"{slug}: resumed inventory source hash mismatch.")
-              if not isinstance(inventory.get("assets"), list):
-                  raise SystemExit(f"{slug}: resumed inventory has no assets list.")
-              print(json.dumps({"book_id": source["book_id"], "slug": slug, "inventory_assets": len(inventory["assets"]), "candidate_pack_rebuild": False}))
+              slug=source["book_slug"]; work=source_root/slug
+              invdir=work/"inventory"
+              repo_index=repo/"data"/"textbook-visuals"/slug/"visual-pipeline-index.v1.json"
+              prior=None
+              if repo_index.is_file():
+                  try: prior=json.loads(repo_index.read_text(encoding="utf-8"))
+                  except json.JSONDecodeError: raise SystemExit(f"{slug}: committed pipeline index is corrupted; refusing unsafe resume.")
+              matching=bool(prior and prior.get("source_book_id")==source["book_id"] and str(prior.get("source_pdf_sha256") or "").lower()==str(source["sha256"]).lower())
+              if prior and prior.get("source_book_id")==source["book_id"] and not matching:
+                  raise SystemExit(f"{slug}: source PDF edition differs from prior pipeline checkpoint. Use analyze_all to start a clean edition-bound run.")
+              bundle=prior.get("inventory_bundle") if matching else None
+              restored=False
+              if isinstance(bundle,dict):
+                  if bundle.get("package")!=expected_package or not isinstance(bundle.get("tag"),str) or not isinstance(bundle.get("tar_sha256"),str):
+                      raise SystemExit(f"{slug}: inventory bundle reference is malformed or belongs to another package.")
+                  pull_dir=work/".inventory-pull"
+                  shutil.rmtree(pull_dir,ignore_errors=True);pull_dir.mkdir(parents=True,exist_ok=True)
+                  pull=subprocess.run(["oras","pull",f"{expected_package}:{bundle['tag']}","--output",str(pull_dir)],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+                  archives=list(pull_dir.glob("*.tar.gz"))
+                  detail=(pull.stdout or "").strip()[-700:]
+                  if pull.returncode==0 and len(archives)==1:
+                      archive=archives[0]
+                      if sha(archive)!=bundle["tar_sha256"]:
+                          raise SystemExit(f"{slug}: inventory bundle tar SHA-256 mismatch; refusing to regenerate over a corrupt checkpoint.")
+                      with tarfile.open(archive,"r:gz") as tar:
+                          members=tar.getmembers()
+                          for member in members:
+                              name=PurePosixPath(member.name)
+                              if name.is_absolute() or ".." in name.parts or not name.parts or name.parts[0] not in {"inventory","source.manifest.json",source["text_jsonl_filename"]}:
+                                  raise SystemExit(f"{slug}: unsafe inventory bundle member {member.name!r}.")
+                              if member.issym() or member.islnk() or member.isdev():
+                                  raise SystemExit(f"{slug}: links/devices are forbidden in inventory bundle.")
+                          inventory_members=[m for m in members if PurePosixPath(m.name).parts[0]=="inventory"]
+                          if not inventory_members: raise SystemExit(f"{slug}: bundle has no inventory directory.")
+                          tar.extractall(path=work,members=inventory_members,filter="data")
+                      inv=validate_inventory(work,source)
+                      if not (work/".inventory-restored-from-ghcr.json").is_file():
+                          (work/".inventory-restored-from-ghcr.json").write_text(json.dumps({"source_pdf_sha256":source["sha256"],"tag":bundle["tag"],"tar_sha256":bundle["tar_sha256"]},indent=2)+"\n",encoding="utf-8")
+                      print(json.dumps({"book_id":source["book_id"],"inventory":"RESTORED_FROM_VERIFIED_GHCR_BUNDLE","asset_count":len(inv["assets"]),"candidate_pack_rebuild":False}))
+                      restored=True
+                  elif pull.returncode!=0 and ("404" in detail or "not found" in detail.lower() or "manifest unknown" in detail.lower()):
+                      print(json.dumps({"book_id":source["book_id"],"inventory":"PRIOR_BUNDLE_NOT_FOUND","fallback":"build Layer 1 only; preserve source-bound Layer 4 checkpoint","detail":detail}))
+                  else:
+                      raise SystemExit(f"{slug}: cannot safely recover prior inventory bundle; resume stopped. {detail}")
+                  shutil.rmtree(pull_dir,ignore_errors=True)
+              if not restored:
+                  invdir.mkdir(parents=True,exist_ok=True)
+                  subprocess.run([sys.executable,"scripts/extract_visual_asset_inventory.py","--pdf",str(work/"source.pdf"),"--manifest",str(work/"source.manifest.json"),"--output-dir",str(invdir),"--preview-width","1200"],cwd=repo,check=True)
+                  inv=validate_inventory(work,source)
+                  print(json.dumps({"book_id":source["book_id"],"inventory":"BUILT_BECAUSE_NO_VERIFIED_BUNDLE","asset_count":len(inv["assets"]),"candidate_pack_rebuild":False}))
+              candidate_path=repo/"data"/"textbook-visual-candidates-v3"/slug/"candidates.v3.json"
+              if candidate_path.is_file():
+                  pack=json.loads(candidate_path.read_text(encoding="utf-8"))
+                  if pack.get("schema_version")!="quantaedge.visual-candidate-pack.v3" or (pack.get("source") or {}).get("pdf_sha256")!=source["sha256"]:
+                      raise SystemExit(f"{slug}: existing candidate pack is stale/mismatched; use analyze_all to rebuild it.")
+              else:
+                  raise SystemExit(f"{slug}: no committed v3 candidate pack exists; resume mode will not rebuild candidate packs.")
           PY
 
       - name: Build review-only candidate packs and attachment manifests for all six source books
@@ -325,6 +417,7 @@ jobs:
           PY
 
       - name: Install ORAS and authenticate to GHCR
+        if: inputs.analysis_mode != 'resume_layers_4_5'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
