@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `632c9be0285ae59c78992f48322cb57762743440`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/632c9be0285ae59c78992f48322cb57762743440).
+**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `4af1e5760649917c595b4e67a2037f86d493bb48`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/4af1e5760649917c595b4e67a2037f86d493bb48).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
