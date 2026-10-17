@@ -56,6 +56,7 @@ assert(editor.includes('/api/v1/hrms/platform/institutions/theme-presets'), 'Ins
 assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && editor.includes('brandAccent'), 'Institution editor must save schema v2 source colours.');
 assert(editor.includes('appearance') && editor.includes('themePreviewGrid'), 'Institution editor must expose appearance and preview.');
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-preview') && editor.includes('themePreviewStates') && !editor.includes('contrastTextForPreview'), 'Institution preview must use the server-generated full palette rather than a duplicate client colour algorithm.');
+assert(editor.includes('view.palette.accentContainer') && editor.includes('view.palette.onAccentContainer') && editor.includes('view.palette.accentText'), 'Institution preview must demonstrate primary and accent-container contrast, not just the primary action.');
 assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes('qeAppearance'), 'Web runtime must resolve system/light/dark appearance.');
 assert(webRuntime.includes("export type AppearanceMode = 'institution' | 'system' | 'light' | 'dark'") && webRuntime.includes("const mode = savedMode ?? 'institution'") && webRuntime.includes('effectiveMode(mode, configuredMode, media.matches)'), 'Web users must be able to return to the institution-configured default after overriding appearance.');
 assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens') && webRuntime.includes('accentContainer'), 'Web runtime must map all tenant semantic roles, including accent containers.');
@@ -66,6 +67,8 @@ for (const role of ['background', 'surface', 'text-muted', 'primary-container', 
 }
 assert(webCss.includes('html[data-qe-appearance="dark"]'), 'Web CSS must define dark-mode surfaces/states.');
 assert(webCss.includes('/* Tenant semantic compatibility layer for the legacy tutor and parent controls.'), 'Legacy tutor and parent controls must have a semantic-token bridge.');
+assert(webCss.includes('.tutor-head.tutor-head--compact') && webCss.includes('.tutor-heading-copy>strong {\\n  color: var(--qe-color-on-surface);'), 'High-specificity compact tutor headers and titles must not override the tenant palette.');
+assert(webCss.includes('.tutor-language-indicator {\\n  background: var(--qe-color-surface-elevated);'), 'Tutor language indicator must use semantic neutral surfaces.');
 assert(webCss.includes('.tutor-launch {\n  background: var(--qe-color-primary);'), 'Tutor launch action must use the active tenant primary colour.');
 assert(webCss.includes('.tutor-message.user {\n  background: var(--qe-color-primary-container);'), 'Tutor learner messages must use tenant semantic container colours.');
 assert(webCss.includes('.parent-notice, .parent-courses-page__alert {\n  border-color: var(--qe-color-success-container);'), 'Parent feedback must keep semantic success colours while adopting a tenant palette.');
