@@ -331,13 +331,13 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         const nextSessionId = Number(body.sessionId);
         if (!Number.isFinite(nextSessionId) || nextSessionId <= 0) {
           setAvailable(false);
-          setError(languageRef.current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.tutor.returned.an.invalid.session..56b40f2f'));
+          setError(translateUi(languageRef.current.english ? 'english' : 'hinglish', 'legacy.web.the.tutor.returned.an.invalid.session..56b40f2f'));
           return;
         }
         setAvailable(Boolean(body.available));
         setSessionId(nextSessionId);
         if (!body.available) {
-          setError(languageRef.current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.ai.tutor.is.not.enabled.for.this.envir.fee73b3a'));
+          setError(translateUi(languageRef.current.english ? 'english' : 'hinglish', 'legacy.web.ai.tutor.is.not.enabled.for.this.envir.fee73b3a'));
           return;
         }
         const historyResponse = await fetch('/api/v1/tutor/sessions/' + nextSessionId + '/messages?limit=30', {
@@ -544,7 +544,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       setMode('EXPLAIN');
       if (!body.available) {
         const current = languageRef.current;
-        setError(current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.a.new.chat.was.created.but.the.tutor.i.a993d078'));
+        setError(translateUi(current.english ? 'english' : 'hinglish', 'legacy.web.a.new.chat.was.created.but.the.tutor.i.a993d078'));
       }
     } catch {
       const current = languageRef.current;
@@ -601,7 +601,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       if (typeof body.message !== 'string' || !body.message.trim()) {
         setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
         setInput(message);
-        setError(current.translateUi(english ? 'english' : 'hinglish', 'legacy.web.the.tutor.returned.an.empty.answer.ple.1947ed0d'));
+        setError(translateUi(current.english ? 'english' : 'hinglish', 'legacy.web.the.tutor.returned.an.empty.answer.ple.1947ed0d'));
         return;
       }
       setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string, created_at: new Date().toISOString() }]);
