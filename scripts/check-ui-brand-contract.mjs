@@ -41,6 +41,10 @@ const androidTenantMigration = read('services/api/src/main/resources/db/migratio
 const institutionTenantController = read('services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java');
 const institutionPlatformController = read('services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java');
 const institutionAuthService = read('services/api/src/main/java/com/quantaedge/api/InstitutionAuthService.java');
+const certificateController = read('services/api/src/main/java/com/quantaedge/api/CertificateController.java');
+const certificateRenderer = read('services/api/src/main/java/com/quantaedge/api/CertificateRenderer.java');
+const androidMainActivity = read('apps/android/app/src/main/java/com/quantaedge/android/MainActivity.kt');
+const androidLocalization = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
 const androidCertificateScreen = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
 const tutorService = read('services/api/src/main/java/com/quantaedge/api/TutorService.java');
 const colorThemeProvider = read('apps/web/app/components/ColorThemeProvider.tsx');
@@ -80,6 +84,13 @@ assert(institutionTenantController.includes('RequestParam(value="institutionCode
 assert(androidCertificateScreen.includes('institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }'), 'Android certificate issuance must preserve the current school issuer context.');
 assert(tutorService.includes('You are a helpful tutor for school learners') && !tutorService.includes('You are QuantaEdge Tutor for school learners'), 'Generated tutor answers must not identify QuantaEdge as the learner-facing tutor.');
 assert(colorThemeProvider.includes('brand?.themeTokens') && colorThemeProvider.includes('applyPalette(actual, tokens)'), 'Tenant identity must continue to feed the existing shared v2 theme provider without a parallel palette system.');
+assert(tenantBrandingProvider.includes('window.location.hash') && tenantBrandingProvider.includes('history.replaceState'), 'Invitation secrets must be captured from a URL fragment and removed from browser history.');
+assert(hrmsInstitutionPage.includes('url.hash=new URLSearchParams({join:joinCode}).toString()'), 'HRMS school invitations must keep private join tokens in URL fragments, not query strings.');
+assert(institutionAuthService.includes('String expectedTenantCode') && institutionAuthService.includes("and (?='' or t.tenant_code=?)") && institutionTenantController.includes('value(body,"institutionCode")'), 'Backend invitation redemption must bind membership to the tenant in the school link.');
+assert(certificateController.includes('resolveCertificateIssuer') && certificateController.includes('CertificateRenderer.CertificateBranding') && certificateRenderer.includes('institutionIssued'), 'Certificates must use the active school issuer name and approved logo when the learner has a matching membership.');
+assert(androidMainActivity.includes('institutionDisplayName') && androidMainActivity.includes('BuildConfig.INSTITUTION_DISPLAY_NAME'), 'Learner checkout must display school identity in a tenant build while retaining its correct payment context.');
+assert(androidLocalization.includes('LocalInstitutionBrandResolutionPending') && androidLocalization.includes('replace("QuantaEdge", name)'), 'Android learner copy must suppress the provider name while a school identity is resolving and after it resolves.');
+assert(androidBuildConfig.includes('A tenant-branded Android package requires QUANTAEDGE_INSTITUTION_ICON_PATH') && androidBuildConfig.includes('configuredInstitutionApplicationId'), 'A tenant-specific Android release must require a school launcher image and separate package ID.');
 assert(schoolEntryPage.includes('brand.displayName') && schoolEntryPage.includes('/login/student') && schoolEntryPage.includes('/signup'), 'A direct school invitation must show the school brand before learner authentication.');
 assert(hrmsInstitutionPage.includes('schoolLearningLink') && hrmsInstitutionPage.includes("new URL('/school/" ) && hrmsInstitutionPage.includes('Copy school learning link'), 'HRMS must generate a shareable school-branded invite URL rather than only exposing the raw join code.');
 assert(androidAppManifest.includes('${institutionLinkPath}') && androidAppManifest.includes('${applicationLabel}') && androidAppManifest.includes('${applicationIcon}'), 'Android launcher identity and app-link route must be configured per branded build.');
