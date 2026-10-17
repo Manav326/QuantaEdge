@@ -25,13 +25,13 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="qe-institution" android:host="join" />
+                <data android:scheme="${institutionLinkScheme}" android:host="join" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="qe.thinkwithsujeet.in" android:pathPrefix="/school/" />
+                <data android:scheme="https" android:host="qe.thinkwithsujeet.in" android:pathPrefix="${institutionLinkPath}" />
             </intent-filter>
         </activity>
         <provider
