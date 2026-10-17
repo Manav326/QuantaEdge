@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useTenantBranding } from './TenantBrandingProvider';
 
 type BrandVariant = 'header' | 'compact' | 'footer' | 'auth';
 type QuantaEdgeBrandProps = {
@@ -14,23 +17,37 @@ export default function QuantaEdgeBrand({
   variant = 'header',
   className = '',
 }: QuantaEdgeBrandProps) {
+  const { brand } = useTenantBranding();
+  const tenantName = brand?.displayName?.trim();
+  const accessibleLabel = tenantName || BRAND_LABEL;
+  const logoUrl = brand?.logoUrl && brand.logoUrl.startsWith('/api/v1/institution/public/branding-assets/')
+    ? brand.logoUrl
+    : null;
   const lockup = (
     <span className={`qe-brand qe-brand--${variant}`}>
       <span className="qe-brand__lockup">
-        <img className="qe-brand__icon" src="/branding/quantaedge-icon.png" alt="" width={192} height={192} aria-hidden="true" />
+        {brand
+          ? logoUrl
+            ? <img className="qe-brand__icon qe-brand__tenant-logo" src={logoUrl} alt="" width={192} height={192} aria-hidden="true" />
+            : <span className="qe-brand__tenant-mark" aria-hidden="true">{(tenantName || 'S').slice(0, 1).toLocaleUpperCase()}</span>
+          : <img className="qe-brand__icon" src="/branding/quantaedge-icon.png" alt="" width={192} height={192} aria-hidden="true" />}
         <span className="qe-brand__copy">
-          <span className="qe-brand__name" aria-hidden="true">
-            <span className="qe-brand__name-quant">Quanta</span><span className="qe-brand__name-edge">Edge</span>
-          </span>
-          <span className="qe-brand__tagline">Smarter Decisions. Greater Growth.</span>
+          {brand
+            ? <span className="qe-brand__name qe-brand__tenant-name">{tenantName || 'Your school'}</span>
+            : <>
+                <span className="qe-brand__name" aria-hidden="true">
+                  <span className="qe-brand__name-quant">Quanta</span><span className="qe-brand__name-edge">Edge</span>
+                </span>
+                <span className="qe-brand__tagline">Smarter Decisions. Greater Growth.</span>
+              </>}
         </span>
       </span>
     </span>
   );
 
   if (href === null) {
-    return <div className={`qe-brand-static ${className}`.trim()} role="img" aria-label={BRAND_LABEL}>{lockup}</div>;
+    return <div className={`qe-brand-static ${className}`.trim()} role="img" aria-label={accessibleLabel}>{lockup}</div>;
   }
 
-  return <Link href={href} className={`qe-brand-link ${className}`.trim()} aria-label={BRAND_LABEL}>{lockup}</Link>;
+  return <Link href={href} className={`qe-brand-link ${className}`.trim()} aria-label={accessibleLabel}>{lockup}</Link>;
 }
