@@ -228,7 +228,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
         <span className="qe-question-type">{questionLabel}</span>
         <span className="qe-question-context">{q.exam_format||translateUi(locale, 'legacy.web.lesson.check.73221abd')}{q.marks?' · '+q.marks+' '+translateUi(locale, 'legacy.web.marks.57368a8d'):''}</span>
       </div>
-      <span className="qe-question-source">{q.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:q.source_kind?<MathText text={q.source_kind.replaceAll('_',' ').toLowerCase()}/>:{locale==='english'?'Practice question':'अभ्यास प्रश्न'}}</span>
+      <span className="qe-question-source">{q.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:q.source_kind?<MathText text={q.source_kind.replaceAll('_',' ').toLowerCase()}/>:locale==='english'?'Practice question':'अभ्यास प्रश्न'}</span>
     </div>
     <div className="qe-question-card__prompt"><MathText text={q.prompt}/></div>
 
