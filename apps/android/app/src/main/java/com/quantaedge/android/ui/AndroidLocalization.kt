@@ -388,6 +388,8 @@ internal fun localizedUiText(source: String): String {
     fun brandText(value: String): String {
         val name = institutionName ?: return value
         return value
+            .replace("Contact QuantaEdge support to create more accounts.", "Ask your school administrator to create more accounts.")
+            .replace("और खाते बनाने के लिए QuantaEdge support से संपर्क करें।", "अधिक खाते बनवाने के लिए अपने विद्यालय प्रशासक से संपर्क करें।")
             .replace("QuantaEdge server", "learning service")
             .replace("QuantaEdge Server", "learning service")
             .replace("QuantaEdge Tutor", "$name tutor")
