@@ -867,10 +867,12 @@ public class LearningClassController {
 
   @GetMapping("/learning/live-classes")
   public Map<String,Object> studentLiveClasses(
-      @RequestParam(required=false) String subjectCode,@RequestParam(defaultValue="25") Integer limit,
-      @RequestParam(defaultValue="0") Integer offset,
+      @RequestParam(required=false) String subjectCode,@RequestParam(required=false) Long courseId,
+      @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    Long courseScopeId=courseId==null?0L:courseId;
+    requireStudentCourseScope(context.studentId(), courseId);
     String subjectFilter=safeText(subjectCode,40);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
@@ -896,9 +898,10 @@ public class LearningClassController {
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (?='' or s.code=?)
+        and (?=0 or s.program_id=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
-      """,context.studentId(),subjectFilter,subjectFilter,rowLimit,rowOffset);
+      """,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -915,8 +918,9 @@ public class LearningClassController {
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (?='' or s.code=?)
+        and (?=0 or s.program_id=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),subjectFilter,subjectFilter);
+      """,Long.class,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -1002,10 +1006,12 @@ public class LearningClassController {
 
   @GetMapping("/learning/recorded-classes")
   public Map<String,Object> studentRecordedClasses(
-      @RequestParam(required=false) String subjectCode,@RequestParam(defaultValue="25") Integer limit,
-      @RequestParam(defaultValue="0") Integer offset,
+      @RequestParam(required=false) String subjectCode,@RequestParam(required=false) Long courseId,
+      @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    Long courseScopeId=courseId==null?0L:courseId;
+    requireStudentCourseScope(context.studentId(), courseId);
     String subjectFilter=safeText(subjectCode,40);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
@@ -1040,9 +1046,10 @@ public class LearningClassController {
         limit 1
       ) download on true
       where rc.status='PUBLISHED' and (?='' or s.code=?)
+        and (?=0 or s.program_id=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by coalesce(ch.teaching_order,ch.sort_order),rc.created_at desc,rc.id desc limit ? offset ?
-      """,context.studentId(),subjectFilter,subjectFilter,rowLimit,rowOffset);
+      """,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -1050,8 +1057,9 @@ public class LearningClassController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       where rc.status='PUBLISHED' and (?='' or s.code=?)
+        and (?=0 or s.program_id=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),subjectFilter,subjectFilter);
+      """,Long.class,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -1181,6 +1189,17 @@ public class LearningClassController {
       """, studentId, recordingId);
     if (rows.isEmpty()) throw notFound("Recorded class", recordingId);
     return new LinkedHashMap<>(rows.getFirst());
+  }
+
+  private void requireStudentCourseScope(long studentId, Long courseId) {
+    if (courseId == null) return;
+    if (courseId <= 0L) throw new IllegalArgumentException("Course ID must be positive.");
+    Boolean enrolled=jdbc.queryForObject("""
+      select exists(select 1 from student_program_enrollment e
+        join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where e.student_id=? and e.program_id=? and e.status='ACTIVE')
+      """,Boolean.class,studentId,courseId);
+    if (!Boolean.TRUE.equals(enrolled)) throw new SecurityException("Active enrolment in this course is required.");
   }
 
   private long positiveLong(Object value,String label) {
