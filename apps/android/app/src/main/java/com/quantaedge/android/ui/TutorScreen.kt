@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -346,6 +347,8 @@ fun TutorScreen(
     onMaximize: () -> Unit = {}
 ) {
     val language = LocalQuantaLanguage.current
+    val institutionBrand = LocalInstitutionBrandIdentity.current
+    val institutionBrandResolving = LocalInstitutionBrandResolutionPending.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var input by rememberSaveable(sessionId) { mutableStateOf("") }
     var pendingInput by rememberSaveable(sessionId) { mutableStateOf("") }
@@ -390,11 +393,34 @@ fun TutorScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Image(
-                painter = painterResource(R.drawable.quantaedge_icon),
-                contentDescription = "QuantaEdge",
-                modifier = Modifier.size(29.dp).clip(RoundedCornerShape(8.dp))
-            )
+            when {
+                institutionBrand?.logo != null -> Image(
+                    bitmap = institutionBrand.logo.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.size(29.dp).clip(RoundedCornerShape(8.dp))
+                )
+                institutionBrand != null -> Box(
+                    modifier = Modifier.size(29.dp).clip(RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        institutionBrand.displayName.take(1).uppercase(),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+                }
+                institutionBrandResolving -> Box(
+                    modifier = Modifier.size(29.dp).clip(RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                )
+                else -> Image(
+                    painter = painterResource(R.drawable.quantaedge_icon),
+                    contentDescription = "QuantaEdge",
+                    modifier = Modifier.size(29.dp).clip(RoundedCornerShape(8.dp))
+                )
+            }
             Column(verticalArrangement = Arrangement.spacedBy(1.dp), modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(t("Your tutor", "आपका ट्यूटर"), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
