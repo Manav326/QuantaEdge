@@ -1,5 +1,6 @@
 'use client';
 
+import AccountIdentitySettings from '../../components/AccountIdentitySettings';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
@@ -333,6 +334,7 @@ export default function ParentProfilePage() {
             </div>
           </form>
         )}
+        <AccountIdentitySettings />
       </div>
     </main>
   );
