@@ -5,6 +5,7 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminWorkspaceContext } from './AdminWorkspaceContext';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { translateUi } from '../i18n/catalog';
 import {
   ADMIN_NAV_GROUPS,
   ADMIN_OVERVIEW_ITEM,
@@ -36,9 +37,10 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
   const workspace = useContext(AdminWorkspaceContext);
   const { insideWorkspace, locale, role: workspaceRole, permissions: workspacePermissions, displayName: workspaceDisplayName } = workspace;
   const visibleRole = insideWorkspace ? workspaceRole : role;
+  const t = (key: string, values: Record<string, string | number> = {}) => translateUi(locale, key, values);
   const visiblePermissions = insideWorkspace ? workspacePermissions : permissions;
-  const visibleAccountName = displayName || (insideWorkspace ? workspaceDisplayName : accountName) || 'Staff account';
-  const roleLabel = adminRoleLabel(visibleRole);
+  const visibleAccountName = displayName || (insideWorkspace ? workspaceDisplayName : accountName) || t('common.account.staff');
+  const roleLabel = adminRoleLabel(visibleRole, locale);
   const compactRoleLabel = adminRoleCompactLabel(visibleRole);
   const roleClass = adminRoleClass(visibleRole);
   const router = useRouter();
@@ -109,20 +111,20 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
           variant={collapsed ? 'compact' : 'header'}
           className={'qe-admin-brand-lockup' + (collapsed ? ' qe-admin-brand-lockup--collapsed' : '')}
         />
-        {!collapsed ? <small className="qe-admin-brand-context">{variant === 'content' ? 'ACADEMIC CONSOLE' : 'ADMIN CONSOLE'}</small> : null}
+        {!collapsed ? <small className="qe-admin-brand-context">{t(variant === 'content' ? 'admin.brand.academicConsole' : 'admin.brand.adminConsole')}</small> : null}
         <button
           type="button"
           className="qe-sidebar-toggle"
           onClick={toggleCollapsed}
-          aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+          aria-label={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')}
           aria-expanded={!collapsed}
-          title={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+          title={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')}
         >{collapsed ? '»' : '«'}</button>
       </div>
 
       <div className="qe-sidebar-scroll">
-        {!collapsed ? <div className="sidebar-label">{variant === 'content' ? 'LEARNING OPERATIONS' : 'WORKSPACE'}</div> : null}
-        <nav className="qe-admin-navigation" aria-label="Admin navigation">
+        {!collapsed ? <div className="sidebar-label">{t(variant === 'content' ? 'admin.navigation.learningOperations' : 'common.navigation.workspace')}</div> : null}
+        <nav className="qe-admin-navigation" aria-label={t('admin.navigation.label')}>
           {showOverview ? (
             <Link
               href={ADMIN_OVERVIEW_ITEM.href}
@@ -175,14 +177,14 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
         {variant === 'overview' ? (
           <div className="qe-admin-overview-shortcuts">
             <div className="sidebar-divider" />
-            {!collapsed ? <div className="sidebar-label">OVERVIEW SHORTCUTS</div> : null}
-            <a href="#analytics" title={collapsed ? 'Learning analytics' : undefined}>
+            {!collapsed ? <div className="sidebar-label">{t('admin.navigation.overviewShortcuts')}</div> : null}
+            <a href="#analytics" title={collapsed ? t('admin.navigation.learningAnalytics') : undefined}>
               <span className="qe-nav-icon" aria-hidden="true">◌</span>
-              <span className="qe-nav-label">Learning analytics</span>
+              <span className="qe-nav-label">{t('admin.navigation.learningAnalytics')}</span>
             </a>
-            <a href="#governance" title={collapsed ? 'Content governance' : undefined}>
+            <a href="#governance" title={collapsed ? t('admin.navigation.contentGovernance') : undefined}>
               <span className="qe-nav-icon" aria-hidden="true">✓</span>
-              <span className="qe-nav-label">Content governance</span>
+              <span className="qe-nav-label">{t('admin.navigation.contentGovernance')}</span>
             </a>
           </div>
         ) : null}
@@ -195,8 +197,8 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
             <strong title={visibleAccountName}>{visibleAccountName}</strong>
             <span
               className={'qe-staff-role-badge qe-staff-role-' + roleClass}
-              title={'Assigned role: ' + roleLabel}
-              aria-label={'Assigned role: ' + roleLabel}
+              title={t('common.account.assignedRole', { role: roleLabel })}
+              aria-label={t('common.account.assignedRole', { role: roleLabel })}
             >
               <span className="qe-staff-role-dot" aria-hidden="true" />
               <span className="qe-staff-role-full">{roleLabel}</span>
@@ -204,9 +206,9 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
             </span>
           </div>
         </div>
-        <button className="qe-sidebar-logout" type="button" aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'} title={locale === 'english' ? 'Log out' : 'लॉग आउट'} onClick={() => void logout()}>
+        <button className="qe-sidebar-logout" type="button" aria-label={t('common.actions.signOut')} title={t('common.actions.signOut')} onClick={() => void logout()}>
           <span className="qe-sidebar-logout-icon" aria-hidden="true">↪</span>
-          <span className="qe-sidebar-logout-label">{locale === 'english' ? 'Log out' : 'लॉग आउट'}</span>
+          <span className="qe-sidebar-logout-label">{t('common.actions.signOut')}</span>
         </button>
       </div>
     </aside>
