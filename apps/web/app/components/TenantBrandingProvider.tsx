@@ -51,17 +51,17 @@ function approvedAssetUrl(url: unknown, code: string, type: 'logo' | 'app-icon')
 }
 
 /** Update identity metadata only; theme tokens/presets are managed by ColorThemeProvider. */
-function applyTenantIdentity(brand: TenantBrand | null) {
+function applyTenantIdentity(brand: TenantBrand | null, institutionContextRequested = false) {
   const root = document.documentElement;
   if (brand) root.dataset.tenantBrandCode = brand.institutionCode;
   else delete root.dataset.tenantBrandCode;
 
   const title = brand?.displayName?.trim();
-  document.title = title || DEFAULT_TITLE;
+  document.title = title || (institutionContextRequested ? 'Learning space' : DEFAULT_TITLE);
   const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-  if (description) description.content = title ? 'Learning and progress with ' + title + '.' : DEFAULT_DESCRIPTION;
+  if (description) description.content = title ? 'Learning and progress with ' + title + '.' : institutionContextRequested ? 'Your school learning space.' : DEFAULT_DESCRIPTION;
   const appName = document.querySelector<HTMLMetaElement>('meta[name="application-name"]');
-  if (appName) appName.content = title || 'QuantaEdge';
+  if (appName) appName.content = title || (institutionContextRequested ? 'Learning space' : 'QuantaEdge');
 
   const iconUrl = brand?.appIconUrl && approvedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon')
     ? brand.appIconUrl
@@ -81,7 +81,7 @@ function applyTenantIdentity(brand: TenantBrand | null) {
         letter + '</text></svg>';
       link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
     } else {
-      link.href = link.rel === 'apple-touch-icon' ? '/branding/quantaedge-icon.png' : '/favicon.svg';
+      link.href = institutionContextRequested ? '/favicon.svg' : link.rel === 'apple-touch-icon' ? '/branding/quantaedge-icon.png' : '/favicon.svg';
     }
   });
 }
@@ -188,6 +188,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     const code = normalizedCode(input);
     if (!code) return false;
     setIsResolving(true);
+    setInstitutionContextRequested(true);
     try {
       const next = await fetchTenantBrand(code);
       setBrand(next);
@@ -198,7 +199,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     } catch {
       saveSessionCode(null);
       setBrand(null);
-      applyTenantIdentity(null);
+      applyTenantIdentity(null, true);
       return false;
     } finally {
       setIsResolving(false);
@@ -225,7 +226,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const storedCode = hasUrlCode ? null : readSessionCode();
       const candidate = urlCode || storedCode;
       const storedJoinTenant = readPendingJoinTenantCode();
-      setInstitutionContextRequested(Boolean(hasUrlCode || candidate || hasUrlJoin || storedJoinTenant));
+      let contextRequested = Boolean(hasUrlCode || candidate || hasUrlJoin || storedJoinTenant);
+      setInstitutionContextRequested(contextRequested);
       if (hasUrlCode && !urlCode) saveSessionCode(null);
 
       const redeemPendingJoin = async (expectedInstitutionCode: string | null): Promise<string | null> => {
@@ -281,9 +283,9 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           return;
         } catch {
           if (cancelled) return;
-          if (hasUrlCode) saveSessionCode(null);
+          saveSessionCode(null);
           setBrand(null);
-          applyTenantIdentity(null);
+          applyTenantIdentity(null, true);
         } finally {
           if (!cancelled) setIsResolving(false);
         }
@@ -319,7 +321,10 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
             const body = await response.json() as { institutions?: Array<{
               tenant_code?: string; institution_status?: string; membership_status?: string;
             }>; requiresInstitutionContext?: boolean };
-            if (body.requiresInstitutionContext) setInstitutionContextRequested(true);
+            if (body.requiresInstitutionContext) {
+              contextRequested = true;
+              setInstitutionContextRequested(true);
+            }
             const active = (body.institutions || []).filter(item =>
               item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE');
             if (active.length === 1 && active[0].tenant_code) {
@@ -339,7 +344,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       }
       if (!cancelled) {
         setBrand(null);
-        applyTenantIdentity(null);
+        applyTenantIdentity(null, contextRequested);
+        setInstitutionContextRequested(contextRequested);
         setIsResolving(false);
       }
     };
