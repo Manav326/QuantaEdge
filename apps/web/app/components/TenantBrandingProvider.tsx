@@ -232,8 +232,16 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const urlCode = codeFromCurrentUrl();
       const hasUrlJoin = urlHasJoinParam();
       const urlJoin = joinCodeFromCurrentUrl();
-      if (hasUrlJoin) savePendingJoinCode(urlJoin, urlCode);
-      else if (urlCode && readPendingJoinCode() && readPendingJoinTenantCode() !== urlCode) savePendingJoinCode(null);
+      if (hasUrlJoin) {
+        savePendingJoinCode(urlJoin, urlCode);
+        // Invite secrets live in the URL fragment for transport; once safely stored in
+        // session storage, remove them from the address bar/history before authentication.
+        if (urlJoin && readPendingJoinCode() === urlJoin) {
+          window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
+        }
+      } else if (urlCode && readPendingJoinCode() && readPendingJoinTenantCode() !== urlCode) {
+        savePendingJoinCode(null);
+      }
       const pendingJoinCodeAtStart = readPendingJoinCode();
       const storedJoinTenant = readPendingJoinTenantCode();
       const storedCode = hasUrlCode || (pendingJoinCodeAtStart && !storedJoinTenant) ? null : readSessionCode();
