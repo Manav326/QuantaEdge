@@ -1,0 +1,3 @@
+resume_layers_1_5_class6_curiosity=2026-10-17T07:30:00+05:30
+reason=repair_visual_checkpoint_and_rebuild_source_bound_layer5_ledger
+source_book_id=ncert-c6-english-fecu1
