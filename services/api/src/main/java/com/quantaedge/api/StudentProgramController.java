@@ -112,22 +112,27 @@ public class StudentProgramController {
       throw new SecurityException("This course is not available or is not active.");
     }
     Map<String,Object> course = matches.getFirst();
-    Boolean paymentRequired = jdbc.queryForObject("""
-      select exists(
-        select 1 from course_marketplace_offer o
-        where o.course_id=? and o.status='PUBLISHED' and o.price_paise>0
-      )
-      and not exists(
-        select 1 from student_program_enrollment e
-        where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
-      )
-      and not exists(
-        select 1 from course_purchase cp
-        where cp.student_id=? and cp.course_id=?
-      )
-      """, Boolean.class, courseId, context.studentId(), courseId, context.studentId(), courseId);
-    if (Boolean.TRUE.equals(paymentRequired)) {
-      throw new SecurityException("Purchase this course before opening its lessons.");
+    // Existing enrollment/purchase permits resuming the course regardless of later offer edits.
+    // A new self-enrollment is allowed only for an explicitly published free offer. Missing,
+    // draft, archived, and paid offers must never turn into a free-enrollment path.
+    Boolean hasAuthorisedEnrolment = jdbc.queryForObject("""
+      select
+        exists(
+          select 1 from student_program_enrollment e
+          where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
+        )
+        or exists(
+          select 1 from course_purchase cp
+          where cp.student_id=? and cp.course_id=?
+        )
+        or exists(
+          select 1 from course_marketplace_offer o
+          where o.course_id=? and o.status='PUBLISHED'
+            and o.price_paise=0 and o.currency='INR'
+        )
+      """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId, courseId);
+    if (!Boolean.TRUE.equals(hasAuthorisedEnrolment)) {
+      throw new SecurityException("This course is not available for self-enrolment. Choose a published free course or purchase its paid offer.");
     }
     List<Map<String,Object>> subjects = jdbc.queryForList("""
       select s.id,s.code
