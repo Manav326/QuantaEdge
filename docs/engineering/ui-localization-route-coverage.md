@@ -46,7 +46,7 @@
 | `/content` | `apps/admin/app/content/page.tsx` | Needs audit/migration | Audit Content Studio editor, preview, visual review and validation. |
 | `/employees` | `apps/admin/app/employees/page.tsx` | Needs audit/migration | Audit employee and permission-facing text. |
 | `/legacy-content` | `apps/admin/app/legacy-content/page.tsx` | Needs audit/migration | Inspect retained route before deciding deprecation or migration. |
-| `/login` | `apps/admin/app/login/page.tsx` | First pass — audit pending | Check authentication failures and pre-login language selector. |
+| `/login` | `apps/admin/app/login/page.tsx` | Instruction copy catalog-backed; selector registry-driven — CI pending, audit open | Verify server failures, OTP activation, permission errors and language switch in browser. |
 | `/parents` | `apps/admin/app/parents/page.tsx` | First pass — audit pending | Check parent/child permissions, confirmations and status feedback. |
 | `/questions` | `apps/admin/app/questions/page.tsx` | Localized in current slice — CI pending | Verify permission guidance, prompts, history snapshots and all visible status/error variants. |
 | `/resources` | `apps/admin/app/resources/page.tsx` | Needs audit/migration | Translate PDF library forms, ingestion/preview and assignment states. |
@@ -65,7 +65,7 @@
 | `/assignments` | `apps/people/app/assignments/page.tsx` | First pass — audit pending | Verify proposal/history/workload dialogs and error feedback. |
 | `/attendance` | `apps/people/app/attendance/page.tsx` | First pass — audit pending | Verify attendance correction, leave, holiday and balance workflows. |
 | `/change-password` | `apps/people/app/change-password/page.tsx` | First pass — audit pending | Verify password rules, submission and server errors. |
-| `/login` | `apps/people/app/login/page.tsx` | First pass — audit pending | Verify fields, validation, errors and language before login. |
+| `/login` | `apps/people/app/login/page.tsx` | Username placeholder catalog-backed — CI pending, audit open | Verify password errors, forced-change redirect, language before login and remaining raw copy. |
 | `/my-classes` | `apps/people/app/my-classes/page.tsx` | First pass — audit pending | Check join-window guidance, schedules and private-link errors. |
 | `/payroll` | `apps/people/app/payroll/page.tsx` | First pass — audit pending | Verify period/snapshot/approval/reconciliation labels and permissions. |
 | `/self-service` | `apps/people/app/self-service/page.tsx` | First pass — audit pending | Verify employee profile, requests and lifecycle dialogs. |

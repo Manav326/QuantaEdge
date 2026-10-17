@@ -394,3 +394,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Migrated Admin structured lesson preview fallback feedback, publication gate warnings, question progress/instructions, question navigation and validation errors to the central UI translator. The UI now follows the Admin UI locale; the lesson's selected content locale still controls lesson content, accepted answers and feedback from the lesson data.
 - Simplified long static preview instructions while preserving the publication gate and the warning that author-only grading keys must be sanitized before student display.
 - Added guard coverage for these two inline-pair helper patterns plus 20 new paired catalog keys. Route audits and full browser acceptance remain open pending CI and manual testing.
+
+
+## Pre-login language and authentication copy — Admin and People Operations
+
+- Admin login helper sentences now use central catalog keys with concise wording. Client-owned malformed API response messages are catalog-backed with interpolated HTTP status.
+- Admin's pre-login language selector now renders options from the central registry and shows language names only—no visible caption or fixed English/Hinglish list.
+- People Operations login's username placeholder is catalog-backed. Password-only HRMS authentication and OTP-based educational staff authentication remain unchanged.
+- Added CI regressions for removed literal helper sentences, fixed Admin language options and the People login placeholder; new catalog keys and placeholder parity are checked in both locales.
+- Both routes remain first-pass: inspect remaining embedded copy, responsive/browser behavior and all error states before marking route audit complete.

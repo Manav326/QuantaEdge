@@ -5,17 +5,18 @@ import {useRouter} from 'next/navigation';
 import {useContext, useState} from 'react';
 import { AdminWorkspaceContext, type AdminLocale } from '../components/AdminWorkspaceContext';
 import { useUiTranslation } from '../i18n/useUiTranslation';
+import { UI_LOCALE_OPTIONS } from '../i18n/catalog';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 
-async function readApiJson(response: Response): Promise<any> {
+async function readApiJson(response: Response, t: (key: string, values?: Record<string, string | number>) => string): Promise<any> {
   const body = await response.text();
   try {
     return body ? JSON.parse(body) : {};
   } catch {
     if (!response.ok) {
-      throw new Error(`QuantaEdge server error (${response.status}). The API may be unavailable; please retry after the service is healthy.`);
+      throw new Error(t('admin.login.serverUnavailable', { status: response.status }));
     }
-    throw new Error(`QuantaEdge returned an unexpected response (${response.status}). Please retry.`);
+    throw new Error(t('admin.login.unexpectedResponse', { status: response.status }));
   }
 }
 
@@ -42,7 +43,7 @@ export default function AdminLogin() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({mobile, purpose: 'STAFF_LOGIN'})
       });
-      const body = await readApiJson(response);
+      const body = await readApiJson(response, t);
       if (!response.ok) throw new Error(body.message || body.detail || body.error || t('admin.login.couldNotSendCode'));
       setFirstAccess(Boolean(body.firstAccess));
       setDevCode(body.devCode || '');
@@ -66,7 +67,7 @@ export default function AdminLogin() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({mobile, otp, purpose: 'STAFF_LOGIN', firstAccess})
       });
-      const body = await readApiJson(response);
+      const body = await readApiJson(response, t);
       if (!response.ok) throw new Error(body.message || body.detail || body.error || t('admin.login.couldNotVerifyCode'));
 
       // The successful verification response already includes the authenticated staff
@@ -83,7 +84,7 @@ export default function AdminLogin() {
         throw new Error(t('admin.login.otpNoSession'));
       }
       const meResponse = await fetch('/api/v1/auth/me', {cache: 'no-store', credentials: 'same-origin'});
-      const me = await readApiJson(meResponse);
+      const me = await readApiJson(meResponse, t);
       if (!meResponse.ok || !me.staffId) {
         throw new Error(me.message || me.detail || t('admin.login.sessionNotConfirmed'));
       }
@@ -145,9 +146,9 @@ export default function AdminLogin() {
         </div>
         <div className="qe-login-card">
           <label className="qe-admin-language-switcher qe-admin-login-language-switcher">
-          <span aria-hidden="true">文</span><span className="qe-admin-language-label">{t('admin.language.label')}</span>
+          <span aria-hidden="true">文</span>
           <select value={workspace.locale} onChange={event => workspace.setLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
-            <option value="hinglish">{t('common.language.hinglish')}</option><option value="english">{t('common.language.english')}</option>
+            {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
           </select>
         </label>
         <div className="qe-login-card-top">
@@ -159,10 +160,10 @@ export default function AdminLogin() {
             <span className="qe-login-overline">{step === 1 ? t('admin.login.workspaceAwaits') : firstAccess ? t('admin.login.firstTimeAccess') : t('admin.login.welcomeBack')}</span>
             <h2>{step === 1 ? t('admin.login.signInTeam') : firstAccess ? t('admin.login.activateInvitation') : t('admin.login.verifyIdentity')}</h2>
             <p>{step === 1
-              ? 'Use the mobile number assigned to you by your QuantaEdge administrator.'
+              ? t('admin.login.mobileStepInstruction')
               : firstAccess
-                ? 'Your administrator has created your staff account. Verify your assigned mobile to activate access.'
-                : 'Enter the six-digit code sent to your assigned mobile number.'}</p>
+                ? t('admin.login.firstAccessInstruction')
+                : t('admin.login.otpStepInstruction')}</p>
           </div>
 
           {step === 1 ? (
@@ -212,7 +213,7 @@ export default function AdminLogin() {
                 autoFocus
                 required
               />
-              <small className="qe-login-field-help">{firstAccess ? 'Verify your assigned number to activate your invitation.' : 'Enter the code sent to your registered staff number.'}</small>
+              <small className="qe-login-field-help">{firstAccess ? t('admin.login.firstAccessOtpHelp') : t('admin.login.registeredOtpHelp')}</small>
               {devCode && <div className="qe-login-dev-code"><span>{t("admin.login.localDevCode")}</span><strong>{devCode}</strong><small>{t("admin.login.devCodeNote")}</small></div>}
               {error && <div className="qe-login-error" role="alert"><strong>{t("admin.login.verificationIncomplete")}</strong><span>{error}</span></div>}
               <button className="qe-login-primary" disabled={busy || !/^\d{6}$/.test(otp)} type="submit">

@@ -77,7 +77,7 @@ export default function PeopleLogin() {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               autoComplete="username"
-              placeholder="HRMS_Admin"
+              placeholder={t('people.auth.usernamePlaceholder')}
               required
             />
             <label htmlFor="password">{t('people.auth.password')}</label>

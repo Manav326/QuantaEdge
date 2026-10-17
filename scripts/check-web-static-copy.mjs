@@ -34,6 +34,7 @@ const required = [
   'common.accountMenu.openOptions', 'common.accountMenu.options', 'common.accountMenu.openParentMenu', 'common.accountMenu.parentAccount', 'common.accountMenu.parentOptions', 'common.accountMenu.openStudentSettings', 'common.accountMenu.studentOptions', 'common.accountMenu.loggingOut', 'common.accountMenu.logOut', 'common.navigation.closeMenu', 'common.navigation.adminLabel', 'common.navigation.primaryWorkspace', 'common.pagination.navigationForItems', 'common.pagination.noItems', 'common.pagination.showingRange', 'common.pagination.singleItem', 'common.pagination.itemCount', 'common.pagination.rowsPerPage', 'common.pagination.previousPage', 'common.pagination.previous', 'common.pagination.pageNumber', 'common.pagination.nextPage', 'common.pagination.next', 'common.pagination.tableNavigation', 'common.pagination.pageOf',
   'admin.structuredPreview.answerChecked', 'admin.structuredPreview.shortAnswerNeedsReview', 'admin.structuredPreview.gradingAdapterNeeded', 'admin.structuredPreview.submitEndpointUnavailable', 'admin.structuredPreview.answerSubmitFailed', 'admin.structuredPreview.lessonUnavailable', 'admin.structuredPreview.payloadNotSanitized', 'admin.structuredPreview.publicationGatePending', 'admin.structuredPreview.explainPracticeEyebrow', 'admin.structuredPreview.practiceTitle', 'admin.structuredPreview.practiceInstructions', 'admin.structuredPreview.visualQuestionsPending', 'admin.structuredPreview.noApprovedQuestions', 'admin.structuredPreview.questionProgress', 'admin.structuredPreview.question', 'admin.structuredPreview.tryAgain', 'admin.structuredPreview.previousQuestion', 'admin.structuredPreview.nextQuestion', 'student.learn.missingTeachingBlocks', 'student.learn.missingQuestions',
 ];
+required.push('admin.login.serverUnavailable', 'admin.login.unexpectedResponse', 'admin.login.mobileStepInstruction', 'admin.login.firstAccessInstruction', 'admin.login.otpStepInstruction', 'admin.login.firstAccessOtpHelp', 'admin.login.registeredOtpHelp', 'people.auth.usernamePlaceholder');
 for (const key of required) {
   assert.equal(typeof english[key], 'string', 'English catalog missing ' + key);
   assert.equal(typeof hinglish[key], 'string', 'Hinglish catalog missing ' + key);
@@ -69,6 +70,8 @@ const sharedCopyRegressions = [
   ['apps/people/app/components/PeopleUI.tsx', ['aria-label="Table pagination"', 'Showing {first}–{last} of {total}', 'Rows per page', '>Previous</button>', '>Next</button>']],
   ['apps/admin/app/components/AdminWorkspaceLayout.tsx', ['aria-label="Close navigation menu"', 'aria-label="Admin navigation"']],
   ['apps/people/app/components/PeopleWorkspaceLayout.tsx', ['aria-label="Primary workspace"']],
+  ['apps/admin/app/login/page.tsx', ['Use the mobile number assigned to you by your QuantaEdge administrator.', 'Your administrator has created your staff account. Verify your assigned mobile to activate access.', 'Enter the six-digit code sent to your assigned mobile number.', 'Verify your assigned number to activate your invitation.', 'Enter the code sent to your registered staff number.', '<span className="qe-admin-language-label">', '<option value="hinglish">']],
+  ['apps/people/app/login/page.tsx', ['placeholder="HRMS_Admin"']],
 ];
 for (const [file, forbiddenCopy] of sharedCopyRegressions) {
   const source = fs.readFileSync(path.join(root, file), 'utf8');
