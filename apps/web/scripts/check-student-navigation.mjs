@@ -317,6 +317,7 @@ assert.ok(androidFloatingTutorContract.includes('userResized') &&
 
 
 // Issue #66 dashboard live-class schedule and future-session visibility contracts.
+const issue66TimestampFormatterContract = read('../app/components/formatUserTimestamp.ts');
 const issue66StudentDashboardContract = read('../app/student/page.tsx');
 const issue66LiveClassApiContract = read('../../../services/api/src/main/java/com/quantaedge/api/LearningClassController.java');
 const issue66LiveClassTestsContract = read('../../../services/api/src/test/java/com/quantaedge/api/LearningClassControllerTest.java');
@@ -349,6 +350,12 @@ assert.ok(androidApp.includes('courseSessionEndTimestamp(it)') &&
   androidApp.includes('showSubject: Boolean = true') &&
   androidApp.includes('item.optBoolean("has_recording", item.optBoolean("hasRecording"))'),
   'Android dashboard must include sessions currently in progress, use end timestamps for recency, group sessions by subject and disclose actual recording availability.');
+assert.ok(issue66TimestampFormatterContract.includes("timeZone: 'Asia/Kolkata'") &&
+  issue66TimestampFormatterContract.includes(String.raw`formattedTime.replace(/\b(am|pm)\b/i`),
+  'Web timestamps must use the agreed India timezone and correctly normalize AM/PM casing.');
+assert.ok(androidApp.includes('ZoneId.of("Asia/Kolkata")') &&
+  !androidApp.includes('ZoneId.systemDefault()'),
+  'Android dashboard timestamps and local datetime fallback must use the same agreed India timezone as web.');
 
 
 console.log('Navigation, localization, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
