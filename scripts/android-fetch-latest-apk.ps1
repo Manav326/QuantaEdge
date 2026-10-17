@@ -187,7 +187,7 @@ try {
                     $cacheCommitMatches = Test-CommitDataOnlyCompatible -SourceSha ([string]$cacheMetadata.headSha) -TargetSha $headSha -Repository $Repository
                     if ($cacheCommitMatches) {
                         # Refresh the verified target only after rechecking source-build-to-head compatibility.
-                        $cacheMetadata.verifiedHeadSha = $headSha
+                        $cacheMetadata | Add-Member -MemberType NoteProperty -Name "verifiedHeadSha" -Value $headSha -Force
                         $metadataTempPath = "$cacheMetadataPath.tmp"
                         $cacheMetadata | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $metadataTempPath -Encoding UTF8
                         Move-Item -LiteralPath $metadataTempPath -Destination $cacheMetadataPath -Force
@@ -280,7 +280,7 @@ try {
                 $_.workflowName -eq "QuantaEdge Build and Publish" -and
                 $_.status -eq "completed" -and $_.conclusion -eq "success" -and
                 $_.headSha -match '^[0-9a-f]{40}$'
-            } | Sort-Object createdAt -Descending)
+            } | Sort-Object createdAt -Descending | Select-Object -First 20)
 
             $compatibleCandidates = @()
             foreach ($run in $successfulBuildRuns) {
