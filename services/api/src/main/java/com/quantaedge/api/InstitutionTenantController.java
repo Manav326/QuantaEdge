@@ -187,6 +187,7 @@ public class InstitutionTenantController {
 
   /** Authenticated learner joins the institution represented by a secret join code. */
   @PostMapping("/join")
+  @Transactional
   public Map<String,Object> joinInstitution(
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext", required=false) AuthContext context,
