@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {useState} from 'react';
+import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 
 async function readApiJson(response: Response): Promise<any> {
   const body = await response.text();
@@ -107,13 +108,10 @@ export default function AdminLogin() {
   return (
     <main className="qe-login-shell">
       <aside className="qe-login-story">
-        <Link href="/" className="qe-login-brand" aria-label="QuantaEdge — Smarter Decisions. Greater Growth. — Staff console">
-          <span className="qe-login-brand-copy">
-            <img className="qe-login-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
-            <small className="qe-login-brand-tagline">Smarter Decisions. Greater Growth.</small>
-            <small className="qe-login-brand-context">STAFF CONSOLE</small>
-          </span>
-        </Link>
+        <div className="qe-admin-login-brand">
+          <QuantaEdgeBrand href="/" variant="auth" className="qe-admin-login-brand-lockup" />
+          <small className="qe-login-brand-context">STAFF CONSOLE</small>
+        </div>
 
         <div className="qe-login-story-content">
           <span className="qe-login-eyebrow"><i /> WORKSPACE ACCESS</span>
@@ -138,9 +136,8 @@ export default function AdminLogin() {
       </aside>
 
       <section className="qe-login-panel">
-        <div className="qe-login-mobile-brand" role="img" aria-label="QuantaEdge — Smarter Decisions. Greater Growth.">
-          <img className="qe-login-mobile-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
-          <small>Smarter Decisions. Greater Growth.</small>
+        <div className="qe-login-mobile-brand">
+          <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-login-brand-lockup" />
         </div>
         <div className="qe-login-card">
           <div className="qe-login-card-top">

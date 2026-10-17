@@ -33,6 +33,7 @@ const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
 const adminBrandComponent = read('apps/admin/app/components/QuantaEdgeBrand.tsx');
 const peopleBrandComponent = read('apps/people/app/components/QuantaEdgeBrand.tsx');
 const adminSidebar = read('apps/admin/app/components/AdminSidebar.tsx');
+const adminLogin = read('apps/admin/app/login/page.tsx');
 const adminWorkspaceLayout = read('apps/admin/app/components/AdminWorkspaceLayout.tsx');
 const peopleWorkspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const peopleLogin = read('apps/people/app/login/page.tsx');
@@ -59,6 +60,9 @@ assert(peopleWorkspace.includes('className="qe-people-mobile-brand-lockup"'), 'P
 assert(!peopleWorkspace.includes('<span>QUANTAEDGE</span>'), 'People workspace must not hard-code a duplicate brand name outside the shared component.');
 assert(peopleWorkspace.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'People workspace must use the canonical shared brand component.');
 assert(!adminSidebar.includes('quantaedge-wordmark.png'), 'Admin sidebar must not render the invalid legacy wordmark PNG.');
+assert(adminLogin.includes("import QuantaEdgeBrand from '../components/QuantaEdgeBrand'"), 'Admin login must use the canonical shared brand component.');
+assert(adminLogin.includes('<QuantaEdgeBrand href="/" variant="auth"') && adminLogin.includes('<QuantaEdgeBrand href="/" variant="compact"'), 'Admin login must use the canonical lockup on desktop and mobile.');
+assert(!adminLogin.includes('quantaedge-wordmark.png'), 'Admin login must not render the invalid legacy wordmark PNG.');
 assert(!peopleWorkspace.includes('quantaedge-wordmark.png') && !peopleLogin.includes('quantaedge-wordmark.png') && !peopleChangePassword.includes('quantaedge-wordmark.png'), 'People workspace and authentication must not render the invalid legacy wordmark PNG.');
 assert(peopleLogin.includes('<QuantaEdgeBrand href={null} variant="auth"') && peopleChangePassword.includes('<QuantaEdgeBrand href={null} variant="auth"'), 'HRMS login and password-change screens must use the shared brand lockup.');
 assert(webLayout.includes('/branding/quantaedge-icon.png'), 'Learner web must configure the canonical browser/app icon.');

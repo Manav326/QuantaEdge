@@ -15,7 +15,7 @@
 - **Neutral border:** `#E5EAF3`; primary light-surface text `#172033`; secondary text `#667085`, subject to contrast validation.
 - **Orange-led palette:** `#F97316`; deep orange `#C2410C`; soft orange `#FFF0E5`. Preserve the current approved uses throughout the interface; do not shift to a different dominant accent.
 
-No brand colour refresh is approved. Preserve the current orange-led palette and use the existing Q mark and shared QuantaEdgeBrand component. Maintain one consistent mark, name, tagline, logo colours and wordmark across languages and apps. Proposed layout/placement changes require user approval before implementation.
+No brand colour refresh is approved. Preserve the current orange-led palette and use the existing Q mark and shared QuantaEdgeBrand component. Maintain one consistent mark, name, tagline, logo colours and wordmark across languages and apps. The user approved the planned UI/UX and layout/placement implementation on 2026-10-17. This does not authorize any change to the existing brand colours, canonical assets, wordmark, tagline, or cross-language brand treatment.
 
 ## Canonical assets
 The approved square Q mark is the canonical, byte-identical asset at `apps/web/public/branding/quantaedge-icon.png`; it is the shared live mark and the API renderer mirrors that exact file. The standalone `quantaedge-logo.png` and `quantaedge-wordmark.png` are legacy/export assets. The current wordmark PNG does not have a complete PNG data stream, so do not use it for live rendering or treat it as a trustworthy input until a valid approved export replaces it. Matching branding assets are copied into the separately built admin and People Operations applications.

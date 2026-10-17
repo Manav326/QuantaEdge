@@ -1020,3 +1020,28 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
   .qe-admin-global-brand{display:inline-flex}
   .qe-admin-global-context>strong{font-size:10px}
 }
+
+
+/* Canonical QuantaEdge lockup for Admin authentication (desktop and mobile). */
+.qe-admin-login-brand{display:grid;justify-items:start;gap:6px;max-width:100%;position:relative;z-index:2}
+.qe-admin-login-brand-lockup{display:inline-flex;min-width:0;max-width:100%;color:inherit;text-decoration:none}
+.qe-admin-login-brand-lockup .qe-brand{display:flex;min-width:0;max-width:100%;flex-direction:column;align-items:flex-start;gap:2px}
+.qe-admin-login-brand-lockup .qe-brand__lockup{display:flex;align-items:center;gap:10px;min-width:0;max-width:100%;padding:8px 10px;border:1px solid #f1e5de;border-radius:10px;background:#fff}
+.qe-admin-login-brand-lockup .qe-brand__copy{display:flex;min-width:0;max-width:100%;flex-direction:column;gap:3px}
+.qe-admin-login-brand-lockup .qe-brand__icon{display:block;flex:0 0 42px;width:42px;height:42px;object-fit:contain}
+.qe-admin-login-brand-lockup .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans',Arial,sans-serif;font-size:26px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.qe-admin-login-brand-lockup .qe-brand__name-quant{color:#152038}
+.qe-admin-login-brand-lockup .qe-brand__name-edge{color:#F97316}
+.qe-admin-login-brand-lockup .qe-brand__tagline{display:block;color:#566176;font-size:9.2px;line-height:1.25;letter-spacing:0;white-space:nowrap}
+.qe-admin-login-brand-lockup:focus-visible{outline:3px solid #fdba74;outline-offset:4px;border-radius:10px}
+.qe-admin-login-brand .qe-login-brand-context{margin-left:5px}
+.qe-login-mobile-brand .qe-admin-login-brand-lockup .qe-brand__lockup{gap:7px;padding:6px 8px}
+.qe-login-mobile-brand .qe-admin-login-brand-lockup .qe-brand__icon{flex-basis:30px;width:30px;height:30px}
+.qe-login-mobile-brand .qe-admin-login-brand-lockup .qe-brand__name{font-size:18px}
+.qe-login-mobile-brand .qe-admin-login-brand-lockup .qe-brand__tagline{font-size:7.2px}
+@media(max-width:390px){
+  .qe-admin-login-brand-lockup .qe-brand__lockup{gap:7px;padding:7px 8px}
+  .qe-admin-login-brand-lockup .qe-brand__icon{flex-basis:36px;width:36px;height:36px}
+  .qe-admin-login-brand-lockup .qe-brand__name{font-size:22px}
+  .qe-admin-login-brand-lockup .qe-brand__tagline{font-size:7.5px}
+}
