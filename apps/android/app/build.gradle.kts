@@ -169,7 +169,6 @@ val brandIcon = rootProject.layout.projectDirectory.file("../web/public/branding
 val tenantLauncherIcon = configuredInstitutionIconPath?.let { file(it) }
 tasks.register<Copy>("syncQuantaEdgeBranding") {
     from(brandIcon) { rename { "quantaedge_icon.png" } }
-    from(tenantLauncherIcon ?: brandIcon.asFile) { rename { "qe_launcher_icon.png" } }
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
     doFirst {
         check(brandIcon.asFile.isFile) {
@@ -178,19 +177,31 @@ tasks.register<Copy>("syncQuantaEdgeBranding") {
         check(javax.imageio.ImageIO.read(brandIcon.asFile) != null) {
             "QuantaEdge canonical branding icon is not a decodable image: " + brandIcon.asFile.absolutePath
         }
+        val iconFile = tenantLauncherIcon ?: brandIcon.asFile
+        require(iconFile.isFile && iconFile.length() in 1..2_097_152L) {
+            "The launcher icon must be a readable PNG/JPEG image no larger than 2 MiB."
+        }
+        val image = javax.imageio.ImageIO.read(iconFile)
+        require(image != null && image.width in 1..4096 && image.height in 1..4096 &&
+            image.width.toLong() * image.height.toLong() <= 16_000_000L) {
+            "The launcher icon must be a valid PNG/JPEG no larger than 4096 by 4096 pixels."
+        }
         if (configuredInstitutionCode.isNotBlank()) {
             require(!configuredInstitutionIconPath.isNullOrBlank()) {
                 "A tenant-branded Android package requires QUANTAEDGE_INSTITUTION_ICON_PATH so the installed launcher icon is school-branded."
             }
-            val iconFile = requireNotNull(tenantLauncherIcon)
-            require(iconFile.isFile && iconFile.length() in 1..2_097_152L) {
-                "The institution launcher icon must be a readable image no larger than 2 MiB."
-            }
-            val image = javax.imageio.ImageIO.read(iconFile)
-            require(image != null && image.width in 1..4096 && image.height in 1..4096 &&
-                image.width.toLong() * image.height.toLong() <= 16_000_000L) {
-                "The institution launcher icon must be a valid PNG/JPEG no larger than 4096 by 4096 pixels."
-            }
+        }
+    }
+    doLast {
+        // Convert both PNG and JPEG uploads to a real PNG resource. Never just rename JPEG bytes.
+        val sourceIcon = tenantLauncherIcon ?: brandIcon.asFile
+        val decoded = requireNotNull(javax.imageio.ImageIO.read(sourceIcon)) {
+            "The launcher icon could not be decoded: " + sourceIcon.absolutePath
+        }
+        val destination = generatedBrandingRes.get().dir("drawable-nodpi").file("qe_launcher_icon.png").asFile
+        destination.parentFile.mkdirs()
+        check(javax.imageio.ImageIO.write(decoded, "png", destination)) {
+            "The launcher image could not be encoded as PNG."
         }
     }
 }
