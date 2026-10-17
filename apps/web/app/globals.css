@@ -256,7 +256,7 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 :root {
   --qe-color-primary: #F97316; --qe-color-on-primary: #291400; --qe-color-primary-text: #9A3412;
   --qe-color-primary-container: #FFF0E5; --qe-color-on-primary-container: #7C2D12;
-  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #9A3412;
+  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #9A3412; --qe-color-accent-container: #F9ECE7; --qe-color-on-accent-container: #111827;
   --qe-color-background: #F8FAFC; --qe-color-on-background: #172033;
   --qe-color-surface: #FFFFFF; --qe-color-on-surface: #172033;
   --qe-color-surface-elevated: #FFFFFF; --qe-color-on-surface-elevated: #172033;
@@ -276,7 +276,7 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
   color-scheme: dark;
   --qe-color-primary: #F97316; --qe-color-on-primary: #291400; --qe-color-primary-text: #FDBA74;
   --qe-color-primary-container: #48220D; --qe-color-on-primary-container: #FFF0E5;
-  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #FDBA74;
+  --qe-color-accent: #C2410C; --qe-color-on-accent: #FFFFFF; --qe-color-accent-text: #FDBA74; --qe-color-accent-container: #3F2320; --qe-color-on-accent-container: #FFFFFF;
   --qe-color-background: #0B1220; --qe-color-on-background: #F3F4F6;
   --qe-color-surface: #111827; --qe-color-on-surface: #F3F4F6;
   --qe-color-surface-elevated: #182235; --qe-color-on-surface-elevated: #F3F4F6;
