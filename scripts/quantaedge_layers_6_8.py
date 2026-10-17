@@ -1135,6 +1135,22 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v5"
     cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger_path.parent/"layer-8-rag-corpus.v1.jsonl"
+    if args.preflight_only:
+        if cpfile.exists():
+            prior_doc=read_json(cpfile)
+            if prior_doc.get("input_fingerprint")!=fingerprint:
+                raise ValueError("Resume preflight fingerprint mismatch (edition/text/Layer5/model/prompt changed); existing checkpoint preserved.")
+            prior_segments=prior_doc.get("segments",{})
+            if not isinstance(prior_segments,dict):
+                raise ValueError("Resume preflight found invalid checkpoint segments.")
+            statuses=[v.get("status") for v in prior_segments.values() if isinstance(v,dict)]
+            print(json.dumps({"preflight":"MATCHED_CHECKPOINT","source_book_id":source["book_id"],"model":args.model,"input_fingerprint":fingerprint,
+                "checkpoint_segments":len(statuses),"completed_segments":statuses.count("COMPLETE"),"unresolved_source_segments":statuses.count("UNRESOLVED_SOURCE_TEXT"),
+                "retryable_segments":sum(status not in {"COMPLETE","UNRESOLVED_SOURCE_TEXT"} for status in statuses),"checkpoint_path":cpfile.relative_to(repo).as_posix()},indent=2))
+        else:
+            print(json.dumps({"preflight":"NOT_STARTED","source_book_id":source["book_id"],"model":args.model,"input_fingerprint":fingerprint,
+                "checkpoint_path":cpfile.relative_to(repo).as_posix(),"action":"no checkpoint exists; a new run will initialise it"},indent=2))
+        return {"preflight_only":True,"source_book_id":source["book_id"],"input_fingerprint":fingerprint}
     if cpfile.exists():
         doc=read_json(cpfile)
         if doc.get("input_fingerprint")!=fingerprint: raise ValueError("Resume fingerprint mismatch (edition/text/Layer5/model/prompt changed); existing checkpoint preserved.")
@@ -1375,7 +1391,7 @@ def main(argv:list[str]|None=None)->int:
     r=sub.add_parser("run"); r.add_argument("--repo-root",type=Path,default=Path.cwd()); r.add_argument("--class-no",type=int,choices=(6,7,8),required=True)
     r.add_argument("--source-book-id",required=True); r.add_argument("--endpoint",default="http://127.0.0.1:11434"); r.add_argument("--model",default="qwen2.5:1.5b")
     r.add_argument("--max-model-calls",type=int,default=6); r.add_argument("--max-pages-per-segment",type=int,default=2); r.add_argument("--max-context-chars",type=int,default=5000)
-    r.add_argument("--request-timeout",type=int,default=300); r.add_argument("--checkpoint-every",type=int,default=2); r.add_argument("--benchmark-report",type=Path)
+    r.add_argument("--request-timeout",type=int,default=300); r.add_argument("--checkpoint-every",type=int,default=2); r.add_argument("--benchmark-report",type=Path); r.add_argument("--preflight-only",action="store_true",help="Validate source/evidence/fingerprint/checkpoint without starting model inference.")
     r.add_argument("--allow-experimental-model",action="store_true"); r.add_argument("--commit-checkpoints",action="store_true")
     b=sub.add_parser("benchmark"); b.add_argument("--repo-root",type=Path,default=Path.cwd()); b.add_argument("--source-book-id",default="ncert-c6-english-fecu1")
     b.add_argument("--endpoint",default="http://127.0.0.1:11434"); b.add_argument("--models",default="qwen2.5:1.5b,qwen2.5:3b")
