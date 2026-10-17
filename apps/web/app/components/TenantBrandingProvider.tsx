@@ -134,7 +134,7 @@ function saveSessionCode(code: string | null) {
 export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [brand, setBrand] = useState<TenantBrand | null>(null);
-  const [isResolving, setIsResolving] = useState(false);
+  const [isResolving, setIsResolving] = useState(true);
 
   const resolveInstitutionCode = useCallback(async (input: string): Promise<boolean> => {
     const code = normalizedCode(input);
@@ -165,6 +165,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
+      setIsResolving(true);
       const hasUrlCode = urlHasTenantParam();
       const urlCode = codeFromCurrentUrl();
       const candidate = urlCode || (hasUrlCode ? null : readSessionCode());
@@ -209,6 +210,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
               setBrand(next);
               saveSessionCode(next.institutionCode);
               applyTenantIdentity(next);
+              if (!cancelled) setIsResolving(false);
               return;
             }
           }
@@ -219,6 +221,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       if (!cancelled) {
         setBrand(null);
         applyTenantIdentity(null);
+        setIsResolving(false);
       }
     };
     void run();
