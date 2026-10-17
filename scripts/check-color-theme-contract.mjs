@@ -69,6 +69,10 @@ assert(webCss.includes('/* Tenant semantic compatibility layer for the legacy tu
 assert(webCss.includes('.tutor-launch {\n  background: var(--qe-color-primary);'), 'Tutor launch action must use the active tenant primary colour.');
 assert(webCss.includes('.tutor-message.user {\n  background: var(--qe-color-primary-container);'), 'Tutor learner messages must use tenant semantic container colours.');
 assert(webCss.includes('.parent-notice, .parent-courses-page__alert {\n  border-color: var(--qe-color-success-container);'), 'Parent feedback must keep semantic success colours while adopting a tenant palette.');
+assert(webCss.includes('.subject-book-link') && !webCss.includes('background:linear-gradient(135deg,#fffaf6,#fff)'), 'Student textbook links must not retain a fixed light-only card gradient.');
+assert(webCss.includes('.qe-mcq-progress>i>span') && webCss.includes('linear-gradient(90deg,var(--qe-color-primary),var(--qe-color-accent))'), 'Learner question progress must use tenant primary/accent colours.');
+assert(webCss.includes('.goal-card') && webCss.includes('color:var(--qe-color-nav-text)'), 'Learner goal cards must use semantic foreground/background roles.');
+assert(webCss.includes('.lesson-rich-content code') && webCss.includes('background:var(--qe-color-surface-elevated);color:var(--qe-color-text)'), 'Inline lesson code blocks must remain readable on dark surfaces.');
 assert(!/(?:background|color):#[0-9a-fA-F]{3,8}(?:background|color):/.test(webCss), 'CSS must not contain concatenated duplicate declarations.');
 assert(/--qe-brand-orange\s*:\s*#f97316\b/i.test(webCss), 'QuantaEdge orange default must be preserved.');
 
