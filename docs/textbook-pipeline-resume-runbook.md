@@ -17,7 +17,7 @@ The general Layers 1–8 content pipeline uses two main workflow entrypoints. Ch
 | 1–5 full preparation and analysis | [Prepare textbook visual candidates v3](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-visual-candidates-v3.yml) | `analyze_all` |
 | 6–8 generation | [QuantaEdge Layers 6–8](https://github.com/Manav326/QuantaEdge/actions/workflows/quantaedge-layers-6-8.yml) | `benchmark`, `run`, `resume`, or `refresh_benchmark` |
 
-For Layer 4–5 recovery, select the exact previous class, source edition, and vision model; use checkpoint batch size `1` to minimize work at risk. For Layers 6–8, keep the class, exact `source_book_id`, model, benchmark report and checkpoint settings identical to the interrupted run. The core workflow's preflight requires a matching saved checkpoint for `resume` and refuses an incompatible or missing checkpoint before model download.
+For Layer 4–5 recovery, select the exact previous class, source edition, and vision model. The default checkpoint batch size is `5`; choose `1` when the smallest possible uncommitted work window matters more than savepoint overhead. For Layers 6–8, keep the class, exact `source_book_id`, model, benchmark report and checkpoint settings identical to the interrupted run. The core workflow's preflight requires a matching saved checkpoint for `resume` and refuses an incompatible or missing checkpoint before model download.
 
 Do not use GitHub's **Re-run all jobs** action as a substitute for selecting the application's resume mode. A resume is an explicit data operation with source/model/contract validation, not a rerun of the previous runner.
 
@@ -43,6 +43,16 @@ The resume action is intentionally conservative:
 - Layer 4 is checkpointed in bounded batches; Layer 5 coverage/effective-analysis ledgers are regenerated from the raw checkpoint. Human review remains required.
 
 The temporary visual inventory must be reconstructed on a fresh runner because the image files used for inference are not all stored in Git. This is not the same as rebuilding the candidate packs. The resume mode skips candidate-pack creation and publishing, but still verifies and regenerates the Layer 1 analysis inventory required by Layers 4–5.
+
+## Layer 4–5 performance findings and guardrails (17 October 2026)
+
+A review of the Class 7 and Class 8 Actions logs found that visual requests were processed sequentially by `qwen2.5vl:3b` on the standard four-core GitHub-hosted runner, with no GPU passed to the Ollama container. The recorded runner RAM was around 92–93% in the inspected batches, and completed image requests typically took about 82–110 seconds each. This inference cost, rather than workflow startup alone, is the main runtime driver.
+
+The inspected English Science inventories contained 7,488 visual occurrence rows for Class 7 and 2,291 for Class 8. At roughly 90 seconds per request, those books alone would represent approximately 187 hours and 57 hours of sequential inference respectively, before other language/subject books, retries, and savepoint overhead. These estimates are rate-based, not completion predictions.
+
+Each durable batch checkpoint also regenerates the Layer 5 effective-analysis/coverage ledger, uploads the Layer 4 checkpoint to GHCR, and commits the data under `data/` to `main`. Using batch size `1` repeated that full checkpoint sequence after every image. The workflow now defaults to batches of `5` (still explicitly selectable as `1` or `2`), reducing that savepoint overhead; at most four not-yet-durably-saved successful requests may need to be repeated if a runner is interrupted mid-batch. Matching committed/GHCR checkpoints still resume by source, model, prompt and asset fingerprints.
+
+The Class 7 and Class 8 matrix jobs use separate, class-scoped data paths and the checkpoint writer rebases and retries a concurrent push. The matrix limit is therefore raised to two so the classes can use separate runners at the same time instead of making Class 8 wait for the entire Class 7 run. The analyser's progress summary now counts only successful rows whose asset hash, source, model, prompt and page-text-context hash match the current inventory; stale-context results do not masquerade as newly completed work. All generated analyses remain review-only with publication disabled.
 
 ## Workflow UI: Layers 6–8 local Ollama pipeline
 

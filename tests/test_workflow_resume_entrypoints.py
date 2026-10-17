@@ -24,20 +24,12 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         marker = "[resume-visual-layers-4-5-classes-7-8]"
         self.assertIn(marker, workflow)
         self.assertIn("matrix:", workflow)
-        self.assertIn("max-parallel: 1", workflow)
+        self.assertIn("max-parallel: 2", workflow)
         self.assertIn("fromJSON(contains(github.event.head_commit.message", workflow)
         self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
         self.assertIn("inputs.vision_model || 'qwen2.5vl:3b'", workflow)
         self.assertNotIn("VISION_MODEL: ${{ inputs.vision_model }}", workflow)
-        batch_size_line = next(line for line in workflow.splitlines() if line.strip().startswith("CHECKPOINT_BATCH_SIZE:"))
-        for marker in (
-            "[resume-visual-layers-4-5-class-7]",
-            "[resume-visual-layers-4-5-class-8]",
-            "[resume-visual-layers-4-5-classes-7-8]",
-        ):
-            self.assertIn(marker, batch_size_line)
-        self.assertIn("&& '1'", batch_size_line)
-        self.assertIn("|| '5'", batch_size_line)
+        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '5' }}", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("'classes-7-8-resume'", workflow)
 
@@ -56,7 +48,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '[\"7\",\"8\"]'", matrix_line)
         self.assertIn("'class-7-resume'", workflow)
         self.assertIn("'class-8-resume'", workflow)
-        self.assertIn("max-parallel: 1", workflow)
+        self.assertIn("max-parallel: 2", workflow)
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         preflight = workflow.index("- name: Preflight and restore matching Layer 4 checkpoints before loading the vision model")

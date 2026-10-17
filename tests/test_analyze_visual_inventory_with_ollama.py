@@ -198,6 +198,56 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual({"asset-2"}, {item["asset_id"] for item in resumed["results"]})
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
 
+    def test_progress_excludes_stale_context_successes_until_reanalyzed(self):
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        second_path = self.root / "page-0002.jpg"
+        second_path.write_bytes(b"second fake image")
+        second = dict(inventory["assets"][0])
+        second.update({
+            "asset_id": "asset-2",
+            "source_pdf_page_number": 2,
+            "asset_path": second_path.name,
+            "asset_sha256": hashlib.sha256(second_path.read_bytes()).hexdigest(),
+            "page_text_context": "Water cycle",
+        })
+        inventory["assets"].append(second)
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+        output = self.root / "visual-analysis.v1.json"
+
+        def successful_opener(request, timeout=180):
+            return FakeResponse({"message": {"content": json.dumps({
+                "visual_summary": "A water-cycle diagram.",
+                "visual_type": "diagram",
+                "visible_text": ["Water"],
+                "concepts": ["water cycle"],
+                "context_relation": "Related to nearby page text.",
+                "limitations": [],
+            })}})
+
+        initial = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=2, include_page_previews=True,
+            opener=successful_opener, output_path=output,
+        )
+        self.assertEqual(2, initial["summary"]["assets_analyzed"])
+
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        inventory["assets"][0]["page_text_context"] = "Changed extraction context"
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+
+        progress = io.StringIO()
+        with redirect_stdout(progress):
+            resumed = run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+                opener=successful_opener, output_path=output, resume=True,
+            )
+        output_text = progress.getvalue()
+        self.assertIn("1/2 analyzed (50.0%)", output_text)
+        self.assertIn("2/2 analyzed (100.0%)", output_text)
+        self.assertEqual(2, resumed["summary"]["assets_analyzed"])
+        self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
+
     def test_resume_reanalyzes_when_page_text_context_changes(self):
         output = self.root / "visual-analysis.v1.json"
         first = run_analysis(

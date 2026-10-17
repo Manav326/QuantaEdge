@@ -348,6 +348,7 @@ def run_analysis(
     # with the same content hash. Stale rows would otherwise become orphan analyses in
     # Layer 5 and prevent completion after an upstream inventory change.
     current_asset_hashes: dict[str, str] = {}
+    current_asset_context_hashes: dict[str, str] = {}
     for asset in assets:
         if not isinstance(asset, dict) or asset.get("kind") not in {"embedded_image", "page_preview"}:
             continue
@@ -362,6 +363,7 @@ def run_analysis(
         if not isinstance(asset_hash, str) or not asset_hash:
             raise ValueError(f"Analyzable visual asset {asset_id} lacks asset_sha256.")
         current_asset_hashes[asset_id] = asset_hash
+        current_asset_context_hashes[asset_id] = hashlib.sha256(str(asset.get("page_text_context") or "")[:1600].encode("utf-8")).hexdigest()
 
     previous: dict[str, dict[str, Any]] = {}
     if resume and output_path and output_path.is_file():
@@ -431,12 +433,30 @@ def run_analysis(
 
     def checkpoint() -> dict[str, Any]:
         ordered_results = list(results_by_id.values())
-        analyzed_count = sum(
-            1 for item in ordered_results
-            if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
-            and item.get("model") == model
-            and item.get("prompt_version") == PROMPT_VERSION
-        )
+        analyzed_count = 0
+        failed_count = 0
+        for asset_id, asset_hash in current_asset_hashes.items():
+            item = results_by_id.get(asset_id)
+            if not isinstance(item, dict):
+                continue
+            if (
+                item.get("asset_sha256") != asset_hash
+                or item.get("source_book_id") != source.get("book_id")
+                or str(item.get("source_pdf_sha256") or "").lower()
+                    != str(source.get("pdf_sha256") or "").lower()
+                or item.get("model") != model
+                or item.get("prompt_version") != PROMPT_VERSION
+            ):
+                continue
+            if item.get("analysis_status") == "ANALYSIS_ERROR":
+                failed_count += 1
+                continue
+            if (
+                item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+                and item.get("page_text_context_sha256") == current_asset_context_hashes[asset_id]
+                and _saved_analysis_is_valid(item.get("analysis"))
+            ):
+                analyzed_count += 1
         summary = {
             "assets_selected": len(selected) + skipped_from_checkpoint,
             "assets_processed_this_run": processed_this_run,
@@ -444,7 +464,7 @@ def run_analysis(
             "assets_analyzed": analyzed_count,
             "assets_remaining": max(0, len(seen) - analyzed_count),
             "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 100.0,
-            "assets_failed": sum(1 for item in ordered_results if item.get("analysis_status") == "ANALYSIS_ERROR"),
+            "assets_failed": failed_count,
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "batch_limit": max_assets,
             "publication_allowed": False,
@@ -534,6 +554,7 @@ def run_analysis(
             results_by_id[asset_id] = {
                 "asset_id": asset.get("asset_id"),
                 "asset_sha256": asset.get("asset_sha256"),
+                "page_text_context_sha256": current_asset_context_hashes[asset_id],
                 "source_book_id": source.get("book_id"),
                 "source_pdf_sha256": source.get("pdf_sha256"),
                 "source_pdf_page_number": asset.get("source_pdf_page_number"),
