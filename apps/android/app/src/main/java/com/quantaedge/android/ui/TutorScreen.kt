@@ -190,7 +190,7 @@ internal fun parseTutorMessageBlocks(message: String): List<TutorMessageBlock> {
 @Composable
 private fun tutorInlineText(value: String): androidx.compose.ui.text.AnnotatedString {
     val inlineCodeBackground = MaterialTheme.colorScheme.surfaceVariant
-    val inlineMathColor = MaterialTheme.colorScheme.primary
+    val inlineMathColor = LocalQuantaEdgeSemanticColors.current.primaryText
     return buildAnnotatedString {
     val pattern = Regex("(\\*\\*[^*]+\\*\\*|`[^`]+`|\\u0024[^\\u0024\\n]+\\u0024|\\*[^*\\n]+\\*)")
     var cursor = 0
@@ -235,7 +235,7 @@ private fun TutorMessageBody(message: String, modifier: Modifier = Modifier) {
                             Text(
                                 if (block.kind == "ordered") (index + 1).toString() + "." else "•",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary
+                                color = LocalQuantaEdgeSemanticColors.current.primaryText
                             )
                             Text(text = tutorInlineText(item), style = MaterialTheme.typography.bodyMedium)
                         }
@@ -398,7 +398,7 @@ fun TutorScreen(
             Column(verticalArrangement = Arrangement.spacedBy(1.dp), modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(t("Your tutor", "आपका ट्यूटर"), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.surface, contentColor = MaterialTheme.colorScheme.primary) {
+                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.surface, contentColor = LocalQuantaEdgeSemanticColors.current.primaryText) {
                         Row(modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp), horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text("✦", fontSize = 11.sp)
                             Text("AI", fontSize = 8.sp, fontWeight = FontWeight.Black)
@@ -465,7 +465,7 @@ fun TutorScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(9.dp)) {
                     Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
                         Box(modifier = Modifier.size(46.dp), contentAlignment = Alignment.Center) {
-                            Text("✦", fontSize = 23.sp, color = MaterialTheme.colorScheme.primary)
+                            Text("✦", fontSize = 23.sp, color = LocalQuantaEdgeSemanticColors.current.primaryText)
                         }
                     }
                     Text(t("Tutor is temporarily unavailable", "ट्यूटर अभी उपलब्ध नहीं है"), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -555,7 +555,7 @@ fun TutorScreen(
                         ?: (item.textAny("role") + "-" + item.hashCode())
                 }) { item ->
                     val isAssistant = item.textAny("role").equals("ASSISTANT", true)
-                    val bubbleColor = if (isAssistant) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primaryContainer
+                    val bubbleColor = if (isAssistant) MaterialTheme.colorScheme.surface else LocalQuantaEdgeSemanticColors.current.primaryTextContainer
                     val bubbleText = if (isAssistant) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimaryContainer
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -568,7 +568,7 @@ fun TutorScreen(
                                         if (isAssistant) t("Tutor", "ट्यूटर") else t("You", "आप"),
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
-                                        color = if (isAssistant) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                                        color = LocalQuantaEdgeSemanticColors.current.primaryText
                                     )
                                     tutorModes.firstOrNull { it.key == item.textAny("mode").uppercase() }?.let { Text(it.icon, style = MaterialTheme.typography.labelSmall) }
                                 }

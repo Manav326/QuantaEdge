@@ -80,7 +80,7 @@ fun StructuredLessonRenderer(
 
     Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(localized(chapter.optJSONObject("title_by_locale"), locale),
-            style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.secondary)
+            style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(localized(topic.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.headlineSmall)
         Text(localized(explain.optJSONObject("title_by_locale"), locale), style = MaterialTheme.typography.titleLarge)
         blocks.forEach { block ->
@@ -97,7 +97,7 @@ fun StructuredLessonRenderer(
             val currentQuestion = questions[safeIndex]
             Text((if (locale == "hi") "प्रश्न " else "Question ") + (safeIndex + 1) +
                 (if (locale == "hi") " / " else " of ") + questions.size,
-                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.secondary)
+                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             StructuredQuestionView(currentQuestion, locale, studentMode, blocks,
                 questionStates.optJSONObject(currentQuestion.optString("id")) ?: JSONObject(),
                 currentQuestion.optString("id") in submittingQuestionIds, onSubmitResponse)
@@ -160,7 +160,7 @@ private fun StructuredExplainBlockView(
                         LearningMathText(it, style = MaterialTheme.typography.bodyLarge)
                     }
                     text.optString("key_point").takeIf { it.isNotBlank() }?.let {
-                        Text(it, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(it, style = MaterialTheme.typography.bodyLarge, color = LocalQuantaEdgeSemanticColors.current.primaryText)
                     }
                     text.optString("callout").takeIf { it.isNotBlank() }?.let { Text(it) }
                 }
@@ -216,7 +216,7 @@ private fun StructuredExplainBlockView(
             }
             val caption = localized(block.optJSONObject("caption_by_locale"), locale)
             if (caption.isNotBlank() && type != "image") {
-                Text(caption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                Text(caption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -240,7 +240,7 @@ private fun StructuredDiagramContent(block: JSONObject, locale: String) {
     nodes.forEachIndexed { index, node ->
         val label = localized(node.optJSONObject("label_by_locale"), locale).ifBlank { node.optString("label") }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("${index + 1}.", color = MaterialTheme.colorScheme.primary)
+            Text("${index + 1}.", color = LocalQuantaEdgeSemanticColors.current.primaryText)
             Text(label.ifBlank { if (locale == "hi") "चरण" else "Step" })
         }
     }
@@ -299,7 +299,7 @@ private fun StructuredActivityContent(
     }
     if (onSave == null) Text(
         if (locale == "hi") "इस स्क्रीन पर उत्तर सहेजना अभी जुड़ा नहीं है।" else "Response saving is not connected on this screen yet.",
-        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary
+        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
 
@@ -442,8 +442,12 @@ private fun StructuredQuestionView(
                         "partially_correct" -> if (locale == "hi") "आंशिक रूप से सही" else "Partially correct"
                         else -> if (locale == "hi") "जाँच के लिए सहेजा गया" else "Saved for review"
                     }
-                    Text(statusLabel, style = MaterialTheme.typography.titleSmall, color =
-                        if (savedStatus == "correct") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                    Text(statusLabel, style = MaterialTheme.typography.titleSmall, color = when (savedStatus) {
+                        "correct" -> LocalQuantaEdgeSemanticColors.current.success
+                        "incorrect" -> LocalQuantaEdgeSemanticColors.current.error
+                        "partially_correct" -> LocalQuantaEdgeSemanticColors.current.warning
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    })
                     val feedback = savedState.optJSONObject("feedbackByLocale")?.optString(locale).orEmpty()
                         .ifBlank { savedState.optString("feedback") }
                     if (feedback.isNotBlank()) Text(feedback, style = MaterialTheme.typography.bodyMedium)
