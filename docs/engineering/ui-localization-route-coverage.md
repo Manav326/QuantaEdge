@@ -41,14 +41,14 @@
 | `/` | `apps/admin/app/page.tsx` | First pass — audit pending | Review dashboard retry/error, KPI and empty states. |
 | `/account-lifecycle` | `apps/admin/app/account-lifecycle/page.tsx` | First pass — audit pending | Check status actions, reason dialogs and feedback. |
 | `/assessments` | `apps/admin/app/assessments/page.tsx` | Needs audit/migration | Translate assessment and grading forms, dialogs and tables. |
-| `/certificates` | `apps/admin/app/certificates/page.tsx` | Localized in current slice — CI pending | Verify filters, revocation/audit states and localized dates. |
+| `/certificates` | `apps/admin/app/certificates/page.tsx` | First pass — build-verified, audit pending | Verify filters, revocation/audit states and localized dates in browser. |
 | `/classes` | `apps/admin/app/classes/page.tsx` | Needs audit/migration | Translate live sessions, recordings and actions. |
 | `/content` | `apps/admin/app/content/page.tsx` | Needs audit/migration | Audit Content Studio editor, preview, visual review and validation. |
 | `/employees` | `apps/admin/app/employees/page.tsx` | Needs audit/migration | Audit employee and permission-facing text. |
 | `/legacy-content` | `apps/admin/app/legacy-content/page.tsx` | Needs audit/migration | Inspect retained route before deciding deprecation or migration. |
 | `/login` | `apps/admin/app/login/page.tsx` | First pass — audit pending | Check authentication failures and pre-login language selector. |
 | `/parents` | `apps/admin/app/parents/page.tsx` | First pass — audit pending | Check parent/child permissions, confirmations and status feedback. |
-| `/questions` | `apps/admin/app/questions/page.tsx` | Needs audit/migration | Translate review history, rejection details and filters. |
+| `/questions` | `apps/admin/app/questions/page.tsx` | Localized in current slice — CI pending | Verify permission guidance, prompts, history snapshots and all visible status/error variants. |
 | `/resources` | `apps/admin/app/resources/page.tsx` | Needs audit/migration | Translate PDF library forms, ingestion/preview and assignment states. |
 | `/session` | `apps/admin/app/session/page.tsx` | Needs audit/migration | Audit staff session-boundary/recovery messages. |
 | `/source-ingestion` | `apps/admin/app/source-ingestion/page.tsx` | Needs audit/migration | Translate ingestion, verification and failure states. |
