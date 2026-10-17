@@ -6,8 +6,8 @@ import unittest
 from pathlib import Path
 
 from scripts.prepare_visual_candidate_batch import (
-    MANIFEST_SCHEMA, extract_archive, inventory_context, validate_bundle, validate_legacy_inventory,
-    validate_pack, write_bundle_manifest,
+    MANIFEST_SCHEMA, extract_archive, inventory_context, missing_artifact, validate_bundle,
+    validate_legacy_inventory, validate_pack, write_bundle_manifest,
 )
 
 
@@ -64,6 +64,26 @@ class CandidateBundleCheckpointTests(unittest.TestCase):
             tar.add(item, arcname="../escape.txt")
         with self.assertRaisesRegex(ValueError, "unsafe archive path"):
             extract_archive(archive, self.root / "unpacked", self.source["book_slug"])
+
+    def test_only_explicit_registry_missing_responses_allow_rebuild(self):
+        self.assertTrue(missing_artifact("Error: HTTP 404 manifest not found"))
+        self.assertTrue(missing_artifact("MANIFEST_UNKNOWN: registry has no matching artifact"))
+        self.assertFalse(missing_artifact("HTTP 500: upstream resource not found"))
+        self.assertFalse(missing_artifact("HTTP 401: access denied"))
+
+    def test_legacy_reuse_rejects_different_pdf_edition(self):
+        prior = self.root / "prior.json"
+        current = self.root / "current.json"
+        template = {
+            "schema_version": "quantaedge.visual-inventory.v1",
+            "source": {"book_id": self.source["book_id"], "pdf_sha256": self.source["sha256"], "pdf_page_count": 1},
+            "pages": [], "assets": [],
+        }
+        prior.write_text(json.dumps(template), encoding="utf-8")
+        new_inventory = dict(template)
+        new_inventory["source"] = dict(template["source"], pdf_sha256="d" * 64)
+        current.write_text(json.dumps(new_inventory), encoding="utf-8")
+        self.assertFalse(validate_legacy_inventory(prior, current, dict(self.source, sha256="d" * 64)))
 
     def test_legacy_reuse_requires_exact_layer1_context(self):
         prior = self.root / "prior.json"

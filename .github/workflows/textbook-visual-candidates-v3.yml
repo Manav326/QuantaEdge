@@ -362,7 +362,7 @@ jobs:
                           (work/".inventory-restored-from-ghcr.json").write_text(json.dumps({"source_pdf_sha256":source["sha256"],"tag":bundle["tag"],"tar_sha256":bundle["tar_sha256"]},indent=2)+"\n",encoding="utf-8")
                       print(json.dumps({"book_id":source["book_id"],"inventory":"RESTORED_FROM_VERIFIED_GHCR_BUNDLE","asset_count":len(inv["assets"]),"candidate_pack_rebuild":False}))
                       restored=True
-                  elif pull.returncode!=0 and ("404" in detail or "not found" in detail.lower() or "manifest unknown" in detail.lower()):
+                  elif pull.returncode!=0 and ("404" in detail or "manifest unknown" in detail.lower() or "name_unknown" in detail.lower()):
                       print(json.dumps({"book_id":source["book_id"],"inventory":"PRIOR_BUNDLE_NOT_FOUND","fallback":"build Layer 1 only; preserve source-bound Layer 4 checkpoint","detail":detail}))
                   else:
                       raise SystemExit(f"{slug}: cannot safely recover prior inventory bundle; resume stopped. {detail}")
@@ -467,7 +467,7 @@ jobs:
                   print(json.dumps({"book_id": source["book_id"], "checkpoint": "RESTORED_FROM_GHCR", "results": len(json.loads(candidate.read_text(encoding="utf-8")).get("results", []))}))
                   continue
               detail = (pull.stdout or "").strip()[-500:]
-              not_found = "404" in detail or "not found" in detail.lower() or "manifest unknown" in detail.lower()
+              not_found = "404" in detail or "manifest unknown" in detail.lower() or "name_unknown" in detail.lower()
               prior_layers = prior_index.get("layers") if isinstance(prior_index.get("layers"), dict) else {}
               prior_analysis_path = prior_index.get("analysis_path")
               expected_raw_path = raw.relative_to(repo).as_posix()

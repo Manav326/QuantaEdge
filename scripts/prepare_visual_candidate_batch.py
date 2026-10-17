@@ -335,7 +335,11 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
         archive = output_root / f"{slug}-candidates-v3.tar.gz"
         prior_index_path = repo / "data" / "textbook-visual-candidates-v3" / slug / "bundle-index.v3.json"
         prior_index = read_json(prior_index_path) if prior_index_path.is_file() else {}
-        if prior_index and (prior_index.get("source_book_id") != source["book_id"] or str(prior_index.get("source_pdf_sha256") or "").lower() != str(source["sha256"]).lower()):
+        if prior_index and prior_index.get("source_book_id") == source["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower() != str(source["sha256"]).lower():
+            if mode == "resume_preparation":
+                raise ValueError(f"{slug}: the saved candidate checkpoint belongs to a different PDF edition/hash. Resume refused; use analyze_all only after intentionally choosing the new edition.")
+            prior_index = {}
+        elif prior_index and prior_index.get("source_book_id") != source["book_id"]:
             prior_index = {}
 
         restored = False
