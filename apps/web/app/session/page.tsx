@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { TenantBrandMark, useTenantBranding } from '../components/TenantBrandingProvider';
 
 type Identity = { role?: string; workspace?: string; staffId?: number; studentId?: number; userId?: number };
 const SESSION_CHECK_TIMEOUT_MS = 10_000;
@@ -40,6 +41,7 @@ function homeFor(identity: Identity) {
 
 export default function SessionLandingPage() {
   const router = useRouter();
+  const { brand } = useTenantBranding();
   const [message, setMessage] = useState('Aapka secure session check ho raha hai…');
   const [error, setError] = useState('');
   async function resolveSession() {
@@ -96,5 +98,5 @@ export default function SessionLandingPage() {
     window.location.replace('/');
   }
   useEffect(() => { void resolveSession(); }, []);
-  return <main className="qe-session-gate"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE</span><h1>{error ? 'Account check needed' : 'Checking your account…'}</h1><p>{error || message}</p>{error ? <div className="qe-session-gate-actions"><button className="button button-dark" onClick={() => void resolveSession()}>Dobara try karein</button><button className="button button-light" onClick={() => void logoutToSwitch()}>Sign out karke home par jaayein</button></div> : null}</section></main>;
+  return <main className="qe-session-gate"><section><TenantBrandMark className="qe-session-brand-mark" /><span className="eyebrow">{brand?.displayName || 'QuantaEdge'}</span><h1>{error ? 'Account check needed' : 'Checking your account…'}</h1><p>{error || message}</p>{error ? <div className="qe-session-gate-actions"><button className="button button-dark" onClick={() => void resolveSession()}>Dobara try karein</button><button className="button button-light" onClick={() => void logoutToSwitch()}>Sign out karke home par jaayein</button></div> : null}</section></main>;
 }
