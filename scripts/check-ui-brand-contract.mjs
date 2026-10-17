@@ -46,6 +46,7 @@ const peopleWorkspace = read('apps/people/app/components/PeopleWorkspaceLayout.t
 const peopleLogin = read('apps/people/app/login/page.tsx');
 const peopleChangePassword = read('apps/people/app/change-password/page.tsx');
 const webLayout = read('apps/web/app/layout.tsx');
+const workspaceLayout = read('apps/web/app/components/WorkspaceLayout.tsx');
 const adminLayout = read('apps/admin/app/layout.tsx');
 const peopleLayout = read('apps/people/app/layout.tsx');
 const webStyles = read('apps/web/app/globals.css');
