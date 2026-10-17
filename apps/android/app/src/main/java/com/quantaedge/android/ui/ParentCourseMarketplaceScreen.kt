@@ -84,7 +84,7 @@ fun ParentCourseMarketplaceScreen(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(t("FAMILY COURSE MARKETPLACE", "परिवार का कोर्स मार्केटप्लेस"),
-                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelMedium, color = LocalQuantaEdgeSemanticColors.current.primaryText,
                     fontWeight = FontWeight.Bold)
                 Text(t("Courses for you or your child", "आपके या आपके बच्चे के लिए कोर्स"),
                     style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
@@ -104,7 +104,7 @@ fun ParentCourseMarketplaceScreen(
             }
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-        if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.secondary, style = MaterialTheme.typography.bodySmall)
+        if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
         if (loading) {
             Box(Modifier.fillMaxWidth().padding(vertical = 22.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         } else if (loadFailed) {
@@ -136,7 +136,8 @@ fun ParentCourseMarketplaceScreen(
                             Text(t("Requested by: ", "अनुरोधकर्ता: ") + request.qeText("student_name", "display_name"),
                                 style = MaterialTheme.typography.bodySmall)
                             Text(if (price == 0L) t("Free", "निःशुल्क") else courseMoney(price),
-                                color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
+                                color = if (price == 0L) LocalQuantaEdgeSemanticColors.current.success else LocalQuantaEdgeSemanticColors.current.primaryText,
+                                style = MaterialTheme.typography.labelLarge)
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                                 Button(onClick = {
                                     if (price == 0L) onAddFree(courseId, "CHILD", studentId)
@@ -178,7 +179,8 @@ fun ParentCourseMarketplaceScreen(
                                 }
                                 Text(if (ownedByParent || ownedByChild) t("Owned", "उपलब्ध")
                                     else if (price == 0L) t("Free", "निःशुल्क") else courseMoney(price),
-                                    style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = if (ownedByParent || ownedByChild || price == 0L) LocalQuantaEdgeSemanticColors.current.success else LocalQuantaEdgeSemanticColors.current.primaryText,
                                     fontWeight = FontWeight.Bold)
                             }
                             offer.qeText("description").takeIf { it.isNotBlank() }?.let {
@@ -187,7 +189,7 @@ fun ParentCourseMarketplaceScreen(
                             if (ownedByParent) {
                                 Text(t("You already own this course. Transfer it from the section below instead of paying again.",
                                     "यह कोर्स पहले से आपके पास है। दोबारा भुगतान करने के बजाय नीचे से स्थायी ट्रांसफर करें।"),
-                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             } else {
                                 Button(onClick = { if (price == 0L) onAddFree(courseId, "SELF", 0L) else onBuy(courseId, "SELF", 0L) },
                                     enabled = !busy && courseId > 0L, modifier = Modifier.fillMaxWidth()) {
@@ -204,7 +206,7 @@ fun ParentCourseMarketplaceScreen(
                                                 Text(child.qeText("display_name", "student_name").ifBlank { t("Young Learner", "बाल शिक्षार्थी") },
                                                     style = MaterialTheme.typography.bodyMedium)
                                                 if (alreadyOwned) Text(t("Already has access", "पहले से पहुँच है"),
-                                                    style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
+                                                    style = MaterialTheme.typography.labelSmall, color = LocalQuantaEdgeSemanticColors.current.success)
                                             }
                                             TextButton(
                                                 onClick = { if (price == 0L) onAddFree(courseId, "CHILD", childId) else onBuy(courseId, "CHILD", childId) },

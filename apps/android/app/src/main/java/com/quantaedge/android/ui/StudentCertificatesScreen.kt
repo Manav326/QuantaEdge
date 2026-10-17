@@ -484,7 +484,7 @@ fun StudentCertificatesScreen(
                             if (language == "hi") "⚠ प्रमाणपत्र निरस्त" else "⚠ Certificate revoked"
                         },
                         style = MaterialTheme.typography.titleLarge,
-                        color = if (valid) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                        color = if (valid) LocalQuantaEdgeSemanticColors.current.success else MaterialTheme.colorScheme.error
                     )
                     Text((if (language == "hi") "प्रमाणपत्र नंबर: " else "Certificate ID: ") +
                         result.optString("certificateNumber"))
@@ -526,7 +526,7 @@ fun StudentCertificatesScreen(
                 }
             }
         }
-        if (notice.isNotBlank()) Text(notice, color = MaterialTheme.colorScheme.primary)
+        if (notice.isNotBlank()) Text(notice, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
@@ -536,7 +536,7 @@ fun StudentCertificatesScreen(
                 Text(
                     if (language == "hi") "प्रमाणपत्र सेटिंग्स" else "Certificate settings",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(if (language == "hi") "प्रमाणपत्र की भाषा" else "Certificate language")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -569,7 +569,7 @@ fun StudentCertificatesScreen(
                 Text(
                     if (language == "hi") "उपलब्धि का विवरण" else "Achievement details",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
                     val selectedTrack = subjectTracks.firstOrNull { it.optString("track_key") == selectedTrackKey }
@@ -587,7 +587,7 @@ fun StudentCertificatesScreen(
                     }
                     if (subjectTracks.isEmpty()) Text(
                         if (language == "hi") "कोई सक्रिय विषय ट्रैक उपलब्ध नहीं है।" else "No active subject track available.",
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(if (language == "hi") "विषय ट्रैक" else "Subject track")
                     Box(Modifier.fillMaxWidth()) {
@@ -605,7 +605,7 @@ fun StudentCertificatesScreen(
                     }
                     Text(
                         if (language == "hi") "इस सक्रिय ट्रैक के सभी प्रकाशित पाठ पूरे करें।" else "Complete all published lessons in this active track.",
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 } else {
                     val selectedAssessment = eligibleAssessments.firstOrNull {
@@ -628,7 +628,7 @@ fun StudentCertificatesScreen(
                     }
                     if (eligibleAssessments.isEmpty()) Text(
                         if (language == "hi") "कोई पात्र जारी Admin-created टेस्ट परिणाम नहीं मिला।" else "No eligible released admin-created test results.",
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(if (language == "hi") "जारी टेस्ट परिणाम" else "Released assessment result")
                     Box(Modifier.fillMaxWidth()) {
@@ -648,7 +648,7 @@ fun StudentCertificatesScreen(
                     Text(
                         if (language == "hi") "पास अंक वाले केवल जारी Admin-created टेस्ट पात्र हैं।"
                         else "Only released admin-created tests with passing scores qualify.",
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -706,7 +706,11 @@ fun StudentCertificatesScreen(
                     }
                     Text(
                         statusLabel + " · " + languageLabel,
-                        color = if (rawStatus == "REVOKED") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
+                        color = when (rawStatus) {
+                            "REVOKED" -> MaterialTheme.colorScheme.error
+                            "ISSUED" -> LocalQuantaEdgeSemanticColors.current.success
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        }
                     )
                     if (certificate.optString("status", "ISSUED") == "ISSUED") {
                         if (compact) {

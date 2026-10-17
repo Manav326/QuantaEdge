@@ -83,7 +83,7 @@ fun AccountIdentitySettingsScreen(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(t("ACCOUNT & SIGN-IN", "खाता और साइन-इन"),
-                    color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelMedium,
+                    color = LocalQuantaEdgeSemanticColors.current.primaryText, style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold)
                 Text(t("Account identity", "खाते की पहचान"),
                     style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
@@ -123,7 +123,7 @@ fun AccountIdentitySettingsScreen(
         }
 
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-        if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.secondary, style = MaterialTheme.typography.bodySmall)
+        if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
 
 
         Card(Modifier.fillMaxWidth()) {
@@ -138,7 +138,7 @@ fun AccountIdentitySettingsScreen(
                     }
                     Text(if (gmailVerified) "✓ " + t("Verified", "सत्यापित") else t("Not verified", "सत्यापित नहीं"),
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (gmailVerified) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
+                        color = if (gmailVerified) LocalQuantaEdgeSemanticColors.current.success else MaterialTheme.colorScheme.error)
                 }
                 HorizontalDivider()
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -150,7 +150,7 @@ fun AccountIdentitySettingsScreen(
                     }
                     Text(if (mobileVerified) "✓ " + t("Verified", "सत्यापित") else t("Not verified", "सत्यापित नहीं"),
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (mobileVerified) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
+                        color = if (mobileVerified) LocalQuantaEdgeSemanticColors.current.success else MaterialTheme.colorScheme.error)
                 }
                 Text(t(
                     "Gmail is verified only by Google. A mobile number is verified only after OTP. Profile name and picture do not verify a mobile number.",
