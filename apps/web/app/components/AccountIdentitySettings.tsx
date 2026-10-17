@@ -65,7 +65,7 @@ export default function AccountIdentitySettings() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [locale]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -161,7 +161,7 @@ export default function AccountIdentitySettings() {
             <span className="qe-account-identity-settings__provider-mark" aria-hidden="true">G</span>
             <div className="qe-account-identity-settings__identity-copy">
               <strong>Gmail</strong>
-              <span>{profile.email || (english ? 'No Gmail linked' : 'Gmail लिंक नहीं है')}</span>
+              <span>{profile.gmailVerified && profile.email ? profile.email : (english ? 'No verified Gmail linked' : 'सत्यापित Gmail लिंक नहीं है')}</span>
             </div>
             <span className={profile.gmailVerified ? 'qe-verified-state is-verified' : 'qe-verified-state'}>
               {profile.gmailVerified ? '✓ ' + (english ? 'Verified' : 'सत्यापित') : (english ? 'Not verified' : 'सत्यापित नहीं')}
