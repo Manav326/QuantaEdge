@@ -61,7 +61,9 @@ The existing general-purpose SFT generator is also Ollama-first:
 
 ## First bounded Class 6 generation run
 
-The guarded workflow `.github/workflows/quantaedge-layers-6-8-generate-once.yml` is ready but deliberately not triggered by its own introduction. Only after the fresh benchmark contains a contract-valid `qwen2.5:1.5b` sample and the real Class 6 Curiosity Layer 5 ledger is `COMPLETE`, add or update `.github/triggers/generate-class6-curiosity.trigger` on `main` to execute the initial six-call experimental run. Preflight checks run before model download; each two-call batch is checkpointed and committed. The workflow cannot publish lessons or select the production model, and reports `IN_PROGRESS` when it has more segments to resume.
+The guarded Class 6 Curiosity pilot is an evidence-gated workflow chain. Commit `.github/triggers/layers1-5-class6-curiosity.trigger` to run `.github/workflows/quantaedge-layers-1-5-resume.yml`, which retries only missing/failed source-matched Layer 4 analyses and rebuilds the actual Layer 5 coverage ledger. After that workflow completes, `.github/workflows/benchmark-class6-curiosity-after-layer5.yml` verifies that the ledger is truly `COMPLETE` before it downloads Ollama, then benchmarks `qwen2.5:1.5b`, `qwen2.5:3b`, and `qwen3:4b` under the current prompt and renderer contract. The fresh report is committed under `data/`. If no candidate passes both schema and lesson-contract checks, generation remains blocked and the report is retained for diagnosis.
+
+Only a successful fresh benchmark starts `.github/workflows/quantaedge-layers-6-8-generate-once.yml`. It rechecks the source, Layer 5 ledger, benchmark fingerprint, and production-selection safety, then chooses an eligible model only for a bounded experimental draft batch (six model calls). It does not set the production model, publish lessons, or approve content. Each model call is checkpointed to `data/`; an interrupted batch resumes from the durable matching segments. The run manifest remains `IN_PROGRESS` until the segment dataset is complete and valid.
 
 
 ### Context-driven practice and source coverage
