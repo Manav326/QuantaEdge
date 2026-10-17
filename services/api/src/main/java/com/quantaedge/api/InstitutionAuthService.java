@@ -217,9 +217,23 @@ public class InstitutionAuthService {
         """, principal.adminId());
   }
 
+  @Transactional
   public IssuedJoinCode rotateJoinCode(long institutionId, long actorStaffId, Instant expiresAt, Long useLimit) {
     ensureEncryptionKey();
     if (useLimit != null && useLimit < 1) throw new IllegalArgumentException("Use limit must be a positive number.");
+    LocalDate today = LocalDate.now(BILLING_ZONE);
+    Boolean canIssue = jdbc.queryForObject("""
+        select exists(
+          select 1 from institution_tenant t
+          where t.id=? and t.status='ACTIVE'
+            and exists(select 1 from institution_billing_contract bc
+              where bc.institution_id=t.id and bc.active=true and bc.effective_from<=?
+                and (bc.effective_until is null or bc.effective_until>=?))
+        )
+        """, Boolean.class, institutionId, today, today);
+    if (!Boolean.TRUE.equals(canIssue)) {
+      throw new IllegalStateException("Activate the institution and configure an effective billing contract before issuing a learner join code.");
+    }
     jdbc.update("""
         update institution_join_code set status='REVOKED',revoked_at=now()
         where institution_id=? and status='ACTIVE'
