@@ -303,8 +303,14 @@ class LayersTests(unittest.TestCase):
                 prompts.append(payload["messages"][1]["content"])
                 return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
             args.preflight_only=True
+            args.require_existing_checkpoint=True
+            with self.assertRaisesRegex(ValueError,"no matching checkpoint"):
+                run_layers(args)
+            args.require_existing_checkpoint=False
             preflight=run_layers(args)
             self.assertTrue(preflight["preflight_only"])
+            self.assertEqual("NOT_STARTED",preflight["preflight"])
+            self.assertEqual(1,preflight["retryable_segments"])
             self.assertEqual(0,calls["count"],"resume preflight must never invoke Ollama")
             args.preflight_only=False
             result=run_layers(args,opener=open_)
@@ -352,6 +358,11 @@ class LayersTests(unittest.TestCase):
             again=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"],"completed checkpoints must not call Ollama again")
             self.assertEqual(1,again["segments_completed"])
+            args.rebuild_outputs_only=True
+            rebuilt=run_layers(args,opener=open_)
+            self.assertEqual("OUTPUTS_REBUILT_WITHOUT_MODEL_CALLS",rebuilt["status"])
+            self.assertEqual(1,calls["count"],"output-only reconcile must not call Ollama")
+            args.rebuild_outputs_only=False
             args.max_context_chars=6000
             with self.assertRaisesRegex(ValueError,"fingerprint mismatch"):
                 run_layers(args,opener=open_)
