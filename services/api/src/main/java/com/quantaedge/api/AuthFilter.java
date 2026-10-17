@@ -36,6 +36,18 @@ public class AuthFilter extends OncePerRequestFilter {
         .collect(Collectors.toUnmodifiableSet());
   }
 
+  /** Browser WebSocket handshakes cannot add arbitrary headers. The query hint is limited to this endpoint,
+   * and the cookie session and Origin are still checked by the normal filter path.
+   */
+  static String requestedWorkspace(HttpServletRequest request) {
+    String value = request.getHeader(AuthService.WORKSPACE_HEADER);
+    if ((value == null || value.isBlank())
+        && request.getRequestURI().endsWith("/api/v1/learning-chat/ws")) {
+      value = request.getParameter("workspace");
+    }
+    return AuthService.normalizeWorkspace(value);
+  }
+
   private static boolean authOperationAllowed(String uri, String workspace) {
     if (workspace == null) return true; // legacy non-browser clients are still constrained by token identity
     if (uri.equals("/api/v1/auth/me")
@@ -85,7 +97,7 @@ public class AuthFilter extends OncePerRequestFilter {
     AuthContext context = null;
     if (trace) LOGGER.info("HTTP_DIAG auth-filter-enter uri={} hasCookies={}", uri, request.getCookies() != null);
     try {
-      String workspace = AuthService.normalizeWorkspace(request.getHeader(AuthService.WORKSPACE_HEADER));
+      String workspace = requestedWorkspace(request);
       boolean preflight = "OPTIONS".equalsIgnoreCase(request.getMethod());
       String origin = request.getHeader("Origin");
       if (!preflight && origin != null && !origin.isBlank()) {

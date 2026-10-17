@@ -144,3 +144,13 @@ The backend includes resource/assignment lifecycle, source checks, per-resource 
 - Replaced fixed Admin dropdown choices with any whole-number minute input plus an explicit “Allow joining anytime” toggle for both creation and scheduled-session edits. The toggle stores 0, which removes only the early-join check; enrollment, eligible approved assignment, session status/provider validity and end time remain enforced by the server. The scheduled-session visibility window is still 24 hours.
 - Student web now computes its join state from the API's persisted `join_window_minutes` rather than hardcoding 15 minutes. Android uses the same value to gate joining/reopening and displays a pre-start hint. Both clients refresh their local clock while the screen is visible; API authorization remains authoritative.
 - Validation must be repeated on the exact resulting main commit. These checks do not replace controlled signed-in browser and physical Android device E2E.
+
+
+## Status delta — 2026-10-17, checkpoint 14
+
+This delta supersedes the October 16 source-state rows above for later implementation.
+
+- **Source now includes:** YouTube Live (V108), configurable join windows (V110), provider-neutral resource catalogue (V111), student web/Android lesson resources, Android app-private offline-video transfer, and a first durable native-messaging backend foundation (V112 with REST + cookie-authenticated WebSocket/STOMP, per-conversation history, idempotent send, read state, mute, reports and audited moderation).
+- **CI boundary:** Build/Publish run #3024 was green for an older feature checkpoint. Run #3042 failed API verification during the first resource-catalogue compilation. A compile correction is recorded, but this audit did not establish a green workflow for the latest exact `main` SHA. Do not mark current-main CI green without checking the resulting run.
+- **Security boundary:** messaging endpoints derive sender identity from `AuthContext`, verify active student subject enrollment and class code or approved teacher assignment, isolate private student-teacher conversations, restrict WebSocket destinations, check browser Origin/workspace, and recheck tracked subscriber permissions before each push. Sender IDs are not accepted from clients.
+- **Remaining completion gates:** exact-main green CI; student/teacher web UI wiring; Android messaging UI and reconnect; real-account Web/Android E2E; concurrent idempotent send, moderation/report and account-switch tests; paired database/private-media backup restore; and measured concurrency/load evidence. The single-node simple broker does not establish multi-replica WebSocket delivery. Epic #65 and tasks #61–#64 remain open.
