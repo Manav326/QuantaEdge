@@ -139,7 +139,7 @@ fun StudentProgressScreen(
             if (concepts.isEmpty() && !busy) item {
                 Text(t("No concept mastery is available yet. It will appear after practicing questions from published lessons.",
                     "अभी अवधारणाओं पर पकड़ की जानकारी उपलब्ध नहीं है। प्रकाशित पाठ के प्रश्नों का अभ्यास करने पर यह यहाँ दिखाई देगी।"),
-                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             items(concepts) { concept ->
                 val value = concept.optDouble("mastery_percent", 0.0).toFloat().coerceIn(0f, 100f)
@@ -156,7 +156,7 @@ fun StudentProgressScreen(
             item { Text(t("Recent tests", "हाल के टेस्ट"), style = MaterialTheme.typography.titleLarge) }
             if (recentTests.isEmpty() && !busy) item {
                 Text(t("No test attempts yet.", "अभी कोई टेस्ट प्रयास नहीं है。"),
-                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             items(recentTests) { attempt ->
                 val attemptId = attempt.longAny("attempt_id", "attemptId")
@@ -181,7 +181,7 @@ fun StudentProgressScreen(
                             attempt.textAny("max_score"), style = MaterialTheme.typography.bodyMedium)
                         when {
                             certificateStatus == "ISSUED" && certificateId > 0L -> {
-                                Text(t("Certificate issued", "प्रमाणपत्र जारी"), color = MaterialTheme.colorScheme.primary,
+                                Text(t("Certificate issued", "प्रमाणपत्र जारी"), color = LocalQuantaEdgeSemanticColors.current.success,
                                     style = MaterialTheme.typography.labelMedium)
                                 OutlinedButton(onClick = { onViewCertificate(certificateId) }, enabled = !busy,
                                     modifier = Modifier.fillMaxWidth()) {
@@ -213,7 +213,7 @@ fun StudentProgressScreen(
                                     else -> t("Certificate eligibility could not be checked; refresh to retry.",
                                         "प्रमाणपत्र पात्रता जाँची नहीं जा सकी; दोबारा रिफ्रेश करें।")
                                 }
-                                Text(hint, color = MaterialTheme.colorScheme.secondary, style = MaterialTheme.typography.bodySmall)
+                                Text(hint, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
                             }
                         }
                     }
@@ -227,7 +227,7 @@ fun StudentProgressScreen(
 private fun MetricCard(title: String, value: String, detail: String, modifier: Modifier) {
     Card(modifier = modifier) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-            Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+            Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(value, style = MaterialTheme.typography.titleLarge)
             Text(detail, style = MaterialTheme.typography.bodySmall)
         }

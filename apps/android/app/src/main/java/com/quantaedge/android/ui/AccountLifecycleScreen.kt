@@ -124,7 +124,7 @@ fun AccountLifecycleScreen(
             }
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-        if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.bodySmall)
+        if (status.isNotBlank()) Text(status, color = LocalQuantaEdgeSemanticColors.current.success, style = MaterialTheme.typography.bodySmall)
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Checkbox(checked = consent, onCheckedChange = { consent = it }, enabled = !busy)
             Text(t("I confirm and consent to this request.", "मैं इस अनुरोध की पुष्टि और सहमति देता/देती हूँ।"),
@@ -133,7 +133,7 @@ fun AccountLifecycleScreen(
 
         Text(t("Adult verification", "वयस्कता सत्यापन"), style = MaterialTheme.typography.titleMedium)
         Text(t("Status: ", "स्थिति: ") + displayStatus(adultStatus) + if (adultCurrent) " · " + t("Verified", "सत्यापित") else "",
-            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         if (!adultCurrent) {
             Button(onClick = onRequestAdultReview,
                 enabled = !busy && consent && adultStatus != "PENDING",
@@ -146,7 +146,7 @@ fun AccountLifecycleScreen(
             Text(t("Independent learner account", "स्वतंत्र विद्यार्थी खाता"), style = MaterialTheme.typography.titleMedium)
             Text(t("Verify your mobile and set a password after adult verification.",
                 "वयस्कता सत्यापन के बाद mobile verify करके password बनाएँ।"),
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedTextField(
                 value = mobile,
                 onValueChange = { mobile = it.filter(Char::isDigit).take(10); otpRequested = false; otp = ""; devCode = "" },
@@ -180,7 +180,7 @@ fun AccountLifecycleScreen(
         if (linked && role == "LEARNER") {
             Text(t("Parent eligibility", "अभिभावक पात्रता"), style = MaterialTheme.typography.titleMedium)
             Text(t("Status: ", "स्थिति: ") + displayStatus(parentStatus) + if (parentCurrent) " · " + t("Approved", "स्वीकृत") else "",
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (!parentCurrent && adultCurrent) {
                 Button(onClick = onRequestParentReview,
                     enabled = !busy && consent && parentStatus != "PENDING",

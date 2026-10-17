@@ -44,14 +44,14 @@ fun WelcomeScreen(
             QuantaEdgeBrand(modifier = Modifier.fillMaxWidth(), compact = false, centered = true)
             Spacer(Modifier.height(14.dp))
             Text(if (hi) "कक्षा 6–8 · Bihar Board" else "Classes 6–8 · Bihar Board",
-                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                style = MaterialTheme.typography.labelLarge, color = LocalQuantaEdgeSemanticColors.current.primaryText)
             Spacer(Modifier.height(6.dp))
             Text(if (hi) "पढ़ाई, बच्चे के हिसाब से।" else "Learning, adapted to each child.",
                 style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(8.dp))
             Text(if (hi) "Concept समझें, practice करें और progress देखें।"
                 else "Understand concepts, practise, and track progress.",
-                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(16.dp))
             Button(onClick = onStudentLogin, modifier = Modifier.fillMaxWidth()) {
                 Text(if (hi) "पढ़ाई शुरू करें →" else "Start learning →")

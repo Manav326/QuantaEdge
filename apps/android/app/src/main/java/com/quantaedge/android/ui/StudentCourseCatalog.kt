@@ -39,7 +39,7 @@ fun StudentCourseCatalog(
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                 Text(if (hi) "Courses लोड हो रहे हैं…" else "Loading courses…",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
             } else {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.fillMaxWidth().padding(14.dp),
@@ -115,7 +115,7 @@ fun StudentCourseCatalog(
                                     modifier = Modifier.weight(1f))
                                 Text(percent.toInt().toString() + "%",
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.primary)
+                                    color = LocalQuantaEdgeSemanticColors.current.primaryText)
                             }
                             LinearProgressIndicator(progress = { percent / 100f }, modifier = Modifier.fillMaxWidth())
                         } else {
@@ -124,7 +124,7 @@ fun StudentCourseCatalog(
                             } else {
                                 if (hi) "अभी published lessons नहीं हैं।" else "No published lessons yet."
                             }, style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.secondary)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         if (subjects.isNotEmpty()) {
                             Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
