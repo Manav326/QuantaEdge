@@ -118,3 +118,8 @@ This closes the main topic-ID ambiguity from the first audit pass and is require
 - Admins can configure 15 minutes, longer windows up to 24 hours, or Off (0). Off disables only the early-join time check; enrollment/assignment eligibility, session status, chapter publication and end-time authorization continue to be enforced server-side.
 - The admin can set this at session creation and change it on scheduled-session cards. Server-side student join, assigned-teacher meeting-link, and teacher joinable-catalogue logic read the persisted value; the 24-hour schedule-visibility limit remains separate and unchanged.
 - Regression tests cover the disabled gate, custom-window denial, and invalid value rejection. CI evidence is pending for this checkpoint.
+
+
+### Recording retry edge-case tests and teacher-link boundary — 2026-10-17
+
+The follow-up source checkpoint adds tests for same-key/same-fingerprint retry and same-key/different-content conflict with duplicate-file cleanup. It also keeps the teacher private-link listing restricted to sessions that actually have a private join URL; public YouTube broadcast metadata is not a substitute for that link. This follow-up is pending publication and CI validation after the join-window run.

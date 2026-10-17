@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,9 @@ import static org.mockito.Mockito.when;
 import java.time.OffsetDateTime;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +27,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
@@ -190,6 +197,74 @@ class LearningClassControllerTest {
         ()->controller.setLiveClassJoinWindow(88L,Map.of("joinWindowMinutes",1441),admin));
     assertEquals(400,error.getStatusCode().value());
     verifyNoInteractions(jdbc,staffAudit,mediaStorage);
+  }
+
+  @Test
+  void identicalRecordingUploadRetryReturnsTheExistingDraftAndDeletesDuplicateBytes() {
+    when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
+    org.mockito.Mockito.doReturn(3L).when(jdbc).query(
+        contains("select s.id from curriculum_subject"),
+        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(), eq("6"), eq("maths"));
+    String storageKey="afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4";
+    String digest="a".repeat(64);
+    PrivateMediaStorageService.StoredMedia stored=
+        new PrivateMediaStorageService.StoredMedia(storageKey,"recording.mp4","video/mp4",64L,digest);
+    when(mediaStorage.store(any(MultipartFile.class))).thenReturn(stored);
+    Path duplicateBytes=tempDirectory.resolve(storageKey);
+    when(mediaStorage.resolve(storageKey)).thenReturn(duplicateBytes);
+    String key="admin-upload-key-123";
+    String fingerprint=fingerprintForUpload("Test recording","",3L,null,null,null,
+        "recording.mp4","video/mp4",64L,digest);
+    when(jdbc.queryForList(contains("select id,request_fingerprint from recorded_class"),eq(99L),eq(key)))
+        .thenReturn(List.of(Map.of("id",88L,"request_fingerprint",fingerprint)));
+    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"),eq(88L)))
+        .thenReturn(List.of(Map.of("recorded_class_id",88L,"title","Test recording","status","DRAFT")));
+
+    MockMultipartFile upload=new MockMultipartFile("file","recording.mp4","video/mp4",new byte[64]);
+    Map<String,Object> result=controller.uploadRecordedClass(
+        upload,"Test recording","6","maths",null,null,null,null,key,admin);
+
+    assertEquals(88L,result.get("recorded_class_id"));
+    assertEquals("DRAFT",result.get("status"));
+    verify(mediaStorage).deleteQuietly(duplicateBytes);
+    verifyNoInteractions(staffAudit);
+  }
+
+  @Test
+  void reusingRecordingUploadKeyForDifferentContentConflictsAndCleansDuplicateFile() {
+    when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
+    org.mockito.Mockito.doReturn(3L).when(jdbc).query(
+        contains("select s.id from curriculum_subject"),
+        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(), eq("6"), eq("maths"));
+    String storageKey="afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4";
+    PrivateMediaStorageService.StoredMedia stored=
+        new PrivateMediaStorageService.StoredMedia(storageKey,"recording.mp4","video/mp4",64L,"a".repeat(64));
+    when(mediaStorage.store(any(MultipartFile.class))).thenReturn(stored);
+    Path duplicateBytes=tempDirectory.resolve(storageKey);
+    when(mediaStorage.resolve(storageKey)).thenReturn(duplicateBytes);
+    when(jdbc.queryForList(contains("select id,request_fingerprint from recorded_class"),eq(99L),eq("admin-upload-key-123")))
+        .thenReturn(List.of(Map.of("id",88L,"request_fingerprint","0".repeat(64))));
+
+    MockMultipartFile upload=new MockMultipartFile("file","recording.mp4","video/mp4",new byte[64]);
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.uploadRecordedClass(
+        upload,"Test recording","6","maths",null,null,null,null,"admin-upload-key-123",admin));
+
+    assertEquals(409,error.getStatusCode().value());
+    verify(mediaStorage,times(2)).deleteQuietly(duplicateBytes);
+    verifyNoInteractions(staffAudit);
+  }
+
+  private String fingerprintForUpload(String title,String description,Long subjectId,Long chapterId,
+      Long sessionId,Integer durationSeconds,String filename,String mediaType,long size,String digest) {
+    String canonical=String.join("\n",title,description,String.valueOf(subjectId),
+        chapterId==null?"":String.valueOf(chapterId),sessionId==null?"":String.valueOf(sessionId),
+        durationSeconds==null?"":String.valueOf(durationSeconds),filename,mediaType,String.valueOf(size),digest);
+    try {
+      return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+          .digest(canonical.getBytes(StandardCharsets.UTF_8)));
+    } catch (java.security.NoSuchAlgorithmException ex) {
+      throw new AssertionError(ex);
+    }
   }
 
   @Test

@@ -268,3 +268,11 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - Added controller tests for disabled early gate, configured 30-minute gate, and rejecting settings outside the supported range.
 - **Validation status:** these changes are committed directly to main and the new CI run is authoritative; do not treat this milestone as validated until API verification, migration tests, admin build and full workflow succeed.
 - Next in the locked plan: add direct V109 idempotency retry/conflict regression tests, then implement the provider-neutral resource catalogue and ordered assignments, then protected Android offline video downloads/player and Android YouTube Live parity. Keep the docs journal synchronized as each milestone lands.
+
+
+### Implementation journal — 2026-10-17 (checkpoint 8: recording idempotency regression coverage)
+
+- Added direct controller regression tests for an identical upload retry (returns the existing draft and removes duplicate bytes) and idempotency-key reuse for different content (409 conflict and cleanup).
+- During this follow-up review, restored the teacher `joinable` query's private-URL requirement. The admin-configurable join window changes only when the server allows an assigned teacher to retrieve a private meeting link; a public YouTube broadcast is not a private teacher meeting link and must not appear as joinable through that endpoint.
+- The tests and query correction are prepared as the next source checkpoint but are not yet on `main`; the live join-window validation run must finish first. Once published, the full Actions run is the acceptance evidence for this checkpoint.
+- Next implementation: provider-neutral resource catalogue, ordered scope assignments across chapters/legacy lessons/published structured artifacts, then authorized Android offline media.

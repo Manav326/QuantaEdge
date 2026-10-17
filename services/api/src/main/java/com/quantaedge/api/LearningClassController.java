@@ -98,7 +98,7 @@ public class LearningClassController {
         p.name as academic_period_name,
         (cs.status in ('SCHEDULED','LIVE')
           and (cs.join_window_minutes=0 or cs.starts_at<=now()+(cs.join_window_minutes * interval '1 minute'))
-          and cs.ends_at>now() and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
+          and cs.ends_at>now() and cs.private_join_url is not null
           and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')) as joinable
       from hr_employee e join hr_teaching_assignment a on a.employee_id=e.id
       join learning_class_session cs on cs.teaching_assignment_id=a.id
