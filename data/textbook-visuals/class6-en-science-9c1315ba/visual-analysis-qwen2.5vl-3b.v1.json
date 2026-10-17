@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 322,
+    "assets_selected": 325,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 320,
-    "assets_remaining": 1758,
-    "assets_completion_percent": 15.4,
+    "assets_analyzed": 323,
+    "assets_remaining": 1755,
+    "assets_completion_percent": 15.5,
     "assets_failed": 3,
-    "assets_skipped_from_checkpoint": 317,
+    "assets_skipped_from_checkpoint": 320,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -351,7 +351,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T10:29:25Z"
+      "checkpointed_at": "2026-10-17T10:36:48Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -935,7 +935,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T10:31:09Z"
+      "checkpointed_at": "2026-10-17T10:38:29Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -9697,6 +9697,88 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
       "checkpointed_at": "2026-10-17T10:34:53Z"
+    },
+    {
+      "asset_id": "81013fbd4bfeef3d65452823",
+      "asset_sha256": "8e11e4ba5967272ca469cfe70ab74c1308aca8e5573a5df23632f7a43dedd5bb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8e11e4ba5967272ca469cfe70ab74c1308aca8e5573a5df23632f7a43dedd5bb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T10:39:43Z"
+    },
+    {
+      "asset_id": "d450f5d2ad9b466c547c029c",
+      "asset_sha256": "76ffd8bd7be705e0bd4f12edde7f9e38dfaf5ed70de574ccb6ba51586c7fc11c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/76ffd8bd7be705e0bd4f12edde7f9e38dfaf5ed70de574ccb6ba51586c7fc11c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T10:40:59Z"
+    },
+    {
+      "asset_id": "de6822f9eff0490e6127c5e2",
+      "asset_sha256": "749ae8f0463d9376224d812a86fbdda72cedd4df66e2cc98da5b3e3764fa9160",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/749ae8f0463d9376224d812a86fbdda72cedd4df66e2cc98da5b3e3764fa9160.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T10:42:10Z"
     }
   ]
 }
