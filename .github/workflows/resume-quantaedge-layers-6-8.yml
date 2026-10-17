@@ -1,0 +1,55 @@
+name: Resume QuantaEdge Layers 6–8
+
+on:
+  workflow_dispatch:
+    inputs:
+      class_no:
+        description: "Class for the interrupted generation run"
+        type: choice
+        options: ["6", "7", "8"]
+        default: "8"
+        required: true
+      source_book_id:
+        description: "Exact source_book_id from the interrupted run; do not substitute another edition/book"
+        type: string
+        default: "ncert-c8-english-hecu1"
+        required: true
+      generation_model:
+        description: "Must exactly match the model used by the saved generation checkpoint"
+        type: string
+        default: "qwen2.5:1.5b"
+        required: true
+      max_model_calls:
+        description: "New bounded budget for retryable segments only (1–20)"
+        type: number
+        default: 6
+        required: true
+      checkpoint_every:
+        description: "Git savepoint interval; 1 is safest for recovery"
+        type: choice
+        options: ["1", "2", "3", "5"]
+        default: "1"
+        required: true
+      allow_experimental_model:
+        description: "Explicitly approve review-only experimental draft generation for this resume"
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  resume:
+    name: Resume saved segments for Class ${{ inputs.class_no }}
+    uses: ./.github/workflows/quantaedge-layers-6-8.yml
+    with:
+      mode: resume
+      class_no: ${{ inputs.class_no }}
+      source_book_id: ${{ inputs.source_book_id }}
+      benchmark_models: "qwen2.5:1.5b,qwen2.5:3b"
+      generation_model: ${{ inputs.generation_model }}
+      max_model_calls: ${{ inputs.max_model_calls }}
+      checkpoint_every: ${{ inputs.checkpoint_every }}
+      allow_experimental_model: ${{ inputs.allow_experimental_model }}
+    secrets: inherit
