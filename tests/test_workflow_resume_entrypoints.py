@@ -30,7 +30,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn('ledger_status == "COMPLETE"', workflow)
         self.assertIn("for batch in $(seq 1 80); do", workflow)
         self.assertIn("--max-assets 1 --include-page-previews", workflow)
-        self.assertIn('processed == "0"', workflow)
+        self.assertIn('[[ "$processed" == "0" ]]', workflow)
 
     def test_layers_1_to_3_launcher_locks_resume_preparation(self):
         wrapper = read("resume-textbook-visual-layers-1-3.yml")
