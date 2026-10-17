@@ -236,6 +236,13 @@ fun QuantaEdgeApp() {
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
     LaunchedEffect(activeTenantCode, pendingInstitutionJoinCode, stateOwnerKey) {
         val role = auth.optString("role").uppercase()
+        // Do not revive a previous signed-in user's persisted tenant palette on an unqualified launch.
+        // An explicit institution deep link may still brand the pre-login entry screen.
+        if (stateOwnerKey == "anonymous" && launchTenantCode == null) {
+            institutionBrandIdentity = null
+            themeController.clearInstitutionTheme()
+            return@LaunchedEffect
+        }
         var code = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
         try {
             if (pendingInstitutionJoinCode.isNotBlank() && role == "STUDENT" && stateOwnerKey != "anonymous") {
