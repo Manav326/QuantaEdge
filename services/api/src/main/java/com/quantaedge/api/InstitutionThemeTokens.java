@@ -50,6 +50,18 @@ public final class InstitutionThemeTokens {
       throw new IllegalArgumentException("themeTokens must be an object of approved theme settings.");
     }
     Map<?, ?> input = raw instanceof Map<?, ?> map ? map : Map.of();
+
+    // Stored v2 records contain generated light/dark token maps. Re-normalize their approved
+    // source settings so clients always receive canonical tokens and persisted JSON is never trusted.
+    if (input.get("schemaVersion") instanceof Number version && version.intValue() == SCHEMA_VERSION
+        && input.get("light") instanceof Map<?, ?> && input.get("dark") instanceof Map<?, ?>) {
+      Map<String, Object> source = new LinkedHashMap<>();
+      for (String key : List.of("schemaVersion", "presetId", "appearance", "brandPrimary", "brandAccent")) {
+        if (input.containsKey(key)) source.put(key, input.get(key));
+      }
+      return normalize(source);
+    }
+
     for (Object key : input.keySet()) {
       if (!INPUT_KEYS.contains(String.valueOf(key))) {
         throw new IllegalArgumentException("Unsupported theme setting: " + key);
@@ -129,8 +141,8 @@ public final class InstitutionThemeTokens {
     String muted = darkMode ? "#D1D5DB" : "#475467";
     String border = darkMode ? "#6B7280" : "#737D91";
     String borderSubtle = darkMode ? "#4B5563" : "#D1D5DB";
-    String primaryText = ensureContrast(brandPrimary, background, 4.5, !darkMode);
-    String accentText = ensureContrast(brandAccent, background, 4.5, !darkMode);
+    String primaryText = ensureContrast(brandPrimary, darkMode ? surface : "#FFFFFF", 4.5, !darkMode);
+    String accentText = ensureContrast(brandAccent, darkMode ? surface : "#FFFFFF", 4.5, !darkMode);
     String primaryContainer = mix(darkMode ? "#111827" : "#FFFFFF", brandPrimary, darkMode ? 0.28 : 0.10);
     String accentContainer = mix(darkMode ? "#111827" : "#FFFFFF", brandAccent, darkMode ? 0.26 : 0.10);
     String success = darkMode ? "#4ADE80" : "#166534";
@@ -163,7 +175,7 @@ public final class InstitutionThemeTokens {
     c.put("textMuted", muted);
     c.put("border", border);
     c.put("borderSubtle", borderSubtle);
-    c.put("focus", ensureContrast(brandPrimary, darkMode ? "#0B1220" : "#FFFFFF", 3.0, !darkMode));
+    c.put("focus", ensureContrast(brandPrimary, surface, 3.0, !darkMode));
     c.put("success", success);
     c.put("onSuccess", darkMode ? "#052E16" : "#FFFFFF");
     c.put("successContainer", darkMode ? "#14532D" : "#DCFCE7");
