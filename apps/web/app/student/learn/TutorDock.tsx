@@ -254,7 +254,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   onClose: () => void;
   currentQuestionId?: number;
 }) {
-  const { brand, isResolving } = useTenantBranding();
+  const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const { locale, learningLanguage, languageReady } = useLocale();
   // Keep the two header selectors independent:
   // app UI labels follow locale; lesson content and tutor answers follow learningLanguage.
@@ -615,7 +615,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       type="button"
       className="tutor-minimized"
       style={bubbleStyle}
-      aria-label={brand ? 'Restore ' + brand.displayName + ' tutor' : isResolving ? 'Restore tutor' : translateUi(locale, 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
+      aria-label={brand ? 'Restore ' + brand.displayName + ' tutor' : isResolving || institutionContextRequested ? 'Restore tutor' : translateUi(locale, 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
       title={translateUi(locale, 'legacy.web.restore.tutor.c620078d')}
       onPointerDown={beginBubbleDrag}
       onPointerMove={moveBubble}
@@ -651,7 +651,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     className="tutor-dock open"
     role="dialog"
     aria-modal={mobileViewport ? true : undefined}
-    aria-label={brand ? brand.displayName + ' tutor' : isResolving ? 'Learning tutor' : 'QUANTAEDGE TUTOR'}
+    aria-label={brand ? brand.displayName + ' tutor' : isResolving || institutionContextRequested ? 'Learning tutor' : 'QUANTAEDGE TUTOR'}
     style={panelStyle}
   >
     <div
