@@ -74,6 +74,7 @@ export default function ClassesPage(){
   const [classSessionId,setClassSessionId]=useState('');
   const [durationSeconds,setDurationSeconds]=useState('');
   const [file,setFile]=useState<File|null>(null);
+  const [recordingUploadKey,setRecordingUploadKey]=useState('');
   const [busy,setBusy]=useState(false);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
@@ -257,13 +258,16 @@ export default function ClassesPage(){
     setBusy(true);setError('');setNotice('');
     try{
       const form=new FormData();
+      const uploadKey=recordingUploadKey||crypto.randomUUID();
+      if(!recordingUploadKey)setRecordingUploadKey(uploadKey);
       form.append('file',file);form.append('title',recordingTitle.trim());
       form.append('classCode',classCode);form.append('subjectCode',subjectCode);
       if(recordingDescription.trim())form.append('description',recordingDescription.trim());
       if(recordingChapterId)form.append('chapterId',recordingChapterId);
       if(classSessionId)form.append('classSessionId',classSessionId);
       if(durationSeconds)form.append('durationSeconds',durationSeconds);
-      const result=await api('/api/v1/admin/recorded-classes',{method:'POST',body:form});
+      const result=await api('/api/v1/admin/recorded-classes',{method:'POST',headers:{'Idempotency-Key':uploadKey},body:form});
+      setRecordingUploadKey('');
       setRecordingTitle('');setRecordingDescription('');setRecordingChapterId('');setClassSessionId('');setDurationSeconds('');setFile(null);
       const input=document.getElementById('qe-recorded-class-file') as HTMLInputElement|null;if(input)input.value='';
       setNotice('Recording stored privately as a draft ('+formatSize(Number(result.file_size_bytes||file.size))+'). Publish it after checking the subject/chapter and playback.');
@@ -330,7 +334,7 @@ export default function ClassesPage(){
             <label>Link to live session (optional)<select value={classSessionId} onChange={e=>setClassSessionId(e.target.value)}><option value="">No linked live session</option>{sessions.filter(s=>s.status!=='CANCELLED'&&s.class_code===classCode&&s.subject_code===subjectCode).map(s=><option key={s.session_id} value={s.session_id}>{dateText(s.starts_at)} · {s.title}</option>)}</select></label>
             <label>Duration (seconds, optional)<input type="number" min="1" max="86400" value={durationSeconds} onChange={e=>setDurationSeconds(e.target.value)} placeholder="e.g. 2700"/></label>
             <label className={styles.wide}>Description<textarea rows={3} value={recordingDescription} onChange={e=>setRecordingDescription(e.target.value)} placeholder="Topic coverage, notes or related class details"/></label>
-            <label className={styles.fileInput} htmlFor="qe-recorded-class-file"><span>Choose recording</span><input id="qe-recorded-class-file" type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={e=>setFile(e.target.files?.[0]||null)}/><small>{file?file.name+' · '+formatSize(file.size):'No file selected'}</small></label>
+            <label className={styles.fileInput} htmlFor="qe-recorded-class-file"><span>Choose recording</span><input id="qe-recorded-class-file" type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={e=>{setFile(e.target.files?.[0]||null);setRecordingUploadKey('');}}/><small>{file?file.name+' · '+formatSize(file.size):'No file selected'}</small></label>
           </div>
           <div className={styles.submitBar}><p>New uploads remain Draft until reviewed and published. Playback is authorized for the enrolled subject and uses private byte-range streaming.</p><button type="button" className={styles.primaryButton} disabled={busy||!file||!recordingTitle.trim()} onClick={()=>void uploadRecording()}>{busy?'Uploading…':'Upload private recording'}</button></div>
         </section>

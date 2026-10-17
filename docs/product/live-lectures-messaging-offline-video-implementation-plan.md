@@ -236,3 +236,13 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 
 - The original V43 schema requires `private_join_url NOT NULL`. V108 now explicitly drops that column-level requirement because YouTube broadcasts do not have a private meeting URL, while its replacement provider-specific CHECK requires a non-null private URL for every non-YouTube provider. This preserves the prior invariant for Meet/custom/other sessions instead of accidentally making their private URL optional.
 - This correction is part of the unvalidated V108 migration before the feature is released; do not rewrite a migration after it has been deployed. Re-run migration/API tests before proceeding.
+
+
+### Implementation journal — 2026-10-17 (checkpoint 5: idempotent recording upload)
+
+- Added a forward-only V109 migration for nullable idempotency keys and SHA-256 request fingerprints on recorded recordings. Existing rows and older clients remain compatible; a partial unique index scopes keys to the uploading staff account.
+- Recording uploads accept an `Idempotency-Key` header. When a retry uses the same key and identical normalized metadata plus file digest, the API returns the existing recording instead of creating another row. Reusing a key for different content returns a conflict. Concurrent identical requests use a database uniqueness constraint and conflict-safe insert rather than relying only on a race-prone preflight query.
+- The API continues to stream media to private disk storage; the request fingerprint uses the computed file SHA-256 and metadata rather than loading video bytes into memory. Duplicate temporary media is deleted before returning the existing row.
+- The admin upload form now sends a stable UUID key and retains it after a failed request so retrying the same form is idempotent; successful upload or choosing a different file resets the key.
+- **Validation status:** awaiting the full GitHub Actions run on the resulting commit. Do not treat this milestone as complete until API compilation, migration verification, admin build, and the full workflow pass.
+- Next: build the provider-neutral resource catalogue and assignment schema, then implement Android app-private offline video downloads and durable PostgreSQL-backed messaging. Preserve main-only commits and do not add generated content outside `data/`.

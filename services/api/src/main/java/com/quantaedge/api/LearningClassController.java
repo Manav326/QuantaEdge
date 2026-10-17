@@ -5,6 +5,10 @@ import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -676,6 +680,7 @@ public class LearningClassController {
       @RequestParam(value = "chapterId", required = false) Long requestedChapterId,
       @RequestParam(value = "classSessionId", required = false) Long classSessionId,
       @RequestParam(value = "durationSeconds", required = false) Integer durationSeconds,
+      @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = requireClassManage(context);
     String title = requiredText(suppliedTitle, "Recording title", 240);
@@ -704,22 +709,95 @@ public class LearningClassController {
       }
     }
 
+    String requestKey = normalizeIdempotencyKey(idempotencyKey);
     PrivateMediaStorageService.StoredMedia stored = mediaStorage.store(file);
+    String fingerprint = requestFingerprint(title, desc, subjectId, requestedChapterId,
+        classSessionId, durationSeconds, stored);
     try {
-      Long id = jdbc.queryForObject("""
-        insert into recorded_class(
-          title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
-          media_type,file_size_bytes,sha256,duration_seconds,status,created_by_staff_id
-        ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?) returning id
-        """, Long.class, title, nullable(desc), subjectId, requestedChapterId, classSessionId,
-          stored.storageKey(), stored.originalFilename(), stored.mediaType(), stored.sizeBytes(),
-          stored.sha256(), durationSeconds, context.staffId());
+      if (requestKey != null) {
+        List<Map<String, Object>> previous = jdbc.queryForList("""
+          select id,request_fingerprint from recorded_class
+          where created_by_staff_id=? and idempotency_key=?
+          """, context.staffId(), requestKey);
+        if (!previous.isEmpty()) {
+          long existingId = ((Number) previous.getFirst().get("id")).longValue();
+          String existingFingerprint = String.valueOf(previous.getFirst().get("request_fingerprint"));
+          mediaStorage.deleteQuietly(mediaStorage.resolve(stored.storageKey()));
+          if (!fingerprint.equals(existingFingerprint)) {
+            throw conflict("This upload key was already used for different recording content. Start a new upload attempt with a new key.");
+          }
+          return adminRecordingById(existingId);
+        }
+      }
+
+      List<Long> inserted = requestKey == null
+          ? jdbc.query("""
+              insert into recorded_class(
+                title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
+                media_type,file_size_bytes,sha256,duration_seconds,status,created_by_staff_id
+              ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?) returning id
+              """, (rs, rowNum) -> rs.getLong(1), title, nullable(desc), subjectId,
+              requestedChapterId, classSessionId, stored.storageKey(), stored.originalFilename(),
+              stored.mediaType(), stored.sizeBytes(), stored.sha256(), durationSeconds, context.staffId())
+          : jdbc.query("""
+              insert into recorded_class(
+                title,description,subject_id,chapter_id,class_session_id,storage_key,original_filename,
+                media_type,file_size_bytes,sha256,duration_seconds,status,created_by_staff_id,
+                idempotency_key,request_fingerprint
+              ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',?,?,?)
+              on conflict do nothing returning id
+              """, (rs, rowNum) -> rs.getLong(1), title, nullable(desc), subjectId,
+              requestedChapterId, classSessionId, stored.storageKey(), stored.originalFilename(),
+              stored.mediaType(), stored.sizeBytes(), stored.sha256(), durationSeconds, context.staffId(),
+              requestKey, fingerprint);
+
+      if (inserted.isEmpty()) {
+        // A concurrent request may have won the same idempotency key after the preflight lookup.
+        List<Map<String, Object>> previous = jdbc.queryForList("""
+          select id,request_fingerprint from recorded_class
+          where created_by_staff_id=? and idempotency_key=?
+          """, context.staffId(), requestKey);
+        mediaStorage.deleteQuietly(mediaStorage.resolve(stored.storageKey()));
+        if (!previous.isEmpty()
+            && fingerprint.equals(String.valueOf(previous.getFirst().get("request_fingerprint")))) {
+          return adminRecordingById(((Number) previous.getFirst().get("id")).longValue());
+        }
+        throw conflict("This upload key was concurrently used for different recording content. Start a new upload attempt with a new key.");
+      }
+
+      Long id = inserted.getFirst();
       staffAudit.recordAction(context, "/api/v1/admin/recorded-classes/" + id + "/uploaded",
           "Uploaded private class recording #" + id + " (" + stored.originalFilename() + ").");
       return adminRecordingById(id);
     } catch (RuntimeException ex) {
       mediaStorage.deleteQuietly(mediaStorage.resolve(stored.storageKey()));
       throw ex;
+    }
+  }
+
+  private String normalizeIdempotencyKey(String supplied) {
+    if (supplied == null || supplied.isBlank()) return null;
+    String key = supplied.trim();
+    if (key.length() < 8 || key.length() > 128 || !key.matches("[A-Za-z0-9._:-]+")) {
+      throw badRequest("Idempotency-Key must be 8–128 characters using letters, numbers, dot, underscore, colon, or hyphen.");
+    }
+    return key;
+  }
+
+  private String requestFingerprint(String title, String description, Long subjectId,
+      Long chapterId, Long sessionId, Integer durationSeconds,
+      PrivateMediaStorageService.StoredMedia media) {
+    String canonical = String.join("\n",
+        title, description == null ? "" : description, String.valueOf(subjectId),
+        chapterId == null ? "" : String.valueOf(chapterId),
+        sessionId == null ? "" : String.valueOf(sessionId),
+        durationSeconds == null ? "" : String.valueOf(durationSeconds),
+        media.originalFilename(), media.mediaType(), String.valueOf(media.sizeBytes()), media.sha256());
+    try {
+      return HexFormat.of().formatHex(
+          MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8)));
+    } catch (NoSuchAlgorithmException ex) {
+      throw new IllegalStateException("SHA-256 is not available.", ex);
     }
   }
 
