@@ -416,6 +416,10 @@ public class InstitutionTenantController {
     result.put("appIconAssetKey",row.get("app_icon_asset_key"));
     result.put("storeListingUrl",row.get("store_listing_url"));
     result.put("version",row.get("version"));
+    String tenantCode = jdbc.queryForObject("select tenant_code from institution_tenant where id=?",String.class,institutionId);
+    long version = ((Number) row.get("version")).longValue();
+    result.put("logoUrl",assetUrl(tenantCode,"logo",version,row.get("logo_asset_key")));
+    result.put("appIconUrl",assetUrl(tenantCode,"app-icon",version,row.get("app_icon_asset_key")));
     result.put("themeTokens",InstitutionThemeTokens.normalize(parseJsonObject(row.get("theme_tokens"))));
     return result;
   }
