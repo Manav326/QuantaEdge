@@ -8,6 +8,7 @@ import AnswerFeedback from '../../components/AnswerFeedback';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import styles from './Tests.module.css';
 
 type AssessmentCard = {
@@ -70,7 +71,7 @@ async function api(url:string,init:RequestInit={}) {
   return body;
 }
 function answerText(value:any){if(value===null||value===undefined)return '';if(typeof value==='string')return value;try{return JSON.stringify(value)}catch{return String(value)}}
-function fmtDate(value?:string|null){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString()}
+function fmtDate(value?:string|null){return formatUserTimestamp(value)}
 function clock(seconds:number){const safe=Math.max(0,seconds);return String(Math.floor(safe/60)).padStart(2,'0')+':'+String(safe%60).padStart(2,'0')}
 
 function answerValues(value:any):string[]{
