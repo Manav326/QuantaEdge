@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 259,
+    "assets_selected": 262,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 259,
-    "assets_remaining": 1819,
-    "assets_completion_percent": 12.5,
+    "assets_analyzed": 262,
+    "assets_remaining": 1816,
+    "assets_completion_percent": 12.6,
     "assets_failed": 3,
-    "assets_skipped_from_checkpoint": 254,
+    "assets_skipped_from_checkpoint": 257,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -351,7 +351,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T07:55:31Z"
+      "checkpointed_at": "2026-10-17T08:02:55Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -935,7 +935,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T07:57:10Z"
+      "checkpointed_at": "2026-10-17T08:04:32Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -7844,6 +7844,95 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
       "checkpointed_at": "2026-10-17T08:01:06Z"
+    },
+    {
+      "asset_id": "0e0b8ac669cc268d09586eed",
+      "asset_sha256": "8ef0e351e94cb81d429c16ee99ade5300560f1d434d23d31b0a5c9ebaf68faec",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8ef0e351e94cb81d429c16ee99ade5300560f1d434d23d31b0a5c9ebaf68faec.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "The background serves as a simple, unobtrusive backdrop for the text.",
+        "limitations": [
+          "No specific content or information is provided beyond the text and background."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T08:05:51Z"
+    },
+    {
+      "asset_id": "f6a6115f0f71c58db8835b11",
+      "asset_sha256": "af07de2b857697b647caac82be273f4d85934ebfc4c994e66603fe47099eed17",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/af07de2b857697b647caac82be273f4d85934ebfc4c994e66603fe47099eed17.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal bar chart with two bars, one in light beige and the other in light yellow, possibly representing different categories or data points.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The chart may represent a comparison between two categories or data points.",
+        "limitations": [
+          "The chart does not provide specific numerical values or labels for the bars."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T08:07:12Z"
+    },
+    {
+      "asset_id": "135310bd6e1f915c970c7055",
+      "asset_sha256": "de595161f0abcc1eb24166d5e8bd27b647283b34073ea3fef3de223e75eb2654",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/de595161f0abcc1eb24166d5e8bd27b647283b34073ea3fef3de223e75eb2654.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T08:08:32Z"
     }
   ]
 }
