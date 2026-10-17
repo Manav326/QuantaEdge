@@ -4,70 +4,51 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale } from './LanguageProvider';
+import { translateUi } from '../i18n/catalog';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
 
-type Item = { href: string; hinglish: string; english: string; icon: string; match?: string };
-type StudentNavLink = { href: string; hinglish: string; english: string; icon: string };
+type Item = { href: string; message: string; icon: string; match?: string };
+type StudentNavLink = { href: string; message: string; icon: string };
 type StudentNavGroup = {
-  id: 'today' | 'learn' | 'practice' | 'progress' | 'library';
-  href?: string;
-  hinglish: string;
-  english: string;
-  mobileHinglish: string;
-  mobileEnglish: string;
-  icon: string;
-  children?: StudentNavLink[];
+ id: 'today' | 'learn' | 'practice' | 'progress' | 'library'; message: string; mobileMessage: string;
+ href?: string; icon: string; children?: StudentNavLink[];
 };
-type WorkspaceProfile = {
-  display_name?: string | null;
-  class_code?: string | number | null;
-  profile_image_url?: string | null;
-  mobile_e164?: string | null;
-};
+type WorkspaceProfile = { display_name?: string | null; class_code?: string | number | null; profile_image_url?: string | null; mobile_e164?: string | null };
 
 const studentNavGroups: StudentNavGroup[] = [
-  { id: 'today', href: '/student', hinglish: 'आज की योजना', english: "Today's plan", mobileHinglish: 'आज', mobileEnglish: 'Today', icon: '⌂' },
-  {
-    id: 'learn', hinglish: 'पढ़ाई', english: 'Learn', mobileHinglish: 'पढ़ाई', mobileEnglish: 'Learn', icon: '▤',
-    children: [
-      { href: '/student/learn', hinglish: 'Lessons और topics', english: 'Lessons & topics', icon: '▤' },
-      { href: '/student/structured-lessons', hinglish: 'Structured lessons', english: 'Structured lessons', icon: '✧' },
-      { href: '/student/classes', hinglish: 'Live और recorded classes', english: 'Live & recorded classes', icon: '◷' }
-    ],
-  },
-  {
-    id: 'practice', hinglish: 'अभ्यास और टेस्ट', english: 'Practice & Tests', mobileHinglish: 'अभ्यास', mobileEnglish: 'Practice', icon: '✦',
-    children: [
-      { href: '/student/practice', hinglish: 'अभ्यास', english: 'Practice', icon: '✦' },
-      { href: '/student/tests', hinglish: 'Tests और results', english: 'Tests & results', icon: '✓' },
-      { href: '/student/diagnostic', hinglish: 'शुरुआती diagnostic', english: 'Initial diagnostic', icon: '◎' },
-    ],
-  },
-  {
-    id: 'progress', hinglish: 'प्रगति और प्रमाणपत्र', english: 'Progress & Certificates', mobileHinglish: 'प्रगति', mobileEnglish: 'Progress', icon: '↗',
-    children: [
-      { href: '/student/progress', hinglish: 'मेरी प्रगति', english: 'My progress', icon: '↗' },
-      { href: '/student/certificates', hinglish: 'प्रमाणपत्र', english: 'Certificates', icon: '🏅' },
-    ],
-  },
-  { id: 'library', href: '/student/textbooks', hinglish: 'किताबें', english: 'Textbook Library', mobileHinglish: 'किताबें', mobileEnglish: 'Books', icon: '▣' },
+ { id: 'today', href: '/student', message: 'web.navigation.student.today', mobileMessage: 'web.navigation.student.mobileToday', icon: '⌂' },
+ { id: 'learn', message: 'web.navigation.student.learn', mobileMessage: 'web.navigation.student.mobileLearn', icon: '▤', children: [
+  { href: '/student/learn', message: 'web.navigation.student.learnTopics', icon: '▤' },
+  { href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons', icon: '✧' },
+  { href: '/student/classes', message: 'web.navigation.student.liveClasses', icon: '◷' },
+ ] },
+ { id: 'practice', message: 'web.navigation.student.practiceTests', mobileMessage: 'web.navigation.student.mobilePractice', icon: '✦', children: [
+  { href: '/student/practice', message: 'web.navigation.student.practice', icon: '✦' },
+  { href: '/student/tests', message: 'web.navigation.student.testsResults', icon: '✓' },
+  { href: '/student/diagnostic', message: 'web.navigation.student.diagnostic', icon: '◎' },
+ ] },
+ { id: 'progress', message: 'web.navigation.student.progressCertificates', mobileMessage: 'web.navigation.student.mobileProgress', icon: '↗', children: [
+  { href: '/student/progress', message: 'web.navigation.student.myProgress', icon: '↗' },
+  { href: '/student/certificates', message: 'web.navigation.student.certificates', icon: '🏅' },
+ ] },
+ { id: 'library', href: '/student/textbooks', message: 'web.navigation.student.books', mobileMessage: 'web.navigation.student.mobileBooks', icon: '▣' },
 ];
-
 const parentItems: Item[] = [
-  { href: '/parent', hinglish: 'परिवार की रिपोर्ट', english: 'Family report', icon: '⌂', match: '/parent' },
-  { href: '/parent/children', hinglish: 'बच्चों के Profiles', english: 'Children’s profiles', icon: '♧' },
-  { href: '/parent/profile', hinglish: 'Parent Profile', english: 'Parent profile', icon: '◉' },
+ { href: '/parent', message: 'web.navigation.parent.familyReport', icon: '⌂', match: '/parent' },
+ { href: '/parent/children', message: 'web.navigation.parent.childrenProfiles', icon: '♧' },
+ { href: '/parent/profile', message: 'web.navigation.parent.profile', icon: '◉' },
 ];
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { locale } = useLocale();
+  const t = (key: string) => translateUi(locale === 'english' ? 'english' : 'hinglish', key);
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
-  const itemLabel = (item: { hinglish: string; english: string }) => locale === 'english' ? item.english : item.hinglish;
+  const itemLabel = (item: { message: string }) => t(item.message);
   const [collapsed, setCollapsed] = useState(false);
   const [profile, setProfile] = useState<WorkspaceProfile | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -204,11 +185,11 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
  return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
     <aside className="qe-workspace-sidebar">
       <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
-      <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
+      <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')} aria-expanded={!collapsed} title={t(collapsed ? 'common.navigation.expand' : 'common.navigation.collapse')}>{collapsed ? '»' : '«'}</button>
       <div className="qe-workspace-nav-scroll">
-        <p className="qe-workspace-label">{role === 'student' ? (locale === 'english' ? 'YOUR LEARNING' : 'आपकी पढ़ाई') : (locale === 'english' ? 'YOUR FAMILY' : 'आपका परिवार')}</p>
+        <p className="qe-workspace-label">{t(role === 'student' ? 'web.navigation.student.yourLearning' : 'web.navigation.parent.yourFamily')}</p>
         {role === 'student' ? (
-          <nav aria-label="Student navigation">
+          <nav aria-label={t('web.navigation.student.label')}>
             {visibleStudentNavGroups.map(group => group.href ? (
               <Link key={group.id} href={group.href} title={collapsed ? itemLabel(group) : undefined}
                 aria-current={routeActive(group.href) ? 'page' : undefined}
@@ -244,15 +225,15 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             ))}
           </nav>
         ) : (
-          <nav aria-label="Parent navigation">
+          <nav aria-label={t('web.navigation.parent.label')}>
             {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
           </nav>
         )}
       </div>
       <div className="qe-workspace-sidebar-footer">
-        <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>{locale === 'english' ? 'Safe learning space' : 'सुरक्षित learning space'}</strong><small>{role === 'student' ? (locale === 'english' ? 'Progress saves automatically' : 'Progress अपने-आप save होती है') : (locale === 'english' ? 'Child reports are private' : 'बच्चों की reports private रहती हैं')}</small></div></div>
-        <button type="button" className="qe-workspace-logout" onClick={() => void logout()} disabled={loggingOut} aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}>
-          <span aria-hidden="true">↗</span><span>{loggingOut ? (locale === 'english' ? 'Logging out…' : 'लॉग आउट…') : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</span>
+        <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>{t('web.workspace.safeLearningSpace')}</strong><small>{t(role === 'student' ? 'web.workspace.progressSavesAutomatically' : 'web.workspace.childReportsPrivate')}</small></div></div>
+        <button type="button" className="qe-workspace-logout" onClick={() => void logout()} disabled={loggingOut} aria-label={t('web.workspace.logout')}>
+          <span aria-hidden="true">↗</span><span>{loggingOut ? t('web.workspace.loggingOut') : t('web.workspace.logout')}</span>
         </button>
       </div>
     </aside>
@@ -261,8 +242,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
         <div className="qe-workspace-topbar-actions">
           {role === 'student'
-            ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
-            : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
+            ? <StudentAccountMenu displayName={profile?.display_name || t('web.workspace.studentFallbackName')} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
+            : <ParentAccountMenu displayName={profile?.display_name || t('web.workspace.parentFallbackName')} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
         </div>
       </header>
       {children}
@@ -270,7 +251,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     {role === 'student' ? (
       <>
         {mobileOpenGroup ? <button type="button" className="qe-workspace-mobile-nav-backdrop"
-          aria-label={locale === 'english' ? 'Close navigation submenu' : 'Navigation submenu बंद करें'}
+          aria-label={t('web.navigation.closeSubmenu')}
           onClick={() => setMobileOpenGroup(null)} /> : null}
         {visibleStudentNavGroups.map(group => group.children?.length ? (
           <section key={group.id} className="qe-workspace-mobile-subnav" id={'qe-mobile-subnav-' + group.id}
@@ -278,7 +259,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             <div className="qe-workspace-mobile-subnav-heading">
               <strong>{itemLabel(group)}</strong>
               <button type="button" onClick={() => setMobileOpenGroup(null)}
-                aria-label={locale === 'english' ? 'Close navigation submenu' : 'Navigation submenu बंद करें'}>×</button>
+                aria-label={t('web.navigation.closeSubmenu')}>×</button>
             </div>
             <div className="qe-workspace-mobile-subnav-links">
               {group.children.map(item => <Link key={item.href} href={item.href}
@@ -290,12 +271,12 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             </div>
           </section>
         ) : null)}
-                <nav className="qe-workspace-mobile-nav qe-student-mobile-nav" aria-label="Student navigation">
+                <nav className="qe-workspace-mobile-nav qe-student-mobile-nav" aria-label={t('web.navigation.student.label')}>
           {visibleStudentNavGroups.map(group => group.href ? (
             <Link key={group.id} href={group.href} aria-current={routeActive(group.href) ? 'page' : undefined}
               className={routeActive(group.href) ? 'is-active' : ''} title={itemLabel(group)}
               onClick={() => setMobileOpenGroup(null)}>
-              <span aria-hidden="true">{group.icon}</span><small>{locale === 'english' ? group.mobileEnglish : group.mobileHinglish}</small>
+              <span aria-hidden="true">{group.icon}</span><small>{t(group.mobileMessage)}</small>
             </Link>
           ) : (
             <button key={group.id} type="button" title={itemLabel(group)}
@@ -304,13 +285,13 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               aria-controls={'qe-mobile-subnav-' + group.id}
               className={(studentGroupActive(group) ? 'is-active ' : '') + (mobileOpenGroup === group.id ? 'is-expanded' : '')}
               onClick={() => setMobileOpenGroup(current => current === group.id ? null : group.id)}>
-              <span aria-hidden="true">{group.icon}</span><small>{locale === 'english' ? group.mobileEnglish : group.mobileHinglish}</small>
+              <span aria-hidden="true">{group.icon}</span><small>{t(group.mobileMessage)}</small>
             </button>
           ))}
         </nav>
       </>
     ) : (
-      <nav className="qe-workspace-mobile-nav" aria-label="Parent navigation">
+      <nav className="qe-workspace-mobile-nav" aria-label={t('web.navigation.parent.label')}>
         {items.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''} title={itemLabel(item)}>
           <span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small>
         </Link>)}
