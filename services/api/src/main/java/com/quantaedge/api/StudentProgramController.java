@@ -112,6 +112,23 @@ public class StudentProgramController {
       throw new SecurityException("This course is not available or is not active.");
     }
     Map<String,Object> course = matches.getFirst();
+    Boolean paymentRequired = jdbc.queryForObject("""
+      select exists(
+        select 1 from course_marketplace_offer o
+        where o.course_id=? and o.status='PUBLISHED' and o.price_paise>0
+      )
+      and not exists(
+        select 1 from student_program_enrollment e
+        where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
+      )
+      and not exists(
+        select 1 from course_purchase cp
+        where cp.student_id=? and cp.course_id=?
+      )
+      """, Boolean.class, courseId, context.studentId(), courseId, context.studentId(), courseId);
+    if (Boolean.TRUE.equals(paymentRequired)) {
+      throw new SecurityException("Purchase this course before opening its lessons.");
+    }
     List<Map<String,Object>> subjects = jdbc.queryForList("""
       select s.id,s.code
       from curriculum_program_subject ps
@@ -121,6 +138,11 @@ public class StudentProgramController {
       """, courseId);
     if (subjects.isEmpty()) throw new IllegalStateException("The course has no active subject tracks yet.");
 
+    // Only one course is active at a time, but older enrollments stay paused and resumable.
+    jdbc.update("""
+      update student_program_enrollment set status='PAUSED',updated_at=now()
+      where student_id=? and status='ACTIVE' and program_id<>?
+      """, context.studentId(), courseId);
     jdbc.update("""
       insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
       values(?,?,'ACTIVE',now(),null,now(),now())
