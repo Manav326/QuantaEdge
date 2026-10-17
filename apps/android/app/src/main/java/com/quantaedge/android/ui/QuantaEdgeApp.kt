@@ -771,7 +771,11 @@ fun QuantaEdgeApp() {
         marketplaceBusyCourseId = courseId
         runTask {
             try {
-                val order = ApiClient.postObject("/api/v1/marketplace/courses/" + courseId + "/orders")
+                val order = ApiClient.postObject(
+                    "/api/v1/marketplace/courses/" + courseId + "/orders",
+                    JSONObject(),
+                    mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+                )
                 val host = context as? RazorpayCourseCheckoutHost
                     ?: throw IOException("Razorpay checkout is not available on this device.")
                 val localOrderId = order.optLong("localOrderId", 0L)
