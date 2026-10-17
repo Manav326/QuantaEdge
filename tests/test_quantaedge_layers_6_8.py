@@ -8,7 +8,7 @@ from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
     PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, bind_layer5_evidence_to_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
-    validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag, layer5_ledger,
+    validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag, layer5_ledger, preflight_source,
     write_json, write_jsonl, write_outputs, prompt_for, run as run_layers,
 )
 
@@ -116,7 +116,8 @@ class LayersTests(unittest.TestCase):
             source={"source_book_id":book,"source_pdf_sha256":pdfhash}
             for path in (legacy,canonical):
                 write_json(path,{"schema_version":"quantaedge.textbook-coverage-ledger.v1",
-                    "layer":5,"ledger_status":"COMPLETE","publication_allowed":False,"source":source})
+                    "layer":5,"ledger_status":"COMPLETE","publication_allowed":False,
+                    "summary":{"unresolved_count":0},"source":source})
             index=root/"data"/"textbook-visuals"/"class6-en-science-9c1315ba"/"visual-pipeline-index.v1.json"
             write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1",
                 "class":6,"book_slug":"class6-en-science-9c1315ba","source_book_id":book,
@@ -124,6 +125,35 @@ class LayersTests(unittest.TestCase):
                 "coverage_ledger_path":"data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/coverage-ledger.v1.json"})
             resolved=layer5_ledger(root,{"class_no":6,"book_id":book,"source_pdf_sha256":pdfhash})
             self.assertEqual(canonical.resolve(),resolved)
+
+    def test_incomplete_layer5_error_reports_why_it_is_not_ready(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            book="ncert-c6-english-fecu1"
+            pdfhash="7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73"
+            ledger_path=root/"data"/"textbook-content-pipeline"/"class-6"/"books"/"book"/"coverage-ledger.v1.json"
+            write_json(ledger_path,{"schema_version":"quantaedge.textbook-coverage-ledger.v1","layer":5,
+                "ledger_status":"INCOMPLETE","publication_allowed":False,
+                "source":{"source_book_id":book,"source_pdf_sha256":pdfhash},
+                "summary":{"unresolved_count":1810,"pages_with_unresolved_text":0,
+                    "missing_visual_analyses":1807,"failed_visual_analyses":3,"orphan_analysis_results":0}})
+            with self.assertRaisesRegex(ValueError,r"unresolved_count=1810.*missing_visual_analyses=1807.*failed_visual_analyses=3"):
+                layer5_ledger(root,{"class_no":6,"book_id":book,"source_pdf_sha256":pdfhash})
+
+    def test_source_preflight_is_read_only_and_reports_layer5_lineage(self):
+        from pathlib import Path
+        args=SimpleNamespace(repo_root=Path("."),class_no=6,source_book_id="ncert-c6-english-fecu1")
+        source={"book_id":args.source_book_id,"source_pdf_sha256":"a"*64,"class_no":6,
+                "language":"en","subject":"science","page_count":272}
+        ledger={"summary":{"unresolved_count":0}}
+        with patch("scripts.quantaedge_layers_6_8.load_source",return_value=source), \
+             patch("scripts.quantaedge_layers_6_8.load_layer5_evidence",return_value=(Path("data/ledger.json"),ledger,{1:[{"asset_id":"visual-a"}]})), \
+             patch("scripts.quantaedge_layers_6_8.sha_file",return_value="b"*64):
+            result=preflight_source(args)
+        self.assertEqual("READY",result["preflight"])
+        self.assertFalse(result["model_download_required"])
+        self.assertEqual(1,result["layer5_visual_evidence_count"])
+        self.assertEqual("b"*64,result["layer5_ledger_sha256"])
 
     def test_canonical_layer5_index_missing_target_fails_closed(self):
         with tempfile.TemporaryDirectory() as temp:
