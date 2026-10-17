@@ -76,16 +76,23 @@ fun FloatingTutorDock(
         val viewportWidth = maxWidth.value
         val viewportHeight = maxHeight.value
         val compact = maxWidth < 700.dp
-        val availableWidth = (maxWidth - 16.dp).coerceAtLeast(260.dp)
-        val availableHeight = (maxHeight - 16.dp).coerceAtLeast(260.dp)
-        val compactHeight = if (availableHeight < 280.dp) availableHeight else (maxHeight * 0.78f).coerceIn(280.dp, availableHeight)
+        // Real viewport bounds take precedence over minimum ergonomic sizes. This matters
+        // in split-screen, landscape and when IME/window insets reduce available space.
+        val availableWidth = (maxWidth - 16.dp).coerceAtLeast(1.dp)
+        val availableHeight = (maxHeight - 16.dp).coerceAtLeast(1.dp)
+        val compactMinimumWidth = minOf(260.dp, availableWidth)
+        val compactMinimumHeight = minOf(260.dp, availableHeight)
+        val wideMinimumWidth = minOf(320.dp, availableWidth)
+        val wideMinimumHeight = minOf(360.dp, availableHeight)
+        val compactHeight = if (availableHeight < 280.dp) availableHeight
+            else (maxHeight * 0.78f).coerceIn(minOf(280.dp, availableHeight), availableHeight)
         // Keep the mobile default fitted to the viewport, then honour any user resize.
         val effectiveWidth = if (compact && !userResized) availableWidth
-            else if (compact) panelWidth.dp.coerceIn(260.dp, availableWidth)
-            else panelWidth.dp.coerceIn(320.dp, (maxWidth - 16.dp).coerceAtLeast(320.dp))
+            else if (compact) panelWidth.dp.coerceIn(compactMinimumWidth, availableWidth)
+            else panelWidth.dp.coerceIn(wideMinimumWidth, availableWidth)
         val effectiveHeight = if (compact && !userResized) compactHeight
-            else if (compact) panelHeight.dp.coerceIn(260.dp, availableHeight)
-            else panelHeight.dp.coerceIn(360.dp, (maxHeight - 16.dp).coerceAtLeast(360.dp))
+            else if (compact) panelHeight.dp.coerceIn(compactMinimumHeight, availableHeight)
+            else panelHeight.dp.coerceIn(wideMinimumHeight, availableHeight)
         val defaultLeft = if (compact) 8f else (viewportWidth - effectiveWidth.value - 16f).coerceAtLeast(8f)
         val defaultTop = (viewportHeight - effectiveHeight.value - if (compact) 12f else 18f).coerceAtLeast(8f)
         val panelLeft = (left ?: defaultLeft).coerceIn(8f, (viewportWidth - effectiveWidth.value - 8f).coerceAtLeast(8f))
@@ -185,10 +192,12 @@ fun FloatingTutorDock(
                                     detectDragGestures { change, dragAmount ->
                                         change.consume()
                                         userResized = true
+                                        val maxResizeWidth = (viewportWidth - panelLeft - 8f).coerceAtLeast(1f)
+                                        val maxResizeHeight = (viewportHeight - panelTop - 8f).coerceAtLeast(1f)
                                         panelWidth = (effectiveWidth.value + dragAmount.x / density)
-                                            .coerceIn(260f, (viewportWidth - panelLeft - 8f).coerceAtLeast(260f))
+                                            .coerceIn(minOf(260f, maxResizeWidth), maxResizeWidth)
                                         panelHeight = (effectiveHeight.value + dragAmount.y / density)
-                                            .coerceIn(260f, (viewportHeight - panelTop - 8f).coerceAtLeast(260f))
+                                            .coerceIn(minOf(260f, maxResizeHeight), maxResizeHeight)
                                     }
                                 },
                             color = MaterialTheme.colorScheme.surfaceVariant,
