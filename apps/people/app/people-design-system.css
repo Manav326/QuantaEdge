@@ -1410,3 +1410,74 @@ button:disabled,
 .qe-people-page-slot .cards > .qe-people-empty-state {
   grid-column: 1 / -1;
 }
+
+
+/* Route-wide polish: predictable forms, readable dense data, and resilient small-screen actions. */
+.qe-people-page-slot :where(.field > label, label.field) {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+.qe-people-page-slot :where(.field small, .field .hint, .field .help-text) {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 450;
+  line-height: 1.5;
+}
+.qe-people-page-slot :where(input, select, textarea, .input) {
+  max-width: 100%;
+  min-width: 0;
+  border-color: #cbd5e1;
+  border-radius: var(--qe-radius-control);
+  background-color: #fff;
+  color: var(--ink);
+}
+.qe-people-page-slot textarea {
+  min-height: 104px;
+  resize: vertical;
+}
+.qe-people-page-slot :where(input, select, textarea):disabled {
+  background: #f2f4f7;
+  color: #667085;
+}
+.qe-people-page-slot :where(input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"]) {
+  border-color: var(--danger);
+}
+.qe-people-page-slot :where(.panel, .card) { min-width: 0; }
+.qe-people-page-slot .panel > :where(h2, h3):first-child { line-height: 1.3; }
+.qe-people-page-slot .table-wrap {
+  max-width: 100%;
+  background: var(--card);
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+.qe-people-page-slot table { font-variant-numeric: tabular-nums; }
+.qe-people-page-slot tbody tr { transition: background-color .12s ease; }
+.qe-people-page-slot tbody tr:hover { background: #fffaf6; }
+.qe-people-page-slot tbody tr:focus-within { background: #fff7ed; }
+.qe-people-page-slot td :where(button, a) { overflow-wrap: anywhere; }
+.qe-people-page-slot :where(.actions, .toolbar, .qe-people-page-actions) > * { max-width: 100%; }
+.qe-people-page-slot .qe-people-pagination { justify-content: flex-end; }
+.qe-people-page-slot .qe-people-pagination select { width: auto; min-width: 76px; }
+.qe-people-page-slot :where(.error, .notice, .qe-people-feedback) { overflow-wrap: anywhere; }
+.qe-people-page-slot :where(.pill, .qe-people-status) { white-space: normal; }
+.qe-people-page-slot .metric,
+.qe-people-page-slot .qe-people-metric-value { font-variant-numeric: tabular-nums; }
+.qe-people-page-slot :where(img, video, iframe) { max-width: 100%; }
+.qe-people-page-slot :where(pre, code) { overflow-wrap: anywhere; }
+.qe-people-page-slot a:not([class]) { color: var(--brand2); text-underline-offset: 3px; }
+.qe-people-page-slot a:not([class]):hover { text-decoration-thickness: 2px; }
+@media (max-width: 900px) {
+  .qe-people-page-slot .qe-people-page-header { align-items: stretch; }
+  .qe-people-page-slot .qe-people-page-actions > * { flex: 0 1 auto; }
+}
+@media (max-width: 600px) {
+  .qe-people-page-slot :where(.actions, .toolbar, .qe-people-pagination) { align-items: stretch; }
+  .qe-people-page-slot .qe-people-pagination { justify-content: flex-start; }
+  .qe-people-page-slot .qe-people-pagination > * { min-width: 0; }
+  .qe-people-page-slot .table-wrap table { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qe-people-page-slot tbody tr { transition: none; }
+}
