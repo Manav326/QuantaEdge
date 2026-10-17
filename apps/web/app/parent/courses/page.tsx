@@ -82,12 +82,13 @@ export default function ParentCoursesPage() {
         router.replace('/login');
         return;
       }
-      const results = await Promise.all([
-        readJson(fetch('/api/v1/marketplace/family/courses', { credentials: 'same-origin', cache: 'no-store' })),
-        readJson(fetch('/api/v1/guardians/children', { credentials: 'same-origin', cache: 'no-store' })),
-        readJson(fetch('/api/v1/parent/course-requests', { credentials: 'same-origin', cache: 'no-store' })),
-        readJson(fetch('/api/v1/marketplace/family/entitlements', { credentials: 'same-origin', cache: 'no-store' })),
+      const responses = await Promise.all([
+        fetch('/api/v1/marketplace/family/courses', { credentials: 'same-origin', cache: 'no-store' }),
+        fetch('/api/v1/guardians/children', { credentials: 'same-origin', cache: 'no-store' }),
+        fetch('/api/v1/parent/course-requests', { credentials: 'same-origin', cache: 'no-store' }),
+        fetch('/api/v1/marketplace/family/entitlements', { credentials: 'same-origin', cache: 'no-store' }),
       ]);
+      const results = await Promise.all(responses.map(response => readJson(response)));
       setCourses(Array.isArray(results[0]) ? results[0] : []);
       setChildren(Array.isArray(results[1]) ? results[1] : []);
       setRequests(Array.isArray(results[2]) ? results[2] : []);
