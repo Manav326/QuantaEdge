@@ -6,6 +6,7 @@ import Link from 'next/link';
 import PremiumPagination from '../../components/PremiumPagination';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Classes.module.css';
 import LearningChatPanel from './LearningChatPanel';
@@ -31,10 +32,7 @@ async function api(url:string,init:RequestInit={}) {
   if(!response.ok){if(response.status===401||response.status===403)throw Object.assign(new Error('Student sign-in is required.'),{auth:true});throw new Error(body.detail||body.message||body.error||('Request failed ('+response.status+')'));}
   return body;
 }
-function formatDate(value?:string|null){
-  if(!value)return '—';const d=new Date(value);
-  return Number.isNaN(d.getTime())?'—':d.toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-}
+function formatDate(value?:string|null){return formatUserTimestamp(value)}
 function formatSize(size:number){return size>=1024*1024?(size/(1024*1024)).toFixed(1)+' MB':Math.max(1,Math.round(size/1024))+' KB'}
 function durationText(seconds?:number|null){
   if(!seconds)return 'Duration not listed';const h=Math.floor(seconds/3600),m=Math.floor((seconds%3600)/60);
