@@ -412,3 +412,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Request failures use a catalog fallback with an HTTP status placeholder; audit dates follow the registered UI locale tag.
 - Added CI raw-copy regression checks for representative prior literals and paired catalog messages across generated Web/Admin/People copies.
 - Route remains first-pass until current CI passes and browser checks cover staff creation, role permissions, suspend/reactivate and read-only audit access.
+
+
+## Admin Content Studio — lifecycle feedback, first batch
+
+- Centralized confirmation, saved-preview version, draft creation, curriculum/textbook verification, chapter/micro-topic publication and review-submission feedback.
+- Revision numbers and content type use placeholders; dynamic API diagnostics remain preserved.
+- Added paired catalog keys and CI regression checks. More feedback, validation prompts, block/question editing and preview labels remain open.

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
+import { useUiTranslation } from '../i18n/useUiTranslation';
 import {useEffect,useMemo,useRef,useState} from 'react';
 
 type Row={class_code:string;class_name:string;program_code?:string|null;program_name?:string|null;subject_code:string;subject_name:string;chapter_id:number|null;chapter_code:string|null;chapter_name:string|null;chapter_description:string|null;chapter_sort_order:number|null;chapter_status:string|null;chapter_active:boolean|null;curriculum_source?:string|null;curriculum_source_url?:string|null;curriculum_source_edition?:string|null;curriculum_source_pages?:string|null;curriculum_source_verified?:boolean;lesson_id:number|null;lesson_code:string|null;lesson_title:string|null;lesson_summary:string|null;estimated_minutes:number|null;lesson_sort_order:number|null;lesson_status:string|null;lesson_active:boolean|null;alignment_source_title?:string|null;alignment_source_url?:string|null;alignment_source_edition?:string|null;alignment_page_range?:string|null;alignment_source_verified?:boolean;block_count:number|null;question_count:number|null};
@@ -250,6 +251,7 @@ function questionsForSnapshot(showAdvanced:boolean,questionJson:string,questions
  try{const value=JSON.parse(questionJson);return Array.isArray(value)?value:[{invalid_json:questionJson}]}catch{return [{invalid_json:questionJson}]}
 }
 function RichTextEditor({blockKey,initialHtml,onChange}:{blockKey:number;initialHtml:string;onChange:(html:string)=>void}){
+ const t=useUiTranslation();
  const ref=useRef<HTMLDivElement|null>(null);
  useEffect(()=>{if(ref.current)ref.current.innerHTML=safeRichHtml(initialHtml||'')},[blockKey]);
  function finish(){if(ref.current)onChange(ref.current.innerHTML)}
@@ -258,24 +260,24 @@ function RichTextEditor({blockKey,initialHtml,onChange}:{blockKey:number;initial
   command('fontSize',value);if(!ref.current)return;
   ref.current.querySelectorAll('font[size]').forEach(el=>{const font=el as HTMLElement;const sizes:Record<string,string>={'1':'12px','2':'14px','3':'16px','4':'20px','5':'24px','6':'30px','7':'36px'};const span=document.createElement('span');span.style.fontSize=sizes[font.getAttribute('size')||'3']||'16px';while(font.firstChild)span.appendChild(font.firstChild);font.replaceWith(span)});finish();
  }
- function insertLink(){const url=window.prompt('Paste an HTTPS link');if(!url||!/^https?:\/\//i.test(url))return;command('createLink',url)}
- function insertImage(){const url=window.prompt('Paste an HTTPS image URL');if(!url||!/^https?:\/\//i.test(url))return;command('insertImage',url)}
+ function insertLink(){const url=window.prompt(t('admin.contentStudio.pasteHttpsLink'));if(!url||!/^https?:\/\//i.test(url))return;command('createLink',url)}
+ function insertImage(){const url=window.prompt(t('admin.contentStudio.pasteHttpsImageUrl'));if(!url||!/^https?:\/\//i.test(url))return;command('insertImage',url)}
  return <div className="qe-rich-wrap">
-  <div className="qe-rich-toolbar" aria-label="Text formatting toolbar">
-   <button type="button" title="Bold" onMouseDown={e=>e.preventDefault()} onClick={()=>command('bold')}><b>B</b></button>
-   <button type="button" title="Italic" onMouseDown={e=>e.preventDefault()} onClick={()=>command('italic')}><i>I</i></button>
-   <button type="button" title="Underline" onMouseDown={e=>e.preventDefault()} onClick={()=>command('underline')}><u>U</u></button>
-   <select aria-label="Font size" defaultValue="3" onChange={e=>size(e.target.value)}><option value="2">Small</option><option value="3">Normal</option><option value="4">Large</option><option value="5">Heading</option><option value="6">Very large</option></select>
-   <label className="qe-color-pick" title="Text color">A <input aria-label="Text color" type="color" defaultValue="#243453" onChange={e=>command('foreColor',e.target.value)}/></label>
-   <label className="qe-color-pick" title="Highlight color">▰ <input aria-label="Highlight color" type="color" defaultValue="#fff0b8" onChange={e=>command('hiliteColor',e.target.value)}/></label>
-   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>command('insertUnorderedList')}>• List</button>
-   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>command('insertOrderedList')}>1. List</button>
-   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={insertLink}>↗ Link</button>
-   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={insertImage}>▧ Image URL</button>
-   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>command('removeFormat')}>Clear format</button>
+  <div className="qe-rich-toolbar" aria-label={t('admin.contentStudio.richTextToolbar')}>
+   <button type="button" title={t('admin.contentStudio.bold')} onMouseDown={e=>e.preventDefault()} onClick={()=>command('bold')}><b>B</b></button>
+   <button type="button" title={t('admin.contentStudio.italic')} onMouseDown={e=>e.preventDefault()} onClick={()=>command('italic')}><i>I</i></button>
+   <button type="button" title={t('admin.contentStudio.underline')} onMouseDown={e=>e.preventDefault()} onClick={()=>command('underline')}><u>U</u></button>
+   <select aria-label={t('admin.contentStudio.fontSize')} defaultValue="3" onChange={e=>size(e.target.value)}><option value="2">{t('admin.contentStudio.sizeSmall')}</option><option value="3">{t('admin.contentStudio.sizeNormal')}</option><option value="4">{t('admin.contentStudio.sizeLarge')}</option><option value="5">{t('admin.contentStudio.sizeHeading')}</option><option value="6">{t('admin.contentStudio.sizeVeryLarge')}</option></select>
+   <label className="qe-color-pick" title={t('admin.contentStudio.textColor')}>A <input aria-label={t('admin.contentStudio.textColor')} type="color" defaultValue="#243453" onChange={e=>command('foreColor',e.target.value)}/></label>
+   <label className="qe-color-pick" title={t('admin.contentStudio.highlightColor')}>▰ <input aria-label={t('admin.contentStudio.highlightColor')} type="color" defaultValue="#fff0b8" onChange={e=>command('hiliteColor',e.target.value)}/></label>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>command('insertUnorderedList')}>{t('admin.contentStudio.unorderedList')}</button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>command('insertOrderedList')}>{t('admin.contentStudio.orderedList')}</button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={insertLink}>{t('admin.contentStudio.insertLink')}</button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={insertImage}>{t('admin.contentStudio.insertImage')}</button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>command('removeFormat')}>{t('admin.contentStudio.clearFormat')}</button>
   </div>
-  <div ref={ref} className="qe-rich-editable" contentEditable suppressContentEditableWarning role="textbox" aria-label="Lesson explanation rich text" aria-multiline="true" onInput={finish} onBlur={finish}/>
-  <div className="qe-rich-helper">Select text to format it. Images and links must use trusted HTTPS URLs. The learner preview updates as you type.</div>
+  <div ref={ref} className="qe-rich-editable" contentEditable suppressContentEditableWarning role="textbox" aria-label={t('admin.contentStudio.lessonExplanationEditor')} aria-multiline="true" onInput={finish} onBlur={finish}/>
+  <div className="qe-rich-helper">{t('admin.contentStudio.richTextHelper')}</div>
  </div>;
 }
 function MediaElement({type,content,language='en'}:{type:string;content:Record<string,any>;language?:'hi'|'en'}){
@@ -312,6 +314,7 @@ function LearnerBlock({block,language='hi'}:{block:ContentBlock;language?:'hi'|'
  return <article className="qe-student-card"><span className="qe-student-kicker">{block.block_type}</span><p>{String(c.body||c.description||'Learning block')}</p></article>;
 }
 export default function ContentStudio(){
+ const t=useUiTranslation();
  const [rows,setRows]=useState<Row[]>([]);
  const [identity,setIdentity]=useState<any>(null);
  const [questionSummary,setQuestionSummary]=useState<any>(null);
@@ -457,14 +460,14 @@ export default function ContentStudio(){
  const hasUnsavedChanges=createType?createHasInput:Boolean(baselineSnapshot&&baselineSnapshot!==draftSnapshot);
  const previewReviewed=Boolean(!hasUnsavedChanges&&Number(detail?.content_revision)>0&&Number(detail?.preview_checked_revision)===Number(detail?.content_revision));
  const backToLibrary=()=>{
-  if(hasUnsavedChanges&&!window.confirm('You have unsaved changes. Leave this editor and discard them?'))return;
+  if(hasUnsavedChanges&&!window.confirm(t('admin.contentStudio.unsavedChangesConfirm')))return;
   setSelected(null);setDetail(null);setCreateType(null);setBaselineSnapshot('');setError('');setNotice('');
  };
  const markPreviewReviewed=async()=>{
   if(!selected||selected.type!=='lesson'||!detail||saving||hasUnsavedChanges||!canSubmit||!preparationReady)return;
   const revision=Number(detail.content_revision);
   if(!Number.isInteger(revision)||revision<1){
-   setError('The saved content version could not be identified. Refresh the topic and try again.');
+   setError(t('admin.contentStudio.previewVersionMissing'));
    return;
   }
   setSaving(true);setError('');setNotice('');
@@ -473,8 +476,8 @@ export default function ContentStudio(){
     method:'POST',body:JSON.stringify({contentRevision:revision})
    });
    await load();await open(selected);
-   setNotice('Preview confirmation saved for content version '+revision+'. Any future content edit will require another preview check.');
-  }catch(e){setError(e instanceof Error?e.message:'The learner preview confirmation could not be saved.')}
+   setNotice(t('admin.contentStudio.previewConfirmed',{revision}));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.previewConfirmFailed'))}
   finally{setSaving(false)}
  };
  function updateContent(index:number,patch:Record<string,any>){setBlocks(old=>old.map((b,i)=>i===index?{...b,content:{...b.content,...patch}}:b))}
@@ -490,7 +493,7 @@ export default function ContentStudio(){
    setBlocks(nextBlocks);setQuestions(qs);setQuestionJson(JSON.stringify(qs,null,2));
    setBaselineSnapshot(item.type==='chapter'?JSON.stringify({form:nextForm}):JSON.stringify({form:nextForm,blocks:nextBlocks,questions:qs}));
    
-  }catch(e){setError(e instanceof Error?e.message:'Could not open this content.')}
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.openContentFailed'))}
  }
  function beginCreate(type:'chapter'|'lesson'){
   const chapter=rows.find(r=>r.chapter_id!==null&&(classFilter==='ALL'||r.class_code===classFilter)&&(subjectFilter==='ALL'||r.subject_code===subjectFilter));
@@ -501,8 +504,8 @@ export default function ContentStudio(){
   if(!createType)return;setSaving(true);setError('');setNotice('');
   try{
    const result=createType==='chapter'?await api('/api/v1/admin/content/chapters',{method:'POST',body:JSON.stringify({classCode:createForm.classCode,subjectCode:createForm.subjectCode,courseId:Number(createForm.courseId||programFilter)||undefined,code:createForm.code,displayName:createForm.displayName,description:createForm.description,curriculumSource:createForm.curriculumSource,curriculumSourceUrl:createForm.curriculumSourceUrl,curriculumSourceEdition:createForm.curriculumSourceEdition,curriculumSourcePages:createForm.curriculumSourcePages,sortOrder:Number(createForm.sortOrder),status:'DRAFT'})}):await api('/api/v1/admin/content/lessons',{method:'POST',body:JSON.stringify({chapterId:Number(createForm.chapterId),code:createForm.code,title:createForm.title,summary:createForm.summary,estimatedMinutes:Number(createForm.estimatedMinutes),alignmentSourceTitle:createForm.alignmentSourceTitle,alignmentSourceUrl:createForm.alignmentSourceUrl,alignmentSourceEdition:createForm.alignmentSourceEdition,alignmentPageRange:createForm.alignmentPageRange,sortOrder:Number(createForm.sortOrder),status:'DRAFT'})});
-   const id=Number(createType==='chapter'?result.chapter_id:result.lesson_id);const kind=createType;setCreateType(null);await load();await open({type:kind,id});setNotice('Draft '+kind+' created. Add reviewed teaching material before publishing.');
-  }catch(e){setError(e instanceof Error?e.message:'Could not create content.')}finally{setSaving(false)}
+   const id=Number(createType==='chapter'?result.chapter_id:result.lesson_id);const kind=createType;setCreateType(null);await load();await open({type:kind,id});setNotice(t('admin.contentStudio.draftCreated',{kind:t(kind==='chapter'?'admin.contentStudio.chapter':'admin.contentStudio.microTopic')}));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.createFailed'))}finally{setSaving(false)}
  }
  async function verifyChapterSource(){
    if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canReview||!chapterSourceDetailsComplete||form.curriculumSourceVerified)return;
@@ -510,8 +513,8 @@ export default function ContentStudio(){
    try{
     await api('/api/v1/admin/content/chapters/'+selected.id+'/verify-source',{method:'POST'});
     await load();await open(selected);
-    setNotice('Official curriculum source verified. The chapter can be published when its micro-topic checks pass.');
-   }catch(e){setError(e instanceof Error?e.message:'The curriculum source could not be verified.')}finally{setSaving(false)}
+    setNotice(t('admin.contentStudio.curriculumVerified'));
+   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.curriculumVerifyFailed'))}finally{setSaving(false)}
   }
   async function verifyLessonSource(){
    if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!lessonSourceDetailsComplete||form.alignmentSourceVerified)return;
@@ -519,8 +522,8 @@ export default function ContentStudio(){
    try{
     await api('/api/v1/admin/content/lessons/'+selected.id+'/verify-source',{method:'POST'});
     await load();await open(selected);
-    setNotice('Official textbook mapping verified. The micro-topic can be submitted after the remaining checks pass.');
-   }catch(e){setError(e instanceof Error?e.message:'The textbook mapping could not be verified.')}finally{setSaving(false)}
+    setNotice(t('admin.contentStudio.textbookMappingVerified'));
+   }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.textbookVerifyFailed'))}finally{setSaving(false)}
   }
   async function setChapterPublication(publish:boolean){
   if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canPublishPermission)return;
@@ -528,8 +531,8 @@ export default function ContentStudio(){
   try{
    await api('/api/v1/admin/content/chapters/'+selected.id+(publish?'/publish':'/unpublish'),{method:'POST'});
    await load();await open(selected);
-   setNotice(publish?'Chapter published successfully.':'Chapter returned to draft and hidden from learners.');
-  }catch(e){setError(e instanceof Error?e.message:'Chapter publication could not be updated.')}finally{setSaving(false)}
+   setNotice(publish?t('admin.contentStudio.chapterPublished'):t('admin.contentStudio.chapterUnpublished'));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.chapterPublicationFailed'))}finally{setSaving(false)}
  }
  async function setLessonPublication(publish:boolean){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canPublishPermission)return;
@@ -537,8 +540,8 @@ export default function ContentStudio(){
   try{
    await api('/api/v1/admin/content/lessons/'+selected.id+(publish?'/publish':'/unpublish'),{method:'POST'});
    await load();await open(selected);
-   setNotice(publish?'Micro-topic published successfully.':'Micro-topic returned to draft and hidden from learners.');
-  }catch(e){setError(e instanceof Error?e.message:'Publication could not be updated.')}finally{setSaving(false)}
+   setNotice(publish?t('admin.contentStudio.microTopicPublished'):t('admin.contentStudio.microTopicUnpublished'));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.publicationFailed'))}finally{setSaving(false)}
  }
  async function submitLessonForReview(){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canSubmit)return;
@@ -546,8 +549,8 @@ export default function ContentStudio(){
   try{
    await api('/api/v1/admin/content/lessons/'+selected.id+'/submit',{method:'POST'});
    await load();await open(selected);
-   setNotice('Submitted to the review queue. An authorized reviewer—including an administrator—can approve or return the active questions before publication.');
-  }catch(e){setError(e instanceof Error?e.message:'Could not submit this micro-topic for review.')}finally{setSaving(false)}
+   setNotice(t('admin.contentStudio.submittedToReview'));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.submitReviewFailed'))}finally{setSaving(false)}
  }
  async function reviewQuestion(questionId:number,status:'APPROVED'|'REJECTED'|'REVIEW'){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!questionId)return;
