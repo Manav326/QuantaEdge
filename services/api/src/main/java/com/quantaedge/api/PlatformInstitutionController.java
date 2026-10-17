@@ -50,6 +50,14 @@ public class PlatformInstitutionController {
     this.objectMapper = objectMapper;
   }
 
+  @GetMapping("/theme-presets")
+  public List<Map<String,Object>> themePresets(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner = requirePlatformOwner(context);
+    audit(owner, null, "THEME_PRESETS_VIEWED", "THEME_PRESETS", null, Map.of());
+    return InstitutionThemeTokens.presets();
+  }
+
   @GetMapping("/overview")
   public Map<String,Object> overview(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     AuthContext owner = requirePlatformOwner(context);
@@ -634,17 +642,11 @@ public class PlatformInstitutionController {
   }
 
   private String validateThemeTokens(Object raw) {
-    if(!(raw instanceof Map<?,?> input)) throw new IllegalArgumentException("themeTokens must be an object of approved colour tokens.");
-    Map<String,String> clean = new LinkedHashMap<>();
-    for(Map.Entry<?,?> item:input.entrySet()) {
-      String key=String.valueOf(item.getKey());
-      if(!THEME_KEYS.contains(key)) throw new IllegalArgumentException("Unsupported theme token: "+key);
-      String color=String.valueOf(item.getValue());
-      if(!color.matches("^#[0-9A-Fa-f]{6}$")) throw new IllegalArgumentException("Theme colours must use #RRGGBB format.");
-      clean.put(key,color.toUpperCase(Locale.ROOT));
+    try {
+      return objectMapper.writeValueAsString(InstitutionThemeTokens.normalize(raw));
+    } catch (JsonProcessingException ex) {
+      throw new IllegalStateException("Unable to serialize validated institution theme tokens.", ex);
     }
-    try { return objectMapper.writeValueAsString(clean); }
-    catch(JsonProcessingException ex) { throw new IllegalStateException("Unable to validate theme tokens.",ex); }
   }
 
   private String safeAssetKey(String raw) {
