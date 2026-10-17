@@ -14,7 +14,7 @@ export default function SchoolEntryPage() {
   const english = locale === 'english';
   const code = String(params.tenantCode || '').trim().toUpperCase();
 
-  if (!brand && (isResolving || institutionContextRequested)) {
+  if (!brand && isResolving) {
     return (
       <main className="site qe-tenant-landing" aria-busy="true">
         <section className="hero">
