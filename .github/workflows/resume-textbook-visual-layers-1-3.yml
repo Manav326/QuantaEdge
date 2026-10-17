@@ -1,0 +1,26 @@
+name: Resume textbook preparation (Layers 1–3)
+
+on:
+  workflow_dispatch:
+    inputs:
+      class_no:
+        description: "Resume this class from verified per-book preparation checkpoints"
+        type: choice
+        options: ["6", "7", "8"]
+        default: "8"
+        required: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  resume:
+    name: Resume preparation checkpoints for Class ${{ inputs.class_no }}
+    uses: ./.github/workflows/textbook-visual-candidates-v3.yml
+    with:
+      class_no: ${{ inputs.class_no }}
+      analysis_mode: resume_preparation
+      vision_model: qwen2.5vl:3b
+      checkpoint_batch_size: "1"
+    secrets: inherit
