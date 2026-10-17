@@ -629,6 +629,36 @@ public class AuthService {
         passwordAttemptKey(authType,identifier),authType);
   }
 
+  /** Open a separate learner-scoped session for a parent who wants to use their own courses. */
+  @Transactional
+  public AuthContext openParentLearningContext(long parentUserId) {
+    List<Map<String,Object>> parents = jdbc.queryForList("""
+      select id,display_name from user_account
+      where id=? and role='PARENT' and active=true
+      for update
+      """, parentUserId);
+    if (parents.isEmpty()) throw new SecurityException("An active parent account is required.");
+    List<Map<String,Object>> profiles = jdbc.queryForList("""
+      select id,display_name from student
+      where user_account_id=? and active=true and environment='PRODUCTION'
+      order by id limit 1 for update
+      """, parentUserId);
+    long studentId;
+    String displayName = String.valueOf(parents.getFirst().get("display_name"));
+    if (profiles.isEmpty()) {
+      Long created = jdbc.queryForObject("""
+        insert into student(
+          public_id,display_name,class_code,board,language,environment,active,user_account_id
+        ) values (?,?, '6','Bihar Board','hi','PRODUCTION',true,?)
+        returning id
+        """, Long.class, UUID.randomUUID(), displayName, parentUserId);
+      studentId = java.util.Objects.requireNonNull(created);
+    } else {
+      studentId = ((Number)profiles.getFirst().get("id")).longValue();
+    }
+    return new AuthContext(null, studentId, null, "STUDENT", displayName, "STUDENT");
+  }
+
   /** Password-based parent login. OTP is not required for returning parent sessions. */
   public AuthContext loginParent(String mobile,String password) {
     String normalized=normalizeMobile(mobile);
