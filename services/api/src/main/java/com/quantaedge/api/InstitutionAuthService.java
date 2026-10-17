@@ -280,6 +280,7 @@ public class InstitutionAuthService {
     return names.isEmpty() ? null : names.getFirst();
   }
 
+  @Transactional
   public Map<String,Object> redeemJoinCode(String suppliedCode, long studentId, String sourceHash) {
     return redeemJoinCode(suppliedCode, studentId, sourceHash, null);
   }
