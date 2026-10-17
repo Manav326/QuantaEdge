@@ -49,7 +49,9 @@ function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request
   new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
   const explicitWorkspace = headers.get('X-QE-Workspace');
   const path = window.location.pathname;
-  const inferredWorkspace = path.startsWith('/student') || path === '/login/student' ? 'STUDENT' : 'PARENT';
+  const inferredWorkspace = path.startsWith('/institution')
+    ? 'INSTITUTION'
+    : path.startsWith('/student') || path === '/login/student' ? 'STUDENT' : 'PARENT';
   headers.set('X-QE-Workspace', explicitWorkspace || inferredWorkspace);
   return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
 }
@@ -59,7 +61,7 @@ function installRefreshRecovery() {
   fetchRecoveryInstalled = true;
   const nativeFetch = window.fetch.bind(window);
   let refreshInFlight: Promise<boolean> | null = null;
-  const excluded = ['/api/v1/auth/refresh', '/api/v1/auth/logout', '/api/v1/auth/request-otp', '/api/v1/auth/verify-otp', '/api/v1/auth/parent-login', '/api/v1/auth/student-login', '/api/v1/auth/preview-login'];
+  const excluded = ['/api/v1/auth/refresh', '/api/v1/auth/logout', '/api/v1/auth/request-otp', '/api/v1/auth/verify-otp', '/api/v1/auth/parent-login', '/api/v1/auth/student-login', '/api/v1/auth/preview-login', '/api/v1/institution/auth/login', '/api/v1/institution/auth/refresh', '/api/v1/institution/auth/logout', '/api/v1/institution/auth/change-password'];
   const enhancedFetch: typeof window.fetch = async (input, init) => {
     let target: URL | null = null;
     try {
