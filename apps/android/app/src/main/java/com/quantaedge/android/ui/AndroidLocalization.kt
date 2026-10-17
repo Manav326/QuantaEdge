@@ -17,6 +17,7 @@ private val uiPhrases = listOf(
     UiPhrase("legal_terms", "Terms", "नियम और शर्तें"),
     UiPhrase("legal_privacy", "Privacy", "गोपनीयता"),
     UiPhrase("role_learner", "Learner", "विद्यार्थी"),
+    UiPhrase("account_gmail", "Gmail", "Gmail"),
     UiPhrase("nav_home", "Home", "होम"),
     UiPhrase("nav_learn", "Learn", "सीखें"),
     UiPhrase("nav_tests", "Tests", "टेस्ट"),

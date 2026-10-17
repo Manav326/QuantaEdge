@@ -3537,5 +3537,6 @@
   "web.navigation.student.coursesMarketplace": "Courses & Marketplace",
   "web.navigation.student.mobileCourses": "Courses",
   "web.navigation.student.allCourses": "All Courses",
-  "web.navigation.student.marketplace": "Marketplace"
+  "web.navigation.student.marketplace": "Marketplace",
+  "web.navigation.parent.familyCourses": "Family courses"
 }

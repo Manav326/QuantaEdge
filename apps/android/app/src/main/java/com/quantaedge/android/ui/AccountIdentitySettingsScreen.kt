@@ -131,7 +131,7 @@ fun AccountIdentitySettingsScreen(
                     style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text("Gmail", fontWeight = FontWeight.SemiBold)
+                        Text(localizedUiText("Gmail"), fontWeight = FontWeight.SemiBold)
                         Text(if (gmailVerified) profile.optString("email") else t("No verified Gmail connected", "कोई सत्यापित Gmail जुड़ा नहीं है"),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
