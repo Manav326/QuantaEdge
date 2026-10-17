@@ -49,6 +49,12 @@ on:
         required: true
         type: string
         default: "qwen2.5vl:3b"
+      checkpoint_batch_size:
+        description: "Assets processed before durable Git/GHCR savepoints; 1 minimizes work at risk on cancellation, larger batches reduce savepoint overhead"
+        required: true
+        type: choice
+        options: ["1", "2", "5"]
+        default: "5"
 
 permissions:
   contents: write
@@ -97,6 +103,7 @@ jobs:
       CLASS_NO: ${{ inputs.class_no }}
       ANALYSIS_MODE: ${{ inputs.analysis_mode }}
       VISION_MODEL: ${{ inputs.vision_model }}
+      CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size }}
     steps:
       - name: Checkout main with write permission for review metadata
         uses: actions/checkout@v4
@@ -116,6 +123,7 @@ jobs:
           [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
           [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
+          [[ "$CHECKPOINT_BATCH_SIZE" == "1" || "$CHECKPOINT_BATCH_SIZE" == "2" || "$CHECKPOINT_BATCH_SIZE" == "5" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
           python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
@@ -630,7 +638,7 @@ jobs:
             --package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
             --run-id "$GITHUB_RUN_ID" \
             --model "$VISION_MODEL" \
-            --batch-size 5
+            --batch-size "$CHECKPOINT_BATCH_SIZE"
 
       - name: Stop Ollama container
         if: always() && (inputs.analysis_mode == 'analyze_all' || inputs.analysis_mode == 'resume_layers_4_5')
@@ -643,7 +651,7 @@ jobs:
           {
             echo "## QuantaEdge eight-layer textbook pipeline"
             echo "- Executed here: Layers 1–5. Layers 6–8 are implemented in the separate budgeted per-book workflow; benchmark the model first, then generate review-only drafts."
-            echo "- No visual/candidate total cap; batch size is a checkpoint interval only."
+            echo "- No visual/candidate total cap; checkpoint batch size was $CHECKPOINT_BATCH_SIZE assets. Smaller batches reduce uncheckpointed model work but increase Git/GHCR savepoint traffic."
             echo "- All generated data remains review-only; publication_allowed=false."
           } >> "$GITHUB_STEP_SUMMARY"
 
