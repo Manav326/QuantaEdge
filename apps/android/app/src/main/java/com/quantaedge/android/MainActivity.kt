@@ -38,7 +38,10 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
                 put("order_id", orderId)
                 put("currency", currency)
                 put("amount", amount)
-                put("name", "QuantaEdge")
+                put("name", applicationContext.getSharedPreferences("qe_preferences", 0)
+                    .getString("institutionDisplayName", null)
+                    ?.takeIf { it.isNotBlank() }
+                    ?: BuildConfig.INSTITUTION_DISPLAY_NAME)
                 put("description", order.optString("description", "Course access"))
                 put("theme", JSONObject().put("color", themeController.checkoutAccentColor()))
             }
