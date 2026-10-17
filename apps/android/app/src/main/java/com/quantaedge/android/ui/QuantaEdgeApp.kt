@@ -265,6 +265,7 @@ fun QuantaEdgeApp() {
     var parentReport by remember { mutableStateOf(JSONObject()) }
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentProfile by remember { mutableStateOf(JSONObject()) }
+    var accountIdentityProfile by remember { mutableStateOf(JSONObject()) }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
 
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -688,33 +689,37 @@ fun QuantaEdgeApp() {
         }
     }
 
+    suspend fun retrieveGoogleIdToken(context: Context): String {
+        val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID.trim()
+        if (webClientId.isBlank()) {
+            throw IOException("Google sign-in is not configured. Set GOOGLE_WEB_CLIENT_ID to the Google OAuth Web client ID.")
+        }
+        val credentialManager = CredentialManager.create(context)
+        val googleOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(webClientId)
+            .setAutoSelectEnabled(false)
+            .build()
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleOption)
+            .build()
+        val credential = credentialManager.getCredential(context, request).credential
+        if (credential !is CustomCredential ||
+            credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            throw IOException("Google did not return a supported ID token. Please try again.")
+        }
+        return try {
+            GoogleIdTokenCredential.createFrom(credential.data).idToken
+        } catch (exception: Exception) {
+            throw IOException("Google's sign-in response could not be read. Please try again.", exception)
+        }
+    }
+
     fun signInWithGoogle(context: Context) {
         runTask {
-            val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID.trim()
-            if (webClientId.isBlank()) {
-                throw IOException("Google sign-in is not configured. Set GOOGLE_WEB_CLIENT_ID to the Google OAuth Web client ID.")
-            }
-            val credentialManager = CredentialManager.create(context)
-            val googleOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false)
-                .setServerClientId(webClientId)
-                .setAutoSelectEnabled(false)
-                .build()
-            val request = GetCredentialRequest.Builder()
-                .addCredentialOption(googleOption)
-                .build()
-            val credential = credentialManager.getCredential(context, request).credential
-            if (credential !is CustomCredential ||
-                credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                throw IOException("Google did not return a supported ID token. Please try again.")
-            }
-            val googleCredential = try {
-                GoogleIdTokenCredential.createFrom(credential.data)
-            } catch (e: Exception) {
-                throw IOException("Google's sign-in response could not be read. Please try again.", e)
-            }
+            val idToken = retrieveGoogleIdToken(context)
             val session = ApiClient.postObject("/api/v1/auth/google",
-                JSONObject().put("credential", googleCredential.idToken))
+                JSONObject().put("credential", idToken))
             val workspace = session.optString("workspace").uppercase()
             val verifiedMethods = session.optJSONArray("verifiedMethods")
             val gmailMethodVerified = verifiedMethods != null &&
@@ -732,6 +737,61 @@ fun QuantaEdgeApp() {
             AppRoute.values().forEach { savedRoute ->
                 saveableStateHolder.removeState("anonymous:${savedRoute.name}")
             }
+        }
+    }
+
+    fun openAccountIdentity() {
+        error = ""
+        status = ""
+        route = AppRoute.ACCOUNT_IDENTITY
+        runTask { accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile") }
+    }
+
+    fun saveAccountIdentityProfile(displayName: String, preferredLocale: String) {
+        runTask {
+            ApiClient.putObject("/api/v1/account/me/profile", JSONObject()
+                .put("displayName", displayName.trim())
+                .put("preferredLocale", preferredLocale))
+            accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
+            if (auth.textAny("role").contains("PARENT", true)) {
+                parentAccount = runCatching { ApiClient.getObject("/api/v1/guardians/account") }.getOrDefault(parentAccount)
+            } else {
+                studentProfile = runCatching { ApiClient.getObject("/api/v1/students/me") }.getOrDefault(studentProfile)
+            }
+            status = if (language == "hi") "खाते की प्रोफ़ाइल सुरक्षित हो गई।" else "Account profile saved."
+        }
+    }
+
+    fun saveAccountUsername(username: String) {
+        runTask {
+            ApiClient.putObject("/api/v1/account/me/username", JSONObject().put("username", username.trim()))
+            accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
+            status = if (language == "hi") "यूज़रनेम सुरक्षित हो गया। अगला बदलाव 15 दिन बाद कर सकते हैं।"
+                else "Username saved. You can change it again after 15 days."
+        }
+    }
+
+    fun saveAccountPassword(currentPassword: String, newPassword: String) {
+        runTask {
+            ApiClient.putObject("/api/v1/account/me/password", JSONObject()
+                .put("currentPassword", currentPassword)
+                .put("newPassword", newPassword))
+            ApiClient.clearSession()
+            auth = JSONObject()
+            accountIdentityProfile = JSONObject()
+            route = AppRoute.LOGIN
+            accountMenuExpanded = false
+            status = if (language == "hi") "पासवर्ड सुरक्षित हो गया। कृपया नए पासवर्ड से दोबारा साइन इन करें।"
+                else "Password saved. Please sign in again with your new password."
+        }
+    }
+
+    fun linkGoogleIdentity(context: Context) {
+        runTask {
+            val idToken = retrieveGoogleIdToken(context)
+            ApiClient.postObject("/api/v1/auth/google/link", JSONObject().put("credential", idToken))
+            accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
+            status = if (language == "hi") "Gmail सफलतापूर्वक लिंक हो गया।" else "Gmail linked successfully."
         }
     }
 
@@ -2818,8 +2878,10 @@ fun QuantaEdgeApp() {
             AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME -> route
             AppRoute.WELCOME -> AppRoute.WELCOME
             AppRoute.LOGIN -> AppRoute.WELCOME
-            AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
+            AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET, AppRoute.ACCOUNT_SIGNUP -> AppRoute.LOGIN
             AppRoute.CERTIFICATES, AppRoute.LEADERBOARD, AppRoute.ALL_COURSES, AppRoute.MARKETPLACE -> AppRoute.STUDENT_HOME
+            AppRoute.PARENT_COURSES -> AppRoute.PARENT_HOME
+            AppRoute.ACCOUNT_IDENTITY -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_PROFILE else AppRoute.PROFILE
             AppRoute.ACCOUNT_LIFECYCLE -> AppRoute.PROFILE
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
             AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
@@ -3053,6 +3115,11 @@ fun QuantaEdgeApp() {
                                             openStudentProfile()
                                         }
                                     },
+                                    enabled = !busy
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(if (language == "hi") "खाते की पहचान" else "Account identity") },
+                                    onClick = { accountMenuExpanded = false; openAccountIdentity() },
                                     enabled = !busy
                                 )
                                 DropdownMenuItem(
@@ -3315,6 +3382,21 @@ fun QuantaEdgeApp() {
                         onProfile = ::openParentProfile,
                         onLogout = ::logout,
                         maxChildren = parentAccount.optInt("maxChildren", 3)
+                    )
+                    AppRoute.ACCOUNT_IDENTITY -> AccountIdentitySettingsScreen(
+                        profile = accountIdentityProfile,
+                        profileImage = headerPhotoBitmap,
+                        language = language,
+                        busy = busy,
+                        error = error,
+                        status = status,
+                        onRefresh = ::openAccountIdentity,
+                        onSaveProfile = ::saveAccountIdentityProfile,
+                        onSaveUsername = ::saveAccountUsername,
+                        onSavePassword = ::saveAccountPassword,
+                        onLinkGmail = ::linkGoogleIdentity,
+                        onAccountLifecycle = ::openAccountLifecycle,
+                        onBack = ::goBack
                     )
                     AppRoute.PARENT_COURSES -> ParentCourseMarketplaceScreen(
                         offers = parentMarketplaceOffers,
