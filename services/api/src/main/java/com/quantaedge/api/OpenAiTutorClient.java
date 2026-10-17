@@ -65,8 +65,21 @@ public class OpenAiTutorClient {
           .header("Authorization","Bearer "+apiKey)
           .header("Accept","application/json")
           .GET().build();
-      HttpResponse<Void> response=http.send(req,HttpResponse.BodyHandlers.discarding());
-      return response.statusCode()/100==2;
+      HttpResponse<String> response=http.send(req,HttpResponse.BodyHandlers.ofString());
+      if(response.statusCode()/100!=2) return false;
+
+      // A healthy Ollama/OpenAI-compatible endpoint is not enough: /v1/models
+      // can be reachable while the configured local model is missing. Treat that
+      // as unavailable before offering Tutor, rather than letting the first learner
+      // message fail with a generic provider 5xx.
+      JsonNode catalog=mapper.readTree(response.body()).path("data");
+      if(!catalog.isArray()) return false;
+      for(JsonNode item:catalog) {
+        String id=item.path("id").asText("");
+        String name=item.path("name").asText("");
+        if(model.equalsIgnoreCase(id.trim()) || model.equalsIgnoreCase(name.trim())) return true;
+      }
+      return false;
     }catch(Exception ignored){return false;}
   }
 
