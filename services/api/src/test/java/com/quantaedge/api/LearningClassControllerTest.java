@@ -72,28 +72,27 @@ class LearningClassControllerTest {
   }
 
   @Test
-  void studentClassCatalogueIncludesFarFutureScheduledSessionsAndKeepsCountScopeAligned() {
+  void studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("select cs.id as session_id"),
-        eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0))).thenReturn(List.of());
+        eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0))).thenReturn(List.of());
     when(jdbc.queryForObject(contains("select count(*) from learning_class_session"),
-        eq(Long.class), eq(7L), eq(""), eq(""), eq(0L), eq(0L))).thenReturn(0L);
+        eq(Long.class), eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L))).thenReturn(0L);
 
-    Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, student);
+    Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, true, student);
 
     assertEquals(0L, result.get("total"));
     ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(itemSql.capture(),
-        eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+        eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verify(jdbc).queryForObject(countSql.capture(),
-        eq(Long.class), eq(7L), eq(""), eq(""), eq(0L), eq(0L));
+        eq(Long.class), eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
     assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
-    assertFalse(itemSql.getValue().contains("starts_at<=now()+interval '24 hours'"));
-    assertFalse(countSql.getValue().contains("starts_at<=now()+interval '24 hours'"));
+    assertTrue(itemSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
+    assertTrue(countSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
   }
-
   @Test
   void classManagerCannotSaveAnInsecureMeetingUrl() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
