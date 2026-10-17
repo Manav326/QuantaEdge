@@ -135,7 +135,7 @@ export default function ClassesPage(){
   useEffect(()=>{void loadApprovedAssignments();},[loadApprovedAssignments]);
 
   async function createSession(){
-    if(!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||!startAt||!endAt){setError(provider==='GOOGLE_MEET'?tRef.current('admin.classes.scheduleMeetMissingFields'):provider==='YOUTUBE_LIVE'?tRef.current('admin.classes.scheduleYoutubeMissingFields'):tRef.current('admin.classes.scheduleSecureMissingFields')');return;}
+    if(!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||!startAt||!endAt){setError(provider==='GOOGLE_MEET'?tRef.current('admin.classes.scheduleMeetMissingFields'):provider==='YOUTUBE_LIVE'?tRef.current('admin.classes.scheduleYoutubeMissingFields'):tRef.current('admin.classes.scheduleSecureMissingFields'));return;}
     if(!teachingAssignmentId){setError(tRef.current('admin.classes.approvedAssignmentRequired'));return;}
     if(new Date(endAt).getTime()<=new Date(startAt).getTime()){setError(tRef.current('admin.classes.endAfterStart'));return;}
     setBusy(true);setError('');setNotice('');
