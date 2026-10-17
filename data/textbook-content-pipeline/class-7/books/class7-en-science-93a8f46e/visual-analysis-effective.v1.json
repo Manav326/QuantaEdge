@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2195fb8582aa74fd4ad861818bd17a4d3235808ff67ba695edd1d3d89eca05b5",
+  "raw_analysis_sha256": "f755c7cfa572789d74a5f31ff72cbca53bd8245552bd4323744d76675380109a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -254,17 +254,79 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 2,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "0777 – Curiosity",
+          "ISBN 978-93-5729-039-5",
+          "Textbook of Science for Grade 7",
+          "First Edition",
+          "ALL RIGHTS RESERVED",
+          "April 2025 Chaitra 1947",
+          "Reprinted",
+          "January 2026 Magha 1947"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Textbook",
+          "Science",
+          "Grade 7",
+          "First Edition",
+          "Rights Reserved",
+          "Reprinted",
+          "ISBN",
+          "Chaitra",
+          "Magha"
+        ],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not contain any text that is not visible in the image."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T07:50:05Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "0777 – Curiosity",
+          "ISBN 978-93-5729-039-5",
+          "Textbook of Science for Grade 7",
+          "First Edition",
+          "ALL RIGHTS RESERVED",
+          "April 2025 Chaitra 1947",
+          "Reprinted",
+          "January 2026 Magha 1947"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Textbook",
+          "Science",
+          "Grade 7",
+          "First Edition",
+          "Rights Reserved",
+          "Reprinted",
+          "ISBN",
+          "Chaitra",
+          "Magha"
+        ],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not contain any text that is not visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

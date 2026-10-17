@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 329,
+    "assets_selected": 330,
     "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 330,
-    "assets_remaining": 7158,
+    "assets_analyzed": 331,
+    "assets_remaining": 7157,
     "assets_completion_percent": 4.4,
-    "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 328,
+    "assets_failed": 19,
+    "assets_skipped_from_checkpoint": 329,
     "batch_limit": 1,
     "publication_allowed": false
   },
@@ -186,15 +186,47 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 2,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "0777 – Curiosity",
+          "ISBN 978-93-5729-039-5",
+          "Textbook of Science for Grade 7",
+          "First Edition",
+          "ALL RIGHTS RESERVED",
+          "April 2025 Chaitra 1947",
+          "Reprinted",
+          "January 2026 Magha 1947"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Textbook",
+          "Science",
+          "Grade 7",
+          "First Edition",
+          "Rights Reserved",
+          "Reprinted",
+          "ISBN",
+          "Chaitra",
+          "Magha"
+        ],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not contain any text that is not visible in the image."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3"
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T07:50:05Z"
     },
     {
       "asset_id": "ca778fc3fca0c5c049ea63bf",
