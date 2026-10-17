@@ -1,5 +1,7 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
+import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import Link from 'next/link';
@@ -169,7 +171,7 @@ export default function StudentProfilePage() {
 
   async function requestAdultVerification() {
     setError(''); setNotice('');
-    if (!lifecycleConsent) { setError(tx('आगे बढ़ने से पहले अपनी सहमति दें।','Please confirm your consent before continuing.')); return; }
+    if (!lifecycleConsent) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
     setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/account/me/adult-verification-request', {
@@ -180,8 +182,8 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Unable to request adult verification.');
       await refreshLifecycle();
       setNotice(body.status === 'VERIFIED'
-        ? tx('आपकी adult verification पहले से verified है।','Your adult verification is already current.')
-        : tx('Adult verification review का request भेज दिया गया है।','Your adult verification review request has been submitted.'));
+        ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.adult.verification.is.already.cur.831c32ca')
+        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.adult.verification.review.request.e5c82db3'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to request adult verification.');
     } finally { setLifecycleBusy(false); }
@@ -189,8 +191,8 @@ export default function StudentProfilePage() {
 
   async function requestTransitionOtp() {
     setError(''); setNotice('');
-    if (!lifecycleConsent) { setError(tx('आगे बढ़ने से पहले अपनी सहमति दें।','Please confirm your consent before continuing.')); return; }
-    if (!transitionMobile.trim()) { setError(tx('अपना verified mobile number डालें।','Enter your mobile number.')); return; }
+    if (!lifecycleConsent) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
+    if (!transitionMobile.trim()) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.your.mobile.number.e521108b')); return; }
     setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/auth/learner-transition/request-otp', {
@@ -201,8 +203,8 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Unable to send verification code.');
       setTransitionOtpSent(true);
       setNotice(body.devCode
-        ? tx('Demo verification code: ','Demo verification code: ') + body.devCode
-        : tx('Verification code भेज दिया गया है।','Verification code sent.'));
+        ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.demo.verification.code.64a8cb3f') + body.devCode
+        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verification.code.sent.5eb39c00'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to send verification code.');
     } finally { setLifecycleBusy(false); }
@@ -211,7 +213,7 @@ export default function StudentProfilePage() {
   async function completeIndependentAccount() {
     setError(''); setNotice('');
     if (!transitionOtp.trim() || transitionPassword.length < 8) {
-      setError(tx('OTP डालें और कम से कम 8 characters का password चुनें।','Enter the OTP and choose a password with at least 8 characters.'));
+      setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.the.otp.and.choose.a.password.wi.c59b110f'));
       return;
     }
     setLifecycleBusy(true);
@@ -228,7 +230,7 @@ export default function StudentProfilePage() {
       setTransitionOtp(''); setTransitionPassword(''); setTransitionOtpSent(false);
       setLifecycleConsent(false);
       await refreshLifecycle();
-      setNotice(tx('आपका independent account बन गया है। आपकी learning history और progress उसी profile पर सुरक्षित हैं।','Your independent account is ready. Your learning history and progress remain on the same learner profile.'));
+      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.independent.account.is.ready.your.a9258d86'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to create your independent account.');
     } finally { setLifecycleBusy(false); }
@@ -236,7 +238,7 @@ export default function StudentProfilePage() {
 
   async function requestParentEligibility() {
     setError(''); setNotice('');
-    if (!lifecycleConsent) { setError(tx('आगे बढ़ने से पहले अपनी सहमति दें।','Please confirm your consent before continuing.')); return; }
+    if (!lifecycleConsent) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
     setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/account/me/parent-eligibility-request', {
@@ -247,15 +249,15 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Unable to request parent eligibility review.');
       await refreshLifecycle();
       setNotice(body.status === 'VERIFIED'
-        ? tx('आपकी parent eligibility पहले से verified है।','Your parent eligibility is already current.')
-        : tx('Parent eligibility review का request भेज दिया गया है।','Your parent eligibility review request has been submitted.'));
+        ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.parent.eligibility.is.already.cur.97fa156a')
+        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.parent.eligibility.review.request.3523d9b3'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to request parent eligibility review.');
     } finally { setLifecycleBusy(false); }
   }
 
   async function transitionToParent() {
-    if (!window.confirm(tx('आपका account parent role में बदलेगा। आपकी learner profile और history सुरक्षित रहेंगी। जारी रखें?','Your account will switch to the parent role. Your learner profile and history will be preserved. Continue?'))) return;
+    if (!window.confirm(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.account.will.switch.to.the.parent.f21cb2f0'))) return;
     setError(''); setNotice(''); setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/account/me/transition-to-parent', {
@@ -287,7 +289,7 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
       setProfileImageUrl(body.profile_image_url || null);
       setPhotoName(file.name);
-      setNotice(tx('आपकी photo profile में save हो गई है।','Your photo has been saved to your profile.'));
+      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.photo.has.been.saved.to.your.prof.9c5a5ef0'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to save this photo.');
@@ -321,7 +323,7 @@ export default function StudentProfilePage() {
         favoriteSubject: body.favorite_subject || '',
         learningGoal: body.learning_goal || '',
       });
-      setNotice(tx('आपकी profile save हो गई है।','Your profile has been saved.'));
+      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.profile.has.been.saved.c2201d87'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
@@ -344,7 +346,7 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
       setProfileImageUrl(body.profile_image_url || null);
       setPhotoName('');
-      setNotice(tx('आपकी photo profile से हटा दी गई है।','Your photo has been removed from your profile.'));
+      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.photo.has.been.removed.from.your..2b92c4f9'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Your photo could not be removed.');
@@ -357,119 +359,119 @@ export default function StudentProfilePage() {
     <main className="app-shell student-profile-page">
       <div className="student-profile-page__wrap">
         <div className="student-profile-page__breadcrumb">
-          <Link href="/student"><LocaleText hinglish="← Dashboard पर वापस" english="← Back to dashboard" /></Link>
-          <span><LocaleText hinglish="ACCOUNT" english="ACCOUNT" /></span>
+          <Link href="/student"><UiText message="legacy.web.back.to.dashboard.78462162" /></Link>
+          <span><UiText message="legacy.web.account.c25755c1" /></span>
         </div>
         <div className="student-profile-page__heading">
           <div>
-            <span className="eyebrow"><LocaleText hinglish="आपकी learning space · आपकी journey" english="YOUR SPACE · YOUR JOURNEY" /></span>
-            <h1><LocaleText hinglish="Profile और settings" english="Profile and settings" /></h1>
-            <p><LocaleText hinglish="अपनी learning space को personalise करें। Photo और details update कर सकते हैं।" english="Personalise your learning space by updating your photo and details." /></p>
+            <span className="eyebrow"><UiText message="legacy.web.your.space.your.journey.58306bbb" /></span>
+            <h1><UiText message="legacy.web.profile.and.settings.fee038f0" /></h1>
+            <p><UiText message="legacy.web.personalise.your.learning.space.by.upd.2f56c645" /></p>
           </div>
-          <div className="student-profile-page__class-pill"><span><LocaleText hinglish="आपकी Class" english="YOUR CLASS" /></span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
+          <div className="student-profile-page__class-pill"><span><UiText message="legacy.web.your.class.1cae66ed" /></span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
         </div>
 
         {error && <div className="student-profile-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="student-profile-page__alert is-success" role="status">{notice}</div>}
 
-        {loading ? <div className="student-profile-page__loading" role="status" aria-live="polite"><span className="student-profile-page__spinner" aria-hidden="true" /> <LocaleText hinglish="आपकी profile load हो रही है…" english="Loading your profile…" /></div> : (
+        {loading ? <div className="student-profile-page__loading" role="status" aria-live="polite"><span className="student-profile-page__spinner" aria-hidden="true" /> <UiText message="legacy.web.loading.your.profile.81ab5bfd" /></div> : (
           <form className="student-profile-form" onSubmit={saveProfile}>
             <section className="student-profile-card student-profile-photo-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><LocaleText hinglish="आपकी profile photo" english="Your profile photo" /></h2><p><LocaleText hinglish="आपकी learning space के लिए एक friendly photo।" english="A friendly photo for your learning space." /></p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><UiText message="legacy.web.your.profile.photo.feca3523" /></h2><p><UiText message="legacy.web.a.friendly.photo.for.your.learning.spa.436cd565" /></p></div></div>
               <div className="student-profile-photo-editor">
                 <div className="student-profile-photo-editor__preview">
                   <img src={profileImageUrl || '/branding/student-avatar.svg'} alt="Student profile preview" />
                   <span className="student-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="student-profile-photo-editor__copy">
-                  <strong>{profileImageUrl ? <LocaleText hinglish="अच्छा लग रहा है!" english="Looking good!" /> : <LocaleText hinglish="अपनी photo जोड़ें" english="Add your photo" />}</strong>
-                  <p><LocaleText hinglish="अपनी clear photo चुनें। Save करने से पहले इसे automatically resize किया जाएगा।" english="Choose a clear photo. We’ll resize it automatically before saving." /></p>
+                  <strong>{profileImageUrl ? <UiText message="legacy.web.looking.good.82368f53" /> : <UiText message="legacy.web.add.your.photo.4ad345e3" />}</strong>
+                  <p><UiText message="legacy.web.choose.a.clear.photo.we.ll.resize.it.a.96c6a10c" /></p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" aria-label="Choose profile photo" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : profileImageUrl ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
-                    {profileImageUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <UiText message="legacy.web.preparing.photo.75f074e6" /> : profileImageUrl ? <UiText message="legacy.web.change.photo.5b1bc1d0" /> : <UiText message="legacy.web.choose.photo.de5a3f02" />}</button>
+                    {profileImageUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><UiText message="legacy.web.remove.photo.89a3c097" /></button>}
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><LocaleText hinglish="आपके बारे में" english="About you" /></h2><p><LocaleText hinglish="अपनी basic details updated रखें।" english="Keep your basic details up to date." /></p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.keep.your.basic.details.up.to.date.482d2614" /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका User ID" english="Your user ID" /><input value={student?.public_user_id || ''} readOnly aria-readonly="true" /><small><LocaleText hinglish="यह 12 अक्षरों का स्थायी ID है। इसे बदला नहीं जा सकता।" english="This 12-character ID is permanent and cannot be changed." /></small></label>
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका नाम" english="Your name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={tx('आपको किस नाम से बुलाएँ?','What should we call you?')} autoComplete="name" /></label>
-                <label className="student-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={tx('जैसे Patna','e.g. Patna')} autoComplete="address-level2" /></label>
-                <label className="student-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={tx('जैसे Bihar','e.g. Bihar')} autoComplete="address-level1" /></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={student?.public_user_id || ''} readOnly aria-readonly="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.name.7d67d7b4" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.what.should.we.call.you.1b8ed077')} autoComplete="name" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.e.g.patna.e53ea62e')} autoComplete="address-level2" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.e.g.bihar.928d6032')} autoComplete="address-level1" /></label>
               </div>
-              <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <LocaleText hinglish="City और state काफ़ी हैं। कृपया घर का पूरा address न डालें।" english="City and state are enough. Please do not enter your full home address." /></p>
+              <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <UiText message="legacy.web.city.and.state.are.enough.please.do.no.8802cd0a" /></p>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><LocaleText hinglish="School और learning" english="School and learning" /></h2><p><LocaleText hinglish="अपनी learning को और relevant बनाने में मदद करें।" english="Help us make your learning more relevant." /></p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><UiText message="legacy.web.school.and.learning.998c3fe4" /></h2><p><UiText message="legacy.web.help.us.make.your.learning.more.releva.938b8ffd" /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="School का नाम" english="School name" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={tx('School का नाम डालें','Enter your school name')} autoComplete="organization" /></label>
-                <label className="student-profile-field"><LocaleText hinglish="School medium" english="School medium" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><LocaleText hinglish="अगर पता हो तो चुनें" english="Choose if you know" /></option><option value="Hindi"><LocaleText hinglish="हिन्दी" english="Hindi" /></option><option value="English"><LocaleText hinglish="English" english="English" /></option><option value="Hindi & English"><LocaleText hinglish="Hinglish (हिन्दी + English)" english="Hinglish (Hindi + English)" /></option><option value="Other">{locale==='english'?'Other':'अन्य'}</option></select></label>
-                <label className="student-profile-field"><LocaleText hinglish="पसंदीदा subject" english="Favourite subject" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><LocaleText hinglish="Subject चुनें" english="Choose a subject" /></option><option value="maths"><LocaleText hinglish="गणित · Maths" english="Maths" /></option><option value="science"><LocaleText hinglish="विज्ञान · Science" english="Science" /></option><option value="both"><LocaleText hinglish="दोनों" english="Both" /></option><option value="other"><LocaleText hinglish="कोई और subject" english="Another subject" /></option><option value="not_sure"><LocaleText hinglish="अभी explore कर रहे हैं" english="Still exploring" /></option></select></label>
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="मेरा learning goal" english="My learning goal" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={tx('आप किस चीज़ में बेहतर होना चाहते हैं? जैसे, fractions solve करने में confidence बढ़ाना।','What would you like to improve? For example, build confidence in solving fractions.')} /><small>{draft.learningGoal.length}/300 characters</small></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.school.name.c4fef1c5" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.your.school.name.48c04e62')} autoComplete="organization" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.school.medium.cfa6de85" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><UiText message="legacy.web.choose.if.you.know.e5c58168" /></option><option value="Hindi"><UiText message="legacy.web.hindi.197af92c" /></option><option value="English"><UiText message="common.language.english" /></option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other">{locale==='english'?'Other':'अन्य'}</option></select></label>
+                <label className="student-profile-field"><UiText message="legacy.web.favourite.subject.be48a154" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><UiText message="legacy.web.choose.a.subject.518e940d" /></option><option value="maths"><UiText message="legacy.web.maths.a163a4bb" /></option><option value="science"><UiText message="legacy.web.science.4d80727d" /></option><option value="both"><UiText message="legacy.web.both.20542d4e" /></option><option value="other"><UiText message="legacy.web.another.subject.693bc278" /></option><option value="not_sure"><UiText message="legacy.web.still.exploring.595d12f0" /></option></select></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.my.learning.goal.92dbad6c" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.what.would.you.like.to.improve.for.exa.31332678')} /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">04</span><div><h2><LocaleText hinglish="Account और eligibility" english="Account and eligibility" /></h2><p><LocaleText hinglish="आपकी learner identity और learning history को सुरक्षित रखते हुए account transition manage करें।" english="Manage account transitions while keeping your learner identity and learning history intact." /></p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">04</span><div><h2><UiText message="legacy.web.account.and.eligibility.94499de8" /></h2><p><UiText message="legacy.web.manage.account.transitions.while.keepi.77f5f331" /></p></div></div>
               {!lifecycle?.independentAccountLinked ? (
                 <>
-                  <p><strong><LocaleText hinglish="Adult verification" english="Adult verification" />:</strong> {lifecycle?.adult_verification_status || 'NOT_REQUESTED'}</p>
+                  <p><strong><UiText message="legacy.web.adult.verification.dbbc059b" />:</strong> {lifecycle?.adult_verification_status || 'NOT_REQUESTED'}</p>
                   {lifecycle?.adult_verification_current ? (
                     <>
-                      <p><LocaleText hinglish="आपकी age eligibility verified है। अपना mobile verify करके independent account बना सकते हैं।" english="Your adult eligibility is verified. Verify your mobile to create an independent account." /></p>
+                      <p><UiText message="legacy.web.your.adult.eligibility.is.verified.ver.5fde9e63" /></p>
                       {!transitionOtpSent ? (
                         <div className="student-profile-fields">
-                          <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका mobile number" english="Your mobile number" /><input type="tel" value={transitionMobile} onChange={e=>setTransitionMobile(e.target.value)} placeholder="+91…" autoComplete="tel" /></label>
-                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <LocaleText hinglish="मैं independent account बनाने और guardian access सीमित करने के लिए सहमत हूँ।" english="I consent to creating an independent account and limiting existing guardian access." /></span></label>
-                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestTransitionOtp}><LocaleText hinglish="Verification code भेजें" english="Send verification code" /></button>
+                          <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.mobile.number.835da1ed" /><input type="tel" value={transitionMobile} onChange={e=>setTransitionMobile(e.target.value)} placeholder="+91…" autoComplete="tel" /></label>
+                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <UiText message="legacy.web.i.consent.to.creating.an.independent.a.0c170fcf" /></span></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestTransitionOtp}><UiText message="legacy.web.send.verification.code.533abf96" /></button>
                         </div>
                       ) : (
                         <div className="student-profile-fields">
-                          <label className="student-profile-field"><LocaleText hinglish="OTP" english="OTP" /><input inputMode="numeric" autoComplete="one-time-code" value={transitionOtp} onChange={e=>setTransitionOtp(e.target.value)} /></label>
-                          <label className="student-profile-field"><LocaleText hinglish="नया password" english="New password" /><input type="password" autoComplete="new-password" minLength={8} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
-                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={completeIndependentAccount}><LocaleText hinglish="Independent account बनाएं" english="Create independent account" /></button>
+                          <label className="student-profile-field"><UiText message="legacy.web.otp.257fad4d" /><input inputMode="numeric" autoComplete="one-time-code" value={transitionOtp} onChange={e=>setTransitionOtp(e.target.value)} /></label>
+                          <label className="student-profile-field"><UiText message="legacy.web.new.password.32a2f216" /><input type="password" autoComplete="new-password" minLength={8} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={completeIndependentAccount}><UiText message="legacy.web.create.independent.account.7b195fde" /></button>
                         </div>
                       )}
                     </>
                   ) : lifecycle?.adult_verification_status === 'PENDING' ? (
-                    <p><LocaleText hinglish="आपकी adult verification review में है। Review पूरा होने पर यहाँ status update होगा।" english="Your adult verification is under review. This status will update when the review is complete." /></p>
+                    <p><UiText message="legacy.web.your.adult.verification.is.under.revie.d8b4d04e" /></p>
                   ) : (
                     <div className="student-profile-fields">
-                      <p><LocaleText hinglish="Independent account बनाने के लिए staff द्वारा verified-over-18 review ज़रूरी है। जन्मतिथि यहाँ store नहीं की जाती।" english="An authorized staff review confirming you are strictly over 18 is required. Your date of birth is not stored here." /></p>
-                      <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <LocaleText hinglish="मैं adult verification review का अनुरोध करने के लिए सहमत हूँ।" english="I consent to requesting adult verification review." /></span></label>
-                      <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestAdultVerification}><LocaleText hinglish="Adult verification का अनुरोध करें" english="Request adult verification" /></button>
+                      <p><UiText message="legacy.web.an.authorized.staff.review.confirming..ad1fba1b" /></p>
+                      <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <UiText message="legacy.web.i.consent.to.requesting.adult.verifica.bb696e60" /></span></label>
+                      <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestAdultVerification}><UiText message="legacy.web.request.adult.verification.1e2bcfc5" /></button>
                     </div>
                   )}
                 </>
               ) : (
                 <>
-                  <p><strong><LocaleText hinglish="Account role" english="Account role" />:</strong> {lifecycle?.role || 'LEARNER'}</p>
-                  <p><strong><LocaleText hinglish="Parent eligibility" english="Parent eligibility" />:</strong> {lifecycle?.parent_eligibility_status || 'NOT_REQUESTED'}</p>
+                  <p><strong><UiText message="legacy.web.account.role.6b333543" />:</strong> {lifecycle?.role || 'LEARNER'}</p>
+                  <p><strong><UiText message="legacy.web.parent.eligibility.0f44293b" />:</strong> {lifecycle?.parent_eligibility_status || 'NOT_REQUESTED'}</p>
                   {lifecycle?.canTransitionToParent ? (
-                    <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={transitionToParent}><LocaleText hinglish="Parent account में बदलें" english="Transition to parent account" /></button>
+                    <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={transitionToParent}><UiText message="legacy.web.transition.to.parent.account.99ad6dc1" /></button>
                   ) : lifecycle?.role === 'LEARNER' && lifecycle?.adult_verification_current ? (
                     <>
-                      {lifecycle?.parent_eligibility_status === 'PENDING' ? <p><LocaleText hinglish="Parent eligibility review pending है।" english="Parent eligibility review is pending." /></p> : (
+                      {lifecycle?.parent_eligibility_status === 'PENDING' ? <p><UiText message="legacy.web.parent.eligibility.review.is.pending.659105be" /></p> : (
                         <div className="student-profile-fields">
-                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <LocaleText hinglish="मैं parent eligibility review का अनुरोध करने के लिए सहमत हूँ।" english="I consent to requesting parent eligibility review." /></span></label>
-                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestParentEligibility}><LocaleText hinglish="Parent eligibility का अनुरोध करें" english="Request parent eligibility" /></button>
+                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <UiText message="legacy.web.i.consent.to.requesting.parent.eligibi.4f6223f0" /></span></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestParentEligibility}><UiText message="legacy.web.request.parent.eligibility.54fe8ee5" /></button>
                         </div>
                       )}
                     </>
-                  ) : <p><LocaleText hinglish="Parent transition के लिए current adult verification और अलग parent eligibility approval ज़रूरी है।" english="Parent transition requires current adult verification and separate parent eligibility approval." /></p>}
+                  ) : <p><UiText message="legacy.web.parent.transition.requires.current.adu.4684d2f0" /></p>}
                 </>
               )}
             </section>
 
             <div className="student-profile-form__footer">
-              <p><LocaleText hinglish="ये details update करने पर भी आपकी progress और practice records save रहेंगे।" english="Your progress and practice records remain saved when you update these details." /></p>
-              <div><Link href="/student" className="student-profile-quiet-button"><LocaleText hinglish="रद्द करें" english="Cancel" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? <LocaleText hinglish="Changes save हो रहे हैं…" english="Saving changes…" /> : <LocaleText hinglish="Changes save करें" english="Save changes" />}</button></div>
+              <p><UiText message="legacy.web.your.progress.and.practice.records.rem.110744bb" /></p>
+              <div><Link href="/student" className="student-profile-quiet-button"><UiText message="legacy.web.cancel.843e86d4" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button></div>
             </div>
           </form>
         )}

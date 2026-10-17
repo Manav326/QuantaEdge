@@ -1,5 +1,7 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
+import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -188,7 +190,7 @@ function StudentCertificatesContent() {
     }
     if (requestedCertificate.status !== 'ISSUED') {
       setPreviewUrl('');
-      setPreviewError(t('This certificate is revoked or is not available to view.','यह प्रमाणपत्र निरस्त है या देखने के लिए उपलब्ध नहीं है।'));
+      setPreviewError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.certificate.is.revoked.or.is.not..e52e2d8d'));
       setPreviewLoading(false);
       return;
     }
@@ -212,14 +214,14 @@ function StudentCertificatesContent() {
           const raw = await response.text();
           let body: any = {};
           try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-          throw new Error(body.detail || body.message || body.error || t('Certificate preview could not be loaded.','प्रमाणपत्र का पूर्वावलोकन लोड नहीं हो सका।'));
+          throw new Error(body.detail || body.message || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.preview.could.not.be.loade.4cc69ac9'));
         }
         const blob = await response.blob();
         if (!active) return;
         objectUrl = URL.createObjectURL(blob);
         setPreviewUrl(objectUrl);
       } catch (e: any) {
-        if (active) setPreviewError(e?.message || t('Certificate preview could not be loaded.','प्रमाणपत्र का पूर्वावलोकन लोड नहीं हो सका।'));
+        if (active) setPreviewError(e?.message || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.preview.could.not.be.loade.4cc69ac9'));
       } finally {
         if (active) setPreviewLoading(false);
       }
@@ -249,7 +251,7 @@ function StudentCertificatesContent() {
         const raw = await response.text();
         let body: any = {};
         try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-        throw new Error(body.detail || body.message || body.error || t('Certificate download failed.','प्रमाणपत्र डाउनलोड नहीं हो सका।'));
+        throw new Error(body.detail || body.message || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.download.failed.c9470e3c'));
       }
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement('a');
@@ -260,7 +262,7 @@ function StudentCertificatesContent() {
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (e: any) {
-      setPreviewError(e?.message || t('Certificate download failed.','प्रमाणपत्र डाउनलोड नहीं हो सका।'));
+      setPreviewError(e?.message || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.download.failed.c9470e3c'));
     } finally {
       setDownloadBusy(false);
     }
@@ -287,20 +289,20 @@ function StudentCertificatesContent() {
         });
         const record = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(record.detail || record.message || record.error
-          || t('Existing certificate could not be resolved.','मौजूदा प्रमाणपत्र नहीं मिल सका।'));
+          || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.existing.certificate.could.not.be.reso.0323badc'));
         const id = Number(record.id);
-        if (!Number.isSafeInteger(id) || id < 1) throw new Error(t('Invalid certificate ID.','गलत certificate ID।'));
-        setNotice(t('Opening your existing certificate.','मौजूदा प्रमाणपत्र खोला जा रहा है।'));
+        if (!Number.isSafeInteger(id) || id < 1) throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.invalid.certificate.id.d95a8103'));
+        setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.opening.your.existing.certificate.ab3b11f2'));
         router.push('/student/certificates?certificateId=' + id);
       } catch (e: any) {
-        setError(e?.message || t('Existing certificate could not be resolved.','मौजूदा प्रमाणपत्र नहीं मिल सका।'));
+        setError(e?.message || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.existing.certificate.could.not.be.reso.0323badc'));
       } finally {
         setBusy(false);
       }
       return;
     }
     if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED') {
-      setError(t('A certificate for this assessment has been revoked and cannot be reissued. Contact support if you believe this is an error.','इस टेस्ट का प्रमाणपत्र निरस्त है और दोबारा जारी नहीं हो सकता। इसे गलत मानते हैं तो सहायता टीम से संपर्क करें।'));
+      setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.a.certificate.for.this.assessment.has..57989b50'));
       setNotice('');
       return;
     }
@@ -310,7 +312,7 @@ function StudentCertificatesContent() {
     try {
       const body: Record<string, unknown> = { achievementType, templateId: 'CLASSIC', language };
       if (achievementType === 'SUBJECT_COMPLETION') {
-        if (!selectedTrack) throw new Error(t('Choose an active subject track.','एक सक्रिय विषय ट्रैक चुनें।'));
+        if (!selectedTrack) throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.choose.an.active.subject.track.65a5b52d'));
         body.subjectCode = selectedTrack.subject_code;
         if (Number(selectedTrack.course_id) > 0) body.courseId = Number(selectedTrack.course_id);
       } else {
@@ -324,15 +326,15 @@ function StudentCertificatesContent() {
         body: JSON.stringify(body),
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.detail || result.message || result.error || t('Certificate could not be issued.','प्रमाणपत्र जारी नहीं हो सका।'));
+      if (!response.ok) throw new Error(result.detail || result.message || result.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.could.not.be.issued.505ce13b'));
       const id = Number(result.id);
       if (!Number.isSafeInteger(id) || id < 1 || result.status !== 'ISSUED') {
-        throw new Error(t('The server did not return a confirmed issued certificate. Please refresh and try again.','Server से जारी प्रमाणपत्र की पुष्टि नहीं मिली। कृपया refresh करके फिर प्रयास करें।'));
+        throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.server.did.not.return.a.confirmed..dcf66796'));
       }
-      setNotice(t('Certificate issued. Opening the certificate viewer.','प्रमाणपत्र जारी हो गया। Certificate viewer खोला जा रहा है।'));
+      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.issued.opening.the.certifi.410f199a'));
       router.push('/student/certificates?certificateId=' + id);
     } catch (e: any) {
-      setError(e?.message || t('Certificate could not be issued.','प्रमाणपत्र जारी नहीं हो सका।'));
+      setError(e?.message || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.could.not.be.issued.505ce13b'));
     } finally {
       setBusy(false);
     }
@@ -343,61 +345,61 @@ function StudentCertificatesContent() {
       <section className={styles.page}>
         <header className={styles.header}>
           <div>
-            <span className={styles.kicker}>{t('ACHIEVEMENTS','उपलब्धियाँ')}</span>
-            <h1>{t('Certificates','प्रमाणपत्र')}</h1>
-            <p>{t('Earn verified certificates and download PDF or PNG.','पात्रता की पुष्टि के बाद प्रमाणपत्र PDF या PNG में डाउनलोड करें।')}</p>
+            <span className={styles.kicker}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.achievements.09a2cc77')}</span>
+            <h1>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'admin.navigation.certificates')}</h1>
+            <p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.earn.verified.certificates.and.downloa.61103457')}</p>
           </div>
-          <Link href="/student/progress" className="button button-light">← {t('Learning progress','पढ़ाई की प्रगति')}</Link>
+          <Link href="/student/progress" className="button button-light">← {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.learning.progress.cd800468')}</Link>
         </header>
 
         {error && <div className={styles.error} role="alert">{error}</div>}
         {notice && <div className={styles.notice} role="status">{notice}</div>}
 
-        {requestedCertificateId > 0 && <section className={styles.panel} aria-label={t('Certificate viewer','प्रमाणपत्र व्यूअर')}>
+        {requestedCertificateId > 0 && <section className={styles.panel} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.viewer.ed28e6dd')}>
           <div className={styles.sectionHead}>
-            <div><span className={styles.eyebrow}>{t('CERTIFICATE VIEWER','प्रमाणपत्र व्यूअर')}</span><h2>{requestedCertificate?.achievement_title || t('Certificate','प्रमाणपत्र')}</h2></div>
-            <button type="button" className="button button-light" onClick={() => router.push('/student/certificates')}>{t('All certificates','सभी प्रमाणपत्र')}</button>
+            <div><span className={styles.eyebrow}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.viewer.9951acdd')}</span><h2>{requestedCertificate?.achievement_title || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.760980ff')}</h2></div>
+            <button type="button" className="button button-light" onClick={() => router.push('/student/certificates')}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.all.certificates.dd290d66')}</button>
           </div>
           {!profile || (!requestedCertificate && certificateLookupLoading)
-            ? <div className={styles.viewerLoading}>{t('Loading your certificate…','आपका प्रमाणपत्र लोड हो रहा है…')}</div>
-            : !requestedCertificate ? <div className={styles.empty}><strong>{t('Certificate not found','प्रमाणपत्र नहीं मिला')}</strong><p>{t('This certificate is not available in your account.','यह प्रमाणपत्र आपके खाते में उपलब्ध नहीं है।')}</p></div>
-            : requestedCertificate.status !== 'ISSUED' ? <div className={styles.error}>{t('This certificate has been revoked and cannot be displayed as valid proof.','यह प्रमाणपत्र निरस्त है और मान्य प्रमाण के रूप में नहीं दिखाया जा सकता।')}</div>
+            ? <div className={styles.viewerLoading}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.your.certificate.691b8811')}</div>
+            : !requestedCertificate ? <div className={styles.empty}><strong>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.not.found.2ecc7450')}</strong><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.certificate.is.not.available.in.y.dca2e2b9')}</p></div>
+            : requestedCertificate.status !== 'ISSUED' ? <div className={styles.error}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.certificate.has.been.revoked.and..0f58ec45')}</div>
             : <>
               <div className={styles.viewerToolbar}>
-                <div className={styles.formatChoices} role="group" aria-label={t('Certificate format','प्रमाणपत्र का फ़ॉर्मैट')}>
+                <div className={styles.formatChoices} role="group" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.format.2b65f7d5')}>
                   <button type="button" aria-pressed={previewFormat === 'pdf'} className={previewFormat === 'pdf' ? styles.formatButton + ' ' + styles.formatButtonActive : styles.formatButton} onClick={() => setPreviewFormat('pdf')}>PDF</button>
                   <button type="button" aria-pressed={previewFormat === 'png'} className={previewFormat === 'png' ? styles.formatButton + ' ' + styles.formatButtonActive : styles.formatButton} onClick={() => setPreviewFormat('png')}>PNG</button>
                 </div>
                 <button type="button" className="button button-dark" disabled={downloadBusy || previewLoading} onClick={() => void downloadSelectedCertificate()}>
-                  {downloadBusy ? t('Preparing download…','डाउनलोड तैयार हो रहा है…') : t('Download selected format','चुना गया फ़ॉर्मैट डाउनलोड करें') + ' (' + previewFormat.toUpperCase() + ')'}
+                  {downloadBusy ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.preparing.download.1fc1096c') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.download.selected.format.0bdc6272') + ' (' + previewFormat.toUpperCase() + ')'}
                 </button>
               </div>
               {previewError && <div className={styles.error} role="alert">{previewError}</div>}
-              {previewLoading ? <div className={styles.viewerLoading}>{t('Preparing certificate preview…','प्रमाणपत्र का पूर्वावलोकन तैयार हो रहा है…')}</div>
-                : previewUrl && previewFormat === 'pdf' ? <iframe className={styles.certificatePdfPreview} src={previewUrl} title={t('Certificate PDF preview','प्रमाणपत्र PDF पूर्वावलोकन')} />
-                : previewUrl && previewFormat === 'png' ? <div className={styles.certificateImageStage}><img className={styles.certificateImagePreview} src={previewUrl} alt={t('Issued certificate preview','जारी प्रमाणपत्र का पूर्वावलोकन')} /></div>
+              {previewLoading ? <div className={styles.viewerLoading}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.preparing.certificate.preview.56c67d62')}</div>
+                : previewUrl && previewFormat === 'pdf' ? <iframe className={styles.certificatePdfPreview} src={previewUrl} title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.pdf.preview.62fc39ea')} />
+                : previewUrl && previewFormat === 'png' ? <div className={styles.certificateImageStage}><img className={styles.certificateImagePreview} src={previewUrl} alt={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issued.certificate.preview.2e287fa6')} /></div>
                 : null}
             </>}
         </section>}
 
         <section className={styles.panel}>
           <div className={styles.sectionHead}>
-            <div><span className={styles.eyebrow}>01 · {t('CERTIFICATE','प्रमाणपत्र')}</span><h2>{t('Issue an achievement certificate','उपलब्धि प्रमाणपत्र जारी करें')}</h2></div>
-            <span className={styles.meta}>{t('Standard design applied automatically','मानक डिज़ाइन अपने-आप लागू होगा')}</span>
+            <div><span className={styles.eyebrow}>01 · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.ea04cb7f')}</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issue.an.achievement.certificate.b1633fb4')}</h2></div>
+            <span className={styles.meta}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.standard.design.applied.automatically.e65a8a93')}</span>
           </div>
 
           <div className={styles.formGroup}>
-            <h3 className={styles.groupTitle}>{t('Certificate settings','प्रमाणपत्र सेटिंग्स')}</h3>
+            <h3 className={styles.groupTitle}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.settings.029fc02d')}</h3>
             <div className={styles.formGrid}>
               <label className={styles.field}>
-                <span>{t('Achievement type','उपलब्धि का प्रकार')}</span>
+                <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.achievement.type.a2a9c2eb')}</span>
                 <select value={achievementType} onChange={(event) => setAchievementType(event.target.value as any)}>
-                  <option value="SUBJECT_COMPLETION">{t('Subject learning completion','विषय की पढ़ाई पूरी')}</option>
-                  <option value="ASSESSMENT_PASS">{t('Assessment result','टेस्ट परिणाम')} ({passThreshold}% {t('or higher','या अधिक')})</option>
+                  <option value="SUBJECT_COMPLETION">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.subject.learning.completion.bfc75806')}</option>
+                  <option value="ASSESSMENT_PASS">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.assessment.result.6bfe79be')} ({passThreshold}% {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.or.higher.f419fb1a')})</option>
                 </select>
               </label>
               <label className={styles.field}>
-                <span>{t('Certificate language','प्रमाणपत्र की भाषा')}</span>
+                <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.language.d0920722')}</span>
                 <select value={language} onChange={(event) => setCertificateLanguage(event.target.value as 'hi' | 'en')}>
                   <option value="hi">हिन्दी (Hindi)</option>
                   <option value="en">English</option>
@@ -407,22 +409,22 @@ function StudentCertificatesContent() {
           </div>
 
           <div className={styles.formGroup}>
-            <h3 className={styles.groupTitle}>{t('Achievement details','उपलब्धि का विवरण')}</h3>
+            <h3 className={styles.groupTitle}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.achievement.details.004b5ef1')}</h3>
             <div className={styles.formGridSingle}>
               {achievementType === 'SUBJECT_COMPLETION' ? (
                 <label className={styles.field}>
-                  <span>{t('Subject track','विषय ट्रैक')}</span>
+                  <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.subject.track.b3c28eb5')}</span>
                   <select value={selectedTrackKey} onChange={(event) => setSelectedTrackKey(event.target.value)} disabled={!tracks.length}>
-                    <option value="">{tracks.length ? t('Choose a subject track','विषय ट्रैक चुनें') : t('No active subject track available','कोई सक्रिय विषय ट्रैक उपलब्ध नहीं है')}</option>
+                    <option value="">{tracks.length ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.choose.a.subject.track.585eb9ad') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.active.subject.track.available.591e0174')}</option>
                     {tracks.map((track: any) => {
                       const scopeLabel = Number(track.course_id) > 0 && track.course_name
                         ? String(track.course_name)
-                        : t('Class ','कक्षा ') + track.class_code;
+                        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.class.3f617911') + track.class_code;
                       return (
                         <option key={track.track_key} value={track.track_key}>
                           {scopeLabel} · {localizedTrackName(track.subject_code, track.subject_name, language)}
                           {track.completed != null && track.lessons != null
-                            ? ` · ${Number(track.completed)} / ${Number(track.lessons)} ${t('lessons complete','पाठ पूरे')}`
+                            ? ` · ${Number(track.completed)} / ${Number(track.lessons)} ${translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.lessons.complete.54b61c54')}`
                             : ''}
                         </option>
                       );
@@ -431,18 +433,18 @@ function StudentCertificatesContent() {
                 </label>
               ) : (
                 <label className={styles.field}>
-                  <span>{t('Released assessment result','जारी टेस्ट परिणाम')}</span>
+                  <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.released.assessment.result.b36a17f5')}</span>
                   <select value={attemptId} onChange={(event) => setAttemptId(event.target.value)}>
-                    <option value="">{t('Choose an eligible released result','पात्र जारी परिणाम चुनें')}</option>
+                    <option value="">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.choose.an.eligible.released.result.6d1980f1')}</option>
                     {releasedAttempts.map((attempt: any) => {
                       const scopeLabel = Number(attempt.course_id) > 0 && attempt.course_name
                         ? String(attempt.course_name)
-                        : t('Class ','कक्षा ') + attempt.class_code;
+                        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.class.3f617911') + attempt.class_code;
                       return (
                         <option key={attempt.attempt_id} value={attempt.attempt_id}>
                           {scopeLabel} · {localizedTrackName(attempt.subject_code, attempt.subject_name, language)} — {attempt.assessment_title} · {attempt.final_score} / {attempt.max_score}
-                          {attempt.certificate_status === 'ISSUED' ? ' · ' + t('Certificate already issued','प्रमाणपत्र पहले से जारी है') : ''}
-                          {attempt.certificate_status === 'REVOKED' ? ' · ' + t('Certificate revoked','प्रमाणपत्र निरस्त') : ''}
+                          {attempt.certificate_status === 'ISSUED' ? ' · ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.already.issued.2539565e') : ''}
+                          {attempt.certificate_status === 'REVOKED' ? ' · ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.revoked.29f7fafd') : ''}
                         </option>
                       );
                     })}
@@ -452,22 +454,22 @@ function StudentCertificatesContent() {
             </div>
             {achievementType === 'ASSESSMENT_PASS' && releasedAttempts.length === 0 && (
               <p className={styles.help}>
-                {t('No eligible released admin-created test results.','कोई पात्र जारी Admin-created टेस्ट परिणाम नहीं मिला।')}
-                {' '}<Link href="/student/tests">{t('Check your test results','अपने टेस्ट परिणाम देखें')}</Link>
+                {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.eligible.released.admin.created.tes.04c71473')}
+                {' '}<Link href="/student/tests">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.check.your.test.results.61b59418')}</Link>
               </p>
             )}
             {achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED' && (
-              <p className={styles.help}>{t('Certificate already issued for this result; open it below.','इस परिणाम का प्रमाणपत्र पहले से जारी है; नीचे खोलें।')}</p>
+              <p className={styles.help}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.already.issued.for.this.re.144bddaf')}</p>
             )}
             {achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED' && (
-              <p className={styles.error}>{t('This certificate was revoked and cannot be reissued.','यह प्रमाणपत्र निरस्त है और दोबारा जारी नहीं होगा।')}</p>
+              <p className={styles.error}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.certificate.was.revoked.and.canno.2af16133')}</p>
             )}
           </div>
 
           <div className={styles.rule}>
-            <strong>{t('Eligibility','पात्रता')}</strong>
+            <strong>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.eligibility.ba503253')}</strong>
             {achievementType === 'SUBJECT_COMPLETION'
-              ? t('Complete all published lessons in this active subject track.','इस सक्रिय विषय ट्रैक के सभी प्रकाशित पाठ पूरे करें।')
+              ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.complete.all.published.lessons.in.this.c157618b')
               : t(`Pass a released admin-created test at ${passThreshold}% or higher.`,`जारी Admin-created टेस्ट में कम-से-कम ${passThreshold}% अंक प्राप्त करें।`)}
           </div>
           <button className="button button-dark" type="button"
@@ -475,21 +477,21 @@ function StudentCertificatesContent() {
             disabled={busy
               || (achievementType === 'SUBJECT_COMPLETION' && (!selectedTrackKey || !selectedTrack))
               || (achievementType === 'ASSESSMENT_PASS' && (!attemptId || !selectedAssessment || selectedAssessment?.certificate_status === 'REVOKED'))}>
-            {busy ? t('Verifying achievement…','उपलब्धि की पुष्टि हो रही है…') : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
-              ? t('Open existing certificate','मौजूदा प्रमाणपत्र खोलें')
+            {busy ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verifying.achievement.c48cbd89') : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
+              ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.existing.certificate.8ba85e12')
               : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED'
-                ? t('Certificate revoked','प्रमाणपत्र निरस्त')
-                : t('Verify eligibility & issue certificate','पात्रता जाँचें और प्रमाणपत्र जारी करें')}
+                ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.revoked.29f7fafd')
+                : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verify.eligibility.issue.certificate.799b6ae3')}
           </button>
         </section>
 
         <section className={styles.panel}>
           <div className={styles.sectionHead}>
-            <div><span className={styles.eyebrow}>03 · {t('YOUR RECORDS','आपके रिकॉर्ड')}</span><h2>{t('Issued certificates','जारी किए गए प्रमाणपत्र')}</h2></div>
-            <span className={styles.meta}>{certificates.length} {t('records','रिकॉर्ड')}</span>
+            <div><span className={styles.eyebrow}>03 · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.records.c4304201')}</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issued.certificates.3cbbcab6')}</h2></div>
+            <span className={styles.meta}>{certificates.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.records.415b5a7c')}</span>
           </div>
           {!certificates.length ? (
-            <div className={styles.empty}><strong>{t('No certificates yet','अभी कोई प्रमाणपत्र नहीं है')}</strong><p>{t('Complete all published lessons or pass an eligible test.','सभी प्रकाशित पाठ पूरे करें या पात्र टेस्ट पास करें।')}</p></div>
+            <div className={styles.empty}><strong>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.certificates.yet.46af6a77')}</strong><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.complete.all.published.lessons.or.pass.6578ce33')}</p></div>
           ) : (
             <div className={styles.certificateList}>
               {certificates.map((certificate) => (
@@ -497,16 +499,16 @@ function StudentCertificatesContent() {
                   <div className={styles.certificateIcon} aria-hidden="true">QE</div>
                   <div className={styles.certificateInfo}>
                     <strong>{certificate.achievement_title}</strong>
-                    <span>{t('Class ','कक्षा ')}{certificate.class_code} · {localizedTrackName(certificate.subject_code, certificate.subject_name, certificate.language || 'en')}</span>
+                    <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.class.3f617911')}{certificate.class_code} · {localizedTrackName(certificate.subject_code, certificate.subject_name, certificate.language || 'en')}</span>
                     <span>{certificate.certificate_number}</span>
-                    <small>{t('Issued','जारी')}: {new Date(certificate.issued_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')} · {certificate.language === 'hi' ? t('Hindi','हिन्दी') : 'English'}</small>
+                    <small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issued.454de9e4')}: {new Date(certificate.issued_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')} · {certificate.language === 'hi' ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.hindi.197af92c') : 'English'}</small>
                   </div>
-                  <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status === 'ISSUED' ? t('Issued','जारी') : t('Revoked','निरस्त')}</span>
+                  <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status === 'ISSUED' ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issued.454de9e4') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.revoked.e75eac7b')}</span>
                   <div className={styles.downloads}>
                     {certificate.status === 'ISSUED' ? <>
-                      <Link href={'/student/certificates?certificateId=' + certificate.id}>{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</Link>
-                    </> : <small>{t('Revoked · contact support if you believe this is an error.','निरस्त · इसे गलत मानते हैं तो सहायता टीम से संपर्क करें।')}</small>}
-                    <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</Link>
+                      <Link href={'/student/certificates?certificateId=' + certificate.id}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.view.certificate.07663aac')}</Link>
+                    </> : <small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.revoked.contact.support.if.you.believe.61cb6a1f')}</small>}
+                    <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verify.status.8146b8bf')}</Link>
                   </div>
                 </article>
               ))}
