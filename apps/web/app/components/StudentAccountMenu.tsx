@@ -1,8 +1,8 @@
 'use client';
 
-import { UiText } from '../i18n/useUiTranslation';
+import { UiText, useUiTranslation } from '../i18n/useUiTranslation';
 import { translateUi } from '../i18n/catalog';
-import { LanguageSwitcher, LearningLanguageSwitcher, LocaleText } from './LanguageProvider';
+import { LanguageSwitcher, LearningLanguageSwitcher } from './LanguageProvider';
 import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
 import Link from 'next/link';
@@ -21,6 +21,7 @@ function MenuIcon() {
 }
 
 export default function StudentAccountMenu({ displayName, profileImageUrl, onLogout, loggingOut }: StudentAccountMenuProps) {
+  const t = useUiTranslation();
   const accountRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -54,7 +55,7 @@ export default function StudentAccountMenu({ displayName, profileImageUrl, onLog
         ref={triggerRef}
         type="button"
         className="student-account-trigger"
-        aria-label={`Open profile and settings for ${displayName}`}
+        aria-label={t('common.accountMenu.openStudentSettings',{ name: displayName })}
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls="student-account-menu"
@@ -67,7 +68,7 @@ export default function StudentAccountMenu({ displayName, profileImageUrl, onLog
       </button>
 
       {open && (
-        <div className="student-account-menu" id="student-account-menu" aria-label="Student account options">
+        <div className="student-account-menu" id="student-account-menu" aria-label={t('common.accountMenu.studentOptions')}>
           <div className="qe-account-language-settings student-account-menu__language-settings">
             <LanguageSwitcher menu />
             <LearningLanguageSwitcher menu />
@@ -80,10 +81,10 @@ export default function StudentAccountMenu({ displayName, profileImageUrl, onLog
           </Link>
           <div className="student-account-menu__divider" />
           <button type="button" className="student-account-menu__logout" disabled={loggingOut}
-            aria-label={loggingOut ? 'Logging out' : 'Log out'}
+            aria-label={t(loggingOut ? 'common.accountMenu.loggingOut' : 'common.accountMenu.logOut')}
             onClick={() => { closeMenu(); onLogout(); }}>
             <span aria-hidden="true">↗</span>
-            <span><LocaleText hinglish={loggingOut ? 'लॉग आउट…' : 'लॉग आउट'} english={loggingOut ? 'Logging out…' : 'Log out'} /></span>
+            <span>{t(loggingOut ? 'common.accountMenu.loggingOut' : 'common.accountMenu.logOut')}</span>
           </button>
         </div>
       )}

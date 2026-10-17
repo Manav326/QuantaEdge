@@ -1,8 +1,6 @@
 'use client';
 
-import { UiText } from '../i18n/useUiTranslation';
-import { translateUi } from '../i18n/catalog';
-import { LocaleText } from './LanguageProvider';
+import { UiText, useUiTranslation } from '../i18n/useUiTranslation';
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -15,6 +13,7 @@ function AccountIcon({ kind }: { kind: 'student' | 'parent' }) {
 }
 
 export default function LandingAccountMenu() {
+  const t = useUiTranslation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -40,12 +39,12 @@ export default function LandingAccountMenu() {
   return (
     <div className="qe-landing-account" ref={rootRef}>
       <button ref={triggerRef} type="button" className="qe-account-trigger"
-        aria-label="Open account options" aria-haspopup="true" aria-expanded={open}
+        aria-label={t('common.accountMenu.openOptions')} aria-haspopup="true" aria-expanded={open}
         aria-controls="qe-account-menu" onClick={() => setOpen(value => !value)}>
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg>
         <svg className={open ? 'qe-account-chevron is-open' : 'qe-account-chevron'} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
-      {open && <div className="qe-account-menu" id="qe-account-menu" role="menu" aria-label="QuantaEdge account options">
+      {open && <div className="qe-account-menu" id="qe-account-menu" role="menu" aria-label={t('common.accountMenu.options')}>
         <div className="qe-account-menu__heading"><strong><UiText message="legacy.web.sign.in.to.quantaedge.972d39f9" /></strong><span><UiText message="legacy.web.choose.your.account.type.6d9b63b8" /></span></div>
         <Link href="/login/student" role="menuitem" className="qe-account-menu__item" onClick={close}>
           <span className="qe-account-menu__icon"><AccountIcon kind="student" /></span>

@@ -1,8 +1,8 @@
 'use client';
 
-import { UiText } from '../i18n/useUiTranslation';
+import { UiText, useUiTranslation } from '../i18n/useUiTranslation';
 import { translateUi } from '../i18n/catalog';
-import { LanguageSwitcher, LocaleText } from './LanguageProvider';
+import { LanguageSwitcher } from './LanguageProvider';
 import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
 import Link from 'next/link';
@@ -22,12 +22,14 @@ function ParentMenuIcon() {
 }
 
 export default function ParentAccountMenu({
-  displayName = 'Parent account',
+  displayName,
   mobile = '',
   profileImageUrl,
   onLogout,
   loggingOut,
 }: ParentAccountMenuProps) {
+  const t = useUiTranslation();
+  const accessibleName = displayName || t('common.accountMenu.parentAccount');
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -61,7 +63,7 @@ export default function ParentAccountMenu({
         ref={triggerRef}
         type="button"
         className="parent-account__trigger"
-        aria-label={`Open parent account menu for ${displayName}`}
+        aria-label={t('common.accountMenu.openParentMenu',{ name: accessibleName })}
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls="parent-account-menu"
@@ -72,7 +74,7 @@ export default function ParentAccountMenu({
       </button>
 
       {open && (
-        <div className="parent-account__menu" id="parent-account-menu" aria-label="Parent account options">
+        <div className="parent-account__menu" id="parent-account-menu" aria-label={t('common.accountMenu.parentOptions')}>
           <div className="qe-account-language-settings parent-account__language-settings">
             <LanguageSwitcher menu />
           </div>
@@ -84,10 +86,10 @@ export default function ParentAccountMenu({
           </Link>
           <div className="parent-account__divider" />
           <button type="button" className="parent-account__logout" disabled={loggingOut}
-            aria-label={loggingOut ? 'Logging out' : 'Log out'}
+            aria-label={t(loggingOut ? 'common.accountMenu.loggingOut' : 'common.accountMenu.logOut')}
             onClick={() => { closeMenu(); onLogout(); }}>
             <span aria-hidden="true">↗</span>
-            <span><LocaleText hinglish={loggingOut ? 'लॉग आउट…' : 'लॉग आउट'} english={loggingOut ? 'Logging out…' : 'Log out'} /></span>
+            <span>{t(loggingOut ? 'common.accountMenu.loggingOut' : 'common.accountMenu.logOut')}</span>
           </button>
         </div>
       )}

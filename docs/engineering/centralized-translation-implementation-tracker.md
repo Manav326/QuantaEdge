@@ -371,3 +371,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Generalized Admin Classes and Assessments date labels and People class times to use the locale registry’s language tag. Admin navigation’s locale type now reuses the central `UiLocale` type. Learning language and lesson/test data remain independent of UI locale.
 - Extended the static-copy guard to scan all Web, Admin and People Operations TypeScript/JavaScript source for the known forced English/Hinglish translation mapping and validate the new TutorDock keys.
 - This is a locale-extensibility pass—not the final raw-string migration. Static sentences, labels and some locale-specific branches remain across route components; route acceptance and browser checks remain open. CI must pass on this commit before this batch is build-certified.
+
+
+## Shared account-menu copy extraction — 2026-10-17
+
+- Replaced hardcoded Web landing/Parent/Student account-menu accessibility names and logout text with shared semantic catalog keys. Parent/student menu labels retain the profile name through the `{name}` placeholder.
+- Added nine matching English/Hinglish messages and synchronized catalog content for all three independent Next.js app builds. Catalog key and placeholder checks remain part of CI.
+- Pagination and remaining workspace labels are the next shared-component slice. This does not certify all route copy or remove remaining static sentences elsewhere.
