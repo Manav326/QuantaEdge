@@ -76,12 +76,16 @@ public class GuardianController {
 
     int changed=jdbc.update("""
       update user_account
-      set display_name=?,profile_image_data_url=?,email=?,city=?,state=?,occupation=?,
+      set display_name=?,profile_image_data_url=?,contact_email=?,city=?,state=?,occupation=?,
           organization=?,preferred_language=?,profile_updated_at=now(),updated_at=now()
       where id=? and active=true and role='PARENT'
       """,name,image,nullable(email),nullable(city),nullable(state),nullable(occupation),
          nullable(organization),preferredLanguage,userId);
     if(changed!=1) throw new SecurityException("Active parent account not found.");
+    jdbc.update("""
+      update student set display_name=?,profile_updated_at=now()
+      where user_account_id=? and active=true and environment='PRODUCTION'
+      """, name, userId);
     return parentProfile(userId);
   }
 
@@ -134,9 +138,9 @@ public class GuardianController {
 
   private Map<String,Object> parentProfile(long userId) {
     return jdbc.queryForMap("""
-      select id,public_id,public_user_id,display_name,mobile_e164,email,city,state,occupation,
+      select id,public_id,public_user_id,display_name,mobile_e164,contact_email as email,city,state,occupation,
              organization,preferred_language,
-             case when profile_image_data_url is not null then '/api/v1/guardians/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else null end as profile_image_url,
+             case when profile_image_data_url is not null then '/api/v1/guardians/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else google_picture_url end as profile_image_url,
              profile_updated_at
       from user_account
       where id=? and active=true and role='PARENT'
