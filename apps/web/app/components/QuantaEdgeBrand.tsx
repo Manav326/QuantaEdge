@@ -7,7 +7,7 @@ function approvedLogoUrl(url: string | null | undefined, code: string | undefine
   if (!url || !code) return false;
   const prefix = '/api/v1/institution/public/branding/' + code + '/assets/logo?v=';
   if (!url.startsWith(prefix)) return false;
-  return /^\\d+$/.test(url.slice(prefix.length));
+  return /^\d+$/.test(url.slice(prefix.length));
 }
 
 type BrandVariant = 'header' | 'compact' | 'footer' | 'auth';
