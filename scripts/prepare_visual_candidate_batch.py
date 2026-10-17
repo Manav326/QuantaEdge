@@ -20,7 +20,6 @@ PREPARATION_SCRIPTS = (
     "scripts/extract_visual_asset_inventory.py",
     "scripts/prepare_visual_candidates_v3.py",
     "scripts/build_visual_lesson_attachment_manifest.py",
-    "scripts/prepare_visual_candidate_batch.py",
 )
 
 
@@ -121,6 +120,183 @@ def preparation_fingerprint(source: dict[str, Any], work: Path, inventory_path: 
     }
     raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
+
+
+def layer1_input_fingerprint(source: dict[str, Any], work: Path, repo: Path) -> str:
+    pdf, source_manifest = work / "source.pdf", work / "source.manifest.json"
+    filename = source.get("text_jsonl_filename")
+    if not isinstance(filename, str) or Path(filename).name != filename or not filename.endswith(".jsonl"):
+        raise ValueError(f"{source.get('book_slug')}: unsafe/missing page JSONL filename.")
+    page_jsonl = work / filename
+    if any(not path.is_file() for path in (pdf, source_manifest, page_jsonl)):
+        raise ValueError(f"{source.get('book_slug')}: source PDF, manifest, or page JSONL is missing.")
+    if sha256_file(pdf) != str(source.get("sha256") or "").lower():
+        raise ValueError(f"{source.get('book_slug')}: source PDF SHA-256 mismatch.")
+    import fitz
+    payload = {
+        "schema_version": "quantaedge.visual-inventory-preparation-fingerprint.v1",
+        "source_book_id": source["book_id"],
+        "source_pdf_sha256": str(source["sha256"]).lower(),
+        "manifest_sha256": sha256_file(source_manifest),
+        "page_jsonl_sha256": sha256_file(page_jsonl),
+        "extractor_sha256": sha256_file(repo / "scripts" / "extract_visual_asset_inventory.py"),
+        "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+        "pymupdf_version": str(getattr(fitz, "VersionBind", "unknown")),
+        "preview_width": 1200,
+        "inventory_schema": "quantaedge.visual-inventory.v1",
+    }
+    return hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def validate_layer1_inventory(work: Path, source: dict[str, Any], inventory_dir: Path) -> dict[str, Any]:
+    inventory = read_json(inventory_dir / "visual-inventory.v1.json")
+    meta = inventory.get("source") if isinstance(inventory.get("source"), dict) else {}
+    if (inventory.get("schema_version") != "quantaedge.visual-inventory.v1"
+        or meta.get("book_id") != source["book_id"]
+        or str(meta.get("pdf_sha256") or "").lower() != str(source["sha256"]).lower()):
+        raise ValueError(f"{source['book_slug']}: Layer 1 inventory source identity/schema mismatch.")
+    source_page_hashes = {}
+    with (work / source["text_jsonl_filename"]).open(encoding="utf-8") as stream:
+        for line_no, line in enumerate(stream, 1):
+            if not line.strip(): continue
+            try: row = json.loads(line)
+            except json.JSONDecodeError as exc: raise ValueError(f"{source['book_slug']}: malformed page JSONL line {line_no}.") from exc
+            page = row.get("source_book_page_number", row.get("source_pdf_page_number"))
+            text = row.get("text")
+            if not isinstance(page, int) or isinstance(page, bool) or page < 1 or page in source_page_hashes or not isinstance(text, str):
+                raise ValueError(f"{source['book_slug']}: invalid/duplicate page record at JSONL line {line_no}.")
+            source_page_hashes[page] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    manifest = read_json(work / "source.manifest.json")
+    count, expected = meta.get("pdf_page_count"), manifest.get("page_count") or manifest.get("completed_pages")
+    if not isinstance(count, int) or count < 1 or set(source_page_hashes) != set(range(1, count + 1)):
+        raise ValueError(f"{source['book_slug']}: extracted page JSONL does not cover the full PDF.")
+    if isinstance(expected, int) and expected > 0 and expected != count:
+        raise ValueError(f"{source['book_slug']}: manifest/inventory page counts disagree.")
+    pages, assets = inventory.get("pages"), inventory.get("assets")
+    if not isinstance(pages, list) or not isinstance(assets, list):
+        raise ValueError(f"{source['book_slug']}: Layer 1 inventory pages/assets malformed.")
+    page_rows, seen = {}, set()
+    for page in pages:
+        if not isinstance(page, dict): raise ValueError(f"{source['book_slug']}: malformed inventory page row.")
+        number = page.get("source_pdf_page_number")
+        if not isinstance(number, int) or isinstance(number, bool) or number in page_rows:
+            raise ValueError(f"{source['book_slug']}: inventory has duplicate/missing page numbers.")
+        if source_page_hashes.get(number) != page.get("page_text_sha256"):
+            raise ValueError(f"{source['book_slug']}: source text fingerprint mismatch on PDF page {number}.")
+        page_rows[number] = page
+    if set(page_rows) != set(range(1, count + 1)):
+        raise ValueError(f"{source['book_slug']}: inventory page coverage incomplete.")
+    for asset in assets:
+        if not isinstance(asset, dict): raise ValueError(f"{source['book_slug']}: malformed asset row.")
+        aid = asset.get("asset_id")
+        if not isinstance(aid, str) or not aid or aid in seen: raise ValueError(f"{source['book_slug']}: missing/duplicate asset ID.")
+        seen.add(aid)
+        if asset.get("kind") not in {"embedded_image", "page_preview"}: continue
+        number = asset.get("source_pdf_page_number")
+        if source_page_hashes.get(number) != asset.get("page_text_sha256"):
+            raise ValueError(f"{source['book_slug']}: stale/unverified text context for visual {aid}.")
+        relative = asset.get("asset_path")
+        if not isinstance(relative, str) or not relative: raise ValueError(f"{source['book_slug']}: eligible visual {aid} has no path.")
+        target = safe_path(inventory_dir, relative)
+        if not target.is_file() or sha256_file(target) != asset.get("asset_sha256"):
+            raise ValueError(f"{source['book_slug']}: visual asset file/hash mismatch for {aid}.")
+    return inventory
+
+
+def write_layer1_bundle_manifest(inventory_dir: Path, source: dict[str, Any], work: Path, fingerprint: str, destination: Path) -> dict[str, Any]:
+    files = {}
+    for path in sorted(inventory_dir.rglob("*")):
+        if path.is_symlink(): raise ValueError(f"{source['book_slug']}: Layer 1 inventory contains symlink.")
+        if path.is_file(): files[path.relative_to(inventory_dir).as_posix()] = sha256_file(path)
+    value = {
+        "schema_version": "quantaedge.visual-inventory-bundle-manifest.v1",
+        "book_slug": source["book_slug"], "source_book_id": source["book_id"],
+        "source_pdf_sha256": source["sha256"], "preparation_fingerprint": fingerprint,
+        "source_manifest_sha256": sha256_file(work / "source.manifest.json"),
+        "page_jsonl_sha256": sha256_file(work / source["text_jsonl_filename"]),
+        "inventory_json_sha256": sha256_file(inventory_dir / "visual-inventory.v1.json"),
+        "files": files, "publication_allowed": False, "human_review_required": True,
+    }
+    write_json(destination, value)
+    return value
+
+
+def validate_layer1_bundle(bundle_root: Path, source: dict[str, Any], work: Path, fingerprint: str) -> dict[str, Any]:
+    inventory_dir = bundle_root / "inventory"
+    manifest = read_json(bundle_root / "layer1-bundle-manifest.v1.json")
+    if (manifest.get("schema_version") != "quantaedge.visual-inventory-bundle-manifest.v1"
+        or manifest.get("book_slug") != source["book_slug"]
+        or manifest.get("source_book_id") != source["book_id"]
+        or str(manifest.get("source_pdf_sha256") or "").lower() != str(source["sha256"]).lower()
+        or manifest.get("preparation_fingerprint") != fingerprint
+        or manifest.get("source_manifest_sha256") != sha256_file(work / "source.manifest.json")
+        or manifest.get("page_jsonl_sha256") != sha256_file(work / source["text_jsonl_filename"])
+        or manifest.get("publication_allowed") is not False
+        or manifest.get("human_review_required") is not True):
+        raise ValueError(f"{source['book_slug']}: Layer 1 checkpoint source/fingerprint mismatch.")
+    expected = manifest.get("files")
+    if not isinstance(expected, dict): raise ValueError(f"{source['book_slug']}: Layer 1 bundle file map malformed.")
+    actual = {}
+    for path in inventory_dir.rglob("*"):
+        if path.is_symlink(): raise ValueError(f"{source['book_slug']}: restored Layer 1 bundle contains symlink.")
+        if path.is_file(): actual[path.relative_to(inventory_dir).as_posix()] = sha256_file(path)
+    if actual != expected: raise ValueError(f"{source['book_slug']}: Layer 1 bundle file set/hash mismatch.")
+    validate_layer1_inventory(work, source, inventory_dir)
+    if manifest.get("inventory_json_sha256") != sha256_file(inventory_dir / "visual-inventory.v1.json"):
+        raise ValueError(f"{source['book_slug']}: Layer 1 inventory JSON SHA-256 mismatch.")
+    return manifest
+
+
+def ensure_layer1_checkpoint(selection_class: int, source: dict[str, Any], work: Path, output_root: Path, repo: Path, package: str) -> dict[str, Any]:
+    fingerprint = layer1_input_fingerprint(source, work, repo)
+    tag = f"visual-inventory-v1-class{selection_class}-{source['book_slug']}-prep-{fingerprint[:24]}"
+    archive = output_root / f"{source['book_slug']}-layer1.tar.gz"
+    saved_path = repo / "data" / "textbook-visual-candidates-v3" / source["book_slug"] / "preparation-checkpoint.v1.json"
+    saved = read_json(saved_path) if saved_path.is_file() else {}
+    prior = saved.get("layer1_inventory_bundle") if isinstance(saved.get("layer1_inventory_bundle"), dict) else {}
+    pulled, detail = pull_archive(package, tag, output_root / f".pull-layer1-{source['book_slug']}")
+    inventory_dir = work / "inventory"
+    if pulled is not None:
+        archive_sha = sha256_file(pulled)
+        if prior.get("version_tag") == tag and prior.get("bundle_tar_sha256") != archive_sha:
+            raise ValueError(f"{source['book_slug']}: Layer 1 archive SHA-256 differs from saved checkpoint index.")
+        shutil.copy2(pulled, archive)
+        bundle_root = extract_archive(archive, output_root, f"{source['book_slug']}-layer1")
+        validate_layer1_bundle(bundle_root, source, work, fingerprint)
+        shutil.rmtree(inventory_dir, ignore_errors=True)
+        shutil.copytree(bundle_root / "inventory", inventory_dir)
+        inventory_sha = sha256_file(inventory_dir / "visual-inventory.v1.json")
+        status = "RESTORED_FROM_GHCR"
+    else:
+        shutil.rmtree(inventory_dir, ignore_errors=True)
+        subprocess.run([
+            sys.executable, "scripts/extract_visual_asset_inventory.py", "--pdf", str(work / "source.pdf"),
+            "--manifest", str(work / "source.manifest.json"), "--output-dir", str(inventory_dir), "--preview-width", "1200",
+        ], cwd=repo, check=True)
+        validate_layer1_inventory(work, source, inventory_dir)
+        manifest_path = output_root / f"{source['book_slug']}-layer1-bundle-manifest.v1.json"
+        write_layer1_bundle_manifest(inventory_dir, source, work, fingerprint, manifest_path)
+        archive.unlink(missing_ok=True)
+        with tarfile.open(archive, "w:gz") as tar:
+            tar.add(inventory_dir, arcname=f"{source['book_slug']}-layer1/inventory")
+            tar.add(manifest_path, arcname=f"{source['book_slug']}-layer1/layer1-bundle-manifest.v1.json")
+        archive_sha = sha256_file(archive)
+        subprocess.run(
+            ["oras", "push", "--artifact-type", "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+             f"{package}:{tag}", f"{archive.name}:application/gzip"], cwd=output_root, check=True,
+        )
+        inventory_sha = sha256_file(inventory_dir / "visual-inventory.v1.json")
+        status = "BUILT_AND_PUBLISHED"
+    marker = {
+        "schema_version": "quantaedge.visual-inventory-checkpoint-marker.v1",
+        "source_book_id": source["book_id"], "source_pdf_sha256": source["sha256"],
+        "package": package, "artifact_type": "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",
+        "version_tag": tag, "bundle_tar_sha256": archive_sha,
+        "preparation_fingerprint": fingerprint, "inventory_json_sha256": inventory_sha,
+    }
+    write_json(work / ".layer1-preparation-checkpoint.json", marker)
+    print(json.dumps({"book_id": source["book_id"], "layer": 1, "checkpoint": status, "tag": tag, "archive_sha256": archive_sha}))
+    return marker
 
 
 def validate_pack(out: Path, source: dict[str, Any]) -> dict[str, Any]:
@@ -245,7 +421,7 @@ def missing_artifact(message: str) -> bool:
     # Only an explicit registry "artifact absent" response permits a rebuild.
     # Generic "not found" wording can appear in authentication/proxy/server errors,
     # which must fail closed rather than silently trigger expensive regeneration.
-    return any(term in lower for term in ("404", "manifest unknown", "name_unknown"))
+    return any(term in lower for term in ("404", "manifest unknown", "manifest_unknown", "name_unknown"))
 
 
 def pull_archive(package: str, tag: str, staging: Path) -> tuple[Path | None, str]:
@@ -316,23 +492,6 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
         if sha256_file(pdf) != str(source.get("sha256") or "").lower():
             raise ValueError(f"{slug}: source PDF SHA-256 mismatch.")
 
-        inventory_dir = work / "inventory"
-        shutil.rmtree(inventory_dir, ignore_errors=True)
-        subprocess.run([
-            sys.executable, "scripts/extract_visual_asset_inventory.py",
-            "--pdf", str(pdf), "--manifest", str(manifest_path),
-            "--output-dir", str(inventory_dir), "--preview-width", "1200",
-        ], cwd=repo, check=True)
-        inventory_path = inventory_dir / "visual-inventory.v1.json"
-        current_inventory = read_json(inventory_path)
-        inv_source = current_inventory.get("source") if isinstance(current_inventory.get("source"), dict) else {}
-        if current_inventory.get("schema_version") != "quantaedge.visual-inventory.v1" or inv_source.get("book_id") != source["book_id"] or str(inv_source.get("pdf_sha256") or "").lower() != str(source["sha256"]).lower():
-            raise ValueError(f"{slug}: fresh inventory does not match whole-book source.")
-
-        fingerprint = preparation_fingerprint(source, work, inventory_path, repo)
-        tag = f"candidates-v3-class{selection['class']}-{slug}-prep-{fingerprint[:24]}"
-        out = output_root / slug
-        archive = output_root / f"{slug}-candidates-v3.tar.gz"
         prior_index_path = repo / "data" / "textbook-visual-candidates-v3" / slug / "bundle-index.v3.json"
         prior_index = read_json(prior_index_path) if prior_index_path.is_file() else {}
         if prior_index and prior_index.get("source_book_id") == source["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower() != str(source["sha256"]).lower():
@@ -341,6 +500,14 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
             prior_index = {}
         elif prior_index and prior_index.get("source_book_id") != source["book_id"]:
             prior_index = {}
+
+        layer1_checkpoint = ensure_layer1_checkpoint(selection["class"], source, work, output_root, repo, package)
+        inventory_dir = work / "inventory"
+        inventory_path = inventory_dir / "visual-inventory.v1.json"
+        fingerprint = preparation_fingerprint(source, work, inventory_path, repo)
+        tag = f"candidates-v3-class{selection['class']}-{slug}-prep-{fingerprint[:24]}"
+        out = output_root / slug
+        archive = output_root / f"{slug}-candidates-v3.tar.gz"
 
         restored = False
         pulled, detail = pull_archive(package, tag, output_root / f".pull-{slug}-fingerprint")
@@ -446,8 +613,27 @@ def prepare_batch(selection_path: Path, source_root: Path, output_root: Path, re
             bundle_index["preparation_fingerprint"] = fingerprint
             bundle_index["candidate_pack_sha256"] = sha256_file(out / "candidates.v3.json")
             bundle_index["bundle_manifest_sha256"] = sha256_file(bundle_manifest_path)
+        bundle_index["layer1_inventory_bundle"] = {
+            "package": layer1_checkpoint["package"], "artifact_type": layer1_checkpoint["artifact_type"],
+            "version_tag": layer1_checkpoint["version_tag"], "bundle_tar_sha256": layer1_checkpoint["bundle_tar_sha256"],
+            "preparation_fingerprint": layer1_checkpoint["preparation_fingerprint"],
+            "inventory_json_sha256": layer1_checkpoint["inventory_json_sha256"],
+        }
         write_json(destination / "bundle-index.v3.json", bundle_index)
-        completed.append({"slug": slug, "tag": bundle_index["version_tag"], "candidate_count": bundle_index["candidate_count"], "checkpoint": "FINGERPRINTED" if is_fingerprinted else "LEGACY"})
+        write_json(destination / "preparation-checkpoint.v1.json", {
+            "schema_version": "quantaedge.visual-candidate-preparation-checkpoint.v1",
+            "book_slug": slug, "class": selection["class"], "source_book_id": source["book_id"],
+            "source_pdf_sha256": source["sha256"], "layers": {"1": "COMPLETE", "2": "COMPLETE", "3": "COMPLETE"},
+            "layer1_inventory_bundle": bundle_index["layer1_inventory_bundle"],
+            "candidate_bundle": {
+                "package": package, "artifact_type": ARTIFACT_TYPE, "version_tag": bundle_index["version_tag"],
+                "bundle_tar_sha256": bundle_index["bundle_tar_sha256"],
+                "preparation_fingerprint": bundle_index.get("preparation_fingerprint"),
+                "candidate_pack_sha256": sha256_file(destination / "candidates.v3.json"),
+            },
+            "publication_allowed": False, "human_review_required": True,
+        })
+        completed.append({"slug": slug, "tag": bundle_index["version_tag"], "candidate_count": bundle_index["candidate_count"], "layer1_checkpoint": layer1_checkpoint["version_tag"], "checkpoint": "FINGERPRINTED" if is_fingerprinted else "LEGACY"})
     print(json.dumps({"class": selection["class"], "per_book_checkpoints": completed, "publication_allowed": False}, indent=2))
 
 
