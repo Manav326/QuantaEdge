@@ -33,15 +33,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("'classes-7-8-resume'", workflow)
 
-    def test_marked_push_can_resume_class7_independently_of_class8(self):
+    def test_marked_push_can_resume_class7_and_class8_independently(self):
         workflow = read("textbook-visual-candidates-v3.yml")
-        marker = "[resume-visual-layers-4-5-class-7]"
-        self.assertIn(marker, workflow)
-        self.assertIn("fromJSON(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '[\"7\"]'", workflow)
+        marker7 = "[resume-visual-layers-4-5-class-7]"
+        marker8 = "[resume-visual-layers-4-5-class-8]"
+        self.assertIn(marker7, workflow)
+        self.assertIn(marker8, workflow)
+        matrix_line = next(line for line in workflow.splitlines() if line.strip().startswith("class_no:"))
+        self.assertIn('["7"]', matrix_line)
+        self.assertIn('["8"]', matrix_line)
         self.assertIn("'class-7-resume'", workflow)
-        self.assertIn("(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]'))", workflow)
+        self.assertIn("'class-8-resume'", workflow)
         self.assertIn("max-parallel: 1", workflow)
-
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         preflight = workflow.index("- name: Preflight and restore matching Layer 4 checkpoints before loading the vision model")
@@ -52,6 +55,9 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("resume_preflight", preflight_step)
         self.assertIn("prior_analysis_started", preflight_step)
         self.assertIn("resume stopped instead of silently redoing inference", preflight_step)
+        self.assertIn("from scripts.prepare_visual_candidate_batch import missing_artifact", preflight_step)
+        self.assertIn('not_found = missing_artifact(detail, f"{package}:{tag}")', preflight_step)
+        self.assertIn("missing_artifact(detail, f", workflow)
 
     def test_layers_6_to_8_has_all_modes_in_one_entrypoint(self):
         workflow = read("quantaedge-layers-6-8.yml")

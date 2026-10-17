@@ -94,3 +94,9 @@ Every resumable stage must:
 ## Operating rule
 
 Before cancelling or rerunning an Actions job, check its last completed step and the latest `data/` savepoint on `main`. Prefer the explicit resume mode whenever inputs are unchanged. Use full preparation only when upstream artifacts are missing, invalid, or intentionally changed.
+
+## Resume recovery: Classes 6–8
+
+Use the existing **Prepare textbook visual candidates v3 (additive)** workflow. In Actions, choose **Run workflow**, select the class, and set `analysis_mode=resume_layers_4_5` to continue saved visual analysis without rebuilding candidate packs. The core workflow supports single-class recovery and the combined Class 7–8 path; no extra workflow file is needed.
+
+Resume preflight uses the shared `missing_artifact(message, expected_reference)` classifier. It recognizes explicit registry absence responses, including the exact ORAS/GHCR `failed to resolve <tag>: <package>:<tag>: not found` response, and does not mistake arbitrary proxy, upstream, or authentication errors for an absent checkpoint. Missing checkpoints are treated as not started only when no Layer 4 work is recorded; an existing partial checkpoint is never silently regenerated.
