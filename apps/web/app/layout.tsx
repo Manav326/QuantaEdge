@@ -2,6 +2,7 @@ import './globals.css';
 import { LanguageProvider } from './components/LanguageProvider';
 import SessionBoundary from './components/SessionBoundary';
 import WorkspaceLayout from './components/WorkspaceLayout';
+import { TenantBrandingProvider } from './components/TenantBrandingProvider';
 
 export const metadata = {
   title: { default: 'QuantaEdge | Smarter Decisions. Greater Growth.', template: '%s | QuantaEdge' },
@@ -18,5 +19,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="hi"><body><LanguageProvider><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></LanguageProvider></body></html>;
+  return <html lang="hi"><body><LanguageProvider><TenantBrandingProvider><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></TenantBrandingProvider></LanguageProvider></body></html>;
 }
