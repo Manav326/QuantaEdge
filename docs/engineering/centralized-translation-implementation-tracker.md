@@ -175,3 +175,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - This patch adds 43 additional directory keys to the catalog and refreshes the six app-local JSON copies from canonical `localization/catalogs`. The synchronization script remains the source-of-truth check for future edits.
 - CI must be checked on the newest commit; current branch verification was not yet all-green at the last check. Do not claim production readiness until a fresh non-cancelled run passes the localization parity check and all required builds.
 - Still outstanding for People Operations: the rest of employee creation/edit dialog fields, access/role assignments, attendance/leave, payroll, workforce lifecycle, teaching assignments/classes, self-service, and deep dialogs/error/empty/loading states. This directory pass is not full route completion.
+
+
+## Latest continuation — HRMS access governance localization
+
+- Added 52 semantic `people.access.*` messages for role names/descriptions, access overview metrics, filters, credential setup/reset, permission errors, role-save/access-toggle feedback, and status text. The access-management page now uses the shared `useUiTranslation` hook for those surfaces and no longer keeps role labels/descriptions as a local English dictionary.
+- Role codes, permission keys, reserved-account checks, API access enforcement, session revocation behavior and credential rules are unchanged. The initial-password minimum remains 12 characters; the client message is catalog-backed, while explicit server response messages remain visible so operational errors are not hidden.
+- The canonical catalogs will contain 1702 keys per locale once this change is committed. The commit also refreshes all six app-local JSON copies and updates this tracker.
+- Still outstanding in People Operations: deep copy in access dialogs, attendance/leave, payroll, workforce lifecycle, academic assignments/classes and self-service. The access route is a first migration pass, not full route certification.

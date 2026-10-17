@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PeopleEmptyState, PeopleFeedback, PeopleMetricCard, PeoplePageHeader, PeopleStatusBadge, PeopleButton } from '../components/PeopleUI';
+import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
 type Session = { staffId?: number; role?: string; displayName?: string; permissions?: string[]; workspace?: string };
 type AccessUser = {
@@ -23,10 +24,10 @@ type AccessUser = {
 type Permission = { permission_key: string; display_name: string; description: string };
 
 const ROLE_OPTIONS = [
-  { value: 'EMPLOYEE', label: 'Employee', description: 'Own profile and permitted self-service only.' },
-  { value: 'HR', label: 'Human Resources', description: 'Employee records, attendance, leave and HR workflows.' },
-  { value: 'ACCOUNTANT', label: 'Accountant', description: 'Payroll information, payroll processing and approved payment tasks.' },
-  { value: 'PEOPLE_MANAGER', label: 'People Manager', description: 'Permitted team information and manager-level approvals.' },
+  { value: 'EMPLOYEE', labelKey: 'people.access.role.employee', descriptionKey: 'people.access.role.employeeHelp' },
+  { value: 'HR', labelKey: 'people.access.role.hr', descriptionKey: 'people.access.role.hrHelp' },
+  { value: 'ACCOUNTANT', labelKey: 'people.access.role.accountant', descriptionKey: 'people.access.role.accountantHelp' },
+  { value: 'PEOPLE_MANAGER', labelKey: 'people.access.role.manager', descriptionKey: 'people.access.role.managerHelp' },
 ];
 
 async function api(path: string, init: RequestInit = {}) {
@@ -46,6 +47,7 @@ const reserved = (row: AccessUser) => row.username?.toLowerCase() === 'hrms_admi
 
 export default function HrmsAccessPage() {
   const router = useRouter();
+  const { t } = useUiTranslation();
   const [session, setSession] = useState<Session | null>(null);
   const [rows, setRows] = useState<AccessUser[]>([]);
   const [permissionOptions, setPermissionOptions] = useState<Permission[]>([]);
@@ -70,7 +72,7 @@ export default function HrmsAccessPage() {
       setSession(me);
       if (!Array.isArray(me.permissions) || !me.permissions.includes('HR_ACCESS_MANAGE')) {
         setRows([]);
-        setError('Your account cannot manage HRMS login access. Ask the People Operations Super Admin to grant HR_ACCESS_MANAGE.');
+        setError(t('people.access.permissionMissing'));
         return;
       }
       const [result, options] = await Promise.all([
@@ -80,7 +82,7 @@ export default function HrmsAccessPage() {
       setRows(Array.isArray(result) ? result : []);
       setPermissionOptions(Array.isArray(options) ? options : []);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Employee access records could not be loaded.');
+      setError(cause instanceof Error ? cause.message : t('people.access.loadFailed'));
       if (String(cause).toLowerCase().includes('authentication required')) router.replace('/login');
     } finally {
       setLoading(false);
@@ -119,7 +121,7 @@ export default function HrmsAccessPage() {
   async function provision() {
     if (!selected) return;
     if (initialPassword.length < 12) {
-      setError('The initial password must contain at least 12 characters.');
+      setError(t('people.access.shortPassword'));
       return;
     }
     setSaving(true); setError(''); setNotice('');
@@ -128,11 +130,11 @@ export default function HrmsAccessPage() {
         method: 'POST',
         body: JSON.stringify({ username: username.trim(), initialPassword, roles, permissions: assignedPermissions }),
       });
-      setNotice('Login credentials saved. The employee must change the initial password at first sign-in; previous HRMS sessions have been revoked.');
+      setNotice(t('people.access.credentialsSaved'));
       setInitialPassword('');
       await load();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Login credentials could not be saved.');
+      setError(cause instanceof Error ? cause.message : t('people.access.credentialsSaveFailed'));
     } finally { setSaving(false); }
   }
 
@@ -143,15 +145,15 @@ export default function HrmsAccessPage() {
       await api('/api/v1/hrms/access-users/' + selected.employee_id + '/roles', {
         method: 'PUT', body: JSON.stringify({ roles, permissions: assignedPermissions }),
       });
-      setNotice('Roles updated. The API enforces these permissions immediately; active HRMS sessions were revoked for a fresh sign-in.');
+      setNotice(t('people.access.rolesSaved'));
       await load();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Role assignments could not be saved.');
+      setError(cause instanceof Error ? cause.message : t('people.access.rolesSaveFailed'));
     } finally { setSaving(false); }
   }
 
   async function toggleAccess(row: AccessUser) {
-    if (!row.staff_id) { selectEmployee(row); setShowCredentials(true); setNotice('Create a username and initial password to enable this employee login.'); return; }
+    if (!row.staff_id) { selectEmployee(row); setShowCredentials(true); setNotice(t('people.access.createCredentialsHint')); return; }
     if (row.username?.toLowerCase() === 'hrms_admin' || row.staff_id === session?.staffId) return;
     const enabled = !row.hrms_access_enabled;
     setSaving(true); setError(''); setNotice('');
@@ -159,10 +161,10 @@ export default function HrmsAccessPage() {
       await api('/api/v1/hrms/access-users/' + row.employee_id + '/status', {
         method: 'PUT', body: JSON.stringify({ enabled }),
       });
-      setNotice(enabled ? 'HRMS access enabled.' : 'HRMS access disabled and the employee’s active HRMS sessions revoked.');
+      setNotice(enabled ? t('people.access.enabledNotice') : t('people.access.disabledNotice'));
       await load();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'HRMS access status could not be updated.');
+      setError(cause instanceof Error ? cause.message : t('people.access.statusUpdateFailed'));
     } finally { setSaving(false); }
   }
 
@@ -171,15 +173,15 @@ export default function HrmsAccessPage() {
       
 
       <main className="main">
-        <PeoplePageHeader eyebrow="ACCESS GOVERNANCE · HRMS ONLY" title="Employee login access" description="Create employee logins, assign multiple HRMS roles, and revoke HRMS access without signing the employee out of Educational Admin." />
+        <PeoplePageHeader eyebrow={t('people.access.eyebrow')} title={t('people.access.title')} description={t('people.access.description')} />
 
         {error && <PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
         {notice && <PeopleFeedback tone="success" role="status">{notice}</PeopleFeedback>}
 
         <div className="cards">
-          <PeopleMetricCard label="Employee records" value={loading ? '—' : rows.length} help="Canonical HR records" />
-          <PeopleMetricCard label="HRMS access enabled" value={loading ? '—' : rows.filter((r) => r.hrms_access_enabled).length} help="Access may still expire or be revoked" />
-          <PeopleMetricCard label="No login linked" value={loading ? '—' : rows.filter((r) => !r.staff_id).length} help="Employees awaiting credentials" />
+          <PeopleMetricCard label={t('people.access.metricRecords')} value={loading ? '—' : rows.length} help={t('people.access.metricRecordsHelp')} />
+          <PeopleMetricCard label={t('people.access.metricEnabled')} value={loading ? '—' : rows.filter((r) => r.hrms_access_enabled).length} help={t('people.access.metricEnabledHelp')} />
+          <PeopleMetricCard label={t('people.access.metricNoLogin')} value={loading ? '—' : rows.filter((r) => !r.staff_id).length} help={t('people.access.metricNoLoginHelp')} />
         </div>
 
         <section className="panel">
@@ -188,9 +190,9 @@ export default function HrmsAccessPage() {
             <PeopleButton variant="secondary" type="button" onClick={() => void load()} disabled={loading || saving}>Refresh</PeopleButton>
           </div>
           <label style={{ display: 'block', margin: '16px 0' }}>Search employees
-            <input className="input" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Name, employee number, username or role" />
+            <input className="input" value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t('people.access.searchPlaceholder')} />
           </label>
-          {loading ? <div className="empty" role="status" aria-live="polite">Loading employee access records…</div> : (
+          {loading ? <div className="empty" role="status" aria-live="polite">{t('people.access.loading')}</div> : (
             <div className="table-wrap">
               <table>
                 <thead><tr><th>Employee</th><th>HRMS username</th><th>Assigned roles</th><th>HRMS access</th><th>Last sign-in</th><th>Action</th></tr></thead>
@@ -198,20 +200,20 @@ export default function HrmsAccessPage() {
                   {filtered.map((row) => (
                     <tr key={row.employee_id}>
                       <td><strong>{row.display_name}</strong><div className="small">{row.employee_number} · <PeopleStatusBadge status={pretty(row.employment_status)} /></div></td>
-                      <td>{row.username || 'Not created'}{reserved(row) && <div className="small">People Operations Super Admin</div>}</td>
-                      <td>{(row.roles || []).map(pretty).join(', ') || 'Employee'}<div className="small">{(row.permissions || []).length} effective permissions</div></td>
-                      <td><PeopleStatusBadge status={row.hrms_access_enabled ? 'Enabled' : 'Disabled'} /></td>
-                      <td>{row.last_login_at ? new Date(row.last_login_at).toLocaleString() : 'Never'}</td>
+                      <td>{row.username || t('people.access.notCreated')}{reserved(row) && <div className="small">{t('people.access.superAdmin')}</div>}</td>
+                      <td>{(row.roles || []).map(pretty).join(', ') || t('people.access.role.employee')}<div className="small">{(row.permissions || []).length} effective permissions</div></td>
+                      <td><PeopleStatusBadge status={row.hrms_access_enabled ? t('people.access.enabled') : t('people.access.disabled')} /></td>
+                      <td>{row.last_login_at ? new Date(row.last_login_at).toLocaleString() : t('people.access.never')}</td>
                       <td style={{ minWidth: 180 }}>
-                        <PeopleButton variant="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>{reserved(row) ? 'View account' : 'Manage access'}</PeopleButton>
-                        {!reserved(row) && row.staff_id !== session?.staffId && <PeopleButton variant="secondary" type="button" onClick={() => void toggleAccess(row)} disabled={saving || !row.staff_id}>{row.hrms_access_enabled ? 'Disable' : 'Enable'}</PeopleButton>}
+                        <PeopleButton variant="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>{reserved(row) ? t('people.access.viewAccount') : t('people.access.manageAccess')}</PeopleButton>
+                        {!reserved(row) && row.staff_id !== session?.staffId && <PeopleButton variant="secondary" type="button" onClick={() => void toggleAccess(row)} disabled={saving || !row.staff_id}>{row.hrms_access_enabled ? t('people.access.disable') : t('people.access.enable')}</PeopleButton>}
                         {!row.staff_id && <PeopleButton variant="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>Create login</PeopleButton>}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              {!filtered.length && <PeopleEmptyState title="No employees match the search." />}
+              {!filtered.length && <PeopleEmptyState title={t('people.access.noEmployees')} />}
             </div>
           )}
         </section>
@@ -227,7 +229,7 @@ export default function HrmsAccessPage() {
               {ROLE_OPTIONS.map((role) => (
                 <label className="card" key={role.value} style={{ cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'start' }}>
                   <input type="checkbox" checked={roles.includes(role.value)} onChange={(event) => toggleRole(role.value, event.target.checked)} disabled={saving || isReserved || isSelf} />
-                  <span><strong>{role.label}</strong><div className="small">{role.description}</div></span>
+                  <span><strong>{t(role.labelKey)}</strong><div className="small">{t(role.descriptionKey)}</div></span>
                 </label>
               ))}
             </div>
@@ -250,26 +252,26 @@ export default function HrmsAccessPage() {
 
             {selected.staff_id && selected.hrms_access_enabled && !isReserved && !isSelf && (
               <PeopleButton variant="primary" type="button" onClick={() => void saveRoles()} disabled={saving}>
-                {saving ? 'Saving…' : 'Save roles and permissions'}
+                {saving ? t('people.access.saving') : t('people.access.saveRoles')}
               </PeopleButton>
             )}
 
             {!isReserved && !isSelf && (
               <div style={{ marginTop: 18 }}>
                 <PeopleButton variant="secondary" type="button" onClick={() => setShowCredentials((value) => !value)} disabled={saving}>
-                  {showCredentials ? 'Hide credential form' : selected.username ? 'Set / reset password' : 'Create username and password'}
+                  {showCredentials ? t('people.access.hideCredentialForm') : selected.username ? t('people.access.setResetPassword') : t('people.access.createUsernamePassword')}
                 </PeopleButton>
                 {showCredentials && (
                   <form className="card" style={{ marginTop: 12 }} onSubmit={(event) => { event.preventDefault(); void provision(); }}>
-                    <h3>{selected.username ? 'Reset HRMS credentials' : 'Create HRMS credentials'}</h3>
-                    <p className="small">The initial password is temporary. The employee must replace it before accessing any other HRMS screen. Resetting credentials revokes active HRMS sessions.</p>
-                    <label>Username
+                    <h3>{selected.username ? t('people.access.resetCredentials') : t('people.access.createCredentials')}</h3>
+                    <p className="small">{t('people.access.initialPasswordHelp')}</p>
+                    <label>{t('people.access.username')}
                       <input className="input" required minLength={3} maxLength={64} autoComplete="off" value={username} onChange={(event) => setUsername(event.target.value)} placeholder="employee.username" />
                     </label>
                     <label>Temporary password (at least 12 characters)
                       <input className="input" required type="password" minLength={12} maxLength={128} autoComplete="new-password" value={initialPassword} onChange={(event) => setInitialPassword(event.target.value)} />
                     </label>
-                    <PeopleButton variant="primary" disabled={saving || !username.trim() || initialPassword.length < 12}>{saving ? 'Saving securely…' : 'Save credentials and roles'}</PeopleButton>
+                    <PeopleButton variant="primary" disabled={saving || !username.trim() || initialPassword.length < 12}>{saving ? t('people.access.savingSecurely') : t('people.access.saveCredentialsAndRoles')}</PeopleButton>
                   </form>
                 )}
               </div>
