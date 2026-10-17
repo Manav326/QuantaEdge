@@ -12,7 +12,7 @@
 |---|---|---|---|
 | `/` | `apps/web/app/page.tsx` | First pass — audit pending | Check labels, forms, validation and public errors. |
 | `/certificate/verify` | `apps/web/app/certificate/verify/page.tsx` | First pass — audit pending | Check verification status/error variants and locale persistence. |
-| `/login` | `apps/web/app/login/page.tsx` | First pass — audit pending | Check all fields, accessibility labels and failures. |
+| `/login` | `apps/web/app/login/page.tsx` | Inline auth copy extracted — CI pending, route audit still open | Verify fields, accessibility labels and all error states in both locales. |
 | `/login/student` | `apps/web/app/login/student/page.tsx` | Static inline-pair extraction — CI pending, route audit still open | Verify login validation, remaining literal JSX/accessibility text and session errors in both locales. |
 | `/parent` | `apps/web/app/parent/page.tsx` | First pass — audit pending | Check family dashboard and progress labels. |
 | `/parent/children` | `apps/web/app/parent/children/page.tsx` | Static inline-pair extraction — CI pending, route audit still open | Verify child creation, credential dialog, raw fallback errors and remaining literal text. |

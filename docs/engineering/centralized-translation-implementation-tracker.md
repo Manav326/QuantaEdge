@@ -354,3 +354,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 ## Type-check follow-up — translation hook call shape
 
 - Corrected migrated components to bind `const t = useUiTranslation()`; this hook returns the translator callback directly (it does not return an object with a `t` property). The route-copy extraction is still pending the current full Actions result.
+
+
+## Parent login route — centralized static copy
+
+- Migrated `/login` Parent authentication, registration, OTP/reset validation, in-progress/success notices, action labels and field placeholders into semantic catalog keys; removed the local `tx(Hinglish, English)` helper.
+- Client-owned malformed-response text now uses a catalog key with a matching `{status}` placeholder; API-supplied diagnostic messages remain dynamic and are not rewritten.
+- Updated the shared web `useUiTranslation` hook to pass the registered locale ID unchanged into the runtime, instead of coercing every non-English locale to Hinglish. Added a guard against reintroducing that forced mapping on guarded auth routes.
+- Route matrix: Parent login has first-pass catalog extraction; complete literal JSX/accessibility audit and browser acceptance remain open. Registry/future-locale extension is not finished until remaining locale-specific branches and types are addressed.

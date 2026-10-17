@@ -1,25 +1,24 @@
 'use client';
 
-import { UiText } from '../i18n/useUiTranslation';
+import { UiText, useUiTranslation } from '../i18n/useUiTranslation';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
-import { LanguageSwitcher, LocaleText, useLocale } from '../components/LanguageProvider';
+import { LanguageSwitcher } from '../components/LanguageProvider';
 
 type Mode = 'login' | 'register' | 'reset';
 type Step = 'mobile' | 'otp';
 type LoginMethod = 'password' | 'otp';
 
-async function readApi(response: Response): Promise<any> {
+async function readApi(response: Response, unexpectedResponse: (status: number) => string): Promise<any> {
   const raw = await response.text();
   if (!raw.trim()) return {};
   try { return JSON.parse(raw); }
-  catch { throw new Error('The server returned an unexpected response (' + response.status + ').'); }
+  catch { throw new Error(unexpectedResponse(response.status)); }
 }
 
 export default function ParentLoginPage() {
-  const { locale } = useLocale();
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+  const t = useUiTranslation();
   const [mode, setMode] = useState<Mode>('login');
   const [loginMethod, setLoginMethod] = useState<LoginMethod>('password');
   const [step, setStep] = useState<Step>('mobile');
@@ -54,29 +53,29 @@ export default function ParentLoginPage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: mobile.trim(), password }),
       });
-      const body = await readApi(response);
+      const body = await readApi(response, status => t('parent.login.unexpectedResponse', { status }));
       if (!response.ok) {
         const message = String(body.message || '');
         if (message.toLowerCase().includes('password has not been set')) {
-          throw new Error(tx('इस parent account पर अभी password set नहीं है। Dashboard खोलने के लिए “OTP से sign in करें” चुनें या “Password भूल गए?” से password बनाएँ।','No password is set on this parent account yet. Choose “Sign in with OTP” to open your dashboard, or use “Forgot password?” to create one.'));
+          throw new Error(t('parent.login.passwordNotSet'));
         }
-        throw new Error(message || 'Unable to sign in. Check your mobile number and password.');
+        throw new Error(message || t('parent.login.invalidCredentials'));
       }
       if (body.role !== 'PARENT' || body.workspace !== 'PARENT' || Number(body.userId) <= 0 || Number(body.studentId) > 0) {
-        throw new Error(tx('Parent session verify नहीं हो पाया। दोबारा sign in करें।', 'The server did not confirm a Parent session. Please sign in again.'));
+        throw new Error(t('parent.login.sessionNotConfirmed'));
       }
       window.location.replace('/parent');
     } catch (e: any) {
-      setError(e?.message || tx('Sign in नहीं हो पाया। दोबारा प्रयास करें।','Unable to sign in. Please try again.'));
+      setError(e?.message || t('parent.login.signInFailed'));
     } finally { setBusy(false); }
   }
 
   async function requestOtp() {
     setError(''); setNotice('');
     if (mode === 'register') {
-      if (displayName.trim().length < 2) { setError(tx('अपना नाम लिखें।','Enter your name.')); return; }
-      if (password.length < 8) { setError(tx('कम से कम 8 characters का password चुनें।','Choose a password with at least 8 characters.')); return; }
-      if (password !== confirmPassword) { setError(tx('दोनों passwords match नहीं कर रहे।','The passwords do not match.')); return; }
+      if (displayName.trim().length < 2) { setError(t('parent.login.enterName')); return; }
+      if (password.length < 8) { setError(t('parent.login.passwordMinimum')); return; }
+      if (password !== confirmPassword) { setError(t('parent.login.passwordMismatch')); return; }
     }
     setBusy(true);
     try {
@@ -85,25 +84,25 @@ export default function ParentLoginPage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: mobile.trim(), purpose }),
       });
-      const body = await readApi(response);
-      if (!response.ok) throw new Error(body.message || 'Unable to send the verification code.');
+      const body = await readApi(response, status => t('parent.login.unexpectedResponse', { status }));
+      if (!response.ok) throw new Error(body.message || t('parent.login.sendVerificationFailed'));
       setDevCode(body.devCode || ''); setOtp(''); setStep('otp');
       setNotice(mode === 'register'
-        ? tx('आपके mobile number पर OTP भेज दिया गया है।', 'An OTP has been sent to your mobile number.')
+        ? t('parent.login.otpSentSignup')
         : mode === 'reset'
-          ? tx('Registered mobile number पर password reset OTP भेज दिया गया है।', 'A password reset OTP has been sent to your registered mobile number.')
-          : tx('Registered mobile number पर login OTP भेज दिया गया है।', 'A login OTP has been sent to your registered mobile number.'));
+          ? t('parent.login.otpSentReset')
+          : t('parent.login.otpSentLogin'));
     } catch (e: any) {
-      setError(e?.message || 'Unable to send the verification code.');
+      setError(e?.message || t('parent.login.sendVerificationFailed'));
     } finally { setBusy(false); }
   }
 
   async function verifyOtp() {
     setError(''); setNotice('');
-    if (otp.trim().length !== 6) { setError(tx('6-digit OTP डालें।','Enter the 6-digit OTP.')); return; }
+    if (otp.trim().length !== 6) { setError(t('parent.login.invalidOtp')); return; }
     if (mode === 'reset') {
-      if (newPassword.length < 8) { setError(tx('कम से कम 8 characters का password चुनें।','Choose a password with at least 8 characters.')); return; }
-      if (newPassword !== confirmNewPassword) { setError(tx('दोनों नए passwords match नहीं कर रहे।','The new passwords do not match.')); return; }
+      if (newPassword.length < 8) { setError(t('parent.login.passwordMinimum')); return; }
+      if (newPassword !== confirmNewPassword) { setError(t('parent.login.newPasswordMismatch')); return; }
     }
     setBusy(true);
     try {
@@ -118,14 +117,14 @@ export default function ParentLoginPage() {
       const response = await fetch('/api/v1/auth/verify-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
       });
-      const body = await readApi(response);
-      if (!response.ok) throw new Error(body.message || 'Verification failed. Please try again.');
+      const body = await readApi(response, status => t('parent.login.unexpectedResponse', { status }));
+      if (!response.ok) throw new Error(body.message || t('parent.login.verificationFailed'));
       if (body.role !== 'PARENT' || body.workspace !== 'PARENT' || Number(body.userId) <= 0 || Number(body.studentId) > 0) {
-        throw new Error(tx('Parent session verify नहीं हो पाया। दोबारा sign in करें।', 'The server did not confirm a Parent session. Please sign in again.'));
+        throw new Error(t('parent.login.sessionNotConfirmed'));
       }
       window.location.replace(mode === 'register' ? '/parent/children' : '/parent');
     } catch (e: any) {
-      setError(e?.message || 'Verification failed. Please try again.');
+      setError(e?.message || t('parent.login.verificationFailed'));
     } finally { setBusy(false); }
   }
 
@@ -138,17 +137,17 @@ export default function ParentLoginPage() {
 
   const submitLabel = mode === 'login'
     ? loginMethod === 'password'
-      ? (busy ? tx('Sign in हो रहा है…', 'Signing in…') : tx('Sign in करें', 'Sign in'))
+      ? (busy ? t('parent.login.signingIn') : t('parent.login.signIn'))
       : busy
-        ? (step === 'mobile' ? tx('Login OTP भेजा जा रहा है…', 'Sending login OTP…') : tx('Verify हो रहा है…', 'Verifying…'))
-        : step === 'mobile' ? tx('Login OTP भेजें →', 'Send login OTP →') : tx('OTP verify करके sign in करें →', 'Verify OTP and sign in →')
+        ? (step === 'mobile' ? t('parent.login.sendingLoginOtp') : t('parent.login.verifying'))
+        : step === 'mobile' ? t('parent.login.sendLoginOtp') : t('parent.login.verifyOtpAndSignIn')
     : mode === 'register'
       ? busy
-        ? (step === 'mobile' ? tx('OTP भेजा जा रहा है…', 'Sending OTP…') : tx('Account बन रहा है…', 'Creating account…'))
-        : step === 'mobile' ? tx('Mobile verify करें →', 'Verify mobile →') : tx('Parent account बनाएँ →', 'Create parent account →')
+        ? (step === 'mobile' ? t('parent.login.sendingOtp') : t('parent.login.creatingAccount'))
+        : step === 'mobile' ? t('parent.login.verifyMobile') : t('parent.login.createAccount')
       : busy
-        ? (step === 'mobile' ? tx('OTP भेजा जा रहा है…', 'Sending OTP…') : tx('Password reset हो रहा है…', 'Resetting password…'))
-        : step === 'mobile' ? tx('Password reset OTP भेजें →', 'Send password reset OTP →') : tx('Password reset करें →', 'Reset password →');
+        ? (step === 'mobile' ? t('parent.login.sendingOtp') : t('parent.login.resettingPassword'))
+        : step === 'mobile' ? t('parent.login.sendResetOtp') : t('parent.login.resetPassword');
 
   return (
     <main className="auth-page">
@@ -168,33 +167,33 @@ export default function ParentLoginPage() {
 
         <form className="auth-form" onSubmit={submit}>
           {mode === 'register' && <label><UiText message="legacy.web.parent.guardian.name.1ab0447b" />
-            <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder={tx('अपना पूरा नाम लिखें', 'Enter your full name')} autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
+            <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder={t('parent.login.fullNamePlaceholder')} autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
           </label>}
           <label><UiText message="legacy.web.registered.mobile.number.65c4e773" />
-            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder={tx('10 अंकों का mobile number डालें', 'Enter 10-digit mobile number')} inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
+            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder={t('parent.login.mobilePlaceholder')} inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
           </label>
           {mode === 'login' && loginMethod === 'password' && <label><UiText message="legacy.web.password.dc78b30b" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('अपना password डालें', 'Enter your password')} autoComplete="current-password" required />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('parent.login.passwordPlaceholder')} autoComplete="current-password" required />
           </label>}
           {mode === 'register' && step === 'mobile' && <>
             <label><UiText message="legacy.web.create.password.b06eaef9" />
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('कम से कम 8 characters', 'At least 8 characters')} autoComplete="new-password" minLength={8} required />
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('parent.login.passwordMinimumPlaceholder')} autoComplete="new-password" minLength={8} required />
             </label>
             <label><UiText message="legacy.web.re.enter.password.541a6b9c" />
-              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder={tx('वही password दोबारा डालें', 'Re-enter the same password')} autoComplete="new-password" minLength={8} required />
+              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder={t('parent.login.confirmPasswordPlaceholder')} autoComplete="new-password" minLength={8} required />
             </label>
           </>}
           {otpFlow && step === 'otp' && <>
             {devCode && <div className="auth-dev-code"><span><UiText message="legacy.web.local.development.otp.51756e69" /></span><strong>{devCode}</strong></div>}
             <label><UiText message="legacy.web.6.digit.otp.7a404f31" />
-              <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder={tx('OTP डालें', 'Enter OTP')} inputMode="numeric" autoComplete="one-time-code" required />
+              <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder={t('parent.login.otpPlaceholder')} inputMode="numeric" autoComplete="one-time-code" required />
             </label>
             {mode === 'reset' && <>
               <label><UiText message="legacy.web.new.password.32a2f216" />
-                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Kam se kam 8 characters" autoComplete="new-password" minLength={8} required />
+                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder={t('parent.login.passwordMinimumPlaceholder')} autoComplete="new-password" minLength={8} required />
               </label>
               <label><UiText message="legacy.web.re.enter.new.password.37b05353" />
-                <input type="password" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} placeholder={tx('वही password दोबारा डालें', 'Re-enter the same password')} autoComplete="new-password" minLength={8} required />
+                <input type="password" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} placeholder={t('parent.login.confirmPasswordPlaceholder')} autoComplete="new-password" minLength={8} required />
               </label>
             </>}
           </>}
