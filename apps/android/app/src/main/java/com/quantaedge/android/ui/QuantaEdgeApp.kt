@@ -260,7 +260,9 @@ fun QuantaEdgeApp() {
     var tutorAvailable by remember { mutableStateOf(false) }
     var tutorSendInFlight by remember { mutableStateOf(false) }
     var tutorConnecting by remember { mutableStateOf(false) }
-    var tutorMinimized by remember { mutableStateOf(false) }
+    var tutorOpen by rememberSaveable { mutableStateOf(false) }
+    var tutorScopeLessonId by rememberSaveable { mutableStateOf(0L) }
+    var tutorMinimized by rememberSaveable { mutableStateOf(false) }
     var tutorHasOlderMessages by remember { mutableStateOf(false) }
     var tutorOlderBeforeId by remember { mutableStateOf<Long?>(null) }
     var tutorLoadingOlderMessages by remember { mutableStateOf(false) }
@@ -281,6 +283,16 @@ fun QuantaEdgeApp() {
     fun pendingTasksFor(targetRoute: AppRoute): androidx.compose.runtime.MutableState<Int> =
         pendingTaskCounts.getOrPut(targetRoute) { mutableStateOf(0) }
     val busy = pendingTasksFor(route).value > 0
+
+    LaunchedEffect(route, lesson.longAny("id", "lesson_id"), tutorScopeLessonId) {
+        val activeLessonId = lesson.longAny("id", "lesson_id")
+        if (route != AppRoute.LESSON ||
+            (tutorOpen && tutorScopeLessonId > 0L && activeLessonId > 0L && tutorScopeLessonId != activeLessonId)) {
+            tutorOpen = false
+            tutorMinimized = false
+            tutorScopeLessonId = 0L
+        }
+    }
     var error by remember { mutableStateOf("") }
     var errorStatusCode by remember { mutableStateOf(0) }
     var status by remember { mutableStateOf("") }
@@ -1207,9 +1219,12 @@ fun QuantaEdgeApp() {
     }
 
     fun openTutorWithQuestion(questionId: Long) {
+        val activeLessonId = lesson.longAny("id", "lesson_id")
+        if (route != AppRoute.LESSON || activeLessonId <= 0L) return
         tutorQuestionId = questionId
+        tutorScopeLessonId = activeLessonId
+        tutorOpen = true
         tutorMinimized = false
-        route = AppRoute.TUTOR
         tutorConnecting = true
         tutorAvailable = false
         tutorSession = JSONObject()
@@ -1249,12 +1264,12 @@ fun QuantaEdgeApp() {
 
     fun minimizeTutor() {
         tutorMinimized = true
-        route = AppRoute.LESSON
+        tutorOpen = true
     }
 
     fun restoreTutor() {
+        tutorOpen = true
         tutorMinimized = false
-        route = AppRoute.TUTOR
     }
 
     fun retryTutorConnection() = openTutorWithQuestion(tutorQuestionId)
@@ -3065,7 +3080,7 @@ fun QuantaEdgeApp() {
                         onNewChat = ::startNewTutorChat,
                         onMinimize = ::minimizeTutor,
                         onRetry = ::retryTutorConnection,
-                        onClose = { tutorMinimized = false; route = AppRoute.LESSON }
+                        onClose = { tutorOpen = false; tutorMinimized = false; tutorScopeLessonId = 0L }
                     )
                     AppRoute.CLASSES -> if (liveBroadcastVideoId.isNotBlank()) {
                         LiveBroadcastPlayerScreen(
@@ -3110,6 +3125,33 @@ fun QuantaEdgeApp() {
                     )
                 }
                 }
+                    if (route == AppRoute.LESSON && tutorOpen) {
+                        FloatingTutorDock(
+                            minimized = tutorMinimized,
+                            lessonTitle = lesson.textAny("title"),
+                            learningLanguage = learningContentLanguage,
+                            sessionId = tutorSession.longAny("sessionId", "session_id"),
+                            connecting = tutorConnecting,
+                            available = tutorAvailable,
+                            messages = tutorMessages,
+                            hasOlderMessages = tutorHasOlderMessages,
+                            loadingOlderMessages = tutorLoadingOlderMessages,
+                            busy = tutorSendInFlight,
+                            error = error,
+                            onSend = ::sendTutorMessage,
+                            onLoadOlder = ::loadOlderTutorMessages,
+                            onNewChat = ::startNewTutorChat,
+                            onMinimize = ::minimizeTutor,
+                            onRestore = ::restoreTutor,
+                            onRetry = ::retryTutorConnection,
+                            onClose = {
+                                tutorOpen = false
+                                tutorMinimized = false
+                                tutorScopeLessonId = 0L
+                            }
+                        )
+                    }
+
                 }
             }
             if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar {
