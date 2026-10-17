@@ -1,5 +1,7 @@
 'use client';
 
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './Classes.module.css';
 
@@ -179,7 +181,7 @@ export default function StaffLearningChatPanel({sessionId,locale}:{sessionId:num
       </div>
       <div className={styles.chatAdminMessages}>
         {messages.map(m=><article key={m.messageId} className={styles.chatAdminMessage}>
-          <div><strong>{m.senderName||t('Member','सदस्य')} · {m.messageType}{m.pinned?' · 📌':''}</strong><small>{m.createdAt?new Date(m.createdAt).toLocaleString():''}</small></div>
+          <div><strong>{m.senderName||t('Member','सदस्य')} · {m.messageType}{m.pinned?' · 📌':''}</strong><small>{m.createdAt?formatUserTimestamp(m.createdAt):''}</small></div>
           <p>{m.body}</p>
           <div className={styles.chatAdminActions}>
             <button type="button" className={styles.chatAdminButton} onClick={()=>void moderate(m,m.pinned?'UNPIN':'PIN')} disabled={!['QUESTION','ANNOUNCEMENT'].includes(m.messageType)}>{m.pinned?t('Unpin','अनपिन'):t('Pin','पिन')}</button>
