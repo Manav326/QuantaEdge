@@ -32,6 +32,14 @@ class QuantaEdgeThemeController(context: Context) {
     var themeTokensJson by mutableStateOf<String?>(null)
         private set
 
+    /** A validated, theme-aware accent for supported platform-owned checkout UI. */
+    fun checkoutAccentColor(): String {
+        val raw = runCatching {
+            themeTokensJson?.let(::JSONObject)?.optJSONObject("light")?.optString("primary")
+        }.getOrNull()
+        return raw?.takeIf { HEX_COLOUR.matches(it) } ?: "#F97316"
+    }
+
     fun setAppearanceMode(mode: QeAppearanceMode) {
         appearanceMode = mode
         val editor = preferences.edit()
