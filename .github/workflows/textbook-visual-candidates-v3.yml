@@ -335,6 +335,61 @@ jobs:
           sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
+      - name: Preflight and restore matching Layer 4 checkpoints before loading the vision model
+        if: inputs.analysis_mode == 'resume_layers_4_5'
+        shell: bash
+        env:
+          VISION_MODEL: ${{ inputs.vision_model }}
+          GHCR_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$GITHUB_WORKSPACE" "$RUNNER_TEMP/layer4-resume-checkpoints" "$VISION_MODEL" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
+          import json, re, shutil, subprocess, sys
+          from pathlib import Path
+          selection_path, repo_arg, temp_arg, model, package = sys.argv[1:]
+          repo, temp = Path(repo_arg), Path(temp_arg)
+          temp.mkdir(parents=True, exist_ok=True)
+          safe_model = re.sub(r"[^A-Za-z0-9._-]", "-", model)
+          prompt_version = "visual-analysis-prompt-v2"
+          def valid(path, source):
+              try:
+                  doc = json.loads(path.read_text(encoding="utf-8"))
+                  return (doc.get("schema_version") == "quantaedge.visual-analysis.v1"
+                      and doc.get("source_book_id") == source["book_id"]
+                      and str(doc.get("source_pdf_sha256") or "").lower() == str(source["sha256"]).lower()
+                      and doc.get("model") == model
+                      and doc.get("prompt_version") == prompt_version
+                      and isinstance(doc.get("results"), list))
+              except (OSError, json.JSONDecodeError, AttributeError):
+                  return False
+          selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+          failures = []
+          for source in selection["sources"]:
+              slug = source["book_slug"]
+              raw = repo / "data" / "textbook-visuals" / slug / f"visual-analysis-{safe_model}.v1.json"
+              if raw.is_file() and valid(raw, source):
+                  print(json.dumps({"book_id": source["book_id"], "checkpoint": "REUSED_FROM_GIT", "results": len(json.loads(raw.read_text(encoding="utf-8")).get("results", []))}))
+                  continue
+              tag = f"layer4-class{selection['class']}-{slug}-{safe_model}-checkpoint"
+              pull_dir = temp / slug
+              shutil.rmtree(pull_dir, ignore_errors=True)
+              pull_dir.mkdir(parents=True, exist_ok=True)
+              pull = subprocess.run(["oras", "pull", f"{package}:{tag}", "--output", str(pull_dir)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+              candidate = pull_dir / f"visual-analysis-{safe_model}.v1.json"
+              if pull.returncode == 0 and candidate.is_file() and valid(candidate, source):
+                  raw.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copy2(candidate, raw)
+                  print(json.dumps({"book_id": source["book_id"], "checkpoint": "RESTORED_FROM_GHCR", "results": len(json.loads(candidate.read_text(encoding="utf-8")).get("results", []))}))
+                  continue
+              detail = (pull.stdout or "").strip()[-500:]
+              failures.append({"book_id": source["book_id"], "raw_checkpoint": "missing_or_fingerprint_mismatch", "ghcr_checkpoint": "missing_or_fingerprint_mismatch", "detail": detail})
+          if failures:
+              print(json.dumps({"resume_preflight": "FAILED", "failures": failures}, indent=2))
+              raise SystemExit("Resume stopped before model download: no source/model/prompt-matching Layer 4 checkpoint exists for every selected book. Use analyze_all to initialise missing books, or correct the inputs.")
+          print(json.dumps({"resume_preflight": "PASSED", "book_count": len(selection["sources"]), "model": model, "prompt_version": prompt_version}))
+          PY
+
       - name: Publish immutable per-book candidate packs and persist bundle indexes
         if: inputs.analysis_mode != 'resume_layers_4_5'
         shell: bash
