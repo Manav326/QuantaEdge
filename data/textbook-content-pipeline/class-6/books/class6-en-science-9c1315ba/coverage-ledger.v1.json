@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 220,
-    "successful_visual_analyses": 217,
-    "missing_visual_analyses": 1858,
+    "raw_analysis_result_rows": 223,
+    "successful_visual_analyses": 220,
+    "missing_visual_analyses": 1855,
     "failed_visual_analyses": 3,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1861,
+    "unresolved_count": 1858,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -14216,9 +14216,18 @@
       "asset_path": "assets/f8db6f818370fcbc339eebcb3f7be8af7fb241ba5fdf5c6b75a8f0028318d14c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from orange to yellow to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14234,9 +14243,18 @@
       "asset_path": "assets/b21fc1071d4b8fe6c86ab93bf7ed942c51c4594c194d0d8edea8bbcd9b3d6ded.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to orange, with a white light source in the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14252,9 +14270,19 @@
       "asset_path": "assets/4df6cbb46127f432de9caeb9b5eac1937b2af60ce839561bffcd3ea209440544.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from a light brown at the top to a darker brown at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a cover or header for a textbook.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read.",
+          "The image does not provide any specific information about the content or subject of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
