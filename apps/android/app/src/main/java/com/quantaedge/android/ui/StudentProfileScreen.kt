@@ -210,10 +210,10 @@ fun StudentProfileScreen(
                 ) { Text(t("Save changes", "बदलाव सेव करें")) }
             }
         }
-        OutlinedButton(onClick = onAccountLifecycle, enabled = !busy && editing, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(onClick = onAccountLifecycle, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
             Text(t("Account & eligibility", "Account और eligibility"))
         }
-        TextButton(onClick = onLogout, enabled = !busy && editing, modifier = Modifier.fillMaxWidth()) {
+        TextButton(onClick = onLogout, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
             Text(t("Sign out", "साइन आउट"))
         }
         Text(t("Your learning account and course eligibility.", "आपका learning account और course eligibility."),
