@@ -1,6 +1,6 @@
 import hashlib,json,tempfile,unittest
 from pathlib import Path
-from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,layer1_inventory_bundle_from_marker
+from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,layer1_inventory_bundle_from_marker,previous_inventory_for_resume
 def w(p,v):p.write_text(json.dumps(v)+"\n",encoding="utf-8")
 class PipelineTests(unittest.TestCase):
  def setUp(self):
@@ -40,6 +40,35 @@ class PipelineTests(unittest.TestCase):
   before=self.raw.read_bytes()
   updated=backfill_legacy_context_hashes(inv,self.raw,book_id="b",source_sha=self.sha,model="vision")
   self.assertEqual(0,updated);self.assertEqual(before,self.raw.read_bytes())
+ def test_resume_uses_restored_inventory_only_when_bound_to_prior_checkpoint(self):
+  repo_inventory=self.root/"git-inventory.json"
+  restore_inventory=self.inv
+  marker_path=self.root/"restored-from-ghcr.json"
+  package="ghcr.io/example/quantaedge-textbook-visuals"
+  source={"book_id":"b","sha256":self.sha}
+  prior_index={"source_book_id":"b","source_pdf_sha256":self.sha,
+   "inventory_bundle":{"package":package,"tag":"layer1-bundle-1","tar_sha256":"c"*64}}
+  w(marker_path,{"source_pdf_sha256":self.sha,"tag":"layer1-bundle-1","tar_sha256":"c"*64})
+  prior=previous_inventory_for_resume(repo_inventory,restore_inventory,marker_path,prior_index,source,package)
+  self.assertEqual("b",prior["source"]["book_id"])
+  self.assertEqual(self.sha,prior["source"]["pdf_sha256"])
+ def test_resume_refuses_unbound_restored_inventory_for_legacy_hash_backfill(self):
+  repo_inventory=self.root/"git-inventory.json"
+  marker_path=self.root/"restored-from-ghcr.json"
+  package="ghcr.io/example/quantaedge-textbook-visuals"
+  source={"book_id":"b","sha256":self.sha}
+  prior_index={"source_book_id":"other","source_pdf_sha256":self.sha,
+   "inventory_bundle":{"package":package,"tag":"layer1-bundle-1","tar_sha256":"c"*64}}
+  w(marker_path,{"source_pdf_sha256":self.sha,"tag":"layer1-bundle-1","tar_sha256":"c"*64})
+  with self.assertRaisesRegex(ValueError,"no matching prior pipeline index"):
+   previous_inventory_for_resume(repo_inventory,self.inv,marker_path,prior_index,source,package)
+ def test_resume_without_git_inventory_or_verified_restore_marker_does_not_backfill(self):
+  repo_inventory=self.root/"git-inventory.json"
+  marker_path=self.root/"missing-marker.json"
+  source={"book_id":"b","sha256":self.sha}
+  prior=previous_inventory_for_resume(repo_inventory,self.inv,marker_path,{},source,"ghcr.io/example/quantaedge-textbook-visuals")
+  self.assertIsNone(prior)
+
  def test_layer1_preparation_marker_reuses_only_matching_inventory_bytes(self):
   inv=self.root/"inventory.json";inv.write_text('{"layer":1}',encoding="utf-8")
   marker=self.root/"marker.json";digest=hashlib.sha256(inv.read_bytes()).hexdigest()
