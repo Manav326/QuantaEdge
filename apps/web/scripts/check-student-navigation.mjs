@@ -83,7 +83,7 @@ assert.notEqual(arrayStart, -1, 'Student navigation configuration must exist.');
 assert.notEqual(arrayEnd, -1, 'Parent menu must follow the student navigation configuration.');
 const studentGroups = layout.slice(arrayStart, arrayEnd);
 
-const groupIds = [...studentGroups.matchAll(/\bid: '(today|learn|practice|progress|library)'/g)].map((match) => match[1]);
+const groupIds = [...studentGroups.matchAll(/\bid: '(today|courses|learn|practice|progress|library)'/g)].map((match) => match[1]);
 assert.deepEqual(groupIds, ['today', 'courses', 'learn', 'practice', 'progress', 'library'], 'Student navigation must expose Courses & Marketplace beside the existing learning groups.');
 
 const requiredGroupRoutes = [
