@@ -234,4 +234,50 @@ class LearningDocumentControllerTest {
         eq(byte[].class), eq(12L));
   }
 
+  @Test
+  void pageBatchReturnsFewerThanTenRemainingPagesAndEmptyAtEndOfDocument() throws Exception {
+    byte[] sourcePdf;
+    try (PDDocument pdf = new PDDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+      pdf.addPage(new PDPage());
+      pdf.addPage(new PDPage());
+      pdf.save(output);
+      sourcePdf = output.toByteArray();
+    }
+
+    when(authorization.requireStudent(student)).thenReturn(student);
+    Map<String, Object> metadata = Map.of(
+        "document_id", 88L,
+        "pdf_asset_id", 12L,
+        "asset_sha256", "cd".repeat(32),
+        "asset_file_size_bytes", 1024L,
+        "page_start", 1,
+        "page_end", 2,
+        "page_count", 2);
+    when(jdbc.queryForList(
+        contains("where d.id=? and d.status='PUBLISHED'"), eq(7L), eq(88L)))
+        .thenReturn(List.of(metadata));
+    when(jdbc.queryForObject(
+        contains("select pdf_bytes from learning_pdf_asset where id=?"),
+        eq(byte[].class), eq(12L))).thenReturn(sourcePdf);
+
+    Map<String, Object> finalBatch =
+        controller.studentDocumentPageBatch(88L, 2, 10, "thumbnail", student);
+    Map<String, Object> afterEnd =
+        controller.studentDocumentPageBatch(88L, 3, 10, "thumbnail", student);
+
+    assertEquals(2, finalBatch.get("pageCount"));
+    assertEquals(10, finalBatch.get("requestedLimit"));
+    List<?> items = (List<?>) finalBatch.get("items");
+    assertEquals(1, items.size());
+    Map<?, ?> onlyPage = (Map<?, ?>) items.getFirst();
+    assertEquals(2, onlyPage.get("pageNumber"));
+    assertEquals("image/png", onlyPage.get("contentType"));
+    assertTrue(String.valueOf(onlyPage.get("contentBase64")).length() > 8);
+    assertTrue(((List<?>) afterEnd.get("items")).isEmpty());
+    verify(jdbc, times(1)).queryForObject(
+        contains("select pdf_bytes from learning_pdf_asset where id=?"),
+        eq(byte[].class), eq(12L));
+  }
+
+
 }
