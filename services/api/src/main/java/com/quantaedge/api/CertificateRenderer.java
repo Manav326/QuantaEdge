@@ -8,6 +8,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -62,6 +63,8 @@ public class CertificateRenderer {
   private String publicBaseUrl = "http://localhost:3000";
 
   public record RenderedCertificate(byte[] pdf, byte[] png) {}
+  /** Tenant issuer identity; null means the canonical QuantaEdge direct-consumer issuer. */
+  public record CertificateBranding(String displayName, byte[] logoPng) {}
   public record CertificateDetails(String subjectName, String classCode, String score, String result,
       String assessmentDate, String signatoryName, String signatoryRole, String assessmentName, String examId) {}
   public record CertificateWording(String title, String introduction, String connector, String completion) {}
@@ -91,6 +94,13 @@ public class CertificateRenderer {
   public RenderedCertificate render(String templateId, String language, String recipientName,
       String achievementTitle, String achievementSummary, String certificateNumber,
       OffsetDateTime issuedAt, CertificateDetails details, boolean sample) {
+    return render(templateId, language, recipientName, achievementTitle, achievementSummary,
+        certificateNumber, issuedAt, details, sample, null);
+  }
+
+  public RenderedCertificate render(String templateId, String language, String recipientName,
+      String achievementTitle, String achievementSummary, String certificateNumber,
+      OffsetDateTime issuedAt, CertificateDetails details, boolean sample, CertificateBranding branding) {
     normalizeTemplate(templateId);
     boolean hindi = "hi".equalsIgnoreCase(language);
     if (recipientName == null || recipientName.isBlank()) throw new IllegalArgumentException("A real recipient name is required.");
@@ -102,7 +112,7 @@ public class CertificateRenderer {
       configure(g);
       drawClassic(g);
       drawContent(g, "CLASSIC", hindi, recipientName, achievementTitle, achievementSummary,
-          certificateNumber, issuedAt, details, sample);
+          certificateNumber, issuedAt, details, sample, branding);
       if (sample) drawSampleWatermark(g, hindi);
       else { drawVerificationQr(g, certificateNumber, hindi); drawVerificationBarcode(g, certificateNumber, hindi); }
     } finally { g.dispose(); }
@@ -122,7 +132,7 @@ public class CertificateRenderer {
     try {
       configure(g); g.scale(0.5, 0.5); drawClassic(g);
       drawContent(g, "CLASSIC", hindi, recipientName, achievementTitle, achievementSummary,
-          certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null,null), true);
+          certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null,null), true, null);
       drawSampleWatermark(g, hindi);
     } finally { g.dispose(); }
     try (ByteArrayOutputStream png = new ByteArrayOutputStream()) {
@@ -226,17 +236,33 @@ public class CertificateRenderer {
   }
 
   private void drawContent(Graphics2D g, String template, boolean hindi, String recipient, String title,
-      String summary, String number, OffsetDateTime issuedAt, CertificateDetails details, boolean sample) {
+      String summary, String number, OffsetDateTime issuedAt, CertificateDetails details, boolean sample,
+      CertificateBranding branding) {
     if (recipient == null || recipient.isBlank()) throw new IllegalArgumentException("A real recipient name is required.");
     CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null,null) : details;
-    BufferedImage brandIcon = brandIcon();
-    g.drawImage(brandIcon, 132, 95, 88, 88, null);
-    int wordmarkCenterX = drawBrandWordmark(g, 2320, 150, 58);
-    g.setColor(MUTED);
-    // Keep the tagline centered beneath the wordmark; preserve its baseline and
-    // the divider's position so the shifted text remains clear of the frame.
-    drawCentered(g, font(false, Font.BOLD, 19), "Smarter Decisions. Greater Growth.",
-        wordmarkCenterX, 192, 500);
+    boolean institutionIssued = branding != null && branding.displayName() != null && !branding.displayName().isBlank();
+    if (institutionIssued) {
+      BufferedImage logo = decodeIssuerLogo(branding.logoPng());
+      if (logo != null) {
+        drawContainedImage(g, logo, 132, 95, 88, 88);
+      } else {
+        g.setColor(ORANGE);
+        g.fillRoundRect(132, 95, 88, 88, 18, 18);
+        g.setColor(Color.WHITE);
+        String initial = branding.displayName().trim().substring(0, 1).toUpperCase(Locale.ROOT);
+        drawCentered(g, font(hindi, Font.BOLD, 46), initial, 176, 154, 78);
+      }
+      g.setColor(NAVY);
+      drawCentered(g, font(hindi, Font.BOLD, 42), branding.displayName().trim(), WIDTH - 470, 150, 760);
+    } else {
+      BufferedImage canonicalIcon = brandIcon();
+      g.drawImage(canonicalIcon, 132, 95, 88, 88, null);
+      int wordmarkCenterX = drawBrandWordmark(g, 2320, 150, 58);
+      g.setColor(MUTED);
+      // Keep the canonical platform tagline under the canonical platform wordmark.
+      drawCentered(g, font(false, Font.BOLD, 19), "Smarter Decisions. Greater Growth.",
+          wordmarkCenterX, 192, 500);
+    }
     g.setColor(GOLD); g.setStroke(new BasicStroke(3)); g.drawLine(125, 260, WIDTH - 125, 260);
 
     CertificateWording wording = lockedWording(hindi ? "hi" : "en");
@@ -362,7 +388,33 @@ public class CertificateRenderer {
     g.setColor(MUTED);
     drawCentered(g, font(hindi, Font.BOLD, 18), lockedFooterWording(hindi ? "hi" : "en"),
         WIDTH / 2, 1525, 720);
-    drawCenteredBrandWordmark(g, WIDTH / 2, 1540, 48);
+    if (institutionIssued) {
+      g.setColor(NAVY);
+      drawCentered(g, font(hindi, Font.BOLD, 30), branding.displayName().trim(), WIDTH / 2, 1540, 1050);
+    } else {
+      drawCenteredBrandWordmark(g, WIDTH / 2, 1540, 48);
+    }
+  }
+
+  private BufferedImage decodeIssuerLogo(byte[] bytes) {
+    if (bytes == null || bytes.length == 0 || bytes.length > 2_097_152) return null;
+    try (ByteArrayInputStream input = new ByteArrayInputStream(bytes)) {
+      BufferedImage image = ImageIO.read(input);
+      if (image == null || image.getWidth() < 1 || image.getHeight() < 1
+          || image.getWidth() > 4096 || image.getHeight() > 4096
+          || (long) image.getWidth() * image.getHeight() > 16_000_000L) return null;
+      return image;
+    } catch (IOException ex) {
+      return null;
+    }
+  }
+
+  private static void drawContainedImage(Graphics2D g, BufferedImage image,
+      int x, int y, int boxWidth, int boxHeight) {
+    double scale = Math.min((double) boxWidth / image.getWidth(), (double) boxHeight / image.getHeight());
+    int width = Math.max(1, (int) Math.round(image.getWidth() * scale));
+    int height = Math.max(1, (int) Math.round(image.getHeight() * scale));
+    g.drawImage(image, x + (boxWidth - width) / 2, y + (boxHeight - height) / 2, width, height, null);
   }
 
   private BufferedImage brandIcon() {
