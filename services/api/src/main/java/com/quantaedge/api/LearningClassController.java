@@ -1014,7 +1014,9 @@ public class LearningClassController {
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              cs.id as session_id,cs.title as session_title,cs.starts_at as session_starts_at,
              coalesce(progress.last_position_seconds,0) as last_position_seconds,
-             coalesce(progress.watched_seconds,0) as watched_seconds,coalesce(progress.completed,false) as completed
+             coalesce(progress.watched_seconds,0) as watched_seconds,coalesce(progress.completed,false) as completed,
+             download.resource_id as download_resource_id,download.assignment_id as download_assignment_id,
+             (download.resource_id is not null) as download_allowed,rc.sha256 as download_sha256
       from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
@@ -1022,6 +1024,21 @@ public class LearningClassController {
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id
       left join student_recorded_class_progress progress on progress.recorded_class_id=rc.id and progress.student_id=st.id
+      left join lateral (
+        select r.id as resource_id,a.id as assignment_id
+        from learning_resource r join learning_resource_assignment a on a.resource_id=r.id
+        where r.recorded_class_id=rc.id and r.resource_type='VIDEO' and r.source_kind='RECORDED_CLASS'
+          and r.status='PUBLISHED' and r.download_allowed=true and a.status='PUBLISHED'
+          and rc.chapter_id is not null and a.chapter_id=rc.chapter_id
+          and (a.target_kind='CHAPTER'
+            or (a.target_kind='LESSON' and exists (
+              select 1 from lesson l where l.id=a.lesson_id and l.chapter_id=a.chapter_id
+                and l.active=true and l.status='PUBLISHED'))
+            or a.target_kind='STRUCTURED_ARTIFACT')
+        order by case when a.target_kind='CHAPTER' then 0 when a.target_kind='LESSON' then 1 else 2 end,
+          a.sort_order,a.id
+        limit 1
+      ) download on true
       where rc.status='PUBLISHED' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by coalesce(ch.teaching_order,ch.sort_order),rc.created_at desc,rc.id desc limit ? offset ?
