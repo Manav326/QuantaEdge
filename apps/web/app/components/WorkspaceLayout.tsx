@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useLocale } from './LanguageProvider';
 import { translateUi } from '../i18n/catalog';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { useTenantBranding } from './TenantBrandingProvider';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
 import { AppearanceModeButton } from './ColorThemeProvider';
@@ -51,6 +52,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const { locale } = useLocale();
+  const { clearTenantBrand } = useTenantBranding();
   const t = (key: string) => translateUi(locale, key);
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
@@ -177,6 +179,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     } catch {
       // Always leave the workspace after the logout request, even if the network fails.
     } finally {
+      clearTenantBrand();
       router.replace(role === 'student' ? '/login/student' : '/login');
       router.refresh();
       setLoggingOut(false);
