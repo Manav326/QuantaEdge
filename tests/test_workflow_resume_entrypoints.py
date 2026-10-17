@@ -101,6 +101,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertLess(benchmark, require_valid)
         self.assertIn('assert ledger.get("ledger_status") == "COMPLETE"', workflow)
         self.assertIn('"qwen2.5:1.5b,qwen2.5:3b,qwen3:4b"', workflow)
+        self.assertIn("Could not pull $model", workflow)
+        self.assertIn("continue with the other candidates", workflow)
         self.assertIn('row.get("successful_samples", 0) >= 1', workflow)
         self.assertIn('row.get("lesson_contract_valid_rate", 0) > 0', workflow)
         self.assertIn('"production_model_selection": report.get("production_model_selection")', workflow)
