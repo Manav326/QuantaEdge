@@ -49,7 +49,7 @@
 | `/login` | `apps/admin/app/login/page.tsx` | Instruction copy catalog-backed; selector registry-driven — CI pending, audit open | Verify server failures, OTP activation, permission errors and language switch in browser. |
 | `/parents` | `apps/admin/app/parents/page.tsx` | First pass — audit pending | Check parent/child permissions, confirmations and status feedback. |
 | `/questions` | `apps/admin/app/questions/page.tsx` | Localized in current slice — CI pending | Verify permission guidance, prompts, history snapshots and all visible status/error variants. |
-| `/resources` | `apps/admin/app/resources/page.tsx` | Needs audit/migration | Translate PDF library forms, ingestion/preview and assignment states. |
+| `/resources` | `apps/admin/app/resources/page.tsx` | Central-catalog first pass — CI pending, route audit open | Verify English/Hinglish for assignment filters/statuses, secured read-only PDF preview, upload/library selection, intake/OCR reconciliation, human review, chapter ranges and draft attachment; preserve dynamic curriculum/source diagnostics and role gates. |
 | `/session` | `apps/admin/app/session/page.tsx` | Needs audit/migration | Audit staff session-boundary/recovery messages. |
 | `/source-ingestion` | `apps/admin/app/source-ingestion/page.tsx` | Central-catalog first pass — CI pending, route audit open | Verify both locales for source registration, GHCR cache, source-gap inventory, chapter mapping/review, approval gates and text extraction; keep server diagnostics and curriculum/source records data-driven. |
 | `/structured-lesson-preview` | `apps/admin/app/structured-lesson-preview/page.tsx` | Needs audit/migration | Check question types, preview controls and validation feedback. |

@@ -4,6 +4,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Resources.module.css';
+import { useUiTranslation } from '../i18n/useUiTranslation';
 import PremiumPagination from '../components/PremiumPagination';
 
 type PdfAsset = {
@@ -67,27 +68,56 @@ async function api(url: string, init: RequestInit = {}) {
   const raw = await response.text();
   let body: any = {};
   try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-  if (!response.ok) throw new Error(body.detail || body.message || body.error || ('Request failed (' + response.status + ')'));
+  if (!response.ok) throw new Error(body.detail || body.message || body.error || ('__QE_REQUEST_FAILED__' + response.status));
   return body;
 }
 
-function contentCoverageWarning(reference?: string | null): string | null {
+function localizedError(error: unknown, t: UiTranslate, fallbackKey: string): string {
+  if (error instanceof Error) {
+    const status = error.message.match(/^__QE_REQUEST_FAILED__(\d+)$/);
+    if (status) return t('admin.resources.requestFailed', { status: Number(status[1]) });
+    if (error.message) return error.message;
+  }
+  return t(fallbackKey);
+}
+function resourceStatusLabel(status: string | null | undefined, t: UiTranslate): string {
+  const value = String(status || '').toUpperCase();
+  const map: Record<string, string> = {
+    PUBLISHED: 'admin.resources.published', DRAFT: 'admin.resources.draft',
+    ARCHIVED: 'admin.resources.archived', PENDING: 'admin.resources.statusPending',
+    REVIEWED: 'admin.resources.statusReviewed', NEEDS_REVIEW: 'admin.resources.statusNeedsReview',
+    APPROVED: 'admin.resources.statusApproved', FAILED: 'admin.resources.statusFailed',
+    RUNNING: 'admin.resources.statusRunning', PRIVATE: 'admin.resources.statusPrivate',
+    COMPLETE: 'admin.resources.statusComplete',
+  };
+  return map[value] ? t(map[value]) : (value ? t('admin.resources.unknownStatus', { status: value.replaceAll('_', ' ') }) : '');
+}
+function resourceCategoryLabel(category: string | null | undefined, t: UiTranslate): string {
+  const value = String(category || '').toUpperCase();
+  const map: Record<string, string> = {
+    MAIN_TEXTBOOK: 'admin.resources.mainTextbook', PART: 'admin.resources.partVolume',
+    SUPPLEMENTARY: 'admin.resources.supplementary', WORKBOOK: 'admin.resources.workbook',
+    TEACHER_GUIDE: 'admin.resources.teacherGuide', REFERENCE: 'admin.resources.referenceBook',
+    OTHER: 'admin.resources.otherResource',
+  };
+  return map[value] ? t(map[value]) : String(category || '').replaceAll('_', ' ');
+}
+function contentCoverageWarning(reference: string | null | undefined, t: UiTranslate): string | null {
   if (!reference) return null;
   const parentStatus = reference.match(/parent_book_status=(PARTIAL|UNAVAILABLE)/i)?.[1]?.toUpperCase();
   const parentMissing = reference.match(/parent_missing_chapters=([^;]+)/i)?.[1]?.trim();
   if (parentStatus) {
     return parentMissing
-      ? 'PARENT BOOK ' + parentStatus + ' — chapters missing from the original book: ' + parentMissing
-        + '. This individual chapter PDF may still be complete.'
-      : 'PARENT BOOK ' + parentStatus + ' — review the original book coverage report.';
+      ? t('admin.resources.warning.parentMissing', { status: parentStatus, chapters: parentMissing })
+      : t('admin.resources.warning.parentReview', { status: parentStatus });;
   }
   const status = reference.match(/content_status=(PARTIAL|UNAVAILABLE)/i)?.[1]?.toUpperCase();
   if (!status) return null;
   const missing = reference.match(/missing_chapters=([^;]+)/i)?.[1]?.trim();
-  if (status === 'UNAVAILABLE') return 'SOURCE CONTENT UNAVAILABLE — do not treat this PDF as a complete book.';
+  if (status === 'UNAVAILABLE') return t('admin.resources.warning.unavailable');
   return missing
-    ? 'PARTIAL SOURCE — missing chapters: ' + missing + '. Review the coverage report before assigning to students.'
-    : 'PARTIAL SOURCE — chapter coverage requires review before assigning to students.';
+    ? t('admin.resources.warning.partialMissing', { chapters: missing })
+    : t('admin.resources.warning.partial');
 }
 
 function formatBytes(value: number) {
@@ -95,6 +125,7 @@ function formatBytes(value: number) {
   return (value / (1024 * 1024)).toFixed(1) + ' MB';
 }
 
+type UiTranslate = (key: string, values?: Record<string, string | number>) => string;
 type GovernanceFacet = 'class' | 'subject' | 'status' | 'language' | 'scope';
 type GovernanceSelections = Record<GovernanceFacet, string[]>;
 type FilterOption = { value: string; label: string; count: number };
@@ -132,11 +163,13 @@ function MultiSelectFilter({
   options,
   selected,
   onChange,
+  t,
 }: {
   label: string;
   options: FilterOption[];
   selected: string[];
   onChange: (values: string[]) => void;
+  t: UiTranslate;
 }) {
   const [open, setOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement | null>(null);
@@ -164,16 +197,16 @@ function MultiSelectFilter({
       <button type="button" className={styles.filterTrigger} aria-haspopup="true" aria-expanded={open}
         onClick={() => setOpen(value => !value)}>
         <span>{label}</span>
-        <strong>{selected.length === 0 ? 'All' : selected.length + ' selected'}</strong>
+        <strong>{selected.length === 0 ? t('admin.resources.all') : t('admin.resources.selectedCount', { count: selected.length })}</strong>
         <span className={styles.filterChevron} aria-hidden="true">{open ? '▴' : '▾'}</span>
       </button>
-      {open && <div className={styles.filterMenu} role="group" aria-label={label + ' filter options'}>
+      {open && <div className={styles.filterMenu} role="group" aria-label={t('admin.resources.filterOptions', { label })}>
         <div className={styles.filterMenuActions}>
-          <button type="button" onClick={() => onChange(options.map(option => option.value))}>Select all</button>
-          <button type="button" onClick={() => onChange([])}>Clear filter</button>
+          <button type="button" onClick={() => onChange(options.map(option => option.value))}>{t('admin.resources.selectAll')}</button>
+          <button type="button" onClick={() => onChange([])}>{t('admin.resources.clearFilter')}</button>
         </div>
         {options.length === 0
-          ? <p className={styles.filterEmpty}>No options available.</p>
+          ? <p className={styles.filterEmpty}>{t('admin.resources.noOptions')}</p>
           : options.map(option => (
             <label className={styles.filterOption} key={option.value}>
               <input
@@ -195,6 +228,7 @@ function MultiSelectFilter({
 }
 
 export default function TextbookLibraryPage() {
+  const t = useUiTranslation();
   const [classCode, setClassCode] = useState('6');
   const [subjectCode, setSubjectCode] = useState('maths');
   const [viewClassCodes, setViewClassCodes] = useState<string[]>([]);
@@ -306,11 +340,11 @@ export default function TextbookLibraryPage() {
     status: viewStatuses,
     language: viewLanguages,
     scope: viewScopes,
-  }), [viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
+  }), [viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes, t]);
   const classFilterOptions = useMemo(
     () => addFacetCounts(assignmentFacets, classOptions.map(track => ({
       value: track.class_code,
-      label: 'Class ' + track.class_code,
+      label: t('admin.resources.classLine', { classCode: track.class_code }),
     })), 'class'),
     [assignmentFacets, classOptions],
   );
@@ -320,23 +354,23 @@ export default function TextbookLibraryPage() {
   );
   const statusFilterOptions = useMemo(
     () => addFacetCounts(assignmentFacets, [
-      { value: 'PUBLISHED', label: 'Published' },
-      { value: 'DRAFT', label: 'Draft' },
-      { value: 'ARCHIVED', label: 'Archived' },
+      { value: 'PUBLISHED', label: t('admin.resources.published') },
+      { value: 'DRAFT', label: t('admin.resources.draft') },
+      { value: 'ARCHIVED', label: t('admin.resources.archived') },
     ], 'status'),
     [assignmentFacets],
   );
   const languageFilterOptions = useMemo(
     () => addFacetCounts(assignmentFacets, [
-      { value: 'hi', label: 'Hindi' },
-      { value: 'en', label: 'English' },
+      { value: 'hi', label: t('admin.resources.hindi') },
+      { value: 'en', label: t('admin.resources.english') },
     ], 'language'),
     [assignmentFacets],
   );
   const scopeFilterOptions = useMemo(
     () => addFacetCounts(assignmentFacets, [
-      { value: 'CHAPTER_PDF', label: 'Chapter PDFs' },
-      { value: 'SUBJECT_BOOK', label: 'Complete books' },
+      { value: 'CHAPTER_PDF', label: t('admin.resources.chapterPdf') },
+      { value: 'SUBJECT_BOOK', label: t('admin.resources.completeSubjectBook') },
     ], 'scope'),
     [assignmentFacets],
   );
@@ -360,7 +394,7 @@ export default function TextbookLibraryPage() {
   const previewPageUrl = previewDocumentId
     ? '/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage
     : '';
-  const previewPageTitle = previewAssignment?.title || 'textbook PDF';
+  const previewPageTitle = previewAssignment?.title || t('admin.resources.title');
 
   const openPdfPreview = useCallback((documentId: number) => {
     previewOriginScrollY.current = window.scrollY;
@@ -584,7 +618,7 @@ export default function TextbookLibraryPage() {
         setPreviewDocumentId(null);
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The textbook library could not be loaded.');
+      setError(localizedError(e, t, 'admin.resources.libraryLoadFailed'));
     } finally {
       setLoading(false);
     }
@@ -611,10 +645,10 @@ export default function TextbookLibraryPage() {
       });
       if (!selectedPdfId && items.length) setSelectedPdfId(String(items[0].pdf_asset_id || items[0].id));
     })().catch((e:any) => {
-      if (active) setError(e instanceof Error ? e.message : 'The stored PDF library could not be loaded.');
+      if (active) setError(localizedError(e, t, 'admin.resources.pdfLibraryLoadFailed'));
     });
     return () => { active = false; };
-  }, [canEdit, libraryPage, libraryPageSize, libraryQuery]);
+  }, [canEdit, libraryPage, libraryPageSize, libraryQuery, t]);
 
   useEffect(() => {
     if (!tracks.length) return;
@@ -630,14 +664,14 @@ export default function TextbookLibraryPage() {
   }, [tracks, uploadClassCode, uploadSubjectCode]);
 
   async function uploadPdf() {
-    if (!file) { setError('Choose the existing textbook PDF file first.'); return; }
+    if (!file) { setError(t('admin.resources.choosePdfFirst')); return; }
     if (file.size > maxPdfBytes) {
       setError(isAdmin
-        ? 'Admin PDF uploads are limited to 500 MB per file by the API configuration.'
-        : 'PDF uploads for this staff account are limited to 50 MB per file.');
+        ? t('admin.resources.uploadLimitAdmin')
+        : t('admin.resources.uploadLimitStaff'));
       return;
     }
-    if (!pdfTitle.trim()) { setError('Give this PDF a recognizable library title.'); return; }
+    if (!pdfTitle.trim()) { setError(t('admin.resources.libraryTitleRequired')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
       const form = new FormData();
@@ -647,7 +681,7 @@ export default function TextbookLibraryPage() {
       const created = await api('/api/v1/admin/learning-pdfs', { method: 'POST', body: form });
       const id = Number(created.pdf_asset_id || created.id);
       if (!Number.isSafeInteger(id) || id <= 0) {
-        throw new Error('The PDF was uploaded, but the API did not return a valid library ID. Refresh the library before retrying.');
+        throw new Error(t('admin.resources.uploadInvalidLibraryId'));
       }
       setIntakeAssetId(id);
       // Classification is stored in a dedicated table, never hidden in source-reference text.
@@ -668,9 +702,7 @@ export default function TextbookLibraryPage() {
         setIntakeReport(normalizeIntakeReport(analysis));
       } catch (analysisError) {
         setIntakeReport(null);
-        setNotice('PDF saved and classified, but automatic inventory analysis needs attention: ' +
-          (analysisError instanceof Error ? analysisError.message : 'unknown error') +
-          '. The book remains private and unpublished; use Re-run analysis after fixing the issue.');
+        setNotice(t('admin.resources.analysisAttention', { error: analysisError instanceof Error ? analysisError.message : t('admin.resources.unknownError') }));
       }
       await load();
       setSelectedPdfId(String(id));
@@ -682,10 +714,7 @@ export default function TextbookLibraryPage() {
         const missingCount = Array.isArray(report.missing_from_book) ? report.missing_from_book.length : 0;
         const extraCount = Array.isArray(report.extra_in_book) ? report.extra_in_book.length : 0;
         const ambiguousCount = Array.isArray(report.ambiguous) ? report.ambiguous.length : 0;
-        setNotice((created.duplicate ? 'Existing PDF reused; no duplicate copy was created. ' : 'PDF saved. ') +
-          'Classification saved. Inventory scan found ' + missingCount + ' curriculum title(s) not found, ' +
-          extraCount + ' unmatched chapter/appendix heading(s), and ' + ambiguousCount +
-          ' ambiguous match(es). Nothing was auto-approved or published; review the reconciliation report below.');
+        setNotice(t('admin.resources.uploadScanSummary', { duplicateNote: created.duplicate ? t('admin.resources.duplicateReused') : t('admin.resources.pdfSaved'), missingCount, extraCount, ambiguousCount }));
       }
       setFile(null);
       setPdfTitle('');
@@ -694,21 +723,21 @@ export default function TextbookLibraryPage() {
       const input = document.getElementById('qe-pdf-file') as HTMLInputElement | null;
       if (input) input.value = '';
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'PDF upload failed.');
+      setError(localizedError(e, t, 'admin.resources.uploadFailed'));
     } finally {
       setBusy(false);
     }
   }
 
   async function attachPdf() {
-    if (!selectedPdf) { setError('Select a PDF from the library or upload it first.'); return; }
-    if (scope === 'CHAPTER_PDF' && !chapterId) { setError('Select the chapter that this PDF belongs to.'); return; }
-    if (!title.trim()) { setError('Enter the title students should see.'); return; }
+    if (!selectedPdf) { setError(t('admin.resources.selectPdf')); return; }
+    if (scope === 'CHAPTER_PDF' && !chapterId) { setError(t('admin.resources.selectChapter')); return; }
+    if (!title.trim()) { setError(t('admin.resources.studentTitleRequired')); return; }
     if (!sourceTitle.trim() || !sourceUrl.trim() || !edition.trim()) {
-      setError('Add the source title, official HTTPS URL, and edition/session before attaching this learning resource.');
+      setError(t('admin.resources.sourceMetadataRequired'));
       return;
     }
-    if (!/^https:\/\//i.test(sourceUrl.trim())) { setError('The official source URL must use HTTPS.'); return; }
+    if (!/^https:\/\//i.test(sourceUrl.trim())) { setError(t('admin.resources.httpsOnly')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
       const resource = await api('/api/v1/admin/learning-documents', {
@@ -723,12 +752,12 @@ export default function TextbookLibraryPage() {
           pageEnd: Number(pageEnd || selectedPdf.page_count),
         }),
       });
-      setNotice('Resource attached as a draft. Review the metadata, then publish it for enrolled students.');
+      setNotice(t('admin.resources.attachedDraft'));
       setTitle('');
       await load();
       setSelectedPdfId(String(resource.pdf_asset_id || selectedPdfId));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'PDF could not be attached.');
+      setError(localizedError(e, t, 'admin.resources.attachFailed'));
     } finally {
       setBusy(false);
     }
@@ -740,10 +769,10 @@ export default function TextbookLibraryPage() {
       await api('/api/v1/admin/learning-documents/' + row.document_id + '/status', {
         method: 'PATCH', body: JSON.stringify({ status: nextStatus }),
       });
-      setNotice('“' + row.title + '” is now ' + nextStatus.toLowerCase() + '.');
+      setNotice(t('admin.resources.statusUpdated', { title: row.title, status: resourceStatusLabel(nextStatus, t) }));
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The resource status could not be changed.');
+      setError(localizedError(e, t, 'admin.resources.statusChangeFailed'));
     } finally {
       setBusy(false);
     }
@@ -754,20 +783,20 @@ export default function TextbookLibraryPage() {
     <section className={'admin-main ' + styles.page}>
       <header className="admin-top">
         <div>
-          <span className="admin-kicker">QUANTAEDGE LEARNING / TEXTBOOK RESOURCES</span>
-          <h1>Textbook PDF library</h1>
-          <p>Reuse a stored textbook PDF or add it once, then attach it to a whole subject or a specific chapter.</p>
-          <Link href="/learning-resources" className={styles.catalogueLink}>Open unified resource catalogue ↗</Link>
+          <span className="admin-kicker">{t('admin.resources.kicker')}</span>
+          <h1>{t('admin.resources.title')}</h1>
+          <p>{t('admin.resources.description')}</p>
+          <Link href="/learning-resources" className={styles.catalogueLink}>{t('admin.resources.unifiedCatalogue')}</Link>
         </div>
-        <button type="button" className="admin-refresh" onClick={() => void load()} title="Refresh textbook library">↻</button>
+        <button type="button" className="admin-refresh" onClick={() => void load()} title={t('admin.resources.refresh')}>↻</button>
       </header>
 
       <section className={styles.hero}>
         <div className={styles.heroIcon}>▤</div>
-        <div><span>PRIVATE SOURCE LIBRARY</span><h2>One PDF. Multiple learning placements.</h2>
-          <p>PDFs are stored privately in the database. Students receive rendered page images after access checks, not the original PDF download.</p>
+        <div><span>{t('admin.resources.privateLibrary')}</span><h2>{t('admin.resources.heroTitle')}</h2>
+          <p>{t('admin.resources.privateStorage')}</p>
         </div>
-        <div className={styles.heroStats}><strong>{libraryTotal}</strong><small>PDF files in library</small><strong>{Number(assignmentFacets.status?.PUBLISHED || 0)}</strong><small>Published in filtered view</small></div>
+        <div className={styles.heroStats}><strong>{libraryTotal}</strong><small>{t('admin.resources.pdfFiles')}</small><strong>{Number(assignmentFacets.status?.PUBLISHED || 0)}</strong><small>{t('admin.resources.publishedFiltered')}</small></div>
       </section>
 
       {error && <div className={styles.alertError} role="alert">{error}</div>}
@@ -776,21 +805,21 @@ export default function TextbookLibraryPage() {
       <section className={styles.panel + " " + styles.governancePanel}>
         <div className={styles.governanceHeader}>
           <div className={styles.sectionHeading}>
-            <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Find, filter, and manage the textbook placements available to students. Counts stay accurate across the full matching inventory.</p></div>
+            <div><span>{t('admin.resources.governance')}</span><h2>{t('admin.resources.assignmentsTitle')}</h2><p>{t('admin.resources.assignmentsDescription')}</p></div>
           </div>
           <div className={styles.governanceFilterArea}>
-            <div className={styles.governanceFilterIntro}><span>REFINE INVENTORY</span><small>Combine filters to narrow the assignment list.</small></div>
+            <div className={styles.governanceFilterIntro}><span>{t('admin.resources.refineInventory')}</span><small>{t('admin.resources.combineFilters')}</small></div>
             <div className={styles.filterBar}>
-              <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={values=>{setViewClassCodes(values);setAssignmentPage(0)}} />
-              <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={values=>{setViewSubjectCodes(values);setAssignmentPage(0)}} />
-              <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={values=>{setViewStatuses(values);setAssignmentPage(0)}} />
-              <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={values=>{setViewLanguages(values);setAssignmentPage(0)}} />
-              <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={values=>{setViewScopes(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter t={t} label={t('admin.resources.class')} options={classFilterOptions} selected={viewClassCodes} onChange={values=>{setViewClassCodes(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter t={t} label={t('admin.resources.subject')} options={subjectFilterOptions} selected={viewSubjectCodes} onChange={values=>{setViewSubjectCodes(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter t={t} label={t('admin.resources.status')} options={statusFilterOptions} selected={viewStatuses} onChange={values=>{setViewStatuses(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter t={t} label={t('admin.resources.language')} options={languageFilterOptions} selected={viewLanguages} onChange={values=>{setViewLanguages(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter t={t} label={t('admin.resources.resourceType')} options={scopeFilterOptions} selected={viewScopes} onChange={values=>{setViewScopes(values);setAssignmentPage(0)}} />
             </div>
           </div>
         </div>
         <div className={styles.resultSummary}>
-          <div><strong>{assignmentTotal}</strong><span>matching assignment{assignmentTotal === 1 ? '' : 's'}</span><small>{visibleAssignments.length} shown on this page</small></div>
+          <div><strong>{assignmentTotal}</strong><span>{assignmentTotal === 1 ? t('admin.resources.matchingAssignmentOne') : t('admin.resources.matchingAssignments')}</span><small>{t('admin.resources.shownOnPage', { count: visibleAssignments.length })}</small></div>
           <div className={styles.resultBreakdown}>
             <span><b>{Number(assignmentFacets.status?.PUBLISHED || 0)}</b> Published</span>
             <span><b>{Number(assignmentFacets.status?.DRAFT || 0)}</b> Drafts</span>
@@ -803,35 +832,35 @@ export default function TextbookLibraryPage() {
             setViewStatuses([]);
             setViewLanguages([]);
             setViewScopes([]);
-          }}>Reset filters</button>
+          }}>{t('admin.resources.resetFilters')}</button>
         </div>
-        {loading ? <p className={styles.empty}>Loading resource assignments…</p> : visibleAssignments.length === 0 ? <div className={styles.empty}><b>No assignments match these filters</b><span>Clear or adjust the filters to inspect the matching resources.</span></div> :
+        {loading ? <p className={styles.empty}>{t('admin.resources.loadingAssignments')}</p> : visibleAssignments.length === 0 ? <div className={styles.empty}><b>{t('admin.resources.noAssignments')}</b><span>{t('admin.resources.adjustFilters')}</span></div> :
           <div className={styles.assignmentList}>
             {visibleAssignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
               <div className={styles.assignmentIcon}>{row.scope === 'SUBJECT_BOOK' ? '▤' : '▧'}</div>
               <div className={styles.assignmentBody}>
-                <div className={styles.assignmentTitle}><h3>{row.title}</h3><span className={styles['status' + row.status]}>{row.status}</span></div>
-                <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · {row.language === 'en' ? 'English' : 'Hindi'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
-                <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || 'Source title not set'} · {row.edition || 'Edition not set'}</small>
-                <small>{row.source_url || 'Official source URL not set'}</small>
+                <div className={styles.assignmentTitle}><h3>{row.title}</h3><span className={styles['status' + row.status]}>{resourceStatusLabel(row.status, t)}</span></div>
+                <p>{row.scope === 'SUBJECT_BOOK' ? t('admin.resources.completeSubjectBook') : t('admin.resources.chapterPdf')} · {row.language === 'en' ? t('admin.resources.english') : t('admin.resources.hindi')} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
+                <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || t('admin.resources.sourceTitleNotSet')} · {row.edition || t('admin.resources.editionNotSet')}</small>
+                <small>{row.source_url || t('admin.resources.sourceUrlNotSet')}</small>
                 {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
               </div>
               <div className={styles.rowActions}>
-                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>Preview</button>
+                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>{t('admin.resources.preview')}</button>
                 {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
                   <button type="button" className={styles.publishButton}
                     disabled={busy || (row.scope === 'CHAPTER_PDF' && row.chapter_active !== true)}
-                    title={row.scope === 'CHAPTER_PDF' && row.chapter_active !== true ? 'Reactivate this curriculum chapter first.' : 'Publish this resource for eligible students.'}
-                    onClick={() => void setStatus(row, 'PUBLISHED')}>Publish</button>}
-                {row.status === 'PUBLISHED' && canPublish && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>Archive</button>}
-                {row.status === 'ARCHIVED' && canEdit && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>Restore to draft</button>}
-                {row.status === 'DRAFT' && !canPublish && <small className={styles.roleHint}>Awaiting a publisher</small>}
+                    title={row.scope === 'CHAPTER_PDF' && row.chapter_active !== true ? t('admin.resources.reactivateChapter') : t('admin.resources.publishResource')}
+                    onClick={() => void setStatus(row, 'PUBLISHED')}>{t('admin.resources.publish')}</button>}
+                {row.status === 'PUBLISHED' && canPublish && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>{t('admin.resources.archive')}</button>}
+                {row.status === 'ARCHIVED' && canEdit && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>{t('admin.resources.restoreDraft')}</button>}
+                {row.status === 'DRAFT' && !canPublish && <small className={styles.roleHint}>{t('admin.resources.awaitingPublisher')}</small>}
               </div>
             </article>)}
           </div>}
         <PremiumPagination page={assignmentPage} total={assignmentTotal} pageSize={assignmentPageSize}
           onPageChange={setAssignmentPage} onPageSizeChange={size => { setAssignmentPageSize(size); setAssignmentPage(0); }}
-          itemLabel="assignments" loading={loading} />
+          itemLabel={t('admin.resources.assignments')} loading={loading} />
       </section>
 
       {previewAssignment && <div className={styles.previewBackdrop} role="presentation" onMouseDown={event => {
@@ -839,84 +868,84 @@ export default function TextbookLibraryPage() {
       }}>
         <section ref={node => { previewDialogRef.current = node; }} className={styles.previewDialog} role="dialog" aria-modal="true" aria-labelledby="qe-pdf-preview-title" tabIndex={-1}>
           <div className={styles.previewHeading}>
-            <div className={styles.previewTitleCopy}><span>PDF PREVIEW · READ ONLY</span><h2 id="qe-pdf-preview-title">{previewAssignment.title}</h2>
-              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · {previewAssignment.language === 'en' ? 'English' : 'Hindi'} · {previewPageCount} pages</p>
+            <div className={styles.previewTitleCopy}><span>{t('admin.resources.previewReadonly')}</span><h2 id="qe-pdf-preview-title">{previewAssignment.title}</h2>
+              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? t('admin.resources.completeSubjectBook') : (previewAssignment.chapter_name || t('admin.resources.chapterPdf'))} · {previewAssignment.language === 'en' ? t('admin.resources.english') : t('admin.resources.hindi')} · {t('admin.resources.pageCount', { count: previewPageCount })}</p>
             </div>
-            <button type="button" className={styles.secondaryButton} onClick={closePdfPreview}>← Back to assignments</button>
+            <button type="button" className={styles.secondaryButton} onClick={closePdfPreview}>{t('admin.resources.backToAssignments')}</button>
           </div>
 
-          <div className={styles.previewReaderToolbar} role="toolbar" aria-label="PDF reader controls">
+          <div className={styles.previewReaderToolbar} role="toolbar" aria-label={t('admin.resources.readerControls')}>
             <div className={styles.previewPageControls}>
-              <button type="button" className={styles.previewIconButton} aria-label="Previous page" title="Previous page" disabled={previewPage <= 1} onClick={() => changePreviewPage(previewPage - 1)}>‹</button>
-              <label>Page <input type="number" min="1" max={previewPageCount} value={previewPageDraft} onChange={event => setPreviewPageDraft(event.target.value)} onBlur={() => changePreviewPage(Number(previewPageDraft))} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); changePreviewPage(Number(previewPageDraft)); } }} /><span>of {previewPageCount}</span></label>
-              <button type="button" className={styles.previewIconButton} aria-label="Next page" title="Next page" disabled={previewPage >= previewPageCount} onClick={() => changePreviewPage(previewPage + 1)}>›</button>
+              <button type="button" className={styles.previewIconButton} aria-label={t('admin.resources.previousPage')} title={t('admin.resources.previousPage')} disabled={previewPage <= 1} onClick={() => changePreviewPage(previewPage - 1)}>‹</button>
+              <label>{t('admin.resources.page')} <input type="number" min="1" max={previewPageCount} value={previewPageDraft} onChange={event => setPreviewPageDraft(event.target.value)} onBlur={() => changePreviewPage(Number(previewPageDraft))} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); changePreviewPage(Number(previewPageDraft)); } }} /><span>{t('admin.resources.of', { count: previewPageCount })}</span></label>
+              <button type="button" className={styles.previewIconButton} aria-label={t('admin.resources.nextPage')} title={t('admin.resources.nextPage')} disabled={previewPage >= previewPageCount} onClick={() => changePreviewPage(previewPage + 1)}>›</button>
             </div>
             <span className={styles.previewToolbarDivider} aria-hidden="true"/>
             <div className={styles.previewZoomControls}>
-              <button type="button" className={styles.previewIconButton} aria-label="Zoom out" title="Zoom out" disabled={previewZoom <= 60} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(false);setPreviewZoom(value => Math.max(60,value-10));}}>−</button>
-              <span>{previewFitPage?'Fit page':previewFitWidth?'Fit width':previewZoom+'%'}</span>
-              <button type="button" className={styles.previewIconButton} aria-label="Zoom in" title="Zoom in" disabled={previewZoom >= 160} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(false);setPreviewZoom(value => Math.min(160,value+10));}}>＋</button>
+              <button type="button" className={styles.previewIconButton} aria-label={t('admin.resources.zoomOut')} title={t('admin.resources.zoomOut')} disabled={previewZoom <= 60} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(false);setPreviewZoom(value => Math.max(60,value-10));}}>−</button>
+              <span>{previewFitPage?t('admin.resources.fitPage'):previewFitWidth?t('admin.resources.fitWidth'):previewZoom+'%'}</span>
+              <button type="button" className={styles.previewIconButton} aria-label={t('admin.resources.zoomIn')} title={t('admin.resources.zoomIn')} disabled={previewZoom >= 160} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(false);setPreviewZoom(value => Math.min(160,value+10));}}>＋</button>
             </div>
-            <button type="button" className={styles.previewToolButton+(previewFitPage?' '+styles.isSelected:'')} onClick={() => {setPreviewFitPage(true);setPreviewFitWidth(false);}}>Fit page</button>
-            <button type="button" className={styles.previewToolButton+(previewFitWidth?' '+styles.isSelected:'')} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(value => !value);}}>{previewFitWidth?'Actual size':'Fit width'}</button>
-            <button type="button" className={styles.previewToolButton+(previewThumbnailsOpen?' '+styles.isSelected:'')} onClick={() => setPreviewThumbnailsOpen(value => !value)}>▤ Pages</button>
-            <button type="button" className={styles.previewToolButton+' '+styles.previewFullscreenButton} onClick={() => void togglePreviewFullscreen()}>{previewFullscreen?'Exit full screen':'⛶ Full screen'}</button>
+            <button type="button" className={styles.previewToolButton+(previewFitPage?' '+styles.isSelected:'')} onClick={() => {setPreviewFitPage(true);setPreviewFitWidth(false);}}>{t('admin.resources.fitPage')}</button>
+            <button type="button" className={styles.previewToolButton+(previewFitWidth?' '+styles.isSelected:'')} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(value => !value);}}>{previewFitWidth?t('admin.resources.actualSize'):t('admin.resources.fitWidth')}</button>
+            <button type="button" className={styles.previewToolButton+(previewThumbnailsOpen?' '+styles.isSelected:'')} onClick={() => setPreviewThumbnailsOpen(value => !value)}>▤ {t('admin.resources.pages')}</button>
+            <button type="button" className={styles.previewToolButton+' '+styles.previewFullscreenButton} onClick={() => void togglePreviewFullscreen()}>{previewFullscreen?t('admin.resources.exitFullscreen'):t('admin.resources.fullscreen')}</button>
           </div>
 
           <div className={styles.previewReaderWorkspace+(previewThumbnailsOpen?' '+styles.withThumbnails:'')}>
-            {previewThumbnailsOpen && <aside className={styles.previewThumbnails} aria-label="Page thumbnails">
-              <div className={styles.previewThumbsHeader}><b>Pages</b><small>{previewPageCount} total</small></div>
+            {previewThumbnailsOpen && <aside className={styles.previewThumbnails} aria-label={t('admin.resources.pageThumbnails')}>
+              <div className={styles.previewThumbsHeader}><b>{t('admin.resources.pages')}</b><small>{t('admin.resources.totalPages', { count: previewPageCount })}</small></div>
               <div className={styles.previewThumbList}>{previewThumbnails.map(pageNumber=><button type="button" key={pageNumber} className={pageNumber===previewPage?styles.activeThumb:''} onClick={() => changePreviewPage(pageNumber)}>
-                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber} alt="" loading="lazy" draggable={false}/><span>Page {pageNumber}</span>
+                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber} alt="" loading="lazy" draggable={false}/><span>{t('admin.resources.page')} {pageNumber}</span>
               </button>)}</div>
-              <div className={styles.previewThumbsFooter}>Showing pages {previewThumbnails[0]||0}–{previewThumbnails[previewThumbnails.length-1]||0}</div>
+              <div className={styles.previewThumbsFooter}>{t('admin.resources.showingPages', { start: previewThumbnails[0] || 0, end: previewThumbnails[previewThumbnails.length-1] || 0 })}</div>
             </aside>}
             <div className={styles.previewPageStage}>
-              <div className={styles.previewCanvasTop}><span><i/> Secured source preview</span><span>Page {previewPage} / {previewPageCount}</span></div>
+              <div className={styles.previewCanvasTop}><span><i/> {t('admin.resources.securedPreview')}</span><span>{t('admin.resources.page')} {previewPage} / {previewPageCount}</span></div>
               <div className={styles.previewPageViewport+(previewFitWidth?' '+styles.fitWidth:'')+(previewFitPage?' '+styles.fitPage:'')} key={previewDocumentId+'-'+previewPage}>
-                {previewImageLoading&&<div className={styles.previewImageLoading}><span className={styles.previewSpinner}/> Rendering page {previewPage}…</div>}
-                <img ref={previewPageImageRef} className={styles.previewPageImage} src={previewPageUrl} alt={'Page '+previewPage+' of '+previewPageTitle} draggable={false} onLoad={() => {setPreviewImageLoading(false);setPreviewImageError('');}} onError={() => {setPreviewImageLoading(false);setPreviewImageError('This page could not be rendered. Try again or return to assignments.');}} style={{width:previewFitPage?'auto':previewFitWidth?'100%':previewZoom+'%'}}/>
-                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=previewPageUrl+'?retry='+Date.now();}}>Retry page</button></div>}
+                {previewImageLoading&&<div className={styles.previewImageLoading}><span className={styles.previewSpinner}/> {t('admin.resources.renderingPage', { page: previewPage })}</div>}
+                <img ref={previewPageImageRef} className={styles.previewPageImage} src={previewPageUrl} alt={t('admin.resources.previewImageAlt', { page: previewPage, title: previewPageTitle })} draggable={false} onLoad={() => {setPreviewImageLoading(false);setPreviewImageError('');}} onError={() => {setPreviewImageLoading(false);setPreviewImageError(t('admin.resources.renderFailed'));}} style={{width:previewFitPage?'auto':previewFitWidth?'100%':previewZoom+'%'}}/>
+                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=previewPageUrl+'?retry='+Date.now();}}>{t('admin.resources.retryPage')}</button></div>}
               </div>
-              <div className={styles.previewCanvasBottom}><span>Private source preview · Page {previewPage}</span><span>Use ← → or Page Up / Page Down to navigate</span></div>
+              <div className={styles.previewCanvasBottom}><span>{t('admin.resources.privatePagePreview', { page: previewPage })}</span><span>{t('admin.resources.keyboardHelp')}</span></div>
             </div>
           </div>
-          <div className={styles.previewDialogFooter}><span>Read-only secure page rendering</span><span>Original PDF bytes are not exposed in this preview</span></div>
+          <div className={styles.previewDialogFooter}><span>{t('admin.resources.securePageRendering')}</span><span>{t('admin.resources.originalBytesHidden')}</span></div>
         </section>
       </div>}
 
       {canEdit && <section className={styles.panel + " " + styles.workflowStep}>
-        <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
+        <div className={styles.sectionHeading}><div><span>{t('admin.resources.stepOne')}</span><h2>{t('admin.resources.chooseUpload')}</h2><p>{t('admin.resources.duplicateDetection')}</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
           <div className={styles.field}>
-            <label htmlFor="qe-existing-pdf-search">Existing PDF library</label>
-            <input id="qe-existing-pdf-search" value={libraryQuery} onChange={e => {setLibraryQuery(e.target.value);setLibraryPage(0)}} placeholder="Search PDF title, filename or source…" aria-label="Search stored PDF library" />
-            <select aria-label="Select stored PDF to attach" value={selectedPdfId} onChange={e => {
+            <label htmlFor="qe-existing-pdf-search">{t('admin.resources.existingPdfLibrary')}</label>
+            <input id="qe-existing-pdf-search" value={libraryQuery} onChange={e => {setLibraryQuery(e.target.value);setLibraryPage(0)}} placeholder={t('admin.resources.searchPdfPlaceholder')} aria-label={t('admin.resources.searchStoredPdf')} />
+            <select aria-label={t('admin.resources.selectStoredPdf')} value={selectedPdfId} onChange={e => {
               setSelectedPdfId(e.target.value);
               const asset = library.find(item => Number(item.pdf_asset_id || item.id) === Number(e.target.value));
               if (asset) { setTitle(asset.title); setPageStart('1'); setPageEnd(String(asset.page_count)); }
             }}>
-              <option value="">Select a stored PDF…</option>
+              <option value="">{t('admin.resources.selectStoredPdfOption')}</option>
               {selectedPdfId && selectedPdf && !library.some(pdf => Number(pdf.pdf_asset_id || pdf.id) === Number(selectedPdfId)) &&
-                <option value={selectedPdfId}>Selected: {selectedPdf.title} · {selectedPdf.page_count} pages</option>}
+                <option value={selectedPdfId}>{t('admin.resources.selectedPdfOption', { title: selectedPdf.title, count: selectedPdf.page_count })}</option>}
               {library.map(pdf => <option key={pdf.pdf_asset_id || pdf.id} value={pdf.pdf_asset_id || pdf.id}>
-                {pdf.title} · {pdf.page_count} pages · {formatBytes(pdf.file_size_bytes)}{contentCoverageWarning(pdf.source_reference) ? ' · ⚠ PARTIAL' : ''}
+                {pdf.title} · {t('admin.resources.pageCount', { count: pdf.page_count })} · {formatBytes(pdf.file_size_bytes)}{contentCoverageWarning(pdf.source_reference, t) ? ' · ' + t('admin.resources.partialFlag') : ''}
               </option>)}
             </select>
-            <small>{libraryTotal ? 'Showing ' + (libraryTotal===0?0:libraryPage*libraryPageSize+1) + '–' + Math.min(libraryTotal,(libraryPage+1)*libraryPageSize) + ' of ' + libraryTotal + ' matching stored PDFs.' : 'No PDFs match this search. Upload a source PDF or change the search text.'}</small>
+            <small>{libraryTotal ? t('admin.resources.libraryRange', { start: libraryTotal===0?0:libraryPage*libraryPageSize+1, end: Math.min(libraryTotal,(libraryPage+1)*libraryPageSize), total: libraryTotal }) : t('admin.resources.noPdfMatches')}</small>
             <PremiumPagination page={libraryPage} total={libraryTotal} pageSize={libraryPageSize}
               onPageChange={setLibraryPage} onPageSizeChange={size => { setLibraryPageSize(size); setLibraryPage(0); }}
-              itemLabel="stored PDFs" loading={loading} />
+              itemLabel={t('admin.resources.storedPdfs')} loading={loading} />
           </div>
           {canReview && <section className={styles.uploadBox}>
-            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeTotal} classified PDF(s)</small></div>
-            {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
+            <div className={styles.uploadTitle}><b>{t('admin.resources.bookIntakeQueue')}</b><small>{t('admin.resources.classifiedPdfCount', { count: intakeTotal })}</small></div>
+            {intakeRows.length === 0 ? <p>{t('admin.resources.noClassifiedBooks')}</p> :
               <div className={styles.assignmentList}>
                 {intakeRows.map((item: any) => <div className={styles.assignmentQueueRow} key={item.pdf_asset_id}>
                   <div>
                     <b>{item.title || ('PDF #' + item.pdf_asset_id)}</b>
-                    <small>Class {item.class_code} · {item.subject_name || item.subject_code} · {item.language === 'hi' ? 'Hindi' : 'English'} · {String(item.category || '').replaceAll('_', ' ')}{item.part_label ? ' · ' + item.part_label : ''}</small>
-                    <small>{item.page_count} pages · {String(item.status || 'PENDING').replaceAll('_', ' ')} · {item.asset_review_status || 'private library'}</small>
+                    <small>{t('admin.resources.classLine', { classCode: item.class_code })} · {item.subject_name || item.subject_code} · {item.language === 'hi' ? t('admin.resources.hindi') : t('admin.resources.english')} · {resourceCategoryLabel(item.category, t)}{item.part_label ? ' · ' + item.part_label : ''}</small>
+                    <small>{t('admin.resources.pageCount', { count: item.page_count })} · {resourceStatusLabel(item.status || 'PENDING', t)} · {item.asset_review_status ? resourceStatusLabel(item.asset_review_status, t) : t('admin.resources.privateLibraryStatus')}</small>
                   </div>
                   <button type="button" className={styles.secondaryButton} disabled={busy} onClick={() => {
                     setIntakeAssetId(Number(item.pdf_asset_id));
@@ -938,31 +967,28 @@ export default function TextbookLibraryPage() {
                     setReviewAcknowledged(false);
                     setReviewNotes(String(item.review_notes || ''));
                     setError('');
-                    setNotice('Loaded the saved intake record. Run or re-run analysis to refresh the inventory report.');
-                  }}>Open review</button>
+                    setNotice(t('admin.resources.loadedIntake'));
+                  }}>{t('admin.resources.openReview')}</button>
                 </div>)}
               </div>}
             <PremiumPagination page={intakePage} total={intakeTotal} pageSize={intakePageSize}
               onPageChange={setIntakePage} onPageSizeChange={size => { setIntakePageSize(size); setIntakePage(0); }}
-              itemLabel="intake records" loading={loading} />
+              itemLabel={t('admin.resources.intakeRecords')} loading={loading} />
           </section>}
           {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
             <div className={styles.uploadTitle}>
-              <b>Book inventory review · PDF #{intakeAssetId}</b>
+              <b>{t('admin.resources.intakeReviewTitle', { assetId: intakeAssetId })}</b>
               <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
                 setBusy(true); setError(''); setNotice('');
                 try {
                   const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
                   setIntakeReport(normalizeIntakeReport(result));
                   const report = result.reconciliation || {};
-                  setNotice('Inventory scan complete. ' +
-                    (report.missing_from_book?.length || 0) + ' curriculum title(s) not found; ' +
-                    (report.extra_in_book?.length || 0) + ' unmatched heading(s); ' +
-                    (report.ambiguous?.length || 0) + ' ambiguous match(es). Nothing was auto-approved or published.');
+                  setNotice(t('admin.resources.inventoryScanComplete', { missingCount: report.missing_from_book?.length || 0, extraCount: report.extra_in_book?.length || 0, ambiguousCount: report.ambiguous?.length || 0 }));
                 } catch (e) {
-                  setError(e instanceof Error ? e.message : 'Inventory scan failed.');
+                  setError(localizedError(e, t, 'admin.resources.inventoryScanFailed'));
                 } finally { setBusy(false); }
-              }}>Re-run analysis</button>
+              }}>{t('admin.resources.rerunAnalysis')}</button>
               <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
                 setBusy(true); setError(''); setNotice('');
                 try {
@@ -972,15 +998,13 @@ export default function TextbookLibraryPage() {
                   await load();
                   const warnings = result.reconciliation?.page_boundary_warnings || [];
                   const partial = warnings.some((warning: any) => warning.type === 'OCR_PARTIAL' || warning.type === 'OCR_UNAVAILABLE');
-                  setNotice((partial ? 'OCR-assisted analysis was partial; check the page warnings and review remaining pages manually. '
-                    : 'OCR-assisted analysis completed or was not needed. ') +
-                    'Recognized text is only a candidate for inventory matching. Nothing was approved or published.');
+                  setNotice((partial ? t('admin.resources.ocrPartialNotice') : t('admin.resources.ocrCompleteNotice')) + t('admin.resources.ocrCandidateNotice'));
                 } catch (e) {
-                  setError(e instanceof Error ? e.message : 'OCR-assisted analysis failed.');
+                  setError(localizedError(e, t, 'admin.resources.ocrAnalysisFailed'));
                 } finally { setBusy(false); }
-              }}>Run OCR-assisted analysis</button>
+              }}>{t('admin.resources.runOcrAnalysis')}</button>
             </div>
-            <p>To correct the selected book's tags, edit the category, class, subject, language or part label in the form above, then save them here.</p>
+            <p>{t('admin.resources.correctBookTags')}</p>
             <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
               setBusy(true); setError(''); setNotice('');
               try {
@@ -995,71 +1019,71 @@ export default function TextbookLibraryPage() {
                 const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
                 setIntakeReport(normalizeIntakeReport(result));
                 await load();
-                setNotice('Classification saved and inventory analysis refreshed. Review the new report below; nothing was published.');
+                setNotice(t('admin.resources.classificationScanSaved'));
               } catch (e) {
-                setError(e instanceof Error ? e.message : 'Classification could not be saved.');
+                setError(localizedError(e, t, 'admin.resources.classificationSaveFailed'));
               } finally { setBusy(false); }
-            }}>Save classification and re-run analysis</button>
+            }}>{t('admin.resources.saveRerunClassification')}</button>
             {intakeReport ? <>
-              <p><b>Status:</b> {String(intakeReport.status || 'NEEDS_REVIEW').replaceAll('_', ' ')}</p>
-              <p>These are review signals, not automatic chapter assignments. Scanned page numbers are candidates only.</p>
+              <p><b>{t('admin.resources.statusLabel')}</b> {resourceStatusLabel(intakeReport.status || 'NEEDS_REVIEW', t)}</p>
+              <p>{t('admin.resources.reviewSignals')}</p>
               <div className={styles.assignmentFields}>
-                <div><b>Curriculum titles not found</b><p>{(intakeReport.reconciliation?.missing_from_book || []).length}</p></div>
-                <div><b>Unmatched headings / appendices</b><p>{(intakeReport.reconciliation?.extra_in_book || []).length}</p></div>
-                <div><b>Ambiguous matches</b><p>{(intakeReport.reconciliation?.ambiguous || []).length}</p></div>
-                <div><b>Page / extraction warnings</b><p>{(intakeReport.reconciliation?.page_boundary_warnings || []).length}</p></div>
+                <div><b>{t('admin.resources.curriculumTitlesMissing')}</b><p>{(intakeReport.reconciliation?.missing_from_book || []).length}</p></div>
+                <div><b>{t('admin.resources.unmatchedHeadings')}</b><p>{(intakeReport.reconciliation?.extra_in_book || []).length}</p></div>
+                <div><b>{t('admin.resources.ambiguousMatches')}</b><p>{(intakeReport.reconciliation?.ambiguous || []).length}</p></div>
+                <div><b>{t('admin.resources.pageExtractionWarnings')}</b><p>{(intakeReport.reconciliation?.page_boundary_warnings || []).length}</p></div>
               </div>
               {((intakeReport.reconciliation?.page_boundary_warnings || []).some((item: any) => item.type === 'OCR_REQUIRED')) && <div className={styles.publishHint}>
-                <b>OCR required before trusting automated inventory</b>
+                <b>{t('admin.resources.ocrRequired')}</b>
                 {(() => {
                   const warning = intakeReport.reconciliation.page_boundary_warnings.find((item: any) => item.type === 'OCR_REQUIRED');
-                  return <p>{warning.message} Low-text pages: {warning.low_text_page_count} of {warning.total_pages}. Sample page numbers: {(warning.low_text_pages || []).join(', ')}{warning.page_list_truncated ? ' … (list truncated)' : ''}</p>;
+                  return <p>{warning.message} {t('admin.resources.lowTextPages', { lowText: warning.low_text_page_count, total: warning.total_pages, pages: (warning.low_text_pages || []).join(', '), truncated: warning.page_list_truncated ? t('admin.resources.truncatedList') : '' })}</p>;
                 })()}
               </div>}
               {(intakeReport.reconciliation?.page_boundary_warnings || [])
                 .filter((item: any) => ['OCR_COMPLETED', 'OCR_PARTIAL', 'OCR_UNAVAILABLE'].includes(item.type))
                 .map((warning: any, index: number) => (
                   <div className={styles.publishHint} key={'ocr-result-' + index}>
-                    <b>{warning.type === 'OCR_COMPLETED' ? 'OCR text extracted — manual verification required'
-                      : warning.type === 'OCR_PARTIAL' ? 'OCR was partial — additional review required'
-                      : 'OCR unavailable — use manual page-range review'}</b>
+                    <b>{warning.type === 'OCR_COMPLETED' ? t('admin.resources.ocrCompletedWarning')
+                      : warning.type === 'OCR_PARTIAL' ? t('admin.resources.ocrPartialWarning')
+                      : t('admin.resources.ocrUnavailableWarning')}</b>
                     <p>{warning.message}</p>
                     {warning.attempted_pages != null && <p>
-                      Pages attempted: {warning.attempted_pages}; pages with recognized text: {warning.recognized_pages || 0}
-                      {warning.remaining_unprocessed_pages > 0 ? '; low-text pages not processed: ' + warning.remaining_unprocessed_pages : ''}
+                      {t('admin.resources.pagesAttempted', { attempted: warning.attempted_pages, recognized: warning.recognized_pages || 0 })}
+                      {warning.remaining_unprocessed_pages > 0 ? t('admin.resources.lowTextNotProcessed', { count: warning.remaining_unprocessed_pages }) : ''}
                     </p>}
                     {(warning.sample_problem_pages || []).length > 0 && <p>
-                      Sample pages requiring manual inspection: {warning.sample_problem_pages.join(', ')}
+                      {t('admin.resources.samplePagesManual', { pages: warning.sample_problem_pages.join(', ') })}
                     </p>}
                   </div>
                 ))}
               {((intakeReport.reconciliation?.missing_from_book || []).length > 0) && <div>
-                <b>Titles to verify</b>
+                <b>{t('admin.resources.titlesToVerify')}</b>
                 <ul>{intakeReport.reconciliation.missing_from_book.slice(0, 30).map((item: any, index: number) =>
                   <li key={'missing-' + index}>{item.title} — {item.reason}</li>)}</ul>
               </div>}
               {((intakeReport.reconciliation?.extra_in_book || []).length > 0) && <div>
-                <b>Unmatched headings to verify</b>
+                <b>{t('admin.resources.unmatchedHeadingsToVerify')}</b>
                 <ul>{intakeReport.reconciliation.extra_in_book.slice(0, 30).map((item: any, index: number) =>
-                  <li key={'extra-' + index}>Page {item.page}: {item.title}</li>)}</ul>
+                  <li key={'extra-' + index}>{t('admin.resources.pagePrefix', { page: item.page, title: item.title })}</li>)}</ul>
               </div>}
               {((intakeReport.reconciliation?.ambiguous || []).length > 0) && <div>
                 <b>Ambiguous matches</b>
                 <ul>{intakeReport.reconciliation.ambiguous.slice(0, 20).map((item: any, index: number) =>
-                  <li key={'ambiguous-' + index}>{item.title} — pages {(item.candidate_pages || []).join(', ')}</li>)}</ul>
+                  <li key={'ambiguous-' + index}>{item.title} — {t('admin.resources.pagesList', { pages: (item.candidate_pages || []).join(', ') })}</li>)}</ul>
               </div>}
               {intakeReport.status !== 'REVIEWED' && <div className={styles.uploadBox}>
-                <b>Finish the human review</b>
-                <p>Check the flagged items above against the original book. This records your review only; it does not publish the book or approve chapter page ranges.</p>
-                <label className={styles.field}>Review note
+                <b>{t('admin.resources.finishHumanReview')}</b>
+                <p>{t('admin.resources.humanReviewHelp')}</p>
+                <label className={styles.field}>{t('admin.resources.reviewNote')}
                   <textarea value={reviewNotes} onChange={e => setReviewNotes(e.target.value)}
-                    placeholder="What did you verify? Explain any accepted differences or why a title may not match."
+                    placeholder={t('admin.resources.reviewNotePlaceholder')}
                     maxLength={2000} rows={3} />
                 </label>
                 <label className={styles.field}>
                   <input type="checkbox" checked={reviewAcknowledged}
                     onChange={e => setReviewAcknowledged(e.target.checked)} />
-                  I reviewed the original PDF and the flagged differences. I understand these are candidates, not automatic chapter mappings.
+                  {t('admin.resources.reviewAcknowledgement')}
                 </label>
                 <button type="button" className={styles.primaryButton} disabled={busy || !reviewAcknowledged}
                   onClick={async () => {
@@ -1070,30 +1094,30 @@ export default function TextbookLibraryPage() {
                         body: JSON.stringify({ acknowledgeDiscrepancies: reviewAcknowledged, reviewNotes: reviewNotes.trim() || null }),
                       });
                       setIntakeReport(normalizeIntakeReport({ ...(intakeReport || {}), ...result }));
-                      setNotice('Human review recorded. The source PDF remains private; no chapter was published.');
+                      setNotice(t('admin.resources.humanReviewRecorded'));
                     } catch (e) {
-                      setError(e instanceof Error ? e.message : 'Review could not be recorded.');
+                      setError(localizedError(e, t, 'admin.resources.reviewFailed'));
                     } finally { setBusy(false); }
-                  }}>Record review (does not publish)</button>
+                  }}>{t('admin.resources.recordReview')}</button>
               </div>}
               <div className={styles.rangeReview}>
                 <div className={styles.uploadTitle}>
-                  <b>Manual chapter page ranges</b>
-                  <small>{intakeRanges.filter((row: any) => row.pageStart && row.pageEnd).length} range(s) entered</small>
+                  <b>{t('admin.resources.manualChapterRanges')}</b>
+                  <small>{t('admin.resources.rangesEntered', { count: intakeRanges.filter((row: any) => row.pageStart && row.pageEnd).length })}</small>
                 </div>
-                <p>Use the page numbers printed by the PDF viewer, not guessed chapter order. Save ranges only after checking the original PDF. Overlapping ranges and chapters from another subject are rejected.</p>
-                {chapters.length === 0 ? <p>No curriculum chapters are loaded for this book yet. Check the class and subject selection above, then reopen the book.</p> :
+                <p>{t('admin.resources.rangeInstructions')}</p>
+                {chapters.length === 0 ? <p>{t('admin.resources.noCurriculumChapters')}</p> :
                   <div className={styles.rangeReviewList}>
                     {intakeRanges.map((range: any) => <div className={styles.rangeReviewRow} key={range.chapterId}>
                       <div className={styles.rangeReviewChapter}>
                         <b>{range.title}</b>
                         <small>Chapter ID {range.chapterId}</small>
                       </div>
-                      <label className={styles.field}>PDF start page
+                      <label className={styles.field}>{t('admin.resources.pdfStartPage')}
                         <input type="number" min="1" max={Number(intakeRows.find((r: any) => Number(r.pdf_asset_id) === intakeAssetId)?.page_count || 2000)}
                           value={range.pageStart} onChange={e => setIntakeRanges(rows => rows.map((row: any) => row.chapterId === range.chapterId ? {...row,pageStart:e.target.value} : row))} />
                       </label>
-                      <label className={styles.field}>PDF end page
+                      <label className={styles.field}>{t('admin.resources.pdfEndPage')}
                         <input type="number" min={range.pageStart || 1} max={Number(intakeRows.find((r: any) => Number(r.pdf_asset_id) === intakeAssetId)?.page_count || 2000)}
                           value={range.pageEnd} onChange={e => setIntakeRanges(rows => rows.map((row: any) => row.chapterId === range.chapterId ? {...row,pageEnd:e.target.value} : row))} />
                       </label>
@@ -1110,12 +1134,12 @@ export default function TextbookLibraryPage() {
                           setSourceTitle(String(book?.title || ''));
                           setPageStart(String(range.pageStart));
                           setPageEnd(String(range.pageEnd));
-                          setNotice('Draft placement prepared for ' + range.title + '. Verify the official source URL and edition below, then attach it as a draft. Nothing is published.');
+                          setNotice(t('admin.resources.draftPlacementPrepared', { title: range.title }));
                         }}>Prepare draft</button>
                     </div>)}
                   </div>}
-                <label className={styles.field}>Range review notes
-                  <textarea rows={2} value={rangeReviewNotes} onChange={e => setRangeReviewNotes(e.target.value)} placeholder="Optional notes about page numbering, contents pages, or uncertain boundaries." />
+                <label className={styles.field}>{t('admin.resources.rangeReviewNotes')}
+                  <textarea rows={2} value={rangeReviewNotes} onChange={e => setRangeReviewNotes(e.target.value)} placeholder={t('admin.resources.rangeNotesPlaceholder')} />
                 </label>
                 <button type="button" className={styles.primaryButton} disabled={busy || !intakeRanges.some((row: any) => row.pageStart && row.pageEnd)}
                   onClick={async () => {
@@ -1128,28 +1152,28 @@ export default function TextbookLibraryPage() {
                       });
                       const normalized = normalizeIntakeReport({ ...(intakeReport || {}), ...result });
                       setIntakeReport(normalized);
-                      setNotice('Manual chapter ranges saved. They remain private review metadata; use Prepare draft for a chapter, then verify source metadata before attaching.');
+                      setNotice(t('admin.resources.rangesSaved'));
                       await load();
                     } catch (e) {
-                      setError(e instanceof Error ? e.message : 'Chapter ranges could not be saved.');
+                      setError(localizedError(e, t, 'admin.resources.chapterRangesSaveFailed'));
                     } finally { setBusy(false); }
-                  }}>Save reviewed page ranges</button>
-                {intakeReport.ranges_reviewed_at && <small>Ranges last saved for review: {String(intakeReport.ranges_reviewed_at)}. Saving ranges does not publish or approve student visibility.</small>}
+                  }}>{t('admin.resources.saveRanges')}</button>
+                {intakeReport.ranges_reviewed_at && <small>{t('admin.resources.rangesLastSaved', { date: String(intakeReport.ranges_reviewed_at) })}</small>}
                 {canEdit && <div className={styles.uploadBox}>
-                  <b>Create private draft resources from these saved ranges</b>
-                  <p>This uses only saved ranges. Confirm the printed source title, official HTTPS URL, and edition/session. Existing identical drafts are reused; conflicts with different page bounds are rejected.</p>
+                  <b>{t('admin.resources.createDraftsFromRanges')}</b>
+                  <p>{t('admin.resources.savedRangeRules')}</p>
                   <div className={styles.assignmentFields}>
-                    <label className={styles.field}>Printed source title
+                    <label className={styles.field}>{t('admin.resources.printedSourceTitle')}
                       <input value={rangeDraftSourceTitle} onChange={e => setRangeDraftSourceTitle(e.target.value)}
-                        placeholder="Title printed on the textbook" maxLength={300} />
+                        placeholder={t('admin.resources.textbookTitlePlaceholder')} maxLength={300} />
                     </label>
-                    <label className={styles.field}>Official HTTPS source URL
+                    <label className={styles.field}>{t('admin.resources.officialHttpsSourceUrl')}
                       <input type="url" value={rangeDraftSourceUrl} onChange={e => setRangeDraftSourceUrl(e.target.value)}
-                        placeholder="https://..." maxLength={2000} />
+                        placeholder={t('admin.resources.httpsPlaceholder')} maxLength={2000} />
                     </label>
-                    <label className={styles.field}>Edition / academic session
+                    <label className={styles.field}>{t('admin.resources.editionSession')}
                       <input value={rangeDraftEdition} onChange={e => setRangeDraftEdition(e.target.value)}
-                        placeholder="Verified edition or session" maxLength={160} />
+                        placeholder={t('admin.resources.verifiedEditionPlaceholder')} maxLength={160} />
                     </label>
                   </div>
                   <button type="button" className={styles.primaryButton}
@@ -1168,37 +1192,36 @@ export default function TextbookLibraryPage() {
                           }),
                         });
                         await load();
-                        setNotice('Draft creation complete: ' + Number(result.created_count || 0) + ' new chapter resource draft(s); '
-                          + Number(result.existing_count || 0) + ' identical active resource(s) reused. Nothing was published.');
+                        setNotice(t('admin.resources.draftCreationComplete', { createdCount: Number(result.created_count || 0), existingCount: Number(result.existing_count || 0) }));
                       } catch (e) {
-                        setError(e instanceof Error ? e.message : 'Draft resources could not be created.');
+                        setError(localizedError(e, t, 'admin.resources.draftResourcesFailed'));
                       } finally { setBusy(false); }
-                    }}>Create drafts for all saved ranges</button>
+                    }}>{t('admin.resources.createDraftsAllRanges')}</button>
                 </div>}
               </div>
-              {intakeReport.status === 'REVIEWED' && <p><b>Human review recorded.</b> The source remains private and unpublished.</p>}
-              <small>Original PDF is retained. Chapter page ranges are not guessed, approved, or published by this scan.</small>
-            </> : <p>Classification has been saved. Run the inventory scan to compare the PDF against the selected curriculum.</p>}
+              {intakeReport.status === 'REVIEWED' && <p><b>{t('admin.resources.reviewRecordedLabel')}</b> {t('admin.resources.sourcePrivateUnpublished')}</p>}
+              <small>{t('admin.resources.originalPdfRetained')}</small>
+            </> : <p>{t('admin.resources.classificationOnlySaved')}</p>}
           </section>}
           <div className={styles.uploadBox}>
-            <div className={styles.uploadTitle}><b>Add a PDF to the library</b><small>PDF only · maximum {isAdmin ? '500 MB for Admin' : '50 MB'} · up to 2,000 pages</small></div>
-            <label className={styles.field}>Library title
-              <input value={pdfTitle} onChange={e => setPdfTitle(e.target.value)} placeholder="e.g. Bihar Board Class 7 Mathematics — Part II" />
+            <div className={styles.uploadTitle}><b>{t('admin.resources.addPdfLibrary')}</b><small>{t('admin.resources.pdfUploadConstraint', { limit: isAdmin ? '500 MB for Admin' : '50 MB' })}</small></div>
+            <label className={styles.field}>{t('admin.resources.libraryTitle')}
+              <input value={pdfTitle} onChange={e => setPdfTitle(e.target.value)} placeholder={t('admin.resources.libraryTitlePlaceholder')} />
             </label>
             <div className={styles.assignmentFields}>
-              <label className={styles.field}>Book category
+              <label className={styles.field}>{t('admin.resources.bookCategory')}
                 <select value={uploadCategory} onChange={e => setUploadCategory(e.target.value)}>
-                  <option value="MAIN_TEXTBOOK">Main textbook</option>
-                  <option value="PART">Part / volume of a textbook</option>
-                  <option value="SUPPLEMENTARY">Supplementary book</option>
-                  <option value="WORKBOOK">Workbook / practice book</option>
-                  <option value="TEACHER_GUIDE">Teacher guide / handbook</option>
-                  <option value="REFERENCE">Reference book</option>
-                  <option value="OTHER">Other learning resource</option>
+                  <option value="MAIN_TEXTBOOK">{t('admin.resources.mainTextbook')}</option>
+                  <option value="PART">{t('admin.resources.partVolume')}</option>
+                  <option value="SUPPLEMENTARY">{t('admin.resources.supplementary')}</option>
+                  <option value="WORKBOOK">{t('admin.resources.workbook')}</option>
+                  <option value="TEACHER_GUIDE">{t('admin.resources.teacherGuide')}</option>
+                  <option value="REFERENCE">{t('admin.resources.referenceBook')}</option>
+                  <option value="OTHER">{t('admin.resources.otherResource')}</option>
                 </select>
-                <small>This describes the uploaded source PDF; it does not publish or assign it to students.</small>
+                <small>{t('admin.resources.categoryGuidance')}</small>
               </label>
-              <label className={styles.field}>Class
+              <label className={styles.field}>{t('admin.resources.class')}
                 <select value={uploadClassCode} onChange={e => {
                   setUploadClassCode(e.target.value);
                   const first = tracks.find(track => track.class_code === e.target.value);
@@ -1207,51 +1230,51 @@ export default function TextbookLibraryPage() {
                   {classOptions.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name}</option>)}
                 </select>
               </label>
-              <label className={styles.field}>Subject
+              <label className={styles.field}>{t('admin.resources.subject')}
                 <select value={uploadSubjectCode} onChange={e => setUploadSubjectCode(e.target.value)}>
                   {tracks.filter(track => track.class_code === uploadClassCode).map(track =>
                     <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
                 </select>
               </label>
-              <label className={styles.field}>Book language
+              <label className={styles.field}>{t('admin.resources.language')}
                 <select value={uploadLanguage} onChange={e => setUploadLanguage(e.target.value as 'hi' | 'en')}>
-                  <option value="hi">Hindi</option>
-                  <option value="en">English</option>
+                  <option value="hi">{t('admin.resources.hindi')}</option>
+                  <option value="en">{t('admin.resources.english')}</option>
                 </select>
               </label>
-              <label className={styles.field}>Part / volume label (optional)
+              <label className={styles.field}>{t('admin.resources.partLabelOptional')}
                 <input value={uploadPartLabel} onChange={e => setUploadPartLabel(e.target.value)}
-                  placeholder="e.g. Part II, Volume 2, Supplement A" maxLength={40} />
-                <small>Use the label printed on the book. Leave blank for a standalone book.</small>
+                  placeholder={t('admin.resources.partLabelPlaceholder')} maxLength={40} />
+                <small>{t('admin.resources.partLabelHelp')}</small>
               </label>
             </div>
-            <label className={styles.field}>Extra source reference (optional)
-              <input value={sourceReference} onChange={e => setSourceReference(e.target.value)} placeholder="Publisher catalogue ID, extraction bundle ID…" maxLength={220} />
+            <label className={styles.field}>{t('admin.resources.sourceReferenceOptional')}
+              <input value={sourceReference} onChange={e => setSourceReference(e.target.value)} placeholder={t('admin.resources.sourceReferencePlaceholder')} maxLength={220} />
             </label>
-            <label className={styles.fileInput} htmlFor="qe-pdf-file"><span>Choose PDF file</span><input id="qe-pdf-file" type="file" accept="application/pdf,.pdf" onChange={e => {
+            <label className={styles.fileInput} htmlFor="qe-pdf-file"><span>{t('admin.resources.choosePdfFile')}</span><input id="qe-pdf-file" type="file" accept="application/pdf,.pdf" onChange={e => {
               const nextFile = e.target.files?.[0] || null;
               setFile(nextFile);
               if (nextFile && nextFile.size > maxPdfBytes) {
                 setError(isAdmin
-                  ? 'This file exceeds the 500 MB Admin upload limit.'
-                  : 'This file exceeds the 50 MB upload limit for this staff account.');
+                  ? t('admin.resources.adminFileTooLarge')
+                  : t('admin.resources.staffFileTooLarge'));
               } else {
                 setError('');
               }
-            }} /><small>{file ? file.name + ' · ' + formatBytes(file.size) : 'No file selected'}</small></label>
-            <button type="button" className={styles.primaryButton} disabled={busy || !file || !pdfTitle.trim()} onClick={() => void uploadPdf()}>{busy ? 'Processing…' : 'Validate and save PDF'}</button>
+            }} /><small>{file ? file.name + ' · ' + formatBytes(file.size) : t('admin.resources.noFileSelected')}</small></label>
+            <button type="button" className={styles.primaryButton} disabled={busy || !file || !pdfTitle.trim()} onClick={() => void uploadPdf()}>{busy ? t('admin.resources.processing') : t('admin.resources.validateSavePdf')}</button>
           </div>
         </div>
         {selectedPdf && <div className={styles.selectedSummary}>
           <span className={styles.pdfBadge}>PDF</span><div><b>{selectedPdf.title}</b><small>{selectedPdf.original_filename} · {selectedPdf.page_count} pages · {formatBytes(selectedPdf.file_size_bytes)} · {selectedPdf.source_kind.replaceAll('_',' ')}</small>
-            {contentCoverageWarning(selectedPdf.source_reference) && <small className={styles.coverageWarning}>{contentCoverageWarning(selectedPdf.source_reference)}</small>}
-            {selectedPdf.source_reference && <small>Source reference: {selectedPdf.source_reference}</small>}
+            {contentCoverageWarning(selectedPdf.source_reference, t) && <small className={styles.coverageWarning}>{contentCoverageWarning(selectedPdf.source_reference, t)}</small>}
+            {selectedPdf.source_reference && <small>{t('admin.resources.sourceReference')}: {selectedPdf.source_reference}</small>}
           </div><span className={styles.hash}>{selectedPdf.sha256.slice(0, 12)}…</span>
         </div>}
       </section>}
 
       {canEdit && <section className={styles.panel + " " + styles.workflowStep}>
-        <div className={styles.sectionHeading}><div><span>STEP 02</span><h2>Attach PDF to a book or chapter</h2><p>Subject books appear at subject level. Chapter PDFs appear with the matching chapter in the student library.</p></div><span className={styles.stepIcon}>02</span></div>
+        <div className={styles.sectionHeading}><div><span>{t('admin.resources.stepTwo')}</span><h2>{t('admin.resources.attachHeading')}</h2><p>{t('admin.resources.attachDescription')}</p></div><span className={styles.stepIcon}>02</span></div>
         <div className={styles.assignmentFields}>
           <label className={styles.field}>Class
             <select value={classCode} disabled={!classOptions.length} onChange={e => {
@@ -1268,33 +1291,33 @@ export default function TextbookLibraryPage() {
               {subjectOptions.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
             </select>
           </label>
-          <label className={styles.field}>Placement
+          <label className={styles.field}>{t('admin.resources.placement')}
             <select value={scope} onChange={e => setScope(e.target.value as 'SUBJECT_BOOK' | 'CHAPTER_PDF')}>
-              <option value="CHAPTER_PDF">Chapter PDF</option><option value="SUBJECT_BOOK">Complete subject book</option>
+              <option value="CHAPTER_PDF">{t('admin.resources.chapterPdf')}</option><option value="SUBJECT_BOOK">{t('admin.resources.completeSubjectBook')}</option>
             </select>
           </label>
-          <label className={styles.field}>Content medium
+          <label className={styles.field}>{t('admin.resources.contentMedium')}
             <select value={resourceLanguage} onChange={e => setResourceLanguage(e.target.value as 'hi' | 'en')}>
-              <option value="hi">Hindi (हिन्दी)</option><option value="en">English</option>
+              <option value="hi">{t('admin.resources.hindi')}</option><option value="en">{t('admin.resources.english')}</option>
             </select>
           </label>
-          {scope === 'CHAPTER_PDF' && <label className={styles.field}>Chapter
+          {scope === 'CHAPTER_PDF' && <label className={styles.field}>{t('admin.resources.chapter')}
             <select value={chapterId} onChange={e => setChapterId(e.target.value)}>
-              <option value="">Select chapter…</option>
+              <option value="">{t('admin.resources.selectChapterOption')}</option>
               {chapters.map(ch => <option key={ch.chapter_id} value={ch.chapter_id}>{ch.chapter_code} — {ch.chapter_name}</option>)}
             </select>
           </label>}
-          <label className={styles.field}>Student-facing title
-            <input value={title} onChange={e => setTitle(e.target.value)} placeholder={selectedPdf?.title || 'Title shown to students'} />
+          <label className={styles.field}>{t('admin.resources.studentFacingTitle')}
+            <input value={title} onChange={e => setTitle(e.target.value)} placeholder={selectedPdf?.title || t('admin.resources.studentTitlePlaceholder')} />
           </label>
-          <label className={styles.field}>Official source title
-            <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder="Book title as printed on the source" />
+          <label className={styles.field}>{t('admin.resources.officialSourceTitle')}
+            <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={t('admin.resources.sourceTitlePlaceholder')} />
           </label>
-          <label className={styles.field}>Official HTTPS source URL
-            <input type="url" value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} placeholder="https://…" />
+          <label className={styles.field}>{t('admin.resources.officialSourceUrl')}
+            <input type="url" value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} placeholder={t('admin.resources.sourceUrlPlaceholder')} />
           </label>
-          <label className={styles.field}>Edition / academic session
-            <input value={edition} onChange={e => setEdition(e.target.value)} placeholder="e.g. 2025–26 edition" />
+          <label className={styles.field}>{t('admin.resources.editionSession')}
+            <input value={edition} onChange={e => setEdition(e.target.value)} placeholder={t('admin.resources.editionPlaceholder')} />
           </label>
           <label className={styles.field}>PDF start page
             <input type="number" min="1" value={pageStart} onChange={e => setPageStart(e.target.value)} />
@@ -1304,8 +1327,8 @@ export default function TextbookLibraryPage() {
           </label>
         </div>
         <div className={styles.attachFooter}>
-          <p>{scope === 'SUBJECT_BOOK' ? 'Complete book: include all concepts and practice questions.' : 'Chapter PDF: include concepts and QuantaEdge Advanced / Next Level material, with no practice questions.'} This {resourceLanguage === 'hi' ? 'Hindi' : 'English'} edition is delivered when a student selects the matching language. The saved page range can map a chapter to its own PDF or to a range within a complete book.</p>
-          <button type="button" className={styles.primaryButton} disabled={busy || !selectedPdf || (scope === 'CHAPTER_PDF' && !chapterId) || !title.trim()} onClick={() => void attachPdf()}>{busy ? 'Saving…' : 'Attach as draft'}</button>
+          <p>{scope === 'SUBJECT_BOOK' ? t('admin.resources.attachCompleteHelp') : t('admin.resources.attachChapterHelp')} {t('admin.resources.languageDeliveredNote', { language: resourceLanguage === 'hi' ? t('admin.resources.hindi') : t('admin.resources.english') })}</p>
+          <button type="button" className={styles.primaryButton} disabled={busy || !selectedPdf || (scope === 'CHAPTER_PDF' && !chapterId) || !title.trim()} onClick={() => void attachPdf()}>{busy ? t('admin.resources.saving') : t('admin.resources.attachAsDraft')}</button>
         </div>
       </section>}
 

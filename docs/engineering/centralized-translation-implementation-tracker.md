@@ -475,3 +475,18 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 2. Continue Admin `/resources` (textbook PDF library and preview), preserving private-PDF access, publish permissions and viewer behavior.
 3. Continue route-by-route static-copy/accessibility audits; preserve curriculum content language independently from UI locale.
 4. Keep this tracker and route matrix updated after each meaningful batch. Overall localization remains **IN PROGRESS — NOT PRODUCTION-COMPLETE**.
+
+
+## Latest continuation — Admin textbook PDF library localization first pass (2026-10-17)
+
+- Resumed on current `main` at `6795e82ad99a3c883879d20a30324498e6b6dcc7`; no new branch was created. This slice extends the central catalog rather than adding page-local translation logic.
+- Migrated the Admin `/resources` shell, library governance/filter controls, assignment cards and lifecycle actions, secured read-only PDF viewer/keyboard/zoom/page states, stored-PDF chooser, upload form, source-intake/OCR reconciliation, human-review acknowledgement, manual chapter ranges and draft attachment into semantic `admin.resources.*` messages.
+- Localized client-owned validation, notices, HTTP fallback errors, source-coverage warning templates, known status labels, and book-category labels. Server diagnostics, chapter/title data and review evidence remain data-driven; curriculum content language stays separate from UI locale.
+- Added a route-specific CI contract, synchronized all generated Web/Admin/People catalog copies, and updated the route-coverage matrix. This is **first pass / CI pending / browser audit open** until Actions passes and both-locale browser acceptance checks the responsive viewer, back/forward behavior, render retry, upload limits, permissions, and accessibility.
+- Patch-time checks validate translated placeholder parity and the statically referenced route keys. CI and browser acceptance remain separate completion gates.
+
+### Next continuation
+1. Verify this commit's Actions result; fix any contract/build regression before marking the route green.
+2. Continue the next highest-debt Admin route after reviewing the current matrix; `/structured-lesson-preview` and `/session` are candidates.
+3. Continue removing direct UI copy and hardcoded accessibility/helper text route by route, without translating curriculum content or raw server diagnostics.
+4. Keep the tracker and route-coverage matrix updated after each meaningful batch. Overall localization remains **IN PROGRESS — NOT PRODUCTION-COMPLETE**.
