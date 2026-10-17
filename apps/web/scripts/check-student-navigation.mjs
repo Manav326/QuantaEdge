@@ -49,10 +49,19 @@ assert.ok(studentLogin.includes("body.role !== 'STUDENT'") && studentLogin.inclu
   'Student login must reject any response that does not confirm a Student-scoped session.');
 assert.ok(studentLogin.includes("window.location.replace('/student')"),
   'Student login must perform a full navigation after scoped cookies are issued.');
-assert.ok(parentLogin.includes("body.role !== 'PARENT'") && parentLogin.includes("body.workspace !== 'PARENT'"),
-  'Parent login must reject any response that does not confirm a Parent-scoped session.');
-assert.ok(parentLogin.includes("window.location.replace('/parent')"),
-  'Parent login must perform a full navigation after scoped cookies are issued.');
+// The shared account sign-in page accepts both Parent and regular Learner accounts.
+ // Its destination() function must positively match role + workspace and reject all other
+ // responses before performing a full navigation. Keep support for the former Parent-only guard
+ // so future dedicated flows remain valid too.
+const strictParentOnlyGuard = parentLogin.includes("body.role !== 'PARENT'") && parentLogin.includes("body.workspace !== 'PARENT'");
+const sharedAccountGuard =
+  parentLogin.includes("body.workspace === 'PARENT' && body.role === 'PARENT'") &&
+  parentLogin.includes("body.workspace === 'STUDENT' && body.role === 'STUDENT'") &&
+  parentLogin.includes("throw new Error('QuantaEdge could not confirm this account session. Please sign in again.')");
+assert.ok(strictParentOnlyGuard || sharedAccountGuard,
+  'Login must reject any response that does not confirm a valid role- and workspace-scoped session.');
+assert.ok(parentLogin.includes("window.location.replace('/parent')") || parentLogin.includes("window.location.replace(destination(body))"),
+  'Account login must perform a full navigation only after the scoped session has been confirmed.');
 
 // Route inventory and pure navigation functions must be exhaustive over AppRoute.
 // Kotlin's exhaustive enum when-expressions also fail compilation when a new route is not categorized.
