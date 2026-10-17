@@ -142,12 +142,13 @@ class LayersTests(unittest.TestCase):
 
     def test_source_preflight_is_read_only_and_reports_layer5_lineage(self):
         from pathlib import Path
-        args=SimpleNamespace(repo_root=Path("."),class_no=6,source_book_id="ncert-c6-english-fecu1")
+        root=Path(".").resolve()
+        args=SimpleNamespace(repo_root=root,class_no=6,source_book_id="ncert-c6-english-fecu1")
         source={"book_id":args.source_book_id,"source_pdf_sha256":"a"*64,"class_no":6,
                 "language":"en","subject":"science","page_count":272}
         ledger={"summary":{"unresolved_count":0}}
         with patch("scripts.quantaedge_layers_6_8.load_source",return_value=source), \
-             patch("scripts.quantaedge_layers_6_8.load_layer5_evidence",return_value=(Path("data/ledger.json"),ledger,{1:[{"asset_id":"visual-a"}]})), \
+             patch("scripts.quantaedge_layers_6_8.load_layer5_evidence",return_value=(root/"data"/"ledger.json",ledger,{1:[{"asset_id":"visual-a"}]})), \
              patch("scripts.quantaedge_layers_6_8.sha_file",return_value="b"*64):
             result=preflight_source(args)
         self.assertEqual("READY",result["preflight"])
