@@ -47,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -66,11 +67,6 @@ import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
 private enum class ScannerMode { ALL, QR_ONLY, BARCODE_ONLY }
-private val ScanInk = Color(0xFF0C1425)
-private val ScanPanel = Color(0xFF17233A)
-private val ScanOrange = Color(0xFFF97316)
-private val ScanMuted = Color(0xFFB7C3D7)
-
 private fun scannerOptions(mode: ScannerMode): BarcodeScannerOptions {
     val builder = BarcodeScannerOptions.Builder()
     return when (mode) {
@@ -128,6 +124,15 @@ fun PremiumCodeScannerScreen(
     val config = LocalConfiguration.current
     val hindi = language == "hi"
     val landscape = config.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+    val scanInk = MaterialTheme.colorScheme.background
+    val scanPanel = MaterialTheme.colorScheme.surfaceVariant
+    val scanPrimary = MaterialTheme.colorScheme.primary
+    val scanOnPrimary = MaterialTheme.colorScheme.onPrimary
+    val scanMuted = MaterialTheme.colorScheme.onSurfaceVariant
+    val scanText = MaterialTheme.colorScheme.onBackground
+    val scanBorder = MaterialTheme.colorScheme.outlineVariant
+    // The scan frame sits on black camera preview; preserve a visible accent for very dark brand colours.
+    val scanFocus = if (scanPrimary.luminance() < 0.179f) Color.White else scanPrimary
     var mode by rememberSaveable { mutableStateOf(ScannerMode.ALL) }
     var permissionGranted by remember {
         mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
@@ -242,25 +247,25 @@ fun PremiumCodeScannerScreen(
     )
     val frameHeight = if (landscape) 148.dp else (config.screenHeightDp.dp - 410.dp).coerceIn(220.dp, 350.dp)
     val layoutModifier = Modifier.fillMaxSize().systemBarsPadding().padding(horizontal = if (landscape) 14.dp else 20.dp, vertical = 10.dp)
-    Surface(Modifier.fillMaxSize(), color = ScanInk) {
+    Surface(Modifier.fillMaxSize(), color = scanInk) {
         Column(
             layoutModifier.then(if (landscape) Modifier.verticalScroll(rememberScrollState()) else Modifier),
             verticalArrangement = Arrangement.spacedBy(if (landscape) 8.dp else 13.dp)
         ) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-                Surface(color = ScanPanel, shape = CircleShape) {
+                Surface(color = scanPanel, shape = CircleShape) {
                     TextButton(onClick = onBack, modifier = Modifier.size(46.dp), contentPadding = PaddingValues(0.dp)) {
                         Text("×", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Light)
                     }
                 }
             }
             Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(if (hindi) "स्मार्ट स्कैन" else "SMART SCAN", color = ScanOrange, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.8.sp)
-                Text(if (hindi) "QR और बारकोड स्कैन करें" else "Scan QR & barcodes", color = Color.White, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                Text(if (hindi) "स्मार्ट स्कैन" else "SMART SCAN", color = scanFocus, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.8.sp)
+                Text(if (hindi) "QR और बारकोड स्कैन करें" else "Scan QR & barcodes", color = scanText, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                 if (!landscape) Text(
                     if (hindi) "प्रमाणपत्र का कोड फ्रेम में रखें। उसकी स्थिति QuantaEdge सर्वर से सत्यापित होगी।"
                     else "Align a certificate code inside the frame. Its status is verified securely with QuantaEdge.",
-                    color = ScanMuted, style = MaterialTheme.typography.bodySmall
+                    color = scanMuted, style = MaterialTheme.typography.bodySmall
                 )
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -274,19 +279,19 @@ fun PremiumCodeScannerScreen(
                         onClick = { mode = option; cameraError = "" },
                         modifier = Modifier.weight(1f).height(40.dp),
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = ScanOrange, contentColor = Color.White)
+                        colors = ButtonDefaults.buttonColors(containerColor = scanPrimary, contentColor = scanOnPrimary)
                     ) { Text(label, fontSize = 13.sp, maxLines = 1) }
                     else OutlinedButton(
                         onClick = { mode = option; cameraError = "" },
                         modifier = Modifier.weight(1f).height(40.dp),
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.25f)),
+                        border = BorderStroke(1.dp, scanBorder),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
                     ) { Text(label, fontSize = 13.sp, maxLines = 1) }
                 }
             }
             if (!permissionGranted) {
-                Card(Modifier.fillMaxWidth().height(frameHeight), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = ScanPanel)) {
+                Card(Modifier.fillMaxWidth().height(frameHeight), shape = RoundedCornerShape(28.dp), colors = CardDefaults.cardColors(containerColor = scanPanel)) {
                     Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("▦", color = ScanOrange, fontSize = 48.sp, fontWeight = FontWeight.Light)
                         Text(if (hindi) "कैमरा अनुमति चाहिए" else "Camera access needed", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
@@ -319,7 +324,7 @@ fun PremiumCodeScannerScreen(
                             val c = 30.dp.toPx()
                             val i = s / 2f
                             val l = i; val t = i; val r = size.width - i; val b = size.height - i
-                            val orange = ScanOrange
+                            val orange = scanFocus
                             drawLine(orange, androidx.compose.ui.geometry.Offset(l, t), androidx.compose.ui.geometry.Offset(l+c, t), s, cap = StrokeCap.Round)
                             drawLine(orange, androidx.compose.ui.geometry.Offset(l, t), androidx.compose.ui.geometry.Offset(l, t+c), s, cap = StrokeCap.Round)
                             drawLine(orange, androidx.compose.ui.geometry.Offset(r-c, t), androidx.compose.ui.geometry.Offset(r, t), s, cap = StrokeCap.Round)
@@ -333,15 +338,15 @@ fun PremiumCodeScannerScreen(
                             drawLine(Color(0xFFFFC28A), androidx.compose.ui.geometry.Offset(12.dp.toPx(), y), androidx.compose.ui.geometry.Offset(size.width-12.dp.toPx(), y), 2.dp.toPx(), cap = StrokeCap.Round)
                         }
                     }
-                    Surface(Modifier.align(Alignment.BottomCenter).padding(bottom = 14.dp), color = Color.Black.copy(alpha = 0.66f), shape = RoundedCornerShape(50)) {
+                    Surface(Modifier.align(Alignment.BottomCenter).padding(bottom = 14.dp), color = Color.Black.copy(alpha = 0.66f), contentColor = Color.White, shape = RoundedCornerShape(50)) {
                         Text(if (hindi) "कोड को फ्रेम के भीतर रखें" else "Keep the code inside the frame", Modifier.padding(horizontal = 14.dp, vertical = 8.dp), color = Color.White, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
-            if (cameraError.isNotBlank()) Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF3B1E27)), shape = RoundedCornerShape(14.dp)) {
+            if (cameraError.isNotBlank()) Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer), shape = RoundedCornerShape(14.dp)) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text(cameraError, color = Color(0xFFFFD7DE), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                    TextButton(onClick = { retryToken += 1 }) { Text(if (hindi) "फिर कोशिश" else "Retry", color = Color.White) }
+                    Text(cameraError, color = MaterialTheme.colorScheme.onErrorContainer, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                    TextButton(onClick = { retryToken += 1 }) { Text(if (hindi) "फिर कोशिश" else "Retry", color = MaterialTheme.colorScheme.onErrorContainer) }
                 }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -352,7 +357,7 @@ fun PremiumCodeScannerScreen(
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
                 ) { Text(if (torchEnabled) { if (hindi) "टॉर्च चालू" else "Flash on" } else { if (hindi) "टॉर्च" else "Flashlight" }) }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(if (hindi) "कैमरा आपके डिवाइस पर ही रहता है" else "Camera stays on your device", color = Color.White, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
+                    Text(if (hindi) "कैमरा आपके डिवाइस पर ही रहता है" else "Camera stays on your device", color = scanText, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
                     Text(if (hindi) "केवल मान्य प्रमाणपत्र कोड सत्यापन के लिए भेजा जाता है।" else "Only an accepted certificate code is sent for verification.", color = ScanMuted, style = MaterialTheme.typography.labelSmall)
                 }
             }
