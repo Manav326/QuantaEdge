@@ -91,7 +91,7 @@ Preserve these rules when implementing the next phase:
 - [x] Remove duplicate `UiText` import in the structured-lessons catalogue client.
 - [x] Replace stale `ADMIN_OVERVIEW_ITEM.english` access with the catalog-backed label function.
 - [x] Update the People UI contract to assert the new centralized access-governance key while preserving permission-gating checks.
-- [ ] Confirm the GitHub Actions build on the fix commit is green: web, admin, People, API, content safeguards, Android, and localization parity. Latest link: [QuantaEdge Actions](https://github.com/Manav326/QuantaEdge/actions).
+- [x] Confirm the Admin Classes syntax-fix commit’s full GitHub Actions build is green: all eight required jobs passed on [`dd95053`](https://github.com/Manav326/QuantaEdge/commit/dd95053e85d57b82b6ff1d3b29ca2581c79016ed), [run #3048](https://github.com/Manav326/QuantaEdge/actions/runs/39006837008). The subsequent Classes session/recording localization batch still needs its own CI run.
 
 ### P1 — Complete route and static-string coverage
 
@@ -307,3 +307,18 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Began `/classes` localization by centralizing the page/hero, class and subject filters, status filter, live-session tabs, scheduling-form labels and guidance, and key create-session validation/error fallbacks.
 - Added 60 semantic `admin.classes.*` messages. Canonical catalogs contain **2590 keys each** with matching key sets and interpolation placeholders; six application catalog copies are set to the canonical catalog bytes.
 - Added `scripts/check-admin-classes-i18n.mjs` and wired it into CI. This is explicitly a first pass; session-card actions/statuses, provider-operation notices, recording-management details and browser acceptance remain open.
+
+## Build blocker repair — Admin Classes syntax regression (2026-10-17)
+
+- Full Actions run [#3048](https://github.com/Manav326/QuantaEdge/actions/runs/39006837008) passed all eight required jobs on commit [`dd95053`](https://github.com/Manav326/QuantaEdge/commit/dd95053e85d57b82b6ff1d3b29ca2581c79016ed): localization/route guards, Android APK, Admin image, Web image, People Operations image, content import safeguards, API verification, and API image.
+- The Admin image failure on the previous Classes form commit was an unterminated string caused by one extra quote in the secure-meeting validation fallback. The fix changes only TSX syntax and leaves validation/API behavior unchanged.
+- The next Classes localization batch below has not yet been build-certified; its own CI result must pass before the route is treated as verified.
+
+## Latest continuation — Admin Classes session operations and recording lifecycle (2026-10-17)
+
+- Extended `/classes` central-catalog coverage from the scheduling form to join-window controls, provider-operation and private-link notices, session status/actions, teacher replacement/rescheduling, recording upload guidance, empty/loading states, and publish/archive/restore actions.
+- Added **118 semantic `admin.classes.*` messages**. Canonical English and Hinglish catalogs now have **2,708 keys each** with matching key sets and interpolation placeholders; all six generated app catalog copies reuse the canonical bytes.
+- Known session, recording and Google integration statuses now display localized labels while preserving the underlying API status codes. Date/time display uses the selected UI locale (`en-IN` or `hi-IN`) with `Asia/Kolkata`; business date parsing and API payloads are unchanged.
+- Existing endpoint calls, authorization, assignment eligibility, meeting-link privacy, upload idempotency, recording state transitions, raw server diagnostics, user-generated titles/descriptions and identifiers remain data-driven and unchanged.
+- Expanded `scripts/check-admin-classes-i18n.mjs` to check both catalog key/placeholder coverage and representative session/recording hardcoded UI literals. Pre-push validation confirmed all **170 unique directly referenced page translation keys** resolve in both catalogs, with zero catalog placeholder mismatches and zero checked literal remnants.
+- Updated `docs/engineering/ui-localization-route-coverage.md`. This remains a first migration pass, not full route acceptance: browser/device checks and remaining accessibility/deep-state audits are still open. The new batch awaits its own CI run.
