@@ -192,6 +192,15 @@ jobs:
               out.write(f"retryable_segments={int(report['retryable_segments'])}\n")
           PY
 
+      - name: Require explicit experimental-draft approval before model startup
+        if: inputs.mode == 'run' || (inputs.mode == 'resume' && steps.resume_preflight.outputs.retryable_segments != '0')
+        shell: bash
+        env:
+          ALLOW_EXPERIMENTAL_MODEL: "${{ inputs.allow_experimental_model }}"
+        run: |
+          set -euo pipefail
+          [[ "$ALLOW_EXPERIMENTAL_MODEL" == "true" ]] || { echo "Enable allow_experimental_model before starting Ollama; generated content remains review-only." >&2; exit 2; }
+
       - name: Reconcile saved Layers 6–8 outputs without model inference
         if: inputs.mode == 'resume' && steps.resume_preflight.outputs.retryable_segments == '0'
         shell: bash
