@@ -215,14 +215,13 @@ private fun resourceDownloadUiState(work: androidx.work.WorkInfo, language: Stri
 }
 
 @Composable
-fun QuantaEdgeApp() {
+fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val context = LocalContext.current
     val themeController = LocalQuantaEdgeThemeController.current
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
-    val launchIntent = remember(context) { (context as? Activity)?.intent }
-    val launchTenantCode = remember(context) { InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent) }
+    val launchTenantCode = remember(launchIntent) { InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent) }
     var activeTenantCode by rememberSaveable {
         mutableStateOf(launchTenantCode ?: preferences.getString("institutionCode", null).orEmpty())
     }
@@ -230,6 +229,19 @@ fun QuantaEdgeApp() {
         mutableStateOf(InstitutionBrandingRepository.joinCodeFromIntent(launchIntent).orEmpty())
     }
     var institutionBrandIdentity by remember { mutableStateOf<InstitutionBrandIdentity?>(null) }
+    LaunchedEffect(launchIntent) {
+        val incomingCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
+        val incomingJoinCode = InstitutionBrandingRepository.joinCodeFromIntent(launchIntent)
+        if (incomingCode != null) {
+            val previousCode = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
+            activeTenantCode = incomingCode
+            preferences.edit().putString("institutionCode", incomingCode).apply()
+            if (previousCode != incomingCode && incomingJoinCode == null) {
+                pendingInstitutionJoinCode = ""
+            }
+        }
+        if (incomingJoinCode != null) pendingInstitutionJoinCode = incomingJoinCode
+    }
     val saveableStateHolder = rememberSaveableStateHolder()
     val stateOwnerKey = auth.textAny("user_id", "userId", "id", "account_id", "mobile_e164")
         .ifBlank { auth.textAny("role", "displayName", "display_name").ifBlank { "anonymous" } }
