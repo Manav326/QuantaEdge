@@ -76,7 +76,7 @@ class LearningClassControllerTest {
     when(jdbc.queryForObject(contains("select count(*) from learning_class_session"),
         eq(Long.class), eq(7L), eq(""), eq(""))).thenReturn(0L);
 
-    Map<String, Object> result = controller.studentLiveClasses(null, 25, 0, student);
+    Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, student);
 
     assertEquals(0L, result.get("total"));
     verify(jdbc).queryForList(
@@ -318,7 +318,7 @@ class LearningClassControllerTest {
     when(jdbc.queryForObject(contains("select count(*) from recorded_class"), eq(Long.class),
         eq(7L), eq(""), eq(""))).thenReturn(1L);
 
-    Map<String,Object> result = controller.studentRecordedClasses(null, 25, 0, student);
+    Map<String,Object> result = controller.studentRecordedClasses(null, null, 25, 0, student);
 
     assertEquals(1L, result.get("total"));
     Map<?,?> row = (Map<?,?>)((List<?>)result.get("items")).get(0);
