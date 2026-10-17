@@ -294,6 +294,7 @@ fun QuantaEdgeApp() {
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var dashboardClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var dashboardClassesLoaded by rememberSaveable { mutableStateOf(false) }
+    var dashboardClassesCourseId by remember { mutableStateOf(0L) }
     var dashboardClassesFailed by remember { mutableStateOf(false) }
     var offlineRecordingIds by remember { mutableStateOf(offlineVideoStore.downloadedRecordingIds()) }
     val videoDownloadStates = remember { mutableStateMapOf<Long, String>() }
@@ -562,6 +563,7 @@ fun QuantaEdgeApp() {
             else it.textAny("title", "name") + "|" + it.textAny("start_at", "starts_at", "start_time")
         }
         dashboardClassesFailed = anyRequestFailed && dashboardClasses.isEmpty()
+        dashboardClassesCourseId = currentCourseId
         dashboardClassesLoaded = true
     }
 
@@ -2520,6 +2522,12 @@ fun QuantaEdgeApp() {
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+    LaunchedEffect(route, currentCourseId, signedIn) {
+        if (route == AppRoute.STUDENT_HOME && signedIn &&
+            (!dashboardClassesLoaded || dashboardClassesCourseId != currentCourseId)) {
+            runTask { refreshDashboardClasses() }
+        }
+    }
     val headerPhotoUrl = if (parentRole) {
         parentProfile.textAny("profile_image_url", "profileImageUrl")
             .ifBlank { parentAccount.textAny("profile_image_url", "profileImageUrl") }
@@ -3655,6 +3663,8 @@ private fun StudentHomeScreen(
     val activeCourseSubjects = activeCourse?.optJSONArray("subjects")?.let { array ->
         (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
     }.orEmpty()
+    val dashboardDefaultSubject = activeCourseSubjects.firstOrNull()
+        ?.textAny("subject_code", "code")?.ifBlank { "maths" } ?: "maths"
     val nowMillis = System.currentTimeMillis()
     val recentThreshold = nowMillis - 3L * 24L * 60L * 60L * 1000L
     val upcomingClasses = dashboardClasses.filter {
@@ -3818,7 +3828,7 @@ private fun StudentHomeScreen(
                         else "Upcoming sessions and recent classes from the last 3 days",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                TextButton(onClick = { onClasses(currentSubject) }, enabled = !busy) {
+                TextButton(onClick = { onClasses(dashboardDefaultSubject) }, enabled = !busy) {
                     Text(if (language == "hi") "सभी देखें" else "View all")
                 }
             }
@@ -3839,14 +3849,14 @@ private fun StudentHomeScreen(
                     Text(if (language == "hi") "आने वाली" else "Upcoming",
                         style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                     upcomingClasses.forEach { item ->
-                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { currentSubject }) }
+                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { dashboardDefaultSubject }) }
                     }
                 }
                 if (recentClasses.isNotEmpty()) {
                     Text(if (language == "hi") "हाल की · पिछले 3 दिन" else "Recent · last 3 days",
                         style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                     recentClasses.forEach { item ->
-                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { currentSubject }) }
+                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { dashboardDefaultSubject }) }
                     }
                 }
             }
