@@ -153,6 +153,10 @@ public class PlatformInstitutionController {
     if(rows.isEmpty()) throw new IllegalArgumentException("Institution not found.");
     Map<String,Object> result = new LinkedHashMap<>(rows.getFirst());
     result.put("themeTokens", InstitutionThemeTokens.normalize(parseJsonObject(result.remove("theme_tokens"))));
+    String publicCode = String.valueOf(result.get("tenant_code"));
+    long brandVersion = result.get("branding_version") instanceof Number n ? n.longValue() : 1L;
+    result.put("logo_url", publicAssetUrl(publicCode, "logo", brandVersion, result.get("logo_asset_key")));
+    result.put("app_icon_url", publicAssetUrl(publicCode, "app-icon", brandVersion, result.get("app_icon_asset_key")));
     result.put("admins", jdbc.queryForList("""
         select id,username,display_name,active,must_change_password,last_login_at,created_at
         from institution_admin_account where institution_id=? order by created_at,id
@@ -740,6 +744,11 @@ public class PlatformInstitutionController {
     } catch (JsonProcessingException ex) {
       throw new IllegalStateException("Unable to serialize validated institution theme tokens.", ex);
     }
+  }
+
+  private String publicAssetUrl(String tenantCode,String assetType,long version,Object assetKey) {
+    if(assetKey==null || String.valueOf(assetKey).isBlank()) return "";
+    return "/api/v1/institution/public/branding/"+tenantCode+"/assets/"+assetType+"?v="+version;
   }
 
   private String ownedBrandAssetKey(long institutionId,String assetType,String raw) {
