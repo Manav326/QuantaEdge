@@ -622,3 +622,15 @@ html[data-qe-appearance="dark"] .button-dark:hover {
 .qe-school-entry-actions .button{width:100%;justify-content:center;min-height:46px}
 .qe-school-entry-note{font-size:12px!important}
 .qe-school-entry-placeholder{width:64px;height:64px;border-radius:18px;background:var(--qe-color-surface-elevated);border:1px solid var(--qe-color-border-subtle)}
+
+
+/* Contrast-critical controls use the stronger outline token, while card/divider boundaries retain the softer token. */
+html[data-qe-appearance] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-qe-appearance] .qe-workspace-content select,
+html[data-qe-appearance] .qe-workspace-content textarea,
+html[data-qe-appearance] .auth-card input,
+html[data-qe-appearance] .tutor-input textarea,
+html[data-qe-appearance] .tutor-composer textarea,
+html[data-qe-appearance] .qe-language-switcher--menu-setting select {
+  border-color: var(--qe-color-border);
+}

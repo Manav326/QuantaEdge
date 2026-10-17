@@ -66,6 +66,8 @@ for (const role of ['background', 'surface', 'text-muted', 'primary-container', 
   assert(webCss.includes('--qe-color-' + role), 'Web CSS is missing semantic role: ' + role);
 }
 assert(webCss.includes('html[data-qe-appearance="dark"]'), 'Web CSS must define dark-mode surfaces/states.');
+assert(webCss.includes('html[data-qe-appearance] .qe-workspace-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"])') && webCss.includes('border-color: var(--qe-color-border);'), 'Interactive controls must use the stronger contrast-tested border role in both modes.');
+assert(apiTests.includes('control border/background contrast') && apiTests.includes('control border/elevated-surface contrast'), 'API tests must cover non-text control-outline contrast.');
 assert(webCss.includes('/* Tenant semantic compatibility layer for the legacy tutor and parent controls.'), 'Legacy tutor and parent controls must have a semantic-token bridge.');
 assert(webCss.includes('.tutor-head.tutor-head--compact') && webCss.includes('.tutor-heading-copy>strong {\\n  color: var(--qe-color-on-surface);'), 'High-specificity compact tutor headers and titles must not override the tenant palette.');
 assert(webCss.includes('.tutor-language-indicator {\\n  background: var(--qe-color-surface-elevated);'), 'Tutor language indicator must use semantic neutral surfaces.');

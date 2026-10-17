@@ -130,6 +130,12 @@ class InstitutionThemeTokensTest {
       }
       assertTrue(contrast((String) colors.get("focus"), (String) colors.get("surface")) >= 3.0,
           description + " " + mode + " focus contrast");
+      assertTrue(contrast((String) colors.get("border"), (String) colors.get("background")) >= 3.0,
+          description + " " + mode + " control border/background contrast");
+      assertTrue(contrast((String) colors.get("border"), (String) colors.get("surface")) >= 3.0,
+          description + " " + mode + " control border/surface contrast");
+      assertTrue(contrast((String) colors.get("border"), (String) colors.get("surfaceElevated")) >= 3.0,
+          description + " " + mode + " control border/elevated-surface contrast");
     }
   }
 
