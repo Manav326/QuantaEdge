@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 10,
+    "assets_selected": 18,
     "assets_processed_this_run": 10,
-    "assets_analyzed": 150,
-    "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 0,
+    "assets_analyzed": 156,
+    "assets_failed": 17,
+    "assets_skipped_from_checkpoint": 8,
     "publication_allowed": false
   },
   "results": [
@@ -336,14 +336,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 3,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4300 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy 2020 and its vision for education in India.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:45Z"
     },
     {
       "asset_id": "8d35dc673109641624e2223c",
@@ -352,14 +365,43 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 3,
       "asset_path": "page-0003.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "FOREWORD",
+          "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
+          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
+          "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
+          "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
+        ],
+        "concepts": [
+          "National Education Policy 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "pañchakoshas",
+          "Middle Stage",
+          "Foundational and Preparatory Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Curricular Area Groups"
+        ],
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "limitations": [
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:53:23Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -369,6 +411,7 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -413,8 +456,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:55:34Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:54:01Z"
     },
     {
       "asset_id": "6081f3aa50114e3079c63e5a",
@@ -424,6 +467,7 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -468,8 +512,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:56:08Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:54:34Z"
     },
     {
       "asset_id": "18744dff72aac7d5c753a203",
@@ -478,14 +522,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 4,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4365 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:54:51Z"
     },
     {
       "asset_id": "c46181e89835d17ab1839069",
@@ -494,14 +550,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 4,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4306 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:55:07Z"
     },
     {
       "asset_id": "34297b4098a78ae6d37eb165",
@@ -510,14 +578,56 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 4,
       "asset_path": "page-0004.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the development and features of a science textbook for Grade 6.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "all possible efforts to develop such textbooks. Curiosity, Textbook\nof Science for Grade 6, is one of these. It has been developed in\nconsonance with the recommendations of NEP 2020 and the\nNCF-SE 2023 to take students on a journey of experiential learning\nby citing examples from the world of the le",
+          "To encourage creativity and innovation, it is feasible to regard\nstudents as active participants in the learning process, rather than\nmere recipients of a predetermined set of knowledge. This can\nonly be achieved if the necessary number of hours are dedicated to\nscience teaching-learning annually as",
+          "However, in addition to this textbook, students at this stage\nshould also be encouraged to explore various other learning\nresources. School libraries play a crucial role in making such\nresources available. Besides, the role of parents and teachers will\nalso be invaluable in guiding and encouraging s",
+          "With this, I express my gratitude to all those who have been\ninvolved in the development of this textbook and hope that it\nwill meet the expectations of all stakeholders. At the same time, I\nalso invite suggestions and feedback from all its users for further\nimprovement in the coming years.",
+          "DINESH PRASAD SAKLANI\nDirector\nNational Council of Educational\nResearch and Training",
+          "New Delhi\n30 June 2024"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Textbook",
+          "Science",
+          "Grade 6",
+          "NEP 2020",
+          "NCF-SE 2023",
+          "Experiential learning",
+          "Curiosity",
+          "Exploration",
+          "Questioning",
+          "Critical thinking",
+          "Physics",
+          "Chemistry",
+          "Biology",
+          "Earth science",
+          "Environmental education",
+          "Value education",
+          "Inclusive education",
+          "Indian Knowledge Systems (IKS)",
+          "Integrated approach"
+        ],
+        "context_relation": "The page discusses the development and features of a science textbook for Grade 6, including its alignment with educational guidelines and its pedagogical approach.",
+        "limitations": [
+          "The page does not provide specific details about the textbook's content or structure.",
+          "The page does not include any visual elements or illustrations.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:05Z"
     },
     {
       "asset_id": "5fe69a802c2a490bd1bb4448",
@@ -527,6 +637,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -543,8 +654,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:59:54Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:16Z"
     },
     {
       "asset_id": "25a519ef8f386ff959746a30",
@@ -554,6 +665,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -570,8 +682,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:00:01Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:24Z"
     },
     {
       "asset_id": "8acaf09f0cabf7ba518940ae",
@@ -580,14 +692,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 5,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4352 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:39Z"
     },
     {
       "asset_id": "67fcb1d37cd895f2b19a9074",
