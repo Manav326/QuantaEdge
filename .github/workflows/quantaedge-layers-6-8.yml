@@ -16,6 +16,8 @@ on:
       - "services/api/src/test/java/com/quantaedge/api/StructuredLessonArtifactServiceTest.java"
       - ".github/workflows/ci.yml"
       - ".github/workflows/quantaedge-layers-6-8.yml"
+      - ".github/workflows/resume-quantaedge-layers-6-8.yml"
+      - "tests/test_workflow_resume_entrypoints.py"
       - "docs/textbook-content-pipeline-eight-layers.md"
       - "apps/admin/app/structured-lesson-preview/page.tsx"
   workflow_dispatch:
@@ -64,6 +66,41 @@ on:
         default: false
         required: true
 
+  workflow_call:
+    inputs:
+      mode:
+        description: "Shared internal execution mode; the dedicated recovery entrypoint fixes this to resume"
+        required: true
+        type: string
+      class_no:
+        description: "Class for the selected source book"
+        required: true
+        type: string
+      source_book_id:
+        description: "Exact whole-book ID from the committed extraction manifest"
+        required: true
+        type: string
+      benchmark_models:
+        description: "Models recorded for the benchmark report"
+        required: true
+        type: string
+      generation_model:
+        description: "Exact model bound to the generation checkpoint"
+        required: true
+        type: string
+      max_model_calls:
+        description: "Bounded model-call budget for this invocation"
+        required: true
+        type: number
+      checkpoint_every:
+        description: "Git checkpoint interval"
+        required: true
+        type: string
+      allow_experimental_model:
+        description: "Explicitly permit review-only experimental drafts"
+        required: true
+        type: boolean
+
 permissions:
   contents: write
 
@@ -90,11 +127,12 @@ jobs:
           python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
           python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
           python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
+          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
       - name: Validate current canonical lesson store and database-facing IDs
         run: python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
 
   execute:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
     name: Run budgeted local Ollama pipeline
     needs: validate
     runs-on: ubuntu-latest
