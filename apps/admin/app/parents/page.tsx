@@ -53,7 +53,7 @@ export default function AdminParents(){
 
   async function toggleParent(row:ParentRow){
     const active=!row.active;
-    if(!active&&!window.confirm(t('admin.parents.confirmSuspendParent',{name:row.display_name||row.mobile_e164})))return;
+    if(!active&&!window.confirm(t('admin.parents.confirmSuspendParent',{name:String(row.display_name||row.mobile_e164||'')})))return;
     setBusy(`parent-${row.id}`);setError('');setNotice('');
     try{
       const r=await fetch(`/api/v1/admin/parents/${row.id}/status`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active})});
