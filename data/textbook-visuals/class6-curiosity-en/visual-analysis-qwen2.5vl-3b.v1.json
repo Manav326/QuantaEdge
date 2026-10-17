@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 35,
+    "assets_selected": 44,
     "assets_processed_this_run": 10,
-    "assets_analyzed": 166,
-    "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 25,
+    "assets_analyzed": 169,
+    "assets_failed": 4,
+    "assets_skipped_from_checkpoint": 34,
     "publication_allowed": false
   },
   "results": [
@@ -401,7 +401,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38994583378",
-      "checkpointed_at": "2026-10-17T03:14:30Z"
+      "checkpointed_at": "2026-10-17T03:25:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1345,6 +1345,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1382,8 +1383,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:17:00Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:26:23Z"
     },
     {
       "asset_id": "621e7f15906dd556ba8cb629",
@@ -1392,14 +1393,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 9,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4392 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images present."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:26:40Z"
     },
     {
       "asset_id": "f819e786c5753684dd868453",
@@ -1408,14 +1422,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 9,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4333 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content or text present on the page."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:26:56Z"
     },
     {
       "asset_id": "aecc6234857605276de86b42",
@@ -1424,14 +1450,66 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 9,
       "asset_path": "page-0009.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of committee members for National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching Learning\nMaterial Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational\nPlanning and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council–Prime\nMinister (EAC–PM)",
+          "5. Shekhar Mande, Former Director General, CSIR, Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shan",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton\nAcademy, Bengaluru",
+          "9. Michel Danino, Visiting Professor, IIT–Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General,\nHIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bhasha Samiti, Ministry\nof Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council–Prime\nMinister (EAC–PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office, NSTC",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusha Kumar Mandal, Professor, Department of Education\nin Social Science, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor and Head, Planning and Monitoring\nDivision, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Committee members",
+          "Chancellor",
+          "Professor",
+          "Economic Advisory Council",
+          "Distinguished Professor",
+          "Music Maestro",
+          "Badminton Academy",
+          "HIPA",
+          "Ministry of Education",
+          "Economic Advisory Council–Prime Minister",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Department of Education in Social Science",
+          "Planning and Monitoring Division",
+          "Department of Education in Languages",
+          "Department of Curriculum Studies and Development"
+        ],
+        "context_relation": "The list of committee members for the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is incomplete, with some names and positions missing."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:31:35Z"
     },
     {
       "asset_id": "9221c92f66926af1dc38caf8",
@@ -1441,6 +1519,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1455,8 +1534,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:22:11Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:33:05Z"
     },
     {
       "asset_id": "1524c5f474314fd0235cd96e",
@@ -1466,6 +1545,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1482,8 +1562,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:23:46Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:34:37Z"
     },
     {
       "asset_id": "cde1cdc68d8262fad2aecb47",
@@ -1493,6 +1573,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1515,8 +1596,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:25:21Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:36:09Z"
     },
     {
       "asset_id": "d3d95345c1d0b1349bf16a32",
@@ -1526,6 +1607,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1540,8 +1622,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:26:49Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:37:34Z"
     },
     {
       "asset_id": "7d6f5537786277f7ed78a53e",
@@ -1551,6 +1633,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1567,8 +1650,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:28:18Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:39:02Z"
     },
     {
       "asset_id": "68909d5d05113f04eabe5dfb",
