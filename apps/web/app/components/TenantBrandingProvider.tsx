@@ -25,6 +25,7 @@ export type TenantBrand = {
 type TenantBrandingValue = {
   brand: TenantBrand | null;
   isResolving: boolean;
+  institutionContextRequested: boolean;
   resolveInstitutionCode: (code: string) => Promise<boolean>;
   clearTenantBrand: () => void;
 };
@@ -32,6 +33,7 @@ type TenantBrandingValue = {
 const TenantBrandingContext = createContext<TenantBrandingValue>({
   brand: null,
   isResolving: false,
+  institutionContextRequested: false,
   resolveInstitutionCode: async () => false,
   clearTenantBrand: () => undefined,
 });
@@ -180,6 +182,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [brand, setBrand] = useState<TenantBrand | null>(null);
   const [isResolving, setIsResolving] = useState(true);
+  const [institutionContextRequested, setInstitutionContextRequested] = useState(false);
 
   const resolveInstitutionCode = useCallback(async (input: string): Promise<boolean> => {
     const code = normalizedCode(input);
@@ -188,6 +191,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     try {
       const next = await fetchTenantBrand(code);
       setBrand(next);
+      setInstitutionContextRequested(true);
       saveSessionCode(code);
       applyTenantIdentity(next);
       return true;
@@ -204,6 +208,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const clearTenantBrand = useCallback(() => {
     saveSessionCode(null);
     setBrand(null);
+    setInstitutionContextRequested(false);
     applyTenantIdentity(null);
   }, []);
 
@@ -217,7 +222,10 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const urlJoin = joinCodeFromCurrentUrl();
       if (hasUrlJoin) savePendingJoinCode(urlJoin, urlCode);
       else if (urlCode && readPendingJoinCode() && readPendingJoinTenantCode() !== urlCode) savePendingJoinCode(null);
-      const candidate = urlCode || (hasUrlCode ? null : readSessionCode());
+      const storedCode = hasUrlCode ? null : readSessionCode();
+      const candidate = urlCode || storedCode;
+      const storedJoinTenant = readPendingJoinTenantCode();
+      setInstitutionContextRequested(Boolean(hasUrlCode || candidate || hasUrlJoin || storedJoinTenant));
       if (hasUrlCode && !urlCode) saveSessionCode(null);
 
       const redeemPendingJoin = async (expectedInstitutionCode: string | null): Promise<string | null> => {
@@ -258,6 +266,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           const next = await fetchTenantBrand(candidate);
           if (cancelled) return;
           setBrand(next);
+          setInstitutionContextRequested(true);
           saveSessionCode(candidate);
           applyTenantIdentity(next);
           const joinedCode = await redeemPendingJoin(candidate);
@@ -265,6 +274,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
             const joinedBrand = await fetchTenantBrand(joinedCode);
             if (cancelled) return;
             setBrand(joinedBrand);
+            setInstitutionContextRequested(true);
             saveSessionCode(joinedCode);
             applyTenantIdentity(joinedBrand);
           }
@@ -287,6 +297,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           const joinedBrand = await fetchTenantBrand(joinedCode);
           if (cancelled) return;
           setBrand(joinedBrand);
+          setInstitutionContextRequested(true);
           saveSessionCode(joinedCode);
           applyTenantIdentity(joinedBrand);
           if (!cancelled) setIsResolving(false);
@@ -307,13 +318,15 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           if (response.ok) {
             const body = await response.json() as { institutions?: Array<{
               tenant_code?: string; institution_status?: string; membership_status?: string;
-            }> };
+            }>; requiresInstitutionContext?: boolean };
+            if (body.requiresInstitutionContext) setInstitutionContextRequested(true);
             const active = (body.institutions || []).filter(item =>
               item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE');
             if (active.length === 1 && active[0].tenant_code) {
               const next = await fetchTenantBrand(active[0].tenant_code);
               if (cancelled) return;
               setBrand(next);
+              setInstitutionContextRequested(true);
               saveSessionCode(next.institutionCode);
               applyTenantIdentity(next);
               if (!cancelled) setIsResolving(false);
@@ -334,8 +347,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     return () => { cancelled = true; };
   }, [pathname]);
 
-  const value = useMemo(() => ({ brand, isResolving, resolveInstitutionCode, clearTenantBrand }),
-    [brand, isResolving, resolveInstitutionCode, clearTenantBrand]);
+  const value = useMemo(() => ({ brand, isResolving, institutionContextRequested, resolveInstitutionCode, clearTenantBrand }),
+    [brand, isResolving, institutionContextRequested, resolveInstitutionCode, clearTenantBrand]);
   return <TenantBrandingContext.Provider value={value}>{children}</TenantBrandingContext.Provider>;
 }
 
@@ -344,7 +357,7 @@ export function useTenantBranding() {
 }
 
 export function TenantBrandMark({ className = '' }: { className?: string }) {
-  const { brand } = useTenantBranding();
+  const { brand, institutionContextRequested } = useTenantBranding();
   const title = brand?.displayName?.trim();
   const logoUrl = brand && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo') ? brand.logoUrl : null;
   if (brand) {
@@ -352,5 +365,7 @@ export function TenantBrandMark({ className = '' }: { className?: string }) {
       ? <img className={className} src={logoUrl} alt="" aria-hidden="true" />
       : <span className={className} role="img" aria-label={title || 'School'}>{(title || 'S').slice(0, 1).toLocaleUpperCase()}</span>;
   }
-  return <img className={className} src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" />;
+  return institutionContextRequested
+    ? <span className={className} aria-hidden="true" />
+    : <img className={className} src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" />;
 }
