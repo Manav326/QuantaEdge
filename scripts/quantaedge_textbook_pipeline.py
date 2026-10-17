@@ -216,6 +216,63 @@ def backfill_legacy_context_hashes(previous_inventory, raw_path, *, book_id, sou
     return updated
 
 
+def previous_inventory_for_resume(repo_inventory_path, restored_inventory_path, restored_marker_path, prior_index, source, package):
+    """Find the prior inventory only from a source-bound, verified checkpoint.
+
+    A fresh runner may restore Layer 4 analysis from GHCR while the associated
+    inventory JSON is absent from Git. In that case, the workflow-created
+    restore marker binds the restored inventory bundle to the prior pipeline
+    index. Use that restored inventory to backfill legacy page-context hashes
+    only after every binding matches. Without that proof, do not infer that
+    the current inventory was the one used to generate the old analysis.
+    """
+    repo_inventory_path = Path(repo_inventory_path)
+    restored_inventory_path = Path(restored_inventory_path)
+    restored_marker_path = Path(restored_marker_path)
+    if repo_inventory_path.is_file():
+        return read_json(repo_inventory_path)
+    if not restored_marker_path.is_file():
+        return None
+
+    marker = read_json(restored_marker_path)
+    prior_bundle = prior_index.get("inventory_bundle") if isinstance(prior_index.get("inventory_bundle"), dict) else {}
+    prior_matches = (
+        prior_index.get("source_book_id") == source.get("book_id")
+        and str(prior_index.get("source_pdf_sha256") or "").lower()
+        == str(source.get("sha256") or "").lower()
+    )
+    if not prior_matches:
+        raise ValueError(
+            f"{source.get('book_id')}: restored inventory marker has no matching prior pipeline index; "
+            "refusing to reuse legacy visual analyses."
+        )
+    if (
+        marker.get("source_pdf_sha256") != source.get("sha256")
+        or marker.get("tag") != prior_bundle.get("tag")
+        or marker.get("tar_sha256") != prior_bundle.get("tar_sha256")
+        or prior_bundle.get("package") != package
+    ):
+        raise ValueError(
+            f"{source.get('book_id')}: restored inventory bundle marker/index/source mismatch; "
+            "refusing to reuse legacy visual analyses."
+        )
+    if not restored_inventory_path.is_file():
+        raise ValueError(f"{source.get('book_id')}: verified restored inventory file is missing.")
+
+    inventory = read_json(restored_inventory_path)
+    inventory_source = inventory.get("source") if isinstance(inventory.get("source"), dict) else {}
+    if (
+        inventory.get("schema_version") != "quantaedge.visual-inventory.v1"
+        or inventory_source.get("book_id") != source.get("book_id")
+        or str(inventory_source.get("pdf_sha256") or "").lower()
+        != str(source.get("sha256") or "").lower()
+    ):
+        raise ValueError(
+            f"{source.get('book_id')}: restored inventory schema or source identity mismatch."
+        )
+    return inventory
+
+
 def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, package):
     """Use the already-published Layer 1 inventory bundle only if every marker binding matches."""
     marker_path, inventory_path = Path(marker_path), Path(inventory_path)
@@ -254,15 +311,17 @@ def run_layers(args):
         vis=repo/"data"/"textbook-visuals"/slug;layer=repo/"data"/"textbook-content-pipeline"/f"class-{selection['class']}"/"books"/slug
         vis.mkdir(parents=True,exist_ok=True);layer.mkdir(parents=True,exist_ok=True)
         invrepo=vis/"visual-inventory.v1.json"
-        previous_inventory=read_json(invrepo) if invrepo.is_file() else None
         raw=vis/f"visual-analysis-{model}.v1.json";cor=layer/"visual-analysis-corrections.v1.json";eff=layer/"visual-analysis-effective.v1.json";ledger=layer/"coverage-ledger.v1.json"
-        shutil.copy2(inv,invrepo);shutil.copy2(work/"source.manifest.json",vis/"source.manifest.json")
         index=vis/"visual-pipeline-index.v1.json"
         prior_index=read_json(index) if index.is_file() else {}
         prior_matches=(prior_index.get("source_book_id")==s["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower()==str(s["sha256"]).lower())
         preparation_marker=work/".layer1-preparation-checkpoint.json"
         prepared_bundle=layer1_inventory_bundle_from_marker(preparation_marker,inv,s,args.package)
         restored_marker=work/".inventory-restored-from-ghcr.json"
+        previous_inventory=previous_inventory_for_resume(
+            invrepo, inv, restored_marker, prior_index, s, args.package
+        )
+        shutil.copy2(inv,invrepo);shutil.copy2(work/"source.manifest.json",vis/"source.manifest.json")
         if prepared_bundle is not None:
             inventory_bundle=prepared_bundle
             print(f"[pipeline] INVENTORY_BUNDLE_REUSED_FROM_PREPARATION book={slug} tag={inventory_bundle['tag']} tar_sha256={inventory_bundle['tar_sha256']}",flush=True)
