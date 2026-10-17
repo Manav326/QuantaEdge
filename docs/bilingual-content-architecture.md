@@ -4,6 +4,12 @@
 
 Migration V51 adds the foundation for contextual Hindi/English versions of existing student-facing content and an academic-program layer for future stream-based classes. It is additive: it does not delete curriculum, lesson, question, progress, assessment, PDF, or media rows.
 
+## Web UI localization vs. learning-content translation
+
+QuantaEdge tracks two different language concerns. The learning-content pipeline below localizes database-backed curriculum entities and keeps translations in the draft/review/approval/publication workflow. The web-interface localization layer separately owns static interface copy such as navigation, buttons, forms, notifications, and accessibility labels. UI message catalogs must not be used as a substitute for translating lesson data, and the AI content translator must not rewrite source questions or answer logic.
+
+The implementation tracker for the web UI catalog, locale preference sharing, route migration, CI validation, and remaining work is [Centralized Translation Implementation Tracker](engineering/centralized-translation-implementation-tracker.md). That tracker is authoritative for UI localization; the acceptance gates in this document remain authoritative for database-backed learning-content translation.
+
 ## Language model
 
 - Stable curriculum, lesson, block, question, option and assessment identities remain language-independent.
