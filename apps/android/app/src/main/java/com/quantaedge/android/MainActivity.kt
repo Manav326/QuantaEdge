@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
                 put("amount", amount)
                 put("name", "QuantaEdge")
                 put("description", order.optString("description", "Course access"))
-                put("theme.color", "#E87524")
+                put("theme", JSONObject().put("color", "#E87524"))
             }
             pendingCourseOrderId = orderId
             pendingCourseResult = onResult

@@ -71,7 +71,7 @@ const studentMappedRoutes = [...new Set([...studentMapping.matchAll(/AppRoute\\.
 const parentMappedRoutes = [...new Set([...parentMapping.matchAll(/AppRoute\\.([A-Z_]+)/g)].map((match) => match[1]))].sort();
 assert.deepEqual(studentMappedRoutes, [...appRouteIds].sort(), 'Every Android route must have a documented student-group owner or explicit auth/parent exception.');
 assert.deepEqual(parentMappedRoutes, [...appRouteIds].sort(), 'Every Android route must have documented parent-group ownership or an explicit non-parent exception.');
-assert.ok(androidNavigationContract.includes('listOf("today", "learn", "practice", "progress", "library")'), 'Android contract must own the five canonical student group IDs.');
+assert.ok(androidNavigationContract.includes('listOf("today", "courses", "learn", "practice", "progress", "library")'), 'Android contract must own the five canonical student group IDs.');
 assert.ok(androidNavigationContract.includes('listOf("family", "children", "profile")'), 'Android contract must own the three parent group IDs.');
 
 const androidCertificates = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');

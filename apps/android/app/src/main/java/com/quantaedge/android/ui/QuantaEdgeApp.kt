@@ -2604,6 +2604,7 @@ fun QuantaEdgeApp() {
         AppNavItem("profile", if (language == "hi") "प्रोफ़ाइल" else "Profile", "◉")
     ) else listOf(
         AppNavItem("today", if (language == "hi") "आज" else "Today", "⌂"),
+        AppNavItem("courses", if (language == "hi") "Courses" else "Courses", "▦"),
         AppNavItem("learn", if (language == "hi") "पढ़ाई" else "Learn", "▤"),
         AppNavItem("practice", if (language == "hi") "अभ्यास" else "Practice", "✦"),
         AppNavItem("progress", if (language == "hi") "प्रगति" else "Progress", "↗"),
@@ -2623,6 +2624,7 @@ fun QuantaEdgeApp() {
                 openStudentProfile()
             }
             "today" -> { lastStudentNavGroup = key; route = AppRoute.STUDENT_HOME }
+            "courses" -> { lastStudentNavGroup = key; openAllCourses() }
             "learn" -> { lastStudentNavGroup = key; openSubject(currentSubject) }
             "practice" -> { lastStudentNavGroup = key; openAssessments("ALL") }
             "progress" -> { lastStudentNavGroup = key; openProgress() }

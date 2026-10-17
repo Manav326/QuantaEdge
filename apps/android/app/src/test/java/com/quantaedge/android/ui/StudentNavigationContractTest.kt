@@ -8,7 +8,7 @@ import org.junit.Test
 class StudentNavigationContractTest {
     @Test
     fun canonicalGroupsMatchTheWebOrder() {
-        assertEquals(listOf("today", "learn", "practice", "progress", "library"), StudentNavigationContract.studentGroupIds)
+        assertEquals(listOf("today", "courses", "learn", "practice", "progress", "library"), StudentNavigationContract.studentGroupIds)
         assertEquals(listOf("family", "children", "profile"), StudentNavigationContract.parentGroupIds)
     }
 
@@ -21,8 +21,8 @@ class StudentNavigationContractTest {
 
     @Test
     fun courseCatalogueAndMarketplaceReturnToTheStudentWorkspace() {
-        assertEquals("today", StudentNavigationContract.studentGroupForRoute(AppRoute.ALL_COURSES, "learn"))
-        assertEquals("today", StudentNavigationContract.studentGroupForRoute(AppRoute.MARKETPLACE, "learn"))
+        assertEquals("courses", StudentNavigationContract.studentGroupForRoute(AppRoute.ALL_COURSES, "learn"))
+        assertEquals("courses", StudentNavigationContract.studentGroupForRoute(AppRoute.MARKETPLACE, "learn"))
     }
 
     @Test

@@ -13,13 +13,14 @@ internal enum class AppRoute {
 }
 
 internal object StudentNavigationContract {
-    val studentGroupIds: List<String> = listOf("today", "learn", "practice", "progress", "library")
+    val studentGroupIds: List<String> = listOf("today", "courses", "learn", "practice", "progress", "library")
     val parentGroupIds: List<String> = listOf("family", "children", "profile")
 
     fun usesLeftRail(isLandscape: Boolean): Boolean = isLandscape
 
     fun studentGroupForRoute(destination: AppRoute, lastStudentNavGroup: String): String = when (destination) {
-        AppRoute.STUDENT_HOME, AppRoute.ALL_COURSES, AppRoute.MARKETPLACE -> "today"
+        AppRoute.STUDENT_HOME -> "today"
+        AppRoute.ALL_COURSES, AppRoute.MARKETPLACE -> "courses"
         AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES,
         AppRoute.RECORDING_PLAYER -> "learn"
         AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
