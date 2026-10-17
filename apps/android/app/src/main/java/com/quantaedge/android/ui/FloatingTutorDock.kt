@@ -67,6 +67,7 @@ fun FloatingTutorDock(
     var bubbleLeft by rememberSaveable { mutableStateOf<Float?>(null) }
     var bubbleTop by rememberSaveable { mutableStateOf<Float?>(null) }
     var maximized by rememberSaveable { mutableStateOf(false) }
+    var userResized by rememberSaveable { mutableStateOf(false) }
     val density = LocalDensity.current.density
 
     BoxWithConstraints(
@@ -77,9 +78,14 @@ fun FloatingTutorDock(
         val compact = maxWidth < 700.dp
         val availableWidth = (maxWidth - 16.dp).coerceAtLeast(260.dp)
         val availableHeight = (maxHeight - 16.dp).coerceAtLeast(260.dp)
-        val effectiveWidth = if (compact) availableWidth else panelWidth.dp.coerceIn(320.dp, (maxWidth - 16.dp).coerceAtLeast(320.dp))
         val compactHeight = if (availableHeight < 280.dp) availableHeight else (maxHeight * 0.78f).coerceIn(280.dp, availableHeight)
-        val effectiveHeight = if (compact) compactHeight else panelHeight.dp.coerceIn(360.dp, (maxHeight - 16.dp).coerceAtLeast(360.dp))
+        // Keep the mobile default fitted to the viewport, then honour any user resize.
+        val effectiveWidth = if (compact && !userResized) availableWidth
+            else if (compact) panelWidth.dp.coerceIn(260.dp, availableWidth)
+            else panelWidth.dp.coerceIn(320.dp, (maxWidth - 16.dp).coerceAtLeast(320.dp))
+        val effectiveHeight = if (compact && !userResized) compactHeight
+            else if (compact) panelHeight.dp.coerceIn(260.dp, availableHeight)
+            else panelHeight.dp.coerceIn(360.dp, (maxHeight - 16.dp).coerceAtLeast(360.dp))
         val defaultLeft = if (compact) 8f else (viewportWidth - effectiveWidth.value - 16f).coerceAtLeast(8f)
         val defaultTop = (viewportHeight - effectiveHeight.value - if (compact) 12f else 18f).coerceAtLeast(8f)
         val panelLeft = (left ?: defaultLeft).coerceIn(8f, (viewportWidth - effectiveWidth.value - 8f).coerceAtLeast(8f))
@@ -178,6 +184,7 @@ fun FloatingTutorDock(
                                 .pointerInput(viewportWidth, viewportHeight, effectiveWidth, effectiveHeight) {
                                     detectDragGestures { change, dragAmount ->
                                         change.consume()
+                                        userResized = true
                                         panelWidth = (effectiveWidth.value + dragAmount.x / density)
                                             .coerceIn(260f, (viewportWidth - panelLeft - 8f).coerceAtLeast(260f))
                                         panelHeight = (effectiveHeight.value + dragAmount.y / density)
