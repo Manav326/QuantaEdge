@@ -1,5 +1,6 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
@@ -226,75 +227,75 @@ export default function ParentChildrenPage(){
   return <main className="parent-app">
     <section className="parent-dashboard parent-manage">
       <div className="parent-manage-hero">
-        <div><span className="eyebrow"><LocaleText hinglish="FAMILY LEARNING" english="FAMILY LEARNING" /></span><h1><LocaleText hinglish="बच्चों के Profiles" english="Children’s profiles" /></h1>
-          <p><LocaleText hinglish="अपने account limit तक profiles बनाएँ, हर बच्चे के subjects चुनें और उनका learning access अलग रखें।" english="Create profiles up to your account limit, choose each child’s subjects, and keep their learning access separate." /></p></div>
-        <div className="parent-capacity"><span><LocaleText hinglish="Active profiles" english="Active profiles" /></span><strong>{account?account.activeChildren:'—'} <small>/ {account?account.maxChildren:'—'}</small></strong><span>{account?.remainingSlots??'—'} <LocaleText hinglish="profile slots बाकी" english="profile slots remaining" /></span></div>
+        <div><span className="eyebrow"><UiText message="legacy.web.family.learning.9f99fe9d" /></span><h1><UiText message="legacy.web.children.s.profiles.110b8bde" /></h1>
+          <p><UiText message="legacy.web.create.profiles.up.to.your.account.lim.b2d42aee" /></p></div>
+        <div className="parent-capacity"><span><UiText message="legacy.web.active.profiles.c6b083a5" /></span><strong>{account?account.activeChildren:'—'} <small>/ {account?account.maxChildren:'—'}</small></strong><span>{account?.remainingSlots??'—'} <UiText message="legacy.web.profile.slots.remaining.8928cc72" /></span></div>
       </div>
 
       {error&&<div className="feedback" role="alert">{error}</div>}
       {notice&&<div className="parent-notice" role="status">{notice}</div>}
 
       <section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="STUDENT PROFILES" english="STUDENT PROFILES" /></span><h2><LocaleText hinglish="आपके बच्चे" english="Your children" /></h2></div><span className="count">{children.length} <LocaleText hinglish="active" english="active" /></span></div>
-        {!children.length?<div className="parent-empty"><strong><LocaleText hinglish="अभी कोई active child profile नहीं है" english="No active child profile yet" /></strong><p><LocaleText hinglish="नीचे पहला profile बनाएँ और बच्चे के लिए subjects चुनें।" english="Create the first profile below and choose subjects for your child." /></p></div>:<div className="parent-child-list">
+        <div className="parent-manage-panel-head"><div><span className="eyebrow"><UiText message="legacy.web.student.profiles.bfb0042f" /></span><h2><UiText message="legacy.web.your.children.492f3c5d" /></h2></div><span className="count">{children.length} <UiText message="legacy.web.active.2b76438d" /></span></div>
+        {!children.length?<div className="parent-empty"><strong><UiText message="legacy.web.no.active.child.profile.yet.e3baf80e" /></strong><p><UiText message="legacy.web.create.the.first.profile.below.and.cho.77d6bd19" /></p></div>:<div className="parent-child-list">
           {children.map(child=><article className="parent-child-card" key={child.id}>
             <div className="parent-child-overview">
               <div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div>
               <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · {tx('पढ़ाई की भाषा: '+((child.language||'hi')==='en'?'English':'हिन्दी'),'Learning content: '+((child.language||'hi')==='en'?'English':'Hindi'))}</p>
                 <div className="track-pill-row">{(trackDrafts[child.id]||[]).map(code=><span className="track-pill" key={code}>{code==='maths'?'गणित':'विज्ञान'}</span>)}</div>
               </div>
-              <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}><LocaleText hinglish="Profile archive करें" english="Archive profile" /></button>
+              <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}><UiText message="legacy.web.archive.profile.4dc003f9" /></button>
             </div>
             <div className="parent-child-credentials parent-profile-editor">
-              <div className="parent-credentials-heading"><strong><LocaleText hinglish="Profile details" english="Profile details" /></strong><small><LocaleText hinglish="नाम और learning language update करें। Class बदलने पर केवल अगली class में promotion होगा; पुरानी progress और assessments बने रहेंगे।" english="Update the name and learning language. Class changes allow only the next-grade promotion; prior progress and assessments are retained." /></small></div>
+              <div className="parent-credentials-heading"><strong><UiText message="legacy.web.profile.details.614c25cd" /></strong><small><UiText message="legacy.web.update.the.name.and.learning.language..dc96f21b" /></small></div>
               <div className="parent-child-form">
-                <label><LocaleText hinglish="बच्चे का नाम" english="Child’s name" /><input value={profileDrafts[child.id]?.displayName??child.display_name} maxLength={120} onChange={e=>updateChildDraft(child,{displayName:e.target.value})} /></label>
-                <label><LocaleText hinglish="Class" english="Class" /><select value={profileDrafts[child.id]?.classCode??String(child.class_code)} onChange={e=>updateChildDraft(child,{classCode:e.target.value})}>
+                <label><UiText message="legacy.web.child.s.name.8e59b3df" /><input value={profileDrafts[child.id]?.displayName??child.display_name} maxLength={120} onChange={e=>updateChildDraft(child,{displayName:e.target.value})} /></label>
+                <label><UiText message="legacy.web.class.9c9232e5" /><select value={profileDrafts[child.id]?.classCode??String(child.class_code)} onChange={e=>updateChildDraft(child,{classCode:e.target.value})}>
                   <option value={String(child.class_code)}>Class {child.class_code}</option>
                   {child.class_code==='6'&&<option value="7">Promote to Class 7</option>}
                   {child.class_code==='7'&&<option value="8">Promote to Class 8</option>}
                 </select></label>
-                <label><LocaleText hinglish="Learning language" english="Learning language" /><select value={profileDrafts[child.id]?.language??child.language??'hi'} onChange={e=>updateChildDraft(child,{language:e.target.value})}>
+                <label><UiText message="legacy.web.learning.language.8be9be9d" /><select value={profileDrafts[child.id]?.language??child.language??'hi'} onChange={e=>updateChildDraft(child,{language:e.target.value})}>
                   <option value="hi">हिन्दी (Hindi)</option><option value="en">English</option>
                 </select></label>
               </div>
               <button type="button" className="button button-light button-small" disabled={busyProfile===child.id||(profileDrafts[child.id]?.displayName??child.display_name).trim().length<2}
-                onClick={()=>void saveChildProfile(child)}>{busyProfile===child.id?<LocaleText hinglish="Save हो रहा है…" english="Saving…" />:<LocaleText hinglish="Profile save करें" english="Save profile" />}</button>
+                onClick={()=>void saveChildProfile(child)}>{busyProfile===child.id?<UiText message="legacy.web.saving.ec034ad4" />:<UiText message="legacy.web.save.profile.5dbd6753" />}</button>
             </div>
             <div className="parent-child-credentials">
-              <div className="parent-credentials-heading"><strong><LocaleText hinglish="Student login details" english="Student login details" /></strong><small><LocaleText hinglish="Step 1: यहाँ username और password set करें। Step 2: ये details बच्चे के साथ share करें। Student Login पर आपका registered mobile number, username और password use होगा।" english="Step 1: Set a username and password here. Step 2: Share these details with your child. Student Login uses your registered mobile number, the username, and the password." /></small></div>
+              <div className="parent-credentials-heading"><strong><UiText message="legacy.web.student.login.details.7429647d" /></strong><small><UiText message="legacy.web.step.1.set.a.username.and.password.her.4d30cfe2" /></small></div>
               <div className="parent-credentials-status" role="status">
-                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?<LocaleText hinglish="✓ Student login ready है" english="✓ Student login is ready" />:<LocaleText hinglish="Student login अभी set नहीं हुआ है" english="Student login is not set yet" />}</strong>
-                <p>{child.login_username?<LocaleText hinglish="इस बच्चे का login ready है; अब sign in कर सकता है।" english="This child can now sign in." />:<LocaleText hinglish="बच्चा अभी sign in नहीं कर सकता। नीचे username और password बनाएँ, फिर “Login details save करें” चुनें।" english="Your child cannot sign in yet. Create a username and password below, then select “Save login details”." />}</p>
+                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?<UiText message="legacy.web.student.login.is.ready.68c4022e" />:<UiText message="legacy.web.student.login.is.not.set.yet.8669d2ea" />}</strong>
+                <p>{child.login_username?<UiText message="legacy.web.this.child.can.now.sign.in.308512b7" />:<UiText message="legacy.web.your.child.cannot.sign.in.yet.create.a.aff32fb8" />}</p>
               </div>
-              {child.login_username&&<p className="parent-credentials-current"><LocaleText hinglish="Current username:" english="Current username:" /> <strong>{child.login_username}</strong></p>}
+              {child.login_username&&<p className="parent-credentials-current"><UiText message="legacy.web.current.username.440d701d" /> <strong>{child.login_username}</strong></p>}
               <div className="parent-child-form parent-credentials-form">
-                <label><LocaleText hinglish="Student username" english="Student username" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off" /></label>
-                <label><LocaleText hinglish="Password set / reset करें" english="Set or reset password" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password" /></label>
+                <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off" /></label>
+                <label><UiText message="legacy.web.set.or.reset.password.d599fa87" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password" /></label>
               </div>
-              <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><LocaleText hinglish="Login details save करें" english="Save login details" /></button>
+              <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><UiText message="legacy.web.save.login.details.bcf9bcd7" /></button>
             </div>
             <div className="parent-track-editor">
-              <div><strong><LocaleText hinglish="Learning access" english="Learning access" /></strong><small><LocaleText hinglish="सिर्फ selected subjects ही student के learning area में दिखेंगे।" english="Only selected subjects appear in the student’s learning area." /></small></div>
+              <div><strong><UiText message="legacy.web.learning.access.dc503c1d" /></strong><small><UiText message="legacy.web.only.selected.subjects.appear.in.the.s.993efbad" /></small></div>
               <div className="parent-track-options">{trackOptions.map(option=><label key={option.code}>
                 <input type="checkbox" checked={(trackDrafts[child.id]||[]).includes(option.code)}
                   onChange={e=>toggleTrack(child.id,option.code,e.target.checked)}/>
                 <span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):(option.label)}</span>
               </label>)}</div>
               <button className="button button-dark button-small" disabled={busyTrack===child.id||(trackDrafts[child.id]||[]).length===0}
-                onClick={()=>saveTracks(child)}>{busyTrack===child.id?<LocaleText hinglish="Save हो रहा है…" english="Saving…" />:<LocaleText hinglish="Subjects save करें" english="Save subjects" />}</button>
+                onClick={()=>saveTracks(child)}>{busyTrack===child.id?<UiText message="legacy.web.saving.ec034ad4" />:<UiText message="legacy.web.save.subjects.123d5ff5" />}</button>
             </div>
             <div className="parent-track-editor qe-child-course-editor">
-              <div><strong><LocaleText hinglish="Independent courses" english="Independent courses" /></strong><small><LocaleText hinglish="किसी course को इस बच्चे के account में assign करें। इससे पुराने class subjects या learning history replace नहीं होंगे।" english="Assign a course to this child’s account without replacing class subjects or existing learning history." /></small></div>
+              <div><strong><UiText message="legacy.web.independent.courses.13023fbd" /></strong><small><UiText message="legacy.web.assign.a.course.to.this.child.s.accoun.b2c771e2" /></small></div>
               {(childPrograms[child.id]||[]).length===0
-                ? <p className="eyebrow"><LocaleText hinglish="अभी कोई independent course उपलब्ध नहीं है।" english="No independent courses are available yet." /></p>
+                ? <p className="eyebrow"><UiText message="legacy.web.no.independent.courses.are.available.y.7da2a26b" /></p>
                 : <div className="parent-course-options">{(childPrograms[child.id]||[]).map((course:any)=>(
                   <div className="parent-course-option" key={course.id}>
                     <div><strong>{course.display_name}</strong><small>{course.public_id||course.code} · {course.curriculum_version}</small>
                       <small>{(course.subjects||[]).map((subject:any)=>subject.subject_name+' ('+Number(subject.lessons||0)+' lessons)').join(' · ')}</small></div>
                     {course.is_enrolled||course.enrolled
-                      ? <span className="track-pill"><LocaleText hinglish="Assigned" english="Assigned" /></span>
-                      : <button type="button" className="button button-light button-small" disabled={busyCourse!==''} onClick={()=>void assignCourse(child,course)}>{busyCourse===child.id+':'+course.id?<LocaleText hinglish="Assign हो रहा है…" english="Assigning…" />:<LocaleText hinglish="Assign course" english="Assign course" />}</button>}
+                      ? <span className="track-pill"><UiText message="legacy.web.assigned.f5b576f5" /></span>
+                      : <button type="button" className="button button-light button-small" disabled={busyCourse!==''} onClick={()=>void assignCourse(child,course)}>{busyCourse===child.id+':'+course.id?<UiText message="legacy.web.assigning.f0834a8f" />:<UiText message="legacy.web.assign.course.c9842149" />}</button>}
                   </div>
                 ))}</div>}
             </div>
@@ -303,26 +304,26 @@ export default function ParentChildrenPage(){
       </section>
 
       {archivedChildren.length>0&&<section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="ARCHIVED PROFILES" english="ARCHIVED PROFILES" /></span><h2><LocaleText hinglish="Archived children" english="Archived children" /></h2><p><LocaleText hinglish="Learning history सुरक्षित है। Restore करने पर fresh consent देना और login credentials फिर से set करना होगा।" english="Learning history is retained. Restoring requires fresh consent and student login credentials to be set again." /></p></div></div>
+        <div className="parent-manage-panel-head"><div><span className="eyebrow"><UiText message="legacy.web.archived.profiles.2a69713d" /></span><h2><UiText message="legacy.web.archived.children.10cc65d1" /></h2><p><UiText message="legacy.web.learning.history.is.retained.restoring.3c3f6204" /></p></div></div>
         <div className="parent-child-list">{archivedChildren.map(child=><article className="parent-child-card" key={'archived-'+child.id}>
           <div className="parent-child-overview"><div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div><div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board}</p></div>
-            <button type="button" className="button button-light button-small" onClick={()=>void restoreChild(child)}><LocaleText hinglish="Restore profile" english="Restore profile" /></button></div>
+            <button type="button" className="button button-light button-small" onClick={()=>void restoreChild(child)}><UiText message="legacy.web.restore.profile.e209e8ad" /></button></div>
         </article>)}</div>
       </section>}
 
       <section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="ADD A CHILD" english="ADD A CHILD" /></span><h2><LocaleText hinglish="नया student profile" english="New student profile" /></h2><p><LocaleText hinglish="बच्चे का profile और login एक साथ बनाएँ। Form पूरा करके username और password set करने के बाद ही बच्चा sign in कर पाएगा।" english="Create your child’s profile and login together. Your child can sign in once you complete the form and set a username and password." /></p></div></div>
+        <div className="parent-manage-panel-head"><div><span className="eyebrow"><UiText message="legacy.web.add.a.child.3e7ac755" /></span><h2><UiText message="legacy.web.new.student.profile.c8b13062" /></h2><p><UiText message="legacy.web.create.your.child.s.profile.and.login..b6c4b0d7" /></p></div></div>
         {(account?.remainingSlots??0)<=0
-          ? <div className="parent-empty"><strong><LocaleText hinglish="आपके account की profile limit पूरी हो गई है।" english="You have reached your account’s profile limit." /></strong><p><LocaleText hinglish="Profile limit बढ़ाने के लिए support से contact करें। Existing profiles और learning history available रहेंगी।" english="Contact support to increase your profile limit. Existing profiles and learning history will remain available." /></p></div>
+          ? <div className="parent-empty"><strong><UiText message="legacy.web.you.have.reached.your.account.s.profil.819488f8" /></strong><p><UiText message="legacy.web.contact.support.to.increase.your.profi.3aa0e91d" /></p></div>
           : <div className="parent-child-form">
-            <label><LocaleText hinglish="बच्चे का नाम" english="Child’s name" /><input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder={tx('बच्चे का नाम डालें','Enter child’s name')} autoComplete="off"/></label>
-            <label><LocaleText hinglish="Class" english="Class" /><select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6"><LocaleText hinglish="Class 6" english="Class 6" /></option><option value="7"><LocaleText hinglish="Class 7" english="Class 7" /></option><option value="8"><LocaleText hinglish="Class 8" english="Class 8" /></option></select></label>
-            <label><LocaleText hinglish="Learning language" english="Learning language" /><select value={draft.language} onChange={e=>setDraft({...draft,language:e.target.value})}><option value="hi">हिन्दी (Hindi)</option><option value="en">English</option></select></label>
-            <label><LocaleText hinglish="Student username" english="Student username" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off"/></label>
-            <label><LocaleText hinglish="Student password" english="Student password" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password"/></label>
-            <fieldset className="parent-track-fieldset"><legend><LocaleText hinglish="Subjects चुनें" english="Choose subjects" /></legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):option.label}</span></label>)}</fieldset>
-            <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span><LocaleText hinglish="मैं बच्चे का authorised guardian हूँ और profile बनाने व learning records रखने की permission देता/देती हूँ।" english="I am the child’s authorised guardian and consent to creating this profile and maintaining learning records." /></span></label>
-            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?<LocaleText hinglish="Profile बन रहा है…" english="Creating profile…" />:<LocaleText hinglish="Student profile बनाएँ →" english="Create student profile →" />}</button>
+            <label><UiText message="legacy.web.child.s.name.8e59b3df" /><input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder={tx('बच्चे का नाम डालें','Enter child’s name')} autoComplete="off"/></label>
+            <label><UiText message="legacy.web.class.9c9232e5" /><select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6"><UiText message="legacy.web.class.6.c917d5d1" /></option><option value="7"><UiText message="legacy.web.class.7.0a63ed61" /></option><option value="8"><UiText message="legacy.web.class.8.ccf4ad25" /></option></select></label>
+            <label><UiText message="legacy.web.learning.language.8be9be9d" /><select value={draft.language} onChange={e=>setDraft({...draft,language:e.target.value})}><option value="hi">हिन्दी (Hindi)</option><option value="en">English</option></select></label>
+            <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off"/></label>
+            <label><UiText message="legacy.web.student.password.9ba6b0cd" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password"/></label>
+            <fieldset className="parent-track-fieldset"><legend><UiText message="legacy.web.choose.subjects.1c060640" /></legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):option.label}</span></label>)}</fieldset>
+            <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span><UiText message="legacy.web.i.am.the.child.s.authorised.guardian.a.45b1acdf" /></span></label>
+            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?<UiText message="legacy.web.creating.profile.03f9567c" />:<UiText message="legacy.web.create.student.profile.b50fed07" />}</button>
           </div>}
       </section>
     </section>
