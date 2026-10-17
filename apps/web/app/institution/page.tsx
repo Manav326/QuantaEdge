@@ -7,6 +7,8 @@ type Brand = {
   displayName?: string;
   logoAssetKey?: string | null;
   appIconAssetKey?: string | null;
+  logoUrl?: string | null;
+  appIconUrl?: string | null;
   brandingVersion?: number;
   themeTokens?: Record<string, string>;
 };
@@ -277,7 +279,7 @@ export default function InstitutionPortalPage() {
       <header className="institution-header">
         <div className="institution-brand">
           <div className="institution-mark" aria-hidden="true">
-            {brand?.logoAssetKey ? '◆' : heading.trim().slice(0, 1).toUpperCase()}
+            {brand?.logoUrl ? <img className="institution-real-logo" src={brand.logoUrl} alt="" /> : heading.trim().slice(0, 1).toUpperCase()}
           </div>
           <div>
             <strong>{heading}</strong>
