@@ -66,7 +66,7 @@ export default function AdminHome(){
   const activeQuestions=countQuestionStatus(['DRAFT','REVIEW','REJECTED','APPROVED','PUBLISHED']);
   const inactiveQuestions=reviewRows.filter(row=>row.active===false).reduce((n,row)=>n+Number(row.count||0),0);
 
-  if(error)return <main className="admin-shell"><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">{t('admin.dashboard.operations')}</span><h1>{t('admin.dashboard.unavailable')}</h1><p>{error}</p><button className="button button-dark" onClick={()=>window.location.reload()}{t('admin.dashboard.tryAgain')}</button></div></section></main>;
+  if(error)return <main className="admin-shell"><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">{t('admin.dashboard.operations')}</span><h1>{t('admin.dashboard.unavailable')}</h1><p>{error}</p><button className="button button-dark" onClick={()=>window.location.reload()}>{t('admin.dashboard.tryAgain')}</button></div></section></main>;
   if(loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" /><span className="admin-kicker">{t('admin.dashboard.learning')}</span><h1>{t('admin.dashboard.preparingWorkspace')}</h1><p>{t('admin.dashboard.connectingRecords')}</p></div></section></main>;
 
   const pendingReview=countQuestionStatus(['REVIEW']);
