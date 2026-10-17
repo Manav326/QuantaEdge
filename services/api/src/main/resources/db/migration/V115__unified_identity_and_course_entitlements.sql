@@ -3,7 +3,7 @@
 ALTER TABLE user_account ALTER COLUMN mobile_e164 DROP NOT NULL;
 
 ALTER TABLE user_account
-  ADD COLUMN email varchar(320),
+  ADD COLUMN IF NOT EXISTS email varchar(320),
   ADD COLUMN email_verified_at timestamptz,
   ADD COLUMN google_subject varchar(255),
   ADD COLUMN google_picture_url text,
