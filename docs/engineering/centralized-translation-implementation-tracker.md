@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `6ba9aebc2d4be30035062eb54bdf94d6a01271a2`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/6ba9aebc2d4be30035062eb54bdf94d6a01271a2).
+**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `3d617e8bcad8cea83911c86db45cc58931252fcc`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/3d617e8bcad8cea83911c86db45cc58931252fcc).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -215,3 +215,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - This pass changes display copy only: salary values/currencies, effective dates, immutable snapshot data, approval gates, run statuses, provider references and payment reconciliation calls remain unchanged. Raw server-originated error details remain visible when the API supplies them.
 - The canonical catalogs and all six app-local JSON copies are synchronized in this commit. CI is the authority for type/build validation; do not call the overall build green until a fresh non-cancelled run passes.
 - Remaining People Operations routes include attendance/leave, workforce lifecycle and self-service; deep field-level copy in access and employee forms also remains to be reviewed.
+
+
+## Latest continuation — People Attendance & Leave localization
+
+- Added 168 semantic `people.attendance.*` messages for attendance recording/corrections, leave workflows, balance ledger/reversals, lifecycle approval rules, working-week configuration and government-sourced holiday calendar management. Major section labels, controls, validation/fallback notices and empty states are catalog-backed.
+- Permission checks, no-self-approval rules, immutable correction history, leave-balance ledger behavior, working-day calculations and official holiday source-attestation rules remain unchanged. Dynamic employee records, balances and API statuses remain data-driven.
+- All six generated app-local catalogs are updated from canonical `localization/catalogs` in this commit; inspect the newest CI run before marking route certification complete.
