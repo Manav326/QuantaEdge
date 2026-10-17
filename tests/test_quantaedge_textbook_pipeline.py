@@ -1,6 +1,6 @@
 import hashlib,json,tempfile,unittest
 from pathlib import Path
-from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths
+from scripts.quantaedge_textbook_pipeline import backfill_legacy_context_hashes,build_coverage_ledger,changed_correction_paths,layer1_inventory_bundle_from_marker
 def w(p,v):p.write_text(json.dumps(v)+"\n",encoding="utf-8")
 class PipelineTests(unittest.TestCase):
  def setUp(self):
@@ -40,6 +40,16 @@ class PipelineTests(unittest.TestCase):
   before=self.raw.read_bytes()
   updated=backfill_legacy_context_hashes(inv,self.raw,book_id="b",source_sha=self.sha,model="vision")
   self.assertEqual(0,updated);self.assertEqual(before,self.raw.read_bytes())
+ def test_layer1_preparation_marker_reuses_only_matching_inventory_bytes(self):
+  inv=self.root/"inventory.json";inv.write_text('{"layer":1}',encoding="utf-8")
+  marker=self.root/"marker.json";digest=hashlib.sha256(inv.read_bytes()).hexdigest()
+  package="ghcr.io/example/quantaedge-textbook-visuals"
+  w(marker,{"schema_version":"quantaedge.visual-inventory-checkpoint-marker.v1","source_book_id":"b","source_pdf_sha256":self.sha,"package":package,"artifact_type":"application/vnd.quantaedge.textbook.visual-inventory-bundle.v1","version_tag":"layer1-checkpoint","bundle_tar_sha256":"c"*64,"preparation_fingerprint":"d"*64,"inventory_json_sha256":digest})
+  source={"book_id":"b","sha256":self.sha}
+  bundle=layer1_inventory_bundle_from_marker(marker,inv,source,package)
+  self.assertEqual("layer1-checkpoint",bundle["tag"])
+  inv.write_text('{"layer":2}',encoding="utf-8")
+  with self.assertRaisesRegex(ValueError,"marker/source/inventory mismatch"):layer1_inventory_bundle_from_marker(marker,inv,source,package)
  def test_changed_overlay_paths_detected(self):
   ev=self.root/"event.json";w(ev,{"commits":[{"added":["data/x/books/b/visual-analysis-corrections.v1.json"],"removed":["data/y/books/c/visual-analysis-corrections.v1.json"]}]})
   rows=changed_correction_paths(ev,self.root);self.assertEqual(2,len(rows));self.assertEqual(("b",True),(rows[0][0].parent.name,rows[0][1]));self.assertEqual(("c",False),(rows[1][0].parent.name,rows[1][1]))
