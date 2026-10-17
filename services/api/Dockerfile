@@ -26,6 +26,10 @@ RUN apt-get update \
     && fc-match --format='%{family}\n' 'Noto Sans Devanagari' | grep -qi 'Noto Sans Devanagari' \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
+# OAuth client IDs are public identifiers, not client secrets. This allows the
+# published API image to verify ID-token audiences without a separate server-side secret.
+ARG APP_AUTH_GOOGLE_CLIENT_ID=""
+ENV APP_AUTH_GOOGLE_CLIENT_ID=${APP_AUTH_GOOGLE_CLIENT_ID}
 COPY --from=build /app/target/quantaedge-api-0.1.0-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]
