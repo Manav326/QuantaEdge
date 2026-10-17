@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { usePathname } from 'next/navigation';
 
 const BRAND_SESSION_KEY = 'qe.institution.brand-code.v1';
+const JOIN_SESSION_KEY = 'qe.institution.pending-join-code.v1';
 const CODE_PATTERN = /^[A-Z0-9][A-Z0-9_-]{2,31}$/;
 const DEFAULT_TITLE = 'QuantaEdge | Smarter Decisions. Greater Growth.';
 const DEFAULT_DESCRIPTION = 'AI-powered learning for Hindi-medium students, starting with Bihar Board Classes 6–8.';
@@ -131,6 +132,34 @@ function saveSessionCode(code: string | null) {
   }
 }
 
+function joinCodeFromCurrentUrl(): string | null {
+  const query = new URLSearchParams(window.location.search);
+  const raw = query.get('joinCode') || query.get('join_code') || query.get('join');
+  const value = raw?.trim() || '';
+  return value.length >= 12 && value.length <= 256 && !/[\\u0000-\\u001f\\u007f]/.test(value) ? value : null;
+}
+
+function urlHasJoinParam(): boolean {
+  const query = new URLSearchParams(window.location.search);
+  return ['joinCode', 'join_code', 'join'].some(key => query.has(key));
+}
+
+function readPendingJoinCode(): string | null {
+  try {
+    const value = (window.sessionStorage.getItem(JOIN_SESSION_KEY) || '').trim();
+    return value.length >= 12 && value.length <= 256 && !/[\\u0000-\\u001f\\u007f]/.test(value) ? value : null;
+  } catch { return null; }
+}
+
+function savePendingJoinCode(code: string | null) {
+  try {
+    if (code) window.sessionStorage.setItem(JOIN_SESSION_KEY, code);
+    else window.sessionStorage.removeItem(JOIN_SESSION_KEY);
+  } catch {
+    // A manually entered join code remains available if browser storage is unavailable.
+  }
+}
+
 export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [brand, setBrand] = useState<TenantBrand | null>(null);
@@ -168,8 +197,39 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       setIsResolving(true);
       const hasUrlCode = urlHasTenantParam();
       const urlCode = codeFromCurrentUrl();
+      const hasUrlJoin = urlHasJoinParam();
+      const urlJoin = joinCodeFromCurrentUrl();
+      if (hasUrlJoin) savePendingJoinCode(urlJoin);
       const candidate = urlCode || (hasUrlCode ? null : readSessionCode());
       if (hasUrlCode && !urlCode) saveSessionCode(null);
+
+      const redeemPendingJoin = async (): Promise<string | null> => {
+        if (!pathname.startsWith('/student')) return null;
+        const joinCode = readPendingJoinCode();
+        if (!joinCode) return null;
+        try {
+          const response = await fetch('/api/v1/institution/join', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+            body: JSON.stringify({ code: joinCode }),
+          });
+          if (!response.ok) {
+            // Keep the invite while unauthenticated so it can be redeemed after sign-in.
+            if (response.status !== 401 && response.status !== 403 && response.status < 500) {
+              savePendingJoinCode(null);
+            }
+            return null;
+          }
+          const joined = await response.json() as { institutionCode?: string };
+          savePendingJoinCode(null);
+          return normalizedCode(joined.institutionCode);
+        } catch {
+          return null;
+        }
+      };
+
       if (candidate) {
         setIsResolving(true);
         try {
@@ -178,6 +238,14 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           setBrand(next);
           saveSessionCode(candidate);
           applyTenantIdentity(next);
+          const joinedCode = await redeemPendingJoin();
+          if (joinedCode && joinedCode !== candidate) {
+            const joinedBrand = await fetchTenantBrand(joinedCode);
+            if (cancelled) return;
+            setBrand(joinedBrand);
+            saveSessionCode(joinedCode);
+            applyTenantIdentity(joinedBrand);
+          }
           return;
         } catch {
           if (cancelled) return;
@@ -188,6 +256,22 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           if (!cancelled) setIsResolving(false);
         }
         return;
+      }
+
+      // Learner invitation links may redeem a school membership after an existing account signs in.
+      const joinedCode = await redeemPendingJoin();
+      if (joinedCode) {
+        try {
+          const joinedBrand = await fetchTenantBrand(joinedCode);
+          if (cancelled) return;
+          setBrand(joinedBrand);
+          saveSessionCode(joinedCode);
+          applyTenantIdentity(joinedBrand);
+          if (!cancelled) setIsResolving(false);
+          return;
+        } catch {
+          // Do not block the learner workspace if brand assets are temporarily unavailable.
+        }
       }
 
       // Existing learners can inherit the school's brand only when membership is unambiguous.
