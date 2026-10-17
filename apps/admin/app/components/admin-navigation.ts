@@ -13,7 +13,8 @@ export type AdminSection =
   | 'lifecycle'
   | 'staff'
   | 'translations'
-  | 'certificates';
+  | 'certificates'
+  | 'marketplace';
 
 export type AdminLocale = UiLocale;
 export type AdminNavItem = { key: AdminSection; href: string; icon: string };
@@ -35,6 +36,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   ] },
   { id: 'administration', items: [
     { key: 'staff', href: '/employees', icon: '♙' }, { key: 'certificates', href: '/certificates', icon: '▧' },
+    { key: 'marketplace', href: '/marketplace', icon: '₹' },
   ] },
 ];
 
@@ -43,14 +45,14 @@ const ITEM_MESSAGE_KEYS: Record<AdminSection, MessageKey> = {
   resources: 'admin.navigation.textbookLibrary', sources: 'admin.navigation.sourceIngestion', assessments: 'admin.navigation.testsGrading',
   classes: 'admin.navigation.liveRecordedClasses', students: 'admin.navigation.students', parents: 'admin.navigation.parentsFamilies',
   lifecycle: 'admin.navigation.accountLifecycle', staff: 'admin.navigation.staffAudit', translations: 'admin.navigation.languageReview',
-  certificates: 'admin.navigation.certificates',
+  certificates: 'admin.navigation.certificates', marketplace: 'admin.navigation.courseMarketplace',
 };
 const ITEM_SHORT_MESSAGE_KEYS: Record<AdminSection, MessageKey> = {
   overview: 'admin.navigation.short.home', content: 'admin.navigation.short.content', questions: 'admin.navigation.short.questions',
   resources: 'admin.navigation.short.books', sources: 'admin.navigation.short.sources', assessments: 'admin.navigation.short.tests',
   classes: 'admin.navigation.short.classes', students: 'admin.navigation.short.students', parents: 'admin.navigation.short.families',
   lifecycle: 'admin.navigation.short.lifecycle', staff: 'admin.navigation.short.staff', translations: 'admin.navigation.short.language',
-  certificates: 'admin.navigation.short.certificates',
+  certificates: 'admin.navigation.short.certificates', marketplace: 'admin.navigation.short.marketplace',
 };
 const GROUP_MESSAGE_KEYS: Record<AdminNavGroup['id'], MessageKey> = {
   curriculum: 'admin.navigation.group.curriculum', teaching: 'admin.navigation.group.teaching',
@@ -61,7 +63,7 @@ export function canSeeAdminItem(item: AdminNavItem, role: string, permissions: s
   // Preserve the current loading behavior while the staff session is being resolved.
   if (!role) return true;
   if (item.key === 'overview') return role === 'ADMIN';
-  if (item.key === 'certificates') return role === 'ADMIN';
+  if (item.key === 'certificates' || item.key === 'marketplace') return role === 'ADMIN';
   if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
   if (item.key === 'lifecycle') return role === 'ADMIN' || permissions.includes('ACCOUNT_LIFECYCLE_REVIEW');
   if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
