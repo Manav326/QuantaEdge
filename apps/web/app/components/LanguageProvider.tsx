@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
+import { translateUi } from '../i18n/catalog';
 
 export type Locale = 'hindi' | 'english';
 export type LearningLanguage = 'hi' | 'en';
@@ -18,6 +19,32 @@ type LocaleContextValue = {
 const STORAGE_KEY = 'qe-locale';
 const LEARNING_STORAGE_KEY = 'qe-learning-language';
 const CERTIFICATE_STORAGE_KEY = 'qe-certificate-language';
+
+function toLocale(value: unknown): Locale | null {
+  const normalized = String(value ?? '').trim().toLowerCase();
+  if (normalized === 'english' || normalized === 'en') return 'english';
+  if (normalized === 'hinglish' || normalized === 'hindi' || normalized === 'hi') return 'hindi';
+  return null;
+}
+
+function localeCookieValue(): Locale | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(/(?:^|;\\s*)qe-locale=([^;]+)/);
+  return match ? toLocale(decodeURIComponent(match[1])) : null;
+}
+
+function persistSharedLocale(next: Locale) {
+  if (typeof window === 'undefined') return;
+  const stored = next === 'english' ? 'english' : 'hinglish';
+  try { window.localStorage.setItem(STORAGE_KEY, stored); } catch {}
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = STORAGE_KEY + '=' + stored + '; Path=/; Max-Age=31536000; SameSite=Lax' + secure;
+}
+
+function isStoredLocale(value: string | null): boolean {
+  return value === 'english' || value === 'hinglish' || value === 'hindi';
+}
+
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 function normalizedLanguage(value: unknown): LearningLanguage | null {
@@ -38,9 +65,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const applyLocale = useCallback((next: Locale, persist: boolean) => {
     setLocaleState(next);
     if (typeof document !== 'undefined') document.documentElement.lang = next === 'hindi' ? 'hi' : 'en';
-    if (persist && typeof window !== 'undefined') {
-      try { window.localStorage.setItem(STORAGE_KEY, next); } catch {}
-    }
+    if (persist) persistSharedLocale(next);
   }, []);
 
   const applyLearningLanguage = useCallback((next: LearningLanguage, persist: boolean) => {
@@ -90,9 +115,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     let active = true;
     setLanguageReady(false);
     try {
+      const cookieLocale = localeCookieValue();
       const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === 'hinglish') applyLocale('hindi', true);
-      else if (saved === 'hindi' || saved === 'english') applyLocale(saved, false);
+      const resolved = cookieLocale ?? toLocale(saved);
+      if (resolved) {
+        applyLocale(resolved, false);
+        // Normalize older localStorage-only values and make the preference available
+        // to the other QuantaEdge apps running on the same host.
+        if (!cookieLocale || !isStoredLocale(saved)) persistSharedLocale(resolved);
+      }
       const savedLearning = normalizedLanguage(window.localStorage.getItem(LEARNING_STORAGE_KEY));
       if (savedLearning) applyLearningLanguage(savedLearning, false);
       const savedCertificate = normalizedLanguage(window.localStorage.getItem(CERTIFICATE_STORAGE_KEY));
@@ -101,8 +132,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     const onStorage = (event: StorageEvent) => {
       if (event.key === STORAGE_KEY) {
-        if (event.newValue === 'hinglish') applyLocale('hindi', true);
-        else if (event.newValue === 'hindi' || event.newValue === 'english') applyLocale(event.newValue, false);
+        const next = toLocale(event.newValue);
+        if (next) applyLocale(next, false);
       } else if (event.key === LEARNING_STORAGE_KEY) {
         const saved = normalizedLanguage(event.newValue);
         if (saved) applyLearningLanguage(saved, false);
@@ -141,8 +172,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     let active = true;
     const localLocaleIsSet = () => {
       try {
-        const saved = window.localStorage.getItem(STORAGE_KEY);
-        return saved === 'hindi' || saved === 'english';
+        return Boolean(localeCookieValue() || toLocale(window.localStorage.getItem(STORAGE_KEY)));
       } catch {
         return false;
       }
@@ -185,17 +215,15 @@ export function LanguageSwitcher({ compact = false, menu = false }: { compact?: 
     <label className={'qe-language-switcher' + (compact ? ' is-compact' : '') + (menu ? ' qe-language-switcher--menu-setting' : '')}>
       <span aria-hidden="true">文</span>
       <span className="qe-language-switcher__label">
-        {locale === 'english' ? 'App interface language' : 'ऐप इंटरफ़ेस की भाषा'}
+        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.label')}
       </span>
       <select value={locale} onChange={event => setLocale(event.target.value as Locale)}
-        aria-label={locale === 'english' ? 'App interface language' : 'ऐप इंटरफ़ेस की भाषा'}>
-        <option value="hindi">हिन्दी (Hindi)</option>
-        <option value="english">English</option>
+        aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.label')}>
+        <option value="hindi">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.hinglish')}</option>
+        <option value="english">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.english')}</option>
       </select>
       <small className="qe-language-switcher__help">
-        {locale === 'english'
-          ? 'Changes menus, buttons and navigation only — not lesson language.'
-          : 'केवल मेन्यू, बटन और नेविगेशन बदलता है — पाठों की भाषा नहीं।'}
+        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.changeHelp')}
       </small>
     </label>
   );
@@ -207,17 +235,15 @@ export function LearningLanguageSwitcher({ compact = false, menu = false }: { co
     <label className={'qe-language-switcher qe-learning-language-switcher' + (compact ? ' is-compact' : '') + (menu ? ' qe-language-switcher--menu-setting' : '')}>
       <span aria-hidden="true">📚</span>
       <span className="qe-language-switcher__label">
-        {locale === 'english' ? 'Learning content language' : 'पढ़ाई की सामग्री की भाषा'}
+        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.learningLanguage.label')}
       </span>
       <select value={learningLanguage} onChange={event => setLearningLanguage(event.target.value as LearningLanguage)}
-        aria-label={locale === 'english' ? 'Learning content language' : 'पढ़ाई की सामग्री की भाषा'}>
-        <option value="hi">हिन्दी (Hindi)</option>
-        <option value="en">English</option>
+        aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.learningLanguage.label')}>
+        <option value="hi">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.hinglish')}</option>
+        <option value="en">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.english')}</option>
       </select>
       <small className="qe-language-switcher__help">
-        {locale === 'english'
-          ? 'Changes lessons, questions, books and AI Tutor replies.'
-          : 'पाठ, प्रश्न, किताबें और AI Tutor के जवाब बदलता है।'}
+        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.learningLanguage.changeHelp')}
       </small>
     </label>
   );
