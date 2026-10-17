@@ -319,12 +319,7 @@ private fun tutorTimestampLabel(message: JSONObject): String {
             }.getOrNull()
         } ?: return ""
     }
-    val messageDay = Calendar.getInstance().apply { timeInMillis = millis }
-    val today = Calendar.getInstance()
-    val sameDay = messageDay.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-        && messageDay.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
-    val pattern = if (sameDay) "h:mm a" else "MMM d, h:mm a"
-    return SimpleDateFormat(pattern, Locale.getDefault()).format(Date(millis))
+    return SimpleDateFormat("EEE dd MMM yyyy, h:mm a", Locale.ENGLISH).format(Date(millis))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
