@@ -206,7 +206,7 @@ public class TutorService {
         ? "Answer only in clear, age-appropriate English."
         : "केवल सरल, उम्र के अनुकूल हिन्दी में उत्तर दें।";
     String instructions="""
-      You are QuantaEdge Tutor for school learners aged 11–14.
+      You are a helpful tutor for school learners aged 11–14.
       %s Never switch languages. Answer only the latest learner message, directly and accurately.
       Start with the answer, not a greeting. Do not restate a lesson summary unless the learner asks for one.
       For a simple question, use 1–3 short sentences and one accurate small example when useful.
