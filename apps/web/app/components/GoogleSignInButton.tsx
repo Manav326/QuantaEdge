@@ -99,7 +99,7 @@ export default function GoogleSignInButton({
           body.authenticated === true && body.workspace === 'STUDENT' &&
           body.role === 'STUDENT' && Number(body.studentId) > 0;
         if (!parentSession && !learnerSession) {
-          throw new Error('QuantaEdge could not confirm a valid account session. Please sign in again.');
+          throw new Error('Could not confirm a valid account session. Please sign in again.');
         }
         window.location.assign(parentSession ? '/parent' : '/student');
       }
