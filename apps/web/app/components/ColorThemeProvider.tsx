@@ -79,8 +79,8 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
   const supplied = rawTokens && rawTokens[mode] && typeof rawTokens[mode] === 'object'
     ? rawTokens[mode] as Record<string, unknown>
     : null;
-  const palette = supplied
-    ? Object.fromEntries(roles.map(role => [role, safeColor(supplied[role]) || defaultPalette[mode][role]]))
+  const palette: Record<(typeof roles)[number], string> = supplied
+    ? Object.fromEntries(roles.map(role => [role, safeColor(supplied[role]) || defaultPalette[mode][role]])) as Record<(typeof roles)[number], string>
     : defaultPalette[mode];
 
   for (const role of roles) root.style.setProperty(cssToken(role), palette[role]);
@@ -153,7 +153,8 @@ function applyPalette(mode: 'light' | 'dark', rawTokens: Record<string, unknown>
 export function ColorThemeProvider({ children }: { children: ReactNode }) {
   const { brand } = useTenantBranding();
   const [savedMode, setSavedMode] = useState<AppearanceMode | null>(null);
-  const configuredMode = isMode(brand?.themeTokens?.appearance) ? brand.themeTokens.appearance : 'system';
+  const rawConfiguredMode = brand?.themeTokens?.appearance;
+  const configuredMode: AppearanceMode = isMode(rawConfiguredMode) ? rawConfiguredMode : 'system';
   const mode = savedMode ?? configuredMode;
 
   useEffect(() => {
