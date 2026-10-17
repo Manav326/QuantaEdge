@@ -20,6 +20,28 @@ val LocalQuantaEdgeThemeController = staticCompositionLocalOf<QuantaEdgeThemeCon
 }
 
 /**
+ * Contrast-safe foreground/status roles. MaterialTheme.colorScheme.primary remains the actual brand
+ * colour for filled controls; labels must use primaryText/accentText instead.
+ */
+data class QuantaEdgeSemanticColors(
+    val primaryText: Color,
+    val accentText: Color,
+    val success: Color,
+    val warning: Color,
+    val error: Color
+)
+
+val LocalQuantaEdgeSemanticColors = staticCompositionLocalOf {
+    QuantaEdgeSemanticColors(
+        primaryText = Color(0xFF9A3412),
+        accentText = Color(0xFF9A3412),
+        success = Color(0xFF166534),
+        warning = Color(0xFF92400E),
+        error = Color(0xFFB42318)
+    )
+}
+
+/**
  * Central Android colour system. The active institution palette comes from the server-normalized
  * v2 theme contract; QuantaEdge orange/navy remain the safe default when no tenant is resolved.
  */
@@ -96,11 +118,38 @@ fun QuantaEdgeTheme(
         )
     }
 
+    val semanticColors = QuantaEdgeSemanticColors(
+        primaryText = tokenColor(
+            palette, "primaryText",
+            if (useDark) Color(0xFFFDBA74) else Color(0xFF9A3412)
+        ),
+        accentText = tokenColor(
+            palette, "accentText",
+            if (useDark) Color(0xFFFDBA74) else Color(0xFF9A3412)
+        ),
+        success = tokenColor(
+            palette, "success",
+            if (useDark) Color(0xFF4ADE80) else Color(0xFF166534)
+        ),
+        warning = tokenColor(
+            palette, "warning",
+            if (useDark) Color(0xFFFCD34D) else Color(0xFF92400E)
+        ),
+        error = tokenColor(
+            palette, "error",
+            if (useDark) Color(0xFFFDA4AF) else Color(0xFFB42318)
+        )
+    )
+
     MaterialTheme(
         colorScheme = colors,
         shapes = QuantaShapes,
         content = {
-            CompositionLocalProvider(LocalQuantaEdgeThemeController provides controller, content = content)
+            CompositionLocalProvider(
+                LocalQuantaEdgeThemeController provides controller,
+                LocalQuantaEdgeSemanticColors provides semanticColors,
+                content = content
+            )
         }
     )
 }
