@@ -1,5 +1,7 @@
 'use client';
 
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
+
 import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
@@ -135,7 +137,7 @@ export default function AdminParents(){
             {visible.map(parent=><article className="parent-admin-row" key={parent.id}>
               <div className="parent-admin-summary">
                 <div className="admin-parent-avatar">{(parent.display_name||'?').trim().slice(0,1).toUpperCase()}</div>
-                <div className="parent-admin-identity"><strong>{parent.display_name||t('admin.parents.parentFallback')}</strong><span>{parent.mobile_e164}</span><small>{t('admin.parents.joined',{date:parent.created_at?new Date(parent.created_at).toLocaleDateString(locale==='english'?'en-IN':'hi-IN'):'—'})}</small></div>
+                <div className="parent-admin-identity"><strong>{parent.display_name||t('admin.parents.parentFallback')}</strong><span>{parent.mobile_e164}</span><small>{t('admin.parents.joined',{date:parent.created_at?formatUserTimestamp(parent.created_at):'—'})}</small></div>
                 <div className="parent-admin-count"><strong>{parent.active_children}</strong><span>{t('admin.parents.activeChildren')}</span></div>
                 <span className={`admin-status-pill ${parent.active?'active':'inactive'}`}>{parent.active?t('admin.parents.active'):t('admin.parents.suspended')}</span>
                 <button className="parent-secondary-button" onClick={()=>toggleExpand(parent.id)}>{expanded===parent.id?t('admin.parents.hideChildren'):t('admin.parents.viewChildren')} <span>{expanded===parent.id?'↑':'↓'}</span></button>
