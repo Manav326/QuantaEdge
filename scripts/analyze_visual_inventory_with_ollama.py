@@ -341,13 +341,10 @@ def run_analysis(
             f"run_id={run_id or 'local'}",
             flush=True,
         )
-        if (
-            existing.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
-            and existing.get("asset_sha256") == asset.get("asset_sha256")
-            and existing.get("model") == model
-            and existing.get("prompt_version") == PROMPT_VERSION
-        ):
-            continue
+        # The selection pass above is authoritative: it already rejects reusable
+        # checkpoints whose asset hash, source, model, prompt or page-text context
+        # differs. Do not perform a weaker second check here, or stale successful
+        # analyses can be skipped after the page context changed.
         try:
             item = analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, num_ctx=num_ctx, num_predict=num_predict, opener=opener)
             item["prompt_version"] = PROMPT_VERSION
