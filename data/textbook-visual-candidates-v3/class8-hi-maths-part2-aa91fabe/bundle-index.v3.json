@@ -215,6 +215,6 @@
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
   "version_tag": "candidates-v3-class8-class8-hi-maths-part2-aa91fabe-run-38904509019",
-  "bundle_tar_sha256": "2e1871410a0faa72311706fcd99aa52ebb83ec3bf91ee30e5a3e3f0f590e6dda",
+  "bundle_tar_sha256": "e837d44cb690c9df489422a25f90b238992bd17fb9b0c3c592f30bd657c33269",
   "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
 }
