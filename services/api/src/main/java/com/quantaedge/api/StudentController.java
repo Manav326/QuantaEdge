@@ -155,6 +155,13 @@ public class StudentController {
       """,displayName,image,nullable(city),nullable(state),nullable(schoolName),
          nullable(schoolMedium),nullable(favoriteSubject),nullable(learningGoal),studentId);
     if(changed!=1) throw new SecurityException("Active student profile not found.");
+    // Independent learner accounts share the same person identity as their student profile.
+    // Keep the canonical account name synchronized when that learner edits their profile.
+    jdbc.update("""
+      update user_account set display_name=?,updated_at=now()
+      where id=(select user_account_id from student where id=? and user_account_id is not null)
+        and active=true
+      """, displayName, studentId);
     return profileFor(studentId);
   }
 
@@ -175,11 +182,15 @@ public class StudentController {
 
   private Map<String,Object> profileFor(long studentId) {
     return jdbc.queryForMap("""
-      select id,public_id,public_user_id,display_name,class_code,board,language,
-             case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else null end as profile_image_url,
-             city,state,school_name,school_medium,
-             favorite_subject,learning_goal,profile_updated_at
-      from student where id=? and active=true
+      select st.id,st.public_id,st.public_user_id,st.display_name,st.class_code,st.board,st.language,
+             case when st.profile_image_data_url is not null
+               then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from st.profile_updated_at)*1000)::bigint::text
+               else u.google_picture_url end as profile_image_url,
+             st.city,st.state,st.school_name,st.school_medium,
+             st.favorite_subject,st.learning_goal,st.profile_updated_at
+      from student st
+      left join user_account u on u.id=st.user_account_id
+      where st.id=? and st.active=true
       """,studentId);
   }
 
