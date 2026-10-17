@@ -43,7 +43,7 @@ fun StudentMarketplaceScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text("Course Marketplace", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(if (hi) "कोर्स मार्केटप्लेस" else "Course Marketplace", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Text(
                 if (hi) "अपनी अगली सीखने की यात्रा चुनें। भुगतान Razorpay के सुरक्षित checkout से होगा।"
                 else "Choose your next learning path. Course payments are handled through secure Razorpay Checkout.",
