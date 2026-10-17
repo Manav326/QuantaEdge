@@ -3881,7 +3881,7 @@ private fun StudentHomeScreen(
         items.groupBy {
             it.textAny("subject_name", "subjectName", "subject_code", "subjectCode")
                 .ifBlank { if (language == "hi") "अन्य विषय" else "Other subjects" }
-        }.toSortedMap().take(3)
+        }.toSortedMap().entries.take(3).associate { it.key to it.value }
     val greeting = HomeGreeting.text(LocalTime.now().hour, language)
 
     Column(
