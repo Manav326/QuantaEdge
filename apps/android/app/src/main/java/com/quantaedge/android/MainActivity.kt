@@ -13,6 +13,7 @@ import com.razorpay.PaymentResultWithDataListener
 import org.json.JSONObject
 
 class MainActivity : ComponentActivity(), PaymentResultWithDataListener, RazorpayCourseCheckoutHost {
+    private lateinit var themeController: com.quantaedge.android.ui.QuantaEdgeThemeController
     private var pendingCourseOrderId: String? = null
     private var pendingCourseResult: ((CourseCheckoutResult) -> Unit)? = null
 
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
                 put("amount", amount)
                 put("name", "QuantaEdge")
                 put("description", order.optString("description", "Course access"))
-                put("theme", JSONObject().put("color", "#E87524"))
+                put("theme", JSONObject().put("color", themeController.checkoutAccentColor()))
             }
             pendingCourseOrderId = orderId
             pendingCourseResult = onResult
@@ -77,7 +78,7 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         ApiClient.initialize(applicationContext)
-        val themeController = com.quantaedge.android.ui.QuantaEdgeThemeController(applicationContext)
+        themeController = com.quantaedge.android.ui.QuantaEdgeThemeController(applicationContext)
         setContent { QuantaEdgeTheme(themeController) { QuantaEdgeApp() } }
     }
 }
