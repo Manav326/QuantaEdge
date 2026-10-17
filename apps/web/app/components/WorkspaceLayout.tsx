@@ -12,13 +12,17 @@ import ParentAccountMenu from './ParentAccountMenu';
 type Item = { href: string; message: string; icon: string; match?: string };
 type StudentNavLink = { href: string; message: string; icon: string };
 type StudentNavGroup = {
- id: 'today' | 'learn' | 'practice' | 'progress' | 'library'; message: string; mobileMessage: string;
+ id: 'today' | 'courses' | 'learn' | 'practice' | 'progress' | 'library'; message: string; mobileMessage: string;
  href?: string; icon: string; children?: StudentNavLink[];
 };
 type WorkspaceProfile = { display_name?: string | null; class_code?: string | number | null; profile_image_url?: string | null; mobile_e164?: string | null };
 
 const studentNavGroups: StudentNavGroup[] = [
  { id: 'today', href: '/student', message: 'web.navigation.student.today', mobileMessage: 'web.navigation.student.mobileToday', icon: '⌂' },
+ { id: 'courses', message: 'web.navigation.student.coursesMarketplace', mobileMessage: 'web.navigation.student.mobileCourses', icon: '✦', children: [
+  { href: '/student/courses', message: 'web.navigation.student.allCourses', icon: '▦' },
+  { href: '/student/marketplace', message: 'web.navigation.student.marketplace', icon: '₹' },
+ ] },
  { id: 'learn', message: 'web.navigation.student.learn', mobileMessage: 'web.navigation.student.mobileLearn', icon: '▤', children: [
   { href: '/student/learn', message: 'web.navigation.student.learnTopics', icon: '▤' },
   { href: '/student/structured-lessons', message: 'web.navigation.student.structuredLessons', icon: '✧' },
