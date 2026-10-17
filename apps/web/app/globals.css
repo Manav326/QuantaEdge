@@ -369,3 +369,44 @@ html[data-qe-appearance="dark"] .qe-workspace-content td { border-color: var(--q
 .qe-institutions-page .auth-message{margin:0 0 14px}
 .institution-real-logo{display:block;width:36px;height:36px;object-fit:contain;border-radius:9px}
 @media(max-width:600px){.qe-institutions-page{padding:22px 14px 70px}.qe-institutions-panel{padding:16px}.qe-institutions-join-form{align-items:stretch}.qe-institutions-join-form .button{width:100%}.qe-institution-membership{flex-wrap:wrap}.qe-institution-status{margin-left:53px}}
+
+
+/* Default legacy aliases follow the same semantic palette as new components. */
+:root {
+  --green: var(--qe-color-success);
+  --qe-answer-correct-text: var(--qe-color-success);
+  --qe-answer-correct-bg: var(--qe-color-success-container);
+  --qe-answer-correct-border: var(--qe-color-success);
+  --qe-answer-correct-strong-bg: var(--qe-color-success-container);
+  --qe-answer-correct-option-border: var(--qe-color-success);
+  --qe-answer-incorrect-text: var(--qe-color-error);
+  --qe-answer-incorrect-bg: var(--qe-color-error-container);
+  --qe-answer-incorrect-border: var(--qe-color-error);
+  --qe-answer-incorrect-strong-bg: var(--qe-color-error-container);
+  --qe-answer-incorrect-option-border: var(--qe-color-error);
+  --qe-answer-neutral-text: var(--qe-color-text-muted);
+  --qe-answer-neutral-bg: var(--qe-color-surface-elevated);
+  --qe-answer-neutral-border: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .button-dark,
+html[data-qe-appearance="dark"] .device-cta {
+  background: var(--qe-color-nav-background);
+  color: var(--qe-color-nav-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .button-light {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .strip,
+html[data-qe-appearance="dark"] .section-soft,
+html[data-qe-appearance="dark"] .promise,
+html[data-qe-appearance="dark"] .subject-card,
+html[data-qe-appearance="dark"] .student-card,
+html[data-qe-appearance="dark"] .report-card,
+html[data-qe-appearance="dark"] .parent-card {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
