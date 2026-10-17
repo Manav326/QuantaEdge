@@ -128,6 +128,10 @@ The GitHub Actions UI exposes different actions for starting work and recovering
 
 The vision model name is part of checkpoint identity. A resume request must not silently turn into a different-model full rerun. If the selected model has no checkpoint while a prior Layer 4 run is recorded for that book, the preflight fails with an explanation; choose **analyze_all** only when deliberately beginning a different model/configuration run. The inventory's per-page text hashes are also compared with the current extraction JSONL; a same-PDF but revised extraction is not allowed to reuse old visual interpretations as though their model context were unchanged. Layer 5 explicitly marks stale-context checkpoints incomplete, and Layers 6–8 refuse to consume those ledgers.
 
+### Dedicated recovery UI entrypoints
+
+The Actions list also exposes fixed-mode launchers for [Layers 1–3](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-textbook-visual-layers-1-3.yml), [Layers 4–5](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-textbook-visual-layers-4-5.yml), and [Layers 6–8](https://github.com/Manav326/QuantaEdge/actions/workflows/resume-quantaedge-layers-6-8.yml). They delegate to these shared workflows; they do not clone the execution steps or change the checkpoint contract. Pick the layer range where the interruption occurred, then preserve the exact class/book/edition/model/configuration from the prior attempt. For Layers 4–5, the launcher fixes the mode to `resume_layers_4_5`; for Layers 6–8, it fixes `mode=resume` and retains strict existing-checkpoint preflight.
+
 ### Layers 6–8 UI choices
 
 - **benchmark** — benchmark only; this benchmark is intentionally anchored to Class 6 English Science (Curiosity).
