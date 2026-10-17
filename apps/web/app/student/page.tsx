@@ -41,6 +41,7 @@ export default function StudentHome(){
   const [textbooksLoading,setTextbooksLoading]=useState(true);
   const [textbooksError,setTextbooksError]=useState('');
   const [courses,setCourses]=useState<any[]>([]);
+  const [courseCatalogReady,setCourseCatalogReady]=useState(false);
   const [courseProgress,setCourseProgress]=useState<Record<number,any>>({});
   const [activeCourseId,setActiveCourseId]=useState<number|null>(null);
   const [courseError,setCourseError]=useState('');
@@ -65,9 +66,14 @@ export default function StudentHome(){
         const body=await response.json();
         if(!response.ok) throw new Error(body.message||body.error||'Courses could not be loaded.');
         const rows=Array.isArray(body)?body:[];
+        const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true);
         if(active) {
           setCourses(rows);
-          const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true);
+          setCourseCatalogReady(true);
+          if(ownedRows.length===0) {
+            router.replace('/student/marketplace');
+            return;
+          }
           const serverActive=ownedRows.find((course:any)=>course.is_enrolled===true);
           const activeId=serverActive?Number(serverActive.id):null;
           setActiveCourseId(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0 ? activeId : null);
@@ -162,6 +168,7 @@ export default function StudentHome(){
   },[data,textbooksLoading]);
 
   if(error)return <main className="app-shell"><section className="app-content"><div role="alert" aria-live="assertive" className="auth-card"><h1><UiText message="legacy.web.student.unavailable.9bdc6a90" /></h1><p>{error}</p><Link href="/login/student" className="button button-dark"><UiText message="legacy.web.log.in.9cfe4389" /></Link></div></section></main>;
+  if(courseCatalogReady && !courseError && !courses.some((course:any)=>course.is_enrolled===true||course.paused===true)) return <main className="app-shell"><section className="app-content"><div className="auth-card"><h1><LocaleText hinglish="अपना अगला कोर्स चुनें" english="Choose your next course" /></h1><p><LocaleText hinglish="आपके खाते में अभी कोई कोर्स नहीं है। आपको कोर्स मार्केटप्लेस पर ले जाया जा रहा है।" english="There are no courses in your account yet. Opening the course marketplace." /></p><Link href="/student/marketplace" className="button button-dark"><LocaleText hinglish="कोर्स देखें" english="Explore courses" /></Link></div></section></main>;
   if(!data)return <main className="app-shell"><section className="app-content"><div role="status" aria-live="polite" className="eyebrow"><UiText message="legacy.web.loading.learning.profile.71b24943" /></div></section></main>;
   const activeCourse = courses.find((course:any)=>Number(course.id)===activeCourseId && course.is_enrolled===true)
     || courses.find((course:any)=>course.is_enrolled===true)
