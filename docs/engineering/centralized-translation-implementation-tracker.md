@@ -432,3 +432,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Centralized question-review validation, reviewer feedback prompt/results, teaching-block limit, and visual candidate/source validation messages.
 - Dynamic lesson/source labels now interpolate into catalog text. The source-match placement notice uses two short variants.
 - Added paired messages and CI regression checks for the replaced review/visual copy. Form labels and learner preview remain open.
+
+
+## Admin Content Studio — question JSON and save feedback
+
+- Centralized advanced question JSON validation, teaching-block minimum, save/readiness statuses and Content Studio load/identity fallbacks.
+- Dynamic API error details are preserved; catalog copy is the fallback for client-generated messages.
+- Added paired catalog entries and CI raw-copy checks. Content Studio still needs its main form labels, publishing readiness text, visual-review controls and learner-preview copy migrated.

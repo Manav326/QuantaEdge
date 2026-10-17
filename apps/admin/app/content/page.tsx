@@ -406,7 +406,7 @@ export default function ContentStudio(){
   setRows(Array.isArray(data)?data:[]);
   setQuestionSummary(questionCounts);
   setPrograms(Array.isArray(programRows)?programRows:[]);
- }catch(e){setError(e instanceof Error?e.message:'Content library or question counts could not be loaded. Sign in as an administrator and retry.')}finally{setLoading(false)}}
+ }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.contentLibraryLoadFailed'))}finally{setLoading(false)}}
  useEffect(()=>{
   let mounted=true;
   void (async()=>{
@@ -417,7 +417,7 @@ export default function ContentStudio(){
     setIdentity(me);
     await load();
    }catch(e){
-    if(mounted){setError(e instanceof Error?e.message:'Staff identity could not be verified.');setLoading(false);}
+    if(mounted){setError(e instanceof Error?e.message:t('admin.contentStudio.staffIdentityUnverified'));setLoading(false);}
    }
   })();
   return ()=>{mounted=false};
@@ -652,8 +652,8 @@ export default function ContentStudio(){
  function addQuestion(){
   const index=questions.length+1;const q={question_type:'MCQ',prompt:'',explanation:'',difficulty:'CORE',sort_order:index,active:true,review_status:'DRAFT',review_notes:null,marks:1,exam_format:'Practice',source_kind:'AUTHOR_CREATED',source_title:null,source_ref:null,source_year:null,source_id:null,board:null,topic:form.title||null,subtopic:null,skill:null,tags:[],answer_payload:{kind:'OPTION',value:'A'},options:[{key:'A',label:'',correct:true,sort_order:1},{key:'B',label:'',correct:false,sort_order:2}]};const next=[...questions,q];setQuestions(next);setQuestionJson(JSON.stringify(next,null,2));
  }
- function applyQuestionJson(){try{const q=JSON.parse(questionJson);if(!Array.isArray(q))throw new Error('Questions must be a JSON array.');setQuestions(q);setShowAdvancedQuestions(false);setNotice('Advanced question data loaded. Save to persist it.')}catch(e){setError(e instanceof Error?e.message:'Invalid question JSON.')}}
- function removeBlock(index:number){if(blocks.length<=1){setError('A lesson needs at least one teaching block. Add another block before removing this one.');return}setBlocks(old=>old.filter((_,i)=>i!==index).map((b,i)=>({...b,sequence_no:i+1})));setActiveBlock(Math.max(0,Math.min(index,blocks.length-2)))}
+ function applyQuestionJson(){try{const q=JSON.parse(questionJson);if(!Array.isArray(q))throw new Error(t('admin.contentStudio.questionsMustJsonArray'));setQuestions(q);setShowAdvancedQuestions(false);setNotice(t('admin.contentStudio.advancedQuestionDataLoaded'))}catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.invalidQuestionJson'))}}
+ function removeBlock(index:number){if(blocks.length<=1){setError(t('admin.contentStudio.atLeastOneTeachingBlock'));return}setBlocks(old=>old.filter((_,i)=>i!==index).map((b,i)=>({...b,sequence_no:i+1})));setActiveBlock(Math.max(0,Math.min(index,blocks.length-2)))}
  function moveBlock(index:number,direction:number){const target=index+direction;if(target<0||target>=blocks.length)return;setBlocks(old=>{const next=[...old];const item=next.splice(index,1)[0];next.splice(target,0,item);return next.map((b,i)=>({...b,sequence_no:i+1}))});setActiveBlock(target)}
  function duplicateBlock(index:number){if(blocks.length>=100){setError(t('admin.contentStudio.maxTeachingBlocksReached',{count:100}));return}setBlocks(old=>[...old.slice(0,index+1),{...old[index],content:{...old[index].content},sequence_no:index+2},...old.slice(index+1)].map((b,i)=>({...b,sequence_no:i+1})));setActiveBlock(index+1)}
  async function saveLesson(nextStatus?:string){
@@ -662,11 +662,11 @@ export default function ContentStudio(){
   setSaving(true);setError('');setNotice('');
   try{
    const nextBlocks=blocks.map((b,i)=>({sequence_no:i+1,block_type:b.block_type,content:normalizeBlock(b).content,active:b.active!==false}));
-   if(!nextBlocks.length)throw new Error('Add at least one teaching block before saving.');
-   const nextQuestions=showAdvancedQuestions?JSON.parse(questionJson):questions;if(!Array.isArray(nextQuestions))throw new Error('Assessment questions must be a list.');
+   if(!nextBlocks.length)throw new Error(t('admin.contentStudio.atLeastOneTeachingBlock'));
+   const nextQuestions=showAdvancedQuestions?JSON.parse(questionJson):questions;if(!Array.isArray(nextQuestions))throw new Error(t('admin.contentStudio.assessmentQuestionsMustList'));
    await api('/api/v1/admin/content/lessons/'+selected.id,{method:'PATCH',body:JSON.stringify({title:form.title,summary:form.summary,estimatedMinutes:Number(form.estimatedMinutes),alignmentSourceTitle:form.alignmentSourceTitle,alignmentSourceUrl:form.alignmentSourceUrl,alignmentSourceEdition:form.alignmentSourceEdition,alignmentPageRange:form.alignmentPageRange,alignmentSourceVerified:Boolean(form.alignmentSourceVerified),status:nextStatus||form.lessonStatus,sortOrder:Number(form.sortOrder),blocks:nextBlocks,questions:nextQuestions})});
-   await load();await open(selected);setNotice(nextStatus==='REVIEW'?'Lesson saved for review.':nextStatus==='PUBLISHED'?'Publish request completed. Confirm final status and readiness below.':['REVIEW','PUBLISHED','ARCHIVED'].includes(previousStatus)?'Changes saved as a draft. Check the current learner preview and submit the topic for review again before publishing.':'Lesson and teaching material saved.');
-  }catch(e){setError(e instanceof Error?e.message:'Lesson could not be saved.')}finally{setSaving(false)}
+   await load();await open(selected);setNotice(nextStatus==='REVIEW'?t('admin.contentStudio.lessonSavedForReview'):nextStatus==='PUBLISHED'?t('admin.contentStudio.publishRequestComplete'):['REVIEW','PUBLISHED','ARCHIVED'].includes(previousStatus)?t('admin.contentStudio.changesSavedAsDraft'):t('admin.contentStudio.lessonAndBlocksSaved'));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.lessonSaveFailed'))}finally{setSaving(false)}
  }
  const basicsReady=Boolean(String(form.title||'').trim()&&String(form.summary||'').trim()&&Number(form.estimatedMinutes)>=1&&Number(form.estimatedMinutes)<=120);
   const activeBlocks=blocks.filter(block=>block.active!==false);
