@@ -19,10 +19,10 @@ const promises = [
 ];
 
 export default function Home() {
-  const { brand, isResolving } = useTenantBranding();
+  const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
-  if (!brand && isResolving) return (
+  if (!brand && (isResolving || institutionContextRequested)) return (
     <main className="site qe-tenant-landing" aria-busy="true">
       <section className="hero">
         <div className="hero-copy">
