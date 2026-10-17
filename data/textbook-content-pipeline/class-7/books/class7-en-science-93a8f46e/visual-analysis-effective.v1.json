@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9c5eec013b9b80266edb79eae02bfa8b457883a38959f122a95f0500e08660bd",
+  "raw_analysis_sha256": "9eda89bf9410433860a72b8141fe6709306e430d39c38d7d54b75976a680f369",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14560,7 +14560,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39013231656",
-      "checkpointed_at": "2026-10-17T08:48:45Z",
+      "checkpointed_at": "2026-10-17T08:49:51Z",
       "effective_analysis": {
         "visual_summary": "Page from a textbook discussing the nature of science and its approach to learning.",
         "visual_type": "page_with_multiple_visuals",
