@@ -24,10 +24,12 @@ class QuantaEdgeThemeController(context: Context) {
     var appearanceMode by mutableStateOf(readAppearanceMode())
         private set
 
-    var activeInstitutionCode by mutableStateOf(preferences.getString(KEY_ACTIVE_INSTITUTION, null))
+    // Do not render a palette left active by a previous process/session before this process
+    // re-resolves the institution. QuantaEdge defaults render until a trusted tenant code is resolved.
+    var activeInstitutionCode by mutableStateOf<String?>(null)
         private set
 
-    var themeTokensJson by mutableStateOf(readActiveTokens())
+    var themeTokensJson by mutableStateOf<String?>(null)
         private set
 
     fun setAppearanceMode(mode: QeAppearanceMode) {
@@ -93,13 +95,6 @@ class QuantaEdgeThemeController(context: Context) {
     private fun readAppearanceMode(): QeAppearanceMode {
         val saved = preferences.getString(KEY_USER_APPEARANCE, null)
         return runCatching { saved?.let(QeAppearanceMode::valueOf) }.getOrNull() ?: QeAppearanceMode.INSTITUTION
-    }
-
-    private fun readActiveTokens(): String? {
-        val code = preferences.getString(KEY_ACTIVE_INSTITUTION, null)?.uppercase() ?: return null
-        if (!INSTITUTION_CODE.matches(code)) return null
-        val raw = preferences.getString(KEY_TENANT_THEME_PREFIX + code, null) ?: return null
-        return runCatching { validateThemeTokens(raw); raw }.getOrNull()
     }
 
     private fun validateThemeTokens(raw: String) {
