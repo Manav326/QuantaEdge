@@ -1175,7 +1175,23 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
         checkpoints={}; doc={"schema_version":"quantaedge.layers-6-8-checkpoint.v1","source_book_id":source["book_id"],
           "source_pdf_sha256":source["source_pdf_sha256"],"model":args.model,"prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,
           "input_fingerprint":fingerprint,"segments":{}}
-    write_rag(rag,source); calls=0
+    write_rag(rag,source)
+    if getattr(args, "rebuild_outputs_only", False):
+        if not cpfile.is_file():
+            raise ValueError("Output-only resume requires an existing matching checkpoint.")
+        for seg in segments:
+            prior=checkpoints.get(seg["segment_id"])
+            if not isinstance(prior,dict) or prior.get("status") not in {"COMPLETE","UNRESOLVED_SOURCE_TEXT"}:
+                raise ValueError("Output-only resume found pending segments; use resume mode to continue model inference.")
+            if prior.get("segment_sha256")!=seg["segment_sha256"]:
+                raise ValueError(f"Output-only resume segment hash mismatch {seg['segment_id']}.")
+        current=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)),layer5_by_page)
+        if args.commit_checkpoints:
+            checkpoint_git(repo,[outdir,rag],f"reconcile(content): L6-8 outputs {source['book_id']}")
+        return {"status":"OUTPUTS_REBUILT_WITHOUT_MODEL_CALLS","source_book_id":source["book_id"],
+            "overall_status":current.get("overall_status"),"segments_completed":current.get("segments_completed"),
+            "segments_total":current.get("segment_count"),"checkpoint_path":cpfile.relative_to(repo).as_posix()}
+    calls=0
     for seg in segments:
         prior=checkpoints.get(seg["segment_id"])
         if isinstance(prior,dict) and prior.get("status") in {"COMPLETE","UNRESOLVED_SOURCE_TEXT"}:
@@ -1407,7 +1423,7 @@ def main(argv:list[str]|None=None)->int:
     r.add_argument("--source-book-id",required=True); r.add_argument("--endpoint",default="http://127.0.0.1:11434"); r.add_argument("--model",default="qwen2.5:1.5b")
     r.add_argument("--max-model-calls",type=int,default=6); r.add_argument("--max-pages-per-segment",type=int,default=2); r.add_argument("--max-context-chars",type=int,default=5000)
     r.add_argument("--request-timeout",type=int,default=300); r.add_argument("--checkpoint-every",type=int,default=2); r.add_argument("--benchmark-report",type=Path); r.add_argument("--preflight-only",action="store_true",help="Validate source/evidence/fingerprint/checkpoint without starting model inference."); r.add_argument("--require-existing-checkpoint",action="store_true",help="With preflight-only, fail if no matching checkpoint exists; never start a new run by accident.")
-    r.add_argument("--allow-experimental-model",action="store_true"); r.add_argument("--commit-checkpoints",action="store_true")
+    r.add_argument("--allow-experimental-model",action="store_true"); r.add_argument("--commit-checkpoints",action="store_true"); r.add_argument("--rebuild-outputs-only",action="store_true",help="Rebuild aggregated review outputs from a complete checkpoint without starting or calling a model.")
     b=sub.add_parser("benchmark"); b.add_argument("--repo-root",type=Path,default=Path.cwd()); b.add_argument("--source-book-id",default="ncert-c6-english-fecu1")
     b.add_argument("--endpoint",default="http://127.0.0.1:11434"); b.add_argument("--models",default="qwen2.5:1.5b,qwen2.5:3b")
     b.add_argument("--sample-segments",type=int,default=2); b.add_argument("--request-timeout",type=int,default=300)
