@@ -312,8 +312,11 @@ assert.ok(androidMarketplaceContract.includes('"Idempotency-Key" to java.util.UU
   'Android course checkout must supply an idempotency key.');
 assert.ok(androidFloatingTutorContract.includes('userResized') &&
   androidFloatingTutorContract.includes('if (compact && !userResized)') &&
-  androidFloatingTutorContract.includes('userResized = true'),
-  'The floating tutor must honour resize gestures on compact screens as well as wide screens.');
+  androidFloatingTutorContract.includes('userResized = true') &&
+  androidFloatingTutorContract.includes('availableWidth = (maxWidth - 16.dp).coerceAtLeast(1.dp)') &&
+  androidFloatingTutorContract.includes('coerceIn(minOf(260f, maxResizeWidth), maxResizeWidth)'),
+  'The floating tutor must honour resize gestures and keep the panel within very small, split-screen and IME-reduced viewports.');
+
 
 
 // Issue #66 dashboard live-class schedule and future-session visibility contracts.
@@ -346,10 +349,11 @@ assert.ok(issue66AndroidDashboardRefresh.includes('&includeFuture=true') &&
   !issue66AndroidDashboardRefresh.includes('/api/v1/learning/recorded-classes?subjectCode='),
   'Android dashboard Live Classes must request the full upcoming session schedule without mixing standalone recording-library items into live sessions.');
 assert.ok(androidApp.includes('courseSessionEndTimestamp(it)') &&
-  androidApp.includes('groupClassesBySubject(items: List<JSONObject>)') &&
+  androidApp.includes('groupClassesBySubject(items: List<JSONObject>): Map<String, List<JSONObject>>') &&
+  androidApp.includes('.toSortedMap().entries.take(3).associate { it.key to it.value }') &&
   androidApp.includes('showSubject: Boolean = true') &&
   androidApp.includes('item.optBoolean("has_recording", item.optBoolean("hasRecording"))'),
-  'Android dashboard must include sessions currently in progress, use end timestamps for recency, group sessions by subject and disclose actual recording availability.');
+  'Android dashboard must include sessions currently in progress, use end timestamps for recency, group sessions by subject with a Map-compatible return type and disclose recording availability.');
 assert.ok(issue66TimestampFormatterContract.includes("timeZone: 'Asia/Kolkata'") &&
   issue66TimestampFormatterContract.includes(String.raw`formattedTime.replace(/\b(am|pm)\b/i`),
   'Web timestamps must use the agreed India timezone and correctly normalize AM/PM casing.');
