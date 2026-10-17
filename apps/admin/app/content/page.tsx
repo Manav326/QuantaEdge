@@ -554,18 +554,18 @@ export default function ContentStudio(){
  }
  async function reviewQuestion(questionId:number,status:'APPROVED'|'REJECTED'|'REVIEW'){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!questionId)return;
-  if(!['REVIEW','PUBLISHED'].includes(String(form.lessonStatus||'').toUpperCase())){setError('Submit a draft micro-topic for review first. Questions on a published topic can be reviewed without unpublishing it.');return;}
-  const note=status==='REJECTED'?window.prompt('Tell the author what needs to change before resubmission:'):null;
+  if(!['REVIEW','PUBLISHED'].includes(String(form.lessonStatus||'').toUpperCase())){setError(t('admin.contentStudio.submitDraftBeforeQuestionReview'));return;}
+  const note=status==='REJECTED'?window.prompt(t('admin.contentStudio.authorFeedbackPrompt')):null;
   if(status==='REJECTED'&&note===null)return;
-  if(status==='REJECTED'&&!String(note||'').trim()){setError('Add feedback explaining what the author must correct.');return;}
+  if(status==='REJECTED'&&!String(note||'').trim()){setError(t('admin.contentStudio.authorFeedbackRequired'));return;}
   setSaving(true);setError('');setNotice('');
   try{
    await api('/api/v1/admin/content/lessons/'+selected.id+'/questions/'+questionId+'/review',{
     method:'POST',body:JSON.stringify({status,reviewNotes:note||undefined})
    });
    await load();await open(selected);
-   setNotice(status==='APPROVED'?'Question approved.':'Question returned to the author with review feedback.');
-  }catch(e){setError(e instanceof Error?e.message:'Question review could not be saved.')}finally{setSaving(false)}
+   setNotice(status==='APPROVED'?t('admin.contentStudio.questionApproved'):t('admin.contentStudio.questionReturned'));
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.questionReviewFailed'))}finally{setSaving(false)}
  }
  async function saveChapter(nextStatus?:string){
   if(!selected||selected.type!=='chapter')return;setSaving(true);setError('');setNotice('');
@@ -573,23 +573,23 @@ export default function ContentStudio(){
   catch(e){setError(e instanceof Error?e.message:'Chapter could not be saved.')}finally{setSaving(false)}
  }
  function addBlock(type:string){
-  if(blocks.length>=100){setError('This lesson already has the maximum of 100 teaching blocks.');return}
+  if(blocks.length>=100){setError(t('admin.contentStudio.maxTeachingBlocksReached',{count:100}));return}
   const next:ContentBlock={sequence_no:blocks.length+1,block_type:type,content:contentFor(type),active:true};setBlocks(old=>[...old,next]);setActiveBlock(blocks.length);setNotice('Added '+(BLOCK_OPTIONS.find(x=>x.type===type)?.label||type)+'. Complete the content, then save.');
  }
 
  function attachVisualCandidate(candidate:VisualCandidate){
-  if(candidate.candidate_kind==='page_preview'){setNotice('This whole-page preview is source context only. Attach a specific figure candidate, not the entire textbook page.');return;}
+  if(candidate.candidate_kind==='page_preview'){setNotice(t('admin.contentStudio.wholePagePreviewContext'));return;}
   if(!canEdit||saving||!selected||selected.type!=='lesson')return;
   const targetRow=rows.find(row=>row.lesson_id===selected.id);
   if(!visualCatalogMatchesLesson(targetRow,visualCatalog)){
    const sourceLabel=visualCatalog?('Class '+visualCatalog.source.class+' '+visualCatalog.source.subject):'the selected textbook';
    const lessonLabel=targetRow?('Class '+targetRow.class_code+' '+targetRow.subject_name):'the selected lesson';
-   setError('This visual source is for '+sourceLabel+'; it does not match '+lessonLabel+'. Select a lesson with the matching class and subject.');return;
+   setError(t('admin.contentStudio.visualSourceMismatch',{sourceLabel,lessonLabel}));return;
   }
   const existing=blocks.findIndex(block=>block.content?.source_candidate_id===candidate.candidate_id&&block.content?.source_book_id===candidate.source_book_id&&block.content?.source_pdf_sha256===candidate.source_pdf_sha256);
-  if(existing>=0){setActiveBlock(existing);setNotice('This candidate is already attached to this micro-topic.');return;}
-  if(blocks.length>=100){setError('This lesson already has the maximum of 100 teaching blocks.');return;}
-  if(!candidate.image_url){setError('This candidate has no resolvable image URL.');return;}
+  if(existing>=0){setActiveBlock(existing);setNotice(t('admin.contentStudio.candidateAlreadyAttached'));return;}
+  if(blocks.length>=100){setError(t('admin.contentStudio.maxTeachingBlocksReached',{count:100}));return;}
+  if(!candidate.image_url){setError(t('admin.contentStudio.candidateNoImage'));return;}
   const sourcePage=Number(candidate.source_pdf_page_number);
   const next:ContentBlock={sequence_no:blocks.length+1,block_type:'IMAGE',active:true,content:{
    title:'Textbook visual · PDF page '+sourcePage,
@@ -630,8 +630,8 @@ export default function ContentStudio(){
   setBlocks(old=>[...old.slice(0,insertAt),next,...old.slice(insertAt)].map((block,index)=>({...block,sequence_no:index+1})));
   setActiveBlock(insertAt);
   setNotice(best.index>=0&&best.score>0
-   ?'Added a draft visual after the lesson block with the strongest source-text overlap. Verify the placement and meaning before saving.'
-   :'Added a draft visual after the first explanation block as a placement suggestion. Verify the placement and meaning before saving.');
+   ?t('admin.contentStudio.visualAddedSourceOverlap')
+   :t('admin.contentStudio.visualAddedSuggestedPlacement'));
  }
  function updateQuestion(index:number,patch:Record<string,any>){
   const editsQuestionContent=Object.keys(patch).some(key=>!['review_status','review_notes','active','sort_order'].includes(key));
@@ -655,7 +655,7 @@ export default function ContentStudio(){
  function applyQuestionJson(){try{const q=JSON.parse(questionJson);if(!Array.isArray(q))throw new Error('Questions must be a JSON array.');setQuestions(q);setShowAdvancedQuestions(false);setNotice('Advanced question data loaded. Save to persist it.')}catch(e){setError(e instanceof Error?e.message:'Invalid question JSON.')}}
  function removeBlock(index:number){if(blocks.length<=1){setError('A lesson needs at least one teaching block. Add another block before removing this one.');return}setBlocks(old=>old.filter((_,i)=>i!==index).map((b,i)=>({...b,sequence_no:i+1})));setActiveBlock(Math.max(0,Math.min(index,blocks.length-2)))}
  function moveBlock(index:number,direction:number){const target=index+direction;if(target<0||target>=blocks.length)return;setBlocks(old=>{const next=[...old];const item=next.splice(index,1)[0];next.splice(target,0,item);return next.map((b,i)=>({...b,sequence_no:i+1}))});setActiveBlock(target)}
- function duplicateBlock(index:number){if(blocks.length>=100){setError('This lesson already has the maximum of 100 blocks.');return}setBlocks(old=>[...old.slice(0,index+1),{...old[index],content:{...old[index].content},sequence_no:index+2},...old.slice(index+1)].map((b,i)=>({...b,sequence_no:i+1})));setActiveBlock(index+1)}
+ function duplicateBlock(index:number){if(blocks.length>=100){setError(t('admin.contentStudio.maxTeachingBlocksReached',{count:100}));return}setBlocks(old=>[...old.slice(0,index+1),{...old[index],content:{...old[index].content},sequence_no:index+2},...old.slice(index+1)].map((b,i)=>({...b,sequence_no:i+1})));setActiveBlock(index+1)}
  async function saveLesson(nextStatus?:string){
   if(!selected||selected.type!=='lesson')return;
   const previousStatus=String(form.lessonStatus||'DRAFT').toUpperCase();

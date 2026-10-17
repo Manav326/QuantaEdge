@@ -425,3 +425,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 
 - The first full validation run for the Employees copy migration failed while parsing the actor-role JSX expression: an extra opening brace had been inserted during translation extraction.
 - Removed the extra brace. Permission checks, staff role mapping, and audit data handling are unchanged. The route remains CI-pending until a new full run succeeds.
+
+
+## Admin Content Studio — question review and visual feedback
+
+- Centralized question-review validation, reviewer feedback prompt/results, teaching-block limit, and visual candidate/source validation messages.
+- Dynamic lesson/source labels now interpolate into catalog text. The source-match placement notice uses two short variants.
+- Added paired messages and CI regression checks for the replaced review/visual copy. Form labels and learner preview remain open.
