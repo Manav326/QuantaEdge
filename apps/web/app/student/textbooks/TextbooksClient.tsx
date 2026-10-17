@@ -49,6 +49,15 @@ export default function TextbooksClient() {
   const t = (english: string, hindi: string) => locale === 'english' ? english : hindi;
   const requestedSubjectCode = searchParams.get('subjectCode') || '';
   const documentId = Number(searchParams.get('documentId') || 0);
+  const courseIdParam = Number(searchParams.get('courseId') || 0);
+  const [activeCourseId, setActiveCourseId] = useState<number | null>(() => {
+    if (Number.isSafeInteger(courseIdParam) && courseIdParam > 0) return courseIdParam;
+    if (typeof window !== 'undefined') {
+      const saved = Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
+      if (Number.isSafeInteger(saved) && saved > 0) return saved;
+    }
+    return null;
+  });
   const readerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -76,12 +85,25 @@ export default function TextbooksClient() {
   const [notice, setNotice] = useState('');
   const [fullscreen, setFullscreen] = useState(false);
 
+  useEffect(() => {
+    if (Number.isSafeInteger(courseIdParam) && courseIdParam > 0) {
+      setActiveCourseId(courseIdParam);
+      try { window.localStorage.setItem('qe:student:activeCourseId', String(courseIdParam)); } catch {}
+    } else {
+      try {
+        const saved = Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
+        setActiveCourseId(Number.isSafeInteger(saved) && saved > 0 ? saved : null);
+      } catch { setActiveCourseId(null); }
+    }
+  }, [courseIdParam]);
+
   const loadDocuments = useCallback(async () => {
     setLoading(true);
     setError('');
     setDocumentsLanguage(null);
     try {
-      const data = await api('/api/v1/learning/documents?language=' + requestedLanguage);
+      const courseQuery = activeCourseId !== null ? '&courseId=' + encodeURIComponent(String(activeCourseId)) : '';
+      const data = await api('/api/v1/learning/documents?language=' + requestedLanguage + courseQuery);
       setDocuments(Array.isArray(data) ? data : []);
       setDocumentsLanguage(requestedLanguage);
     } catch (e: any) {
@@ -91,7 +113,7 @@ export default function TextbooksClient() {
     } finally {
       setLoading(false);
     }
-  }, [router, requestedLanguage, locale]);
+  }, [router, requestedLanguage, locale, activeCourseId]);
 
   useEffect(() => { void loadDocuments(); }, [loadDocuments]);
 
