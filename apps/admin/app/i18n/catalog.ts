@@ -15,7 +15,7 @@ export function translateUi(localeValue: unknown, key: MessageKey | string, valu
   const primary = (locale === 'english' ? english : hinglish) as Record<string, string>;
   const fallback = english as Record<string, string>;
   const template = primary[key] ?? fallback[key] ?? key;
-  return template.replace(/\\{([a-zA-Z][a-zA-Z0-9_]*)\\}/g, (match, name: string) =>
+  return template.replace(/\{([a-zA-Z][a-zA-Z0-9_]*)\}/g, (match, name: string) =>
     Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match,
   );
 }
