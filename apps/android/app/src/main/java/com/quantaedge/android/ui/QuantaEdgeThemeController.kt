@@ -40,7 +40,7 @@ class QuantaEdgeThemeController(context: Context) {
         return raw?.takeIf { HEX_COLOUR.matches(it) } ?: "#F97316"
     }
 
-    fun setAppearanceMode(mode: QeAppearanceMode) {
+    fun updateAppearanceMode(mode: QeAppearanceMode) {
         appearanceMode = mode
         val editor = preferences.edit()
         if (mode == QeAppearanceMode.INSTITUTION) editor.remove(KEY_USER_APPEARANCE)
