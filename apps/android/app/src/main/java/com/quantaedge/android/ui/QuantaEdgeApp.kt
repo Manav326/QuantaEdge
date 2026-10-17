@@ -246,7 +246,7 @@ fun QuantaEdgeApp() {
         var code = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
         try {
             if (pendingInstitutionJoinCode.isNotBlank() && role == "STUDENT" && stateOwnerKey != "anonymous") {
-                val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode)
+                val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode, code)
                 pendingInstitutionJoinCode = ""
                 code = InstitutionBrandingRepository.normalizeCode(joined.optString("institutionCode")) ?: code
                 if (code != null) {
