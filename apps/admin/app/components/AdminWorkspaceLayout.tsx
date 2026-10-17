@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
-import { translateUi } from '../i18n/catalog';
+import { getUiLocaleLanguage, resolveUiLocale, UI_LOCALE_OPTIONS, translateUi } from '../i18n/catalog';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
 import {
   ADMIN_NAV_GROUPS,
@@ -40,10 +40,7 @@ function activeSection(pathname: string): AdminSection {
 }
 
 function normalizeAdminLocale(value: unknown): AdminLocale | null {
-  const raw = String(value ?? '').trim().toLowerCase();
-  if (raw === 'english' || raw === 'en') return 'english';
-  if (raw === 'hinglish' || raw === 'hindi' || raw === 'hi') return 'hinglish';
-  return null;
+  return resolveUiLocale(value);
 }
 function readSharedAdminLocale(): AdminLocale | null {
   const match = document.cookie.match(/(?:^|;\s*)qe-locale=([^;]+)/);
@@ -68,7 +65,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const t = (key: string, values: Record<string, string | number> = {}) => translateUi(locale, key, values);
   const changeLocale = useCallback((next: AdminLocale) => {
     setLocale(next);
-    if (typeof document !== 'undefined') document.documentElement.lang = next === 'hinglish' ? 'hi' : 'en';
+    if (typeof document !== 'undefined') document.documentElement.lang = getUiLocaleLanguage(next);
     persistAdminLocale(next);
   }, []);
 
@@ -77,13 +74,13 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     try { saved = readSharedAdminLocale() ?? normalizeAdminLocale(window.localStorage.getItem('qe-locale')); } catch {}
     if (saved) {
       setLocale(saved);
-      document.documentElement.lang = saved === 'english' ? 'en' : 'hi';
+      document.documentElement.lang = getUiLocaleLanguage(saved);
       if (!readSharedAdminLocale()) persistAdminLocale(saved);
     }
     const onStorage = (event: StorageEvent) => {
       if (event.key === 'qe-locale') {
         const next = normalizeAdminLocale(event.newValue);
-        if (next) { setLocale(next); document.documentElement.lang = next === 'english' ? 'en' : 'hi'; }
+        if (next) { setLocale(next); document.documentElement.lang = getUiLocaleLanguage(next); }
       }
     };
     window.addEventListener('storage', onStorage);
@@ -203,10 +200,9 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           </div>
           <div className="qe-admin-global-actions">
             <label className="qe-admin-language-switcher">
-              <span aria-hidden="true">文</span><span className="qe-admin-language-label">{t('admin.language.label')}</span>
+              <span aria-hidden="true">文</span>
               <select value={locale} onChange={event => changeLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
-                <option value="hinglish">{t('common.language.hinglish')}</option>
-                <option value="english">{t('common.language.english')}</option>
+                {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
               </select>
             </label>
           </div>

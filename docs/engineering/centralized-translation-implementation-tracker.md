@@ -19,7 +19,7 @@
 
 ## Architecture implemented
 
-- Central key/value resources for `english` and `hinglish`, with a runtime API (`translateUi`, `normalizeUiLocale`, `hasUiTranslation`) and typed message-key support.
+- Central key/value resources driven by `localization/locales.json` and a generated registry. `translateUi`, locale normalization, aliases, display names, HTML language tags, fallback and selector choices are registry-backed. Adding a catalog plus one metadata entry generates all three app copies without page-level edits.
 - Web exposes `useUiTranslation` and `UiText` through the existing `LanguageProvider`; it keeps the distinct learning-language and certificate-language controls.
 - Admin uses the existing `AdminWorkspaceContext` for catalog translation and shares the locale through the same cookie/local-storage contract.
 - People Operations is wrapped in `UiLocaleProvider`, has a header language selector, and reads/writes the shared locale cookie.
@@ -119,7 +119,8 @@ Preserve these rules when implementing the next phase:
 
 ### P3 — Acceptance and observability
 
-- [ ] CI check fails for catalog key/placeholder drift, missing generated copies, and newly introduced hardcoded interface literals in covered routes (with documented exceptions).
+- [x] CI fails for catalog key/placeholder drift, missing locale metadata/catalog pairs, alias collisions, placeholder drift, stale generated registry and out-of-sync app copies.
+- [ ] CI check fails for direct static UI sentences in all covered routes (with documented exceptions); migrate existing raw-copy debt before enabling the repository-wide blocking mode.
 - [ ] Add unit/integration tests for `translateUi`, fallback, interpolation, cookie/storage synchronization and locale persistence.
 - [ ] Verify deep links, reload, tab changes and authenticated routes in all three apps with English and Hinglish selected.
 - [ ] Verify UI language changes do not silently change learning language, assessment state, question ID, selected answer, result, source data or permissions.
@@ -322,3 +323,20 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Existing endpoint calls, authorization, assignment eligibility, meeting-link privacy, upload idempotency, recording state transitions, raw server diagnostics, user-generated titles/descriptions and identifiers remain data-driven and unchanged.
 - Expanded `scripts/check-admin-classes-i18n.mjs` to check both catalog key/placeholder coverage and representative session/recording hardcoded UI literals. Pre-push validation confirmed all **170 unique directly referenced page translation keys** resolve in both catalogs, with zero catalog placeholder mismatches and zero checked literal remnants.
 - Updated `docs/engineering/ui-localization-route-coverage.md`. This remains a first migration pass, not full route acceptance: browser/device checks and remaining accessibility/deep-state audits are still open. The new batch awaits its own CI run.
+
+
+## Non-negotiable requirement added — catalog-only UI language and static copy
+
+- Required outcome: no page component may own a user-visible static sentence, inline language pair such as `tx('Hinglish','English')`, locale-specific ternary, duplicated page dictionary, or hardcoded accessibility/helper sentence. Every static label, action, notice, form hint, validation message, dialog, empty/loading/error state and accessibility name must resolve from central semantic keys.
+- Adding another UI language must not require edits to page components, feature components, or route files. A locale catalog and one entry in `localization/locales.json` define its registered ID, display/native name, HTML language tag, legacy aliases and fallback. The sync script generates the static import registry and keeps web/admin/People Operations copies in sync.
+- Legacy stored values `hindi` and `hi` continue resolving to Hinglish to avoid changing existing user preferences. Future Pure Hindi must use a distinct registered ID (recommended `pure-hindi`) so this compatibility alias cannot silently switch existing users' language.
+- Language selectors display available language names only; no visible pre-login explanatory phrase such as “Interface language” or long helper description. Crisp notices are the default; actual curriculum text, user-generated data, identifiers and meaningful server diagnostics are not rewritten as short UI copy.
+- Completion is not inferred from the registry alone. Route-by-route literal migration, short-copy review, a blocking static-copy guard, catalog checks, CI builds and real-browser acceptance remain separate tracker items.
+
+## Latest implementation checkpoint — locale registry and selector foundation
+
+- Inspected `main` before patch: `066727ad8f091aa278d1f30f166d221c3e7fd5f1`. The preceding Admin Classes localization validation is green on [Actions run #3051](https://github.com/Manav326/QuantaEdge/actions/runs/39007559294) (eight required jobs succeeded for `53d01006ce13`).
+- Introduced registry-driven locale metadata, generated TypeScript imports, canonical locale normalization, legacy aliases, display/native labels, HTML language tags and catalog fallback. The current registered locales remain English and Hinglish; no incomplete Pure Hindi catalog is being advertised.
+- Replaced hardcoded two-option language lists in Student/Parent Web, Admin and People Operations selectors with the shared generated options. Removed visible explanatory/help copy from those selectors while keeping accessible names. Existing learning-language and certificate-language settings remain independent.
+- Updated this tracker and route matrix to distinguish registry readiness from still-incomplete inline-copy and route acceptance work.
+- This patch is not marked CI-verified until its own new Actions run completes successfully.

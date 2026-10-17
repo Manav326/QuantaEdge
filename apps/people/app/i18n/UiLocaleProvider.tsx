@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { translateUi, type MessageKey, type MessageValues, type UiLocale } from './catalog';
+import { DEFAULT_UI_LOCALE, UI_LOCALE_OPTIONS, getUiLocaleLanguage, resolveUiLocale, translateUi, type MessageKey, type MessageValues, type UiLocale } from './catalog';
 
 type UiLocaleContextValue = {
   locale: UiLocale;
@@ -12,10 +12,7 @@ const UiLocaleContext = createContext<UiLocaleContextValue | null>(null);
 const STORAGE_KEY = 'qe-locale';
 
 function normalize(value: unknown): UiLocale | null {
-  const raw = String(value ?? '').trim().toLowerCase();
-  if (raw === 'english' || raw === 'en') return 'english';
-  if (raw === 'hinglish' || raw === 'hindi' || raw === 'hi') return 'hinglish';
-  return null;
+  return resolveUiLocale(value);
 }
 function cookieLocale(): UiLocale | null {
   if (typeof document === 'undefined') return null;
@@ -30,10 +27,10 @@ function persist(locale: UiLocale) {
 }
 
 export function UiLocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<UiLocale>('hinglish');
+  const [locale, setLocaleState] = useState<UiLocale>(DEFAULT_UI_LOCALE);
   const setLocale = useCallback((next: UiLocale) => {
     setLocaleState(next);
-    document.documentElement.lang = next === 'english' ? 'en' : 'hi';
+    document.documentElement.lang = getUiLocaleLanguage(next);
     persist(next);
   }, []);
 
@@ -44,7 +41,7 @@ export function UiLocaleProvider({ children }: { children: ReactNode }) {
     const resolved = shared ?? local;
     if (resolved) {
       setLocaleState(resolved);
-      document.documentElement.lang = resolved === 'english' ? 'en' : 'hi';
+      document.documentElement.lang = getUiLocaleLanguage(resolved);
       if (!shared || !local) persist(resolved);
     }
     const onStorage = (event: StorageEvent) => {
@@ -52,7 +49,7 @@ export function UiLocaleProvider({ children }: { children: ReactNode }) {
       const next = normalize(event.newValue);
       if (next) {
         setLocaleState(next);
-        document.documentElement.lang = next === 'english' ? 'en' : 'hi';
+        document.documentElement.lang = getUiLocaleLanguage(next);
       }
     };
     window.addEventListener('storage', onStorage);
@@ -75,10 +72,8 @@ export function PeopleLanguageSwitcher() {
   const { locale, setLocale, t } = useUiTranslation();
   return (
     <label className="qe-people-language-select">
-      <span>{t('common.language.label')}</span>
       <select value={locale} onChange={event => setLocale(event.target.value as UiLocale)} aria-label={t('common.language.label')}>
-        <option value="hinglish">{t('common.language.hinglish')}</option>
-        <option value="english">{t('common.language.english')}</option>
+        {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
       </select>
     </label>
   );

@@ -2,9 +2,9 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import { translateUi } from '../i18n/catalog';
+import { DEFAULT_UI_LOCALE, UI_LOCALE_OPTIONS, getUiLocaleLanguage, resolveUiLocale, translateUi, type UiLocale } from '../i18n/catalog';
 
-export type Locale = 'hindi' | 'english';
+export type Locale = UiLocale;
 export type LearningLanguage = 'hi' | 'en';
 type LocaleContextValue = {
   locale: Locale;
@@ -21,10 +21,7 @@ const LEARNING_STORAGE_KEY = 'qe-learning-language';
 const CERTIFICATE_STORAGE_KEY = 'qe-certificate-language';
 
 function toLocale(value: unknown): Locale | null {
-  const normalized = String(value ?? '').trim().toLowerCase();
-  if (normalized === 'english' || normalized === 'en') return 'english';
-  if (normalized === 'hinglish' || normalized === 'hindi' || normalized === 'hi') return 'hindi';
-  return null;
+  return resolveUiLocale(value);
 }
 
 function localeCookieValue(): Locale | null {
@@ -35,14 +32,14 @@ function localeCookieValue(): Locale | null {
 
 function persistSharedLocale(next: Locale) {
   if (typeof window === 'undefined') return;
-  const stored = next === 'english' ? 'english' : 'hinglish';
+  const stored = next;
   try { window.localStorage.setItem(STORAGE_KEY, stored); } catch {}
   const secure = window.location.protocol === 'https:' ? '; Secure' : '';
   document.cookie = STORAGE_KEY + '=' + stored + '; Path=/; Max-Age=31536000; SameSite=Lax' + secure;
 }
 
 function isStoredLocale(value: string | null): boolean {
-  return value === 'english' || value === 'hinglish' || value === 'hindi';
+  return Boolean(value && resolveUiLocale(value) === value);
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
@@ -58,13 +55,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isStudentRoute = pathname?.startsWith('/student') ?? false;
   const isParentRoute = pathname?.startsWith('/parent') ?? false;
-  const [locale, setLocaleState] = useState<Locale>('hindi');
+  const [locale, setLocaleState] = useState<Locale>(DEFAULT_UI_LOCALE);
   const [learningLanguage, setLearningLanguageState] = useState<LearningLanguage>('hi');
   const [certificateLanguage, setCertificateLanguageState] = useState<LearningLanguage>('hi');
 
   const applyLocale = useCallback((next: Locale, persist: boolean) => {
     setLocaleState(next);
-    if (typeof document !== 'undefined') document.documentElement.lang = next === 'hindi' ? 'hi' : 'en';
+    if (typeof document !== 'undefined') document.documentElement.lang = getUiLocaleLanguage(next);
     if (persist) persistSharedLocale(next);
   }, []);
 
@@ -186,7 +183,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         if (!active || !profile || localLocaleIsSet()) return;
         const preference = String(profile.preferred_language || '');
         if (preference === 'English') applyLocale('english', true);
-        else if (preference === 'Hindi' || preference === 'Hindi & English') applyLocale('hindi', true);
+        else if (preference === 'Hindi' || preference === 'Hindi & English') applyLocale('hinglish', true);
       })
       .catch(() => undefined);
     return () => { active = false; };
@@ -214,17 +211,10 @@ export function LanguageSwitcher({ compact = false, menu = false }: { compact?: 
   return (
     <label className={'qe-language-switcher' + (compact ? ' is-compact' : '') + (menu ? ' qe-language-switcher--menu-setting' : '')}>
       <span aria-hidden="true">文</span>
-      <span className="qe-language-switcher__label">
-        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.label')}
-      </span>
       <select value={locale} onChange={event => setLocale(event.target.value as Locale)}
-        aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.label')}>
-        <option value="hindi">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.hinglish')}</option>
-        <option value="english">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.english')}</option>
+        aria-label={translateUi(locale, 'common.language.label')}>
+        {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
       </select>
-      <small className="qe-language-switcher__help">
-        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.changeHelp')}
-      </small>
     </label>
   );
 }
@@ -235,15 +225,15 @@ export function LearningLanguageSwitcher({ compact = false, menu = false }: { co
     <label className={'qe-language-switcher qe-learning-language-switcher' + (compact ? ' is-compact' : '') + (menu ? ' qe-language-switcher--menu-setting' : '')}>
       <span aria-hidden="true">📚</span>
       <span className="qe-language-switcher__label">
-        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.learningLanguage.label')}
+        {translateUi(locale, 'common.learningLanguage.label')}
       </span>
       <select value={learningLanguage} onChange={event => setLearningLanguage(event.target.value as LearningLanguage)}
-        aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.learningLanguage.label')}>
-        <option value="hi">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.hinglish')}</option>
-        <option value="en">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.language.english')}</option>
+        aria-label={translateUi(locale, 'common.learningLanguage.label')}>
+        <option value="hi">{translateUi(locale, 'common.language.hinglish')}</option>
+        <option value="en">{translateUi(locale, 'common.language.english')}</option>
       </select>
       <small className="qe-language-switcher__help">
-        {translateUi(locale === 'english' ? 'english' : 'hinglish', 'common.learningLanguage.changeHelp')}
+        {translateUi(locale, 'common.learningLanguage.changeHelp')}
       </small>
     </label>
   );

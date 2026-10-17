@@ -73,7 +73,8 @@
 
 ## Current priority
 
-1. Finish first-pass migration on remaining Admin routes and their dialogs.
-2. Audit Student and People deep controls, error/empty/loading states and accessibility labels.
-3. Add a catalog-backed literal anti-regression guard and browser locale-persistence checks.
-4. Map the existing curriculum-translation APIs/provider/review workflow before designing any runtime translation cache. Do not introduce a duplicate AI translation service without an evidenced architecture gap.
+1. Use the generated locale registry as the only source for selector options; do not add per-page language options.
+2. Remove inline translation pairs and direct static UI sentences route by route, beginning with pre-login/auth copy and deep Admin/People dialogs.
+3. Add a blocking literal anti-regression guard only after remaining legacy raw-copy debt is migrated or explicitly tracked.
+4. Verify cross-app locale persistence and language switching without changing learning language, content, test state or permissions.
+5. Map the existing curriculum-translation APIs/provider/review workflow before designing any runtime translation cache. Do not introduce a duplicate AI translation service without an evidenced architecture gap.

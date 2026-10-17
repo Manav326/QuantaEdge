@@ -1,29 +1,57 @@
 #!/usr/bin/env python3
-"""Synchronize the canonical QuantaEdge UI message catalogs into the standalone web apps.
+"""Validate and synchronize central QuantaEdge UI language catalogs.
 
-The app builds use apps/{web,admin,people} as independent Docker contexts, so each app
-receives a generated runtime copy. Edit localization/catalogs only.
+Add a catalog file in localization/catalogs and metadata in localization/locales.json.
+Running this script regenerates the static TypeScript locale registry and all app copies;
+page components do not need locale-specific edits.
 """
 from __future__ import annotations
+
 import argparse
 import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "localization"
 APPS = ("web", "admin", "people")
-# The generated app runtime historically used catalog.ts; keep that import path stable.
-FILES = (("catalogs/english.json", "catalogs/english.json"),
-         ("catalogs/hinglish.json", "catalogs/hinglish.json"),
-         ("runtime.ts", "catalog.ts"))
+TOKEN = re.compile(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}")
 
 
-def validate() -> dict[str, dict[str, str]]:
+def load_locales() -> dict[str, dict[str, Any]]:
+    path = SOURCE / "locales.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict) or not payload:
+        raise ValueError(f"{path}: expected a non-empty locale metadata object")
+    required = {"label", "nativeLabel", "lang", "aliases", "fallback", "default"}
+    for locale, metadata in payload.items():
+        if not isinstance(locale, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", locale):
+            raise ValueError(f"{path}: invalid locale ID {locale!r}")
+        if not isinstance(metadata, dict) or not required.issubset(metadata):
+            raise ValueError(f"{path}: {locale} must define {sorted(required)}")
+        for key in ("label", "nativeLabel", "lang", "fallback"):
+            if not isinstance(metadata[key], str) or not metadata[key].strip():
+                raise ValueError(f"{path}: {locale}.{key} must be a non-empty string")
+        if not isinstance(metadata["aliases"], list) or any(not isinstance(alias, str) or not alias.strip() for alias in metadata["aliases"]):
+            raise ValueError(f"{path}: {locale}.aliases must be an array of non-empty strings")
+        if not isinstance(metadata["default"], bool):
+            raise ValueError(f"{path}: {locale}.default must be boolean")
+    defaults = [locale for locale, metadata in payload.items() if metadata["default"]]
+    if len(defaults) != 1:
+        raise ValueError(f"{path}: exactly one locale must set default=true")
+    if "english" not in payload:
+        raise ValueError(f"{path}: English catalog is required as the universal fallback")
+    return payload
+
+
+def load_catalogs(locales: dict[str, dict[str, Any]]) -> dict[str, dict[str, str]]:
+    catalog_dir = SOURCE / "catalogs"
+    paths = sorted(catalog_dir.glob("*.json"))
     catalogs: dict[str, dict[str, str]] = {}
-    for locale in ("english", "hinglish"):
-        path = SOURCE / "catalogs" / f"{locale}.json"
+    for path in paths:
+        locale = path.stem
         payload = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(payload, dict) or not payload:
             raise ValueError(f"{path}: expected a non-empty flat key/value object")
@@ -32,32 +60,83 @@ def validate() -> dict[str, dict[str, str]]:
         if invalid:
             raise ValueError(f"{path}: empty or non-string messages: {invalid[:5]}")
         catalogs[locale] = payload
-    english_keys = set(catalogs["english"])
-    hinglish_keys = set(catalogs["hinglish"])
-    if english_keys != hinglish_keys:
+
+    if set(catalogs) != set(locales):
         raise ValueError(
-            f"Catalog key mismatch. English-only={sorted(english_keys - hinglish_keys)[:10]}, "
-            f"Hinglish-only={sorted(hinglish_keys - english_keys)[:10]}"
+            "Locale registry/catalog mismatch. Missing catalog files="
+            f"{sorted(set(locales) - set(catalogs))}; unregistered catalog files="
+            f"{sorted(set(catalogs) - set(locales))}. Add both the catalog and metadata."
         )
-    token = re.compile(r"\{([a-zA-Z][a-zA-Z0-9_]*)\}")
-    for key in sorted(english_keys):
-        en_tokens = sorted(token.findall(catalogs["english"][key]))
-        hi_tokens = sorted(token.findall(catalogs["hinglish"][key]))
-        if en_tokens != hi_tokens:
-            raise ValueError(f"Placeholder mismatch for {key}: English={en_tokens}, Hinglish={hi_tokens}")
+    aliases: dict[str, str] = {}
+    for locale, metadata in locales.items():
+        if metadata["fallback"] not in catalogs:
+            raise ValueError(f"{locale}: fallback {metadata['fallback']!r} is not registered")
+        for alias in metadata["aliases"]:
+            normalized = alias.strip().lower()
+            if normalized in catalogs and normalized != locale:
+                raise ValueError(f"{locale}: alias {alias!r} conflicts with a registered locale ID")
+            previous = aliases.get(normalized)
+            if previous and previous != locale:
+                raise ValueError(f"Locale alias {alias!r} is shared by {previous} and {locale}")
+            aliases[normalized] = locale
+
+    english_keys = set(catalogs["english"])
+    for locale, payload in catalogs.items():
+        keys = set(payload)
+        if keys != english_keys:
+            raise ValueError(
+                f"Catalog key mismatch for {locale}. English-only={sorted(english_keys - keys)[:10]}, "
+                f"{locale}-only={sorted(keys - english_keys)[:10]}"
+            )
+        for key in sorted(english_keys):
+            english_tokens = sorted(TOKEN.findall(catalogs["english"][key]))
+            locale_tokens = sorted(TOKEN.findall(payload[key]))
+            if english_tokens != locale_tokens:
+                raise ValueError(f"Placeholder mismatch for {locale}.{key}: English={english_tokens}, {locale}={locale_tokens}")
     return catalogs
+
+
+def render_registry(locales: dict[str, dict[str, Any]]) -> str:
+    locale_ids = sorted(locales)
+    imports = "\n".join(f"import {locale.replace('-', '_')} from './catalogs/{locale}.json';" for locale in locale_ids)
+    entries = ",\n".join(f"  '{locale}': {locale.replace('-', '_')}" for locale in locale_ids)
+    return (
+        imports + "\nimport locales from './locales.json';\n\n"
+        + "export const uiCatalogs = {\n" + entries + ",\n} as const;\n\n"
+        + "export const uiLocaleMetadata = locales as {\n"
+        + "  readonly [locale: string]: {\n"
+        + "    readonly label: string;\n"
+        + "    readonly nativeLabel: string;\n"
+        + "    readonly lang: string;\n"
+        + "    readonly aliases: readonly string[];\n"
+        + "    readonly fallback: string;\n"
+        + "    readonly default: boolean;\n"
+        + "  };\n"
+        + "};\n"
+    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="Fail if an app copy differs; never writes files")
+    parser.add_argument("--check", action="store_true", help="Fail if generated copies differ; never writes files")
     args = parser.parse_args()
     try:
-        catalogs = validate()
+        locales = load_locales()
+        catalogs = load_catalogs(locales)
+        expected_registry = render_registry(locales).encode("utf-8")
+        registry_path = SOURCE / "registry.ts"
         differences = []
+        if args.check:
+            if not registry_path.is_file() or registry_path.read_bytes() != expected_registry:
+                differences.append("localization/registry.ts (generated registry is stale)")
+        else:
+            registry_path.write_bytes(expected_registry)
+
+        source_files = [(f"catalogs/{locale}.json", f"catalogs/{locale}.json") for locale in sorted(catalogs)]
+        source_files.extend([("locales.json", "locales.json"), ("registry.ts", "registry.ts"), ("runtime.ts", "catalog.ts")])
         for app in APPS:
             target_root = ROOT / "apps" / app / "app" / "i18n"
-            for source_relative, target_relative in FILES:
+            for source_relative, target_relative in source_files:
                 source = SOURCE / source_relative
                 target = target_root / target_relative
                 if args.check:
@@ -67,14 +146,15 @@ def main() -> int:
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_bytes(source.read_bytes())
         if differences:
-            print("Out-of-sync generated localization files:\\n- " + "\\n- ".join(differences), file=sys.stderr)
+            print("Out-of-sync generated localization files:\n- " + "\n- ".join(differences), file=sys.stderr)
             return 1
-        status = "all app copies match" if args.check else "all three app copies synchronized"
-        print(f"Central localization valid: {len(catalogs['english'])} keys × 2 locales; {status}")
+        status = "all app copies match" if args.check else "registry and all app copies generated"
+        print(f"Central localization valid: {len(catalogs['english'])} keys × {len(catalogs)} locale(s); {status}")
         return 0
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Localization validation failed: {exc}", file=sys.stderr)
         return 1
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

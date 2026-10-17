@@ -1,8 +1,9 @@
 'use client';
 
 import { createContext } from 'react';
+import type { UiLocale } from '../i18n/catalog';
 
-export type AdminLocale = 'hinglish' | 'english';
+export type AdminLocale = UiLocale;
 export type AdminWorkspaceContextValue = {
   insideWorkspace: boolean;
   locale: AdminLocale;
