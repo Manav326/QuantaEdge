@@ -14,6 +14,7 @@ concurrency:
 
 jobs:
   benchmark:
+    if: github.event.workflow_run.conclusion == 'success'
     name: Verify evidence gate and benchmark local Ollama candidates
     runs-on: ubuntu-latest
     timeout-minutes: 360
