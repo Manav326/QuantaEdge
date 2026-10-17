@@ -35,12 +35,47 @@ jobs:
           python -m py_compile scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
           python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+      - name: Preflight durable source and coverage checkpoint before model startup
+        id: recovery_preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$GITHUB_OUTPUT" <<'PY'
+          import json, sys
+          from pathlib import Path
+          root = Path.cwd()
+          inventory = root / "data/textbook-visuals/class6-curiosity-en/visual-inventory.v1.json"
+          raw = root / "data/textbook-visuals/class6-curiosity-en/visual-analysis-qwen2.5vl-3b.v1.json"
+          manifest = root / "data/textbook-extractions/class-6/english/pages/7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.manifest.json"
+          text_jsonl = root / "data/textbook-extractions/class-6/english/pages/7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.jsonl"
+          missing = [str(p.relative_to(root)) for p in (inventory, raw, manifest, text_jsonl) if not p.is_file()]
+          if missing:
+              raise SystemExit("Resume stopped before model startup; verified source/checkpoint files are missing: " + ", ".join(missing))
+          ledger_path = root / "data/textbook-content-pipeline/class-6/books/class6-curiosity-en/coverage-ledger.v1.json"
+          needs_repair = True
+          ledger_status = "MISSING"
+          if ledger_path.is_file():
+              ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+              ledger_status = ledger.get("ledger_status", "UNKNOWN")
+              source = ledger.get("source") if isinstance(ledger.get("source"), dict) else {}
+              if (ledger_status == "COMPLETE"
+                  and source.get("source_book_id") == "ncert-c6-english-fecu1"
+                  and str(source.get("source_pdf_sha256") or "").lower() == "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73"
+                  and ledger.get("publication_allowed") is False
+                  and ledger.get("human_review_required") is True):
+                  needs_repair = False
+          print(json.dumps({"source_book_id":"ncert-c6-english-fecu1","layer5_status":ledger_status,"needs_repair":needs_repair}))
+          with open(sys.argv[1], "a", encoding="utf-8") as out:
+              out.write(f"needs_repair={str(needs_repair).lower()}\n")
+          PY
       - name: Restore the model cache when available
+        if: steps.recovery_preflight.outputs.needs_repair == 'true'
         uses: actions/cache@v4
         with:
           path: ~/.ollama
           key: ollama-model-qwen2.5vl:3b
       - name: Start local Ollama and load the existing vision model
+        if: steps.recovery_preflight.outputs.needs_repair == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -53,7 +88,8 @@ jobs:
           done
           [[ "$ready" == true ]] || { cat "$RUNNER_TEMP/ollama-vision.log"; exit 1; }
           ollama pull qwen2.5vl:3b
-      - name: Retry the failed checkpoint in small, durable batches
+      - name: Retry pending/error visuals with one-asset durable savepoints
+        if: steps.recovery_preflight.outputs.needs_repair == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -63,10 +99,10 @@ jobs:
             echo "Existing committed inventory/model checkpoint is missing; refusing to invent a fresh ledger."
             exit 2
           }
-          for batch in $(seq 1 8); do
+          for batch in $(seq 1 80); do
             python scripts/analyze_visual_inventory_with_ollama.py \
               --inventory "$INVENTORY" --model qwen2.5vl:3b \
-              --max-assets 10 --include-page-previews \
+              --max-assets 1 --include-page-previews \
               --run-id "$GITHUB_RUN_ID" --timeout 360 \
               --num-ctx 8192 --num-predict 1024 \
               --output "$RAW" --resume
@@ -84,6 +120,7 @@ jobs:
             if [[ "$processed" == "0" ]]; then break; fi
           done
       - name: Rebuild the canonical analysis and Layer 5 ledger from source evidence
+        if: steps.recovery_preflight.outputs.needs_repair == 'true'
         id: ledger
         shell: bash
         run: |
@@ -122,7 +159,7 @@ jobs:
               output.write(f"ledger_status={ledger.get('ledger_status')}\n")
           PY
       - name: Commit analysis and evidence ledger, even when review gaps remain
-        if: always()
+        if: always() && steps.recovery_preflight.outputs.needs_repair == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -140,7 +177,7 @@ jobs:
             git push origin HEAD:main
           fi
       - name: Require true Layer 5 completeness for downstream generation
-        if: steps.ledger.outcome == 'success'
+        if: steps.recovery_preflight.outputs.needs_repair == 'true' && steps.ledger.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
