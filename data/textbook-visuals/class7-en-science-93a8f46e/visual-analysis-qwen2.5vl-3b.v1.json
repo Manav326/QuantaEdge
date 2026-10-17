@@ -11,8 +11,8 @@
     "assets_selected": 339,
     "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 339,
-    "assets_remaining": 7149,
+    "assets_analyzed": 338,
+    "assets_remaining": 7150,
     "assets_completion_percent": 4.5,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 338,
@@ -9730,7 +9730,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39013231656",
-      "checkpointed_at": "2026-10-17T09:04:06Z"
+      "checkpointed_at": "2026-10-17T09:05:12Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
