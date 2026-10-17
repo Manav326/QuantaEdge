@@ -153,7 +153,8 @@ public class AuthService {
   }
 
   public String requestOtp(String mobile,String purpose) {
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose) && !"PASSWORD_RESET".equals(purpose))
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)
+        && !"PASSWORD_RESET".equals(purpose) && !"ACCOUNT_SIGNUP".equals(purpose))
       throw new IllegalArgumentException("Invalid OTP purpose");
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
@@ -171,23 +172,27 @@ public class AuthService {
         }
       }
     } else if ("PASSWORD_RESET".equals(purpose)) {
-      boolean parentExists=Boolean.TRUE.equals(jdbc.queryForObject(
-          "select exists(select 1 from user_account where mobile_e164=? and role='PARENT' and active=true)",
+      boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
+          "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true)",
           Boolean.class, normalized));
-      if(!parentExists) throw new IllegalArgumentException("No parent account found for this mobile number.");
-    } else if ("SIGNUP".equals(purpose)) {
+      if(!accountExists) throw new IllegalArgumentException("No active account found for this mobile number.");
+    } else if ("SIGNUP".equals(purpose) || "ACCOUNT_SIGNUP".equals(purpose)) {
       // Prevent duplicate customer identities independently of a matching staff identity.
       boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
           "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
       if(accountExists)
         throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
     } else {
-      // A login OTP must only be available to an active parent identity.
-      boolean activeParentExists=Boolean.TRUE.equals(jdbc.queryForObject(
-          "select exists(select 1 from user_account where mobile_e164=? and role='PARENT' and active=true)",
+      boolean activeAccountExists=Boolean.TRUE.equals(jdbc.queryForObject(
+          "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true)",
           Boolean.class, normalized));
-      if(!activeParentExists)
-        throw new IllegalArgumentException("No active parent account found for this mobile number. If the account is suspended, contact support.");
+      if(!activeAccountExists) {
+        boolean inactiveAccountExists=Boolean.TRUE.equals(jdbc.queryForObject(
+            "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER'))",
+            Boolean.class, normalized));
+        if(inactiveAccountExists) throw new SecurityException("This account is inactive. Contact support.");
+        throw new IllegalArgumentException("No active account found for this mobile number. Please sign up first.");
+      }
     }
 
     return deliverOtp(normalized,purpose,null);
@@ -270,10 +275,12 @@ public class AuthService {
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess,String newPassword) {
     String normalized=normalizeMobile(mobile);
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose) && !"PASSWORD_RESET".equals(purpose) && !"LEARNER_TRANSITION".equals(purpose))
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)
+        && !"PASSWORD_RESET".equals(purpose) && !"LEARNER_TRANSITION".equals(purpose) && !"ACCOUNT_SIGNUP".equals(purpose))
       throw new IllegalArgumentException("Invalid OTP purpose");
-    if("SIGNUP".equals(purpose) && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
-      throw new IllegalArgumentException("Parent name must be between 2 and 120 characters");
+    if(("SIGNUP".equals(purpose) || "ACCOUNT_SIGNUP".equals(purpose))
+        && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
+      throw new IllegalArgumentException("Full name must be between 2 and 120 characters");
     if("SIGNUP".equals(purpose) || "PASSWORD_RESET".equals(purpose) || "LEARNER_TRANSITION".equals(purpose))
       validatePassword(newPassword, 8, "Password");
 
@@ -347,39 +354,72 @@ public class AuthService {
     }
 
     if ("PASSWORD_RESET".equals(purpose)) {
-      List<Map<String,Object>> parentRows=jdbc.queryForList(
-          "select id from user_account where mobile_e164=? and active=true and role='PARENT'", normalized);
-      if(parentRows.isEmpty()) throw new SecurityException("Active parent account not found.");
-      long parentId=((Number)parentRows.getFirst().get("id")).longValue();
+      List<Map<String,Object>> accountRows=jdbc.queryForList(
+          "select id,role from user_account where mobile_e164=? and active=true and role in ('PARENT','LEARNER')",
+          normalized);
+      if(accountRows.isEmpty()) throw new SecurityException("Active account not found.");
+      long accountId=((Number)accountRows.getFirst().get("id")).longValue();
+      String accountRole=String.valueOf(accountRows.getFirst().get("role"));
       int changed=jdbc.update(
-          "update user_account set password_hash=?,updated_at=now() where id=? and active=true and role='PARENT'",
-          passwordEncoder.encode(newPassword), parentId);
-      if(changed!=1) throw new SecurityException("Active parent account not found.");
-      // A password reset invalidates every previously issued parent access/refresh token.
-      jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null", parentId);
+          "update user_account set password_hash=?,updated_at=now() where id=? and active=true and role in ('PARENT','LEARNER')",
+          passwordEncoder.encode(newPassword), accountId);
+      if(changed!=1) throw new SecurityException("Active account not found.");
+      jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null", accountId);
       jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
-      return contextForUser(parentId);
+      if ("PARENT".equals(accountRole)) return contextForUser(accountId);
+      List<Map<String,Object>> profileRows=jdbc.queryForList(
+          "select id from student where user_account_id=? and active=true and environment='PRODUCTION'",accountId);
+      if(profileRows.isEmpty()) throw new IllegalStateException("Learner profile is not available for this account.");
+      return contextForStudent(null,((Number)profileRows.getFirst().get("id")).longValue());
     }
 
-    // Login must not change a parent's activation or role. Only explicit admin
-    // reactivation can restore a suspended account.
+    // Login never changes a role or activates a suspended identity.
     if("LOGIN".equals(purpose)) {
-      List<Map<String,Object>> activeParents=jdbc.queryForList(
-          "select id from user_account where mobile_e164=? and role='PARENT' and active=true", normalized);
-      if(activeParents.isEmpty()) {
-        Boolean parentExists=jdbc.queryForObject(
-            "select exists(select 1 from user_account where mobile_e164=? and role='PARENT')",
+      List<Map<String,Object>> accounts=jdbc.queryForList(
+          "select id,role from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true",
+          normalized);
+      if(accounts.isEmpty()) {
+        Boolean accountExists=jdbc.queryForObject(
+            "select exists(select 1 from user_account where mobile_e164=? and role in ('PARENT','LEARNER'))",
             Boolean.class, normalized);
-        if(Boolean.TRUE.equals(parentExists))
-          throw new SecurityException("This parent account is inactive. Contact support.");
-        throw new IllegalArgumentException("No active parent account found for this mobile number. Please register first.");
+        if(Boolean.TRUE.equals(accountExists)) throw new SecurityException("This account is inactive. Contact support.");
+        throw new IllegalArgumentException("No active account found for this mobile number. Please sign up first.");
       }
-      long userId=((Number)activeParents.getFirst().get("id")).longValue();
+      long userId=((Number)accounts.getFirst().get("id")).longValue();
+      String role=String.valueOf(accounts.getFirst().get("role"));
       jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
-      return contextForUser(userId);
+      if ("PARENT".equals(role)) return contextForUser(userId);
+      List<Map<String,Object>> profiles=jdbc.queryForList(
+          "select id from student where user_account_id=? and active=true and environment='PRODUCTION'",userId);
+      if(profiles.isEmpty()) throw new IllegalStateException("Learner profile is not available for this account.");
+      return contextForStudent(null,((Number)profiles.getFirst().get("id")).longValue());
     }
 
-    // Signup is the only path that creates a parent identity.
+    if("ACCOUNT_SIGNUP".equals(purpose)) {
+      Boolean accountExists=jdbc.queryForObject(
+          "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized);
+      if(Boolean.TRUE.equals(accountExists))
+        throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
+      long newUserId;
+      try {
+        newUserId=jdbc.queryForObject("""
+          insert into user_account(public_id,mobile_e164,display_name,role,mobile_verified_at)
+          values (?,?,?,'LEARNER',now()) returning id
+          """,Long.class,UUID.randomUUID(),normalized,displayName.trim());
+      } catch (DuplicateKeyException ex) {
+        throw new IllegalStateException("An account already exists for this mobile number. Please log in.",ex);
+      }
+      Long newStudentId=jdbc.queryForObject("""
+        insert into student(
+          public_id,display_name,class_code,board,language,environment,active,user_account_id
+        ) values (?,?, '6','Bihar Board','hi','PRODUCTION',true,?)
+        returning id
+        """,Long.class,UUID.randomUUID(),displayName.trim(),newUserId);
+      jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
+      return contextForStudent(null,newStudentId);
+    }
+
+    // Legacy SIGNUP remains the dedicated parent-registration entry point.
     boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
         "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
     if(accountExists)
