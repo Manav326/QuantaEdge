@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 300,
-    "successful_visual_analyses": 159,
+    "successful_visual_analyses": 293,
     "missing_visual_analyses": 1991,
-    "failed_visual_analyses": 141,
+    "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2132,
+    "unresolved_count": 1998,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7614,9 +7614,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in a textbook.",
+        "limitations": [
+          "No visible content on the page.",
+          "No text or images present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12360,9 +12370,19 @@
       "asset_path": "assets/d8c5c86a46f752f20c610c433aee9177e5cc188abd2187062762a05ea049a076.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and beige gradient background with no visible text or objects.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation to the image is provided.",
+        "limitations": [
+          "No visible text or objects are present in the image.",
+          "The background is a gradient with no distinct objects or elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12378,9 +12398,16 @@
       "asset_path": "assets/bcc8b10ec400f700ef0cd04051c93fc8efa8b7fcad8c6bf889e7a9b1792b10db.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page with a gradient background.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12396,9 +12423,18 @@
       "asset_path": "assets/41e375983eb815f7a238acf6e984a3f4ee3a5eee7a4b16b61c0c92ed11c5269b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with shades of orange and yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12414,9 +12450,16 @@
       "asset_path": "assets/a3f1643ec252ccc743a106878a9d566f81a6e201ad565dcfe2b4134bba7b1a82.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a warm, golden color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12432,9 +12475,16 @@
       "asset_path": "assets/83384730d1c6ad4f7762f92f2baab8d203da19033b1e3dbde5c46363f1e374e9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar chart with a light beige to yellow gradient.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a gradient bar chart.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12450,9 +12500,26 @@
       "asset_path": "assets/fbd42cd819f8f758dc2ce8e271cb32be1a14be91699bbb5deedda21f02204eff.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a darker shade of the same color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "beige",
+          "dark",
+          "text"
+        ],
+        "context_relation": "The background serves as a simple, unobtrusive backdrop for the text.",
+        "limitations": [
+          "No specific objects or figures are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12468,9 +12535,18 @@
       "asset_path": "assets/5a2cbbb4a8be811c7ef32d0b6cf8731144eb51d82aa876064dc42805463fbb85.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a golden hue transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12486,9 +12562,23 @@
       "asset_path": "assets/435e86ffd81ac2ded50488a139f57c9670401fdb0a2c4d100e0c7efe7659ed42.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white gradient background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and white gradient background",
+          "black horizontal line at the bottom"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided in the image"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12504,9 +12594,18 @@
       "asset_path": "assets/5d620c97633699e83b07ec30713b5990929878bac8082566d08440e8f61941f3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color palette transitioning from light beige to a deeper orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or content is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12522,9 +12621,16 @@
       "asset_path": "assets/cd928f932263b167558a1022a5f0370bf1031c01f4ace58d3d3afd2f7ea6e759.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and beige gradient background with a black line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "background",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12540,9 +12646,16 @@
       "asset_path": "assets/414647d777c5de75604891a839114efd0d290b493efedf4268e48b70849b8ce7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12558,9 +12671,18 @@
       "asset_path": "assets/708cc45d73aee6ed27848fb38ff9f9f88c5b2c601e0918c019a0324a54af61ce.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a blank or introductory page.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing. The background is a gradient, which might be used for aesthetic purposes or as a placeholder for content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12576,9 +12698,18 @@
       "asset_path": "assets/730a1ea7a70c2111268623c3c81a77c83655bff1b5f152832a5ca88637fa0f2d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative element or a header for the page.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12594,9 +12725,18 @@
       "asset_path": "assets/534ee31cfcf3f0741a86f2000fbc7075de2fe0aef3cba62cf0f40cf55fafc26b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light yellow to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for an educational content editor",
+        "limitations": [
+          "Unclear content or message due to blurriness and lack of visible text or symbols."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12612,9 +12752,16 @@
       "asset_path": "assets/586e700643014a4007637df05136495c30bf77d5252476ad7995e6f0929de31a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12630,9 +12777,18 @@
       "asset_path": "assets/cdc30a7697c74ba98f54d224b70b1da951a5c4bea6c8870112b44f4a04343b8c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid-colored background with a gradient effect transitioning from light to dark shades.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a title or header page.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12648,9 +12804,16 @@
       "asset_path": "assets/7c050de20e2037f1cef0d9ae304b91f3b0ddbc97d40e3d1748afdeb62e97aa74.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12666,9 +12829,19 @@
       "asset_path": "assets/9ab191536644b840331ed7dc10edc7ad348daf87e65a2e9820ff291eddf8ddca.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light beige to yellow, possibly indicating a title or heading area.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a title or heading area of a page, possibly for an educational content editor to use as a background or header.",
+        "limitations": [
+          "The image does not contain any specific text or content that can be analyzed for educational content.",
+          "The image is a gradient background, which may not convey specific information or concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12684,9 +12857,27 @@
       "asset_path": "assets/faa3fc6a5bcd19918c56efac25ce4d4267d69e39066c357b8b797a080be4db99.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color scheme transitioning from light beige to a deeper orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "color scheme",
+          "transition",
+          "beige",
+          "orange"
+        ],
+        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "limitations": [
+          "No specific content or information is provided beyond the text and background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12702,9 +12893,16 @@
       "asset_path": "assets/62b1c6dc6a6f7d83aa07dbb700e6a77517afbeaada247d9c49acdeffbe332efc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, orange-to-yellow color scheme.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12720,9 +12918,16 @@
       "asset_path": "assets/186cc93cec2576b4b7740fdc3a98f2af01291d00d140a70e49e4668e876e8216.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover page",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12738,9 +12943,18 @@
       "asset_path": "assets/0c3ec6d966b0ac1339f7c8cc0312d476dfce0bcb02b9f8c0984b0193ddc69de7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or border for text or content.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12756,9 +12970,18 @@
       "asset_path": "assets/34e846de6ce7c1933c6e9e238938eb03a426052d1b799e0ee13eea154f05d336.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12774,9 +12997,16 @@
       "asset_path": "assets/ef7a76bd5b36595b86d2b37a2fc32b390249178436057aedec04869e7c98d5fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from beige to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12792,9 +13022,18 @@
       "asset_path": "assets/e88619aeb5c66c7b5931f517d43d0dd13f07ab5ec257b8f8782dd9bf4ec1edfc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12810,9 +13049,16 @@
       "asset_path": "assets/ac07b4f5084d3189f0d6940ac26ac8a3b8ad409b72a7a4361bd7e81ce4d99346.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, earthy tone transitioning from beige to a deeper orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12828,9 +13074,19 @@
       "asset_path": "assets/2a80399b6fd54effc51bcdf1ec99a9cca2be729303e9d7d840ca9a896875f863.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of warm colors.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or labels"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12846,9 +13102,18 @@
       "asset_path": "assets/6526a264e2443f16f4eac4a4f40899723bdc6052fb674055c5fadada1837060f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12864,9 +13129,18 @@
       "asset_path": "assets/12e22bf911475c9a4073161d810d212fedbd8ab6077a386b6459c23ca7cc0c92.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The background is likely used as a simple, unobtrusive backdrop for text or images.",
+        "limitations": [
+          "The image does not contain any specific content or objects that can be described in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12882,9 +13156,16 @@
       "asset_path": "assets/f0ff2bfd64d7d1700f8b07e1bb743ee4b9480346da03db3e894a7dd3fa79c446.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12900,9 +13181,16 @@
       "asset_path": "assets/50e7c6861596b75072a7fc1c58ca40a2b93ae3097df32aa0083c0eac7deac03c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12918,9 +13206,16 @@
       "asset_path": "assets/5b1a506fd99ec8a6ebbe10aadb132a24c576c6c6bb790e6cc72f135428e1a513.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color palette transitioning from beige to light brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12936,9 +13231,18 @@
       "asset_path": "assets/bb565d28de86dff1fa30d6b3e65a0c652255b11245f2b71275c72345f822a6a4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12954,9 +13258,16 @@
       "asset_path": "assets/1d96d08ee52ac6add0ba7ae940799a0b306e97689534f0142fe86815e8e4f3d7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid yellow background with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12972,9 +13283,16 @@
       "asset_path": "assets/cd0a184086544b78d7a635ed37979c38d7d7517655542634c34ae1697409826c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white striped background with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12990,9 +13308,23 @@
       "asset_path": "assets/7251df3b15cf979831bd48b12fc84ba323085fb22ca5ea938310b4657c58be96.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "page layout"
+        ],
+        "context_relation": "The image is a full page from a textbook, likely used as a background or separator for educational content.",
+        "limitations": [
+          "The image does not contain any specific content or visual elements beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13008,9 +13340,18 @@
       "asset_path": "assets/b833b8b33401c5b1996b0f88373f5895ca805619e5c15b5aa29a0ab7578e5c09.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gradient background transitioning from light brown to beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13026,9 +13367,18 @@
       "asset_path": "assets/e7c6f420bad4a60421dc9fdb3a871fd993a87bf11ef5add6b90ce9785bec90ff.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a golden hue.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient effect."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13044,9 +13394,16 @@
       "asset_path": "assets/e10bc4d3edbdef78f0ae6764856a30920881cb9d818ad9f8e95c0aa910bb3c48.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13062,9 +13419,22 @@
       "asset_path": "assets/24e6d25938d88706aac130cd7417444909ab29341f24bef6567e70e900b5baec.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color palette transitioning from beige to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "warm color palette",
+          "transitional colors"
+        ],
+        "context_relation": "background",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13080,9 +13450,23 @@
       "asset_path": "assets/2ef6b9f7d86db00448c108f251363bf48e82bf7a19d58cb36f41ee5537d5e9ae.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or objects are visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13098,9 +13482,19 @@
       "asset_path": "assets/42e270a7e92f20417e0bf72373bd6d5ff9ff18fc0cf679d5d91f35718c831ef5.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of warm colors.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or objects"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13116,9 +13510,16 @@
       "asset_path": "assets/ba6c1a599ac81a98d4e4c8466231400e114697ecacd3dc36be01ded599b1103e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13134,9 +13535,21 @@
       "asset_path": "assets/76bd8752f1ef6de0a46a0fd79e4c115c116f81e404cf513869598217b674186b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from light brown to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "text",
+          "gradient"
+        ],
+        "context_relation": "background",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13152,9 +13565,16 @@
       "asset_path": "assets/9967ff55fce24f99b9fea0579ce983e9631192a097b20a5eade95fd6e1ad04b4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color palette transitioning from light beige to a deeper orange.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13170,9 +13590,16 @@
       "asset_path": "assets/61f06cc3967eaaead4731589945c3fb6451201965f67fb1d3e5b04b877d21b60.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover page",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13188,9 +13615,18 @@
       "asset_path": "assets/2e83cff4b4700fb2fea077d7df26c94819d0459825b061aaa1084bdf2fb68f3b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a blend of warm colors, transitioning from a light beige to a darker beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13206,9 +13642,19 @@
       "asset_path": "assets/eac44a17d56f086db02fb0699d3143184e3442e6a7b0f37eb8bcbdd40b1705c8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred gradient background transitioning from light beige to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for educational content.",
+        "limitations": [
+          "The image is blurred and lacks specific details.",
+          "The content is not readable or identifiable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13224,9 +13670,18 @@
       "asset_path": "assets/bb22d288c0e086e11ec782d647d5f6d6ade1ddd543b5b1d8ec4247ab4a7f46fb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and lack of visible text or objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13242,9 +13697,24 @@
       "asset_path": "assets/a43a162d8abcff1a724705b87a1af8b2782ead91827e5f9c9d5b144d569d2bbb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light brown to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "warm colors",
+          "transitional effect"
+        ],
+        "context_relation": "The background serves as a simple, unobtrusive backdrop for the text.",
+        "limitations": [
+          "No specific content or information is provided beyond the text and background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13260,9 +13730,18 @@
       "asset_path": "assets/77da71a6b3dbbc9d0a15dcc47a23d4dba74c84cdc726c152ae6abf735c32eab1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13278,9 +13757,19 @@
       "asset_path": "assets/845f90156a6b1b7966bebcff320a2dc4c19b72a12014df97b03e20f8fa05ae29.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a gradient effect transitioning from light orange to dark orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content or message",
+          "No specific text or elements visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13296,9 +13785,24 @@
       "asset_path": "assets/bad34f4e6461f64852159394993970b801b507a6f1416033946b3990255adc59.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a light beige color transitioning to a darker beige color.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient",
+          "color gradient",
+          "horizontal gradient"
+        ],
+        "context_relation": "The image is a visual element in a textbook, likely used to illustrate a concept or theme related to color gradients or transitions.",
+        "limitations": [
+          "The image does not provide specific details about the content or context it is meant to represent."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13314,9 +13818,24 @@
       "asset_path": "assets/a21521dcadd761de1ae2eee60703d6221b27b543feefb8d82b7aafee2bd90849.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color palette transitioning from light beige to a darker shade of the same color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "color gradient",
+          "text"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific objects or figures are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13332,9 +13851,18 @@
       "asset_path": "assets/c61a150fece3e31f6d7c4cbc5b609e7aa60dcbd951ed680539065d4917c147cf.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from orange to white.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13350,9 +13878,18 @@
       "asset_path": "assets/90a7c27d8a3658c20533a91bd24c5ccfcc4f7a46a3c4a67d14e7c69c6a4a2e2c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to a darker shade of orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13368,9 +13905,26 @@
       "asset_path": "assets/275007ffc87b0b92a7755b4bafea47e1df43d334d58e76eed063af6c03dbb532.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow background with a white line running horizontally across the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow background",
+          "white line",
+          "horizontal",
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13386,9 +13940,18 @@
       "asset_path": "assets/330e32e3af11b34d9fccdeddcff6e418f47c0fe60573b40da00a8abb4d949263.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gradient background transitioning from light brown to beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13404,9 +13967,16 @@
       "asset_path": "assets/e49cb84a84f85df40dce58ec7c85efbf17ca5d439ebfdfb8b491fe0cc7ab1598.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid orange background with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13422,9 +13992,18 @@
       "asset_path": "assets/d4ca487ba80eb7acefdb35275205e7553145ce0210073211c4c945ec0fa79617.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light orange to a deeper shade of orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13440,9 +14019,18 @@
       "asset_path": "assets/47c47dd9412291173f403f4c3810271e8bb013cf1c81e6f3bf8da087f7c7e389.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13458,9 +14046,23 @@
       "asset_path": "assets/74faa7e83707df8c4b3fae1b646737716f81e9d0a83a7b01c47c564e62a01cc8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm, golden hue.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient"
+        ],
+        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "limitations": [
+          "The image does not contain any specific objects or figures to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13476,9 +14078,19 @@
       "asset_path": "assets/3f6d42ef5437fd839643f8266536f86518daa798bfab403ae59adb9e904d5912.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to yellow, possibly representing a sunrise or sunset.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover design for educational content.",
+        "limitations": [
+          "No specific text or content is visible in the image.",
+          "The image does not provide any specific information or data points."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13494,9 +14106,18 @@
       "asset_path": "assets/1fbe9a534313dc99e8fcab8c50ee9f4290a64aa9b39e23cdd43b981dec5bd6fb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13512,9 +14133,16 @@
       "asset_path": "assets/6d5c9880771d4ee37fcf01c11663ed435cb1438bccdf5a2ebcde1d8dc5ffcbc5.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to yellow, possibly representing a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "header or footer",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13530,9 +14158,18 @@
       "asset_path": "assets/ac6aba368fb927c5b8371f4c9c1e27dd381ef2ffe76b0d3bc1b1d949a812bdb2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13548,9 +14185,18 @@
       "asset_path": "assets/f630c61d3f3725d2397868ea2a6bb27be094cd30f66b913059ef9778de0314f4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from white to a warm, golden color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13566,9 +14212,18 @@
       "asset_path": "assets/d51ab37ba5118813601421f5121fdea8c1d4cd88a842f06de3d6d94da0b2076f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13584,9 +14239,18 @@
       "asset_path": "assets/c1f8f207f25e35a7f70e1dae94f6c28bfa05c3e81af2b4a0ebc42cd73b25e8d2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid-colored page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, and no visible text or images are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13602,9 +14266,16 @@
       "asset_path": "assets/c2b1e7f6b2ea60eb8631161b7d4c5040466310b9e48b67987e218478037c7329.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or images",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13620,9 +14291,19 @@
       "asset_path": "assets/e653f1b40b6274357872728306e59e46c60d4746d960d046e33a57df3d427b3e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred gradient background transitioning from light orange to white.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": [
+          "Unclear content due to blurriness",
+          "No specific text or image present"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13638,9 +14319,16 @@
       "asset_path": "assets/da60503d3456271f50231ba9026b263cf69031de18915fa0f926df3826a358aa.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from white to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13656,9 +14344,18 @@
       "asset_path": "assets/2368f636e36a00d680a88c182b5015f1dcc02aea162e3337bc4cb5214e5b4716.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13674,9 +14371,16 @@
       "asset_path": "assets/5849c897ca00c5500006d15f07e893628c820704ae115a7cf5b7453a7cfaedfa.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13692,9 +14396,18 @@
       "asset_path": "assets/f8db6f818370fcbc339eebcb3f7be8af7fb241ba5fdf5c6b75a8f0028318d14c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from orange to yellow to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13710,9 +14423,18 @@
       "asset_path": "assets/b21fc1071d4b8fe6c86ab93bf7ed942c51c4594c194d0d8edea8bbcd9b3d6ded.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or content is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13728,9 +14450,19 @@
       "asset_path": "assets/4df6cbb46127f432de9caeb9b5eac1937b2af60ce839561bffcd3ea209440544.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, rectangular object with a gradient background transitioning from light brown to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a cover or a background for a document or textbook.",
+        "limitations": [
+          "The image does not contain any text or symbols that can be directly interpreted.",
+          "The image is a gradient background, which may not convey specific information about the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13746,9 +14478,23 @@
       "asset_path": "assets/652dda59cf7a1d445d880f22a83595cd1473f278431b9a3e7e4d11a3a463f0a6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from light brown to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal line"
+        ],
+        "context_relation": "The line and gradient background are likely part of a design element in the textbook, possibly used for aesthetic purposes or as a separator between sections.",
+        "limitations": [
+          "The image does not provide specific information about the textbook's content or structure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13764,9 +14510,18 @@
       "asset_path": "assets/b922ab455dd8424d4a8d47c080741eaa3e8503826df4342ecd8f8e6bb7e8bcae.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm color palette transitioning from light beige to a darker shade of the same color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13782,9 +14537,16 @@
       "asset_path": "assets/1690e1f134b90ca3a21286f2129f86bae320fa46769c646799308cfe6bb15ec8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from orange to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13800,9 +14562,23 @@
       "asset_path": "assets/021fd4a8950a1fd6c39891b4a7d637d22bda52b6687f27b0e2418434eac2afa9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "page layout"
+        ],
+        "context_relation": "The image is a part of a textbook page.",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13818,9 +14594,16 @@
       "asset_path": "assets/79432e34596e1c34107238d92ffe655d94e2008dddb135cac6c4e3d96c185706.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a blend of light beige and orange colors.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13836,9 +14619,18 @@
       "asset_path": "assets/9f03070f4745151b6434afde239d850c64dfdbaabe939b40d37446942249f9e2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13854,9 +14646,18 @@
       "asset_path": "assets/007d573404ac1dfe9878548380b7c854a49ef91d9c4cdcf18b2fdf2b7f3a1a49.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a bright, white center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and lack of visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13872,9 +14673,19 @@
       "asset_path": "assets/877ec0acf133867cf7af45c134a5d8669a59c187ec6c0c6c484c2a839f2144a7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or labels are present in the image.",
+          "The image does not contain any specific educational content or data points."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13890,9 +14701,18 @@
       "asset_path": "assets/c0b376253c9d0c4c0edb4498558ea9a153e398af7fb53eaa7d0e9166f6c742c8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13908,9 +14728,18 @@
       "asset_path": "assets/7f919084cc264f505e265521396ae11ab6fbce38bc6fa896afb164d54315639f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light brown to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13926,9 +14755,18 @@
       "asset_path": "assets/85234e7872590c022bad30d6b3bfbdc376686977fb6f07f02f67d8e03e2403d0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, gradient background transitioning from dark brown to light brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a blank or introductory page.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13944,9 +14782,19 @@
       "asset_path": "assets/6d7ba8577f3f9dda42e34027e99a8211dffbfcdf5779e74e86212b1acffd86b3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred gradient background with warm colors transitioning from light beige to dark brown.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness",
+          "No specific text or labels visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13962,9 +14810,19 @@
       "asset_path": "assets/f12e15c39379a0468064e42fd2f4872a26142f2d97a9b41a0145fcb751775864.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light orange to dark brown.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness",
+          "No specific text or labels visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13980,9 +14838,16 @@
       "asset_path": "assets/046c8fa887078d8a560585130cd5faa244edce29a85b7447f1b28ce34e8cb849.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or images",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13998,9 +14863,19 @@
       "asset_path": "assets/728463acd6e187c05a2ba5fe948da24a075bec2282dda33bdf7e2319facfba13.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light orange to a deeper shade of the same color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness",
+          "No specific text or labels visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14016,9 +14891,23 @@
       "asset_path": "assets/6ff1c874887f197f30d8cbf7d2fd040ee5d79ae49e0b06cfb0b29e0f4d030439.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a warm, golden color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or text visible beyond the gradient background"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14034,9 +14923,18 @@
       "asset_path": "assets/2a97c079ec70155151d716a2ac43a0f9525c7751a98cad95bdb65a43b5302b4d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14052,9 +14950,18 @@
       "asset_path": "assets/6699beb1656671eb50461e43695a5a642e39120b6b48bbc4109af25ebca31083.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14070,9 +14977,16 @@
       "asset_path": "assets/03d862273bf6cf1d3c0168a1ba988ea79facb3994982776f0db7001552d6c160.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and orange gradient background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14088,9 +15002,18 @@
       "asset_path": "assets/984ad379e4230e1220f443f18e2559cc5c29e6726596763ccc988b9534d2272a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14106,9 +15029,19 @@
       "asset_path": "assets/8a733e26d7bfdb5affeac3b4cf2293cd798499b053a8ee0746274b34e8968d18.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a warm, golden color scheme.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear text or content within the image",
+          "No specific objects or figures present"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14124,9 +15057,16 @@
       "asset_path": "assets/9ffa8a213b1d635b769e5af600526b0d188e880c7708fbd9f5f662f9940291f8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm, golden color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14142,9 +15082,23 @@
       "asset_path": "assets/1c98947d1ea8e3f239cc435ad97650d08b750b5dcd778f67b7b70ef8cd4cf1ec.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or objects are visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14160,9 +15114,18 @@
       "asset_path": "assets/3f4f0b07b89a1a993666090523e27e34ac480b9f95e317b58a4a9ef5b0a244ff.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14178,9 +15141,18 @@
       "asset_path": "assets/094ac57b8fd8639824ebd8b1dd616c09471d46545fa76017b44a86eae9172449.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden hue transitioning from light to dark, possibly representing a progress bar or a loading indicator.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual element used in a textbook, likely as a background or a loading indicator.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14196,9 +15168,23 @@
       "asset_path": "assets/4492bd922154d661008410c3de36a6965d8cdcc9db692f1dac860044d9cbbc77.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light brown to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The banner likely represents a reprint or edition date for a book or document.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the reprint."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14214,9 +15200,18 @@
       "asset_path": "assets/d0f8964356a580c3563a9af0a1826bf26721bc4bd5654dba9397e10095751fae.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light beige to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14232,9 +15227,16 @@
       "asset_path": "assets/1475afc969a7ae894c8b8f0e9ff03d0f865111016419ea21762608a2a889ac23.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, solid-colored rectangular shape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14250,9 +15252,19 @@
       "asset_path": "assets/1f0c3a633b60221448b0202d5a55e876d7bd90b42ec0ba74e32c5935ce7e860a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, gradient-colored rectangular shape with a warm, golden-brown color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or background element, possibly used as a header or footer in a document.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for educational content.",
+          "The image is a solid color gradient and does not represent any specific concept or data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14268,9 +15280,23 @@
       "asset_path": "assets/6a3dcca899f600e9556218f6e8e8f620fd169420aad9c1174145e1a32906b294.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal banner"
+        ],
+        "context_relation": "The banner is likely a decorative element on a page, possibly at the top or bottom.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the banner."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14286,9 +15312,16 @@
       "asset_path": "assets/ee4d56c81ae72223c14547d74853812ca28e203b5ae9ff4273a52bfcf4499064.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a tree with leaves and branches.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The illustration is likely used to represent nature or growth.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14304,9 +15337,23 @@
       "asset_path": "assets/e66cb59559c4d8bfbbc3e8535cf90bcee3ae4169680571030c20692205f6ed8d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color palette transitioning from light brown to dark brown.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors"
+        ],
+        "context_relation": "The image is a visual representation of a color gradient used in the textbook.",
+        "limitations": [
+          "No specific content or information is provided within the image itself."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14322,9 +15369,18 @@
       "asset_path": "assets/4e5dd6900d4715535cd5e9fd3464e284bea89287d001cec5d794f3e1878b1ae7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light orange to dark brown.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14340,9 +15396,24 @@
       "asset_path": "assets/e524c5d01542465b1523997fb1658a9ce5c7bf64c8d113563f1ad397b95eb8d1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color palette transitioning from light to dark shades.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm tones"
+        ],
+        "context_relation": "The image is a visual element used as a background or header for the text.",
+        "limitations": [
+          "The image does not contain any specific content or data that can be analyzed.",
+          "The image is a simple gradient bar with no additional elements or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14358,9 +15429,23 @@
       "asset_path": "assets/4cd115a490efcef9d23e956c1c3cb484b619dd27bea98d6f41c3ba2e6f5d0984.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar chart with a golden background transitioning to a darker shade.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The text 'Reprint 2026-27' is likely a title or heading related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the content or data represented by the bar chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14376,9 +15461,23 @@
       "asset_path": "assets/6001d46f329b4245792519195e28cdcd9a5663679bb7571c82ab6c922deb248c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal banner"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The banner's content is static and does not provide additional information about the page's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14394,9 +15493,24 @@
       "asset_path": "assets/bbbf5e285ef38b4df5985d3c6982a75580cbcca127574b1de2cc729c91666e4f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light orange to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "warm colors",
+          "transitional effect"
+        ],
+        "context_relation": "The background serves as a backdrop for the text.",
+        "limitations": [
+          "No specific content or design elements are visible beyond the gradient background and text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14412,9 +15526,23 @@
       "asset_path": "assets/25647a6bef3609edf7583497dc1f99a8d251dd792f3192a5b7f60c7eaf974f3b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white striped background with a black line running horizontally across the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "horizontal black line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14430,9 +15558,18 @@
       "asset_path": "assets/01e58263b3f85f63744eaeadf1654d6ef66e3f4b95d707b6e23b14e42ad68bd9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or separator for the page.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14448,9 +15585,18 @@
       "asset_path": "assets/8ef0e351e94cb81d429c16ee99ade5300560f1d434d23d31b0a5c9ebaf68faec.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14466,9 +15612,16 @@
       "asset_path": "assets/af07de2b857697b647caac82be273f4d85934ebfc4c994e66603fe47099eed17.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white striped background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14484,9 +15637,18 @@
       "asset_path": "assets/de595161f0abcc1eb24166d5e8bd27b647283b34073ea3fef3de223e75eb2654.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14502,9 +15664,18 @@
       "asset_path": "assets/3e1c26af6e8d913bd672b5fdcedace09679ab0fb5938eef0fce2f6541dc92748.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14520,9 +15691,25 @@
       "asset_path": "assets/27cb62eba4cebf6842677ae499a7418c72b33466a437f9ef5d7a877d2f023902.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white striped background with a black line running horizontally across the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "yellow and white",
+          "black line",
+          "horizontal"
+        ],
+        "context_relation": "The background is likely a design element for a page or document.",
+        "limitations": [
+          "No specific content or information is provided within the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14538,9 +15725,19 @@
       "asset_path": "assets/fa374db8e81f4d8e26f3da7e4b2e2409fa03af6580880f3f68796c4fad20b6b9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient background transitioning from a light beige at the top to a darker beige at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The background is likely used as a neutral backdrop for text or images.",
+        "limitations": [
+          "The image does not contain any specific content or objects to analyze.",
+          "The background is a gradient, which may affect the readability of text or images placed on it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14556,9 +15753,23 @@
       "asset_path": "assets/339ba607f9ebf51f4719a0a0584d26c04fcbff5f863ced46a9c3fa611edc51d0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white gradient background with a black line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and white gradient background",
+          "black line at the bottom"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14574,9 +15785,19 @@
       "asset_path": "assets/dcec45d2f637ebd906ddf86ef4f30fb0d3e071ee593e14937b23620d0e22a214.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a light yellow color transitioning to a darker shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual element in a textbook, possibly used as a background or a decorative element.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context.",
+          "The image is a simple gradient bar and does not represent any specific concept or data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14592,9 +15813,23 @@
       "asset_path": "assets/c113b7c9d97a01f92f227a1f90f9b53ffc5c7f369276e465b2593c514316d203.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient",
+          "background"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly a header or footer.",
+        "limitations": [
+          "The image does not provide specific content or information about the page it is on."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14610,9 +15845,21 @@
       "asset_path": "assets/629ca7ddf6be805c2931cdf04b9e4bd544626f3a2ed8cf6d6d5d6eafbe368c05.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white striped background with a gradient effect.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "gradient effect"
+        ],
+        "context_relation": "background",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14628,9 +15875,24 @@
       "asset_path": "assets/a8e16dcfc730cd826df2b9c0fb59a13b740e4368c9c47a525e88a82d9e8a84af.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, orange-to-yellow color scheme.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "color scheme"
+        ],
+        "context_relation": "The background serves as a backdrop for the text.",
+        "limitations": [
+          "No specific content or details are visible beyond the text and background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14646,9 +15908,23 @@
       "asset_path": "assets/2208bc840d159d6db12481618b8d571072474a9a1caec0bcd00246a2e7322c85.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "yellow to orange transition"
+        ],
+        "context_relation": "The background of the page.",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14664,9 +15940,23 @@
       "asset_path": "assets/10d0947e8a885cf0d5f6b246995ad1dfbeadbf3e81d3fa94015ae22b411047f1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light yellow to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "The background of the page, which is a gradient from light yellow to dark brown.",
+        "limitations": [
+          "No specific objects or figures are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14682,9 +15972,24 @@
       "asset_path": "assets/395e057efc43076d2ec2938a8d9e5ff6775345e627309483cab04cbdbd90a5c8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal gradient",
+          "golden color",
+          "lighter shade"
+        ],
+        "context_relation": "The image is a visual element of a textbook page, likely used as a header or footer.",
+        "limitations": [
+          "The image does not provide specific information about the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14700,9 +16005,16 @@
       "asset_path": "assets/740d9b26a017779db6e77752b8a287b34867b042f6681a24e0fa2b9f3c1f2b46.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14718,9 +16030,18 @@
       "asset_path": "assets/8e84f4b174d3c6db453d847c2a2f336a1a2592ccf4487f52ee47ebda25190c3e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light pink background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14736,9 +16057,18 @@
       "asset_path": "assets/1c37350ddf10f91c1a84ab2b56254649c976a9f883725bf6d88e67ccbc2fd686.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
