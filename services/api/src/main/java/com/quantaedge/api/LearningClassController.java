@@ -869,6 +869,7 @@ public class LearningClassController {
   public Map<String,Object> studentLiveClasses(
       @RequestParam(required=false) String subjectCode,@RequestParam(required=false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
+      @RequestParam(defaultValue="false") Boolean includeFuture,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     Long courseScopeId=courseId==null?0L:courseId;
@@ -896,11 +897,12 @@ public class LearningClassController {
         and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and (?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')
         and (?='' or s.code=?)
         and (?=0 or s.program_id=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
-      """,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
+      """,context.studentId(),Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -915,10 +917,11 @@ public class LearningClassController {
         and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and (?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')
         and (?='' or s.code=?)
         and (?=0 or s.program_id=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
+      """,Long.class,context.studentId(),Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
