@@ -3532,6 +3532,8 @@
   "web.workspace.progressSavesAutomatically": "Progress saves automatically",
   "web.workspace.safeLearningSpace": "Safe learning space",
   "web.workspace.studentFallbackName": "Student",
+  "admin.navigation.courseMarketplace": "Course marketplace",
+  "admin.navigation.short.marketplace": "Market",
   "web.navigation.student.coursesMarketplace": "Courses & Marketplace",
   "web.navigation.student.mobileCourses": "Courses",
   "web.navigation.student.allCourses": "All Courses",

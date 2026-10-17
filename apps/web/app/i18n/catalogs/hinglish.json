@@ -3532,6 +3532,8 @@
   "web.workspace.progressSavesAutomatically": "Progress अपने-आप save होती है",
   "web.workspace.safeLearningSpace": "सुरक्षित learning space",
   "web.workspace.studentFallbackName": "Student",
+  "admin.navigation.courseMarketplace": "Course Marketplace",
+  "admin.navigation.short.marketplace": "Market",
   "web.navigation.student.coursesMarketplace": "Courses और Marketplace",
   "web.navigation.student.mobileCourses": "Courses",
   "web.navigation.student.allCourses": "सभी Courses",
