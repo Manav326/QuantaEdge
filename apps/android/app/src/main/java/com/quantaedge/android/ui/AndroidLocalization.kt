@@ -384,6 +384,7 @@ internal fun localizedUiText(source: String): String {
     val context = LocalContext.current
     val language = LocalQuantaLanguage.current
     val institutionName = LocalInstitutionBrandIdentity.current?.displayName?.takeIf { it.isNotBlank() }
+        ?: if (LocalInstitutionBrandResolutionPending.current) "Your school" else null
     fun brandText(value: String): String {
         val name = institutionName ?: return value
         return value
