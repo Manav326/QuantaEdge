@@ -92,12 +92,13 @@ public class LearningClassController {
     context=authorization.requireAuth(context);
     if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes,
         cs.provider_operation_status,cs.provider_error_message,cs.teaching_assignment_id,
         s.code as subject_code,s.display_name as subject_name,c.code as class_code,c.display_name as class_name,
         p.name as academic_period_name,
-        (cs.status in ('SCHEDULED','LIVE') and cs.starts_at<=now()+interval '15 minutes'
-          and cs.ends_at>now() and cs.private_join_url is not null
+        (cs.status in ('SCHEDULED','LIVE')
+          and (cs.join_window_minutes=0 or cs.starts_at<=now()+(cs.join_window_minutes * interval '1 minute'))
+          and cs.ends_at>now() and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
           and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')) as joinable
       from hr_employee e join hr_teaching_assignment a on a.employee_id=e.id
       join learning_class_session cs on cs.teaching_assignment_id=a.id
@@ -125,7 +126,7 @@ public class LearningClassController {
     context=authorization.requireAuth(context);
     if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select cs.id,cs.title,cs.provider,cs.private_join_url,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id,cs.title,cs.provider,cs.private_join_url,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes,
         cs.provider_operation_status,cs.provider_error_message,a.employee_id,a.effective_start,a.effective_end
       from learning_class_session cs
       join hr_teaching_assignment a on a.id=cs.teaching_assignment_id and a.status='APPROVED'
@@ -146,7 +147,9 @@ public class LearningClassController {
         ((java.sql.Date)row.get("effective_end")).toLocalDate());
     OffsetDateTime now=OffsetDateTime.now();
     OffsetDateTime startsAt=toOffsetDateTime(row.get("starts_at")),endsAt=toOffsetDateTime(row.get("ends_at"));
-    if(startsAt!=null&&startsAt.isAfter(now.plusMinutes(15)))throw conflict("The teacher join window opens 15 minutes before the scheduled start.");
+    int joinWindowMinutes=row.get("join_window_minutes") instanceof Number n?n.intValue():15;
+    if(startsAt!=null&&joinWindowMinutes>0&&startsAt.isAfter(now.plusMinutes(joinWindowMinutes)))
+      throw conflict("The teacher join window opens "+joinWindowMinutes+" minutes before the scheduled start.");
     if(endsAt==null||!endsAt.isAfter(now))throw conflict("This class has ended.");
     staffAudit.recordAction(context,"/api/v1/teaching/live-classes/"+sessionId+"/meeting-link",
         "Retrieved the assigned teacher's private meeting link for class #"+sessionId+".");
@@ -228,7 +231,7 @@ public class LearningClassController {
     if(!Set.of("ALL","SCHEDULED","LIVE","COMPLETED","CANCELLED").contains(statusFilter))throw badRequest("Choose a valid live class status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes,
              cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
              assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
              cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,cs.youtube_video_id,
@@ -269,6 +272,8 @@ public class LearningClassController {
     String joinUrl = ("GOOGLE_MEET".equals(provider) || "YOUTUBE_LIVE".equals(provider)) ? null : validJoinUrl(body.get("joinUrl"));
     OffsetDateTime startsAt = parseDate(body.get("startsAt"), "Start time");
     OffsetDateTime endsAt = parseDate(body.get("endsAt"), "End time");
+    int joinWindowMinutes = integer(body.getOrDefault("joinWindowMinutes", 15),
+        "Join window minutes", 0, 1440);
     if (!endsAt.isAfter(startsAt)) throw badRequest("End time must be after the start time.");
     if (endsAt.isAfter(startsAt.plusHours(8))) throw badRequest("A live class cannot be longer than 8 hours.");
     if (startsAt.isBefore(OffsetDateTime.now().minusHours(2))) {
@@ -317,10 +322,10 @@ public class LearningClassController {
     Long id = jdbc.queryForObject("""
       insert into learning_class_session(
         title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,youtube_video_id,starts_at,ends_at,
-        status,host_staff_id,created_by_staff_id,provider_operation_status,provider_conference_request_id
-      ) values(?,?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
+        join_window_minutes,status,host_staff_id,created_by_staff_id,provider_operation_status,provider_conference_request_id
+      ) values(?,?,?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
       """, Long.class, title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl, youtubeVideoId,
-        startsAt, endsAt, hostStaffId, context.staffId(),
+        startsAt, endsAt, joinWindowMinutes, hostStaffId, context.staffId(),
         "GOOGLE_MEET".equals(provider) ? "PENDING" : "NOT_REQUIRED", requestId);
 
     // Save the local schedule before making a network call. If Google is unavailable, retry later
@@ -349,6 +354,30 @@ public class LearningClassController {
         "Scheduled live class #" + id + " for class " + classCode + " / subject " + subjectCode
             + ("GOOGLE_MEET".equals(provider) ? "; Google Meet=" + created.get("provider_operation_status") : "") + ".");
     return created;
+  }
+
+  @PutMapping("/admin/live-classes/{sessionId}/join-window")
+  @Transactional
+  public Map<String,Object> setLiveClassJoinWindow(
+      @PathVariable long sessionId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireClassManage(context);
+    int joinWindowMinutes=integer(body.get("joinWindowMinutes"),"Join window minutes",0,1440);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,status,join_window_minutes from learning_class_session where id=?
+      """,sessionId);
+    if(rows.isEmpty())throw notFound("Live class",sessionId);
+    String status=String.valueOf(rows.getFirst().get("status"));
+    if(!"SCHEDULED".equals(status))throw conflict("The join window can only be changed while a class is scheduled.");
+    jdbc.update("""
+      update learning_class_session set join_window_minutes=?,updated_at=now()
+      where id=? and status='SCHEDULED'
+      """,joinWindowMinutes,sessionId);
+    staffAudit.recordAction(context,"/api/v1/admin/live-classes/"+sessionId+"/join-window",
+      "Changed join window for live class #"+sessionId+" to "
+        +(joinWindowMinutes==0?"unrestricted early access":joinWindowMinutes+" minutes before start")+".");
+    return adminSessionById(sessionId);
   }
 
   @PatchMapping("/admin/live-classes/{sessionId}/status")
@@ -845,7 +874,7 @@ public class LearningClassController {
     String subjectFilter=safeText(subjectCode,40);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes,
              s.code as subject_code,s.display_name as subject_name,ch.id as chapter_id,ch.code as chapter_code,
              ch.display_name as chapter_name,host.display_name as host_staff_name,
              exists(select 1 from recorded_class rc where rc.class_session_id=cs.id and rc.status='PUBLISHED') as has_recording,
@@ -898,7 +927,7 @@ public class LearningClassController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select cs.id,cs.private_join_url,cs.youtube_video_id,cs.provider,cs.title,cs.status,cs.starts_at,cs.ends_at
+      select cs.id,cs.private_join_url,cs.youtube_video_id,cs.provider,cs.title,cs.status,cs.starts_at,cs.ends_at,cs.join_window_minutes
       from learning_class_session cs
       join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -921,8 +950,10 @@ public class LearningClassController {
     OffsetDateTime now = OffsetDateTime.now();
     OffsetDateTime startsAt = toOffsetDateTime(session.get("starts_at"));
     OffsetDateTime endsAt = toOffsetDateTime(session.get("ends_at"));
-    if (startsAt != null && startsAt.isAfter(now.plusMinutes(15))) {
-      throw conflict("This live class has not opened yet.");
+    int joinWindowMinutes = session.get("join_window_minutes") instanceof Number n ? n.intValue() : 15;
+    if (joinWindowMinutes > 0 && startsAt != null && startsAt.isAfter(now.plusMinutes(joinWindowMinutes))) {
+      throw conflict("This live class has not opened yet. Access opens "
+          + joinWindowMinutes + " minutes before its scheduled start.");
     }
     if (endsAt == null || !endsAt.isAfter(now)) throw conflict("This live class has ended.");
     jdbc.update("""
@@ -1168,7 +1199,7 @@ public class LearningClassController {
 
   private Map<String, Object> adminSessionById(long sessionId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes,
              cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
              assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
              cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,cs.youtube_video_id,

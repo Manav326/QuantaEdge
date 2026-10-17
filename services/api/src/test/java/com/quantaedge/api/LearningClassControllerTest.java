@@ -155,6 +155,44 @@ class LearningClassControllerTest {
   }
 
   @Test
+  void studentCanJoinBeforeStartWhenAdminDisablesEarlyJoinGate() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    OffsetDateTime starts=OffsetDateTime.now().plusHours(3);
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"),eq(7L),eq(88L)))
+        .thenReturn(List.of(Map.of(
+            "id",88L,"private_join_url","https://meet.example.org/class/88",
+            "provider","CUSTOM","title","Revision class","status","SCHEDULED",
+            "starts_at",starts,"ends_at",starts.plusHours(1),"join_window_minutes",0)));
+    Map<String,Object> result=controller.joinLiveClass(88L,student);
+    assertEquals(true,result.get("joined"));
+    verify(jdbc).update(contains("insert into learning_class_attendance"),eq(88L),eq(7L));
+  }
+
+  @Test
+  void studentJoinWindowUsesTheConfiguredMinutes() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    OffsetDateTime starts=OffsetDateTime.now().plusMinutes(45);
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"),eq(7L),eq(88L)))
+        .thenReturn(List.of(Map.of(
+            "id",88L,"private_join_url","https://meet.example.org/class/88",
+            "provider","CUSTOM","title","Revision class","status","SCHEDULED",
+            "starts_at",starts,"ends_at",starts.plusHours(1),"join_window_minutes",30)));
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.joinLiveClass(88L,student));
+    assertEquals(409,error.getStatusCode().value());
+    verify(jdbc,never()).update(contains("insert into learning_class_attendance"),eq(88L),eq(7L));
+  }
+
+  @Test
+  void adminCannotSetJoinWindowOutsideAllowedRange() {
+    when(authorization.requirePermission(admin,"CLASS_MANAGE")).thenReturn(admin);
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.setLiveClassJoinWindow(88L,Map.of("joinWindowMinutes",1441),admin));
+    assertEquals(400,error.getStatusCode().value());
+    verifyNoInteractions(jdbc,staffAudit,mediaStorage);
+  }
+
+  @Test
   void outOfScopeStudentCannotFetchPrivateRecordingBytes() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), eq(7L), eq(88L)))

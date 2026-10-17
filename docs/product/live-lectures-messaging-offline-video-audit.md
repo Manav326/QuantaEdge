@@ -110,3 +110,11 @@ This closes the main topic-ID ambiguity from the first audit pass and is require
 ### Current completion decision
 
 **Not complete end to end.** Existing textbook PDF management and online recorded-video playback are functioning code paths; the YouTube web broadcast path and idempotent recording upload have passed the current feature-code CI checkpoint. The common resource catalogue, Android YouTube parity, authorized offline video, resumable transfer, dedicated idempotency tests, backup/restore evidence and full operational tests remain open. Tracking stays in epic [#65](https://github.com/Manav326/QuantaEdge/issues/65) and child issues [#59](https://github.com/Manav326/QuantaEdge/issues/59), [#61](https://github.com/Manav326/QuantaEdge/issues/61), [#63](https://github.com/Manav326/QuantaEdge/issues/63), and [#64](https://github.com/Manav326/QuantaEdge/issues/64).
+
+
+## Admin-controlled join window — 2026-10-17
+
+- V110 adds a persisted per-session `join_window_minutes` setting; 15 minutes remains the default for existing and new sessions.
+- Admins can configure 15 minutes, longer windows up to 24 hours, or Off (0). Off disables only the early-join time check; enrollment/assignment eligibility, session status, chapter publication and end-time authorization continue to be enforced server-side.
+- The admin can set this at session creation and change it on scheduled-session cards. Server-side student join, assigned-teacher meeting-link, and teacher joinable-catalogue logic read the persisted value; the 24-hour schedule-visibility limit remains separate and unchanged.
+- Regression tests cover the disabled gate, custom-window denial, and invalid value rejection. CI evidence is pending for this checkpoint.
