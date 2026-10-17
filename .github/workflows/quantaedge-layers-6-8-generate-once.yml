@@ -1,10 +1,9 @@
 name: Generate the first Class 6 Curiosity Layers 6-8 batch
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/triggers/generate-class6-curiosity.trigger"
+  workflow_run:
+    workflows: ["Benchmark Class 6 Curiosity after Layer 5 recovery"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -15,7 +14,8 @@ concurrency:
 
 jobs:
   generate:
-    name: Generate a bounded review-only batch after evidence gates
+    if: github.event.workflow_run.conclusion == 'success'
+    name: Generate a bounded review-only batch using a contract-valid benchmark candidate
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -36,33 +36,67 @@ jobs:
           python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
           python -m unittest discover -s tests -p "test_pipeline_data_locations.py" -v
           python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
-      - name: Verify exact whole-book source, complete Layer 5 ledger, and current benchmark
+      - name: Verify complete Layer 5 evidence and select an eligible experimental candidate
+        id: preflight
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
+          python - "$GITHUB_OUTPUT" <<'PY'
+          import json, sys
           from pathlib import Path
           from scripts.quantaedge_layers_6_8 import load_source, layer5_ledger, benchmark_report
           root = Path.cwd()
           source = load_source(root, 6, "ncert-c6-english-fecu1")
-          ledger = layer5_ledger(root, source)
-          benchmark = benchmark_report(root, None, "qwen2.5:1.5b")
-          print({
+          ledger_path = layer5_ledger(root, source)
+          ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+          if ledger.get("ledger_status") != "COMPLETE":
+              raise SystemExit(f"Layer 5 is {ledger.get('ledger_status')!r}; generation remains blocked.")
+          if ledger.get("publication_allowed") is not False:
+              raise SystemExit("Layer 5 must remain review-only.")
+          report_path = root / "data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json"
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          if (report.get("production_model_selection") != "PENDING_HUMAN_REVIEW"
+              or report.get("production_model") is not None
+              or report.get("publication_allowed") is not False):
+              raise SystemExit("Benchmark must not have selected a production model or enabled publication.")
+          eligible = [row for row in report.get("models", [])
+                      if row.get("successful_samples", 0) >= 1
+                      and row.get("lesson_contract_valid_rate", 0) > 0]
+          if not eligible:
+              raise SystemExit("No experimental model passed the current lesson contract. Generation blocked.")
+          # Select only an experimental candidate for this bounded draft run.
+          # This does not select or persist a production model.
+          eligible.sort(key=lambda row: (
+              row.get("lesson_contract_valid_rate", 0),
+              row.get("schema_valid_rate", 0),
+              row.get("sft_examples_valid_rate", 0),
+              row.get("source_page_citation_valid_rate", 0),
+              -row.get("average_seconds_per_sample", 1e9),
+          ), reverse=True)
+          selected = eligible[0]["model"]
+          checked = benchmark_report(root, report_path, selected)
+          print(json.dumps({
               "source_book_id": source["book_id"],
               "source_pdf_sha256": source["source_pdf_sha256"],
-              "layer5_ledger": str(ledger),
-              "layer5_status": "COMPLETE",
-              "benchmark_prompt_version": benchmark.get("prompt_version"),
-              "lesson_contract_version": benchmark.get("lesson_contract_version"),
-              "model": "qwen2.5:1.5b",
-              "successful_samples": next(x["successful_samples"] for x in benchmark["models"] if x["model"] == "qwen2.5:1.5b"),
-              "production_model_selection": benchmark.get("production_model_selection"),
-          })
+              "layer5_ledger": str(ledger_path),
+              "layer5_status": ledger["ledger_status"],
+              "benchmark_prompt_version": checked.get("prompt_version"),
+              "lesson_contract_version": checked.get("lesson_contract_version"),
+              "experimental_generation_candidate": selected,
+              "successful_samples": next(r["successful_samples"] for r in checked["models"] if r["model"] == selected),
+              "production_model_selection": checked.get("production_model_selection"),
+              "production_model": checked.get("production_model"),
+          }, indent=2))
+          with open(sys.argv[1], "a", encoding="utf-8") as out:
+              out.write(f"model={selected}\n")
           PY
       - name: Start loopback-only local Ollama
         shell: bash
+        env:
+          MODEL: "${{ steps.preflight.outputs.model }}"
         run: |
           set -euo pipefail
+          [[ -n "$MODEL" ]] || { echo "Preflight did not select a valid experimental model." >&2; exit 2; }
           docker pull ollama/ollama:latest
           docker volume create quantaedge-layers-6-8-generation-models >/dev/null
           docker run -d --name quantaedge-layers-6-8-generation-ollama \
@@ -74,11 +108,15 @@ jobs:
             if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then ready=true; break; fi
             sleep 2
           done
-          [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-generation-ollama; exit 1; }
-      - name: Pull only the benchmark-approved experimental candidate
-        run: docker exec quantaedge-layers-6-8-generation-ollama ollama pull qwen2.5:1.5b
+          [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-ollama; exit 1; }
+      - name: Pull only the contract-valid experimental candidate
+        env:
+          MODEL: "${{ steps.preflight.outputs.model }}"
+        run: docker exec quantaedge-layers-6-8-ollama ollama pull "$MODEL"
       - name: Generate six review-only model calls with durable savepoints
         shell: bash
+        env:
+          MODEL: "${{ steps.preflight.outputs.model }}"
         run: |
           set -euo pipefail
           python scripts/quantaedge_layers_6_8.py run \
@@ -86,15 +124,15 @@ jobs:
             --class-no 6 \
             --source-book-id ncert-c6-english-fecu1 \
             --endpoint http://127.0.0.1:11434 \
-            --model qwen2.5:1.5b \
+            --model "$MODEL" \
             --max-model-calls 6 \
             --max-pages-per-segment 2 \
             --max-context-chars 5000 \
-            --checkpoint-every 2 \
+            --checkpoint-every 1 \
             --request-timeout 300 \
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model \
             --commit-checkpoints
       - name: Stop local Ollama even on failure
         if: always()
-        run: docker rm -f quantaedge-layers-6-8-generation-ollama >/dev/null 2>&1 || true
+        run: docker rm -f quantaedge-layers-6-8-ollama >/dev/null 2>&1 || true
