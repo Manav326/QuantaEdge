@@ -1350,3 +1350,60 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
     -webkit-overflow-scrolling: touch;
   }
 }
+
+
+/* Route-aware layout hardening for actual learner, lesson, practice and parent markup. */
+.qe-workspace-layout :where(.qe-workspace-content, .qe-workspace-topbar, .qe-workspace-topbar-actions) {
+  min-width: 0;
+  max-width: 100%;
+}
+.qe-workspace-layout :where(.qe-workspace-topbar-actions, .qe-workspace-sidebar-footer, .qe-workspace-sidebar-foot) {
+  flex-wrap: wrap;
+}
+.qe-workspace-layout :where(.qe-workspace-subnav, .qe-workspace-mobile-subnav, .qe-workspace-mobile-subnav-links) {
+  min-width: 0;
+  max-width: 100%;
+}
+:where(.lesson-page, .qe-structured-student-page, .qe-subject-reading-page, .practice-page, .parent-app, .progress-page) {
+  min-width: 0;
+}
+:where(.lesson-page, .qe-structured-student-page, .qe-subject-reading-page) :where(.lesson-wrap, .concept-card, .lesson-rich-content, .qe-question-card__prompt, .qe-answer-options, .qe-answer-entry__actions) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:where(.lesson-page, .qe-structured-student-page, .qe-subject-reading-page) :where(.qe-question-card__labels, .qe-answer-entry__actions, .qe-question-card__top) {
+  flex-wrap: wrap;
+}
+:where(.lesson-page, .qe-structured-student-page, .qe-subject-reading-page) :where(.lesson-rich-content, .concept-card) img {
+  max-width: 100%;
+  height: auto;
+}
+.qe-practice-page :where(.qe-practice-intro, .qe-practice-progress, .qe-practice-progress__meta, .qe-answer-options, .qe-practice-question-footer) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.qe-practice-page :where(.qe-practice-progress__meta, .qe-question-card__labels, .qe-practice-question-footer) {
+  flex-wrap: wrap;
+}
+.parent-app :where(.parent-dashboard, .parent-report-switcher, .parent-report-switcher__profiles, .parent-grid, .report-panel, .parent-certificate-actions) {
+  min-width: 0;
+  max-width: 100%;
+}
+.parent-app :where(.parent-recovery-actions, .parent-certificate-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.parent-app :where(.parent-recovery-actions, .parent-certificate-actions) > * {
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  .qe-workspace-layout :where(.qe-workspace-topbar, .qe-workspace-topbar-actions) { gap: 8px; }
+  .qe-workspace-layout .qe-workspace-topbar-actions > * { min-width: 0; max-width: 100%; }
+  :where(.lesson-page, .qe-structured-student-page, .qe-subject-reading-page, .qe-practice-page, .parent-app, .progress-page) :where(.button, button, .text-link) {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .parent-app :where(.parent-recovery-actions, .parent-certificate-actions) > * { flex: 1 1 130px; }
+}

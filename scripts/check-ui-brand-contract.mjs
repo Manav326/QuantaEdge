@@ -82,6 +82,8 @@ assert(/\.practice-feedback-incorrect/.test(webStyles), 'Practice UI must retain
 assert(/\.qe-people-status--success/.test(peopleStyles) && /\.qe-people-status--danger/.test(peopleStyles), 'People Operations must retain distinct success and error status variants.');
 assert(/overscroll-behavior-inline:\s*contain/.test(webStyles), 'Learner surfaces must protect horizontal scroll regions on touch devices.');
 assert(/overscroll-behavior-inline:\s*contain/.test(adminStyles), 'Admin data/preview surfaces must protect horizontal scroll regions.');
+assert(webStyles.includes('.qe-workspace-layout') && webStyles.includes('.qe-structured-student-page') && webStyles.includes('.qe-practice-page'), 'Learner responsive polish must target actual learner workspace, lesson and practice markup.');
+assert(adminStyles.includes('.qe-editor-actions') && adminStyles.includes('.qe-readiness-summary') && adminStyles.includes('@media (max-width: 720px)'), 'Admin responsive polish must cover Content Studio authoring actions and small-screen grids.');
 assert(/tbody tr:focus-within/.test(peopleStyles), 'People tables must keep keyboard focus within rows discoverable.');
 assert(!/(#244c9a|#17376f|#10264b|#3569c8|#6e94d6)/i.test(peopleBaseStyles + peopleStyles), 'People Operations must not regress to its former blue palette.');
 

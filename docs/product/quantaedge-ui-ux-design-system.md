@@ -189,3 +189,10 @@ The user explicitly directed implementation of the planned UI/UX work end to end
 
 
 **Mobile brand consistency — October 17, 2026:** Admin and People Operations mobile workspace headers now render the shared `QuantaEdgeBrand` component instead of repeating the organization name as disconnected text. The cross-app contract guards these entry points.
+
+
+## Route-aware responsive pass — October 17, 2026
+
+- Added CSS scoped to the actual Learner Web workspace, lesson/structured lesson, practice and parent route classes, covering constrained widths, text/media overflow, wrapping action groups and touch-safe scroll regions without changing lesson data, scoring or parent access.
+- Added Content Studio-specific responsive rules for authoring cards, question editors, source-verification panels, readiness summaries, toolbars, form grids and publication actions.
+- Extended the dependency-free UI contract to ensure these responsive rules remain attached to actual route-level classes rather than generic selectors that can silently stop matching.
