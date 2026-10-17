@@ -1,5 +1,6 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import MathText from '../../components/MathText';
 import AnswerFeedback from '../../components/AnswerFeedback';
@@ -219,32 +220,32 @@ export default function PracticePage(){
     else setIndex(questions.length);
   }
 
-  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="आपके topic का practice तैयार हो रहा है…" english="Preparing practice for your topic…" /></div></section></main>;
+  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><UiText message="legacy.web.preparing.practice.for.your.topic.920049af" /></div></section></main>;
 
   if(!lessonId&&!requestedSessionId)return <main className="practice-page">
     <section className="practice-wrap">
-      <div className="eyebrow"><LocaleText hinglish="सीखें → अभ्यास करें" english="Learn → Practise" /></div>
-      <h1><LocaleText hinglish="पहले एक lesson चुनें" english="Start with a lesson" /></h1>
-      <p><LocaleText hinglish="आप lesson के MCQs के बाद सीधे उसी micro-topic का practice करेंगे। Questions QuantaEdge अपने-आप चुनेगा।" english="After the lesson MCQs, you will go straight into practice for the same micro-topic. QuantaEdge selects the questions automatically." /></p>
-      <div className="concept-card"><Link href="/student/learn" className="button button-dark"><LocaleText hinglish="अपने lessons खोलें →" english="Open your lessons →" /></Link></div>
+      <div className="eyebrow"><UiText message="legacy.web.learn.practise.bb602a9d" /></div>
+      <h1><UiText message="legacy.web.start.with.a.lesson.936fa9e6" /></h1>
+      <p><UiText message="legacy.web.after.the.lesson.mcqs.you.will.go.stra.c270ef80" /></p>
+      <div className="concept-card"><Link href="/student/learn" className="button button-dark"><UiText message="legacy.web.open.your.lessons.6e9fe782" /></Link></div>
     </section>
   </main>;
 
   if(error)return <main className="practice-page">
-    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="Practice नहीं खुल पाई" english="Practice could not be opened" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:20}}><LocaleText hinglish="Lesson पर लौटें" english="Return to lesson" /></Link></section>
+    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><UiText message="legacy.web.practice.could.not.be.opened.5bc74c45" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:20}}><UiText message="legacy.web.return.to.lesson.5e757610" /></Link></section>
   </main>;
 
   if(noPractice)return <main className="practice-page">
     <section className="practice-wrap">
       <div className="eyebrow">{lesson?.subject_name||'QuantaEdge'} · {lesson?.chapter_name||tx('अध्याय','Chapter')}</div>
-      <h1><LocaleText hinglish="Practice set अभी उपलब्ध नहीं है" english="Practice set is not available yet" /></h1>
+      <h1><UiText message="legacy.web.practice.set.is.not.available.yet.d6b87368" /></h1>
       <p>{notice}</p>
-      <div className="concept-card"><h2>{lesson?.title||tx('इस micro-topic','This micro-topic')}</h2><p><LocaleText hinglish="अलग topic के questions दिखाने के बजाय, QuantaEdge सिर्फ सही micro-topic के approved questions उपलब्ध होने पर ही practice देगा। आपके lesson के answers save हैं।" english="Instead of showing questions from an unrelated topic, QuantaEdge only starts practice when approved questions for the correct micro-topic are available. Your lesson answers are saved." /></p></div>
+      <div className="concept-card"><h2>{lesson?.title||tx('इस micro-topic','This micro-topic')}</h2><p><UiText message="legacy.web.instead.of.showing.questions.from.an.u.bfb8bb28" /></p></div>
       {recap.map(block=>{
         const data=parse<any>(block.content||'{}');
-        return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
+        return <div className="concept-card" key={block.id}><span className="concept-kicker"><UiText message="legacy.web.recap.d07fa8cc" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
       })}
-      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:22}}><LocaleText hinglish="दूसरा lesson चुनें" english="Choose another lesson" /></Link>
+      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:22}}><UiText message="legacy.web.choose.another.lesson.dd9afbbb" /></Link>
     </section>
   </main>;
 
@@ -252,15 +253,15 @@ export default function PracticePage(){
   // A server-completed session alone must not unmount the current question immediately.
   if(index>=questions.length)return <main className="practice-page">
     <section className="practice-wrap">
-      <div className="eyebrow"><LocaleText hinglish="Micro-topic पूरा हुआ" english="Micro-topic complete" /></div>
-      <h1><LocaleText hinglish="बहुत अच्छा! अभ्यास पूरा हुआ।" english="Well done! Practice complete." /></h1>
-      <p>{lesson?.title||tx('आपका practice session','Your practice session')} · {questions.length} <LocaleText hinglish="questions" english="questions" /></p>
-      <div className="concept-card"><h2><LocaleText hinglish="इस session का परिणाम" english="Session result" /></h2>{gradedCount>0?<p>{correctCount} / {gradedCount} <LocaleText hinglish="questions का latest graded answer सही है" english="questions have a correct latest graded answer" /></p>:<p><LocaleText hinglish="आपके दिए गए answers save हैं।" english="Your submitted answers have been saved." /></p>}<small><LocaleText hinglish="Progress आपके answers से save हुआ है। Mastery केवल जाँचे गए सही/गलत उत्तरों से update होती है।" english="Your answers have been saved. Mastery is updated from graded answers, not from simply opening a question." /></small></div>
+      <div className="eyebrow"><UiText message="legacy.web.micro.topic.complete.1e23cb76" /></div>
+      <h1><UiText message="legacy.web.well.done.practice.complete.1efc8d72" /></h1>
+      <p>{lesson?.title||tx('आपका practice session','Your practice session')} · {questions.length} <UiText message="legacy.web.questions.60fa1a6d" /></p>
+      <div className="concept-card"><h2><UiText message="legacy.web.session.result.db276d70" /></h2>{gradedCount>0?<p>{correctCount} / {gradedCount} <UiText message="legacy.web.questions.have.a.correct.latest.graded.9c32685f" /></p>:<p><UiText message="legacy.web.your.submitted.answers.have.been.saved.fa0511e8" /></p>}<small><UiText message="legacy.web.your.answers.have.been.saved.mastery.i.0856cb2c" /></small></div>
       {recap.map(block=>{
         const data=parse<any>(block.content||'{}');
-        return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="अब दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
+        return <div className="concept-card" key={block.id}><span className="concept-kicker"><UiText message="legacy.web.recap.da5d2bd3" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
       })}
-      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="text-link"><LocaleText hinglish="अध्याय के lessons" english="Chapter lessons" /></Link><Link href={'/student/progress'+(courseId!==null?'?courseId='+courseId:programCode?'?programCode='+encodeURIComponent(programCode):'')} className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link></div>
+      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="text-link"><UiText message="legacy.web.chapter.lessons.13ec05a5" /></Link><Link href={'/student/progress'+(courseId!==null?'?courseId='+courseId:programCode?'?programCode='+encodeURIComponent(programCode):'')} className="button button-dark"><UiText message="legacy.web.view.progress.bce928bc" /></Link></div>
     </section>
   </main>;
 
@@ -272,22 +273,19 @@ export default function PracticePage(){
   return <main className="practice-page qe-practice-page">
     <section className="practice-wrap qe-practice-wrap">
       <div className="qe-practice-intro">
-        <div className="qe-practice-intro__eyebrow"><span className="qe-practice-live-dot"/><LocaleText hinglish="आपकी सीख के अनुसार चुना गया" english="PERSONALISED TO YOUR LESSON" /></div>
-        <h1><LocaleText hinglish="अब खुद करके देखें" english="Now, put it into practice" /></h1>
-        <p><LocaleText hinglish="हर सवाल आपको concept को और अच्छी तरह समझने में मदद करता है। गलत उत्तर भी सीखने का हिस्सा है।" english="Each question helps deepen your understanding. An incorrect answer is part of learning." /></p>
+        <div className="qe-practice-intro__eyebrow"><span className="qe-practice-live-dot"/><UiText message="legacy.web.personalised.to.your.lesson.f5a1e6a2" /></div>
+        <h1><UiText message="legacy.web.now.put.it.into.practice.e1b65d9b" /></h1>
+        <p><UiText message="legacy.web.each.question.helps.deepen.your.unders.849160c7" /></p>
       </div>
 
       <div className="qe-practice-progress" aria-label={tx('अभ्यास की प्रगति','Practice progress')}>
-        <div className="qe-practice-progress__meta"><span><LocaleText hinglish="प्रश्न की प्रगति" english="QUESTION PROGRESS" /></span><strong>{Math.min(index+1,questions.length)} <i>/</i> {questions.length}</strong></div>
+        <div className="qe-practice-progress__meta"><span><UiText message="legacy.web.question.progress.19dd916c" /></span><strong>{Math.min(index+1,questions.length)} <i>/</i> {questions.length}</strong></div>
         <div className="qe-practice-progress__track"><span style={{width:progressPercent+'%'}}/></div>
       </div>
 
-      {!translationComplete&&<div className="qe-practice-notice" role="status"><span>文</span><p><LocaleText
-        hinglish="भाषा कवरेज: कुछ practice प्रश्नों की चुनी हुई भाषा में अलग, समीक्षा-स्वीकृत प्रति उपलब्ध नहीं है। जहाँ ज़रूरी हो, मूल प्रश्न दिखेगा; answer key नहीं बदलती।"
-        english="Language coverage: some practice questions do not yet have a separately reviewed version in the selected language. Original text is retained where needed; answer keys are unchanged."
-      /></p></div>}
+      {!translationComplete&&<div className="qe-practice-notice" role="status"><span>文</span><p><UiText message="legacy.web.language.coverage.some.practice.questi.8b656cca" /></p></div>}
       {notice&&<div className="qe-practice-notice" role="status"><span>✦</span><p>{notice}</p></div>}
-      {error&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="कुछ ठीक नहीं हुआ" english="Something went wrong" /></strong><p>{error}</p></div></div>}
+      {error&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><UiText message="legacy.web.something.went.wrong.6daea259" /></strong><p>{error}</p></div></div>}
 
       <article className={'qe-question-card qe-question-card--practice '+(result?.correct===false?'has-answer-incorrect':result?.correct===true?'has-answer-correct':'')}>
         <div className="qe-question-card__top">
@@ -296,11 +294,11 @@ export default function PracticePage(){
             <span className="qe-question-type">{questionTypeLabel}</span>
             <span className="qe-question-context">{current.exam_format||tx('Topic practice','Topic practice')}{current.marks?' · '+current.marks+' '+tx('अंक','marks'):''}</span>
           </div>
-          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="पाठ्यपुस्तक आधारित" english="Textbook-aligned" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:<LocaleText hinglish="QuantaEdge प्रश्न" english="QuantaEdge question" />}</span>
+          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:<UiText message="legacy.web.quantaedge.question.57836f8f" />}</span>
         </div>
 
         <div className="qe-question-card__prompt"><MathText text={current.prompt}/></div>
-        <div className="qe-practice-hint"><span>✦</span><p><LocaleText hinglish="पहले खुद सोचें। फिर उत्तर दें और feedback से समझें कि आपकी reasoning सही है या नहीं।" english="Think it through first. Then answer and use the feedback to check your reasoning." /></p></div>
+        <div className="qe-practice-hint"><span>✦</span><p><UiText message="legacy.web.think.it.through.first.then.answer.and.76c4914f" /></p></div>
 
         {options.length>0?<div className="qe-answer-options" role="group" aria-label={tx('उत्तर के विकल्प','Answer choices')}>
           {options.map((option,i)=>{
@@ -318,26 +316,26 @@ export default function PracticePage(){
         <div className={'qe-answer-entry '+(result?.correct===false?'is-incorrect':result?.correct===true?'is-correct':'')}>
           {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना संख्यात्मक उत्तर लिखें…','Enter your numerical answer…')}/>:
             <textarea value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
-          <button className="button button-dark" disabled={saving||!selected.trim()||selectedOptionIsRight} onClick={()=>void answer(selected)}>{saving?<LocaleText hinglish="उत्तर जाँचा जा रहा है…" english="Checking answer…" />:<LocaleText hinglish="उत्तर जमा करें" english="Submit answer" />}</button>
+          <button className="button button-dark" disabled={saving||!selected.trim()||selectedOptionIsRight} onClick={()=>void answer(selected)}>{saving?<UiText message="legacy.web.checking.answer.b4319f7e" />:<UiText message="legacy.web.submit.answer.10965fb7" />}</button>
         </div>}
 
-        {answerError&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="उत्तर सेव नहीं हुआ" english="Answer was not saved" /></strong><p>{answerError}</p></div></div>}
+        {answerError&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><UiText message="legacy.web.answer.was.not.saved.6a166e3f" /></strong><p>{answerError}</p></div></div>}
         {result&&<AnswerFeedback
           outcome={result.correct===true?'correct':result.correct===false?'incorrect':'ungraded'}
-          title={result.correct===true?<LocaleText hinglish="बहुत बढ़िया — सही उत्तर!" english="Well done — correct!" />:result.correct===false?<LocaleText hinglish="कोई बात नहीं, फिर प्रयास करें" english="That's okay — try again" />:<LocaleText hinglish="उत्तर सेव हो गया" english="Answer saved" />}
-          message={result.correct===true?<LocaleText hinglish="Explanation पढ़ें और समझें कि यह तरीका क्यों काम करता है।" english="Read the explanation to understand why this method works." />:result.correct===false?<LocaleText hinglish="नीचे दिया explanation पढ़ें। आप इसी सवाल को दोबारा हल कर सकते हैं।" english="Read the explanation below. You can retry this same question." />:<LocaleText hinglish="इस उत्तर की शिक्षक या rubric से जाँच आवश्यक हो सकती है।" english="This answer may need teacher or rubric review." />}
+          title={result.correct===true?<UiText message="legacy.web.well.done.correct.126ebac2" />:result.correct===false?<UiText message="legacy.web.that.s.okay.try.again.25265054" />:<UiText message="legacy.web.answer.saved.b1752a46" />}
+          message={result.correct===true?<UiText message="legacy.web.read.the.explanation.to.understand.why.68b982cf" />:result.correct===false?<UiText message="legacy.web.read.the.explanation.below.you.can.ret.26f5df06" />:<UiText message="legacy.web.this.answer.may.need.teacher.or.rubric.b6c2d2ed" />}
           explanation={result.explanation?<MathText text={String(result.explanation)}/>:undefined}
-          explanationLabel={<LocaleText hinglish="समझें क्यों" english="WHY THIS ANSWER" />}
+          explanationLabel={<UiText message="legacy.web.why.this.answer.2627f3e7" />}
         />}
         <div className="qe-practice-question-footer">
-          <div className="qe-practice-session-state"><span>{saving?<i className="qe-practice-live-dot"/>:sessionStatus==='COMPLETED'?'✓':'•'}</span><span>{saving?<LocaleText hinglish="उत्तर जाँचा जा रहा है" english="Checking your answer" />:<LocaleText hinglish="आपकी प्रगति सेव है" english="Progress is saved" />}</span></div>
-          {result?.correct===false?<button type="button" className="button button-dark" onClick={tryAgain}><LocaleText hinglish="फिर से कोशिश करें ↻" english="Try again ↻" /></button>:
-            result?<button type="button" className="button button-dark" onClick={next}>{index+1<questions.length?<LocaleText hinglish="अगला सवाल →" english="Next question →" />:<LocaleText hinglish="नतीजे देखें →" english="See results →" />}</button>:
-            <span className="qe-practice-awaiting"><LocaleText hinglish="अपना उत्तर चुनें" english="Choose your answer" /></span>}
+          <div className="qe-practice-session-state"><span>{saving?<i className="qe-practice-live-dot"/>:sessionStatus==='COMPLETED'?'✓':'•'}</span><span>{saving?<UiText message="legacy.web.checking.your.answer.cfd590d9" />:<UiText message="legacy.web.progress.is.saved.70d860bc" />}</span></div>
+          {result?.correct===false?<button type="button" className="button button-dark" onClick={tryAgain}><UiText message="legacy.web.try.again.8da39260" /></button>:
+            result?<button type="button" className="button button-dark" onClick={next}>{index+1<questions.length?<UiText message="legacy.web.next.question.28a23f5d" />:<UiText message="legacy.web.see.results.b85010b7" />}</button>:
+            <span className="qe-practice-awaiting"><UiText message="legacy.web.choose.your.answer.e401c4fc" /></span>}
         </div>
       </article>
 
-      <div className="qe-practice-trust"><span>✓</span><p><LocaleText hinglish="सिर्फ approved questions · आपके उत्तर सुरक्षित रूप से save होते हैं" english="Approved questions only · Your answers are saved securely" /></p></div>
+      <div className="qe-practice-trust"><span>✓</span><p><UiText message="legacy.web.approved.questions.only.your.answers.a.e62d67c0" /></p></div>
     </section>
   </main>;
 }
@@ -347,7 +345,7 @@ function OrderInput({prompt,disabled,onSubmit}:{prompt:string;disabled:boolean;o
   const [order,setOrder]=useState<string[]>([]);
   function pick(letter:string){if(disabled||order.includes(letter))return;setOrder([...order,letter]);}
   function reset(){if(!disabled)setOrder([])}
-  return <div className="concept-card structured-card"><div className="structured-hint"><LocaleText hinglish="Sequence चुनें: हर option पर एक बार tap करें।" english="Choose the sequence by tapping each option once." /></div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):<LocaleText hinglish="अभी sequence नहीं चुना गया" english="No sequence selected yet" />}</div><div className="practice-footer"><button className="text-link" onClick={reset}><LocaleText hinglish="Reset" english="Reset" /></button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}><LocaleText hinglish="Sequence submit करें" english="Submit sequence" /></button></div></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint"><UiText message="legacy.web.choose.the.sequence.by.tapping.each.op.e0727d5b" /></div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):<UiText message="legacy.web.no.sequence.selected.yet.464c236b" />}</div><div className="practice-footer"><button className="text-link" onClick={reset}><UiText message="legacy.web.reset.a46f4415" /></button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}><UiText message="legacy.web.submit.sequence.c3a8f3bb" /></button></div></div>;
 }
 
 function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string|object)=>void}){
@@ -358,5 +356,5 @@ function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string
     },{} as Record<string,string>);
     if(Object.keys(mapping).length) onSubmit(mapping);
   }
-  return <div className="concept-card structured-card"><div className="structured-hint"><LocaleText hinglish="Matching लिखें:" english="Enter your matches:" /> <b><LocaleText hinglish="1:A, 2:B, 3:C" english="1:A, 2:B, 3:C" /></b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}><LocaleText hinglish="Matching submit करें" english="Submit matches" /></button></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint"><UiText message="legacy.web.enter.your.matches.9e8a54ae" /> <b><UiText message="legacy.web.1.a.2.b.3.c.4c65fa05" /></b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}><UiText message="legacy.web.submit.matches.e3628269" /></button></div>;
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import MathText from '../../components/MathText';
 import AnswerFeedback from '../../components/AnswerFeedback';
@@ -143,17 +144,17 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
 
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
-    <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?<LocaleText hinglish="पहले से क्या जानते हैं?" english="What you already know" />:<LocaleText hinglish="समझें" english="Understand" />)}</span>
+    <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?<UiText message="legacy.web.what.you.already.know.82c2662c" />:<UiText message="legacy.web.understand.499af863" />)}</span>
     {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(stackFractionsInHtml(String(data.html)))}}/> : <p><MathText text={String(data.body ?? data.description ?? '')}/></p>}
     {data.keyPoints?.map((x:string,i:number)=><div className="feedback" key={i}><span>• {x}</span></div>)}
   </div>;
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
-    <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? <LocaleText hinglish="उदाहरण" english="Example" />}</h3><p><MathText text={String(data.problem || data.prompt || '')}/></p>
+    <span className="concept-kicker"><UiText message="legacy.web.worked.example.84fe1ccd" /></span><h3>{data.title ?? <UiText message="legacy.web.example.4b2669a8" />}</h3><p><MathText text={String(data.problem || data.prompt || '')}/></p>
     {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. <MathText text={x}/></span></div>)}
-    {data.answer && <p className="qe-model-answer"><strong><LocaleText hinglish="Model answer:" english="Model answer:" /></strong> <MathText text={String(data.answer)}/></p>}
+    {data.answer && <p className="qe-model-answer"><strong><UiText message="legacy.web.model.answer.16b8e37d" /></strong> <MathText text={String(data.answer)}/></p>}
   </div>;
   if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type)) return <div className="concept-card">
-    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<LocaleText hinglish="साथ में करें" english="Try together" />:block.block_type==='HINT'?<LocaleText hinglish="Helpful hint" english="Helpful hint" />:<LocaleText hinglish="अब खुद करें" english="Try it yourself" />)}</span><p><MathText text={String(data.prompt || data.body || '')}/></p>{data.hint && <div className="feedback"><span><LocaleText hinglish="Hint:" english="Hint:" /> <MathText text={String(data.hint)}/></span></div>}
+    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<UiText message="legacy.web.try.together.2813d564" />:block.block_type==='HINT'?<UiText message="legacy.web.helpful.hint.e653ab3f" />:<UiText message="legacy.web.try.it.yourself.817b2366" />)}</span><p><MathText text={String(data.prompt || data.body || '')}/></p>{data.hint && <div className="feedback"><span><UiText message="legacy.web.hint.0b3b3ecd" /> <MathText text={String(data.hint)}/></span></div>}
   </div>;
   if (['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].includes(block.block_type)) {
     const url=String(data.url||'');
@@ -177,15 +178,15 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
       {url && block.block_type==='VIDEO' && directVideo && <video className="lesson-visual-video" controls preload="metadata" playsInline src={url}/>}
       {url && block.block_type==='VIDEO' && youtube && <div className="lesson-visual-embed"><iframe src={embed} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div>}
       {url && block.block_type==='AUDIO' && <audio className="lesson-visual-audio" controls preload="metadata" src={url}/>}
-      {url && block.block_type==='VIDEO' && !directVideo && !youtube && <a href={url} target="_blank" rel="noreferrer" className="button button-small"><LocaleText hinglish="Video देखें ↗" english="Watch video ↗" /></a>}
-      {url && block.block_type==='AUDIO' && <a href={url} target="_blank" rel="noreferrer" className="text-link"><LocaleText hinglish="Audio खोलें ↗" english="Open audio ↗" /></a>}
+      {url && block.block_type==='VIDEO' && !directVideo && !youtube && <a href={url} target="_blank" rel="noreferrer" className="button button-small"><UiText message="legacy.web.watch.video.982362cc" /></a>}
+      {url && block.block_type==='AUDIO' && <a href={url} target="_blank" rel="noreferrer" className="text-link"><UiText message="legacy.web.open.audio.d6296323" /></a>}
       {!url && <div className="feedback"><span>◈</span><span>{description||alt||(locale==='english'?'No visual asset is available yet.':'अभी कोई चित्र उपलब्ध नहीं है।')}</span></div>}
       {caption && <p className="lesson-media-caption">{caption}</p>}
       {data.source_candidate_id && <div className="qe-lesson-source-attribution"><span>{locale==='english'?'Source reference':'स्रोत संदर्भ'}</span><span>{String(data.source_book_title||data.source_book_id||'Textbook')} · {locale==='english'?'PDF page':'PDF पृष्ठ'} {String(data.source_pdf_page_number||'—')}{data.source_edition?' · '+String(data.source_edition):''}</span>{data.source_page_url&&<a href={String(data.source_page_url)} target="_blank" rel="noreferrer">{locale==='english'?'View source page ↗':'स्रोत पृष्ठ देखें ↗'}</a>}</div>}
       {visualZoomOpen&&isVisual&&<div className="qe-visual-lightbox" role="dialog" aria-modal="true" aria-label={title} onKeyDown={event=>{if(event.key==='Escape')setVisualZoomOpen(false)}}><button type="button" className="qe-visual-lightbox-close" onClick={()=>setVisualZoomOpen(false)} aria-label={locale==='english'?'Close visual':'चित्र बंद करें'}>×</button>{directVideo?<video controls autoPlay playsInline src={url}/>:<img src={url} alt={alt}/ >}{caption&&<p>{caption}</p>}</div>}
     </div>;
   }
-  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><LocaleText hinglish="AI tutor" english="AI tutor" /></strong><p><LocaleText hinglish="अगर कहीं अटकें, तो इसी lesson के context में hint, explanation, example या step-by-step help लें।" english="If you get stuck, ask for a hint, explanation, example, or step-by-step help in the context of this lesson." /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><LocaleText hinglish="Tutor खोलें →" english="Open tutor →" /></button></div></div>;
+  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><UiText message="legacy.web.ai.tutor.30676145" /></strong><p><UiText message="legacy.web.if.you.get.stuck.ask.for.a.hint.explan.cc1a4459" /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><UiText message="legacy.web.open.tutor.3a75221b" /></button></div></div>;
   if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card">{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={x}/></span></div>)}</div>;
   return null;
 }
@@ -227,7 +228,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
         <span className="qe-question-type">{questionLabel}</span>
         <span className="qe-question-context">{q.exam_format||tx('Lesson check','Lesson check')}{q.marks?' · '+q.marks+' '+tx('अंक','marks'):''}</span>
       </div>
-      <span className="qe-question-source">{q.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="पाठ्यपुस्तक आधारित" english="Textbook-aligned" />:q.source_kind?<MathText text={q.source_kind.replaceAll('_',' ').toLowerCase()}/>:<LocaleText hinglish="QuantaEdge प्रश्न" english="QuantaEdge question" />}</span>
+      <span className="qe-question-source">{q.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:q.source_kind?<MathText text={q.source_kind.replaceAll('_',' ').toLowerCase()}/>:<UiText message="legacy.web.quantaedge.question.57836f8f" />}</span>
     </div>
     <div className="qe-question-card__prompt"><MathText text={q.prompt}/></div>
 
@@ -247,18 +248,18 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
         <textarea value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
         <input value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर लिखें…','Type your answer…')}/>}
       <div className="qe-answer-entry__actions">
-        <button type="button" className="button button-dark button-small" disabled={busy||!value.trim()||submitted} onClick={()=>void submit(value)}>{busy?<LocaleText hinglish="जाँच रहे हैं…" english="Checking…" />:<LocaleText hinglish="उत्तर जाँचें" english="Check answer" />}</button>
-        <button type="button" className="qe-tutor-link" onClick={()=>onTutorOpen(q.id)}><span>✦</span><LocaleText hinglish="Tutor से मदद लें" english="Ask the tutor" /></button>
+        <button type="button" className="button button-dark button-small" disabled={busy||!value.trim()||submitted} onClick={()=>void submit(value)}>{busy?<UiText message="legacy.web.checking.45fef9a5" />:<UiText message="legacy.web.check.answer.293518af" />}</button>
+        <button type="button" className="qe-tutor-link" onClick={()=>onTutorOpen(q.id)}><span>✦</span><UiText message="legacy.web.ask.the.tutor.3a67dbaf" /></button>
       </div>
     </div>}
 
-    {answerError && <div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="उत्तर जाँच नहीं पाया" english="Could not check answer" /></strong><p><MathText text={answerError}/></p></div></div>}
+    {answerError && <div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><UiText message="legacy.web.could.not.check.answer.875a5a14" /></strong><p><MathText text={answerError}/></p></div></div>}
     {result && <AnswerFeedback
       outcome={result.correct===true?'correct':result.correct===false?'incorrect':'ungraded'}
-      title={result.correct===true?<LocaleText hinglish="बिल्कुल सही!" english="That's correct!" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं — फिर प्रयास करें" english="Not quite — try again" />:<LocaleText hinglish="उत्तर सेव हो गया" english="Answer saved" />}
-      message={result.correct===true?<LocaleText hinglish="बहुत बढ़िया। Explanation पढ़कर अपनी समझ पक्की करें।" english="Great work. Review the explanation to strengthen your understanding." />:result.correct===false?<LocaleText hinglish="घबराएँ नहीं। Explanation पढ़ें, फिर विकल्प दोबारा चुनें।" english="No worries. Read the explanation, then choose again." />:<LocaleText hinglish="इस उत्तर की शिक्षक या rubric से जाँच आवश्यक हो सकती है।" english="This answer may need teacher or rubric review." />}
+      title={result.correct===true?<UiText message="legacy.web.that.s.correct.eb4b4a6d" />:result.correct===false?<UiText message="legacy.web.not.quite.try.again.caea98e7" />:<UiText message="legacy.web.answer.saved.b1752a46" />}
+      message={result.correct===true?<UiText message="legacy.web.great.work.review.the.explanation.to.s.56045018" />:result.correct===false?<UiText message="legacy.web.no.worries.read.the.explanation.then.c.cc8aee7d" />:<UiText message="legacy.web.this.answer.may.need.teacher.or.rubric.b6c2d2ed" />}
       explanation={result.explanation?<MathText text={String(result.explanation)}/>:undefined}
-      explanationLabel={<LocaleText hinglish="समझें क्यों" english="Why this works" />}
+      explanationLabel={<UiText message="legacy.web.why.this.works.213b7eaf" />}
     />}
   </article>;
 }
@@ -597,27 +598,27 @@ export default function LearnClient() {
   }
 
   const lastOpenedLesson=trackBrowse?.lessons.find(item=>Number(item.id)===lastOpenedLessonId);
-  if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
+  if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.lesson.2df59c7d" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><UiText message="legacy.web.student.home.c4ae779f" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
     <section className="lesson-wrap">
-      <div className="lesson-meta"><span className="eyebrow">{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?(trackBrowse.courseName||courseDisplayName||tx('Course','Course'))+' · '+trackBrowse.subjectName:<><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</>}</span><span>{trackGroups.length} <LocaleText hinglish="अध्याय" english="chapters" /> · {trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
-      <h1>{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?trackBrowse.subjectName:trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
-      <p className="lesson-intro"><LocaleText hinglish="किसी chapter को खोलकर उसके topics और PDF देखें। आपका आखिरी खुला chapter याद रखा जाएगा।" english="Open a chapter to see its topics and PDF. Your last open chapter is remembered." /></p>
-      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><LocaleText hinglish="पिछला खोला गया topic" english="Last opened topic" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''))+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <LocaleText hinglish="जारी रखें →" english="Continue →" /></Link></div>}
+      <div className="lesson-meta"><span className="eyebrow">{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?(trackBrowse.courseName||courseDisplayName||tx('Course','Course'))+' · '+trackBrowse.subjectName:<><UiText message="legacy.web.class.98aaaa31" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</>}</span><span>{trackGroups.length} <UiText message="legacy.web.chapters.b7609a1c" /> · {trackBrowse.lessons.length} <UiText message="legacy.web.published.lessons.b59dcc4d" /></span></div>
+      <h1>{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?trackBrowse.subjectName:trackBrowse.subjectCode==='maths'?<UiText message="legacy.web.mathematics.learning.f39c3269" />:<UiText message="legacy.web.science.learning.38127305" />}</h1>
+      <p className="lesson-intro"><UiText message="legacy.web.open.a.chapter.to.see.its.topics.and.p.2ba51701" /></p>
+      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><UiText message="legacy.web.last.opened.topic.74a31687" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''))+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <UiText message="legacy.web.continue.3be96765" /></Link></div>}
       {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
         <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
           <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-          <span className="qe-student-pdf-copy"><span><LocaleText hinglish="पूरी subject book" english="Complete subject textbook" /></span><strong>{item.title}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} pages · {item.edition||tx('ऑनलाइन पढ़ें','Read online')}</small></span>
-          <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
+          <span className="qe-student-pdf-copy"><span><UiText message="legacy.web.complete.subject.textbook.3fba5a6f" /></span><strong>{item.title}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} pages · {item.edition||tx('ऑनलाइन पढ़ें','Read online')}</small></span>
+          <span className="qe-student-pdf-action"><UiText message="legacy.web.open.pdf.a6054393" /> ↗</span>
         </Link>
       )}
-      {!documentsLoaded&&<div className="qe-chapter-loading"><span className="qe-reader-spinner"/><LocaleText hinglish="PDFs load हो रहे हैं…" english="Checking available PDFs…" /></div>}
+      {!documentsLoaded&&<div className="qe-chapter-loading"><span className="qe-reader-spinner"/><UiText message="legacy.web.checking.available.pdfs.8cb79079" /></div>}
       {trackGroups.length===0 ? <div className="concept-card">
-        <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
-        <h2><LocaleText hinglish="अभी कोई published lesson या chapter PDF available नहीं है" english="No published lessons or chapter PDFs are available yet" /></h2>
-        <p><LocaleText hinglish="इस विषय की सामग्री तैयार और publish होने पर यहाँ दिखाई देगी।" english="Content will appear here when it has been prepared and published." /></p>
-        <Link href={(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?'/student':'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
-        <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
+        <span className="concept-kicker"><UiText message="legacy.web.subject.content.9f593e47" /></span>
+        <h2><UiText message="legacy.web.no.published.lessons.or.chapter.pdfs.a.c3c39a7e" /></h2>
+        <p><UiText message="legacy.web.content.will.appear.here.when.it.has.b.9ddc3075" /></p>
+        <Link href={(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?'/student':'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><UiText message="legacy.web.view.another.subject.5b4ac3fb" /></Link>
+        <p><Link href="/student" className="text-link"><UiText message="legacy.web.return.to.student.home.bc1b2e2f" /></Link></p>
       </div> : trackGroups.map((group,index)=>{
         const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
           (Boolean(item.chapter_code)&&item.chapter_code===group.code)||
@@ -631,13 +632,13 @@ export default function LearnClient() {
             else localStorage.removeItem('qe:student:open-chapter:'+chapterStorageScope);
           }}>
             <span className="qe-student-chapter-number">{String(index+1).padStart(2,'0')}</span>
-            <span className="qe-student-chapter-title"><small><LocaleText hinglish="CHAPTER" english="CHAPTER" /> {group.code!==group.name?'· '+group.code:''}</small><strong>{group.name}</strong><span>{group.lessons.length} topics · {chapterDocuments.length} PDFs</span></span>
+            <span className="qe-student-chapter-title"><small><UiText message="legacy.web.chapter.17e373cd" /> {group.code!==group.name?'· '+group.code:''}</small><strong>{group.name}</strong><span>{group.lessons.length} topics · {chapterDocuments.length} PDFs</span></span>
             <span className="qe-student-chapter-indicator">{expanded?'−':'+'}</span>
           </button>
           {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
             <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
             <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} {tx('पृष्ठ','pages')} · {textbookChapterTitle(item, learningLanguage)}</small></span>
-            <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
+            <span className="qe-student-pdf-action"><UiText message="legacy.web.open.pdf.a6054393" /> ↗</span>
           </Link>)}
           {expanded&&<div className="qe-student-chapter-content">
             {group.lessons.length>0&&<div className="qe-student-topic-list">{group.lessons.map((item,topicIndex)=>{
@@ -654,17 +655,17 @@ export default function LearnClient() {
               return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''))+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
                 <span className="qe-student-topic-index" aria-label={'Microtopic '+(topicIndex+1)}>{String(topicIndex+1).padStart(2,'0')}</span>
                 <span className="qe-student-topic-copy"><strong>{item.title}</strong>
-                  <small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित microtopic" english="min · published microtopic" /></small>
+                  <small>{item.estimated_minutes} <UiText message="legacy.web.min.published.microtopic.c9b9be28" /></small>
                   <span className="qe-student-topic-progress">
                     <small className={mcqsComplete?'is-done':''}>{mcqCount>0?'MCQ '+mcqAnswered+'/'+mcqCount:'MCQs not required'}</small>
                     {bestGraded>0
-                      ? <small className="is-best"><LocaleText hinglish="Best" english="Best" /> {bestCorrect}/{bestGraded} · {bestPercent}%</small>
+                      ? <small className="is-best"><UiText message="legacy.web.best.fe4104ad" /> {bestCorrect}/{bestGraded} · {bestPercent}%</small>
                       : practiceCompleted
-                        ? <small className="is-best"><LocaleText hinglish="Practice complete" english="Practice complete" /></small>
+                        ? <small className="is-best"><UiText message="legacy.web.practice.complete.5434d15d" /></small>
                         : activeQuestionCount>0
-                          ? <small><LocaleText hinglish="Practice saved" english="Practice saved" /> {activeAnswered}/{activeQuestionCount}</small>
-                          : <small><LocaleText hinglish="Practice शुरू नहीं" english="Practice not started" /></small>}
-                    {practiceCompleted&&activeQuestionCount>0&&<small><LocaleText hinglish="New attempt" english="New attempt" /> {activeAnswered}/{activeQuestionCount}</small>}
+                          ? <small><UiText message="legacy.web.practice.saved.8c07a841" /> {activeAnswered}/{activeQuestionCount}</small>
+                          : <small><UiText message="legacy.web.practice.not.started.dd077277" /></small>}
+                    {practiceCompleted&&activeQuestionCount>0&&<small><UiText message="legacy.web.new.attempt.436d74f5" /> {activeAnswered}/{activeQuestionCount}</small>}
                   </span>
                 </span>
                 {topicComplete
@@ -672,14 +673,14 @@ export default function LearnClient() {
                   : <span className="qe-student-topic-arrow" aria-hidden="true">→</span>}
               </Link>;
             })}</div>}
-            {chapterDocuments.length===0&&group.lessons.length===0&&<p className="qe-student-chapter-empty"><LocaleText hinglish="इस chapter में अभी PDF या published topic नहीं है।" english="No PDF or published topic is available in this chapter yet." /></p>}
+            {chapterDocuments.length===0&&group.lessons.length===0&&<p className="qe-student-chapter-empty"><UiText message="legacy.web.no.pdf.or.published.topic.is.available.740a2b14" /></p>}
           </div>}
         </section>;
       })}
-      <div className="qe-subject-reading-footer"><Link href="/student"><LocaleText hinglish="← Student home" english="← Student home" /></Link><Link href="/student/textbooks"><LocaleText hinglish="सभी textbooks देखें →" english="View all textbooks →" /></Link></div>
+      <div className="qe-subject-reading-footer"><Link href="/student"><UiText message="legacy.web.student.home.d833cae1" /></Link><Link href="/student/textbooks"><UiText message="legacy.web.view.all.textbooks.f101aba4" /></Link></div>
     </section>
   </main>;
-  if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow"><LocaleText hinglish="Lesson load हो रहा है…" english="Loading lesson…" /></div></section></main>;
+  if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow"><UiText message="legacy.web.loading.lesson.7b69e4b9" /></div></section></main>;
 
   // Additive adapter: current database lessons continue through the legacy path below.
   // The API may embed a server-sanitized, explicitly published structured artifact when that delivery path is enabled.
@@ -690,48 +691,45 @@ export default function LearnClient() {
         <span>{lesson.class_code} · {lesson.subject_name}</span>
       </div>
       <StructuredLessonExperience lesson={lesson.structured_lesson} locale={learningLanguage} mode="student" />
-      <div className="lesson-next"><Link href="/student" className="button button-dark button-small"><LocaleText hinglish="Student home →" english="Student home →" /></Link></div>
+      <div className="lesson-next"><Link href="/student" className="button button-dark button-small"><UiText message="legacy.web.student.home.15fbe96d" /></Link></div>
     </section>
   </main>;
 
   return <main className="lesson-page">
     <section className="lesson-wrap">
       <div className="lesson-meta">
-        <span className="eyebrow">{selectedCourseId!==null||selectedProgram?(courseDisplayName||tx('Course','Course'))+' · '+lesson.subject_name:<><LocaleText hinglish="कक्षा" english="Class" /> {lesson.class_code} · {lesson.subject_name}</>} · {lesson.chapter_name}</span>
+        <span className="eyebrow">{selectedCourseId!==null||selectedProgram?(courseDisplayName||tx('Course','Course'))+' · '+lesson.subject_name:<><UiText message="legacy.web.class.98aaaa31" /> {lesson.class_code} · {lesson.subject_name}</>} · {lesson.chapter_name}</span>
         <span>Lesson {currentIndex+1} / {lessons.length}</span>
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
       {!lesson.translation_complete&&<div className="feedback" role="status">
-        <span><LocaleText hinglish="भाषा कवरेज अधूरा है" english="Language coverage is incomplete" /></span>
-        <span><LocaleText
-          hinglish="इस चुनी हुई भाषा के कुछ हिस्सों का वर्तमान अनुवाद अभी प्रकाशित नहीं है। नीचे दिए गए भागों में मूल भाषा का पाठ दिखाई दे सकता है।"
-          english="Current translations for some parts are not published in the selected learning language. Original-language text may appear in the areas listed below."
-        /></span>
+        <span><UiText message="legacy.web.language.coverage.is.incomplete.b287daa1" /></span>
+        <span><UiText message="legacy.web.current.translations.for.some.parts.ar.d95df64e" /></span>
         {!!lesson.translation_gaps?.length&&<small>{lesson.translation_gaps.map(translationGapText).join(" · ")}</small>}
       </div>}
-      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
+      <div className="feedback"><span><UiText message="legacy.web.learning.path.43212585" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
-      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
+      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <UiText message="legacy.web.help.0201f8c2" /></b><span><UiText message="legacy.web.explain.the.concept.in.your.own.words..8ad26ef4" /></span></div>}
 
-      <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <LocaleText hinglish="attempt किए" english="attempted" /></span></div>
-      {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={tx('MCQ की प्रगति','MCQ progress')}><div><span><LocaleText hinglish="सभी सवालों के उत्तर दें" english="Answer every question to continue" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
-      {lessonMcqs.length ? lessonMcqs.map((q,index)=><QuestionCard key={q.id} q={q} index={index+1} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><LocaleText hinglish="इस lesson के लिए MCQ अभी publish नहीं हुए हैं। आप फिर भी इस topic का उपलब्ध practice set खोल सकते हैं।" english="MCQs have not been published for this lesson yet. You can still open any approved practice set for this topic." /></p></div>}
+      <div className="content-heading"><h2><UiText message="legacy.web.check.your.understanding.with.mcqs.858bdd53" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <UiText message="legacy.web.attempted.b3b638cd" /></span></div>
+      {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={tx('MCQ की प्रगति','MCQ progress')}><div><span><UiText message="legacy.web.answer.every.question.to.continue.5dafc788" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
+      {lessonMcqs.length ? lessonMcqs.map((q,index)=><QuestionCard key={q.id} q={q} index={index+1} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><UiText message="legacy.web.mcqs.have.not.been.published.for.this..18b64bb6" /></p></div>}
 
       <section className="concept-card practice-launch-card">
-        <span className="concept-kicker"><LocaleText hinglish="अगला चरण" english="Next step" /></span>
-        <h2><LocaleText hinglish="अब इसी micro-topic का अभ्यास करें" english="Now practise this micro-topic" /></h2>
-        <p><LocaleText hinglish="QuantaEdge इसी lesson के learning objective/concept से जुड़े approved questions चुनेगा। आपको topics या question types चुनने की ज़रूरत नहीं है।" english="QuantaEdge selects approved questions mapped to this lesson's learning objective and concept. You do not need to choose topics or question types." /></p>
+        <span className="concept-kicker"><UiText message="legacy.web.next.step.0a765b4d" /></span>
+        <h2><UiText message="legacy.web.now.practise.this.micro.topic.d41eb5e1" /></h2>
+        <p><UiText message="legacy.web.quantaedge.selects.approved.questions..39820922" /></p>
         {canStartTopicPractice
-          ? <Link href={'/student/practice?lessonId='+lesson.id+courseQuery} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
-          : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><LocaleText hinglish="पहले MCQ पूरे करें" english="Finish the MCQs first" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
+          ? <Link href={'/student/practice?lessonId='+lesson.id+courseQuery} className="button button-dark"><UiText message="legacy.web.start.topic.practice.74092f61" /></Link>
+          : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><UiText message="legacy.web.finish.the.mcqs.first.7354ffa5" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
 
       {recapBlock&&<section className="lesson-recap" aria-label={tx('पाठ का दोहराव','Lesson recap')}>
         <div className="content-heading">
-          <h2><LocaleText hinglish="अब दोहराएँ" english="Recap" /></h2>
-          <span><LocaleText hinglish="मुख्य बातें" english="Key takeaways" /></span>
+          <h2><UiText message="legacy.web.recap.c772ab09" /></h2>
+          <span><UiText message="legacy.web.key.takeaways.0c7d1936" /></span>
         </div>
         <Block key={recapBlock.id} block={recapBlock} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>
       </section>}
@@ -742,10 +740,10 @@ export default function LearnClient() {
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
 
       <div className="lesson-next">
-        {currentIndex>0 ? <button type="button" className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><LocaleText hinglish="← पिछला" english="← Previous" /></button> : <span/>}
+        {currentIndex>0 ? <button type="button" className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><UiText message="legacy.web.previous.c5e11564" /></button> : <span/>}
         {currentIndex>=0 && currentIndex<lessons.length-1
-          ? <button type="button" className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}><LocaleText hinglish="अगला lesson →" english="Next lesson →" /></button>
-          : <Link href="/student" className="button button-dark button-small"><LocaleText hinglish="Student home →" english="Student home →" /></Link>}
+          ? <button type="button" className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}><UiText message="legacy.web.next.lesson.7803b6e6" /></button>
+          : <Link href="/student" className="button button-dark button-small"><UiText message="legacy.web.student.home.15fbe96d" /></Link>}
       </div>
     </section>
   </main>;
