@@ -62,7 +62,7 @@ assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'Live Quan
 assert(adminBrandComponent === peopleBrandComponent, 'Admin and People Operations must keep the same canonical operator brand component.');
 assert(brandComponent.includes('useTenantBranding') && brandComponent.includes('brand.displayName'), 'Learner web brand lockup must consume resolved tenant branding.');
 assert(tenantBrandingProvider.includes('/api/v1/institution/public/branding/') && tenantBrandingProvider.includes('institution/memberships/me'), 'Tenant branding provider must resolve trusted institution codes and a single learner membership.');
-assert(!tenantBrandingProvider.includes('--qe-brand-orange'), 'Tenant identity resolution must leave palette variables to the shared theme system.');
+assert(!/\.style\.setProperty\(['"]--qe-(?:brand-orange|color-)/.test(tenantBrandingProvider), 'Tenant identity resolution must not write palette variables outside the shared theme system.');
 assert(learnerInstitutionsPage.includes('/api/v1/institution/memberships/me') && learnerInstitutionsPage.includes('/api/v1/institution/join'), 'Learner institution self-service must use the authenticated membership and join APIs.');
 assert(androidTenantBrand.includes('LocalInstitutionBrandIdentity') && androidTenantBrand.includes('institution.displayName'), 'Android shared brand lockup must render a resolved institution name.');
 assert(androidTenantRepository.includes('/api/v1/institution/public/branding/') && androidTenantRepository.includes('/api/v1/institution/join'), 'Android must resolve public school branding and use the membership join API.');
