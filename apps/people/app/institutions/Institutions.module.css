@@ -85,3 +85,8 @@
 .themePreviewLight span,.themePreviewDark span{display:inline-flex;align-items:center;justify-content:center;justify-self:start;min-height:34px;padding:7px 10px;border-radius:8px;font-size:10px;font-weight:800}
 .themePreviewLight small,.themePreviewDark small{font-size:10px;font-weight:750;overflow-wrap:anywhere}
 @media(max-width:650px){.themeSettingsGrid,.themePreviewGrid{grid-template-columns:1fr}.colorGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+.brandAssetPreview{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--qe-border,#e5e7eb);border-radius:12px;background:var(--qe-surface,#fff)}
+.brandAssetPreview span{font-size:12px;color:var(--qe-muted,#667085);flex:1}.brandAssetPreview img{max-width:180px;max-height:84px;object-fit:contain;border-radius:8px;background:#fff;padding:6px;border:1px solid #e5e7eb}
+.brandAssetPreview img[src*="app-icon"]{width:64px;height:64px}
