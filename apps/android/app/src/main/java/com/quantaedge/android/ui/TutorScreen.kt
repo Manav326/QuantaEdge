@@ -386,7 +386,7 @@ fun TutorScreen(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().height(58.dp).then(headerDragModifier)
-                .background(Color(0xFF151B2C)).padding(horizontal = 11.dp),
+                .background(MaterialTheme.colorScheme.surfaceVariant).padding(horizontal = 11.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -397,8 +397,8 @@ fun TutorScreen(
             )
             Column(verticalArrangement = Arrangement.spacedBy(1.dp), modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(t("Your tutor", "आपका ट्यूटर"), color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    Surface(shape = RoundedCornerShape(8.dp), color = Color(0xFF292C37), contentColor = Color(0xFFFED7AA)) {
+                    Text(t("Your tutor", "आपका ट्यूटर"), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.surface, contentColor = MaterialTheme.colorScheme.primary) {
                         Row(modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp), horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text("✦", fontSize = 11.sp)
                             Text("AI", fontSize = 8.sp, fontWeight = FontWeight.Black)
@@ -407,7 +407,7 @@ fun TutorScreen(
                 }
                 Text(
                     t("Learning: ", "पढ़ाई: ") + if (learningLanguage == "hi") t("Hindi", "हिन्दी") else "English",
-                    color = Color(0xFFC6D0E0),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 10.sp,
                     maxLines = 1
                 )
@@ -418,7 +418,7 @@ fun TutorScreen(
                 state = rememberTooltipState()
             ) {
                 IconButton(onClick = onNewChat, enabled = !busy && !connecting && available, modifier = Modifier.size(35.dp)) {
-                    Text("＋", color = Color.White, fontSize = 23.sp)
+                    Text("＋", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 23.sp)
                 }
             }
             TooltipBox(
@@ -427,7 +427,7 @@ fun TutorScreen(
                 state = rememberTooltipState()
             ) {
                 IconButton(onClick = onMinimize, modifier = Modifier.size(35.dp)) {
-                    Text("−", color = Color.White, fontSize = 23.sp, lineHeight = 23.sp)
+                    Text("−", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 23.sp, lineHeight = 23.sp)
                 }
             }
             TooltipBox(
@@ -436,7 +436,7 @@ fun TutorScreen(
                 state = rememberTooltipState()
             ) {
                 IconButton(onClick = onMaximize, modifier = Modifier.size(35.dp)) {
-                    Text("□", color = Color.White, fontSize = 19.sp, lineHeight = 23.sp)
+                    Text("□", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 19.sp, lineHeight = 23.sp)
                 }
             }
             TooltipBox(
@@ -445,7 +445,7 @@ fun TutorScreen(
                 state = rememberTooltipState()
             ) {
                 IconButton(onClick = onClose, modifier = Modifier.size(35.dp)) {
-                    Text("×", color = Color.White, fontSize = 23.sp, lineHeight = 23.sp)
+                    Text("×", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 23.sp, lineHeight = 23.sp)
                 }
             }
         }
@@ -497,8 +497,8 @@ fun TutorScreen(
                                 .clickable(enabled = !connecting) { selectedMode = mode.key }
                                 .semantics { contentDescription = modeLabel },
                             shape = RoundedCornerShape(10.dp),
-                            color = if (selectedMode == mode.key) Color(0xFF172033) else MaterialTheme.colorScheme.surfaceVariant,
-                            contentColor = if (selectedMode == mode.key) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = if (selectedMode == mode.key) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = if (selectedMode == mode.key) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                             tonalElevation = if (selectedMode == mode.key) 2.dp else 0.dp
                         ) {
                             Box(contentAlignment = Alignment.Center) {
@@ -555,8 +555,8 @@ fun TutorScreen(
                         ?: (item.textAny("role") + "-" + item.hashCode())
                 }) { item ->
                     val isAssistant = item.textAny("role").equals("ASSISTANT", true)
-                    val bubbleColor = if (isAssistant) MaterialTheme.colorScheme.surface else Color(0xFFFFF0E3)
-                    val bubbleText = if (isAssistant) MaterialTheme.colorScheme.onSurface else Color(0xFF4A2E21)
+                    val bubbleColor = if (isAssistant) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primaryContainer
+                    val bubbleText = if (isAssistant) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimaryContainer
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = if (isAssistant) Alignment.Start else Alignment.End
@@ -578,7 +578,7 @@ fun TutorScreen(
                                     Text(
                                         timestamp,
                                         modifier = Modifier.align(Alignment.End),
-                                        color = if (isAssistant) MaterialTheme.colorScheme.onSurfaceVariant else Color(0xFF98694F),
+                                        color = if (isAssistant) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimaryContainer,
                                         style = MaterialTheme.typography.labelSmall,
                                         fontSize = 9.sp
                                     )
