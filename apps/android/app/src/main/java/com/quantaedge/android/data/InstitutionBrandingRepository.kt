@@ -45,11 +45,19 @@ object InstitutionBrandingRepository {
     }
 
     fun joinCodeFromIntent(intent: Intent?): String? {
+        val data = intent?.data
+        val fragmentParams = data?.fragment?.let { fragment ->
+            val query = fragment.removePrefix("?").removePrefix("#")
+            Uri.parse("https://invite.invalid/?$query")
+        }
         val value = intent?.getStringExtra("joinCode")
             ?: intent?.getStringExtra("join_code")
-            ?: intent?.data?.getQueryParameter("joinCode")
-            ?: intent?.data?.getQueryParameter("join_code")
-            ?: intent?.data?.getQueryParameter("join")
+            ?: data?.getQueryParameter("joinCode")
+            ?: data?.getQueryParameter("join_code")
+            ?: data?.getQueryParameter("join")
+            ?: fragmentParams?.getQueryParameter("joinCode")
+            ?: fragmentParams?.getQueryParameter("join_code")
+            ?: fragmentParams?.getQueryParameter("join")
         return value?.trim()?.takeIf { it.length in 12..256 && it.none(Char::isISOControl) }
     }
 
