@@ -538,8 +538,8 @@ fun QuantaEdgeApp() {
                     else "This account does not have permission to access this item."
                 else -> exception.message
             }
-            is IOException -> if (language == "hi") "QuantaEdge server से संपर्क नहीं हो पाया। नेटवर्क और API URL जाँचें।"
-                else "Couldn't reach the QuantaEdge server. Check your network and API URL."
+            is IOException -> if (language == "hi") "सर्वर से संपर्क नहीं हो पाया। नेटवर्क और कनेक्शन जाँचें।"
+                else "Couldn't reach the learning service. Check your network connection."
             else -> exception.message?.takeIf { it.isNotBlank() }
                 ?: if (language == "hi") "कुछ गलत हो गया। दोबारा प्रयास करें।"
                 else "Something went wrong. Please try again."
@@ -4221,7 +4221,7 @@ private fun AccountSignupScreen(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if(language=="hi") "EN" else "हिंदी") }
         }
-        Text(if(language=="hi") "अपना QuantaEdge खाता बनाएँ" else "Create your QuantaEdge account",
+        Text(if(language=="hi") "अपना " + (LocalInstitutionBrandIdentity.current?.displayName ?: "QuantaEdge") + " खाता बनाएँ" else "Create your " + (LocalInstitutionBrandIdentity.current?.displayName ?: "QuantaEdge") + " account",
             style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
         Text(if(language=="hi")
             "पूरा नाम और मोबाइल नंबर दर्ज करें। सफल OTP सत्यापन के बाद मोबाइल सत्यापित दिखेगा।"
