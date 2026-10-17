@@ -672,7 +672,7 @@ export default function TestsClient(){
       <section className={styles.leaderboardModal} role="dialog" aria-modal="true" aria-labelledby="qe-leaderboard-title" onClick={event=>event.stopPropagation()}>
         <header className={styles.leaderboardHeader}>
           <div className={styles.leaderboardHeading}>
-            <span className={styles.leaderboardEyebrow}>QUANTAEDGE · STUDENT RANKINGS</span>
+            <span className={styles.leaderboardEyebrow}>STUDENT RANKINGS</span>
             <h2 id="qe-leaderboard-title">{leaderboardData?.assessment_title||leaderboardTest.title}</h2>
             <p>{translateUi(locale, 'legacy.web.top.20.performers.higher.marks.rank.fi.31b5b0df')}</p>
           </div>
