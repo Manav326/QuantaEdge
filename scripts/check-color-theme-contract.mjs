@@ -36,7 +36,7 @@ assert(apiTheme.includes('public static List<Map<String, Object>> presets()'), '
 assert(apiTheme.includes('"quantaedge-orange"') && apiTheme.includes('"custom"'), 'QuantaEdge default and custom presets must be supported.');
 assert(apiTheme.includes('contrastRatio') && apiTheme.includes('ensureContrast'), 'Generated foregrounds must be contrast-aware.');
 assert(platformApi.includes('"/theme-presets"') && platformApi.includes('InstitutionThemeTokens.presets()'), 'Preset API must remain owner-controlled.');
-assert(platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Saving tenant themes must normalize/validate centrally.');
+assert(platformApi.includes('"/theme-preview"') && platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Palette preview and save must use the owner-protected canonical normalizer.');
 assert(tenantApi.includes('InstitutionThemeTokens.normalize'), 'Public tenant API must return generated palettes.');
 assert(apiTests.includes('alreadyMaterializedThemeCanBeReadAndNormalizedAgain'), 'Theme round-trip regression test is required.');
 assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'Palette contrast coverage must include curated presets.');
@@ -44,6 +44,7 @@ assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'P
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-presets'), 'Institution editor must load server-owned presets.');
 assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && editor.includes('brandAccent'), 'Institution editor must save schema v2 source colours.');
 assert(editor.includes('appearance') && editor.includes('themePreviewGrid'), 'Institution editor must expose appearance and preview.');
+assert(editor.includes('/api/v1/hrms/platform/institutions/theme-preview') && editor.includes('themePreviewStates') && !editor.includes('contrastTextForPreview'), 'Institution preview must use the server-generated full palette rather than a duplicate client colour algorithm.');
 assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes('qeAppearance'), 'Web runtime must resolve system/light/dark appearance.');
 assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens'), 'Web runtime must map tenant tokens to semantic CSS roles.');
 assert(webLayout.includes('<ColorThemeProvider>'), 'Learner web root must install the theme provider.');
