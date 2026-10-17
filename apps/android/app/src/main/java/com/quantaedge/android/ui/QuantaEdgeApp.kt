@@ -2789,7 +2789,7 @@ fun QuantaEdgeApp() {
                                         enabled = !busy
                                     )
                                     DropdownMenuItem(
-                                        text = { Text("Marketplace") },
+                                        text = { Text(if (language == "hi") "कोर्स मार्केटप्लेस" else "Marketplace") },
                                         onClick = { accountMenuExpanded = false; openMarketplace() },
                                         enabled = !busy
                                     )
