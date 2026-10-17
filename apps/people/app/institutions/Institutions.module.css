@@ -106,3 +106,5 @@
 .themePreviewStates span{display:inline-flex;align-items:center;padding:5px 7px;border-radius:6px;font-size:9px;font-weight:800}
 .themePreviewNotice{grid-column:1/-1;margin:0;padding:18px;border:1px dashed #cbd5e1;border-radius:10px;color:#596579;font-size:11px;line-height:1.6}
 @media(max-width:650px){.themePreviewMeta{align-items:flex-start;flex-direction:column}.themePreviewMeta>span{max-width:100%}.themePreviewCard{padding:10px}}
+
+.invitationLinkPreview{display:block;max-width:100%;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;padding:9px 11px;border:1px solid var(--qe-color-border-subtle,#D1D5DB);border-radius:9px;background:var(--qe-color-surface,#fff);color:var(--qe-color-text,#172033);margin-top:8px}
