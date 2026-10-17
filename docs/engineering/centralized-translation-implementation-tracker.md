@@ -445,3 +445,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 
 - Updated the visual end-to-end contract test to assert the semantic catalog key and its English/Hinglish catalog copy instead of requiring the old English sentence to remain hardcoded in Content Studio JSX.
 - This keeps the visual placement contract enforced while allowing static UI copy to remain centralized.
+
+
+## Admin Content Studio — page shell, library and search filters
+
+- Centralized header/status text, navigation labels, summary-card labels, curriculum search/filter controls, empty/loading states, chapter/topic counts and library footer.
+- Mapped the known persisted chapter/topic status codes to semantic translated labels while preserving unknown server codes as readable fallback text.
+- Added catalog parity and CI regressions for the old shell/filter phrases. Editor forms and learner preview remain the next scope.
