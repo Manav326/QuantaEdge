@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 289,
+    "assets_selected": 292,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 287,
-    "assets_remaining": 1791,
-    "assets_completion_percent": 13.8,
+    "assets_analyzed": 290,
+    "assets_remaining": 1788,
+    "assets_completion_percent": 14.0,
     "assets_failed": 3,
-    "assets_skipped_from_checkpoint": 284,
+    "assets_skipped_from_checkpoint": 287,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -351,7 +351,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T09:09:35Z"
+      "checkpointed_at": "2026-10-17T09:16:35Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -935,7 +935,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T09:11:13Z"
+      "checkpointed_at": "2026-10-17T09:18:12Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -8738,6 +8738,89 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
       "checkpointed_at": "2026-10-17T09:14:47Z"
+    },
+    {
+      "asset_id": "59deb9733536feb0abf760b6",
+      "asset_sha256": "08cb5235a9d0bb851c874cca59077c8e762d19ae7a10b941280e70bc3db18400",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/08cb5235a9d0bb851c874cca59077c8e762d19ae7a10b941280e70bc3db18400.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from light brown to dark brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a simple, solid-colored illustration without any text or additional elements.",
+        "limitations": [
+          "The image does not contain any text or additional elements.",
+          "The image is a solid, rectangular shape with a gradient background."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T09:19:33Z"
+    },
+    {
+      "asset_id": "6aa3f7864bb662705b1a15c5",
+      "asset_sha256": "e7636cf432bed256dd0b4da8be4a78a4cb922a079f0000afcc397c0b98af51aa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e7636cf432bed256dd0b4da8be4a78a4cb922a079f0000afcc397c0b98af51aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or content visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T09:20:46Z"
+    },
+    {
+      "asset_id": "36448c61947c5373f2a0d94f",
+      "asset_sha256": "1aaa45d2a5dcdf60c2ff2e135f1a00d48e834837a1168ef83f71cbe87dcbccdc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1aaa45d2a5dcdf60c2ff2e135f1a00d48e834837a1168ef83f71cbe87dcbccdc.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or header for a page, possibly a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T09:21:59Z"
     }
   ]
 }
