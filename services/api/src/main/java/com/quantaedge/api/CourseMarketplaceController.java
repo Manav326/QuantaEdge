@@ -109,17 +109,23 @@ public class CourseMarketplaceController {
         coalesce(nullif(o.title_override,''),p.display_name) as title,
         p.display_name as course_name,p.curriculum_version,o.description,
         o.price_paise,o.currency,o.status as offer_status,
-        exists(select 1 from course_entitlement ce
-          where ce.course_id=p.id and ce.holder_user_id=?) as owned_by_parent,
-        exists(select 1 from course_entitlement ce
+        (exists(select 1 from course_entitlement ce
+          where ce.course_id=p.id and ce.holder_user_id=?)
+         or exists(select 1 from student st join student_program_enrollment e on e.student_id=st.id
+          where st.user_account_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))) as owned_by_parent,
+        (exists(select 1 from course_entitlement ce
           join guardian_student gs on gs.student_id=ce.holder_student_id
           where ce.course_id=p.id and gs.guardian_user_id=?
-            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL') as owned_by_child
+            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')
+         or exists(select 1 from guardian_student gs
+          join student_program_enrollment e on e.student_id=gs.student_id
+          where gs.guardian_user_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
+            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')) as owned_by_child
       from course_marketplace_offer o
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.status='PUBLISHED'
       order by p.display_name,p.id
-      """, parentId, parentId);
+      """, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -137,6 +143,81 @@ public class CourseMarketplaceController {
         """, courseId));
     }
     return offers;
+  }
+
+  /** Add a published free course to the parent's own or linked child's learning profile. */
+  @PostMapping("/family/courses/{courseId}/enroll-free")
+  @Transactional
+  public Map<String,Object> enrollFreeFamilyCourse(
+      @PathVariable long courseId,
+      @RequestBody(required=false) FamilyCourseOrderRequest request,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context = authorization.requireParent(context);
+    String recipient = request == null || request.recipientType() == null
+        ? "" : request.recipientType().trim().toUpperCase(Locale.ROOT);
+    long studentId;
+    if ("SELF".equals(recipient)) {
+      studentId = ensurePersonalLearningProfile(context.userId());
+    } else if ("CHILD".equals(recipient)) {
+      if (request.studentId() == null || request.studentId() <= 0) {
+        throw new IllegalArgumentException("Choose a linked child before adding this course.");
+      }
+      studentId = request.studentId();
+      requireFullGuardianChildAccess(context.userId(), studentId);
+    } else {
+      throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
+    }
+
+    Boolean freeAndPublished = jdbc.queryForObject("""
+      select exists(
+        select 1 from course_marketplace_offer o
+        join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where o.course_id=? and o.status='PUBLISHED' and o.price_paise=0 and o.currency='INR'
+      )
+      """, Boolean.class, courseId);
+    if (!Boolean.TRUE.equals(freeAndPublished)) {
+      throw new IllegalArgumentException("This course is not currently available as a free offer.");
+    }
+    if (hasAccess(studentId, courseId)) throw new IllegalArgumentException("The selected learner already has access to this course.");
+
+    List<Map<String,Object>> subjects = jdbc.queryForList("""
+      select s.id from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+        and s.class_id=ps.class_id and s.active=true
+      where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
+      """, courseId);
+    if (subjects.isEmpty()) throw new IllegalStateException("This course has no active subject tracks yet.");
+
+    jdbc.update("""
+      update student_program_enrollment set status='PAUSED',updated_at=now()
+      where student_id=? and status='ACTIVE' and program_id<>?
+      """, studentId, courseId);
+    jdbc.update("""
+      insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
+      values(?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(student_id,program_id) do update set
+        status='ACTIVE',enrolled_at=case when student_program_enrollment.status='ACTIVE'
+          then student_program_enrollment.enrolled_at else now() end,
+        ended_at=null,updated_at=now()
+      """, studentId, courseId);
+    jdbc.update("""
+      insert into student_track_enrollment(student_id,subject_id,status)
+      select ?,s.id,'ACTIVE'
+      from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+        and s.class_id=ps.class_id and s.active=true
+      where ps.program_id=?
+      on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+      """, studentId, courseId);
+    if ("CHILD".equals(recipient)) {
+      jdbc.update("""
+        update parent_course_purchase_request
+        set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
+        where guardian_user_id=? and student_id=? and course_id=? and status='PENDING'
+        """, context.userId(), context.userId(), studentId, courseId);
+    }
+    return Map.of("enrolled", true, "studentId", studentId, "courseId", courseId,
+        "recipientType", recipient, "free", true);
   }
 
   /** Only a parent's own, not-yet-transferred purchases are eligible for assignment to a child. */
