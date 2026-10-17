@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QuantaEdge</string>
+    <string name="app_name">School Learning</string>
     <string name="qe_nav_home">Home</string>
     <string name="qe_nav_learn">Learn</string>
     <string name="qe_nav_tests">Tests</string>
