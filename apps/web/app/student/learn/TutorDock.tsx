@@ -248,13 +248,13 @@ function TutorMessageBody({ message, locale }: { message: string; locale: string
   </div>;
 }
 
-export default function TutorDock({
-  const { brand } = useTenantBranding(); lessonId, open, onClose, currentQuestionId }: {
+export default function TutorDock({ lessonId, open, onClose, currentQuestionId }: {
   lessonId: number;
   open: boolean;
   onClose: () => void;
   currentQuestionId?: number;
 }) {
+  const { brand, isResolving } = useTenantBranding();
   const { locale, learningLanguage, languageReady } = useLocale();
   // Keep the two header selectors independent:
   // app UI labels follow locale; lesson content and tutor answers follow learningLanguage.
@@ -615,7 +615,7 @@ export default function TutorDock({
       type="button"
       className="tutor-minimized"
       style={bubbleStyle}
-      aria-label={brand ? 'Restore ' + brand.displayName + ' tutor' : translateUi(locale, 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
+      aria-label={brand ? 'Restore ' + brand.displayName + ' tutor' : isResolving ? 'Restore tutor' : translateUi(locale, 'legacy.web.restore.quantaedge.tutor.95bf0c5d')}
       title={translateUi(locale, 'legacy.web.restore.tutor.c620078d')}
       onPointerDown={beginBubbleDrag}
       onPointerMove={moveBubble}
@@ -651,7 +651,7 @@ export default function TutorDock({
     className="tutor-dock open"
     role="dialog"
     aria-modal={mobileViewport ? true : undefined}
-    aria-label={brand ? brand.displayName + ' tutor' : 'QUANTAEDGE TUTOR'}
+    aria-label={brand ? brand.displayName + ' tutor' : isResolving ? 'Learning tutor' : 'QUANTAEDGE TUTOR'}
     style={panelStyle}
   >
     <div
@@ -662,7 +662,7 @@ export default function TutorDock({
       onPointerCancel={endPanelMove}
     >
       <div className="tutor-head-main">
-        <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
+        <TenantBrandMark className="tutor-q-mark" />
         <strong className="tutor-head-title">{translateUi(locale, 'legacy.web.your.tutor.d7215bed')}</strong>
         <span className="tutor-ai-badge" aria-label="AI tutor" title={translateUi(locale, 'legacy.web.ai.tutor.26ba6c37')}><span aria-hidden="true">✦</span><small>AI</small></span>
         <span className="tutor-language-indicator" title="The tutor responds only in this learning language">
