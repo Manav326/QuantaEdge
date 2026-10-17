@@ -372,3 +372,191 @@ html[data-qe-appearance="dark"] .parent-card{
   color: var(--qe-color-text);
   border-color: var(--qe-color-border-subtle);
 }
+
+
+/* Tenant semantic compatibility layer for the legacy tutor and parent controls.
+   These are real learner surfaces, not decorative brand assets; keep their states palette-driven. */
+.tutor-launch {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border: 1px solid var(--qe-color-primary);
+}
+.tutor-dock {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-head {
+  background: linear-gradient(180deg, var(--qe-color-primary-container), var(--qe-color-surface));
+  color: var(--qe-color-on-surface);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-head-status, .tutor-role, .tutor-message-time, .tutor-note,
+.tutor-resize-grip, .tutor-welcome, .tutor-welcome p,
+.tutor-connecting, .tutor-unavailable, .tutor-language-loading-body {
+  color: var(--qe-color-text-muted);
+}
+.tutor-head-status i, .tutor-minimized-dot, .tutor-thinking-dots i {
+  background: var(--qe-color-primary);
+}
+.tutor-close, .tutor-control-btn {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-close:hover, .tutor-control-btn:hover {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-primary);
+}
+.tutor-modes { border-color: var(--qe-color-border-subtle); }
+.tutor-modes button {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-modes button.selected, .tutor-modes button[aria-pressed=true] {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+.tutor-messages { background: var(--qe-color-background); }
+.tutor-message {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-message.assistant { background: var(--qe-color-surface); color: var(--qe-color-on-surface); }
+.tutor-message.user {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+.tutor-message.user .tutor-role, .tutor-message.user .tutor-message-time {
+  color: var(--qe-color-primary-text);
+}
+.tutor-brand-mark, .tutor-welcome-mark, .tutor-minimized-mark {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-primary-container);
+}
+.tutor-ai-badge, .tutor-eyebrow {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-primary-container);
+}
+.tutor-input, .tutor-composer {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-input textarea, .tutor-composer textarea {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-input textarea::placeholder, .tutor-composer textarea::placeholder {
+  color: var(--qe-color-text-muted);
+}
+.tutor-send, .tutor-retry {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+.tutor-send:hover:not(:disabled), .tutor-retry:hover:not(:disabled) {
+  background: var(--qe-color-accent);
+  color: var(--qe-color-on-accent);
+  border-color: var(--qe-color-accent);
+}
+.tutor-spinner { border-color: var(--qe-color-primary-container); border-top-color: var(--qe-color-primary); }
+.tutor-inline-code, .tutor-inline-math, .tutor-equation {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+  border-color: var(--qe-color-primary-container);
+}
+.tutor-table { color: var(--qe-color-text); }
+.tutor-table th { background: var(--qe-color-surface-elevated); color: var(--qe-color-text); }
+.tutor-table, .tutor-table td, .tutor-table th { border-color: var(--qe-color-border-subtle); }
+.tutor-code {
+  background: var(--qe-color-nav-background);
+  color: var(--qe-color-nav-text);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-dock:focus-within, .tutor-composer:focus-within, .tutor-input textarea:focus {
+  outline-color: var(--qe-color-focus);
+  border-color: var(--qe-color-focus);
+}
+.tutor-minimized {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+.parent-header>span, .parent-capacity>span, .parent-capacity strong small,
+.parent-track-editor small, .parent-empty p, .parent-courses-page__section-heading p,
+.parent-courses-page__empty {
+  color: var(--qe-color-text-muted);
+}
+.parent-track-editor, .parent-track-options, .parent-track-fieldset {
+  border-color: var(--qe-color-border-subtle);
+}
+.parent-track-options label, .parent-track-fieldset label { color: var(--qe-color-text); }
+.parent-empty {
+  border-color: var(--qe-color-border-subtle);
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+}
+.parent-archive-button {
+  border-color: var(--qe-color-error-container);
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-error);
+}
+.parent-archive-button:hover, .parent-account__logout:hover { background: var(--qe-color-error-container); color: var(--qe-color-error); }
+.parent-notice, .parent-courses-page__alert {
+  border-color: var(--qe-color-success-container);
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+}
+.parent-report-switcher__profile:hover, .parent-report-switcher__profile.is-current {
+  border-color: var(--qe-color-primary);
+  background: var(--qe-color-primary-container);
+}
+.parent-report-switcher__avatar {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+}
+.parent-report-switcher__arrow, .parent-courses-page__verify p { color: var(--qe-color-primary-text); }
+.parent-readonly-note {
+  border-color: var(--qe-color-primary-container);
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+.parent-credentials-status strong.is-ready { color: var(--qe-color-success); }
+.parent-certificate-actions a, .student-certificate-actions a {
+  border-color: var(--qe-color-primary);
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-primary-text);
+}
+.parent-certificate-actions a:hover, .student-certificate-actions a:hover {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+.parent-certificate-revoked { color: var(--qe-color-error); }
+.parent-courses-page__heading {
+  background: linear-gradient(125deg, var(--qe-color-surface) 0%, var(--qe-color-primary-container) 100%);
+  border-color: var(--qe-color-border-subtle);
+}
+.parent-courses-page__price { color: var(--qe-color-text); }
+.parent-courses-page__owned-note { background: var(--qe-color-surface-elevated); color: var(--qe-color-text-muted) !important; }
+.auth-separator { color: var(--qe-color-text-muted); }
+.auth-alt-link { color: var(--qe-color-text); }
+.auth-method-switch { background: var(--qe-color-surface-elevated); border-color: var(--qe-color-border-subtle); }
+.qe-session-gate { background: radial-gradient(circle at 15% 15%, var(--qe-color-primary-container) 0, transparent 35%), var(--qe-color-background); }
+.qe-language-switcher { background: var(--qe-color-surface); color: var(--qe-color-text); border-color: var(--qe-color-border-subtle); }
+.qe-language-switcher>span:first-child { color: var(--qe-color-primary); }
+.qe-language-switcher--menu-setting select { background: var(--qe-color-surface); color: var(--qe-color-text); border-color: var(--qe-color-border-subtle); }
+.qe-mcq-progress>i>span { background: linear-gradient(90deg, var(--qe-color-primary), var(--qe-color-accent)); }
+.qe-subject-book-link { border-color: var(--qe-color-border-subtle); background: linear-gradient(110deg, var(--qe-color-primary-container), var(--qe-color-surface) 66%); }
+.qe-subject-reading-footer { border-top-color: var(--qe-color-border-subtle); }
+.qe-subject-reading-footer a, .qe-subject-reading-footer a:hover { color: var(--qe-color-primary-text); }
+.lesson-next, .lesson-media-caption { color: var(--qe-color-text-muted); }
+.lesson-visual-embed { background: var(--qe-color-nav-background); }
