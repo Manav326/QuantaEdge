@@ -371,22 +371,30 @@ jobs:
               if raw.is_file() and valid(raw, source):
                   print(json.dumps({"book_id": source["book_id"], "checkpoint": "REUSED_FROM_GIT", "results": len(json.loads(raw.read_text(encoding="utf-8")).get("results", []))}))
                   continue
+              raw_was_present = raw.exists()
               tag = f"layer4-class{selection['class']}-{slug}-{safe_model}-checkpoint"
               pull_dir = temp / slug
               shutil.rmtree(pull_dir, ignore_errors=True)
               pull_dir.mkdir(parents=True, exist_ok=True)
               pull = subprocess.run(["oras", "pull", f"{package}:{tag}", "--output", str(pull_dir)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
               candidate = pull_dir / f"visual-analysis-{safe_model}.v1.json"
-              if pull.returncode == 0 and candidate.is_file() and valid(candidate, source):
+              if pull.returncode == 0 and candidate.is_file():
+                  if not valid(candidate, source):
+                      failures.append({"book_id": source["book_id"], "reason": "GHCR checkpoint exists but source/model/prompt fingerprint does not match"})
+                      continue
                   raw.parent.mkdir(parents=True, exist_ok=True)
                   shutil.copy2(candidate, raw)
                   print(json.dumps({"book_id": source["book_id"], "checkpoint": "RESTORED_FROM_GHCR", "results": len(json.loads(candidate.read_text(encoding="utf-8")).get("results", []))}))
                   continue
               detail = (pull.stdout or "").strip()[-500:]
-              failures.append({"book_id": source["book_id"], "raw_checkpoint": "missing_or_fingerprint_mismatch", "ghcr_checkpoint": "missing_or_fingerprint_mismatch", "detail": detail})
+              not_found = "404" in detail or "not found" in detail.lower() or "manifest unknown" in detail.lower()
+              if not raw_was_present and not_found:
+                  print(json.dumps({"book_id": source["book_id"], "checkpoint": "NOT_STARTED", "action": "will analyze this book from the beginning; no prior checkpoint exists"}))
+                  continue
+              failures.append({"book_id": source["book_id"], "reason": "checkpoint exists but is invalid, or GHCR could not be checked safely", "detail": detail})
           if failures:
               print(json.dumps({"resume_preflight": "FAILED", "failures": failures}, indent=2))
-              raise SystemExit("Resume stopped before model download: no source/model/prompt-matching Layer 4 checkpoint exists for every selected book. Use analyze_all to initialise missing books, or correct the inputs.")
+              raise SystemExit("Resume stopped before model download: an existing checkpoint is invalid or could not be checked safely. No vision model was downloaded; inspect the source/model/prompt fingerprints or GHCR access.")
           print(json.dumps({"resume_preflight": "PASSED", "book_count": len(selection["sources"]), "model": model, "prompt_version": prompt_version}))
           PY
 
