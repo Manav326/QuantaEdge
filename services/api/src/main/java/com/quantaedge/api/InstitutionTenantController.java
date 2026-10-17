@@ -138,7 +138,7 @@ public class InstitutionTenantController {
     long brandingVersion = ((Number) row.get("branding_version")).longValue();
     result.put("logoUrl", assetUrl(normalized, "logo", brandingVersion, row.get("logo_asset_key")));
     result.put("appIconUrl", assetUrl(normalized, "app-icon", brandingVersion, row.get("app_icon_asset_key")));
-    result.put("themeTokens", parseJsonObject(row.get("theme_tokens")));
+    result.put("themeTokens", InstitutionThemeTokens.normalize(parseJsonObject(row.get("theme_tokens"))));
     return result;
   }
 
@@ -416,7 +416,7 @@ public class InstitutionTenantController {
     result.put("appIconAssetKey",row.get("app_icon_asset_key"));
     result.put("storeListingUrl",row.get("store_listing_url"));
     result.put("version",row.get("version"));
-    result.put("themeTokens",parseJsonObject(row.get("theme_tokens")));
+    result.put("themeTokens",InstitutionThemeTokens.normalize(parseJsonObject(row.get("theme_tokens"))));
     return result;
   }
 
