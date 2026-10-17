@@ -1,6 +1,7 @@
 'use client';
 
 import type { CSSProperties } from 'react';
+import { useUiTranslation } from '../i18n/useUiTranslation';
 
 export type PremiumPaginationProps = {
   page: number;
@@ -49,6 +50,7 @@ export default function PremiumPagination({
   itemLabel = 'records',
   pageSizeOptions = [10, 20, 30, 50],
 }: PremiumPaginationProps) {
+  const t = useUiTranslation();
   const safeTotal = Math.max(0, Number(total) || 0);
   const safeSize = Math.max(1, Number(pageSize) || 10);
   const pageCount = Math.max(1, Math.ceil(safeTotal / safeSize));
@@ -109,19 +111,19 @@ export default function PremiumPagination({
   const disabledButton: CSSProperties = { ...buttonBase, color: '#aab2c0', background: palette.soft, cursor: 'not-allowed' };
 
   return (
-    <nav aria-label={'Pagination for ' + itemLabel} style={shell}>
+    <nav aria-label={t('common.pagination.navigationForItems',{ items: itemLabel })} style={shell}>
       <div style={{ display: 'grid', gap: 3, minWidth: 160 }}>
         <strong aria-live="polite" style={{ fontSize: 12, fontWeight: 800, letterSpacing: '-.1px' }}>
-          {safeTotal === 0 ? 'No ' + itemLabel : 'Showing ' + first.toLocaleString() + '–' + last.toLocaleString() + ' of ' + safeTotal.toLocaleString()}
+          {safeTotal === 0 ? t('common.pagination.noItems',{ items: itemLabel }) : t('common.pagination.showingRange',{ first: first.toLocaleString(), last: last.toLocaleString(), total: safeTotal.toLocaleString() })}
         </strong>
-        <span style={mutedText}>{safeTotal === 1 ? '1 item' : safeTotal.toLocaleString() + ' ' + itemLabel}</span>
+        <span style={mutedText}>{safeTotal === 1 ? t('common.pagination.singleItem') : t('common.pagination.itemCount',{ count: safeTotal.toLocaleString(), items: itemLabel })}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', marginLeft: 'auto' }}>
         <div style={tinyLabel}>
-          ROWS PER PAGE
+          {t('common.pagination.rowsPerPage')}
           <select
-            aria-label="Rows per page"
+            aria-label={t('common.pagination.rowsPerPage')}
             value={safeSize}
             disabled={loading}
             onChange={event => onPageSizeChange(Number(event.target.value))}
@@ -134,18 +136,18 @@ export default function PremiumPagination({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
           <button
             type="button"
-            aria-label="Previous page"
-            title="Previous page"
+            aria-label={t('common.pagination.previousPage')}
+            title={t('common.pagination.previousPage')}
             disabled={loading || safePage <= 0}
             onClick={() => onPageChange(Math.max(0, safePage - 1))}
             style={loading || safePage <= 0 ? disabledButton : buttonBase}
-          >‹ <span style={{ fontSize: 11 }}>Previous</span></button>
+          >{/* translated previous action */}‹ <span style={{ fontSize: 11 }}>{t('common.pagination.previous')}</span></button>
 
           {pages.map((entry, index) => typeof entry === 'number'
             ? <button
                 key={entry}
                 type="button"
-                aria-label={'Page ' + (entry + 1)}
+                aria-label={t('common.pagination.pageNumber',{ page: entry + 1 })}
                 aria-current={entry === safePage ? 'page' : undefined}
                 disabled={loading}
                 onClick={() => onPageChange(entry)}
@@ -156,12 +158,12 @@ export default function PremiumPagination({
 
           <button
             type="button"
-            aria-label="Next page"
-            title="Next page"
+            aria-label={t('common.pagination.nextPage')}
+            title={t('common.pagination.nextPage')}
             disabled={loading || safePage >= pageCount - 1}
             onClick={() => onPageChange(Math.min(pageCount - 1, safePage + 1))}
             style={loading || safePage >= pageCount - 1 ? disabledButton : buttonBase}
-          ><span style={{ fontSize: 11 }}>Next</span> ›</button>
+          >{/* translated next action */}<span style={{ fontSize: 11 }}>{t('common.pagination.next')}</span> ›</button>
         </div>
       </div>
     </nav>

@@ -31,6 +31,7 @@ const required = [
   'parent.profile.photoRemoved', 'student.login.detailsMismatch', 'student.login.sessionNotConfirmed',
   'student.login.signInFailed', 'student.login.parentMobilePlaceholder', 'student.login.usernamePlaceholder',
   'student.login.passwordPlaceholder',
+  'common.accountMenu.openOptions', 'common.accountMenu.options', 'common.accountMenu.openParentMenu', 'common.accountMenu.parentAccount', 'common.accountMenu.parentOptions', 'common.accountMenu.openStudentSettings', 'common.accountMenu.studentOptions', 'common.accountMenu.loggingOut', 'common.accountMenu.logOut', 'common.navigation.closeMenu', 'common.navigation.adminLabel', 'common.navigation.primaryWorkspace', 'common.pagination.navigationForItems', 'common.pagination.noItems', 'common.pagination.showingRange', 'common.pagination.singleItem', 'common.pagination.itemCount', 'common.pagination.rowsPerPage', 'common.pagination.previousPage', 'common.pagination.previous', 'common.pagination.pageNumber', 'common.pagination.nextPage', 'common.pagination.next', 'common.pagination.tableNavigation', 'common.pagination.pageOf',
 ];
 for (const key of required) {
   assert.equal(typeof english[key], 'string', 'English catalog missing ' + key);
@@ -55,6 +56,23 @@ for (const file of sourceRoots.flatMap(sourceFiles)) {
   const source = fs.readFileSync(path.join(root, file), 'utf8');
   for (const pattern of forcedLocalePatterns) {
     assert.equal(pattern.test(source), false, file + ': forced English/Hinglish mapping blocks registered locales');
+  }
+}
+
+
+const sharedCopyRegressions = [
+  ['apps/web/app/components/LandingAccountMenu.tsx', ['aria-label="Open account options"', 'aria-label="QuantaEdge account options"']],
+  ['apps/web/app/components/ParentAccountMenu.tsx', ['aria-label="Parent account options"', "aria-label={loggingOut ? 'Logging out' : 'Log out'}", '<LocaleText']],
+  ['apps/web/app/components/StudentAccountMenu.tsx', ['aria-label="Student account options"', "aria-label={loggingOut ? 'Logging out' : 'Log out'}", '<LocaleText']],
+  ['apps/admin/app/components/PremiumPagination.tsx', ["'Pagination for '", "'No ' + itemLabel", "'Rows per page'", "'Previous page'", "'Next page'", '>Previous</span>', '>Next</span>']],
+  ['apps/people/app/components/PeopleUI.tsx', ['aria-label="Table pagination"', 'Showing {first}–{last} of {total}', 'Rows per page', '>Previous</button>', '>Next</button>']],
+  ['apps/admin/app/components/AdminWorkspaceLayout.tsx', ['aria-label="Close navigation menu"', 'aria-label="Admin navigation"']],
+  ['apps/people/app/components/PeopleWorkspaceLayout.tsx', ['aria-label="Primary workspace"']],
+];
+for (const [file, forbiddenCopy] of sharedCopyRegressions) {
+  const source = fs.readFileSync(path.join(root, file), 'utf8');
+  for (const literal of forbiddenCopy) {
+    assert.equal(source.includes(literal), false, file + ': found raw shared UI copy ' + literal);
   }
 }
 

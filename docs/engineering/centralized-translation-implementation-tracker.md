@@ -378,3 +378,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Replaced hardcoded Web landing/Parent/Student account-menu accessibility names and logout text with shared semantic catalog keys. Parent/student menu labels retain the profile name through the `{name}` placeholder.
 - Added nine matching English/Hinglish messages and synchronized catalog content for all three independent Next.js app builds. Catalog key and placeholder checks remain part of CI.
 - Pagination and remaining workspace labels are the next shared-component slice. This does not certify all route copy or remove remaining static sentences elsewhere.
+
+
+## Shared account-menu and pagination copy extraction — 2026-10-17
+
+- Centralized shared Web account-menu accessibility names and logout labels. Parent/student menu triggers preserve the profile name through the `{name}` placeholder.
+- Centralized Admin and People Operations pagination copy: range counts, no-item states, page count, rows-per-page, previous/next actions and accessibility labels.
+- Removed hardcoded Admin/People workspace navigation accessibility labels. Extended CI to check these raw shared strings do not return and to validate the catalog keys/placeholders in both languages.
+- Other route-level static sentences remain open. This batch does not certify that all page bodies are free of embedded copy.

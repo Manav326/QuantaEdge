@@ -252,7 +252,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
   return (
     <div className={'qe-people-workspace' + (collapsed ? ' is-collapsed' : '')}>
       <a className="qe-people-skip-link" href="#main-content">{t('people.skipToMain')}</a>
-      <aside className="qe-people-sidebar" aria-label="Primary workspace">
+      <aside className="qe-people-sidebar" aria-label={t('common.navigation.primaryWorkspace')}>
         <div className="qe-people-brand-row">
           <div className="qe-people-brand">
             <QuantaEdgeBrand

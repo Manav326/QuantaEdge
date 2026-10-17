@@ -216,7 +216,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
             type="button"
             className="qe-admin-mobile-menu-backdrop"
             onClick={() => setMobileMenuOpen(false)}
-            aria-label="Close navigation menu"
+            aria-label={t('common.navigation.closeMenu')}
             tabIndex={-1}
           />
           <section
@@ -275,7 +275,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
         </>
       ) : null}
 
-      <nav className="qe-admin-mobile-nav" aria-label="Admin navigation" inert={mobileMenuOpen}>
+      <nav className="qe-admin-mobile-nav" aria-label={t('common.navigation.adminLabel')} inert={mobileMenuOpen}>
         {quickItems.map(item => (
           <Link
             key={item.key}
