@@ -17,6 +17,7 @@ type Offer = {
   currency: string;
   has_access: boolean;
   purchased: boolean;
+  parent_managed?: boolean;
   subjects?: Subject[];
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
@@ -166,6 +167,25 @@ export default function StudentMarketplacePage() {
     }
   }
 
+  async function askParentToBuy(courseId: number) {
+    if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
+    setBusyCourseId(courseId);
+    setStatus('');
+    try {
+      await readJson(await fetch('/api/v1/marketplace/courses/' + courseId + '/purchase-request', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+      }));
+      setStatus('Purchase request sent. Your parent can review it from the family account and buy this course for you.');
+    } catch (error: any) {
+      setStatus(error?.message || 'The purchase request could not be sent. Please retry.');
+    } finally {
+      setBusyCourseId(null);
+    }
+  }
+
   async function joinFreeCourse(courseId: number) {
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
     setBusyCourseId(courseId);
@@ -248,6 +268,11 @@ export default function StudentMarketplacePage() {
                     <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>Open course</Link>
                   ) : !validPrice ? (
                     <button className={styles.disabledButton} type="button" disabled>Not available for purchase</button>
+                  ) : offer.parent_managed ? (
+                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null}
+                      onClick={() => void askParentToBuy(offer.course_id)}>
+                      {busyCourseId === offer.course_id ? 'Sending request…' : 'Ask parent to buy'}
+                    </button>
                   ) : offer.price_paise === 0 ? (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null} onClick={() => void joinFreeCourse(offer.course_id)}>
                       {busyCourseId === offer.course_id ? 'Adding…' : 'Add free course'}
