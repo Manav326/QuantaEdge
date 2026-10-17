@@ -43,6 +43,14 @@ public class AuthController {
     return withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
   }
 
+  @PostMapping("/google/link")
+  public Map<String,Object> linkGoogleIdentity(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    if (googleIdentity == null) throw new IllegalStateException("Google sign-in is not configured.");
+    return googleIdentity.linkExisting(context, String.valueOf(body.getOrDefault("credential", "")));
+  }
+
   @PostMapping("/google")
   public ResponseEntity<Map<String,Object>> googleSignIn(
       @RequestBody Map<String,Object> body,
