@@ -207,3 +207,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Permission gates, independently approved assignment workflow, effective dates, period lifecycle, assignment/history IDs, private class-link integration behavior and workload warning calculations are unchanged. Backend-originated error text remains visible where it carries actionable server detail.
 - All six app-local catalog JSON copies are refreshed in this commit. The central catalog has 1856 keys per locale after this batch. Confirm CI and `scripts/sync_ui_localization.py --check` before marking the route certified.
 - Remaining People Operations routes: attendance/leave, payroll, workforce lifecycle, self-service, plus remaining field-level/access-dialog strings in employee directory/access. This migration is not a claim of total site coverage.
+
+
+## Latest continuation — People Payroll localization
+
+- Added 41 semantic `people.payroll.*` messages and moved Payroll’s permission/fallback notices, page header/tabs, salary-component information, effective-dated compensation, payroll-period controls, snapshot review, independent approval and payment-reconciliation interface into the shared catalog.
+- This pass changes display copy only: salary values/currencies, effective dates, immutable snapshot data, approval gates, run statuses, provider references and payment reconciliation calls remain unchanged. Raw server-originated error details remain visible when the API supplies them.
+- The canonical catalogs and all six app-local JSON copies are synchronized in this commit. CI is the authority for type/build validation; do not call the overall build green until a fresh non-cancelled run passes.
+- Remaining People Operations routes include attendance/leave, workforce lifecycle and self-service; deep field-level copy in access and employee forms also remains to be reviewed.
