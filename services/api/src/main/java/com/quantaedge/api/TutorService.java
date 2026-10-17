@@ -275,6 +275,10 @@ public class TutorService {
       long inferenceStartedNanos=System.nanoTime();
       reply=provider.generate(instructions,input);
       inferenceMillis=(System.nanoTime()-inferenceStartedNanos)/1_000_000L;
+      String learnerFacingReply=suppressUnderlyingProviderName(reply.text(),responseLanguage,tutorIdentityLabel);
+      if(!learnerFacingReply.equals(reply.text())){
+        reply=new TutorReply(learnerFacingReply,reply.providerResponseId(),reply.inputTokens(),reply.outputTokens(),reply.model());
+      }
       if(isGenericTutorGreeting("ASSISTANT",reply.text())
           || isMalformedTutorAnswer(reply.text(),normalized,responseLanguage,useLessonContext,currentTopic)){
         throw new TutorProviderException("Tutor produced an irrelevant, malformed, or language-mismatched answer; please retry");
@@ -426,6 +430,19 @@ public class TutorService {
         || normalized.matches("^इस (?:टॉपिक|विषय|पाठ|अध्याय) का नाम क्या है$")
         || normalized.matches("^इस (?:टॉपिक|विषय|पाठ|अध्याय) का नाम बताइए$")
         || normalized.matches("^(?:अभी )?(?:हम )?कौन सा (?:टॉपिक|विषय|पाठ|अध्याय) (?:पढ़ रहे हैं|पढ़ रहे है|सीख रहे हैं)$");
+  }
+
+  private static String suppressUnderlyingProviderName(String answer,String language,String tutorIdentityLabel) {
+    if(answer==null||answer.isBlank()||"QuantaEdge".equals(tutorIdentityLabel)
+        ||!java.util.regex.Pattern.compile("(?i)Quanta\\\\s*Edge").matcher(answer).find()) return answer;
+    String school="your school".equalsIgnoreCase(tutorIdentityLabel) ? "your school" : tutorIdentityLabel;
+    if("en".equalsIgnoreCase(language)){
+      return "I’m the AI tutor for " + school
+          + ". I can help explain your lesson, work through an example, or practise a question with you.";
+    }
+    String schoolLabel="your school".equalsIgnoreCase(tutorIdentityLabel)?"आपके विद्यालय":tutorIdentityLabel;
+    return "मैं " + schoolLabel
+        + " के learning space का AI tutor हूँ। मैं पाठ समझने, उदाहरण हल करने और अभ्यास में मदद कर सकता हूँ।";
   }
 
   private String learnerTutorIdentityLabel(long studentId) {
