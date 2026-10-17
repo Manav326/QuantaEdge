@@ -216,6 +216,29 @@ def backfill_legacy_context_hashes(previous_inventory, raw_path, *, book_id, sou
     return updated
 
 
+def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, package):
+    """Use the already-published Layer 1 inventory bundle only if every marker binding matches."""
+    marker_path, inventory_path = Path(marker_path), Path(inventory_path)
+    if not marker_path.is_file():
+        return None
+    marker = read_json(marker_path)
+    inventory_sha = hashlib.sha256(inventory_path.read_bytes()).hexdigest() if inventory_path.is_file() else None
+    tag, archive_sha, fingerprint = marker.get("version_tag"), marker.get("bundle_tar_sha256"), marker.get("preparation_fingerprint")
+    valid_hex = lambda value: isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+    if (
+        marker.get("schema_version") != "quantaedge.visual-inventory-checkpoint-marker.v1"
+        or marker.get("source_book_id") != source.get("book_id")
+        or str(marker.get("source_pdf_sha256") or "").lower() != str(source.get("sha256") or "").lower()
+        or marker.get("package") != package
+        or marker.get("artifact_type") != "application/vnd.quantaedge.textbook.visual-inventory-bundle.v1"
+        or not isinstance(tag, str) or not tag
+        or not valid_hex(archive_sha) or not valid_hex(fingerprint)
+        or marker.get("inventory_json_sha256") != inventory_sha
+    ):
+        raise ValueError(f"Layer 1 preparation marker/source/inventory mismatch for {source.get('book_id')}.")
+    return {"package": package, "tag": tag, "tar_sha256": archive_sha}
+
+
 def run_layers(args):
     repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[]
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
@@ -237,8 +260,13 @@ def run_layers(args):
         index=vis/"visual-pipeline-index.v1.json"
         prior_index=read_json(index) if index.is_file() else {}
         prior_matches=(prior_index.get("source_book_id")==s["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower()==str(s["sha256"]).lower())
+        preparation_marker=work/".layer1-preparation-checkpoint.json"
+        prepared_bundle=layer1_inventory_bundle_from_marker(preparation_marker,inv,s,args.package)
         restored_marker=work/".inventory-restored-from-ghcr.json"
-        if restored_marker.is_file():
+        if prepared_bundle is not None:
+            inventory_bundle=prepared_bundle
+            print(f"[pipeline] INVENTORY_BUNDLE_REUSED_FROM_PREPARATION book={slug} tag={inventory_bundle['tag']} tar_sha256={inventory_bundle['tar_sha256']}",flush=True)
+        elif restored_marker.is_file():
             marker=read_json(restored_marker)
             prior_bundle=prior_index.get("inventory_bundle") if isinstance(prior_index.get("inventory_bundle"),dict) else {}
             if not prior_matches:
