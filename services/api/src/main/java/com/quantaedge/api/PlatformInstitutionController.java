@@ -179,13 +179,11 @@ public class PlatformInstitutionController {
           insert into institution_admin_account(institution_id,username,display_name,password_hash,active,must_change_password,created_by_staff_id)
           values (?,?,?,?,true,true,?)
           """,id,username,adminDisplayName,institutionAuth.encodePassword(initialPassword),owner.staffId());
-      InstitutionAuthService.IssuedJoinCode issued = institutionAuth.rotateJoinCode(
-          id,owner.staffId(),Instant.now().plus(java.time.Duration.ofDays(90)),null);
       audit(owner,id,"INSTITUTION_CREATED","INSTITUTION",String.valueOf(id),
           Map.of("tenantCode",tenantCode,"adminUsername",username));
       return Map.of("institutionId",id,"tenantCode",tenantCode,"displayName",displayName,
           "status","ACTIVE","adminUsername",username,"initialPasswordChangeRequired",true,
-          "joinCode",issued.code(),"joinCodeExpiresAt",issued.expiresAt().toString());
+          "nextStep","Configure a billing contract, then issue the learner join code.");
     } catch(DuplicateKeyException ex) {
       throw new IllegalArgumentException("Institution code or administrator username already exists.");
     }
@@ -375,7 +373,8 @@ public class PlatformInstitutionController {
     AuthContext owner = requirePlatformOwner(context);
     assertInstitutionExists(institutionId);
     String currency = value(body,"currency").isBlank()?"INR":value(body,"currency").toUpperCase(Locale.ROOT);
-    if(!currency.matches("^[A-Z]{3}$")) throw new IllegalArgumentException("Currency must be a three-letter ISO currency code.");
+    if(!"INR".equals(currency)) throw new IllegalArgumentException(
+        "The current billing ledger stores amounts in INR paise. INR is the only supported billing currency until currency-specific minor-unit handling is implemented.");
     BigDecimal unitPrice;
     try { unitPrice = new BigDecimal(value(body,"unitPriceRupees")); }
     catch(Exception ex) { throw new IllegalArgumentException("Enter a valid price in rupees."); }
@@ -493,6 +492,18 @@ public class PlatformInstitutionController {
       try { useLimit=Long.parseLong(value(body,"useLimit")); }
       catch(NumberFormatException ex) { throw new IllegalArgumentException("useLimit must be a positive integer."); }
       if(useLimit<1) throw new IllegalArgumentException("useLimit must be a positive integer.");
+    }
+    Boolean issuanceAllowed=jdbc.queryForObject("""
+        select exists(
+          select 1 from institution_tenant t
+          where t.id=? and t.status='ACTIVE'
+            and exists(select 1 from institution_billing_contract bc
+              where bc.institution_id=t.id and bc.active=true and bc.effective_from<=?
+                and (bc.effective_until is null or bc.effective_until>=?))
+        )
+        """,Boolean.class,institutionId,LocalDate.now(BILLING_ZONE),LocalDate.now(BILLING_ZONE));
+    if(!Boolean.TRUE.equals(issuanceAllowed)) {
+      throw new IllegalStateException("Activate the institution and configure an effective billing contract before issuing a learner join code.");
     }
     InstitutionAuthService.IssuedJoinCode issued = institutionAuth.rotateJoinCode(institutionId,owner.staffId(),expires,useLimit);
     audit(owner,institutionId,"JOIN_CODE_ROTATED","JOIN_CODE",String.valueOf(issued.id()),
