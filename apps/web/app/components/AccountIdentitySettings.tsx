@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useLocale } from './LanguageProvider';
+import { UI_LOCALE_OPTIONS, resolveUiLocale } from '../i18n/catalog';
 
 type AccountProfile = {
   displayName?: string | null;
@@ -34,6 +35,7 @@ async function readJson(response: Response): Promise<any> {
 
 export default function AccountIdentitySettings() {
   const { locale, setLocale } = useLocale();
+  const [selectedLocale, setSelectedLocale] = useState<typeof locale>(locale);
   const english = locale === 'english';
   const [profile, setProfile] = useState<AccountProfile | null>(null);
   const [displayName, setDisplayName] = useState('');
@@ -56,17 +58,14 @@ export default function AccountIdentitySettings() {
       setProfile(body);
       setDisplayName(String(body.displayName || ''));
       setUsername(String(body.username || ''));
-      const savedLocale = String(body.preferredLocale || '');
-      if (savedLocale && savedLocale !== locale) {
-        // The browser preference remains authoritative for this device. Account language
-        // is updated when the user explicitly saves the profile.
-      }
+      const savedLocale = resolveUiLocale(body.preferredLocale);
+      setSelectedLocale(savedLocale || locale);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Account details could not be loaded.');
     } finally {
       setLoading(false);
     }
-  }, [locale]);
+  }, []);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -77,8 +76,9 @@ export default function AccountIdentitySettings() {
       await readJson(await fetch('/api/v1/account/me/profile', {
         method: 'PUT', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayName: displayName.trim(), preferredLocale: locale }),
+        body: JSON.stringify({ displayName: displayName.trim(), preferredLocale: selectedLocale }),
       }));
+      setLocale(selectedLocale);
       setNotice(english ? 'Profile details saved.' : 'प्रोफ़ाइल विवरण सुरक्षित हो गए।');
       window.dispatchEvent(new Event('qe:profile-updated'));
       await load();
@@ -194,10 +194,8 @@ export default function AccountIdentitySettings() {
               <input value={displayName} onChange={e => setDisplayName(e.target.value)} minLength={2} maxLength={120} required />
             </label>
             <label>{english ? 'Interface language' : 'इंटरफ़ेस भाषा'}
-              <select value={locale} onChange={e => setLocale(e.target.value as typeof locale)}>
-                <option value="hinglish">हिन्दी</option>
-                <option value="english">English</option>
-                <option value="bhojpuri">भोजपुरी</option>
+              <select value={selectedLocale} onChange={e => setSelectedLocale(e.target.value as typeof locale)}>
+                {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
               </select>
             </label>
             <button type="submit" className="button button-dark button-small" disabled={busy !== '' || displayName.trim().length < 2}>
