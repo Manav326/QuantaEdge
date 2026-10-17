@@ -1516,3 +1516,14 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
   .parent-courses-page__buy-actions label,.parent-courses-page__buy-actions select{width:100%}
   .parent-courses-page__verify{align-items:flex-start;flex-direction:column}
 }
+
+
+/* Tenant-aware brand lockup. Platform/operator defaults remain unchanged when no tenant is resolved. */
+.qe-brand__tenant-mark{width:36px;height:36px;flex:0 0 36px;border-radius:11px;display:inline-grid;place-items:center;background:var(--institution-primary,var(--qe-brand-orange));color:#fff;font-weight:800;font-size:18px;line-height:1}
+.qe-brand--compact .qe-brand__tenant-mark{width:29px;height:29px;flex-basis:29px;border-radius:9px;font-size:14px}
+.qe-brand--footer .qe-brand__tenant-mark{width:31px;height:31px;flex-basis:31px}
+.qe-brand__tenant-logo{object-fit:contain;border-radius:8px}
+.qe-brand__tenant-name{color:var(--institution-text,var(--ink));font-weight:800;max-width:min(52vw,340px);overflow-wrap:anywhere}
+.tutor-q-mark:not(img){display:inline-grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:8px;background:var(--institution-primary,var(--qe-brand-orange));color:#fff;font-size:13px;font-weight:800}
+.qe-session-brand-mark:not(img){display:grid;place-items:center;width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:var(--institution-primary,var(--qe-brand-orange));color:#fff;font-size:22px;font-weight:800}
+.qe-tenant-landing .footer{gap:20px}
