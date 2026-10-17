@@ -1,4 +1,4 @@
--- V102: institution tenancy, white-label metadata, client principals and billable enrollment ledger.
+-- V120: institution tenancy, white-label metadata, client principals and billable enrollment ledger.
 -- Institution customers are deliberately separate from hr_employee, staff_account, user_account
 -- and student identities. No synthetic institution/student/financial data is seeded.
 
@@ -274,5 +274,5 @@ WHERE lower(username)='hrms_admin' AND active=true
 ON CONFLICT(staff_id, workspace_key, permission_key) DO NOTHING;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','institution-tenant-white-label-foundation-v102')
+VALUES ('schema','institution-tenant-white-label-foundation-v120')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;
