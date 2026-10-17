@@ -166,8 +166,8 @@ assert.ok(parentAccountMenu.includes('parent-account__logout') && parentAccountM
 assert.ok(layout.includes('onLogout={() => void logout()} loggingOut={loggingOut}'), 'Account menus must reuse the existing session logout handler and in-progress state.');
 
 // Android shares the canonical group IDs and selects its rail/bar by orientation rather than width.
-const androidStudentGroupIds = [...androidApp.matchAll(/AppNavItem\("(today|learn|practice|progress|library)"/g)].map((match) => match[1]);
-assert.deepEqual(androidStudentGroupIds, ['today', 'learn', 'practice', 'progress', 'library'], 'Android must render the same five student groups in web order.');
+const androidStudentGroupIds = [...androidApp.matchAll(/AppNavItem\("(today|courses|learn|practice|progress|library)"/g)].map((match) => match[1]);
+assert.deepEqual(androidStudentGroupIds, ['today', 'courses', 'learn', 'practice', 'progress', 'library'], 'Android must render the same six student groups in web order.');
 const androidParentGroupIds = [...androidApp.matchAll(/AppNavItem\("(family|children|profile)"/g)].map((match) => match[1]);
 assert.deepEqual(androidParentGroupIds, ['family', 'children', 'profile'], 'Android parent navigation must keep its three role-specific destinations.');
 assert.ok(androidApp.includes('LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE'), 'Android navigation must derive placement from device orientation.');
