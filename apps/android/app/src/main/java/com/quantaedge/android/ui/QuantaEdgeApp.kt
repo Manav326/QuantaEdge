@@ -5702,19 +5702,15 @@ private fun DocumentReaderScreen(
     onDownload: () -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
-    var pageInput by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(page.toString()) }
     var zoomScale by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(1f) }
     var imageOffset by remember(document.optLongAny("document_id", "id")) { mutableStateOf(Offset.Zero) }
     var fitWidth by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(false) }
     var thumbnailsOpen by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(false) }
     LaunchedEffect(page) {
-        pageInput = page.toString()
         zoomScale = 1f
         imageOffset = Offset.Zero
         fitWidth = false
     }
-    val requestedPage = pageInput.toIntOrNull()
-    val validPage = requestedPage != null && requestedPage in 1..pageCount
     val thumbnailPages = if (pageCount <= 9) {
         (1..pageCount.coerceAtLeast(1)).toList()
     } else {
@@ -5743,19 +5739,6 @@ private fun DocumentReaderScreen(
             }
             TextButton(onClick = onToggleFullscreen) {
                 Text(if (fullscreen) t("Exit full screen", "Fullscreen बंद करें") else t("Full screen", "Fullscreen"))
-            }
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(
-                value = pageInput,
-                onValueChange = { pageInput = it.filter(Char::isDigit).take(6) },
-                label = { Text(t("Page number", "पृष्ठ संख्या")) },
-                singleLine = true,
-                modifier = Modifier.weight(1f)
-            )
-            Button(onClick = { if (validPage) onPage(requestedPage!!) }, enabled = !busy && validPage) {
-                Text(t("Go", "जाएँ"))
             }
         }
 
