@@ -585,3 +585,16 @@ html[data-qe-appearance="dark"] .button-dark:hover {
   color: var(--qe-color-on-primary-container);
   border-color: var(--qe-color-primary);
 }
+
+/* School-branded entry route. Identity changes per trusted tenant; all colours belong to ColorThemeProvider. */
+.qe-school-entry{min-height:100svh;display:flex;flex-direction:column;align-items:center;padding:clamp(20px,5vw,56px) 18px 48px;background:var(--qe-color-background);color:var(--qe-color-text)}
+.qe-school-entry-header{width:min(100%,980px);display:flex;align-items:center;justify-content:flex-start;min-height:44px}
+.qe-school-entry-panel{width:min(100%,540px);margin:auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px;padding:clamp(24px,5vw,44px);border:1px solid var(--qe-color-border-subtle);border-radius:24px;background:var(--qe-color-surface);box-shadow:0 18px 54px color-mix(in srgb,var(--qe-color-text) 8%,transparent)}
+.qe-school-entry-panel h1{margin:0;font-size:clamp(28px,5vw,40px);line-height:1.15;letter-spacing:-.035em;overflow-wrap:anywhere}
+.qe-school-entry-panel p{max-width:440px;margin:0;color:var(--qe-color-text-muted);font-size:14px;line-height:1.7}
+.qe-school-entry-logo,.qe-school-entry-letter{display:grid;place-items:center;width:76px;height:76px;object-fit:contain;border-radius:18px}
+.qe-school-entry-letter{background:var(--qe-color-primary-container);color:var(--qe-color-primary-text);font-size:32px;font-weight:800}
+.qe-school-entry-actions{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.qe-school-entry-actions .button{width:100%;justify-content:center;min-height:46px}
+.qe-school-entry-note{font-size:12px!important}
+.qe-school-entry-placeholder{width:64px;height:64px;border-radius:18px;background:var(--qe-color-surface-elevated);border:1px solid var(--qe-color-border-subtle)}
