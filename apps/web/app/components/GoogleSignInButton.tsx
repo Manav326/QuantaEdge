@@ -50,13 +50,15 @@ function loadGoogleIdentityServices(): Promise<void> {
 
 type Props = {
   locale?: string;
-  context?: 'signin' | 'signup';
+  context?: 'signin' | 'signup' | 'use';
+  endpoint?: string;
   onAuthenticated?: (result: Record<string, unknown>) => void;
 };
 
 export default function GoogleSignInButton({
   locale = 'en',
   context = 'signin',
+  endpoint = '/api/v1/auth/google',
   onAuthenticated,
 }: Props) {
   const target = useRef<HTMLDivElement>(null);
@@ -74,7 +76,7 @@ export default function GoogleSignInButton({
     setBusy(true);
     setError('');
     try {
-      const result = await fetch('/api/v1/auth/google', {
+      const result = await fetch(endpoint, {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -92,7 +94,7 @@ export default function GoogleSignInButton({
     } finally {
       setBusy(false);
     }
-  }, [onAuthenticated]);
+  }, [endpoint, onAuthenticated]);
 
   useEffect(() => {
     let active = true;
