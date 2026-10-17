@@ -18,6 +18,7 @@ import java.util.UUID;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -99,8 +100,13 @@ public class CourseMarketplaceController {
   @PostMapping("/courses/{courseId}/orders")
   public Map<String, Object> createOrder(
       @PathVariable long courseId,
+      @RequestHeader(value = "Idempotency-Key", required = false) String suppliedIdempotencyKey,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
+    String idempotencyKey = suppliedIdempotencyKey == null ? "" : suppliedIdempotencyKey.trim();
+    if (!isValidIdempotencyKey(idempotencyKey)) {
+      throw new IllegalArgumentException("Checkout could not be identified safely. Please retry from the course marketplace.");
+    }
     requireConfigured();
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select p.id, coalesce(nullif(o.title_override,''),p.display_name) as title,
@@ -117,18 +123,68 @@ public class CourseMarketplaceController {
     Map<String, Object> offer = rows.getFirst();
     long amountPaise = ((Number) offer.get("price_paise")).longValue();
     String currency = String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT);
+    String title = String.valueOf(offer.getOrDefault("title", "Course access"));
+
+    // Recover abandoned CREATING rows as well as old PENDING rows. A process crash
+    // between inserting the local row and receiving the provider order must not block
+    // future checkouts forever under the partial unique index.
     jdbc.update("""
         update course_payment_order set status='EXPIRED',updated_at=now()
-        where student_id=? and course_id=? and status='PENDING'
+        where student_id=? and course_id=? and status in ('CREATING','PENDING')
           and created_at < now() - (? * interval '1 minute')
         """, context.studentId(), courseId, ORDER_EXPIRY_MINUTES);
 
+    List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
+        select id,offer_price_paise,currency,provider_order_id,status
+        from course_payment_order
+        where student_id=? and course_id=? and client_request_key=?
+        """, context.studentId(), courseId, idempotencyKey);
+    if (!keyedOrders.isEmpty()) {
+      Map<String, Object> previous = keyedOrders.getFirst();
+      String previousStatus = String.valueOf(previous.get("status"));
+      if ("PENDING".equals(previousStatus)) {
+        return checkoutResponse(previous, courseId, title);
+      }
+      if ("CREATING".equals(previousStatus)) {
+        throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
+      }
+      throw new IllegalArgumentException("This checkout request has already ended. Start a new checkout from the marketplace.");
+    }
+
+    // If the client lost the response, return the already-created order instead of
+    // attempting a second provider order. This also makes retries safe when a client
+    // generated a new key after a network timeout.
+    List<Map<String, Object>> openOrders = openOrders(context.studentId(), courseId);
+    if (!openOrders.isEmpty()) {
+      Map<String, Object> open = openOrders.getFirst();
+      if ("PENDING".equals(String.valueOf(open.get("status")))) {
+        return checkoutResponse(open, courseId, title);
+      }
+      throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
+    }
+
     String receipt = "qe_" + UUID.randomUUID().toString().replace("-", "");
-    long localOrderId = jdbc.queryForObject("""
-        insert into course_payment_order(student_id,course_id,offer_price_paise,currency,receipt,status)
-        values(?,?,?, ?,?,'CREATING')
-        returning id
-        """, Long.class, context.studentId(), courseId, amountPaise, currency, receipt);
+    long localOrderId;
+    try {
+      localOrderId = jdbc.queryForObject("""
+          insert into course_payment_order(
+            student_id,course_id,offer_price_paise,currency,receipt,client_request_key,status
+          ) values(?,?,?,?,?,?,'CREATING')
+          returning id
+          """, Long.class, context.studentId(), courseId, amountPaise, currency, receipt, idempotencyKey);
+    } catch (DuplicateKeyException conflict) {
+      // Close the race between the open-order check and insert. The DB unique indexes
+      // are the final concurrency guard; recover the winning order when possible.
+      List<Map<String, Object>> racedOrders = openOrders(context.studentId(), courseId);
+      if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
+        return checkoutResponse(racedOrders.getFirst(), courseId, title);
+      }
+      if (!racedOrders.isEmpty()) {
+        throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
+      }
+      throw new IllegalArgumentException("This checkout request has already been used. Start a new checkout.", conflict);
+    }
+
     try {
       String requestJson = objectMapper.writeValueAsString(Map.of(
           "amount", amountPaise,
@@ -148,20 +204,14 @@ public class CourseMarketplaceController {
           || !currency.equalsIgnoreCase(providerCurrency)) {
         throw new IllegalStateException("Payment provider returned an order that did not match the course offer.");
       }
-      jdbc.update("""
+      int updated = jdbc.update("""
           update course_payment_order set provider_order_id=?,status='PENDING',updated_at=now()
           where id=? and student_id=? and status='CREATING'
           """, providerOrderId, localOrderId, context.studentId());
-      Map<String, Object> result = new LinkedHashMap<>();
-      result.put("orderId", providerOrderId);
-      result.put("localOrderId", localOrderId);
-      result.put("amount", amountPaise);
-      result.put("currency", currency);
-      result.put("keyId", keyId);
-      result.put("courseId", courseId);
-      result.put("name", "QuantaEdge");
-      result.put("description", String.valueOf(offer.getOrDefault("title", "Course access")));
-      return result;
+      if (updated != 1) {
+        throw new IllegalStateException("This checkout expired while it was being prepared. Please start checkout again.");
+      }
+      return checkoutResponse(localOrderId, providerOrderId, amountPaise, currency, courseId, title);
     } catch (Exception exception) {
       jdbc.update("""
           update course_payment_order set status='FAILED',failure_code='ORDER_CREATE_FAILED',updated_at=now()
@@ -170,6 +220,59 @@ public class CourseMarketplaceController {
       if (exception instanceof IllegalStateException state) throw state;
       throw new IllegalStateException("Payment could not be started. Please retry.", exception);
     }
+  }
+
+  private List<Map<String, Object>> openOrders(long studentId, long courseId) {
+    return jdbc.queryForList("""
+        select id,offer_price_paise,currency,provider_order_id,status
+        from course_payment_order
+        where student_id=? and course_id=? and status in ('CREATING','PENDING')
+        order by id desc
+        limit 1
+        """, studentId, courseId);
+  }
+
+  private Map<String, Object> checkoutResponse(
+      Map<String, Object> order, long courseId, String title) {
+    if (!isReusablePendingOrder(order)) {
+      throw new IllegalStateException("The previous course checkout is not ready. Please retry shortly.");
+    }
+    return checkoutResponse(
+        ((Number) order.get("id")).longValue(),
+        String.valueOf(order.get("provider_order_id")),
+        ((Number) order.get("offer_price_paise")).longValue(),
+        String.valueOf(order.get("currency")),
+        courseId,
+        title);
+  }
+
+  private Map<String, Object> checkoutResponse(
+      long localOrderId, String providerOrderId, long amountPaise,
+      String currency, long courseId, String title) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("orderId", providerOrderId);
+    result.put("localOrderId", localOrderId);
+    result.put("amount", amountPaise);
+    result.put("currency", currency);
+    result.put("keyId", keyId);
+    result.put("courseId", courseId);
+    result.put("name", "QuantaEdge");
+    result.put("description", title == null || title.isBlank() ? "Course access" : title);
+    return result;
+  }
+
+  static boolean isValidIdempotencyKey(String value) {
+    return value != null && value.matches("[A-Za-z0-9_-]{16,64}");
+  }
+
+  static boolean isReusablePendingOrder(Map<String, Object> order) {
+    if (order == null || !"PENDING".equalsIgnoreCase(String.valueOf(order.get("status")))) return false;
+    Object id = order.get("provider_order_id");
+    Object amount = order.get("offer_price_paise");
+    String currency = String.valueOf(order.get("currency"));
+    return id != null && String.valueOf(id).matches("order_[A-Za-z0-9]+")
+        && amount instanceof Number number && number.longValue() > 0
+        && "INR".equalsIgnoreCase(currency);
   }
 
   /** Verify checkout signature and reconcile the payment against Razorpay before granting access. */
