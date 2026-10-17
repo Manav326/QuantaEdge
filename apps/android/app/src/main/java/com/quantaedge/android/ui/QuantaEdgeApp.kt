@@ -3293,6 +3293,7 @@ fun QuantaEdgeApp() {
                         busy = busy || marketplaceBusyCourseId > 0L,
                         onBuy = ::purchaseMarketplaceCourse,
                         onJoinFree = ::joinFreeMarketplaceCourse,
+                        onAskParent = ::requestParentCoursePurchase,
                         onRefresh = ::refreshMarketplace,
                         onAllCourses = ::openAllCourses
                     )
