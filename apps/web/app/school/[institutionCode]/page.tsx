@@ -27,7 +27,7 @@ export default function SchoolLearningEntryPage() {
         <section className="qe-school-entry-panel">
           <h1>{english ? 'This school link is unavailable' : 'विद्यालय का यह लिंक उपलब्ध नहीं है'}</h1>
           <p>{english ? 'The school link may have expired or been changed. Please ask your school for its current learning link.' : 'विद्यालय का लिंक समाप्त या बदला हुआ हो सकता है। अपने विद्यालय से नया learning link लें।'}</p>
-          {institutionContextRequested ? <p role="status">{english ? 'No QuantaEdge account or other-school selector is required. Use the school-provided link.' : 'किसी अन्य विद्यालय का चयन आवश्यक नहीं है। विद्यालय द्वारा दिया गया लिंक इस्तेमाल करें।'}</p> : null}
+          {institutionContextRequested ? <p role="status">{english ? 'This invitation opens only this school’s learning space. Ask your school for a new link if this one no longer works.' : 'यह आमंत्रण केवल इसी विद्यालय का learning space खोलता है। लिंक काम न करे तो विद्यालय से नया लिंक लें।'}</p> : null}
         </section>
       </main>
     );
