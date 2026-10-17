@@ -285,3 +285,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Submission and audit timestamps now format with the selected Admin UI locale. API routes, server status payloads, grader permissions, answer data, mark validation, certificate eligibility and result-release decisions remain unchanged.
 - The CI route guard now recognizes both `t(...)` and `tRef.current(...)`, and adds regression checks for review-dialog text.
 - Source and catalog validation passed before commit. This slice awaits its own CI run; browser acceptance for both locales remains open. Remaining work on this route includes some list-row metadata/actions and queue/filter labels.
+
+
+## Latest continuation — Admin Assessments catalogue and review-queue labels (2026-10-17)
+
+- Completed the next /assessments UI-copy pass for authoring tabs, curriculum selector options, approved-question selection summary, catalogue filters and metadata, offline-delivery labels, grader-assignment controls, queue filters/search, submitted-attempt summaries, and review/open-record actions.
+- Added 44 semantic admin.assessments messages. Canonical catalogs now have **2530 keys per locale**, with identical key sets and matching interpolation placeholders; all six app-local JSON copies are synchronized from the canonical sources.
+- Backend APIs, status payloads, grader permissions, attempt snapshots, mark validation, certificate rules, and result-release decisions remain unchanged.
+- Expanded the CI literal guard to cover representative tabs, filters, grader assignment, queue search, and review-dialog strings. The current code commit's build and browser acceptance remain pending.
