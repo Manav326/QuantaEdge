@@ -63,10 +63,14 @@ public class CertificateController {
   private final SecureRandom secureRandom = new SecureRandom();
 
   public record IssueRequest(String achievementType, String subjectCode, Long assessmentAttemptId,
-      String templateId, String language, Long courseId) {
+      String templateId, String language, Long courseId, String institutionCode) {
     public IssueRequest(String achievementType,String subjectCode,Long assessmentAttemptId,
         String templateId,String language) {
-      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,null);
+      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,null,null);
+    }
+    public IssueRequest(String achievementType,String subjectCode,Long assessmentAttemptId,
+        String templateId,String language,Long courseId) {
+      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,courseId,null);
     }
   }
 
@@ -386,19 +390,19 @@ public class CertificateController {
     if ("SUBJECT_COMPLETION".equals(type)) {
       String subjectCode = clean(request.subjectCode()).toLowerCase(Locale.ROOT);
       if (!subjectCode.matches("[a-z0-9_-]{1,40}")) throw new IllegalArgumentException("Choose a valid subject track.");
-      return issueSubjectCompletion(studentId, student, subjectCode, courseId, template, language);
+      return issueSubjectCompletion(studentId, student, subjectCode, courseId, template, language, request.institutionCode());
     }
     if ("ASSESSMENT_PASS".equals(type)) {
       if (request.assessmentAttemptId() == null || request.assessmentAttemptId() < 1) {
         throw new IllegalArgumentException("Choose a released assessment result.");
       }
-      return issueAssessmentPass(studentId, student, request.assessmentAttemptId(), courseId, template, language);
+      return issueAssessmentPass(studentId, student, request.assessmentAttemptId(), courseId, template, language, request.institutionCode());
     }
     throw new IllegalArgumentException("Choose SUBJECT_COMPLETION or ASSESSMENT_PASS.");
   }
 
   private Map<String, Object> issueSubjectCompletion(long studentId, Map<String, Object> student,
-      String subjectCode, Long courseId, String template, String language) {
+      String subjectCode, Long courseId, String template, String language, String institutionCode) {
     String classCode = String.valueOf(student.get("class_code"));
     if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
     String key = courseId==null
@@ -477,11 +481,11 @@ public class CertificateController {
     snapshot.put("completedLessonsAtIssue", completed);
     return createIssuedCertificate(studentId, key, "SUBJECT_COMPLETION", sourceClassCode,
         ((Number) achievement.get("subject_id")).longValue(), courseId, null, template, language,
-        String.valueOf(achievement.get("recipient_name")), title, summary, snapshot);
+        String.valueOf(achievement.get("recipient_name")), title, summary, snapshot, institutionCode);
   }
 
   private Map<String, Object> issueAssessmentPass(long studentId, Map<String, Object> student,
-      long attemptId, Long requestedCourseId, String template, String language) {
+      long attemptId, Long requestedCourseId, String template, String language, String institutionCode) {
     // Once issued, a certificate is a durable record. Reopening it must not depend on live
     // attempt or enrollment filters. This lookup is always scoped to the authenticated student.
     String key = "ASSESSMENT_PASS:" + attemptId;
@@ -581,19 +585,21 @@ public class CertificateController {
     snapshot.put("artifactVersion", 5);
     return createIssuedCertificate(studentId, key, "ASSESSMENT_PASS", classCode,
         ((Number) achievement.get("subject_id")).longValue(), courseId, attemptId, template, language,
-        String.valueOf(achievement.get("recipient_name")), title, summary, snapshot);
+        String.valueOf(achievement.get("recipient_name")), title, summary, snapshot, institutionCode);
   }
 
   private Map<String, Object> createIssuedCertificate(long studentId, String achievementKey,
       String achievementType, String classCode, long subjectId, Long courseId, Long attemptId, String template,
-      String language, String recipient, String title, String summary, Map<String, Object> snapshot) {
+      String language, String recipient, String title, String summary, Map<String, Object> snapshot,
+      String institutionCode) {
     snapshot.putIfAbsent("artifactVersion", 5);
     OffsetDateTime issuedAt = OffsetDateTime.now(ZoneId.of("Asia/Kolkata"));
     String certificateNumber = "QE-" + issuedAt.getYear() + "-"
         + HexFormat.of().withUpperCase().formatHex(randomBytes(8));
+    CertificateRenderer.CertificateBranding issuer = resolveCertificateIssuer(studentId, courseId, institutionCode, snapshot);
     CertificateRenderer.RenderedCertificate rendered = renderer.render(template, language, recipient,
         title, summary, certificateNumber, issuedAt,
-        certificateDetails(snapshot, achievementType, language, classCode, title), false);
+        certificateDetails(snapshot, achievementType, language, classCode, title), false, issuer);
     CertificateArtifactStorage.StoredArtifact pdf = null;
     CertificateArtifactStorage.StoredArtifact png = null;
     try {
@@ -623,6 +629,76 @@ public class CertificateController {
       if (pdf != null) storage.deleteQuietly(pdf.storageKey());
       throw ex;
     }
+  }
+
+  private CertificateRenderer.CertificateBranding resolveCertificateIssuer(
+      long studentId, Long courseId, String requestedInstitutionCode, Map<String,Object> snapshot) {
+    String requestedCode = clean(requestedInstitutionCode).toUpperCase(Locale.ROOT);
+    if (!requestedCode.isEmpty() && !requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{2,31}$")) {
+      throw new IllegalArgumentException("The school identity is invalid.");
+    }
+    List<Map<String,Object>> issuers = jdbc.queryForList("""
+        select t.id as institution_id,t.tenant_code,
+          coalesce(b.display_name,t.display_name) as issuer_display_name,
+          coalesce(b.logo_asset_key,'') as issuer_logo_asset_id
+        from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        left join institution_branding b on b.institution_id=t.id
+        where m.student_id=? and m.status='ACTIVE'
+          and (?='' or t.tenant_code=?)
+          and (?::bigint is null or exists (
+            select 1 from institution_course_entitlement e
+            join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+            where e.institution_id=t.id and e.program_id=? and e.status='ACTIVE'
+              and e.valid_from<=now() and (e.valid_until is null or e.valid_until>now())
+          ))
+        order by t.id
+        """, studentId, requestedCode, requestedCode, courseId, courseId);
+    if (issuers.isEmpty()) {
+      if (!requestedCode.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "This school is not an active issuer for the selected certificate track.");
+      }
+      return null;
+    }
+    if (requestedCode.isEmpty() && issuers.size()!=1) return null;
+    Map<String,Object> issuer=issuers.getFirst();
+    long institutionId=number(issuer.get("institution_id"));
+    String displayName=clean(issuer.get("issuer_display_name"));
+    if (displayName.isBlank()) return null;
+    String logoAssetId=clean(issuer.get("issuer_logo_asset_id"));
+    byte[] logo=null;
+    if (!logoAssetId.isBlank()) {
+      logo=queryOptionalByteArray("""
+          select image_bytes from institution_branding_asset
+          where institution_id=? and asset_id=? and asset_type='LOGO' and active=true
+          """, institutionId, logoAssetId);
+    }
+    snapshot.put("issuerInstitutionId", institutionId);
+    snapshot.put("issuerTenantCode", clean(issuer.get("tenant_code")));
+    snapshot.put("issuerDisplayName", displayName);
+    if (!logoAssetId.isBlank()) snapshot.put("issuerLogoAssetId", logoAssetId);
+    return new CertificateRenderer.CertificateBranding(displayName,logo);
+  }
+
+  private CertificateRenderer.CertificateBranding certificateBrandingFromSnapshot(Map<String,Object> snapshot) {
+    String displayName=clean(snapshot.get("issuerDisplayName"));
+    long institutionId=number(snapshot.get("issuerInstitutionId"));
+    String logoAssetId=clean(snapshot.get("issuerLogoAssetId"));
+    if (displayName.isBlank() || institutionId<1) return null;
+    byte[] logo=null;
+    if (!logoAssetId.isBlank()) {
+      logo=queryOptionalByteArray("""
+          select image_bytes from institution_branding_asset
+          where institution_id=? and asset_id=? and asset_type='LOGO'
+          """, institutionId, logoAssetId);
+    }
+    return new CertificateRenderer.CertificateBranding(displayName,logo);
+  }
+
+  private byte[] queryOptionalByteArray(String sql,Object... args) {
+    try { return jdbc.queryForObject(sql, byte[].class, args); }
+    catch (org.springframework.dao.EmptyResultDataAccessException ex) { return null; }
   }
 
   @GetMapping("/students/me/certificates/{certificateId}/download")
@@ -667,7 +743,7 @@ public class CertificateController {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Stored certificate failed its SHA-256 integrity check.");
     }
     MediaType contentType = pdfFormat ? MediaType.APPLICATION_PDF : MediaType.IMAGE_PNG;
-    String filename = "QuantaEdge-" + certificate.get("certificate_number") + "." + normalizedFormat;
+    String filename = "Certificate-" + certificate.get("certificate_number") + "." + normalizedFormat;
     ContentDisposition disposition = inline
         ? ContentDisposition.inline().filename(filename).build()
         : ContentDisposition.attachment().filename(filename).build();
@@ -758,7 +834,7 @@ public class CertificateController {
     CertificateRenderer.CertificateDetails details = certificateDetails(snapshot, achievementType, language, classCode, title);
     CertificateRenderer.RenderedCertificate rendered = renderer.render(clean(certificate.get("template_id")),
         language, clean(certificate.get("recipient_name")), title, originalSummary, certificateNumber,
-        toOffsetDateTime(certificate.get("issued_at")), details, false);
+        toOffsetDateTime(certificate.get("issued_at")), details, false, certificateBrandingFromSnapshot(snapshot));
     CertificateArtifactStorage.StoredArtifact pdf = null, png = null;
     String reason = "Re-rendered with verified Devanagari font coverage, source-preserved dynamic text, canonical branding artwork, and localized fixed wording.";
     try {
