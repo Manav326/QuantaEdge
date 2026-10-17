@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 304,
-    "successful_visual_analyses": 301,
-    "missing_visual_analyses": 1774,
+    "raw_analysis_result_rows": 307,
+    "successful_visual_analyses": 304,
+    "missing_visual_analyses": 1771,
     "failed_visual_analyses": 3,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1777,
+    "unresolved_count": 1774,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -16603,9 +16603,18 @@
       "asset_path": "assets/df7fdc1282971f2d8e0cb241e3b7db64a10b6c7346c48f85b1108705aeb35857.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from yellow to brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or border for a page, possibly a title or header.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16621,9 +16630,22 @@
       "asset_path": "assets/2b251cb29b322112f85ec3b4baa2b16d7d09b82ea0b86b4b86edf2c67624b65d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to gold, possibly representing a title or header.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient",
+          "background",
+          "title"
+        ],
+        "context_relation": "header or title",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16639,9 +16661,16 @@
       "asset_path": "assets/569682c872bf96a1a7bc105627b9a3d7caea24af71ffcf7b6c65c5898f8bb153.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid yellow background with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

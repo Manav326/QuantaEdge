@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "68888235a7d52b68654efeae71356fedbf532c9292fd5984490574688ca77685",
+  "raw_analysis_sha256": "81b827ae55205d6c2e4c4bb21f0649366e03c78d0532e544ddd209114877965c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -458,7 +458,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T09:38:38Z",
+      "checkpointed_at": "2026-10-17T09:45:42Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1376,7 +1376,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
-      "checkpointed_at": "2026-10-17T09:40:16Z",
+      "checkpointed_at": "2026-10-17T09:47:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -13264,6 +13264,130 @@
           "black horizontal line"
         ],
         "context_relation": "background",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3c637eed504492f5e9e1b8d2",
+      "asset_sha256": "df7fdc1282971f2d8e0cb241e3b7db64a10b6c7346c48f85b1108705aeb35857",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/df7fdc1282971f2d8e0cb241e3b7db64a10b6c7346c48f85b1108705aeb35857.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from yellow to brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or border for a page, possibly a title or header.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T09:48:38Z",
+      "effective_analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from yellow to brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or border for a page, possibly a title or header.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4738fe6ec1c341ce59458008",
+      "asset_sha256": "2b251cb29b322112f85ec3b4baa2b16d7d09b82ea0b86b4b86edf2c67624b65d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/2b251cb29b322112f85ec3b4baa2b16d7d09b82ea0b86b4b86edf2c67624b65d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to gold, possibly representing a title or header.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient",
+          "background",
+          "title"
+        ],
+        "context_relation": "header or title",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T09:49:55Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to gold, possibly representing a title or header.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient",
+          "background",
+          "title"
+        ],
+        "context_relation": "header or title",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f3deaca79cf9520139ef4e7",
+      "asset_sha256": "569682c872bf96a1a7bc105627b9a3d7caea24af71ffcf7b6c65c5898f8bb153",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/569682c872bf96a1a7bc105627b9a3d7caea24af71ffcf7b6c65c5898f8bb153.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid yellow background with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39000915492",
+      "checkpointed_at": "2026-10-17T09:51:03Z",
+      "effective_analysis": {
+        "visual_summary": "A solid yellow background with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
