@@ -1,6 +1,7 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Resources.module.css';
 import PremiumPagination from '../components/PremiumPagination';
@@ -756,6 +757,7 @@ export default function TextbookLibraryPage() {
           <span className="admin-kicker">QUANTAEDGE LEARNING / TEXTBOOK RESOURCES</span>
           <h1>Textbook PDF library</h1>
           <p>Reuse a stored textbook PDF or add it once, then attach it to a whole subject or a specific chapter.</p>
+          <Link href="/learning-resources" className={styles.catalogueLink}>Open unified resource catalogue ↗</Link>
         </div>
         <button type="button" className="admin-refresh" onClick={() => void load()} title="Refresh textbook library">↻</button>
       </header>

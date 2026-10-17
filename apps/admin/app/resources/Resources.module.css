@@ -339,3 +339,5 @@
   .workflowStep{padding:17px 14px;border-radius:15px}
   .workflowStep .stepIcon{width:39px;height:39px;flex-basis:39px}
 }
+
+.catalogueLink{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:9px 11px;border:1px solid #f2c39f;border-radius:9px;background:#fff7ed;color:#9a3412;font-size:11px;font-weight:800;text-decoration:none}.catalogueLink:hover{background:#ffedd5}
