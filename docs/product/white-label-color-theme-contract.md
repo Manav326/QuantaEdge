@@ -14,7 +14,7 @@ An institution's `themeTokens` is server-normalized data, never tenant-provided 
 
 Legacy five-colour records remain readable. The API normalizes them to schema v2 and returns the complete generated palette; unknown properties, malformed colours, invalid presets and unsupported schema versions are rejected.
 
-The normalized record keeps legacy `primary`, `accent`, `background`, `surface`, and `text` at the root for compatibility, plus generated `light` and `dark` maps. Each map provides action colours/foregrounds/containers, canvas and surfaces, main/muted text, borders/focus, selected/disabled states, semantic success/warning/error states, and navigation roles. The Java API tests and Android theme controller enforce the required role set.
+The normalized record keeps legacy `primary`, `accent`, `background`, `surface`, and `text` at the root for compatibility, plus generated `light` and `dark` maps. Each map provides action colours/foregrounds/containers, canvas and surfaces, main/muted text, borders/focus, selected/disabled states, semantic success/warning/error states, and navigation roles. Primary and accent each expose a container with a contrast-safe foreground (`primaryContainer`/`onPrimaryContainer`, `accentContainer`/`onAccentContainer`) for selected controls and secondary actions. The Java API tests and Android theme controller enforce the required role set.
 
 ## Catalogue and configuration
 
