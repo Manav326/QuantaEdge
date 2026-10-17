@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 292,
+    "assets_selected": 293,
     "assets_processed_this_run": 1,
     "assets_eligible": 2291,
-    "assets_analyzed": 292,
-    "assets_remaining": 1999,
-    "assets_completion_percent": 12.7,
-    "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 291,
+    "assets_analyzed": 293,
+    "assets_remaining": 1998,
+    "assets_completion_percent": 12.8,
+    "assets_failed": 5,
+    "assets_skipped_from_checkpoint": 292,
     "batch_limit": 1,
     "publication_allowed": false
   },
@@ -186,15 +186,27 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 2,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4f58a575bb545d5a02c6bb12d257233ea3e69f2d2b44295b683a52d0d5c9902",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "d4f58a575bb545d5a02c6bb12d257233ea3e69f2d2b44295b683a52d0d5c9902"
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T13:41:10Z"
     },
     {
       "asset_id": "471113272e25489f4f1bbb74",
