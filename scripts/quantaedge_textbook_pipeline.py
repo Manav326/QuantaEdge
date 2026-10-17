@@ -158,12 +158,36 @@ def run_layers(args):
         vis.mkdir(parents=True,exist_ok=True);layer.mkdir(parents=True,exist_ok=True)
         invrepo=vis/"visual-inventory.v1.json";shutil.copy2(inv,invrepo);shutil.copy2(work/"source.manifest.json",vis/"source.manifest.json")
         raw=vis/f"visual-analysis-{model}.v1.json";cor=layer/"visual-analysis-corrections.v1.json";eff=layer/"visual-analysis-effective.v1.json";ledger=layer/"coverage-ledger.v1.json"
-        bundle=sroot/f"{slug}-inventory-run-{args.run_id}.tar.gz"
-        with tarfile.open(bundle,"w:gz") as tar:tar.add(invdir,arcname="inventory");tar.add(work/"source.manifest.json",arcname="source.manifest.json");tar.add(work/name,arcname=name)
-        digest=hashlib.sha256(bundle.read_bytes()).hexdigest();tag=f"inventory-layer1-class{selection['class']}-{slug}-sha{s['sha256'][:12]}-run-{args.run_id}"
-        subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],cwd=sroot,check=True)
         index=vis/"visual-pipeline-index.v1.json"
-        write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":{"1":"COMPLETE","2":"COMPLETE","3":"COMPLETE","4":"RUNNING","5":"RUNNING","6":"NOT_STARTED","7":"NOT_STARTED","8":"NOT_STARTED"},"inventory_bundle":{"package":args.package,"tag":tag,"tar_sha256":digest},"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
+        prior_index=read_json(index) if index.is_file() else {}
+        prior_matches=(prior_index.get("source_book_id")==s["book_id"] and str(prior_index.get("source_pdf_sha256") or "").lower()==str(s["sha256"]).lower())
+        restored_marker=work/".inventory-restored-from-ghcr.json"
+        if restored_marker.is_file():
+            marker=read_json(restored_marker)
+            prior_bundle=prior_index.get("inventory_bundle") if isinstance(prior_index.get("inventory_bundle"),dict) else {}
+            if not prior_matches:
+                raise ValueError(f"{slug}: restored inventory marker has no matching prior pipeline index; refusing to reuse an unbound bundle.")
+            if (marker.get("source_pdf_sha256")!=s["sha256"] or marker.get("tag")!=prior_bundle.get("tag")
+                or marker.get("tar_sha256")!=prior_bundle.get("tar_sha256") or prior_bundle.get("package")!=args.package):
+                raise ValueError(f"{slug}: restored inventory bundle marker/index/source mismatch.")
+            inventory_bundle=prior_bundle
+            print(f"[pipeline] INVENTORY_BUNDLE_REUSED book={slug} tag={inventory_bundle['tag']} tar_sha256={inventory_bundle['tar_sha256']}",flush=True)
+        else:
+            bundle=sroot/f"{slug}-inventory-run-{args.run_id}.tar.gz"
+            with tarfile.open(bundle,"w:gz") as tar:
+                tar.add(invdir,arcname="inventory")
+                tar.add(work/"source.manifest.json",arcname="source.manifest.json")
+                tar.add(work/name,arcname=name)
+            digest=hashlib.sha256(bundle.read_bytes()).hexdigest()
+            tag=f"inventory-layer1-class{selection['class']}-{slug}-sha{s['sha256'][:12]}-run-{args.run_id}"
+            subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],cwd=sroot,check=True)
+            inventory_bundle={"package":args.package,"tag":tag,"tar_sha256":digest}
+            print(f"[pipeline] INVENTORY_BUNDLE_PUBLISHED book={slug} tag={tag} tar_sha256={digest}",flush=True)
+        previous_layers=prior_index.get("layers",{}) if prior_matches and isinstance(prior_index.get("layers"),dict) else {}
+        layers={"1":"COMPLETE","2":previous_layers.get("2","COMPLETE"),"3":previous_layers.get("3","COMPLETE"),
+                "4":"RUNNING","5":"RUNNING","6":previous_layers.get("6","NOT_STARTED"),
+                "7":previous_layers.get("7","NOT_STARTED"),"8":previous_layers.get("8","NOT_STARTED")}
+        write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":layers,"inventory_bundle":inventory_bundle,"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
         batch_number=0
         print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} checkpoint_tag={checkpoint}",flush=True)
