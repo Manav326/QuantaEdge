@@ -307,6 +307,29 @@ class LearningClassControllerTest {
   }
 
   @Test
+  void recordedListingCarriesPublishedDownloadReferenceOnlyWhenCatalogueAllowsIt() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), eq(7L), eq(""), eq(""), eq(25), eq(0)))
+        .thenReturn(List.of(Map.of(
+            "recorded_class_id", 88L, "title", "Fractions revision", "subject_name", "Mathematics",
+            "media_type", "video/mp4", "file_size_bytes", 1024L, "sha256", "a".repeat(64),
+            "download_resource_id", 501L, "download_assignment_id", 700L,
+            "download_allowed", true, "download_sha256", "a".repeat(64))));
+    when(jdbc.queryForObject(contains("select count(*) from recorded_class"), eq(Long.class),
+        eq(7L), eq(""), eq(""))).thenReturn(1L);
+
+    Map<String,Object> result = controller.studentRecordedClasses(null, 25, 0, student);
+
+    assertEquals(1L, result.get("total"));
+    Map<?,?> row = (Map<?,?>)((List<?>)result.get("items")).get(0);
+    assertEquals(501L, row.get("download_resource_id"));
+    assertEquals(700L, row.get("download_assignment_id"));
+    assertEquals(true, row.get("download_allowed"));
+    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(""), eq(""), eq(25), eq(0));
+    verifyNoInteractions(staffAudit, mediaStorage);
+  }
+
+  @Test
   void malformedRangeHeaderIsRejectedWithoutOpeningTheMediaFile() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), eq(7L), eq(88L)))
