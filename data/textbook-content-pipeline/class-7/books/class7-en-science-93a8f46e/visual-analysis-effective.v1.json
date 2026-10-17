@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "af5b12dab16686870467e93cf8c6b0ae2f0c70908c9f4f2b059a8104b755d514",
+  "raw_analysis_sha256": "bc2ea5c4677acea03e0e291ac6fa0b01928807c8859e2bd492d61bb7b11e73d1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -3394,17 +3394,79 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 8,
       "asset_path": "assets/14014d0e1898f734025bee1ac8236d1b15748aa72bc9b8c39b67ffa8eb4708d4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the Constitution of India, specifically Articles 12 to 35, which guarantee Fundamental Rights. The page focuses on the Right to Equality, emphasizing the equality before law and equal protection of laws, irrespective of religion, race, caste, and gender.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "CONSTITUTION OF INDIA",
+          "Part III (Articles 12 – 35)",
+          "Subject to certain conditions, some exceptions and reasonable restrictions)",
+          "guarantees these",
+          "Fundamental Rights",
+          "Right to Equality",
+          "• before law and equal protection of laws;",
+          "• irrespective of religion, race, caste, gender"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Articles 12 – 35",
+          "Fundamental Rights",
+          "Right to Equality",
+          "Equality before law",
+          "Equal protection of laws",
+          "Religion",
+          "Race",
+          "Caste",
+          "Gender"
+        ],
+        "context_relation": "The page discusses the specific articles of the Indian Constitution that guarantee fundamental rights, focusing on the Right to Equality and its implications.",
+        "limitations": [
+          "The page does not provide specific details about the content of Articles 12 to 35.",
+          "The page does not include any visual aids or diagrams."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "8c5fee61f20d0bf39f8b9624225863808c1896464afa02a8b0328c6ee479c13f",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T08:08:49Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the Constitution of India, specifically Articles 12 to 35, which guarantee Fundamental Rights. The page focuses on the Right to Equality, emphasizing the equality before law and equal protection of laws, irrespective of religion, race, caste, and gender.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "CONSTITUTION OF INDIA",
+          "Part III (Articles 12 – 35)",
+          "Subject to certain conditions, some exceptions and reasonable restrictions)",
+          "guarantees these",
+          "Fundamental Rights",
+          "Right to Equality",
+          "• before law and equal protection of laws;",
+          "• irrespective of religion, race, caste, gender"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Articles 12 – 35",
+          "Fundamental Rights",
+          "Right to Equality",
+          "Equality before law",
+          "Equal protection of laws",
+          "Religion",
+          "Race",
+          "Caste",
+          "Gender"
+        ],
+        "context_relation": "The page discusses the specific articles of the Indian Constitution that guarantee fundamental rights, focusing on the Right to Equality and its implications.",
+        "limitations": [
+          "The page does not provide specific details about the content of Articles 12 to 35.",
+          "The page does not include any visual aids or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
