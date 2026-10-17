@@ -199,3 +199,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Added 30 semantic `people.teachingClasses.*` messages and moved the page’s header, schedule summary, loading/empty/error states, meeting-link actions and past-class table labels into the central catalog.
 - The page formats scheduled dates using the selected UI locale (`en-IN` vs `hi-IN`) while keeping the `Asia/Kolkata` time zone, eligible assignment filtering, join-window check, private meeting-link API and copy/open actions unchanged.
 - The catalog plus all six app-local copies are refreshed in this same commit; the tracker remains the resumable record. Verify the newest CI run before treating this route as build-certified.
+
+
+## Latest continuation — People academic assignments
+
+- Added 124 semantic `people.assignments.*` messages and migrated the academic-assignment screen’s period lifecycle, proposal form, approval/cancellation actions, history modal, coverage report and workload-policy interface. The page now uses the shared People translation hook rather than embedding these labels and workflow messages in JSX.
+- Permission gates, independently approved assignment workflow, effective dates, period lifecycle, assignment/history IDs, private class-link integration behavior and workload warning calculations are unchanged. Backend-originated error text remains visible where it carries actionable server detail.
+- All six app-local catalog JSON copies are refreshed in this commit. The central catalog has 1856 keys per locale after this batch. Confirm CI and `scripts/sync_ui_localization.py --check` before marking the route certified.
+- Remaining People Operations routes: attendance/leave, payroll, workforce lifecycle, self-service, plus remaining field-level/access-dialog strings in employee directory/access. This migration is not a claim of total site coverage.
