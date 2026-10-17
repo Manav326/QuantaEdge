@@ -1407,3 +1407,54 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
   }
   .parent-app :where(.parent-recovery-actions, .parent-certificate-actions) > * { flex: 1 1 130px; }
 }
+
+
+/* Verified account identity and credentials — shared by learner and parent profile screens. */
+.qe-google-signin{display:grid;justify-items:center;gap:6px;margin:18px 0}
+.qe-google-signin__button{display:flex;justify-content:center;min-height:42px;max-width:100%}
+.qe-google-signin iframe{max-width:100%}
+.auth-method-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:5px;background:#f6f7fb;border:1px solid #e6e9f0;border-radius:14px;margin:12px 0}
+.auth-method-switch button{min-height:42px;border:1px solid transparent;border-radius:10px;background:transparent;color:#68738a;font-size:11px;font-weight:800;cursor:pointer;padding:8px}
+.auth-method-switch button.is-active{background:#fff;border-color:#fed7aa;color:#9a3412;box-shadow:0 2px 8px rgba(21,32,56,.06)}
+.qe-account-identity-settings{margin:24px 0 8px;padding:clamp(18px,3vw,28px);border:1px solid #e5e7ef;border-radius:22px;background:#fff;box-shadow:0 12px 38px rgba(32,39,73,.055);display:grid;gap:18px}
+.qe-account-identity-settings__header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:16px;border-bottom:1px solid #eef0f5}
+.qe-account-identity-settings__header h2{margin:5px 0 7px;font-size:clamp(20px,2.2vw,26px);letter-spacing:-.035em}
+.qe-account-identity-settings__header p{margin:0;color:#68738a;font-size:12px;line-height:1.6;max-width:580px}
+.qe-account-identity-settings__avatar{flex:0 0 64px;width:64px;height:64px;object-fit:cover;border-radius:50%;border:3px solid #fff0e5;box-shadow:0 0 0 1px #fed7aa}
+.qe-account-identity-settings__avatar--empty{display:grid;place-items:center;background:#fff0e5;color:#9a3412;font-size:25px;font-weight:800}
+.qe-account-identity-settings__verification{display:grid;gap:0;border:1px solid #e8ebf2;border-radius:16px;overflow:hidden}
+.qe-account-identity-settings__verification-row{display:flex;align-items:center;gap:12px;padding:14px;background:#fff}
+.qe-account-identity-settings__verification-row+.qe-account-identity-settings__verification-row{border-top:1px solid #eef0f5}
+.qe-account-identity-settings__provider-mark{width:36px;height:36px;flex:0 0 36px;border-radius:12px;display:grid;place-items:center;background:#fff0e5;border:1px solid #fed7aa;color:#9a3412;font-weight:900}
+.qe-account-identity-settings__provider-mark--mobile{font-size:22px}
+.qe-account-identity-settings__identity-copy{display:grid;gap:4px;flex:1;min-width:0}
+.qe-account-identity-settings__identity-copy strong{font-size:12px}
+.qe-account-identity-settings__identity-copy span{font-size:11px;color:#68738a;overflow-wrap:anywhere}
+.qe-verified-state{font-size:10px;font-weight:800;color:#8a5260;background:#fff4f1;border:1px solid #f5d4ce;border-radius:999px;padding:6px 9px;white-space:nowrap}
+.qe-verified-state.is-verified{color:#067647;background:#ecfdf3;border-color:#abefc6}
+.qe-account-identity-settings .auth-note{font-size:10px;line-height:1.55;color:#778195;margin:4px 12px 12px}
+.qe-account-identity-settings__form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:17px;border:1px solid #e8ebf2;border-radius:16px;background:#fcfcfe}
+.qe-account-identity-settings__form h3{grid-column:1/-1;margin:0;font-size:13px;font-weight:800}
+.qe-account-identity-settings__form label{display:grid;gap:7px;color:#35415a;font-size:11px;font-weight:800}
+.qe-account-identity-settings__form input,.qe-account-identity-settings__form select{width:100%;min-width:0;min-height:43px;padding:10px 12px;border:1px solid #dfe3ed;border-radius:11px;background:#fff;color:#152038;font:inherit;font-weight:500;outline:none}
+.qe-account-identity-settings__form input:focus,.qe-account-identity-settings__form select:focus{border-color:#fb923c;box-shadow:0 0 0 3px rgba(249,115,22,.12)}
+.qe-account-identity-settings__form .auth-note{grid-column:1/-1;margin:0}
+.qe-account-identity-settings__form button{justify-self:start;align-self:end}
+.qe-account-identity-settings__managed{padding:16px;border:1px solid #fed7aa;border-radius:14px;background:#fffaf5;color:#8f3e10}
+.qe-account-identity-settings__managed strong{font-size:12px}
+.qe-account-identity-settings__managed p{margin:6px 0 0;font-size:11px;line-height:1.6;color:#7b5a48}
+.qe-account-identity-settings__account-type{display:grid;gap:6px;padding:15px;border-radius:14px;background:#f8f9fc;border:1px solid #e8ebf2}
+.qe-account-identity-settings__account-type span{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#778195}
+.qe-account-identity-settings__account-type strong{font-size:13px}
+.qe-account-identity-settings__account-type p{font-size:11px;line-height:1.6;color:#68738a;margin:0}
+.qe-account-identity-settings__account-type a{font-weight:800;color:#9a3412;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:620px){
+  .auth-method-switch{grid-template-columns:1fr}
+  .qe-account-identity-settings{padding:17px;border-radius:17px}
+  .qe-account-identity-settings__header{align-items:flex-start}
+  .qe-account-identity-settings__avatar{width:52px;height:52px;flex-basis:52px}
+  .qe-account-identity-settings__verification-row{gap:9px;padding:11px}
+  .qe-verified-state{font-size:9px;padding:5px 7px}
+  .qe-account-identity-settings__form{grid-template-columns:1fr;padding:13px}
+  .qe-account-identity-settings__form h3,.qe-account-identity-settings__form .auth-note{grid-column:auto}
+}
