@@ -501,7 +501,7 @@ export default function TestsClient(){
                <div className={styles.resultSummary}>
                  <h3>{result.assessment_title}</h3>{result.test_id&&<small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.id.f22e0b35')}: {result.test_id}</small>}
                  <p>{assessmentTypeLabel(result.assessment_type)} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''}</p>
-                 <small>{attemptsInHistory} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.released.attempt.a2ac0123')}{attemptsInHistory===1?'':translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.s.a6d7b636')} · {result.question_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.questions.fa34dc08')} · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.latest.397aaf9b')} {fmtDate(result.released_at)}</small>
+                 <small>{attemptsInHistory} {translateUi(locale === 'english' ? 'english' : 'hinglish', attemptsInHistory === 1 ? 'legacy.web.released.attempt.a2ac0123' : 'web.count.releasedAttemptsPlural')} · {result.question_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.questions.fa34dc08')} · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.latest.397aaf9b')} {fmtDate(result.released_at)}</small>
                </div>
                <div className={styles.score} aria-label={'Best score among latest attempts: '+bestScore+' out of '+result.max_score}>
                  <b>{bestScore} <small>/ {result.max_score}</small></b><span>{bestPercent}%</span><small>Best of last {Math.min(3,latestAttempts.length)}</small>

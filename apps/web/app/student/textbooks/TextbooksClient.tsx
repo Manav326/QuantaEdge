@@ -371,7 +371,7 @@ export default function TextbooksClient() {
                 <option value="ALL">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}
               </select>
             </label>
-            <span className="qe-textbook-filter-summary" aria-live="polite">{visibleDocuments.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.resource.d42911fa')}{visibleDocuments.length === 1 ? '' : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.s.a6d7b636')} · {subjectGroups.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.subject.e4481da7')}{subjectGroups.length === 1 ? '' : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.s.a6d7b636')}</span>
+            <span className="qe-textbook-filter-summary" aria-live="polite">{visibleDocuments.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', visibleDocuments.length === 1 ? 'legacy.web.resource.d42911fa' : 'web.count.resourcesPlural')} · {subjectGroups.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', subjectGroups.length === 1 ? 'legacy.web.subject.e4481da7' : 'web.count.subjectsPlural')}</span>
           </div>
         </div>
       </section>
@@ -443,7 +443,7 @@ export default function TextbooksClient() {
                     </span>
                     <small>{hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0).map(item => partLabel(Number(item.book_part))).join(' & ') + ' ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.available.7c7e1f1d') : book ? book.page_count + ' ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.216981bc') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.published.chapter.pdfs.cb126dfd')}</small>
                   </span>
-                  <span className="qe-textbook-chapter-count">{chapterBooks.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.pdf.689e1479')}{chapterBooks.length===1?'':translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.s.a6d7b636')}</span>
+                  <span className="qe-textbook-chapter-count">{chapterBooks.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', chapterBooks.length === 1 ? 'legacy.web.chapter.pdf.689e1479' : 'web.count.chapterPdfsPlural')}</span>
                   <span className="qe-textbook-book-chevron">{expanded?'−':'+'}</span>
                 </button>
                 {book && !hasBookParts && <button type="button" className="qe-textbook-open-book" onClick={()=>openDocument(book.document_id,code)} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.complete.textbook.f19d2905')+book.title}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.book.e025edc7')}</button>}
