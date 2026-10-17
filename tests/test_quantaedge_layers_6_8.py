@@ -8,7 +8,7 @@ from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
     PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, bind_layer5_evidence_to_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
-    validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag,
+    validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag, layer5_ledger,
     write_json, write_jsonl, write_outputs, prompt_for, run as run_layers,
 )
 
@@ -105,6 +105,41 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
 
 
 class LayersTests(unittest.TestCase):
+    def test_canonical_layer5_index_disambiguates_legacy_duplicate_ledgers(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            book="ncert-c6-english-fecu1"
+            pdfhash="7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73"
+            books=root/"data"/"textbook-content-pipeline"/"class-6"/"books"
+            legacy=books/"class6-curiosity-en"/"coverage-ledger.v1.json"
+            canonical=books/"class6-en-science-9c1315ba"/"coverage-ledger.v1.json"
+            source={"source_book_id":book,"source_pdf_sha256":pdfhash}
+            for path in (legacy,canonical):
+                write_json(path,{"schema_version":"quantaedge.textbook-coverage-ledger.v1",
+                    "layer":5,"ledger_status":"COMPLETE","publication_allowed":False,"source":source})
+            index=root/"data"/"textbook-visuals"/"class6-en-science-9c1315ba"/"visual-pipeline-index.v1.json"
+            write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1",
+                "class":6,"book_slug":"class6-en-science-9c1315ba","source_book_id":book,
+                "source_pdf_sha256":pdfhash,
+                "coverage_ledger_path":"data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/coverage-ledger.v1.json"})
+            resolved=layer5_ledger(root,{"class_no":6,"book_id":book,"source_pdf_sha256":pdfhash})
+            self.assertEqual(canonical.resolve(),resolved)
+
+    def test_canonical_layer5_index_missing_target_fails_closed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            book="ncert-c6-english-fecu1"
+            pdfhash="a"*64
+            books=root/"data"/"textbook-content-pipeline"/"class-6"/"books"
+            legacy=books/"legacy"/"coverage-ledger.v1.json"
+            write_json(legacy,{"ledger_status":"COMPLETE","publication_allowed":False,
+                "source":{"source_book_id":book,"source_pdf_sha256":pdfhash}})
+            index=root/"data"/"textbook-visuals"/"canonical"/"visual-pipeline-index.v1.json"
+            write_json(index,{"class":6,"source_book_id":book,"source_pdf_sha256":pdfhash,
+                "coverage_ledger_path":"data/textbook-content-pipeline/class-6/books/canonical/coverage-ledger.v1.json"})
+            with self.assertRaisesRegex(ValueError,"missing or outside"):
+                layer5_ledger(root,{"class_no":6,"book_id":book,"source_pdf_sha256":pdfhash})
+
     def test_segments_preserve_every_character_and_empty_pages(self):
         pages=[{"page_number":1,"text":"A"*2200},{"page_number":2,"text":""},{"page_number":3,"text":"हिंदी text "*500}]
         segments=segments_for(pages,2,2500); seen={}
