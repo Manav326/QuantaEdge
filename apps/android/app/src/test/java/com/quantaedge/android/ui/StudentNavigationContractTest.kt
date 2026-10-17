@@ -20,6 +20,12 @@ class StudentNavigationContractTest {
     }
 
     @Test
+    fun courseCatalogueAndMarketplaceReturnToTheStudentWorkspace() {
+        assertEquals("today", StudentNavigationContract.studentGroupForRoute(AppRoute.ALL_COURSES, "learn"))
+        assertEquals("today", StudentNavigationContract.studentGroupForRoute(AppRoute.MARKETPLACE, "learn"))
+    }
+
+    @Test
     fun practiceTestsResultsAndLeaderboardStayTogether() {
         listOf(
             AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
