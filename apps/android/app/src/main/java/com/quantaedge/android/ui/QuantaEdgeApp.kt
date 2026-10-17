@@ -631,12 +631,26 @@ fun QuantaEdgeApp() {
                 preferences.edit().putString("contentLanguage", savedLearningLanguage).apply()
             }
             refreshStudentPrograms()
-            if (currentCourseId > 0L) {
-                studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
+            val hasCourseAccess = studentPrograms.any {
+                it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
             }
-            refreshStudentTextbookDocuments()
-            recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
-            route = AppRoute.STUDENT_HOME
+            if (!studentProgramsLoadFailed && !hasCourseAccess) {
+                // A genuinely empty course catalogue is a marketplace onboarding state,
+                // not a dashboard state. Do not redirect on API/network failures.
+                currentCourseId = 0L
+                courseProgress = emptyMap()
+                studentTextbookDocuments = emptyList()
+                recommendation = JSONObject()
+                route = AppRoute.MARKETPLACE
+                refreshMarketplace()
+            } else {
+                if (currentCourseId > 0L) {
+                    studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
+                }
+                refreshStudentTextbookDocuments()
+                recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
+                route = AppRoute.STUDENT_HOME
+            }
         } else {
             ApiClient.postObject("/api/v1/auth/logout")
             ApiClient.clearSession()
