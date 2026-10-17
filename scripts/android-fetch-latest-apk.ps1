@@ -1,4 +1,6 @@
-# QuantaEdge: fetch the APK built from the exact current main commit and install over ADB.
+# QuantaEdge: fetch a verified APK for current main and install over ADB.
+# Exact-commit builds are preferred; older builds are eligible only when all intervening changes
+# are explicitly classified as pipeline JSON outputs or this installer script.
 # Wireless debugging works automatically: connect the phone in Android Studio/adb first.
 [CmdletBinding()]
 param(
@@ -36,6 +38,57 @@ function Require-Command([string]$Name, [string]$Hint) {
     if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
         throw "$Name was not found. $Hint"
     }
+}
+
+function Test-CommitDataOnlyCompatible([string]$SourceSha, [string]$TargetSha, [string]$Repository) {
+    if ($SourceSha -eq $TargetSha) { return $true }
+    if ($SourceSha -notmatch '^[0-9a-f]{40}$' -or $TargetSha -notmatch '^[0-9a-f]{40}$') {
+        Write-Status "Cannot verify build compatibility: source or target SHA is invalid." "Yellow"
+        return $false
+    }
+
+    # Use GitHub's compare API instead of local git state: reason about the remote branch,
+    # not whichever commit happens to be checked out on the user's PC.
+    $comparePath = "repos/$Repository/compare/$SourceSha...$TargetSha"
+    $compareOutput = @(& gh api $comparePath 2>&1)
+    $compareExitCode = $LASTEXITCODE
+    if ($compareExitCode -ne 0) {
+        Write-Status ("Could not compare build commit {0} with current head {1}; compatibility is not proven." -f $SourceSha, $TargetSha) "Yellow"
+        return $false
+    }
+
+    $compareJson = (@($compareOutput) | ForEach-Object { [string]$_ }) -join [Environment]::NewLine
+    try {
+        $comparison = ConvertFrom-Json -InputObject $compareJson
+    } catch {
+        Write-Status "GitHub returned invalid commit-comparison JSON; compatibility is not proven." "Yellow"
+        return $false
+    }
+
+    # The build commit must be an ancestor of the current head. Diverged histories, a target
+    # behind the build, empty/ambiguous comparisons, and truncated file lists fail closed.
+    if ($comparison.status -ne "ahead" -or [int]$comparison.behind_by -ne 0 -or [int]$comparison.ahead_by -lt 1) {
+        Write-Status ("Build commit {0} is not a clean ancestor of current head {1}; compatibility is not proven." -f $SourceSha, $TargetSha) "Yellow"
+        return $false
+    }
+    $changedFiles = @($comparison.files)
+    if ($changedFiles.Count -eq 0 -or $changedFiles.Count -ge 300) {
+        Write-Status ("Commit comparison returned {0} changed files; the full change set cannot be proven safe." -f $changedFiles.Count) "Yellow"
+        return $false
+    }
+
+    foreach ($changedFile in $changedFiles) {
+        $path = [string]$changedFile.filename
+        $approvedPipelineJson = $path -match '^data/(textbook-content-pipeline|textbook-visuals)/.+\.(json|jsonl)$'
+        $approvedInstallerOnly = $path -eq "scripts/android-fetch-latest-apk.ps1"
+        if (-not ($approvedPipelineJson -or $approvedInstallerOnly)) {
+            Write-Status ("Refusing older APK: intervening change is outside the approved data-only allowlist: {0}" -f $path) "Yellow"
+            return $false
+        }
+    }
+
+    Write-Status ("Verified build commit {0} remains compatible with current head {1}; only approved pipeline JSON and/or installer-script changes are present." -f $SourceSha, $TargetSha) "Green"
+    return $true
 }
 
 function Get-UsableDevices([string]$Adb) {
@@ -118,15 +171,30 @@ try {
             $cachedFile = Get-Item -LiteralPath $targetApk
             $cachedHash = (Get-FileHash -LiteralPath $targetApk -Algorithm SHA256).Hash
             $cacheSizeMatches = $null -ne $cacheMetadata.sizeBytes -and ([long]$cacheMetadata.sizeBytes -eq [long]$cachedFile.Length)
-            $cacheMatches = (
+            $cacheIntegrityMatches = (
                 $cacheMetadata.repository -eq $Repository -and
                 $cacheMetadata.branch -eq $Branch -and
                 $cacheMetadata.artifactName -eq $ArtifactName -and
-                $cacheMetadata.headSha -eq $headSha -and
                 $cachedFile.Length -gt 1MB -and
                 $cacheSizeMatches -and
                 $cacheMetadata.sha256 -eq $cachedHash
             )
+            $cacheCommitMatches = $false
+            if ($cacheIntegrityMatches) {
+                if ($cacheMetadata.headSha -eq $headSha -or $cacheMetadata.verifiedHeadSha -eq $headSha) {
+                    $cacheCommitMatches = $true
+                } else {
+                    $cacheCommitMatches = Test-CommitDataOnlyCompatible -SourceSha ([string]$cacheMetadata.headSha) -TargetSha $headSha -Repository $Repository
+                    if ($cacheCommitMatches) {
+                        # Refresh the verified target only after rechecking source-build-to-head compatibility.
+                        $cacheMetadata.verifiedHeadSha = $headSha
+                        $metadataTempPath = "$cacheMetadataPath.tmp"
+                        $cacheMetadata | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $metadataTempPath -Encoding UTF8
+                        Move-Item -LiteralPath $metadataTempPath -Destination $cacheMetadataPath -Force
+                    }
+                }
+            }
+            $cacheMatches = $cacheIntegrityMatches -and $cacheCommitMatches
 
             if ($cacheMatches) {
                 $sourceRun = [PSCustomObject]@{
@@ -135,7 +203,7 @@ try {
                     headSha = [string]$cacheMetadata.headSha
                 }
                 $cacheHit = $true
-                Write-Status ("Verified cached APK matches current commit {0}; skipping GitHub artifact download." -f $headSha) "Green"
+                Write-Status ("Verified cached APK is safe for current commit {0}; original build commit {1}; skipping artifact download." -f $headSha, $cacheMetadata.headSha) "Green"
                 Write-Status ("Cached APK: {0}; size: {1:N2} MB; SHA-256 verified." -f $targetApk, ($cachedFile.Length / 1MB)) "Green"
             } else {
                 Write-Status "Cached APK or metadata does not match the current commit or failed integrity checks; a fresh artifact is required." "Yellow"
@@ -164,6 +232,7 @@ try {
                     repository = $Repository
                     branch = $Branch
                     headSha = $legacyCommit
+                    verifiedHeadSha = $headSha
                     artifactName = $ArtifactName
                     runId = $legacyRunId
                     workflowName = $legacyWorkflow
@@ -201,11 +270,31 @@ try {
             throw "GitHub CLI returned invalid workflow-run JSON. Response: $runsJson"
         }
         $candidates = @($runs | Where-Object {
+            $_.workflowName -eq "QuantaEdge Build and Publish" -and
             $_.headSha -eq $headSha -and $_.status -eq "completed" -and $_.conclusion -eq "success"
         } | Sort-Object createdAt -Descending)
 
         if ($candidates.Count -eq 0) {
-            throw "There is no successful GitHub Actions run for the current $Branch commit $headSha. To avoid installing a stale APK, this script will not use an older build. Check Actions and rerun/fix the Android build, then run this script again."
+            Write-Status ("No successful Actions run exists for exact commit {0}; checking whether a recent successful Android build is compatible." -f $headSha) "Yellow"
+            $successfulBuildRuns = @($runs | Where-Object {
+                $_.workflowName -eq "QuantaEdge Build and Publish" -and
+                $_.status -eq "completed" -and $_.conclusion -eq "success" -and
+                $_.headSha -match '^[0-9a-f]{40}$'
+            } | Sort-Object createdAt -Descending)
+
+            $compatibleCandidates = @()
+            foreach ($run in $successfulBuildRuns) {
+                if (Test-CommitDataOnlyCompatible -SourceSha ([string]$run.headSha) -TargetSha $headSha -Repository $Repository) {
+                    $compatibleCandidates += $run
+                    # Keep a small fallback set in case a valid run's artifact has expired or is absent.
+                    if ($compatibleCandidates.Count -ge 5) { break }
+                }
+            }
+            $candidates = @($compatibleCandidates)
+        }
+
+        if ($candidates.Count -eq 0) {
+            throw "There is no successful Android Actions run for current $Branch commit $headSha, and no recent successful build passed the strict data-only compatibility check. The script will not install an APK after any app/build-relevant change. Check Actions and rerun/fix the Android build, then run this script again."
         }
 
         $downloadedApk = $null
@@ -234,7 +323,7 @@ try {
         }
 
         if (-not $downloadedApk) {
-            throw "No APK artifact named '$ArtifactName' was found in successful Actions runs for current commit $headSha. The Android workflow must upload the installable APK using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
+            throw "No APK artifact named '$ArtifactName' was found in successful exact-commit or data-only-compatible Android Actions runs for current commit $headSha. The Android workflow must upload the installable APK using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
         }
 
         # Stage first; retain the previous APK until the new artifact passes basic validation.
@@ -252,6 +341,7 @@ try {
             repository = $Repository
             branch = $Branch
             headSha = [string]$sourceRun.headSha
+            verifiedHeadSha = $headSha
             artifactName = $ArtifactName
             runId = [string]$sourceRun.databaseId
             workflowName = [string]$sourceRun.workflowName
@@ -270,7 +360,7 @@ try {
     }
 
     $sourceRunId = [string]$sourceRun.databaseId
-    Write-Status ("Build commit: {0}; Actions run: {1}; workflow: {2}; size: {3:N2} MB" -f $sourceRun.headSha, $sourceRunId, $sourceRun.workflowName, ((Get-Item -LiteralPath $targetApk).Length / 1MB)) "Green"
+    Write-Status ("Build commit: {0}; verified for current {1} commit: {2}; Actions run: {3}; workflow: {4}; size: {5:N2} MB" -f $sourceRun.headSha, $Branch, $headSha, $sourceRunId, $sourceRun.workflowName, ((Get-Item -LiteralPath $targetApk).Length / 1MB)) "Green"
 
     Write-Status "Checking connected ADB devices (USB or wireless debugging)..." "Cyan"
     $devices = @(Get-UsableDevices $adbPath)
