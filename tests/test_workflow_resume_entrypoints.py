@@ -41,6 +41,23 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("${{ inputs.allow_experimental_model }}", wrapper)
         self.assertIn('default: false', wrapper)
 
+    def test_layers_6_to_8_preflights_run_and_resume_before_model_download(self):
+        workflow = read("quantaedge-layers-6-8.yml")
+        preflight = workflow.index("- name: Preflight generation checkpoint before model download")
+        output_only = workflow.index("- name: Reconcile saved Layers 6–8 outputs without model inference")
+        ollama_start = workflow.index("- name: Start loopback-only Ollama service")
+        model_pull = workflow.index("- name: Pull only candidate models for this invocation")
+        self.assertLess(preflight, output_only)
+        self.assertLess(preflight, ollama_start)
+        self.assertLess(preflight, model_pull)
+        preflight_step = workflow[preflight:output_only]
+        self.assertIn("if: inputs.mode == 'run' || inputs.mode == 'resume'", preflight_step)
+        self.assertIn('if [[ "$MODE" == "resume" ]]; then', preflight_step)
+        self.assertIn('args+=(--require-existing-checkpoint)', preflight_step)
+        self.assertIn('{"MATCHED_CHECKPOINT","NOT_STARTED"}', preflight_step)
+        self.assertIn("preflight_state=", preflight_step)
+        self.assertIn("steps.generation_preflight.outputs.preflight_state == 'MATCHED_CHECKPOINT'", workflow)
+
     def test_layers_6_to_8_checks_draft_acknowledgement_before_model_startup(self):
         workflow = read("quantaedge-layers-6-8.yml")
         approval = workflow.index("- name: Require explicit experimental-draft approval before model startup")
