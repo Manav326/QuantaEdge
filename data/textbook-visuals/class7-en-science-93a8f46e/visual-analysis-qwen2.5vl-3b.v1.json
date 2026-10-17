@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 328,
+    "assets_selected": 329,
     "assets_processed_this_run": 1,
     "assets_eligible": 7488,
-    "assets_analyzed": 329,
-    "assets_remaining": 7159,
+    "assets_analyzed": 330,
+    "assets_remaining": 7158,
     "assets_completion_percent": 4.4,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 327,
+    "assets_failed": 20,
+    "assets_skipped_from_checkpoint": 328,
     "batch_limit": 1,
     "publication_allowed": false
   },
@@ -118,15 +118,26 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 1,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3"
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39013231656",
+      "checkpointed_at": "2026-10-17T07:42:24Z"
     },
     {
       "asset_id": "caac3c22deaf6a6f93ec68c9",
