@@ -192,3 +192,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Root cause: Language Review adopted `useUiTranslation()` for messages, but number formatting still referenced `locale` without reading it. This patch obtains `locale` from the existing `AdminWorkspaceContext`, preserving the shared source of truth and localized number formatting.
 - A fresh non-cancelled full build must verify the correction. CI was not all green at the time of diagnosis; do not mark P0 complete until the Admin image and every required job pass.
 - People Operations now has first migration passes for public sign-in/password setup, employee directory and access governance. Remaining People routes/forms and the wider Admin route audit remain in progress.
+
+
+## Latest continuation — People teaching-classes page
+
+- Added 30 semantic `people.teachingClasses.*` messages and moved the page’s header, schedule summary, loading/empty/error states, meeting-link actions and past-class table labels into the central catalog.
+- The page formats scheduled dates using the selected UI locale (`en-IN` vs `hi-IN`) while keeping the `Asia/Kolkata` time zone, eligible assignment filtering, join-window check, private meeting-link API and copy/open actions unchanged.
+- The catalog plus all six app-local copies are refreshed in this same commit; the tracker remains the resumable record. Verify the newest CI run before treating this route as build-certified.
