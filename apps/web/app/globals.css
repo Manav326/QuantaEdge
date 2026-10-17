@@ -344,3 +344,28 @@ html[data-qe-appearance="dark"] .qe-workspace-content td { border-color: var(--q
 .qe-appearance-toggle:focus-visible { outline: 3px solid var(--qe-color-focus); outline-offset: 3px; }
 .qe-appearance-toggle-label { white-space: nowrap; }
 @media (max-width: 520px) { .qe-appearance-toggle { min-width: 38px; padding: 7px 9px; } .qe-appearance-toggle-label { display: none; } }
+
+/* Institution membership page: layout only; all colour/contrast stays with the shared theme provider. */
+.qe-institutions-page{max-width:1040px;margin:0 auto;padding:32px 24px 80px}
+.qe-institutions-page-header{display:flex;align-items:flex-start;gap:24px;margin-bottom:26px;flex-wrap:wrap}
+.qe-institutions-page-header>div{flex:1;min-width:240px}
+.qe-institutions-page-header h1{font-size:clamp(28px,4vw,38px);letter-spacing:-1px;margin:8px 0}
+.qe-institutions-page-header p,.qe-institutions-panel>p{color:var(--qe-color-text-muted,var(--muted));font-size:14px;line-height:1.65;margin:0}
+.qe-institutions-panel{padding:22px;margin:0 0 18px;border:1px solid var(--qe-color-border,var(--line));border-radius:18px;background:var(--qe-color-surface,var(--card))}
+.qe-institutions-panel h2{font-size:18px;margin:0 0 8px}
+.qe-institutions-join-form{display:flex;align-items:flex-end;gap:12px;margin-top:18px;flex-wrap:wrap}
+.qe-institutions-join-form label{display:grid;gap:7px;flex:1;min-width:230px;font-size:12px;font-weight:700}
+.qe-institutions-join-form input{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--qe-color-border,var(--line));border-radius:10px;background:var(--qe-color-surface,var(--card));color:var(--qe-color-text,var(--ink))}
+.qe-institutions-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.qe-institutions-empty{padding:20px 4px}
+.qe-institutions-empty p{color:var(--qe-color-text-muted,var(--muted));font-size:13px}
+.qe-institutions-list{display:grid;gap:10px;margin-top:14px}
+.qe-institution-membership{display:flex;align-items:center;gap:13px;padding:13px;border:1px solid var(--qe-color-border,var(--line));border-radius:13px;min-width:0}
+.qe-institution-membership .qe-brand__tenant-mark{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;border-radius:11px}
+.qe-institution-membership-copy{display:grid;gap:3px;flex:1;min-width:0}
+.qe-institution-membership-copy strong{overflow-wrap:anywhere}
+.qe-institution-membership-copy span,.qe-institution-membership-copy small{color:var(--qe-color-text-muted,var(--muted));font-size:11px;overflow-wrap:anywhere}
+.qe-institution-status{font-size:11px;font-weight:700;white-space:nowrap}
+.qe-institutions-page .auth-message{margin:0 0 14px}
+.institution-real-logo{display:block;width:36px;height:36px;object-fit:contain;border-radius:9px}
+@media(max-width:600px){.qe-institutions-page{padding:22px 14px 70px}.qe-institutions-panel{padding:16px}.qe-institutions-join-form{align-items:stretch}.qe-institutions-join-form .button{width:100%}.qe-institution-membership{flex-wrap:wrap}.qe-institution-status{margin-left:53px}}
