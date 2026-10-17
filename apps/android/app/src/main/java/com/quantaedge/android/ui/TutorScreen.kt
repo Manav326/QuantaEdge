@@ -555,7 +555,7 @@ fun TutorScreen(
                         ?: (item.textAny("role") + "-" + item.hashCode())
                 }) { item ->
                     val isAssistant = item.textAny("role").equals("ASSISTANT", true)
-                    val bubbleColor = if (isAssistant) MaterialTheme.colorScheme.surface else LocalQuantaEdgeSemanticColors.current.primaryTextContainer
+                    val bubbleColor = if (isAssistant) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primaryContainer
                     val bubbleText = if (isAssistant) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimaryContainer
                     Column(
                         modifier = Modifier.fillMaxWidth(),
