@@ -31,6 +31,9 @@ const androidTheme = read('apps/android/app/src/main/java/com/quantaedge/android
 const androidApp = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidRepository = read('apps/android/app/src/main/java/com/quantaedge/android/data/InstitutionBrandingRepository.kt');
 const androidSettings = read('apps/android/app/src/main/java/com/quantaedge/android/ui/ColorThemeSettingsCard.kt');
+const androidStudentProfile = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentProfileScreen.kt');
+const androidParentProfile = read('apps/android/app/src/main/java/com/quantaedge/android/ui/ParentProfileScreen.kt');
+const androidAccountIdentity = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AccountIdentitySettingsScreen.kt');
 const androidTutor = read('apps/android/app/src/main/java/com/quantaedge/android/ui/TutorScreen.kt');
 const androidScanner = read('apps/android/app/src/main/java/com/quantaedge/android/ui/PremiumCodeScannerScreen.kt');
 const docs = read('docs/product/white-label-color-theme-contract.md');
@@ -75,6 +78,7 @@ assert(androidController.includes('"accentContainer", "onAccentContainer"'), 'An
 assert(androidTheme.includes('darkColorScheme') && androidTheme.includes('lightColorScheme'), 'Android theme must support light and dark.');
 assert(androidTheme.includes('"accentContainer"') && androidTheme.includes('"onAccentContainer"'), 'Android Material secondary roles must consume accent-container tokens.');
 assert(androidSettings.includes('QeAppearanceMode.DARK') && androidSettings.includes('QeAppearanceMode.SYSTEM'), 'Android settings must expose appearance options.');
+assert(androidStudentProfile.includes('ColorThemeSettingsCard(language = language)') && androidParentProfile.includes('ColorThemeSettingsCard(language = language)') && !androidAccountIdentity.includes('ColorThemeSettingsCard(language = language)'), 'Appearance controls must be discoverable in both student and parent profiles, not mixed into sign-in identity settings.');
 assert(androidTutor.includes('MaterialTheme.colorScheme.primary') && !/Color\\(0xFF151B2C\\)|Color\\(0xFFFFF0E3\\)/i.test(androidTutor), 'Android tutor must use semantic theme roles rather than fixed brand colours.');
 assert(androidScanner.includes('scanPrimary = MaterialTheme.colorScheme.primary') && androidScanner.includes('scanOnPrimary = MaterialTheme.colorScheme.onPrimary'), 'Android scanner controls must use the active tenant palette.');
 assert(androidRepository.includes('val themeTokensJson: String') && androidRepository.includes('optJSONObject("themeTokens")'), 'Android tenant API response must carry theme JSON.');
