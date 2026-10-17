@@ -383,11 +383,23 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
 internal fun localizedUiText(source: String): String {
     val context = LocalContext.current
     val language = LocalQuantaLanguage.current
+    val institutionName = LocalInstitutionBrandIdentity.current?.displayName?.takeIf { it.isNotBlank() }
+    fun brandText(value: String): String {
+        val name = institutionName ?: return value
+        return value
+            .replace("QuantaEdge server", "learning service")
+            .replace("QuantaEdge Server", "learning service")
+            .replace("QuantaEdge Tutor", "$name tutor")
+            .replace("QUANTAEDGE TUTOR", name.uppercase() + " TUTOR")
+            .replace("QuantaEdge", name)
+            .replace("QUANTAEDGE", name.uppercase())
+            .replace("क्वांटाएज", name)
+    }
     val phrase = uiPhraseBySource[source] ?: uiPhrases
         .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }
         .sortedByDescending { maxOf(it.hindi.length, it.english.length) }
         .firstOrNull { source.startsWith(it.hindi) || source.startsWith(it.english) }
-    if (phrase == null) return source
+    if (phrase == null) return brandText(source)
     val exact = source == phrase.hindi || source == phrase.english
     val suffix = if (exact) "" else when {
         source.startsWith(phrase.hindi) -> source.removePrefix(phrase.hindi)
@@ -395,10 +407,10 @@ internal fun localizedUiText(source: String): String {
         else -> ""
     }
     val resourceId = context.resources.getIdentifier("qe_" + phrase.key, "string", context.packageName)
-    if (resourceId == 0) return (if (language == "hi") phrase.hindi else phrase.english) + suffix
+    if (resourceId == 0) return brandText((if (language == "hi") phrase.hindi else phrase.english) + suffix)
     val configuration = Configuration(context.resources.configuration).apply {
         setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
     }
     val localizedContext: Context = context.createConfigurationContext(configuration)
-    return localizedContext.getString(resourceId) + suffix
+    return brandText(localizedContext.getString(resourceId) + suffix)
 }
