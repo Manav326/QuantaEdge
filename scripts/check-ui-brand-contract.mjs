@@ -31,7 +31,6 @@ function requireInteractionBaseline(source, app) {
 const branding = read('docs/branding.md');
 const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
 const tenantBrandingProvider = read('apps/web/app/components/TenantBrandingProvider.tsx');
-const learnerInstitutionsPage = read('apps/web/app/student/institutions/page.tsx');
 const androidTenantBrand = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeBrand.kt');
 const androidTenantRepository = read('apps/android/app/src/main/java/com/quantaedge/android/data/InstitutionBrandingRepository.kt');
 const androidAppManifest = read('apps/android/app/src/main/AndroidManifest.xml');
@@ -63,7 +62,7 @@ assert(adminBrandComponent === peopleBrandComponent, 'Admin and People Operation
 assert(brandComponent.includes('useTenantBranding') && brandComponent.includes('brand.displayName'), 'Learner web brand lockup must consume resolved tenant branding.');
 assert(tenantBrandingProvider.includes('/api/v1/institution/public/branding/') && tenantBrandingProvider.includes('institution/memberships/me'), 'Tenant branding provider must resolve trusted institution codes and a single learner membership.');
 assert(!/\.style\.setProperty\(['"]--qe-(?:brand-orange|color-)/.test(tenantBrandingProvider), 'Tenant identity resolution must not write palette variables outside the shared theme system.');
-assert(learnerInstitutionsPage.includes('/api/v1/institution/memberships/me') && learnerInstitutionsPage.includes('/api/v1/institution/join'), 'Learner institution self-service must use the authenticated membership and join APIs.');
+assert(!workspaceLayout.includes('/student/institutions') && !workspaceLayout.includes('mySchool'), 'Learner navigation must not expose a school/institution selector; school identity is implicit in the branded app.');
 assert(androidTenantBrand.includes('LocalInstitutionBrandIdentity') && androidTenantBrand.includes('institution.displayName'), 'Android shared brand lockup must render a resolved institution name.');
 assert(androidTenantRepository.includes('/api/v1/institution/public/branding/') && androidTenantRepository.includes('/api/v1/institution/join'), 'Android must resolve public school branding and use the membership join API.');
 assert(androidAppManifest.includes('qe-institution') && androidAppManifest.includes('/institution'), 'Android must declare institution invitation/deep-link entry points.');
