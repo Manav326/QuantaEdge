@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AdminSidebar from '../components/AdminSidebar';
+import { useUiTranslation } from '../i18n/useUiTranslation';
 import styles from './Translations.module.css';
 
 type Row = {
@@ -34,19 +35,19 @@ type Row = {
 type Identity = { role?: string; displayName?: string; permissions?: string[]; staffId?: number };
 type ApiResult<T> = T & { message?: string; detail?: string };
 
-const ENTITY_LABELS: Record<string, string> = {
-  curriculum_class: 'Class name',
-  curriculum_program: 'Curriculum program',
-  curriculum_subject: 'Subject name',
-  curriculum_chapter: 'Chapter',
-  learning_objective: 'Learning objective',
-  lesson: 'Lesson title and summary',
-  lesson_block: 'Teaching block',
-  question: 'Question and options',
-  assessment: 'Test title and description',
-  assessment_question: 'Test question',
-  learning_class_session: 'Live class',
-  recorded_class: 'Recorded class'
+const ENTITY_MESSAGE_KEYS: Record<string, string> = {
+  curriculum_class: 'admin.translations.entity.className',
+  curriculum_program: 'admin.translations.entity.curriculumProgram',
+  curriculum_subject: 'admin.translations.entity.subjectName',
+  curriculum_chapter: 'admin.translations.entity.chapter',
+  learning_objective: 'admin.translations.entity.learningObjective',
+  lesson: 'admin.translations.entity.lesson',
+  lesson_block: 'admin.translations.entity.teachingBlock',
+  question: 'admin.translations.entity.question',
+  assessment: 'admin.translations.entity.assessment',
+  assessment_question: 'admin.translations.entity.assessmentQuestion',
+  learning_class_session: 'admin.translations.entity.liveClass',
+  recorded_class: 'admin.translations.entity.recordedClass',
 };
 const STATUS_OPTIONS = ['ALL', 'DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'REJECTED', 'SUPERSEDED'];
 const ENTITY_OPTIONS = Object.keys(ENTITY_LABELS);
@@ -57,15 +58,15 @@ function pretty(value: unknown) {
   }
   return JSON.stringify(value ?? {}, null, 2);
 }
-function parseJson(value: string) {
+function parseJson(value: string, t: (key: string) => string) {
   try {
     const parsed = JSON.parse(value);
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      throw new Error('Translation content must be a JSON object.');
+      throw new Error(t('admin.translations.invalidObject'));
     }
     return parsed as Record<string, unknown>;
   } catch (error) {
-    if (error instanceof SyntaxError) throw new Error('The translation JSON is invalid. Fix the JSON syntax before saving.');
+    if (error instanceof SyntaxError) throw new Error(t('admin.translations.invalidJsonSyntax'));
     throw error;
   }
 }
@@ -87,13 +88,22 @@ function rowKey(row: Row) { return row.entity_type + ':' + (row.translation_id =
 function hasQualityWarnings(row: Row) {
   return /HUMAN REVIEW REQUIRED|PUBLISHED WITH QUALITY WARNINGS/i.test(row.quality_notes || '');
 }
-function contextLabel(row: Row) {
+function entityLabel(entityType: string, t: (key: string, values?: Record<string, string | number>) => string) {
+  const key = ENTITY_MESSAGE_KEYS[entityType];
+  return key ? t(key) : t('admin.translations.entity.unknown', { entityType });
+}
+function statusLabel(status: string, t: (key: string, values?: Record<string, string | number>) => string) {
+  const normalized = String(status || 'UNKNOWN').toUpperCase();
+  const key = 'admin.translations.status.' + normalized;
+  return t(key);
+}
+function contextLabel(row: Row, t: (key: string, values?: Record<string, string | number>) => string) {
   return [
-    row.class_code ? 'Class ' + row.class_code : '',
-    row.subject_code ? row.subject_code === 'maths' ? 'Mathematics' : row.subject_code === 'science' ? 'Science' : row.subject_code : '',
+    row.class_code ? t('admin.translations.classCode', { code: row.class_code }) : '',
+    row.subject_code ? row.subject_code === 'maths' ? t('admin.translations.subject.maths') : row.subject_code === 'science' ? t('admin.translations.subject.science') : row.subject_code : '',
     row.chapter_name || '',
     row.lesson_title || ''
-  ].filter(Boolean).join(' · ') || (ENTITY_LABELS[row.entity_type] || row.entity_type) + ' #' + row.entity_id;
+  ].filter(Boolean).join(' · ') || entityLabel(row.entity_type, t) + ' #' + row.entity_id;
 }
 function badgeClass(status: string) {
   const classes: Record<string, string> = {
@@ -109,6 +119,7 @@ function badgeClass(status: string) {
 }
 
 export default function TranslationsPage() {
+  const t = useUiTranslation();
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [items, setItems] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
@@ -191,13 +202,13 @@ export default function TranslationsPage() {
       if (sequence === loadSequence.current) {
         setItems([]);
         setTotal(0);
-        setError(e instanceof Error ? e.message : 'Translation review could not be loaded.');
+        setError(e instanceof Error ? e.message : t('admin.translations.loadFailed'));
       }
       return [];
     } finally {
       if (sequence === loadSequence.current) setLoading(false);
     }
-  }, [language, status, entityType, classCode, subjectCode]);
+  }, [language, status, entityType, classCode, subjectCode, t]);
 
   useEffect(() => {
     let active = true;
@@ -235,8 +246,8 @@ export default function TranslationsPage() {
   async function saveDraft() {
     if (!selected || saving || (!canEdit && !canReview)) return;
     let translatedContent: Record<string, unknown>;
-    try { translatedContent = parseJson(editor); }
-    catch (e) { setError(e instanceof Error ? e.message : 'Invalid translation JSON.'); return; }
+    try { translatedContent = parseJson(editor, t); }
+    catch (e) { setError(e instanceof Error ? e.message : t('admin.translations.invalidJson')); return; }
     setSaving(true); setError(''); setNotice('');
     try {
       const isNewSource = selected.translation_id == null;
@@ -248,10 +259,10 @@ export default function TranslationsPage() {
         { method: isNewSource ? 'POST' : 'PATCH', body: JSON.stringify({ translatedContent, qualityNotes }) }
       );
       setNotice(isNewSource
-        ? 'Translation draft created. Student delivery is unchanged until review and publication are complete.'
+        ? t('admin.translations.draftCreated')
         : result.createdNewVersion
-          ? 'Saved as a new draft version. The previously approved or published version is unchanged.'
-          : 'Draft saved. Student delivery is unchanged until review and publication are complete.');
+          ? t('admin.translations.newVersionSaved')
+          : t('admin.translations.draftSaved'));
       const nextItems = await load(selected.translation_id == null ? 0 : offset, false);
       const saved = nextItems.find(row => row.entity_type === selected.entity_type && row.translation_id === result.translationId);
       const savedRow: Row = saved || {
@@ -267,7 +278,7 @@ export default function TranslationsPage() {
       setSelectedKey(rowKey(savedRow));
       setEditor(pretty(savedRow.translated_content_text));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The draft could not be saved.');
+      setError(e instanceof Error ? e.message : t('admin.translations.saveFailed'));
     } finally { setSaving(false); }
   }
   async function changeStatus(next: string) {
@@ -277,16 +288,16 @@ export default function TranslationsPage() {
       await api('/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/status',
         { method: 'PATCH', body: JSON.stringify({ status: next, qualityNotes }) });
       setNotice(next === 'PUBLISHED'
-        ? 'Translation published. The previous published version for this source revision was superseded.'
+        ? t('admin.translations.published')
         : next === 'APPROVED'
-          ? 'Translation approved. It is still not student-visible until it is published.'
+          ? t('admin.translations.approved')
           : next === 'IN_REVIEW'
-            ? 'Translation submitted for review.'
-            : 'Translation status updated.');
+            ? t('admin.translations.submitted')
+            : t('admin.translations.statusUpdated'));
       setSelectedKey('');
       await load(offset, true);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'The translation status could not be changed.');
+      setError(e instanceof Error ? e.message : t('admin.translations.statusChangeFailed'));
     } finally { setSaving(false); }
   }
 
@@ -294,83 +305,83 @@ export default function TranslationsPage() {
   const stale = items.filter(row => row.is_current_revision === false).length;
 
   return <main className={styles.page}>
-    <AdminSidebar active="translations" variant="content" displayName={identity?.displayName || 'Content team'} />
+    <AdminSidebar active="translations" variant="content" displayName={identity?.displayName || t('common.account.staff')} />
     <section className={styles.main}>
       <header className={styles.header}>
         <div>
-          <span className={styles.kicker}>QUANTAEDGE · CONTENT GOVERNANCE</span>
-          <h1>Language & translation review</h1>
-          <p>Review contextual Hindi and English editions without changing the source curriculum or answer keys.</p>
+          <span className={styles.kicker}>{t('admin.translations.eyebrow')}</span>
+          <h1>{t('admin.translations.title')}</h1>
+          <p>{t('admin.translations.description')}</p>
         </div>
-        <Link className={styles.backLink} href="/content">← Content Studio</Link>
+        <Link className={styles.backLink} href="/content">{t('admin.translations.back')}</Link>
       </header>
 
       <div className={styles.statGrid}>
-        <article><span>Matching queue items</span><strong>{total.toLocaleString('en-IN')}</strong><small>Existing translations and sources not yet translated</small></article>
-        <article><span>Awaiting review on this page</span><strong>{pending}</strong><small>IN_REVIEW</small></article>
-        <article><span>Stale source versions on this page</span><strong>{stale}</strong><small>Cannot be approved or published</small></article>
+        <article><span>{t('admin.translations.matchingItems')}</span><strong>{total.toLocaleString('en-IN')}</strong><small>{t('admin.translations.existingAndMissing')}</small></article>
+        <article><span>{t('admin.translations.awaitingReview')}</span><strong>{pending}</strong><small>IN_REVIEW</small></article>
+        <article><span>{t('admin.translations.staleVersions')}</span><strong>{stale}</strong><small>{t('admin.translations.cannotPublishStale')}</small></article>
       </div>
 
-      <section className={styles.filters} aria-label="Translation filters">
-        <label>Target language<select value={language} onChange={e => {setLanguage(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">All languages</option><option value="hi">Hindi · हिन्दी</option><option value="en">English</option></select></label>
-        <label>Workflow status<select value={status} onChange={e => {setStatus(e.target.value);setOffset(0);setSelectedKey('');}}>{STATUS_OPTIONS.map(value => <option value={value} key={value}>{value === 'ALL' ? 'All content & translations' : value.replaceAll('_', ' ')}</option>)}</select></label>
-        <label>Content type<select value={entityType} onChange={e => {setEntityType(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">All content types</option>{ENTITY_OPTIONS.map(value => <option value={value} key={value}>{ENTITY_LABELS[value]}</option>)}</select></label>
-        <label>Class<select value={classCode} onChange={e => {setClassCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">All classes</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
-        <label>Subject<select value={subjectCode} onChange={e => {setSubjectCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
-        <button type="button" className={styles.reset} onClick={() => {setLanguage('ALL');setStatus('ALL');setEntityType('ALL');setClassCode('ALL');setSubjectCode('ALL');setOffset(0);setSelectedKey('');setNotice('');}}>Reset filters</button>
-        <button type="button" className={styles.refresh} onClick={() => void load(0, false)} disabled={loading}>↻ Refresh list</button>
+      <section className={styles.filters} aria-label={t('admin.translations.filters')}>
+        <label>{t('admin.translations.targetLanguage')}<select value={language} onChange={e => {setLanguage(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allLanguages')}</option><option value="hi">Hindi · हिन्दी</option><option value="en">English</option></select></label>
+        <label>{t('admin.translations.workflowStatus')}<select value={status} onChange={e => {setStatus(e.target.value);setOffset(0);setSelectedKey('');}}>{STATUS_OPTIONS.map(value => <option value={value} key={value}>{value === 'ALL' ? t('admin.translations.status.ALL') : statusLabel(value, t)}</option>)}</select></label>
+        <label>{t('admin.translations.contentType')}<select value={entityType} onChange={e => {setEntityType(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allContentTypes')}</option>{ENTITY_OPTIONS.map(value => <option value={value} key={value}>{entityLabel(value, t)}</option>)}</select></label>
+        <label>{t('admin.translations.class')}<select value={classCode} onChange={e => {setClassCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allClasses')}</option><option value="6">{t('admin.translations.classCode', { code: 6 })}</option><option value="7">{t('admin.translations.classCode', { code: 7 })}</option><option value="8">{t('admin.translations.classCode', { code: 8 })}</option></select></label>
+        <label>{t('admin.translations.subject')}<select value={subjectCode} onChange={e => {setSubjectCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allSubjects')}</option><option value="maths">{t('admin.translations.subject.maths')}</option><option value="science">{t('admin.translations.subject.science')}</option></select></label>
+        <button type="button" className={styles.reset} onClick={() => {setLanguage('ALL');setStatus('ALL');setEntityType('ALL');setClassCode('ALL');setSubjectCode('ALL');setOffset(0);setSelectedKey('');setNotice('');}}>{t('admin.translations.resetFilters')}</button>
+        <button type="button" className={styles.refresh} onClick={() => void load(0, false)} disabled={loading}>{t('admin.translations.refreshList')}</button>
       </section>
 
       {(error || notice) && <div className={error ? styles.error : styles.notice} role={error ? 'alert' : 'status'}>{error || notice}</div>}
 
       <div className={styles.workspace}>
         <section className={styles.listPanel}>
-          <div className={styles.panelHeader}><div><h2>Translation queue</h2><p>{total.toLocaleString('en-IN')} matching items</p></div><span role="status" aria-live="polite">{loading ? 'Loading…' : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
+          <div className={styles.panelHeader}><div><h2>{t('admin.translations.queue')}</h2><p>{total.toLocaleString('en-IN')} matching items</p></div><span role="status" aria-live="polite">{loading ? t('admin.translations.loading') : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
           <div className={styles.rows}>
-            {!loading && items.length === 0 && <div className={styles.empty}><strong>No content matches these filters</strong><p>Try another class, subject, language, or reset the filters. Source content is included when no current translation exists.</p></div>}
+            {!loading && items.length === 0 && <div className={styles.empty}><strong>{t('admin.translations.noMatch')}</strong><p>{t('admin.translations.tryFilters')}</p></div>}
             {items.map(row => <button type="button" key={rowKey(row)} className={styles.row + (selectedKey === rowKey(row) ? ' ' + styles.rowSelected : '')} onClick={() => selectRow(row)}>
-              <div className={styles.rowTop}><span className={styles.language}>{row.language === 'hi' ? 'हिन्दी' : 'English'}</span><span className={badgeClass(row.translation_status)}>{row.translation_status.replaceAll('_', ' ')}</span></div>
-              <strong>{ENTITY_LABELS[row.entity_type] || row.entity_type}</strong>
-              <small>{contextLabel(row)}</small>
+              <div className={styles.rowTop}><span className={styles.language}>{row.language === 'hi' ? 'हिन्दी' : 'English'}</span><span className={badgeClass(row.translation_status)}>{statusLabel(row.translation_status, t)}</span></div>
+              <strong>{entityLabel(row.entity_type, t)}</strong>
+              <small>{contextLabel(row, t)}</small>
               <span className={styles.rowMeta}>{row.translation_id == null
-                ? '#' + row.entity_id + ' · Source · no translation yet'
-                : '#' + row.entity_id + ' · v' + row.version_no + ' · ' + (row.translation_method === 'AI' ? 'AI draft' : 'Human edited')}</span>
-              {hasQualityWarnings(row) && <span className={styles.qualityFlag}>QUALITY WARNINGS</span>}
-              {row.is_current_revision === false && <span className={styles.staleFlag}>Source has changed</span>}
+                ? '#' + row.entity_id + ' · ' + t('admin.translations.sourceNoTranslation')
+                : '#' + row.entity_id + ' · v' + row.version_no + ' · ' + (row.translation_method === 'AI' ? t('admin.translations.aiDraft') : t('admin.translations.humanEdited'))}</span>
+              {hasQualityWarnings(row) && <span className={styles.qualityFlag}>{t('admin.translations.qualityWarnings')}</span>}
+              {row.is_current_revision === false && <span className={styles.staleFlag}>{t('admin.translations.sourceChanged')}</span>}
             </button>)}
           </div>
           <footer className={styles.pager}>
-            <button type="button" onClick={() => void load(Math.max(0, offset - pageSize), false)} disabled={offset === 0 || loading}>← Previous</button>
+            <button type="button" onClick={() => void load(Math.max(0, offset - pageSize), false)} disabled={offset === 0 || loading}>{t('admin.translations.previous')}</button>
             <span>{total ? Math.floor(offset / pageSize) + 1 + ' / ' + Math.ceil(total / pageSize) : '0 / 0'}</span>
-            <button type="button" onClick={() => void load(offset + pageSize, false)} disabled={offset + pageSize >= total || loading}>Next →</button>
+            <button type="button" onClick={() => void load(offset + pageSize, false)} disabled={offset + pageSize >= total || loading}>{t('admin.translations.next')}</button>
           </footer>
         </section>
 
         <section className={styles.editorPanel}>
-          {!selected ? <div className={styles.editorEmpty}><span>文 / Aa</span><h2>Select a translation</h2><p>Source content and translation JSON will appear here. Save creates or updates a draft; only reviewed and published versions reach students.</p></div> : <>
+          {!selected ? <div className={styles.editorEmpty}><span>文 / Aa</span><h2>{t('admin.translations.selectTranslation')}</h2><p>{t('admin.translations.editorEmpty')}</p></div> : <>
             <div className={styles.editorHeader}>
-              <div><span className={styles.kicker}>{selected.language === 'hi' ? 'HINDI · हिन्दी' : 'ENGLISH'} / VERSION {selected.version_no}</span><h2>{ENTITY_LABELS[selected.entity_type] || selected.entity_type}</h2><p>{contextLabel(selected)} · entity #{selected.entity_id}</p></div>
-              <span className={badgeClass(selected.translation_status)}>{selected.translation_status.replaceAll('_', ' ')}</span>
+              <div><span className={styles.kicker}>{selected.language === 'hi' ? t('admin.translations.hindiDevanagari') : t('common.language.english')} / {t('admin.translations.version', { version: selected.version_no })}</span><h2>{ENTITY_LABELS[selected.entity_type] || selected.entity_type}</h2><p>{contextLabel(selected, t)} · entity #{selected.entity_id}</p></div>
+              <span className={badgeClass(selected.translation_status)}>{statusLabel(selected.translation_status, t)}</span>
             </div>
-            {selected.is_current_revision === false && <div className={styles.error}>This translation targets an older source revision. It cannot be approved or published; regenerate it for the current source.</div>}
-            {hasQualityWarnings(selected) && <div className={styles.qualityWarning}><strong>Quality warning flag</strong> This translation has known quality issues and is published or queued for publication with warnings. Keep the reviewer notes and schedule a correction before treating it as fully verified.</div>}
-            <div className={styles.revisionMeta}><span><b>Source revision</b><code>{selected.source_hash}</code></span><span><b>Model / method</b><code>{selected.model_name || selected.translation_method || 'Imported'}</code></span></div>
+            {selected.is_current_revision === false && <div className={styles.error}>{t('admin.translations.olderSource')}</div>}
+            {hasQualityWarnings(selected) && <div className={styles.qualityWarning}><strong>{t('admin.translations.qualityWarningFlag')}</strong> {t('admin.translations.qualityWarningText')}</div>}
+            <div className={styles.revisionMeta}><span><b>{t('admin.translations.sourceRevision')}</b><code>{selected.source_hash}</code></span><span><b>{t('admin.translations.modelMethod')}</b><code>{selected.model_name || selected.translation_method || t('admin.translations.imported')}</code></span></div>
             <div className={styles.jsonGrid}>
-              <label><span>Original source (read-only)</span><textarea readOnly value={pretty(selected.source_content_text)} spellCheck={false} /></label>
-              <label><span>Translated version (editable JSON)</span><textarea value={editor} onChange={e => setEditor(e.target.value)} disabled={saving || (!canEdit && !canReview)} spellCheck={false} /></label>
+              <label><span>{t('admin.translations.sourceReadOnly')}</span><textarea readOnly value={pretty(selected.source_content_text)} spellCheck={false} /></label>
+              <label><span>{t('admin.translations.translatedEditable')}</span><textarea value={editor} onChange={e => setEditor(e.target.value)} disabled={saving || (!canEdit && !canReview)} spellCheck={false} /></label>
             </div>
-            <label className={styles.notes}><span>Reviewer notes / quality observations</span><textarea value={qualityNotes} maxLength={2000} onChange={e => setQualityNotes(e.target.value)} placeholder="Terminology, mathematics, grammar, missing labels, source alignment…" disabled={saving || (!canEdit && !canReview)} rows={3}/></label>
-            {selected.translation_id == null && <div className={styles.notice}><strong>Translation not started</strong> This is the original source content. Edit the right-hand JSON in {selected.language === 'hi' ? 'Hindi (Devanagari)' : 'English'} and save it as a draft. It will not be shown to students until approved and published.</div>}
-            <div className={styles.workflowHint}><strong>Safe publication path</strong><span>Save draft → Submit for review → Approve → Publish. Publishing is blocked for stale source revisions, invalid structure or missing reviewer/publisher metadata.</span></div>
+            <label className={styles.notes}><span>{t('admin.translations.reviewerNotes')}</span><textarea value={qualityNotes} maxLength={2000} onChange={e => setQualityNotes(e.target.value)} placeholder={t("admin.translations.notesPlaceholder")} disabled={saving || (!canEdit && !canReview)} rows={3}/></label>
+            {selected.translation_id == null && <div className={styles.notice}><strong>{t('admin.translations.notStarted')}</strong> This is the original source content. {t('admin.translations.sourceContentOnly', { language: selected.language === 'hi' ? t('admin.translations.hindiDevanagari') : t('common.language.english') })}</div>}
+            <div className={styles.workflowHint}><strong>{t('admin.translations.safePublicationPath')}</strong><span>{t('admin.translations.workflowDescription')}</span></div>
             <div className={styles.actions}>
-              <button type="button" onClick={() => void saveDraft()} disabled={saving || (!canEdit && !canReview) || selected.is_current_revision === false}>{saving ? 'Saving…' : 'Save draft'}</button>
-              {['DRAFT', 'REJECTED'].includes(selected.translation_status) && canSubmit && <button type="button" className={styles.secondary} onClick={() => void changeStatus('IN_REVIEW')} disabled={saving || selected.is_current_revision === false}>Submit for review</button>}
+              <button type="button" onClick={() => void saveDraft()} disabled={saving || (!canEdit && !canReview) || selected.is_current_revision === false}>{saving ? t('admin.translations.saving') : t('admin.translations.saveDraft')}</button>
+              {['DRAFT', 'REJECTED'].includes(selected.translation_status) && canSubmit && <button type="button" className={styles.secondary} onClick={() => void changeStatus('IN_REVIEW')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.submitReview')}</button>}
               {selected.translation_status === 'IN_REVIEW' && canReview && <>
-                <button type="button" className={styles.secondary} onClick={() => void changeStatus('REJECTED')} disabled={saving || selected.is_current_revision === false}>Reject with notes</button>
-                <button type="button" onClick={() => void changeStatus('APPROVED')} disabled={saving || selected.is_current_revision === false}>Approve</button>
+                <button type="button" className={styles.secondary} onClick={() => void changeStatus('REJECTED')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.rejectNotes')}</button>
+                <button type="button" onClick={() => void changeStatus('APPROVED')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.approve')}</button>
               </>}
-              {selected.translation_status === 'APPROVED' && canPublish && <button type="button" onClick={() => void changeStatus('PUBLISHED')} disabled={saving || selected.is_current_revision === false}>Publish translation</button>}
-              {selected.translation_status === 'PUBLISHED' && <span className={styles.publishedNote}>Live translation · save edits as a new draft version.</span>}
+              {selected.translation_status === 'APPROVED' && canPublish && <button type="button" onClick={() => void changeStatus('PUBLISHED')} disabled={saving || selected.is_current_revision === false}{t('admin.translations.publish')}</button>}
+              {selected.translation_status === 'PUBLISHED' && <span className={styles.publishedNote}>{t('admin.translations.liveNote')}</span>}
             </div>
           </>}
         </section>
