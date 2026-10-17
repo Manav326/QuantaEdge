@@ -15,7 +15,7 @@ type Entitlement = { program_id: number; code: string; display_name: string; ent
 type Admin = { id: number; username: string; display_name: string; active: boolean; must_change_password: boolean; last_login_at?: string | null };
 type Detail = Institution & {
   brand_display_name?: string | null; logo_asset_key?: string | null; app_icon_asset_key?: string | null;
-  store_listing_url?: string | null; themeTokens?: Record<string,string>; contract_id?: number | null; currency?: string;
+  store_listing_url?: string | null; logo_url?: string | null; app_icon_url?: string | null; themeTokens?: Record<string,string>; contract_id?: number | null; currency?: string;
   unit_price_paise?: number; billing_cadence?: string; effective_from?: string; effective_until?: string | null;
   admins?: Admin[]; courses?: Entitlement[];
 };
@@ -141,10 +141,30 @@ export default function InstitutionsAdminPage() {
   async function saveBranding(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/branding',{method:'PUT',body:JSON.stringify({
-      displayName:brand.displayName,logoAssetKey:brand.logoAssetKey,appIconAssetKey:brand.appIconAssetKey,storeListingUrl:brand.storeListingUrl,
+      displayName:brand.displayName,storeListingUrl:brand.storeListingUrl,
       themeTokens:{schemaVersion:2,presetId:brand.presetId,appearance:brand.appearance,brandPrimary:brand.primary,brandAccent:brand.accent},
     })});setNotice('Tenant branding settings saved.');await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Branding could not be saved.');}finally{setSaving(false);}
+  }
+  async function uploadBrandAsset(assetType:'logo'|'app-icon',file:File){
+    if(!detail)return;
+    if(!['image/png','image/jpeg'].includes(file.type)){setError('Choose a PNG or JPEG image. SVG and animated formats are not accepted.');return;}
+    if(file.size>2*1024*1024){setError('Branding images must be 2 MiB or smaller.');return;}
+    setSaving(true);setError('');setNotice('');
+    try{
+      const form=new FormData();form.set('file',file);
+      const headers=new Headers({'X-QE-Workspace':'HRMS','Accept':'application/json'});
+      const response=await fetch('/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,{
+        method:'POST',body:form,headers,credentials:'same-origin',cache:'no-store',
+      });
+      const raw=await response.text();
+      let data:any={};
+      try{data=raw?JSON.parse(raw):{};}catch{data={message:raw};}
+      if(!response.ok)throw new Error(String(data.message||data.detail||data.error||'Image upload failed ('+response.status+')'));
+      setNotice(assetType==='logo'?'School logo uploaded and versioned.':'School app icon uploaded and versioned.');
+      await loadDetail(detail.id);
+    }catch(e){setError(e instanceof Error?e.message:'Branding image could not be uploaded.');}
+    finally{setSaving(false);}
   }
   async function saveBilling(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
@@ -223,10 +243,12 @@ export default function InstitutionsAdminPage() {
           <section className={styles.panel}><div className={styles.panelHeading}><div><h3>Institution administrators</h3><p>Only platform owner can create or suspend client admins.</p></div><button className={styles.secondary} onClick={()=>setShowAdmin(v=>!v)}>{showAdmin?'Cancel':'＋ Add admin'}</button></div>
             {showAdmin?<form className={styles.form} onSubmit={createAdmin}><label>Username *<input required minLength={3} maxLength={64} value={admin.username} onChange={e=>setAdmin(v=>({...v,username:e.target.value}))}/></label><label>Full name *<input required minLength={2} maxLength={120} value={admin.displayName} onChange={e=>setAdmin(v=>({...v,displayName:e.target.value}))}/></label><label>Temporary password *<input required type="password" minLength={12} maxLength={72} value={admin.initialPassword} onChange={e=>setAdmin(v=>({...v,initialPassword:e.target.value}))}/></label><div className={styles.formActions}><button className={styles.primary} disabled={saving}>Provision admin</button></div></form>:null}
             <div className={styles.list}>{(detail.admins||[]).map(a=><div className={styles.listItem} key={a.id}><span className={styles.avatar}>{a.display_name.slice(0,1).toUpperCase()}</span><span className={styles.listCopy}><strong>{a.display_name}</strong><small>@{a.username} · {a.must_change_password?'initial password not changed':'password set'}</small><small>Last sign-in: {fmt(a.last_login_at)}</small></span><button className={styles.secondary} disabled={saving} onClick={()=>void toggleAdmin(a)}>{a.active?'Suspend':'Activate'}</button></div>)}</div></section>
-          <section className={styles.panel}><h3>White-label branding</h3><p>Tenant-specific settings. Asset keys must reference approved private storage; entering a key does not upload a file.</p><form className={styles.form} onSubmit={saveBranding}>
+          <section className={styles.panel}><h3>White-label branding</h3><p>School identity shown in learner-facing web and in-app surfaces. Uploads accept PNG/JPEG images up to 2 MiB; assets are validated and scoped to this institution.</p><form className={styles.form} onSubmit={saveBranding}>
             <label>Branded display name *<input required minLength={2} maxLength={180} value={brand.displayName} onChange={e=>setBrand(v=>({...v,displayName:e.target.value}))}/></label>
-            <label>Logo storage key<input maxLength={500} value={brand.logoAssetKey} onChange={e=>setBrand(v=>({...v,logoAssetKey:e.target.value}))} placeholder="institution-assets/logo.png"/></label>
-            <label>Launcher icon storage key<input maxLength={500} value={brand.appIconAssetKey} onChange={e=>setBrand(v=>({...v,appIconAssetKey:e.target.value}))} placeholder="institution-assets/icon.png"/></label>
+            <label>School logo (PNG/JPEG, max 2 MiB)<input type="file" accept="image/png,image/jpeg" disabled={saving} onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void uploadBrandAsset('logo',file);}}/></label>
+            {detail.logo_url?<div className={styles.brandAssetPreview}><span>Current learner logo</span><img src={detail.logo_url} alt={detail.brand_display_name||detail.display_name+' logo'}/></div>:<p className={styles.disclaimer}>No school logo uploaded yet. A school initial will be used until a logo is provided.</p>}
+            <label>App icon (PNG/JPEG, max 2 MiB)<input type="file" accept="image/png,image/jpeg" disabled={saving} onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void uploadBrandAsset('app-icon',file);}}/></label>
+            {detail.app_icon_url?<div className={styles.brandAssetPreview}><span>Current browser/app icon asset</span><img src={detail.app_icon_url} alt={detail.brand_display_name||detail.display_name+' app icon'}/></div>:null}
             <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>
             <div className={styles.themeSettingsGrid}>
               <label>Palette preset<select value={brand.presetId} onChange={e=>{const id=e.target.value;const preset=themePresets.find(item=>item.id===id);setBrand(v=>({...v,presetId:id,...(id!=='custom'&&preset?{primary:preset.primary,accent:preset.accent}:{})}));}}>
@@ -250,7 +272,7 @@ export default function InstitutionsAdminPage() {
             </div>
             <p className={styles.disclaimer}>Saving generates a versioned light and dark semantic palette for web and Android. Text colours are contrast-adjusted centrally; fixed brand artwork remains unchanged.</p>
             <div className={styles.formActions}><button className={styles.primary} disabled={saving}>Save branding</button></div>
-            <p className={styles.disclaimer}>Google Play custom listings do not by themselves change the installed APK launcher icon. Asset storage, student brand switching and Android launcher alias tests remain separate delivery tasks.</p>
+            <p className={styles.disclaimer}>Google Play custom listings do not by themselves change the installed APK launcher icon. Web and in-app assets are served per tenant; native launcher-name/icon variants still require the Android packaging and device verification gate.</p>
           </form></section>
           <section className={styles.panel}><h3>Enrollment billing contract</h3><p>Rates are owner-controlled. Billable activation events are recorded server-side; do not issue invoices until reconciliation is finished.</p><div className={styles.billingBox}><span>Recorded charge total this period</span><strong>{rupees(institutions.find(i=>i.id===detail.id)?.current_period_amount_paise,detail.contract_currency)}</strong><small>{institutions.find(i=>i.id===detail.id)?.current_period_billable_events||0} membership charge event(s) in the list snapshot</small></div>
             <form className={styles.form} onSubmit={saveBilling}><label>Billing currency<input required value="INR" readOnly aria-readonly="true"/><small>Currently supported: INR, stored in paise.</small></label><label>Price per billed enrollment*<input required type="number" min="0" step="0.01" value={billing.unitPriceRupees} onChange={e=>setBilling(v=>({...v,unitPriceRupees:e.target.value}))}/></label><label>Cadence<select value={billing.billingCadence} onChange={e=>setBilling(v=>({...v,billingCadence:e.target.value}))}><option value="MONTHLY">Monthly</option><option value="ANNUAL">Annual</option></select></label><label>Effective from*<input required type="date" value={billing.effectiveFrom} onChange={e=>setBilling(v=>({...v,effectiveFrom:e.target.value}))}/></label><label>End date<input type="date" value={billing.effectiveUntil} onChange={e=>setBilling(v=>({...v,effectiveUntil:e.target.value}))}/></label><div className={styles.formActions}><button className={styles.primary} disabled={saving}>Save contract</button><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void rotateCode()}>Issue / rotate join code</button><button type="button" className={styles.secondary} disabled={saving||!detail.contract_id} title={!detail.contract_id?'Configure and save an active billing contract first':undefined} onClick={()=>void reconcileBilling()}>Reconcile current period</button></div></form>
