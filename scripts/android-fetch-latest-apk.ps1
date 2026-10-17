@@ -97,7 +97,7 @@ try {
         throw "GitHub CLI is not authenticated. Run 'gh auth login'. Details: $($auth -join ' ')"
     }
 
-    Write-Status ("Finding the newest completed CI run from source branch '{0}' that contains the APK..." -f $Branch) "Cyan"
+    Write-Status ("Finding the newest available APK artifact from source branch '{0}'..." -f $Branch) "Cyan"
     $runsRaw = & gh run list --repo $Repository --branch $Branch --workflow "ci.yml" --limit 100 --json databaseId,workflowName,createdAt,headSha,headBranch,status,conclusion 2>&1
     $runsExitCode = $LASTEXITCODE
     if ($runsExitCode -ne 0) {
@@ -117,12 +117,12 @@ try {
     $candidates = @($runs | Where-Object {
         $_.workflowName -eq "QuantaEdge Build and Publish" -and
         $_.headBranch -eq $Branch -and
-        $_.status -eq "completed" -and
+        ($_.status -eq "completed" -or $_.status -eq "in_progress") -and
         $_.headSha -match '^[0-9a-f]{40}$'
     } | Sort-Object createdAt -Descending)
 
     if ($candidates.Count -eq 0) {
-        throw "No completed Android CI runs were found for source branch '$Branch'. Open GitHub Actions, ensure the main-branch Android build has run, then try again."
+        throw "No recent Android CI runs were found for source branch '$Branch'. Open GitHub Actions, ensure the main-branch Android build has run, then try again."
     }
 
     $downloadedApk = $null
