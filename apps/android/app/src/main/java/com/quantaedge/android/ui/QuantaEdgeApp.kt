@@ -567,14 +567,15 @@ fun QuantaEdgeApp() {
         val gathered = mutableListOf<JSONObject>()
         var anyRequestFailed = false
         for (subjectCode in subjects) {
+            val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
             val liveResponse = runCatching {
-                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode))
+                ApiClient.getObject("/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery)
                     .optJSONArray("items").objectItems()
             }
             if (liveResponse.isFailure) anyRequestFailed = true
             gathered.addAll(liveResponse.getOrDefault(emptyList()))
             val recordedResponse = runCatching {
-                ApiClient.getObject("/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode))
+                ApiClient.getObject("/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery)
                     .optJSONArray("items").objectItems()
             }
             if (recordedResponse.isFailure) anyRequestFailed = true
@@ -1285,11 +1286,12 @@ fun QuantaEdgeApp() {
         offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
         route = AppRoute.CLASSES
         runTask {
+            val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
             liveClasses = ApiClient.getObject(
-                "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
+                "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
             ).optJSONArray("items").objectItems()
             val onlineRows = ApiClient.getObject(
-                "/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
+                "/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
             ).optJSONArray("items").objectItems()
             val localRows = offlineVideoStore.downloadedRecordings()
             val localById = localRows.associateBy { it.longAny("recorded_class_id", "recordingId", "id") }
