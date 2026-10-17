@@ -15,6 +15,7 @@ export type TenantBrand = {
   appIconAssetKey?: string | null;
   /** Only a same-origin, approved asset-serving endpoint is accepted for rendering. */
   logoUrl?: string | null;
+  appIconUrl?: string | null;
   storeListingUrl?: string | null;
   brandingVersion?: number;
   themeTokens?: Record<string, unknown>;
@@ -84,7 +85,12 @@ function updateTenantTheme(brand: TenantBrand | null) {
   // Uploaded image keys are not URLs: only an explicit same-origin asset URL is eligible.
   const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
   if (icon) {
-    if (brand && title) {
+    const approvedAppIcon = brand?.appIconUrl && isApprovedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon')
+      ? brand.appIconUrl
+      : null;
+    if (approvedAppIcon) {
+      icon.href = approvedAppIcon;
+    } else if (brand && title) {
       const color = primary || '#F97316';
       const letter = title.slice(0, 1).replace(/[<>&"]/g, '');
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${color}"/><text x="32" y="43" font-size="38" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#ffffff">${letter}</text></svg>`;
@@ -93,6 +99,168 @@ function updateTenantTheme(brand: TenantBrand | null) {
       icon.href = '/favicon.svg';
     }
   }
+}
+
+function isApprovedAssetUrl(url: string, code: string, type: 'logo' | 'app-icon'): boolean {
+  const escapedCode = code.replace(/[.*+?^${}()|[\]\\]/g, '\\async function fetchTenantBrand(code: string): Promise<TenantBrand> {');
+  return new RegExp('^/api/v1/institution/public/branding/' + escapedCode + '/assets/' + type + '\\?v=\\d+
+  const response = await fetch(`/api/v1/institution/public/branding/${encodeURIComponent(code)}`, {
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: { 'X-QE-Workspace': 'INSTITUTION' },
+  });
+  const body = await response.json().catch(() => ({})) as Partial<TenantBrand> & { message?: string; detail?: string };
+  if (!response.ok) throw new Error(body.message || body.detail || 'School branding is unavailable.');
+  if (normalizedCode(body.institutionCode) !== code || typeof body.displayName !== 'string' || !body.displayName.trim()) {
+    throw new Error('The school branding response is incomplete.');
+  }
+  // The API currently returns an asset key rather than a public URL. Never treat that
+  // key as a URL; the initials fallback remains until the approved asset route exists.
+  const logoUrl = typeof body.logoUrl === 'string' && isApprovedAssetUrl(body.logoUrl, code, 'logo')
+    ? body.logoUrl
+    : null;
+  const appIconUrl = typeof body.appIconUrl === 'string' && isApprovedAssetUrl(body.appIconUrl, code, 'app-icon')
+    ? body.appIconUrl
+    : null;
+  return { ...body, institutionCode: code, displayName: body.displayName.trim(), logoUrl, appIconUrl };
+}
+
+function codeFromCurrentUrl(): string | null {
+  const query = new URLSearchParams(window.location.search);
+  return normalizedCode(
+    query.get('institution') || query.get('institutionCode') ||
+    query.get('institution_code') || query.get('tenant')
+  );
+}
+
+function readSessionCode(): string | null {
+  try { return normalizedCode(window.sessionStorage.getItem(BRAND_SESSION_KEY)); }
+  catch { return null; }
+}
+
+function saveSessionCode(code: string | null) {
+  try {
+    if (code) window.sessionStorage.setItem(BRAND_SESSION_KEY, code);
+    else window.sessionStorage.removeItem(BRAND_SESSION_KEY);
+  } catch {
+    // Branding is not an authentication control; storage denial falls back to this page only.
+  }
+}
+
+export function TenantBrandingProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const [brand, setBrand] = useState<TenantBrand | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
+
+  async function resolveInstitutionCode(input: string): Promise<boolean> {
+    const code = normalizedCode(input);
+    if (!code) return false;
+    setIsResolving(true);
+    try {
+      const next = await fetchTenantBrand(code);
+      setBrand(next);
+      saveSessionCode(code);
+      updateTenantTheme(next);
+      return true;
+    } catch {
+      setBrand(null);
+      updateTenantTheme(null);
+      return false;
+    } finally {
+      setIsResolving(false);
+    }
+  }
+
+  function clearTenantBrand() {
+    saveSessionCode(null);
+    setBrand(null);
+    updateTenantTheme(null);
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+    const run = async () => {
+      const urlCode = codeFromCurrentUrl();
+      const candidate = urlCode || readSessionCode();
+      if (candidate) {
+        setIsResolving(true);
+        try {
+          const next = await fetchTenantBrand(candidate);
+          if (cancelled) return;
+          setBrand(next);
+          saveSessionCode(candidate);
+          updateTenantTheme(next);
+          return;
+        } catch {
+          if (cancelled) return;
+          if (urlCode) saveSessionCode(null);
+          setBrand(null);
+          updateTenantTheme(null);
+        } finally {
+          if (!cancelled) setIsResolving(false);
+        }
+        return;
+      }
+
+      // Existing learner identities can automatically resolve branding when they have
+      // exactly one active institution membership. Multiple memberships require an
+      // explicit institution link so one school's branding is never guessed.
+      if (pathname.startsWith('/student')) {
+        try {
+          const response = await fetch('/api/v1/institution/memberships/me', {
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'X-QE-Workspace': 'STUDENT' },
+          });
+          if (response.ok) {
+            const body = await response.json() as { institutions?: Array<{
+              tenant_code?: string; institution_status?: string; membership_status?: string;
+            }> };
+            const active = (body.institutions || []).filter(item =>
+              item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE');
+            if (active.length === 1 && active[0].tenant_code) {
+              const next = await fetchTenantBrand(active[0].tenant_code);
+              if (cancelled) return;
+              setBrand(next);
+              saveSessionCode(next.institutionCode);
+              updateTenantTheme(next);
+              return;
+            }
+          }
+        } catch {
+          // Membership lookup is best-effort; it must not block ordinary learner access.
+        }
+      }
+      if (!cancelled) {
+        setBrand(null);
+        updateTenantTheme(null);
+      }
+    };
+    void run();
+    return () => { cancelled = true; };
+  }, [pathname]);
+
+  return <TenantBrandingContext.Provider value={{ brand, isResolving, resolveInstitutionCode, clearTenantBrand }}>{children}</TenantBrandingContext.Provider>;
+}
+
+export function useTenantBranding() {
+  return useContext(TenantBrandingContext);
+}
+
+export function TenantBrandMark({ className = '' }: { className?: string }) {
+  const { brand } = useTenantBranding();
+  const title = brand?.displayName?.trim();
+  const logoUrl = brand?.logoUrl && isApprovedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo')
+    ? brand.logoUrl
+    : null;
+  if (brand) {
+    return logoUrl
+      ? <img className={className} src={logoUrl} alt="" aria-hidden="true" />
+      : <span className={className} role="img" aria-label={title || 'School'}>{(title || 'S').slice(0, 1).toLocaleUpperCase()}</span>;
+  }
+  return <img className={className} src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" />;
+}
+).test(url);
 }
 
 async function fetchTenantBrand(code: string): Promise<TenantBrand> {
