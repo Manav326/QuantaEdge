@@ -345,7 +345,10 @@ fun TutorScreen(
     onNewChat: () -> Unit,
     onMinimize: () -> Unit,
     onRetry: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier.fillMaxSize(),
+    headerDragModifier: Modifier = Modifier,
+    onMaximize: () -> Unit = {}
 ) {
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -383,11 +386,11 @@ fun TutorScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(58.dp)
+            modifier = Modifier.fillMaxWidth().height(58.dp).then(headerDragModifier)
                 .background(Color(0xFF151B2C)).padding(horizontal = 11.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -430,6 +433,15 @@ fun TutorScreen(
             ) {
                 IconButton(onClick = onMinimize, modifier = Modifier.size(35.dp)) {
                     Text("−", color = Color.White, fontSize = 23.sp, lineHeight = 23.sp)
+                }
+            }
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = { PlainTooltip { Text(t("Maximize or restore tutor", "ट्यूटर बड़ा करें या पहले जैसा करें")) } },
+                state = rememberTooltipState()
+            ) {
+                IconButton(onClick = onMaximize, modifier = Modifier.size(35.dp)) {
+                    Text("□", color = Color.White, fontSize = 19.sp, lineHeight = 23.sp)
                 }
             }
             TooltipBox(
