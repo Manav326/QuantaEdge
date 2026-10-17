@@ -58,6 +58,14 @@ internal fun parseLiveClassTimestampMillis(value: String): Long? {
     }
 }
 
+internal fun formatLiveClassTimestamp(value: String, language: String): String {
+    val millis = parseLiveClassTimestampMillis(value) ?: return ""
+    val locale = if (language == "hi") Locale.forLanguageTag("hi-IN") else Locale.ENGLISH
+    val formatter = java.time.format.DateTimeFormatter.ofPattern("EEE dd MMM yyyy, h:mm a", locale)
+        .withZone(ZoneId.systemDefault())
+    return formatter.format(Instant.ofEpochMilli(millis))
+}
+
 internal fun isLiveClassJoinWindowOpen(
     status: String, startsAt: String, endsAt: String, joinWindowMinutes: Int, nowMillis: Long
 ): Boolean {
@@ -166,7 +174,9 @@ fun LearningClassesScreen(
                                 style = MaterialTheme.typography.bodyMedium)
                             Text(localizedUiText("शिक्षक: ") + item.textAny("host_staff_name").ifBlank { "QuantaEdge शिक्षक" },
                                 style = MaterialTheme.typography.bodySmall)
-                            Text(item.textAny("starts_at") + if (item.textAny("ends_at").isNotBlank()) " – " + item.textAny("ends_at") else "",
+                            val startLabel = formatLiveClassTimestamp(item.textAny("starts_at", "startsAt"), language)
+                            val endLabel = formatLiveClassTimestamp(item.textAny("ends_at", "endsAt"), language)
+                            Text(listOf(startLabel, endLabel).filter { it.isNotBlank() }.joinToString(" – "),
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                             Text(localizedUiText("Attendance: ") + (item.optLongAny("attended_seconds") / 60) + " मिनट • जुड़ने की संख्या: " + item.optInt("join_count"),
                                 style = MaterialTheme.typography.bodySmall)
