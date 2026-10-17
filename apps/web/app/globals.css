@@ -560,6 +560,30 @@ html[data-qe-appearance="dark"] .parent-card{
 .lesson-visual-embed { background: var(--qe-color-nav-background); }
 
 
+
+
+/* Close high-specificity legacy selectors that otherwise override the semantic tutor surface. */
+.tutor-head.tutor-head--compact {
+  background: linear-gradient(180deg, var(--qe-color-primary-container), var(--qe-color-surface));
+  color: var(--qe-color-on-surface);
+  border-bottom-color: var(--qe-color-border-subtle);
+}
+.tutor-head-title,
+.tutor-head .tutor-head-title,
+.tutor-heading-copy>strong {
+  color: var(--qe-color-on-surface);
+}
+.tutor-welcome strong { color: var(--qe-color-text); }
+.tutor-language-indicator {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+.tutor-table-wrap { border-color: var(--qe-color-border-subtle); }
+.parent-report-switcher__profile.is-current {
+  box-shadow: inset 0 0 0 1px var(--qe-color-primary-container);
+}
+
 /* Final interaction-state coverage for tenant learner dark/light palettes. */
 .tutor-load-older {
   border-color: var(--qe-color-border-subtle);
