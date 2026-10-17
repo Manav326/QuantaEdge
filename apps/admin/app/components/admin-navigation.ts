@@ -1,3 +1,5 @@
+import { translateUi, type MessageKey } from '../i18n/catalog';
+
 export type AdminSection =
   | 'overview'
   | 'content'
@@ -14,76 +16,46 @@ export type AdminSection =
   | 'certificates';
 
 export type AdminLocale = 'english' | 'hinglish';
+export type AdminNavItem = { key: AdminSection; href: string; icon: string };
+export type AdminNavGroup = { id: 'curriculum' | 'teaching' | 'people' | 'administration'; items: AdminNavItem[] };
 
-export type AdminNavItem = {
-  key: AdminSection;
-  href: string;
-  icon: string;
-  english: string;
-  hinglish: string;
-  shortEnglish: string;
-  shortHinglish: string;
-};
-
-export type AdminNavGroup = {
-  id: 'curriculum' | 'teaching' | 'people' | 'administration';
-  english: string;
-  hinglish: string;
-  items: AdminNavItem[];
-};
-
-export const ADMIN_OVERVIEW_ITEM: AdminNavItem = {
-  key: 'overview',
-  href: '/',
-  icon: '▦',
-  english: 'Overview',
-  hinglish: 'Overview',
-  shortEnglish: 'Home',
-  shortHinglish: 'Home',
-};
-
+export const ADMIN_OVERVIEW_ITEM: AdminNavItem = { key: 'overview', href: '/', icon: '▦' };
 export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
-  {
-    id: 'curriculum',
-    english: 'Curriculum & Content',
-    hinglish: 'पाठ्यक्रम और सामग्री',
-    items: [
-      { key: 'content', href: '/content', icon: '◈', english: 'Content Studio', hinglish: 'Content Studio', shortEnglish: 'Content', shortHinglish: 'Content' },
-      { key: 'resources', href: '/resources', icon: '▤', english: 'Textbook library', hinglish: 'Textbook library', shortEnglish: 'Books', shortHinglish: 'Books' },
-      { key: 'sources', href: '/source-ingestion', icon: '⇣', english: 'Source ingestion', hinglish: 'Source जोड़ें', shortEnglish: 'Sources', shortHinglish: 'Sources' },
-      { key: 'translations', href: '/translations', icon: '文', english: 'Language review', hinglish: 'भाषा अनुवाद समीक्षा', shortEnglish: 'Language', shortHinglish: 'भाषा' },
-      { key: 'questions', href: '/questions', icon: '✓', english: 'Question review', hinglish: 'MCQ समीक्षा', shortEnglish: 'Questions', shortHinglish: 'MCQ' },
-    ],
-  },
-  {
-    id: 'teaching',
-    english: 'Teaching & Assessment',
-    hinglish: 'शिक्षण और मूल्यांकन',
-    items: [
-      { key: 'assessments', href: '/assessments', icon: '✓', english: 'Tests & grading', hinglish: 'Tests & grading', shortEnglish: 'Tests', shortHinglish: 'Tests' },
-      { key: 'classes', href: '/classes', icon: '◷', english: 'Live & recorded classes', hinglish: 'Live & recorded classes', shortEnglish: 'Classes', shortHinglish: 'Classes' },
-    ],
-  },
-  {
-    id: 'people',
-    english: 'People',
-    hinglish: 'लोग',
-    items: [
-      { key: 'students', href: '/students', icon: '◉', english: 'Students', hinglish: 'Students', shortEnglish: 'Students', shortHinglish: 'Students' },
-      { key: 'parents', href: '/parents', icon: '♧', english: 'Parents & families', hinglish: 'Parents & families', shortEnglish: 'Families', shortHinglish: 'Families' },
-      { key: 'lifecycle', href: '/account-lifecycle', icon: '✓', english: 'Account lifecycle', hinglish: 'Account lifecycle', shortEnglish: 'Lifecycle', shortHinglish: 'Lifecycle' },
-    ],
-  },
-  {
-    id: 'administration',
-    english: 'Administration & Audit',
-    hinglish: 'प्रशासन और ऑडिट',
-    items: [
-      { key: 'staff', href: '/employees', icon: '♙', english: 'Staff & audit', hinglish: 'Staff & audit', shortEnglish: 'Staff', shortHinglish: 'Staff' },
-      { key: 'certificates', href: '/certificates', icon: '▧', english: 'Certificates', hinglish: 'प्रमाणपत्र', shortEnglish: 'Certificates', shortHinglish: 'प्रमाणपत्र' },
-    ],
-  },
+  { id: 'curriculum', items: [
+    { key: 'content', href: '/content', icon: '◈' }, { key: 'resources', href: '/resources', icon: '▤' },
+    { key: 'sources', href: '/source-ingestion', icon: '⇣' }, { key: 'translations', href: '/translations', icon: '文' },
+    { key: 'questions', href: '/questions', icon: '✓' },
+  ] },
+  { id: 'teaching', items: [
+    { key: 'assessments', href: '/assessments', icon: '✓' }, { key: 'classes', href: '/classes', icon: '◷' },
+  ] },
+  { id: 'people', items: [
+    { key: 'students', href: '/students', icon: '◉' }, { key: 'parents', href: '/parents', icon: '♧' },
+    { key: 'lifecycle', href: '/account-lifecycle', icon: '✓' },
+  ] },
+  { id: 'administration', items: [
+    { key: 'staff', href: '/employees', icon: '♙' }, { key: 'certificates', href: '/certificates', icon: '▧' },
+  ] },
 ];
+
+const ITEM_MESSAGE_KEYS: Record<AdminSection, MessageKey> = {
+  overview: 'admin.navigation.overview', content: 'admin.navigation.contentStudio', questions: 'admin.navigation.questionReview',
+  resources: 'admin.navigation.textbookLibrary', sources: 'admin.navigation.sourceIngestion', assessments: 'admin.navigation.testsGrading',
+  classes: 'admin.navigation.liveRecordedClasses', students: 'admin.navigation.students', parents: 'admin.navigation.parentsFamilies',
+  lifecycle: 'admin.navigation.accountLifecycle', staff: 'admin.navigation.staffAudit', translations: 'admin.navigation.languageReview',
+  certificates: 'admin.navigation.certificates',
+};
+const ITEM_SHORT_MESSAGE_KEYS: Record<AdminSection, MessageKey> = {
+  overview: 'admin.navigation.short.home', content: 'admin.navigation.short.content', questions: 'admin.navigation.short.questions',
+  resources: 'admin.navigation.short.books', sources: 'admin.navigation.short.sources', assessments: 'admin.navigation.short.tests',
+  classes: 'admin.navigation.short.classes', students: 'admin.navigation.short.students', parents: 'admin.navigation.short.families',
+  lifecycle: 'admin.navigation.short.lifecycle', staff: 'admin.navigation.short.staff', translations: 'admin.navigation.short.language',
+  certificates: 'admin.navigation.short.certificates',
+};
+const GROUP_MESSAGE_KEYS: Record<AdminNavGroup['id'], MessageKey> = {
+  curriculum: 'admin.navigation.group.curriculum', teaching: 'admin.navigation.group.teaching',
+  people: 'admin.navigation.group.people', administration: 'admin.navigation.group.administration',
+};
 
 export function canSeeAdminItem(item: AdminNavItem, role: string, permissions: string[]): boolean {
   // Preserve the current loading behavior while the staff session is being resolved.
@@ -122,45 +94,34 @@ export function adminNavHref(item: AdminNavItem, role: string): string {
   return item.key === 'staff' && role !== 'ADMIN' ? '/employees?view=audit' : item.href;
 }
 
+export function adminNavHref(item: AdminNavItem, role: string): string {
+  return item.key === 'staff' && role !== 'ADMIN' ? '/employees?view=audit' : item.href;
+}
+
 export function adminNavLabel(item: AdminNavItem, locale: AdminLocale, role: string): string {
-  if (item.key === 'staff' && role !== 'ADMIN') return locale === 'english' ? 'Activity trail' : 'गतिविधि ट्रेल';
-  return locale === 'english' ? item.english : item.hinglish;
+  if (item.key === 'staff' && role !== 'ADMIN') return translateUi(locale, 'admin.role.activityTrail');
+  return translateUi(locale, ITEM_MESSAGE_KEYS[item.key]);
 }
-
 export function adminNavShortLabel(item: AdminNavItem, locale: AdminLocale): string {
-  return locale === 'english' ? item.shortEnglish : item.shortHinglish;
+  return translateUi(locale, ITEM_SHORT_MESSAGE_KEYS[item.key]);
 }
-
 export function adminNavGroupLabel(group: AdminNavGroup, locale: AdminLocale): string {
-  return locale === 'english' ? group.english : group.hinglish;
+  return translateUi(locale, GROUP_MESSAGE_KEYS[group.id]);
 }
 
-
-const ADMIN_ROLE_LABELS: Record<string, string> = {
-  ADMIN: 'Administrator',
-  MANAGER: 'Manager',
-  CONTENT_AUTHOR: 'Content Author',
-  CONTENT_REVIEWER: 'Content Reviewer',
-  MODERATOR: 'Moderator',
-  PUBLISHER: 'Publisher',
+const ADMIN_ROLE_MESSAGE_KEYS: Record<string, MessageKey> = {
+  ADMIN: 'admin.role.admin', MANAGER: 'admin.role.manager', CONTENT_AUTHOR: 'admin.role.contentAuthor',
+  CONTENT_REVIEWER: 'admin.role.contentReviewer', MODERATOR: 'admin.role.moderator', PUBLISHER: 'admin.role.publisher',
 };
-
 const ADMIN_ROLE_COMPACT_LABELS: Record<string, string> = {
-  ADMIN: 'ADMIN',
-  MANAGER: 'MGR',
-  CONTENT_AUTHOR: 'AUTHOR',
-  CONTENT_REVIEWER: 'REVIEW',
-  MODERATOR: 'MOD',
-  PUBLISHER: 'PUB',
+  ADMIN: 'ADMIN', MANAGER: 'MGR', CONTENT_AUTHOR: 'AUTHOR', CONTENT_REVIEWER: 'REVIEW', MODERATOR: 'MOD', PUBLISHER: 'PUB',
 };
-
-export function adminRoleLabel(role: string): string {
+export function adminRoleLabel(role: string, locale: AdminLocale = 'hinglish'): string {
   const normalized = role.trim().toUpperCase();
-  if (!normalized) return 'Staff';
-  return ADMIN_ROLE_LABELS[normalized]
-    || normalized.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+  if (!normalized) return translateUi(locale, 'admin.role.staff');
+  const key = ADMIN_ROLE_MESSAGE_KEYS[normalized];
+  return key ? translateUi(locale, key) : normalized.toLowerCase().replace(/_/g, ' ').replace(/\\b\\w/g, letter => letter.toUpperCase());
 }
-
 export function adminRoleCompactLabel(role: string): string {
   const normalized = role.trim().toUpperCase();
   return ADMIN_ROLE_COMPACT_LABELS[normalized] || (normalized ? normalized.slice(0, 5) : 'STAFF');
