@@ -4,6 +4,10 @@
 **Audit date:** 2026-10-17  
 **Scope:** The workflow inventory on `main`, recent execution history (latest 100 repository-wide run records), caller/test/documentation references, and duplication between the current pipeline entrypoints.
 
+## Consolidation result
+
+The workflow inventory has been reduced from **24 files to 14**. Ten redundant/legacy workflow files were removed across the cleanup commits, and the sole marker trigger for the retired Class 6 recovery chain was deleted.
+
 ## Decision rule
 
 The number of workflow files is not the measure of how many independent operations the system needs. The audit distinguishes:
@@ -29,6 +33,7 @@ The independent `.github/workflows/textbook-visual-analysis.yml` is retained as 
 |---|---|
 | `agent-4-validation.yml` | Branch-specific validation duplicated by canonical CI for pull requests and no longer belongs to the main-branch release path. |
 | `android-build.yml` | Manual duplicate of the installable APK job in `ci.yml`; the APK fetcher relies on the verified canonical CI run. |
+| `quantaedge-layers-6-8-benchmark-once.yml` | **Removed in the preceding cleanup** | One-time benchmark bootstrap triggered only by changes to its own workflow file; replaced by benchmark mode in the canonical Layers 6–8 entrypoint. |
 | `quantaedge-layers-1-5-resume.yml` | Legacy hard-coded Class 6 Curiosity recovery path. Generic Layers 1–5 now exposes fingerprinted resume modes directly. |
 | `benchmark-class6-curiosity-after-layer5.yml` | One-off benchmark chained only to the retired Class 6 recovery workflow; the canonical Layers 6–8 entrypoint has benchmark mode. |
 | `quantaedge-layers-6-8-generate-once.yml` | One-time generation continuation already covered by the canonical `run`/ `resume` modes with preflight and explicit review-only acknowledgement. |
@@ -56,6 +61,8 @@ The independent `.github/workflows/textbook-visual-analysis.yml` is retained as 
 | `textbook-visual-analysis.yml` | Specialist single-book visual-analysis artifact flow, retained pending a deliberate migration into the class-wide pipeline. |
 | `textbook-visual-candidates-v3.yml` | Canonical Layers 1–5 pipeline. |
 | `quantaedge-layers-6-8.yml` | Canonical Layers 6–8 pipeline. |
+
+The extraction artifact mirror was renamed from `commit-class6-extraction-artifact.yml` to `mirror-textbook-extraction-artifact.yml` because it dispatches for Class 7/8; the old filename incorrectly implied Class 6-only support.
 
 ## Usage findings
 
