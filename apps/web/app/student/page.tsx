@@ -176,7 +176,7 @@ export default function StudentHome(){
                   const chapterPdfCount=textbookDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&item.subject_code===subjectCode).length;
                   const saveHomeScroll=()=>localStorage.setItem('qe:student:home:scrollY',String(window.scrollY));
                   const subjectHref='/student/learn?courseId='+encodeURIComponent(String(activeCourse.id))+'&subjectCode='+encodeURIComponent(subjectCode);
-                  const bookHref=subjectBook?'/student/textbooks?documentId='+subjectBook.document_id+'&returnTo='+encodeURIComponent('/student'):'#';
+                  const bookHref=subjectBook?'/student/textbooks?documentId='+subjectBook.document_id+'&courseId='+encodeURIComponent(String(activeCourse.id))+'&returnTo='+encodeURIComponent('/student'):'#';
                   return <article key={subjectCode} className="app-task subject-track-card">
                     <Link href={subjectHref} className="subject-track-main">
                       <span className="task-icon">{subjectCode==='maths'?'∑':subjectCode==='science'?'⚗':'✦'}</span>
