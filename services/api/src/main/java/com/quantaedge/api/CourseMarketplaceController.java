@@ -70,12 +70,14 @@ public class CourseMarketplaceController {
           exists(select 1 from student_program_enrollment e
             where e.student_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')) as has_access,
           exists(select 1 from course_purchase cp
-            where cp.student_id=? and cp.course_id=p.id) as purchased
+            where cp.student_id=? and cp.course_id=p.id) as purchased,
+          exists(select 1 from student_login_credential c
+            where c.student_id=? and c.active=true) as parent_managed
         from course_marketplace_offer o
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where o.status='PUBLISHED'
         order by p.display_name,p.id
-        """, context.studentId(), context.studentId());
+        """, context.studentId(), context.studentId(), context.studentId());
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -305,14 +307,16 @@ public class CourseMarketplaceController {
     }
   }
 
-  private List<Map<String, Object>> openOrders(long studentId, long courseId) {
+  private List<Map<String, Object>> openOrders(long studentId, long courseId, Long purchaserUserId) {
     return jdbc.queryForList("""
         select id,offer_price_paise,currency,provider_order_id,status
         from course_payment_order
-        where student_id=? and course_id=? and status in ('CREATING','PENDING')
+        where student_id=? and course_id=?
+          and purchaser_user_id is not distinct from ?
+          and status in ('CREATING','PENDING')
         order by id desc
         limit 1
-        """, studentId, courseId);
+        """, studentId, courseId, purchaserUserId);
   }
 
   private Map<String, Object> checkoutResponse(
