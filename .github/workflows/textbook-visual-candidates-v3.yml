@@ -104,6 +104,10 @@ jobs:
           ref: main
           fetch-depth: 0
           persist-credentials: true
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       - name: Validate inputs and run regression tests
         shell: bash
