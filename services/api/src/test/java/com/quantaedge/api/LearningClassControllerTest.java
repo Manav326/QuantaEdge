@@ -1,6 +1,8 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -24,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -69,7 +72,7 @@ class LearningClassControllerTest {
   }
 
   @Test
-  void scheduledClassesUseTheSameTwentyFourHourVisibilityRuleForItemsAndCount() {
+  void studentClassCatalogueIncludesFarFutureScheduledSessionsAndKeepsCountScopeAligned() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("select cs.id as session_id"),
         eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0))).thenReturn(List.of());
@@ -79,12 +82,16 @@ class LearningClassControllerTest {
     Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, student);
 
     assertEquals(0L, result.get("total"));
-    verify(jdbc).queryForList(
-        contains("cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours'"),
+    ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(itemSql.capture(),
         eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
-    verify(jdbc).queryForObject(
-        contains("cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours'"),
+    verify(jdbc).queryForObject(countSql.capture(),
         eq(Long.class), eq(7L), eq(""), eq(""), eq(0L), eq(0L));
+    assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
+    assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
+    assertFalse(itemSql.getValue().contains("starts_at<=now()+interval '24 hours'"));
+    assertFalse(countSql.getValue().contains("starts_at<=now()+interval '24 hours'"));
   }
 
   @Test
