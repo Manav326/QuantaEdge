@@ -109,14 +109,16 @@ async function fetchTenantBrand(codeInput: string): Promise<TenantBrand> {
 }
 
 function tenantCodeFromSchoolPath(): string | null {
-  const match = window.location.pathname.match(/^\\/school\\/([A-Za-z0-9][A-Za-z0-9_-]{2,31})\\/?$/);
-  return normalizedCode(match?.[1]);
+  const segments = window.location.pathname.split('/').filter(Boolean);
+  return segments.length === 2 && segments[0].toLowerCase() === 'school'
+    ? normalizedCode(segments[1])
+    : null;
 }
 
 function urlHasTenantParam(): boolean {
   const query = new URLSearchParams(window.location.search);
   return ['institution', 'institutionCode', 'institution_code', 'tenant'].some(key => query.has(key)) ||
-    /^\\/school\\/[A-Za-z0-9][A-Za-z0-9_-]{2,31}\\/?$/.test(window.location.pathname);
+    window.location.pathname.startsWith('/school/');
 }
 
 function codeFromCurrentUrl(): string | null {
