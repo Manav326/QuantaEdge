@@ -12,6 +12,14 @@ val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
+// Google Identity Services / Credential Manager returns a real Google ID token.
+// Use the OAuth Web application client ID here as the server audience.
+val configuredGoogleWebClientId = providers.gradleProperty("googleWebClientId")
+    .orElse(providers.environmentVariable("GOOGLE_WEB_CLIENT_ID"))
+    .orElse("")
+    .get()
+    .trim()
+
 val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
 val configuredVersionCode = providers.gradleProperty("quantaedgeVersionCode")
     .orElse(providers.environmentVariable("QUANTAEDGE_VERSION_CODE"))
@@ -49,6 +57,7 @@ android {
         versionCode = configuredVersionCode
         versionName = configuredVersionName
         buildConfigField("String", "API_BASE_URL", "\"$configuredApiBaseUrl\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$configuredGoogleWebClientId\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -73,6 +82,9 @@ android {
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.02.00"))
     implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.credentials:credentials:1.6.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.2.1")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui")
