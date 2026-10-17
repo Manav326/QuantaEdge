@@ -23,7 +23,6 @@ const studentNavGroups: StudentNavGroup[] = [
  { id: 'courses', message: 'web.navigation.student.coursesMarketplace', mobileMessage: 'web.navigation.student.mobileCourses', icon: '✦', children: [
   { href: '/student/courses', message: 'web.navigation.student.allCourses', icon: '▦' },
   { href: '/student/marketplace', message: 'web.navigation.student.marketplace', icon: '₹' },
-  { href: '/student/institutions', message: 'web.navigation.student.mySchool', icon: '⌂' },
  ] },
  { id: 'learn', message: 'web.navigation.student.learn', mobileMessage: 'web.navigation.student.mobileLearn', icon: '▤', children: [
   { href: '/student/learn', message: 'web.navigation.student.learnTopics', icon: '▤' },
@@ -55,9 +54,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const t = (key: string) => translateUi(locale, key);
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
-  const itemLabel = (item: { message: string }) => item.message === 'web.navigation.student.mySchool'
-    ? (locale === 'english' ? 'My school' : locale === 'hinglish' ? 'Mera school' : 'मेरा विद्यालय')
-    : t(item.message);
+  const itemLabel = (item: { message: string }) => t(item.message);
   const [collapsed, setCollapsed] = useState(false);
   const [profile, setProfile] = useState<WorkspaceProfile | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
