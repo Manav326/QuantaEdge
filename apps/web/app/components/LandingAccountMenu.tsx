@@ -1,5 +1,7 @@
 'use client';
 
+import { UiText } from '../i18n/useUiTranslation';
+import { translateUi } from '../i18n/catalog';
 import { LocaleText } from './LanguageProvider';
 
 import Link from 'next/link';
@@ -44,16 +46,16 @@ export default function LandingAccountMenu() {
         <svg className={open ? 'qe-account-chevron is-open' : 'qe-account-chevron'} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       {open && <div className="qe-account-menu" id="qe-account-menu" role="menu" aria-label="QuantaEdge account options">
-        <div className="qe-account-menu__heading"><strong><LocaleText hinglish="QuantaEdge में sign in करें" english="Sign in to QuantaEdge" /></strong><span><LocaleText hinglish="अपना account type चुनें" english="Choose your account type" /></span></div>
+        <div className="qe-account-menu__heading"><strong><UiText message="legacy.web.sign.in.to.quantaedge.972d39f9" /></strong><span><UiText message="legacy.web.choose.your.account.type.6d9b63b8" /></span></div>
         <Link href="/login/student" role="menuitem" className="qe-account-menu__item" onClick={close}>
           <span className="qe-account-menu__icon"><AccountIcon kind="student" /></span>
-          <span><strong><LocaleText hinglish="Student login" english="Student login" /></strong><small><LocaleText hinglish="अपनी पढ़ाई जारी रखें" english="Continue learning" /></small></span><span className="qe-account-menu__arrow">→</span>
+          <span><strong><UiText message="legacy.web.student.login.9541c2d5" /></strong><small><UiText message="legacy.web.continue.learning.7a7da80e" /></small></span><span className="qe-account-menu__arrow">→</span>
         </Link>
         <Link href="/login" role="menuitem" className="qe-account-menu__item" onClick={close}>
           <span className="qe-account-menu__icon"><AccountIcon kind="parent" /></span>
-          <span><strong><LocaleText hinglish="Parent / guardian login" english="Parent / guardian login" /></strong><small><LocaleText hinglish="बच्चों की learning और progress देखें" english="View your children’s learning and progress" /></small></span><span className="qe-account-menu__arrow">→</span>
+          <span><strong><UiText message="legacy.web.parent.guardian.login.b45fedd1" /></strong><small><UiText message="legacy.web.view.your.children.s.learning.and.prog.d7ffb0be" /></small></span><span className="qe-account-menu__arrow">→</span>
         </Link>
-        <p className="qe-account-menu__footnote"><LocaleText hinglish="हर account के लिए secure access।" english="Secure access for every account." /></p>
+        <p className="qe-account-menu__footnote"><UiText message="legacy.web.secure.access.for.every.account.3b1b285c" /></p>
       </div>}
     </div>
   );

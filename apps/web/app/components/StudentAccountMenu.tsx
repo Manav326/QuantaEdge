@@ -1,5 +1,7 @@
 'use client';
 
+import { UiText } from '../i18n/useUiTranslation';
+import { translateUi } from '../i18n/catalog';
 import { LanguageSwitcher, LearningLanguageSwitcher, LocaleText } from './LanguageProvider';
 import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
@@ -73,7 +75,7 @@ export default function StudentAccountMenu({ displayName, profileImageUrl, onLog
           <div className="student-account-menu__divider" />
           <Link href="/student/profile" className="student-account-menu__item" onClick={closeMenu}>
             <span className="student-account-menu__icon"><MenuIcon /></span>
-            <span><strong><LocaleText hinglish="सेटिंग्स" english="Settings" /></strong><small><LocaleText hinglish="Profile और personal details" english="Profile and personal details" /></small></span>
+            <span><strong><UiText message="legacy.web.settings.c6cfdff3" /></strong><small><UiText message="legacy.web.profile.and.personal.details.8e02d4d8" /></small></span>
             <span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
