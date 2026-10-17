@@ -239,6 +239,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (previousCode != incomingCode && incomingJoinCode == null) {
                 pendingInstitutionJoinCode = ""
             }
+        } else if (incomingJoinCode != null) {
+            // A code-only invitation determines its tenant on the server; do not bind it
+            // to a different school remembered from a previous learner/session.
+            activeTenantCode = ""
+            preferences.edit().remove("institutionCode").apply()
         }
         if (incomingJoinCode != null) pendingInstitutionJoinCode = incomingJoinCode
     }
