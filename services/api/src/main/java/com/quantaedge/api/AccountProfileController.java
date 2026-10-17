@@ -191,16 +191,26 @@ public class AccountProfileController {
       """, userId);
     if (rows.isEmpty()) throw new SecurityException("The account is inactive or unavailable.");
     Object stored = rows.getFirst().get("password_hash");
-    if (stored != null && !String.valueOf(stored).isBlank()) {
+    boolean passwordWasSet = stored != null && !String.valueOf(stored).isBlank();
+    if (passwordWasSet) {
       if (currentPassword.isBlank() || !PASSWORD_ENCODER.matches(currentPassword, String.valueOf(stored))) {
         throw new SecurityException("Your current password is incorrect.");
       }
     }
     jdbc.update("update user_account set password_hash=?,updated_at=now() where id=? and active=true",
         PASSWORD_ENCODER.encode(newPassword), userId);
-    jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null", userId);
-    audit(userId, context.studentId(), stored == null ? "PASSWORD_SET" : "PASSWORD_CHANGED",
-        Map.of("sessionPolicy", "other_sessions_revoked"));
+    // Learner sessions are keyed by student_id (user_id is null for that identity).
+    // Revoke account-level sessions and all linked personal-learning sessions.
+    jdbc.update("""
+      update auth_session set revoked_at=now()
+      where revoked_at is null and (
+        user_id=? or student_id in (
+          select id from student where user_account_id=?
+        )
+      )
+      """, userId, userId);
+    audit(userId, context.studentId(), passwordWasSet ? "PASSWORD_CHANGED" : "PASSWORD_SET",
+        Map.of("sessionPolicy", "all_account_and_linked_learner_sessions_revoked"));
     return Map.of("saved", true, "reauthenticationRequired", true);
   }
 
