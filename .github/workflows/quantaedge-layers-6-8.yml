@@ -122,23 +122,6 @@ jobs:
           python -m unittest discover -s tests -p "test_validate_structured_lesson_artifacts.py" -v
           python -m unittest discover -s tests -p "test_register_structured_lesson_drafts.py" -v
           python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
-      - name: Preflight explicit resume before downloading or starting models
-        if: inputs.mode == 'resume'
-        shell: bash
-        env:
-          CLASS_NO: "${{ inputs.class_no }}"
-          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
-          MODEL: "${{ inputs.generation_model }}"
-        run: |
-          set -euo pipefail
-          python scripts/quantaedge_layers_6_8.py run \
-            --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
-            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
-            --model "$MODEL" --max-model-calls 1 \
-            --checkpoint-every 1 --request-timeout 180 \
-            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
-            --allow-experimental-model --preflight-only
-
       - name: Preflight exact resume checkpoint before model download
         if: inputs.mode == 'resume'
         id: resume_preflight
@@ -183,7 +166,7 @@ jobs:
             --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
             --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
             --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
-            --checkpoint-every 2 --request-timeout 180 \
+            --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180 \
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model --rebuild-outputs-only --commit-checkpoints
 
@@ -251,7 +234,7 @@ jobs:
             --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
             --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
             --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
-            --checkpoint-every 2 --request-timeout 180 \
+            --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180 \
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model --commit-checkpoints
       - name: Run summary
