@@ -384,6 +384,8 @@ class AuthServiceTest {
 
     AuthContext context = auth.loginStudentByParent("7070107483", "Aarav07", "StudentPass!2026");
 
+    verify(jdbc).queryForList(contains("u.mobile_e164=? and u.mobile_verified_at is not null"),
+        eq("+917070107483"), eq("+917070107483"), eq(""), eq(""), eq("aarav07"));
     assertEquals(null, context.userId());
     assertEquals(81L, context.studentId());
     assertEquals("STUDENT", context.role());

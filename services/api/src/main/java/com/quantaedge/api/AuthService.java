@@ -732,7 +732,7 @@ public class AuthService {
       join student_login_credential c on c.guardian_user_id=u.id and c.active=true
       join guardian_student gs on gs.guardian_user_id=u.id and gs.student_id=c.student_id
       join student st on st.id=c.student_id
-      where ((?<>'' and u.mobile_e164=?) or
+      where ((?<>'' and u.mobile_e164=? and u.mobile_verified_at is not null) or
              (?<>'' and lower(u.email)=? and u.email_verified_at is not null
                and u.google_subject is not null))
         and u.active=true and u.role='PARENT'
