@@ -4,6 +4,7 @@ import { UiText } from '../i18n/useUiTranslation';
 import { useEffect, useState } from 'react';
 import { LanguageSwitcher, LocaleText } from './LanguageProvider';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
+import { useTenantBranding } from './TenantBrandingProvider';
 import { usePathname, useRouter } from 'next/navigation';
 
 type Session = { role?: string; workspace?: string; staffId?: number; studentId?: number; userId?: number; permissions?: string[] };
@@ -128,6 +129,7 @@ if (typeof window !== 'undefined') installRefreshRecovery();
 export default function SessionBoundary({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { brand, institutionContextRequested } = useTenantBranding();
   const [ready, setReady] = useState(false);
   const isPublicEntry = pathname === '/' || pathname === '/login' || pathname === '/login/student';
   const protectedWorkspace: WorkspaceRole | null = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
@@ -257,6 +259,6 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     return () => window.removeEventListener('qe:session-expired', onSessionExpired);
   }, [isProtected, pathname]);
 
-  if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow">QUANTAEDGE</span><h1><UiText message="legacy.web.checking.your.workspace.6565b2ad" /></h1><p><UiText message="legacy.web.your.account.and.saved.session.are.bei.cbd53243" /></p></section></main>;
+  if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow">{brand?.displayName || (institutionContextRequested ? 'Learning space' : 'QUANTAEDGE')}</span><h1><UiText message="legacy.web.checking.your.workspace.6565b2ad" /></h1><p><UiText message="legacy.web.your.account.and.saved.session.are.bei.cbd53243" /></p></section></main>;
   return <>{children}</>;
 }
