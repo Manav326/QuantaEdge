@@ -98,6 +98,13 @@ class CandidateBundleCheckpointTests(unittest.TestCase):
     def test_only_explicit_registry_missing_responses_allow_rebuild(self):
         self.assertTrue(missing_artifact("Error: HTTP 404 manifest not found"))
         self.assertTrue(missing_artifact("MANIFEST_UNKNOWN: registry has no matching artifact"))
+        reference = "ghcr.io/manav326/quantaedge-textbook-visuals:visual-inventory-v1-class6-class6-en-science-test"
+        self.assertTrue(missing_artifact(
+            f"Error response from registry: failed to resolve {reference}: {reference}: not found",
+            reference,
+        ))
+        self.assertFalse(missing_artifact(f"failed to resolve {reference}: HTTP 401: access denied", reference))
+        self.assertFalse(missing_artifact(f"upstream proxy says {reference} not found", reference))
         self.assertFalse(missing_artifact("HTTP 500: upstream resource not found"))
         self.assertFalse(missing_artifact("HTTP 401: access denied"))
 
