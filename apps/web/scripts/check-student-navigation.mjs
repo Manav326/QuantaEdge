@@ -140,7 +140,7 @@ assert.notEqual(mobileStudentStart, -1, 'Student mobile primary navigation must 
 assert.notEqual(mobileStudentEnd, -1, 'Student mobile primary navigation must close.');
 const mobileStudentNav = layout.slice(mobileStudentStart, mobileStudentEnd);
 assert.ok(!mobileStudentNav.includes('logout(') && !mobileStudentNav.includes('Logout'), 'Student mobile primary navigation must not include Logout as a sixth item.');
-const mobileParentStart = layout.indexOf('<nav className="qe-workspace-mobile-nav" aria-label="Parent navigation">');
+const mobileParentStart = layout.indexOf('<nav className="qe-workspace-mobile-nav" aria-label={t(\'web.navigation.parent.label\')}>');
 const mobileParentEnd = layout.indexOf('</nav>', mobileParentStart);
 assert.notEqual(mobileParentStart, -1, 'Parent mobile navigation must exist.');
 const mobileParentNav = layout.slice(mobileParentStart, mobileParentEnd);
