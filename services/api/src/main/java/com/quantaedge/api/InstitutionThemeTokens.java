@@ -172,6 +172,8 @@ public final class InstitutionThemeTokens {
     c.put("accent", brandAccent);
     c.put("onAccent", onAccent);
     c.put("accentText", accentText);
+    c.put("accentContainer", accentContainer);
+    c.put("onAccentContainer", bestContrastText(accentContainer));
     c.put("background", background);
     c.put("onBackground", text);
     c.put("surface", surface);
