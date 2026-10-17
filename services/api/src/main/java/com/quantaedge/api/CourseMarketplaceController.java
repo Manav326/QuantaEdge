@@ -96,17 +96,99 @@ public class CourseMarketplaceController {
     return offers;
   }
 
-  /** Create a payment order from the published server-side offer price, never a client amount. */
+  /** Create an order for an already authenticated learner. Amount and recipient always come from server records. */
   @PostMapping("/courses/{courseId}/orders")
   public Map<String, Object> createOrder(
       @PathVariable long courseId,
       @RequestHeader(value = "Idempotency-Key", required = false) String suppliedIdempotencyKey,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
-    String idempotencyKey = suppliedIdempotencyKey == null ? "" : suppliedIdempotencyKey.trim();
-    if (!isValidIdempotencyKey(idempotencyKey)) {
+    String key = normalizeIdempotencyKey(suppliedIdempotencyKey);
+    return createOrderInternal(courseId, key, context.studentId(), null, null, "STUDENT");
+  }
+
+  /** Parents can buy for their own learning profile or directly for a linked child. */
+  @PostMapping("/family/courses/{courseId}/orders")
+  public Map<String, Object> createFamilyOrder(
+      @PathVariable long courseId,
+      @RequestHeader(value = "Idempotency-Key", required = false) String suppliedIdempotencyKey,
+      @RequestBody(required = false) FamilyCourseOrderRequest request,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    String key = normalizeIdempotencyKey(suppliedIdempotencyKey);
+    String recipient = request == null || request.recipientType() == null
+        ? "" : request.recipientType().trim().toUpperCase(Locale.ROOT);
+    long targetStudentId;
+    String orderRecipientType;
+    if ("SELF".equals(recipient)) {
+      targetStudentId = ensurePersonalLearningProfile(context.userId());
+      // STUDENT recipient means a learner profile is being funded. purchaser_user_id
+      // separately retains the parent's ownership so it can be transferred later.
+      orderRecipientType = "STUDENT";
+    } else if ("CHILD".equals(recipient)) {
+      if (request.studentId() == null || request.studentId() <= 0) {
+        throw new IllegalArgumentException("Choose a linked child before purchasing this course.");
+      }
+      targetStudentId = request.studentId();
+      requireFullGuardianChildAccess(context.userId(), targetStudentId);
+      orderRecipientType = "CHILD";
+    } else {
+      throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
+    }
+    return createOrderInternal(courseId, key, targetStudentId, context.userId(),
+        targetStudentId, orderRecipientType);
+  }
+
+  private String normalizeIdempotencyKey(String supplied) {
+    String key = supplied == null ? "" : supplied.trim();
+    if (!isValidIdempotencyKey(key)) {
       throw new IllegalArgumentException("Checkout could not be identified safely. Please retry from the course marketplace.");
     }
+    return key;
+  }
+
+  private long ensurePersonalLearningProfile(long parentUserId) {
+    List<Map<String,Object>> existing = jdbc.queryForList("""
+      select st.id
+      from user_account u
+      join student st on st.user_account_id=u.id and st.active=true
+        and st.environment='PRODUCTION'
+      where u.id=? and u.role='PARENT' and u.active=true
+      for update of u,st
+      """, parentUserId);
+    if (!existing.isEmpty()) return ((Number) existing.getFirst().get("id")).longValue();
+    List<Map<String,Object>> accounts = jdbc.queryForList("""
+      select id,display_name from user_account
+      where id=? and role='PARENT' and active=true
+      for update
+      """, parentUserId);
+    if (accounts.isEmpty()) throw new SecurityException("An active parent account is required.");
+    String displayName = String.valueOf(accounts.getFirst().get("display_name"));
+    Long studentId = jdbc.queryForObject("""
+      insert into student(
+        public_id,display_name,class_code,board,language,environment,active,user_account_id
+      ) values (?,?,'6','Bihar Board','hi','PRODUCTION',true,?)
+      returning id
+      """, Long.class, UUID.randomUUID(), displayName, parentUserId);
+    return studentId;
+  }
+
+  private void requireFullGuardianChildAccess(long parentUserId, long studentId) {
+    Boolean allowed = jdbc.queryForObject("""
+      select exists(
+        select 1 from guardian_student gs
+        join student st on st.id=gs.student_id
+        where gs.guardian_user_id=? and gs.student_id=?
+          and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+          and st.active=true and st.environment='PRODUCTION'
+      )
+      """, Boolean.class, parentUserId, studentId);
+    if (!Boolean.TRUE.equals(allowed)) throw new SecurityException("Full parent access to this child is required.");
+  }
+
+  private Map<String, Object> createOrderInternal(
+      long courseId, String idempotencyKey, long targetStudentId,
+      Long purchaserUserId, Long targetStudentForOrder, String recipientType) {
     requireConfigured();
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select p.id, coalesce(nullif(o.title_override,''),p.display_name) as title,
@@ -117,48 +199,51 @@ public class CourseMarketplaceController {
           and o.status='PUBLISHED' and o.price_paise>0
         """, courseId);
     if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available.");
-    if (hasAccess(context.studentId(), courseId)) {
-      throw new IllegalArgumentException("You already have access to this course.");
+    if (hasAccess(targetStudentId, courseId)) {
+      throw new IllegalArgumentException("The selected learner already has access to this course.");
+    }
+    if (purchaserUserId != null) {
+      Boolean alreadyOwnedByParent = jdbc.queryForObject("""
+        select exists(select 1 from course_entitlement
+          where holder_user_id=? and course_id=?)
+        """, Boolean.class, purchaserUserId, courseId);
+      if (Boolean.TRUE.equals(alreadyOwnedByParent)) {
+        throw new IllegalArgumentException("You already own this course. Open your courses or transfer it to a linked child.");
+      }
     }
     Map<String, Object> offer = rows.getFirst();
     long amountPaise = ((Number) offer.get("price_paise")).longValue();
     String currency = String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT);
     String title = String.valueOf(offer.getOrDefault("title", "Course access"));
 
-    // Recover abandoned CREATING rows as well as old PENDING rows. A process crash
-    // between inserting the local row and receiving the provider order must not block
-    // future checkouts forever under the partial unique index.
     jdbc.update("""
         update course_payment_order set status='EXPIRED',updated_at=now()
-        where student_id=? and course_id=? and status in ('CREATING','PENDING')
+        where student_id=? and course_id=? and purchaser_user_id is not distinct from ?
+          and status in ('CREATING','PENDING')
           and created_at < now() - (? * interval '1 minute')
-        """, context.studentId(), courseId, ORDER_EXPIRY_MINUTES);
+        """, targetStudentId, courseId, purchaserUserId, ORDER_EXPIRY_MINUTES);
 
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
         select id,offer_price_paise,currency,provider_order_id,status
         from course_payment_order
         where student_id=? and course_id=? and client_request_key=?
-        """, context.studentId(), courseId, idempotencyKey);
+          and purchaser_user_id is not distinct from ?
+        """, targetStudentId, courseId, idempotencyKey, purchaserUserId);
     if (!keyedOrders.isEmpty()) {
       Map<String, Object> previous = keyedOrders.getFirst();
       String previousStatus = String.valueOf(previous.get("status"));
-      if ("PENDING".equals(previousStatus)) {
-        return checkoutResponse(previous, courseId, title);
-      }
+      if ("PENDING".equals(previousStatus)) return checkoutResponse(previous, courseId, title);
       if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
       throw new IllegalArgumentException("This checkout request has already ended. Start a new checkout from the marketplace.");
     }
 
-    // If the client lost the response, return the already-created order instead of
-    // attempting a second provider order. This also makes retries safe when a client
-    // generated a new key after a network timeout.
-    List<Map<String, Object>> openOrders = openOrders(context.studentId(), courseId);
-    if (!openOrders.isEmpty()) {
-      Map<String, Object> open = openOrders.getFirst();
-      if ("PENDING".equals(String.valueOf(open.get("status")))) {
-        return checkoutResponse(open, courseId, title);
+    List<Map<String, Object>> open = openOrders(targetStudentId, courseId, purchaserUserId);
+    if (!open.isEmpty()) {
+      Map<String, Object> prior = open.getFirst();
+      if ("PENDING".equals(String.valueOf(prior.get("status")))) {
+        return checkoutResponse(prior, courseId, title);
       }
       throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
     }
@@ -168,46 +253,44 @@ public class CourseMarketplaceController {
     try {
       localOrderId = jdbc.queryForObject("""
           insert into course_payment_order(
-            student_id,course_id,offer_price_paise,currency,receipt,client_request_key,status
-          ) values(?,?,?,?,?,?,'CREATING')
+            student_id,purchaser_user_id,target_student_id,recipient_type,
+            course_id,offer_price_paise,currency,receipt,client_request_key,status
+          ) values(?,?,?,?,?,?,?,?,?,'CREATING')
           returning id
-          """, Long.class, context.studentId(), courseId, amountPaise, currency, receipt, idempotencyKey);
+          """, Long.class, targetStudentId, purchaserUserId,
+          purchaserUserId == null ? null : targetStudentForOrder, recipientType,
+          courseId, amountPaise, currency, receipt, idempotencyKey);
     } catch (DuplicateKeyException conflict) {
-      // Close the race between the open-order check and insert. The DB unique indexes
-      // are the final concurrency guard; recover the winning order when possible.
-      List<Map<String, Object>> racedOrders = openOrders(context.studentId(), courseId);
+      List<Map<String, Object>> racedOrders = openOrders(targetStudentId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
         return checkoutResponse(racedOrders.getFirst(), courseId, title);
       }
       if (!racedOrders.isEmpty()) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
       }
-      throw new IllegalArgumentException("This checkout request has already been used. Start a new checkout.", conflict);
+      throw new IllegalArgumentException("This checkout request has already been used or another checkout is open. Reload the marketplace and try again.", conflict);
     }
 
     try {
+      Map<String,String> notes = new LinkedHashMap<>();
+      notes.put("quantaedge_order_id", Long.toString(localOrderId));
+      notes.put("quantaedge_student_id", Long.toString(targetStudentId));
+      notes.put("quantaedge_course_id", Long.toString(courseId));
+      if (purchaserUserId != null) notes.put("quantaedge_purchaser_user_id", Long.toString(purchaserUserId));
       String requestJson = objectMapper.writeValueAsString(Map.of(
-          "amount", amountPaise,
-          "currency", currency,
-          "receipt", receipt,
-          "notes", Map.of(
-              "quantaedge_order_id", Long.toString(localOrderId),
-              "quantaedge_student_id", Long.toString(context.studentId()),
-              "quantaedge_course_id", Long.toString(courseId)
-          )));
+          "amount", amountPaise, "currency", currency, "receipt", receipt, "notes", notes));
       JsonNode providerOrder = razorpayRequest("POST", "/orders", requestJson);
       String providerOrderId = providerOrder.path("id").asText("");
       long providerAmount = providerOrder.path("amount").asLong(-1);
       String providerCurrency = providerOrder.path("currency").asText("");
       if (!providerOrderId.matches("order_[A-Za-z0-9]+")
-          || providerAmount != amountPaise
-          || !currency.equalsIgnoreCase(providerCurrency)) {
+          || providerAmount != amountPaise || !currency.equalsIgnoreCase(providerCurrency)) {
         throw new IllegalStateException("Payment provider returned an order that did not match the course offer.");
       }
       int updated = jdbc.update("""
           update course_payment_order set provider_order_id=?,status='PENDING',updated_at=now()
-          where id=? and student_id=? and status='CREATING'
-          """, providerOrderId, localOrderId, context.studentId());
+          where id=? and student_id=? and purchaser_user_id is not distinct from ? and status='CREATING'
+          """, providerOrderId, localOrderId, targetStudentId, purchaserUserId);
       if (updated != 1) {
         throw new IllegalStateException("This checkout expired while it was being prepared. Please start checkout again.");
       }
