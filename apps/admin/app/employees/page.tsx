@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
 import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
@@ -48,10 +49,9 @@ async function readJson(response:Response,t:(key:string,values?:Record<string,st
   return value;
 }
 
-function prettyDate(value:string|null|undefined,locale:string,t:(key:string)=>string) {
+function prettyDate(value:string|null|undefined,_locale:string,t:(key:string)=>string) {
   if(!value)return t('admin.employees.never');
-  const date=new Date(value);
-  return Number.isNaN(date.getTime())?'—':date.toLocaleString(getUiLocaleLanguage(locale)+'-IN');
+  return formatUserTimestamp(value);
 }
 
 export default function AdminStaffPage() {
