@@ -134,8 +134,17 @@ try {
 
         # Download only the installable APK artifact, not Docker build cache artifacts.
         $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--name", $ArtifactName, "--dir", $runDir)
-        $downloadOutput = @(& gh @ghArgs 2>&1)
-        $downloadExit = $LASTEXITCODE
+        # Missing artifacts are expected for cancelled/unfinished runs. In Windows PowerShell,
+        # native stderr can become a terminating error when ErrorActionPreference is Stop,
+        # so temporarily allow it through and use gh's exit code to continue to the next run.
+        $previousErrorActionPreference = $ErrorActionPreference
+        try {
+            $ErrorActionPreference = "Continue"
+            $downloadOutput = @(& gh @ghArgs 2>&1)
+            $downloadExit = $LASTEXITCODE
+        } finally {
+            $ErrorActionPreference = $previousErrorActionPreference
+        }
 
         if ($downloadExit -eq 0) {
             $apkFiles = @(Get-ChildItem -LiteralPath $runDir -Filter "*.apk" -File -Recurse -ErrorAction SilentlyContinue |
