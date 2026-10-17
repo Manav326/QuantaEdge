@@ -156,6 +156,30 @@ public class InstitutionTenantController {
     return result;
   }
 
+  /** Shows only the authenticated learner's own institution memberships. */
+  @GetMapping("/memberships/me")
+  public Map<String,Object> myInstitutionMemberships(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext student=authorization.requireStudent(context);
+    List<Map<String,Object>> memberships=jdbc.queryForList("""
+        select t.tenant_code,coalesce(b.display_name,t.display_name) as institution_name,
+          t.status as institution_status,m.status as membership_status,m.joined_at,
+          coalesce(b.logo_asset_key,'') as logo_asset_key,coalesce(b.version,1) as branding_version,
+          (select count(*) from institution_course_entitlement e
+            join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+            where e.institution_id=t.id and e.status='ACTIVE' and e.valid_from<=now()
+              and (e.valid_until is null or e.valid_until>now())) as authorized_courses
+        from institution_membership m
+        join institution_tenant t on t.id=m.institution_id
+        left join institution_branding b on b.institution_id=t.id
+        where m.student_id=? and m.status='ACTIVE'
+        order by t.display_name,t.id
+        """,student.studentId());
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("institutions",memberships);
+    return result;
+  }
+
   @GetMapping("/reports/overview")
   public Map<String,Object> reportOverview(HttpServletRequest request) {
     InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request, false);
