@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,79 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
   private final AuthService auth;
   private final StaffAuditService staffAudit;
+  private final GoogleIdentityService googleIdentity;
   private final boolean secureCookies;
 
+  @Autowired
+  public AuthController(AuthService auth, StaffAuditService staffAudit, GoogleIdentityService googleIdentity,
+      @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
+    this.auth=auth; this.staffAudit=staffAudit; this.googleIdentity=googleIdentity; this.secureCookies=secureCookies;
+  }
+
+  /** Retained for existing focused controller tests that do not exercise Google sign-in. */
   public AuthController(AuthService auth, StaffAuditService staffAudit,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
-    this.auth=auth; this.staffAudit=staffAudit; this.secureCookies=secureCookies;
+    this(auth, staffAudit, null, secureCookies);
+  }
+
+  @PostMapping("/google")
+  public ResponseEntity<Map<String,Object>> googleSignIn(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    if (googleIdentity == null) throw new IllegalStateException("Google sign-in is not configured.");
+    GoogleIdentityService.GoogleSignIn verified = googleIdentity.authenticate(
+        String.valueOf(body.getOrDefault("credential", "")));
+    AuthContext context = verified.context();
+    String workspace = context.isParent() ? "PARENT" : "STUDENT";
+    boolean androidClient = isAndroidClient(clientHeader);
+    ResponseEntity<Map<String,Object>> session = withCookie(
+        auth.issueSession(context, workspace, androidClient), workspace, androidClient);
+    var result = new LinkedHashMap<String,Object>(session.getBody() == null ? Map.of() : session.getBody());
+    result.put("email", verified.email());
+    result.put("gmailVerified", true);
+    result.put("verifiedMethods", java.util.List.of("GMAIL"));
+    result.put("displayName", verified.displayName());
+    result.put("profileImageUrl", verified.pictureUrl() == null ? "" : verified.pictureUrl());
+    result.put("accountCreated", verified.accountCreated());
+    return ResponseEntity.status(session.getStatusCode())
+        .headers(headers -> headers.addAll(session.getHeaders()))
+        .body(result);
+  }
+
+  @PostMapping("/account-signup/request-otp")
+  public Map<String,Object> requestAccountSignupOtp(@RequestBody Map<String,Object> body) {
+    String devCode = auth.requestOtp(String.valueOf(body.getOrDefault("mobile", "")), "ACCOUNT_SIGNUP");
+    var result = new LinkedHashMap<String,Object>();
+    result.put("accepted", true);
+    result.put("expiresInSeconds", 300);
+    if (devCode != null) result.put("devCode", devCode);
+    return result;
+  }
+
+  @PostMapping("/account-signup/verify-otp")
+  public ResponseEntity<Map<String,Object>> verifyAccountSignupOtp(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    AuthContext context = auth.verifyOtp(
+        String.valueOf(body.getOrDefault("mobile", "")),
+        String.valueOf(body.getOrDefault("otp", "")),
+        "ACCOUNT_SIGNUP",
+        String.valueOf(body.getOrDefault("displayName", "")),
+        false, null);
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context, "STUDENT", androidClient), "STUDENT", androidClient);
+  }
+
+  @PostMapping("/account-login")
+  public ResponseEntity<Map<String,Object>> accountLogin(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    AuthContext context = auth.loginAccountByUsername(
+        String.valueOf(body.getOrDefault("username", "")),
+        String.valueOf(body.getOrDefault("password", "")));
+    String workspace = context.isParent() ? "PARENT" : "STUDENT";
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context, workspace, androidClient), workspace, androidClient);
   }
 
   @PostMapping("/request-otp")
@@ -129,7 +198,9 @@ public class AuthController {
   public ResponseEntity<Map<String,Object>> studentLogin(
       @RequestBody Map<String,Object> body,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
-    AuthContext context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
+    String parentIdentifier = String.valueOf(body.getOrDefault("parentIdentifier",
+        body.getOrDefault("parentMobile", body.getOrDefault("parentEmail", ""))));
+    AuthContext context=auth.loginStudentByParent(parentIdentifier,
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(context, "STUDENT", androidClient), "STUDENT", androidClient);
