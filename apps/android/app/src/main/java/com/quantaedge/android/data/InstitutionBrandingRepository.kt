@@ -78,6 +78,22 @@ object InstitutionBrandingRepository {
         return InstitutionBrandIdentity(code, displayName, logo, appIcon, version, themeTokens)
     }
 
+    suspend fun hasActiveMembership(codeInput: String): Boolean {
+        val code = normalizeCode(codeInput) ?: return false
+        val body = ApiClient.getObject(
+            "/api/v1/institution/memberships/me?institutionCode=" + ApiClient.encodeQuery(code),
+            mapOf("X-QE-Workspace" to "STUDENT")
+        )
+        val institutions = body.optJSONArray("institutions") ?: return false
+        for (index in 0 until institutions.length()) {
+            val item = institutions.optJSONObject(index) ?: continue
+            if (normalizeCode(item.optString("tenant_code")) == code &&
+                item.optString("institution_status") == "ACTIVE" &&
+                item.optString("membership_status") == "ACTIVE") return true
+        }
+        return false
+    }
+
     suspend fun soleActiveMembershipCode(): String? {
         val body = ApiClient.getObject(
             "/api/v1/institution/memberships/me",
