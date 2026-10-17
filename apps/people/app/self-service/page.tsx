@@ -1,4 +1,6 @@
 'use client';
+
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
 import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback, PeopleEmptyState, PeoplePagination } from '../components/PeopleUI';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
@@ -168,7 +170,7 @@ export default function EmployeeSelfServicePage(){
           <section className="panel">
             <h2>{ui("people.selfService.profileRequestsTitle")}</h2>
             {profileChangeRequests.length===0?<PeopleEmptyState title={ui("people.selfService.noProfileRequests")} />:<div className="table-wrap"><table><thead><tr><th>{ui("people.selfService.submitted")}</th><th>{ui("people.selfService.requestedChanges")}</th><th>{ui("people.selfService.reason")}</th><th>{ui("people.selfService.status")}</th><th>{ui("people.selfService.reviewNote")}</th><th>{ui("people.selfService.action")}</th></tr></thead><tbody>
-              {profileChangeRequests.map((item:any)=><tr key={item.id}><td>{new Date(item.created_at).toLocaleString(locale==='english'?'en-IN':'hi-IN')}</td><td>{item.requested_values?.email&&<div>Email: {item.requested_values.email}</div>}{item.requested_values?.phoneE164&&<div>Phone: {item.requested_values.phoneE164}</div>}</td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelProfileChange(item.id)}>Cancel</button>:'—'}</td></tr>)}
+              {profileChangeRequests.map((item:any)=><tr key={item.id}><td>{formatUserTimestamp(item.created_at)}</td><td>{item.requested_values?.email&&<div>Email: {item.requested_values.email}</div>}{item.requested_values?.phoneE164&&<div>Phone: {item.requested_values.phoneE164}</div>}</td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelProfileChange(item.id)}>Cancel</button>:'—'}</td></tr>)}
             </tbody></table></div>}
             <PeoplePagination limit={profilePageLimit} offset={profileOffset} total={profileTotal} onPageChange={setProfileOffset} onLimitChange={limit=>{setProfilePageLimit(limit);setProfileOffset(0)}} />
           </section>
@@ -236,7 +238,7 @@ export default function EmployeeSelfServicePage(){
             <h2 style={{marginTop:6}}>{item.snapshot?.period?.name||ui('people.selfService.payrollStatement')}</h2>
             <div className="label">{String(item.snapshot?.period?.startDate||'').slice(0,10)} – {String(item.snapshot?.period?.endDate||'').slice(0,10)}</div>
             <div className="metric">{new Intl.NumberFormat(locale==='english'?'en-IN':'hi-IN',{style:'currency',currency:String(item.snapshot?.currency||'INR').trim(),maximumFractionDigits:2}).format(Number(item.snapshot?.net||0))}</div>
-            <div className="small">Issued {new Date(item.issued_at).toLocaleDateString(locale==='english'?'en-IN':'hi-IN')}</div>
+            <div className="small">Issued {formatUserTimestamp(item.issued_at)}</div>
             <button type="button" className="primary" style={{marginTop:12}} onClick={()=>setSelectedPayslip(item)}>{ui("people.selfService.viewPayslip")}</button>
           </article>)}</div>
           <PeoplePagination limit={payslipPageLimit} offset={payslipOffset} total={payslipTotal} onPageChange={setPayslipOffset} onLimitChange={limit=>{setPayslipPageLimit(limit);setPayslipOffset(0)}} />
