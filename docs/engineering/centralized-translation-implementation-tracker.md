@@ -362,3 +362,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Client-owned malformed-response text now uses a catalog key with a matching `{status}` placeholder; API-supplied diagnostic messages remain dynamic and are not rewritten.
 - Updated the shared web `useUiTranslation` hook to pass the registered locale ID unchanged into the runtime, instead of coercing every non-English locale to Hinglish. Added a guard against reintroducing that forced mapping on guarded auth routes.
 - Route matrix: Parent login has first-pass catalog extraction; complete literal JSX/accessibility audit and browser acceptance remain open. Registry/future-locale extension is not finished until remaining locale-specific branches and types are addressed.
+
+
+## Locale pass-through and TutorDock static-error extraction — 2026-10-17
+
+- Removed forced English/Hinglish mapping from Student progress, diagnostic, profile, classes, practice, certificates, structured lessons, textbook library, lesson visuals, test runner/results, shared workspace navigation/pagination and AI Tutor message UI. Shared translation calls now pass the registered locale ID directly to the central runtime.
+- TutorDock error helpers now accept the registered locale and resolve fallback messages through central catalog keys; its remaining English/Hinglish error pairs were removed with concise copy. Added nine paired `tutor.error.*` entries to the canonical catalogs and all six generated copies.
+- Generalized Admin Classes and Assessments date labels and People class times to use the locale registry’s language tag. Admin navigation’s locale type now reuses the central `UiLocale` type. Learning language and lesson/test data remain independent of UI locale.
+- Extended the static-copy guard to scan all Web, Admin and People Operations TypeScript/JavaScript source for the known forced English/Hinglish translation mapping and validate the new TutorDock keys.
+- This is a locale-extensibility pass—not the final raw-string migration. Static sentences, labels and some locale-specific branches remain across route components; route acceptance and browser checks remain open. CI must pass on this commit before this batch is build-certified.

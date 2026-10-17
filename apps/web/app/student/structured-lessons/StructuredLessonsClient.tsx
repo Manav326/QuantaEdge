@@ -24,10 +24,10 @@ export default function StructuredLessonsClient() {
         { credentials: 'same-origin', cache: 'no-store' });
       if (response.status === 401 || response.status === 403) { router.replace('/login/student'); return; }
       const body = await response.json();
-      if (!response.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
       setItems(Array.isArray(body) ? body : []);
     } catch (error) {
-      setError(error instanceof Error ? error.message : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
+      setError(error instanceof Error ? error.message : translateUi(locale, 'legacy.web.structured.lessons.could.not.be.loaded.607c9597'));
     } finally { setBusy(false); }
   }, [learningLanguage, locale, router]);
   useEffect(() => { void loadCatalogue(); }, [loadCatalogue]);
@@ -39,17 +39,17 @@ export default function StructuredLessonsClient() {
     </div>
     <button type="button" className="button button-secondary" onClick={() => void loadCatalogue()} disabled={busy}><UiText message="legacy.web.refresh.45078d05" /></button></header>
     {error && <p role="alert" className="error-message">{error}</p>}
-    {busy ? <p role="status" className="eyebrow">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.finding.published.lessons.9f844f1e')}</p> :
+    {busy ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.finding.published.lessons.9f844f1e')}</p> :
       items.length === 0 ? <section className="auth-card" role="status">
-        <h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.approved.structured.lessons.are.ava.a3717bf5')}</h2>
-        <p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.lessons.appear.here.only.after.content.88a83834')}</p>
-        <Link href="/student/learn" className="button button-dark">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.existing.lessons.67cef7a3')}</Link>
+        <h2>{translateUi(locale, 'legacy.web.no.approved.structured.lessons.are.ava.a3717bf5')}</h2>
+        <p>{translateUi(locale, 'legacy.web.lessons.appear.here.only.after.content.88a83834')}</p>
+        <Link href="/student/learn" className="button button-dark">{translateUi(locale, 'legacy.web.open.existing.lessons.67cef7a3')}</Link>
       </section> :
       <div className="task-list">{items.map(item => <article className="task-card" key={item.artifactId}>
-        <div><span className="eyebrow">{item.subjectCode.toUpperCase()} · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.class.98aaaa31')} {item.classNumber}</span>
-          <h2>{item.title}</h2><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
-          {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.min.72242533')}</small>}</div>
-        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId)} className="button button-dark">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.lesson.bca8f87b')}</Link>
+        <div><span className="eyebrow">{item.subjectCode.toUpperCase()} · {translateUi(locale, 'legacy.web.class.98aaaa31')} {item.classNumber}</span>
+          <h2>{item.title}</h2><p>{translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
+          {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>}</div>
+        <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId)} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>
       </article>)}</div>}
   </section></div></main>;
 }

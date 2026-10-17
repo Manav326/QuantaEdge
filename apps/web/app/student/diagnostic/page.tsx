@@ -40,7 +40,7 @@ export default function DiagnosticPage(){
         const response=await fetch('/api/v1/diagnostic',{cache:'no-store'});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body:DiagnosticPayload=await readJson(response);
-        if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.load.diagnostic.f6a469cb'));
+        if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.unable.to.load.diagnostic.f6a469cb'));
         if(body.completed){router.replace('/student');return;}
         const questions=Array.isArray(body.questions)?body.questions:[];
         if(!live)return;
@@ -53,10 +53,10 @@ export default function DiagnosticPage(){
         if(firstUnanswered<0&&questions.length&&body.attemptId){
           const submitted=await fetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit',{method:'POST',cache:'no-store'});
           const submitBody=await readJson(submitted);
-          if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
+          if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
           if(live)router.replace('/student');
         }
-      }catch(e:any){if(live)setError(e?.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.load.diagnostic.f6a469cb'));}
+      }catch(e:any){if(live)setError(e?.message||translateUi(locale, 'legacy.web.unable.to.load.diagnostic.f6a469cb'));}
       finally{if(live)setLoading(false);}
     }
     void load();
@@ -64,7 +64,7 @@ export default function DiagnosticPage(){
   },[router,locale]);
 
   const q=qs[idx];
-  const shownResult=result || (q?.answered&&typeof q.lastCorrect==='boolean'?{correct:q.lastCorrect,feedback:translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.answer.was.checked.earlier.f93c0c7f')}:null);
+  const shownResult=result || (q?.answered&&typeof q.lastCorrect==='boolean'?{correct:q.lastCorrect,feedback:translateUi(locale, 'legacy.web.this.answer.was.checked.earlier.f93c0c7f')}:null);
   let options:any[]=[];
   try{options=JSON.parse(q?.options||'[]')}catch{}
 
@@ -77,10 +77,10 @@ export default function DiagnosticPage(){
       });
       const body=await readJson(response);
       if(response.status===401||response.status===403){router.replace('/login/student');return;}
-      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.could.not.save.this.answer.f5a71de8'));
+      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.could.not.save.this.answer.f5a71de8'));
       setValue(v);setResult(body);
       setQs(old=>old.map(item=>item.id===q.id?{...item,answered:true,lastCorrect:body.correct,selectedAnswer:v}:item));
-    }catch(e:any){setError(e?.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.could.not.be.submitted.05e16fa5'));}
+    }catch(e:any){setError(e?.message||translateUi(locale, 'legacy.web.answer.could.not.be.submitted.05e16fa5'));}
     finally{setSaving(false);}
   }
 
@@ -94,9 +94,9 @@ export default function DiagnosticPage(){
     try{
       const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit',{method:'POST'});
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
+      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));
       router.replace('/student');
-    }catch(e:any){setError(e?.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));}
+    }catch(e:any){setError(e?.message||translateUi(locale, 'legacy.web.unable.to.submit.diagnostic.ec9da1e7'));}
     finally{setSubmitting(false);}
   }
 
@@ -120,7 +120,7 @@ export default function DiagnosticPage(){
       {shownResult&&<AnswerFeedback
         outcome={shownResult.correct===true?'correct':shownResult.correct===false?'incorrect':'ungraded'}
         title={shownResult.correct===true?<UiText message="legacy.web.correct.420829f6" />:shownResult.correct===false?<UiText message="legacy.web.incorrect.answer.72e67de0" />:<UiText message="legacy.web.answer.saved.a1a333eb" />}
-        message={shownResult.feedback||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.answer.was.saved.earlier.39c393b2')}
+        message={shownResult.feedback||translateUi(locale, 'legacy.web.this.answer.was.saved.earlier.39c393b2')}
         explanation={q.explanation||undefined}
         explanationLabel={<UiText message="legacy.web.explanation.162bf3ec" />}
       />}

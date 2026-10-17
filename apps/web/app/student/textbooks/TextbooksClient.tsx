@@ -87,7 +87,7 @@ export default function TextbooksClient() {
     } catch (e: any) {
       if (e?.auth) { router.replace('/login/student'); return; }
       setDocuments([]);
-      setError(e instanceof Error ? e.message : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.textbook.library.could.not.be.loa.3c77f5e0'));
+      setError(e instanceof Error ? e.message : translateUi(locale, 'legacy.web.your.textbook.library.could.not.be.loa.3c77f5e0'));
     } finally {
       setLoading(false);
     }
@@ -113,7 +113,7 @@ export default function TextbooksClient() {
       .catch((e: any) => {
         if (!active) return;
         if (e?.auth) { router.replace('/login/student'); return; }
-        setError(e instanceof Error ? e.message : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.textbook.is.not.available.to.your.8697d28f'));
+        setError(e instanceof Error ? e.message : translateUi(locale, 'legacy.web.this.textbook.is.not.available.to.your.8697d28f'));
         setSelected(null);
       });
     return () => { active = false; };
@@ -189,7 +189,7 @@ export default function TextbooksClient() {
   };
   const subjectLabel = selected
     ? displaySubjectName(selected.subject_code, selected.subject_name || selected.subject_code)
-    : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.textbook.18cd63d6');
+    : translateUi(locale, 'legacy.web.textbook.18cd63d6');
   const displayChapterTitle = (item: LearningDocument, english: boolean) => {
     if (english && item.scope === 'CHAPTER_PDF') {
       const match = item.title.match(/Chapter\s+\d+\s*:\s*(.+)$/i);
@@ -203,7 +203,7 @@ export default function TextbooksClient() {
       const roman = ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[Number(item.book_part)];
       return locale === 'english' ? 'Part ' + (roman || item.book_part) : 'भाग ' + item.book_part;
     }
-    return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.complete.subject.book.9fa02f9d');
+    return translateUi(locale, 'legacy.web.complete.subject.book.9fa02f9d');
   };
   const chapterNumberLabel = (item: LearningDocument) => {
     const englishMatch = String(item.title || '').match(/Chapter\s+(\d+)\s*:/i);
@@ -214,7 +214,7 @@ export default function TextbooksClient() {
   };
   const rawReturnTo = searchParams.get('returnTo') || '';
   const returnTarget = rawReturnTo.startsWith('/') && !rawReturnTo.startsWith('//') ? rawReturnTo : '/student/textbooks';
-  const returnLabel = returnTarget.startsWith('/student/learn') ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.subject.ffd3f558') : returnTarget === '/student' ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.today.d7003bfb') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.textbook.library.278aacb6');
+  const returnLabel = returnTarget.startsWith('/student/learn') ? translateUi(locale, 'legacy.web.back.to.subject.ffd3f558') : returnTarget === '/student' ? translateUi(locale, 'legacy.web.back.to.today.d7003bfb') : translateUi(locale, 'legacy.web.textbook.library.278aacb6');
 
   useEffect(() => {
     if (loading || subjectGroups.length === 0) return;
@@ -361,23 +361,23 @@ export default function TextbooksClient() {
       <section className="qe-textbook-governance" aria-labelledby="qe-textbook-governance-title">
         <div className="qe-textbook-library-toolbar">
           <div className="qe-textbook-governance-copy">
-            <span className="qe-textbook-eyebrow">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.resource.governance.dd634f00')}</span>
-            <h2 id="qe-textbook-governance-title">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.books.and.chapters.7c0f264b')}</h2>
-            <p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.browse.only.the.published.resources.av.80a34039')}</p>
+            <span className="qe-textbook-eyebrow">{translateUi(locale, 'legacy.web.resource.governance.dd634f00')}</span>
+            <h2 id="qe-textbook-governance-title">{translateUi(locale, 'legacy.web.books.and.chapters.7c0f264b')}</h2>
+            <p>{translateUi(locale, 'legacy.web.browse.only.the.published.resources.av.80a34039')}</p>
           </div>
           <div className="qe-textbook-filter-wrap">
-            <label>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.subject.scope.f130e513')}
-              <select aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.filter.textbook.assignments.by.subject.e0994ff3')} value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}>
-                <option value="ALL">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}
+            <label>{translateUi(locale, 'legacy.web.subject.scope.f130e513')}
+              <select aria-label={translateUi(locale, 'legacy.web.filter.textbook.assignments.by.subject.e0994ff3')} value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}>
+                <option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}
               </select>
             </label>
-            <span className="qe-textbook-filter-summary" aria-live="polite">{visibleDocuments.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', visibleDocuments.length === 1 ? 'legacy.web.resource.d42911fa' : 'web.count.resourcesPlural')} · {subjectGroups.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', subjectGroups.length === 1 ? 'legacy.web.subject.e4481da7' : 'web.count.subjectsPlural')}</span>
+            <span className="qe-textbook-filter-summary" aria-live="polite">{visibleDocuments.length} {translateUi(locale, visibleDocuments.length === 1 ? 'legacy.web.resource.d42911fa' : 'web.count.resourcesPlural')} · {subjectGroups.length} {translateUi(locale, subjectGroups.length === 1 ? 'legacy.web.subject.e4481da7' : 'web.count.subjectsPlural')}</span>
           </div>
         </div>
       </section>
 
-      {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.your.textbook.library.e562b86c')}</div>
-        : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.published.pdfs.available.yet.6a520470')}</h3><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.when.your.teacher.publishes.a.subject..6029df49')}</p><Link href="/student/learn">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.continue.with.lessons.2a65104e')}</Link></div>
+      {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {translateUi(locale, 'legacy.web.loading.your.textbook.library.e562b86c')}</div>
+        : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>{translateUi(locale, 'legacy.web.no.published.pdfs.available.yet.6a520470')}</h3><p>{translateUi(locale, 'legacy.web.when.your.teacher.publishes.a.subject..6029df49')}</p><Link href="/student/learn">{translateUi(locale, 'legacy.web.continue.with.lessons.2a65104e')}</Link></div>
         : <div className="qe-textbook-resource-groups">
           {subjectGroups.map(({ code, name: rawName, rows }) => {
             const name = displaySubjectName(code, rawName);
@@ -401,7 +401,7 @@ export default function TextbooksClient() {
                   pageSize={chapterPageSize}
                   onPageChange={nextPage => setChapterPageBySubject(old => ({ ...old, [code]: nextPage + 1 }))}
                   onPageSizeChange={size => { setChapterPageSize(size); setChapterPageBySubject(old => ({ ...old, [code]: 1 })); }}
-                  itemLabel={name + ' ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapters.b7609a1c')}
+                  itemLabel={name + ' ' + translateUi(locale, 'legacy.web.chapters.b7609a1c')}
                 />
               </div>
             );
@@ -409,8 +409,8 @@ export default function TextbooksClient() {
             const metadataDocument = book || rows[0];
             const metadataParts = String(metadataDocument?.title || '').split('|').map(part => part.trim()).filter(Boolean);
             const publisherLabel = metadataParts.length > 1 ? metadataParts[0] : String(metadataDocument?.edition || '').trim();
-            const bookLanguageLabel = (metadataDocument?.language || learningLanguage) === 'en' ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.english.5c61a233') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.hindi.197af92c');
-            const bookKindLabel = hasBookParts ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.book.parts.e55c930d') : book ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.complete.book.db3cef6c') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.pdfs.f9ab1e38');
+            const bookLanguageLabel = (metadataDocument?.language || learningLanguage) === 'en' ? translateUi(locale, 'legacy.web.english.5c61a233') : translateUi(locale, 'legacy.web.hindi.197af92c');
+            const bookKindLabel = hasBookParts ? translateUi(locale, 'legacy.web.book.parts.e55c930d') : book ? translateUi(locale, 'legacy.web.complete.book.db3cef6c') : translateUi(locale, 'legacy.web.chapter.pdfs.f9ab1e38');
             const bookTitle = hasBookParts
               ? (locale === 'english' ? displayName + ' textbook parts' : displayName + ' की पाठ्यपुस्तक के भाग')
                : book ? (locale === 'english' ? displayName + ' textbook' : displayName + ' की पाठ्यपुस्तक')
@@ -436,24 +436,24 @@ export default function TextbooksClient() {
                   <span className="qe-textbook-book-copy"><strong>{bookTitle}</strong>
                     <span className="qe-book-meta-tags">
                       {publisherLabel && <span className="qe-book-meta-tag qe-book-meta-tag--source">{publisherLabel}</span>}
-                      <span className="qe-book-meta-tag qe-book-meta-tag--class">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.class.3f617911')}{rows[0]?.class_code}</span>
+                      <span className="qe-book-meta-tag qe-book-meta-tag--class">{translateUi(locale, 'legacy.web.class.3f617911')}{rows[0]?.class_code}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--subject">{displayName}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--language">{bookLanguageLabel}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--type">{bookKindLabel}</span>
                     </span>
-                    <small>{hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0).map(item => partLabel(Number(item.book_part))).join(' & ') + ' ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.available.7c7e1f1d') : book ? book.page_count + ' ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.216981bc') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.published.chapter.pdfs.cb126dfd')}</small>
+                    <small>{hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0).map(item => partLabel(Number(item.book_part))).join(' & ') + ' ' + translateUi(locale, 'legacy.web.available.7c7e1f1d') : book ? book.page_count + ' ' + translateUi(locale, 'legacy.web.pages.216981bc') : translateUi(locale, 'legacy.web.published.chapter.pdfs.cb126dfd')}</small>
                   </span>
-                  <span className="qe-textbook-chapter-count">{chapterBooks.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', chapterBooks.length === 1 ? 'legacy.web.chapter.pdf.689e1479' : 'web.count.chapterPdfsPlural')}</span>
+                  <span className="qe-textbook-chapter-count">{chapterBooks.length} {translateUi(locale, chapterBooks.length === 1 ? 'legacy.web.chapter.pdf.689e1479' : 'web.count.chapterPdfsPlural')}</span>
                   <span className="qe-textbook-book-chevron">{expanded?'−':'+'}</span>
                 </button>
-                {book && !hasBookParts && <button type="button" className="qe-textbook-open-book" onClick={()=>openDocument(book.document_id,code)} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.complete.textbook.f19d2905')+book.title}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.book.e025edc7')}</button>}
+                {book && !hasBookParts && <button type="button" className="qe-textbook-open-book" onClick={()=>openDocument(book.document_id,code)} aria-label={translateUi(locale, 'legacy.web.open.complete.textbook.f19d2905')+book.title}>{translateUi(locale, 'legacy.web.open.book.e025edc7')}</button>}
               </div>
               {expanded&&<div className="qe-textbook-book-contents" id={'qe-textbook-chapters-' + code}>
-                {(hasBookParts || subjectBooks.length>1) && <div className="qe-textbook-edition-list" aria-label={hasBookParts ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.textbook.parts.0e2e59f6') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.textbook.editions.fba4e58c')}>
+                {(hasBookParts || subjectBooks.length>1) && <div className="qe-textbook-edition-list" aria-label={hasBookParts ? translateUi(locale, 'legacy.web.textbook.parts.0e2e59f6') : translateUi(locale, 'legacy.web.textbook.editions.fba4e58c')}>
                   {(hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0) : subjectBooks.slice(1)).map(item => <button type="button" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                     <span className="qe-library-mini-pdf">PDF</span>
-                    <span><strong>{hasBookParts && item.book_part ? partLabel(Number(item.book_part)) : item.title}</strong><small>{item.edition || (hasBookParts ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.ncert.textbook.part.df28ce27') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.complete.subject.book.9fa02f9d'))} · {item.page_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.216981bc')}</small></span>
-                    <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.2fcc1213')}</span>
+                    <span><strong>{hasBookParts && item.book_part ? partLabel(Number(item.book_part)) : item.title}</strong><small>{item.edition || (hasBookParts ? translateUi(locale, 'legacy.web.ncert.textbook.part.df28ce27') : translateUi(locale, 'legacy.web.complete.subject.book.9fa02f9d'))} · {item.page_count} {translateUi(locale, 'legacy.web.pages.216981bc')}</small></span>
+                    <span>{translateUi(locale, 'legacy.web.open.2fcc1213')}</span>
                   </button>)}
                 </div>}
                 {chapterBooks.length>0 ? <>
@@ -461,50 +461,50 @@ export default function TextbooksClient() {
                   <div className="qe-textbook-chapter-list">{visibleChapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                     <span className="qe-textbook-chapter-index">{String((chapterPage - 1) * chapterPageSize + index + 1).padStart(2,'0')}</span>
                     <span className="qe-library-mini-pdf">PDF</span>
-                    <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, learningLanguage === 'en')}</strong><small>{chapterNumberLabel(item) || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.published.chapter.pdf.f01588a6')}</small></span>
-                    <span className="qe-textbook-chapter-pages">{item.page_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.216981bc')}</span>
+                    <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, learningLanguage === 'en')}</strong><small>{chapterNumberLabel(item) || translateUi(locale, 'legacy.web.published.chapter.pdf.f01588a6')}</small></span>
+                    <span className="qe-textbook-chapter-pages">{item.page_count} {translateUi(locale, 'legacy.web.pages.216981bc')}</span>
                     <span className="qe-textbook-chapter-open">↗</span>
                   </button>)}</div>
                   {showChapterPagination && renderChapterPagination('bottom')}
-                </> : <div className="qe-textbook-no-chapters"><span>▤</span><div><strong>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.chapter.pdfs.published.yet.5e639606')}</strong><small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.published.chapter.files.will.appear.un.6df6e592')}</small></div></div>}
+                </> : <div className="qe-textbook-no-chapters"><span>▤</span><div><strong>{translateUi(locale, 'legacy.web.no.chapter.pdfs.published.yet.5e639606')}</strong><small>{translateUi(locale, 'legacy.web.published.chapter.files.will.appear.un.6df6e592')}</small></div></div>}
               </div>}
             </section>;
           })}
         </div>}
-      <div className="qe-textbook-privacy-note"><span>▣</span><p><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.private.reading.mode.4ee7442e')}</b> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.viewer.does.not.provide.a.pdf.down.a5279925')}</p></div>
+      <div className="qe-textbook-privacy-note"><span>▣</span><p><b>{translateUi(locale, 'legacy.web.private.reading.mode.4ee7442e')}</b> {translateUi(locale, 'legacy.web.the.viewer.does.not.provide.a.pdf.down.a5279925')}</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
       <div className="qe-reader-heading">
         <button type="button" className="qe-reader-heading-back" onClick={returnToLibrary} aria-label={returnLabel}>←</button>
-        <strong className="qe-reader-heading-title">{selected ? subjectLabel + ' · ' + readerTitle(selected) : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.textbook.330c8c7c')}</strong>
-        {selected && <span className="qe-reader-page-indicator">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.page.9da95b95')}{currentPage}/{pageCount}</span>}
+        <strong className="qe-reader-heading-title">{selected ? subjectLabel + ' · ' + readerTitle(selected) : translateUi(locale, 'legacy.web.loading.textbook.330c8c7c')}</strong>
+        {selected && <span className="qe-reader-page-indicator">{translateUi(locale, 'legacy.web.page.9da95b95')}{currentPage}/{pageCount}</span>}
       </div>
 
-      {error ? <div className="qe-textbook-error" role="alert">{error}<button type="button" onClick={returnToLibrary}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.library.409dd37a')}</button></div>
-        : !selected ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.preparing.the.secure.reader.89f6ce6b')}</div>
+      {error ? <div className="qe-textbook-error" role="alert">{error}<button type="button" onClick={returnToLibrary}>{translateUi(locale, 'legacy.web.back.to.library.409dd37a')}</button></div>
+        : !selected ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {translateUi(locale, 'legacy.web.preparing.the.secure.reader.89f6ce6b')}</div>
         : <>
-          <div className="qe-reader-toolbar" role="toolbar" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.textbook.viewer.controls.ba6025be')}>
-            <div className="qe-reader-page-controls"><button type="button" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.page.dcddbbc8')} disabled={currentPage <= 1} onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button><label><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.page.5d16e0a7')}</span><input type="number" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.current.page.b64f7568')} min="1" max={pageCount} value={currentPage} onChange={e => { const value = Number(e.target.value); if (Number.isFinite(value)) setCurrentPage(Math.max(1, Math.min(pageCount, value))); }} onBlur={() => setCurrentPage(p => Math.max(1, Math.min(pageCount, p)))}/><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.ffc7a9ee')} {pageCount}</span></label><button type="button" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.page.24bee7ac')} disabled={currentPage >= pageCount} onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}>›</button></div>
+          <div className="qe-reader-toolbar" role="toolbar" aria-label={translateUi(locale, 'legacy.web.textbook.viewer.controls.ba6025be')}>
+            <div className="qe-reader-page-controls"><button type="button" aria-label={translateUi(locale, 'legacy.web.previous.page.dcddbbc8')} disabled={currentPage <= 1} onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button><label><span>{translateUi(locale, 'legacy.web.page.5d16e0a7')}</span><input type="number" aria-label={translateUi(locale, 'legacy.web.current.page.b64f7568')} min="1" max={pageCount} value={currentPage} onChange={e => { const value = Number(e.target.value); if (Number.isFinite(value)) setCurrentPage(Math.max(1, Math.min(pageCount, value))); }} onBlur={() => setCurrentPage(p => Math.max(1, Math.min(pageCount, p)))}/><span>{translateUi(locale, 'legacy.web.of.ffc7a9ee')} {pageCount}</span></label><button type="button" aria-label={translateUi(locale, 'legacy.web.next.page.24bee7ac')} disabled={currentPage >= pageCount} onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}>›</button></div>
             <div className="qe-reader-toolbar-divider"/>
-            <div className="qe-reader-zoom"><button type="button" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.zoom.out.15e85a79')} disabled={zoom <= 60} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.max(60, z - 10));}}>−</button><span>{fitPage ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.fit.page.1b43aaac') : fitWidth ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.fit.width.7e6e2e4d') : zoom + '%'}</span><button type="button" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.zoom.in.308b06c7')} disabled={zoom >= 160} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.min(160, z + 10));}}>＋</button></div>
-            <button type="button" className={'qe-reader-tool-button' + (fitPage ? ' selected' : '')} onClick={() => {setFitPage(true);setFitWidth(false);}}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.fit.page.1b43aaac')}</button>
-            <button type="button" className={'qe-reader-tool-button' + (fitWidth ? ' selected' : '')} onClick={() => {setFitPage(false);setFitWidth(value => !value);}}>{fitWidth ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.actual.size.85a377bc') : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.fit.width.7e6e2e4d')}</button>
-            <button type="button" className={'qe-reader-tool-button' + (thumbnailsOpen ? ' selected' : '')} onClick={() => setThumbnailsOpen(value => !value)}>▤ {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.4b727f1c')}</button>
-            <button type="button" className="qe-reader-tool-button qe-reader-fullscreen" onClick={() => void toggleFullscreen()}>{fullscreen ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.exit.full.screen.983bdcd1') : '⛶ ' + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.full.screen.2509978d')}</button>
+            <div className="qe-reader-zoom"><button type="button" aria-label={translateUi(locale, 'legacy.web.zoom.out.15e85a79')} disabled={zoom <= 60} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.max(60, z - 10));}}>−</button><span>{fitPage ? translateUi(locale, 'legacy.web.fit.page.1b43aaac') : fitWidth ? translateUi(locale, 'legacy.web.fit.width.7e6e2e4d') : zoom + '%'}</span><button type="button" aria-label={translateUi(locale, 'legacy.web.zoom.in.308b06c7')} disabled={zoom >= 160} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.min(160, z + 10));}}>＋</button></div>
+            <button type="button" className={'qe-reader-tool-button' + (fitPage ? ' selected' : '')} onClick={() => {setFitPage(true);setFitWidth(false);}}>{translateUi(locale, 'legacy.web.fit.page.1b43aaac')}</button>
+            <button type="button" className={'qe-reader-tool-button' + (fitWidth ? ' selected' : '')} onClick={() => {setFitPage(false);setFitWidth(value => !value);}}>{fitWidth ? translateUi(locale, 'legacy.web.actual.size.85a377bc') : translateUi(locale, 'legacy.web.fit.width.7e6e2e4d')}</button>
+            <button type="button" className={'qe-reader-tool-button' + (thumbnailsOpen ? ' selected' : '')} onClick={() => setThumbnailsOpen(value => !value)}>▤ {translateUi(locale, 'legacy.web.pages.4b727f1c')}</button>
+            <button type="button" className="qe-reader-tool-button qe-reader-fullscreen" onClick={() => void toggleFullscreen()}>{fullscreen ? translateUi(locale, 'legacy.web.exit.full.screen.983bdcd1') : '⛶ ' + translateUi(locale, 'legacy.web.full.screen.2509978d')}</button>
           </div>
 
           <div className={'qe-reader-workspace' + (thumbnailsOpen ? ' with-thumbnails' : '')}>
-            {thumbnailsOpen && <aside className="qe-reader-thumbnails" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.page.thumbnails.bb715704')}><div className="qe-reader-thumbs-head"><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.4b727f1c')}</b><small>{pageCount} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.total.37a7923f')}</small></div><div className="qe-reader-thumb-list">{thumbnails.map(number => <button type="button" key={number} className={number === currentPage ? 'active' : ''} onClick={() => {setCurrentPage(number);setPageError('');}}><img src={'/api/v1/learning/documents/' + selected.document_id + '/pages/' + number + '?rendition=thumbnail'} alt="" loading="lazy" decoding="async" draggable={false}/><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.page.5d16e0a7')} {number}</span></button>)}</div><div className="qe-reader-thumbs-foot">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.showing.pages.4fa9e8a0')} {thumbnails[0] || 0}–{thumbnails[thumbnails.length - 1] || 0}</div></aside>}
+            {thumbnailsOpen && <aside className="qe-reader-thumbnails" aria-label={translateUi(locale, 'legacy.web.page.thumbnails.bb715704')}><div className="qe-reader-thumbs-head"><b>{translateUi(locale, 'legacy.web.pages.4b727f1c')}</b><small>{pageCount} {translateUi(locale, 'legacy.web.total.37a7923f')}</small></div><div className="qe-reader-thumb-list">{thumbnails.map(number => <button type="button" key={number} className={number === currentPage ? 'active' : ''} onClick={() => {setCurrentPage(number);setPageError('');}}><img src={'/api/v1/learning/documents/' + selected.document_id + '/pages/' + number + '?rendition=thumbnail'} alt="" loading="lazy" decoding="async" draggable={false}/><span>{translateUi(locale, 'legacy.web.page.5d16e0a7')} {number}</span></button>)}</div><div className="qe-reader-thumbs-foot">{translateUi(locale, 'legacy.web.showing.pages.4fa9e8a0')} {thumbnails[0] || 0}–{thumbnails[thumbnails.length - 1] || 0}</div></aside>}
             <div className="qe-reader-page-stage" onContextMenu={e => e.preventDefault()}><div className={'qe-reader-page-viewport' + (fitWidth ? ' fit-width' : '') + (fitPage ? ' fit-page' : '')} key={selected.document_id + '-' + currentPage}>
-                {imageLoading && <div className="qe-reader-image-loading"><span className="qe-reader-spinner"/> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rendering.page.821433ef')} {currentPage}…</div>}
+                {imageLoading && <div className="qe-reader-image-loading"><span className="qe-reader-spinner"/> {translateUi(locale, 'legacy.web.rendering.page.821433ef')} {currentPage}…</div>}
                 <AuthenticatedPageImage
                   className="qe-reader-page-image"
                   src={pageUrl}
-                  alt={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.page.9da95b95')+currentPage+' '+translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.ffc7a9ee')+' '+selected.title}
+                  alt={translateUi(locale, 'legacy.web.page.9da95b95')+currentPage+' '+translateUi(locale, 'legacy.web.of.ffc7a9ee')+' '+selected.title}
                   onLoad={() => { setImageLoading(false); setPageError(''); }}
                   onError={message => { setImageLoading(false); setPageError(message); }}
                   style={{ width: fitPage ? 'auto' : fitWidth ? '100%' : zoom + '%' }}
                 />
-                {pageError && <div className="qe-reader-page-error" role="alert">{pageError}<button type="button" onClick={() => { setPageError(''); setImageLoading(true); setPageRetry(value => value + 1); }}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.retry.page.ce3b950d')}</button></div>}
+                {pageError && <div className="qe-reader-page-error" role="alert">{pageError}<button type="button" onClick={() => { setPageError(''); setImageLoading(true); setPageRetry(value => value + 1); }}>{translateUi(locale, 'legacy.web.retry.page.ce3b950d')}</button></div>}
               </div>
             </div>
           </div>

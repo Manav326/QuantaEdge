@@ -73,8 +73,8 @@
 
 ## Current priority
 
-1. Use the generated locale registry as the only source for selector options; do not add per-page language options.
-2. Remove inline translation pairs and direct static UI sentences route by route, beginning with pre-login/auth copy and deep Admin/People dialogs.
-3. Add a blocking literal anti-regression guard only after remaining legacy raw-copy debt is migrated or explicitly tracked.
-4. Verify cross-app locale persistence and language switching without changing learning language, content, test state or permissions.
+1. Use the locale registry throughout feature components; do not hard-code a binary English/Hinglish mapping or per-page language options.
+2. Remove direct static UI sentences, inline translation pairs, local dictionaries, and hardcoded accessibility/helper text route by route.
+3. Keep the global forced-locale regression check green; broader static-visible-literal blocking remains staged until raw-copy debt is migrated or explicitly tracked.
+4. Verify cross-app locale persistence and browser language switching without changing learning language, lesson/test state or permissions.
 5. Map the existing curriculum-translation APIs/provider/review workflow before designing any runtime translation cache. Do not introduce a duplicate AI translation service without an evidenced architecture gap.

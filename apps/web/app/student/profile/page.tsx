@@ -171,7 +171,7 @@ export default function StudentProfilePage() {
 
   async function requestAdultVerification() {
     setError(''); setNotice('');
-    if (!lifecycleConsent) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
+    if (!lifecycleConsent) { setError(translateUi(locale, 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
     setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/account/me/adult-verification-request', {
@@ -182,8 +182,8 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Unable to request adult verification.');
       await refreshLifecycle();
       setNotice(body.status === 'VERIFIED'
-        ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.adult.verification.is.already.cur.831c32ca')
-        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.adult.verification.review.request.e5c82db3'));
+        ? translateUi(locale, 'legacy.web.your.adult.verification.is.already.cur.831c32ca')
+        : translateUi(locale, 'legacy.web.your.adult.verification.review.request.e5c82db3'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to request adult verification.');
     } finally { setLifecycleBusy(false); }
@@ -191,8 +191,8 @@ export default function StudentProfilePage() {
 
   async function requestTransitionOtp() {
     setError(''); setNotice('');
-    if (!lifecycleConsent) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
-    if (!transitionMobile.trim()) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.your.mobile.number.e521108b')); return; }
+    if (!lifecycleConsent) { setError(translateUi(locale, 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
+    if (!transitionMobile.trim()) { setError(translateUi(locale, 'legacy.web.enter.your.mobile.number.e521108b')); return; }
     setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/auth/learner-transition/request-otp', {
@@ -203,8 +203,8 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Unable to send verification code.');
       setTransitionOtpSent(true);
       setNotice(body.devCode
-        ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.demo.verification.code.64a8cb3f') + body.devCode
-        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verification.code.sent.5eb39c00'));
+        ? translateUi(locale, 'legacy.web.demo.verification.code.64a8cb3f') + body.devCode
+        : translateUi(locale, 'legacy.web.verification.code.sent.5eb39c00'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to send verification code.');
     } finally { setLifecycleBusy(false); }
@@ -213,7 +213,7 @@ export default function StudentProfilePage() {
   async function completeIndependentAccount() {
     setError(''); setNotice('');
     if (!transitionOtp.trim() || transitionPassword.length < 8) {
-      setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.the.otp.and.choose.a.password.wi.c59b110f'));
+      setError(translateUi(locale, 'legacy.web.enter.the.otp.and.choose.a.password.wi.c59b110f'));
       return;
     }
     setLifecycleBusy(true);
@@ -230,7 +230,7 @@ export default function StudentProfilePage() {
       setTransitionOtp(''); setTransitionPassword(''); setTransitionOtpSent(false);
       setLifecycleConsent(false);
       await refreshLifecycle();
-      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.independent.account.is.ready.your.a9258d86'));
+      setNotice(translateUi(locale, 'legacy.web.your.independent.account.is.ready.your.a9258d86'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to create your independent account.');
     } finally { setLifecycleBusy(false); }
@@ -238,7 +238,7 @@ export default function StudentProfilePage() {
 
   async function requestParentEligibility() {
     setError(''); setNotice('');
-    if (!lifecycleConsent) { setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
+    if (!lifecycleConsent) { setError(translateUi(locale, 'legacy.web.please.confirm.your.consent.before.con.ed6835eb')); return; }
     setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/account/me/parent-eligibility-request', {
@@ -249,15 +249,15 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Unable to request parent eligibility review.');
       await refreshLifecycle();
       setNotice(body.status === 'VERIFIED'
-        ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.parent.eligibility.is.already.cur.97fa156a')
-        : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.parent.eligibility.review.request.3523d9b3'));
+        ? translateUi(locale, 'legacy.web.your.parent.eligibility.is.already.cur.97fa156a')
+        : translateUi(locale, 'legacy.web.your.parent.eligibility.review.request.3523d9b3'));
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : 'Unable to request parent eligibility review.');
     } finally { setLifecycleBusy(false); }
   }
 
   async function transitionToParent() {
-    if (!window.confirm(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.account.will.switch.to.the.parent.f21cb2f0'))) return;
+    if (!window.confirm(translateUi(locale, 'legacy.web.your.account.will.switch.to.the.parent.f21cb2f0'))) return;
     setError(''); setNotice(''); setLifecycleBusy(true);
     try {
       const response = await fetch('/api/v1/account/me/transition-to-parent', {
@@ -289,7 +289,7 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
       setProfileImageUrl(body.profile_image_url || null);
       setPhotoName(file.name);
-      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.photo.has.been.saved.to.your.prof.9c5a5ef0'));
+      setNotice(translateUi(locale, 'legacy.web.your.photo.has.been.saved.to.your.prof.9c5a5ef0'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to save this photo.');
@@ -323,7 +323,7 @@ export default function StudentProfilePage() {
         favoriteSubject: body.favorite_subject || '',
         learningGoal: body.learning_goal || '',
       });
-      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.profile.has.been.saved.c2201d87'));
+      setNotice(translateUi(locale, 'legacy.web.your.profile.has.been.saved.c2201d87'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
@@ -346,7 +346,7 @@ export default function StudentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
       setProfileImageUrl(body.profile_image_url || null);
       setPhotoName('');
-      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.photo.has.been.removed.from.your..2b92c4f9'));
+      setNotice(translateUi(locale, 'legacy.web.your.photo.has.been.removed.from.your..2b92c4f9'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Your photo could not be removed.');
@@ -400,9 +400,9 @@ export default function StudentProfilePage() {
               <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.keep.your.basic.details.up.to.date.482d2614" /></p></div></div>
               <div className="student-profile-fields">
                 <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={student?.public_user_id || ''} readOnly aria-readonly="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.name.7d67d7b4" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.what.should.we.call.you.1b8ed077')} autoComplete="name" /></label>
-                <label className="student-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.e.g.patna.e53ea62e')} autoComplete="address-level2" /></label>
-                <label className="student-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.e.g.bihar.928d6032')} autoComplete="address-level1" /></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.your.name.7d67d7b4" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={translateUi(locale, 'legacy.web.what.should.we.call.you.1b8ed077')} autoComplete="name" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={translateUi(locale, 'legacy.web.e.g.patna.e53ea62e')} autoComplete="address-level2" /></label>
+                <label className="student-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={translateUi(locale, 'legacy.web.e.g.bihar.928d6032')} autoComplete="address-level1" /></label>
               </div>
               <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <UiText message="legacy.web.city.and.state.are.enough.please.do.no.8802cd0a" /></p>
             </section>
@@ -410,10 +410,10 @@ export default function StudentProfilePage() {
             <section className="student-profile-card">
               <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><UiText message="legacy.web.school.and.learning.998c3fe4" /></h2><p><UiText message="legacy.web.help.us.make.your.learning.more.releva.938b8ffd" /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.school.name.c4fef1c5" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.your.school.name.48c04e62')} autoComplete="organization" /></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.school.name.c4fef1c5" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={translateUi(locale, 'legacy.web.enter.your.school.name.48c04e62')} autoComplete="organization" /></label>
                 <label className="student-profile-field"><UiText message="legacy.web.school.medium.cfa6de85" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><UiText message="legacy.web.choose.if.you.know.e5c58168" /></option><option value="Hindi"><UiText message="legacy.web.hindi.197af92c" /></option><option value="English"><UiText message="common.language.english" /></option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other">{locale==='english'?'Other':'अन्य'}</option></select></label>
                 <label className="student-profile-field"><UiText message="legacy.web.favourite.subject.be48a154" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><UiText message="legacy.web.choose.a.subject.518e940d" /></option><option value="maths"><UiText message="legacy.web.maths.a163a4bb" /></option><option value="science"><UiText message="legacy.web.science.4d80727d" /></option><option value="both"><UiText message="legacy.web.both.20542d4e" /></option><option value="other"><UiText message="legacy.web.another.subject.693bc278" /></option><option value="not_sure"><UiText message="legacy.web.still.exploring.595d12f0" /></option></select></label>
-                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.my.learning.goal.92dbad6c" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.what.would.you.like.to.improve.for.exa.31332678')} /><small>{draft.learningGoal.length}/300 characters</small></label>
+                <label className="student-profile-field student-profile-field--wide"><UiText message="legacy.web.my.learning.goal.92dbad6c" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={translateUi(locale, 'legacy.web.what.would.you.like.to.improve.for.exa.31332678')} /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
             </section>
 

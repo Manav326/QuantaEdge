@@ -115,19 +115,19 @@ export default function PremiumPagination({
   if (safeTotal <= 10) return null;
 
   return (
-    <nav aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pagination.for.5b57562e') + itemLabel} style={shell}>
+    <nav aria-label={translateUi(locale, 'legacy.web.pagination.for.5b57562e') + itemLabel} style={shell}>
       <div style={{ display: 'grid', gap: 3, minWidth: 160 }}>
         <strong aria-live="polite" style={{ fontSize: 12, fontWeight: 800, letterSpacing: '-.1px' }}>
-          {safeTotal === 0 ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.9f451e4a') + itemLabel : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.showing.ee66c06d') + number(first) + '–' + number(last) + translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.0762fe50') + number(safeTotal)}
+          {safeTotal === 0 ? translateUi(locale, 'legacy.web.no.9f451e4a') + itemLabel : translateUi(locale, 'legacy.web.showing.ee66c06d') + number(first) + '–' + number(last) + translateUi(locale, 'legacy.web.of.0762fe50') + number(safeTotal)}
         </strong>
-        <span style={mutedText}>{safeTotal === 1 ? translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.1.item.b03c667c') : number(safeTotal) + ' ' + itemLabel}</span>
+        <span style={mutedText}>{safeTotal === 1 ? translateUi(locale, 'legacy.web.1.item.b03c667c') : number(safeTotal) + ' ' + itemLabel}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', marginLeft: 'auto' }}>
         <div style={tinyLabel}>
-          {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rows.per.page.3f63ed4e')}
+          {translateUi(locale, 'legacy.web.rows.per.page.3f63ed4e')}
           <select
-            aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rows.per.page.eb6b4a0e')}
+            aria-label={translateUi(locale, 'legacy.web.rows.per.page.eb6b4a0e')}
             value={safeSize}
             disabled={loading}
             onChange={event => onPageSizeChange(Number(event.target.value))}
@@ -140,12 +140,12 @@ export default function PremiumPagination({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
           <button
             type="button"
-            aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.page.dcddbbc8')}
-            title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.page.dcddbbc8')}
+            aria-label={translateUi(locale, 'legacy.web.previous.page.dcddbbc8')}
+            title={translateUi(locale, 'legacy.web.previous.page.dcddbbc8')}
             disabled={loading || safePage <= 0}
             onClick={() => onPageChange(Math.max(0, safePage - 1))}
             style={loading || safePage <= 0 ? disabledButton : buttonBase}
-          >‹ <span style={{ fontSize: 11 }}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.9320332c')}</span></button>
+          >‹ <span style={{ fontSize: 11 }}>{translateUi(locale, 'legacy.web.previous.9320332c')}</span></button>
 
           {pages.map((entry, index) => typeof entry === 'number'
             ? <button
@@ -162,12 +162,12 @@ export default function PremiumPagination({
 
           <button
             type="button"
-            aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.page.24bee7ac')}
-            title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.page.24bee7ac')}
+            aria-label={translateUi(locale, 'legacy.web.next.page.24bee7ac')}
+            title={translateUi(locale, 'legacy.web.next.page.24bee7ac')}
             disabled={loading || safePage >= pageCount - 1}
             onClick={() => onPageChange(Math.min(pageCount - 1, safePage + 1))}
             style={loading || safePage >= pageCount - 1 ? disabledButton : buttonBase}
-          ><span style={{ fontSize: 11 }}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.7c68200e')}</span> ›</button>
+          ><span style={{ fontSize: 11 }}>{translateUi(locale, 'legacy.web.next.7c68200e')}</span> ›</button>
         </div>
       </div>
     </nav>

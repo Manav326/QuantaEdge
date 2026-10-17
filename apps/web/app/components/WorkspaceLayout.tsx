@@ -45,7 +45,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const { locale } = useLocale();
-  const t = (key: string) => translateUi(locale === 'english' ? 'english' : 'hinglish', key);
+  const t = (key: string) => translateUi(locale, key);
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
   const itemLabel = (item: { message: string }) => t(item.message);

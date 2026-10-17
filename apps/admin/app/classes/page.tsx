@@ -1,5 +1,6 @@
 'use client';
 
+import { getUiLocaleLanguage } from '../i18n/catalog';
 import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -28,10 +29,10 @@ function localTime(offsetMinutes:number){
 }
 function localInput(value?:string|null){if(!value)return '';const d=new Date(value);return Number.isNaN(d.getTime())?'':new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
 function indiaDate(value:string){const d=new Date(value);return Number.isNaN(d.getTime())?'':d.toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});}
-function dateText(value?:string|null, locale:'english'|'hinglish'='hinglish'){
+function dateText(value?:string|null, locale:string='hinglish'){
   if(!value)return '—';
   const date=new Date(value);
-  return Number.isNaN(date.getTime())?'—':date.toLocaleString(locale==='english'?'en-IN':'hi-IN',{timeZone:'Asia/Kolkata'});
+  return Number.isNaN(date.getTime())?'—':date.toLocaleString(getUiLocaleLanguage(locale)+'-IN',{timeZone:'Asia/Kolkata'});
 }
 function sessionStatusText(status:string,t:TranslateFn){
   const keys:Record<string,string>={SCHEDULED:'admin.classes.scheduled',LIVE:'admin.classes.liveStatus',COMPLETED:'admin.classes.completed',CANCELLED:'admin.classes.cancelled'};

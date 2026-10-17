@@ -1,4 +1,4 @@
-import { translateUi, type MessageKey } from '../i18n/catalog';
+import { translateUi, type MessageKey, type UiLocale } from '../i18n/catalog';
 
 export type AdminSection =
   | 'overview'
@@ -15,7 +15,7 @@ export type AdminSection =
   | 'translations'
   | 'certificates';
 
-export type AdminLocale = 'english' | 'hinglish';
+export type AdminLocale = UiLocale;
 export type AdminNavItem = { key: AdminSection; href: string; icon: string };
 export type AdminNavGroup = { id: 'curriculum' | 'teaching' | 'people' | 'administration'; items: AdminNavItem[] };
 

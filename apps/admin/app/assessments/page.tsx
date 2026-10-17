@@ -1,5 +1,6 @@
 'use client';
 
+import { getUiLocaleLanguage } from '../i18n/catalog';
 import AdminSidebar from '../components/AdminSidebar';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import PremiumPagination from '../components/PremiumPagination';
@@ -23,7 +24,7 @@ async function api(url:string,init:RequestInit={}) {
   return body;
 }
 
-function fmtDate(value?:string|null,locale:'english'|'hinglish'='hinglish'){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString(locale==='english'?'en-IN':'hi-IN');}
+function fmtDate(value?:string|null,locale:string='hinglish'){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString(getUiLocaleLanguage(locale)+'-IN');}
 type Translator=(key:string,values?:Record<string,string|number>)=>string;
 function answerText(value:any,noAnswerText:string){if(value===null||value===undefined||value==='')return noAnswerText;if(typeof value==='string'){try{return JSON.stringify(JSON.parse(value),null,2)}catch{return value}}try{return JSON.stringify(value,null,2)}catch{return String(value)}}
 const STATUS_KEYS:Record<string,string>={DRAFT:'admin.assessments.statusDraft',PUBLISHED:'admin.assessments.statusPublished',ARCHIVED:'admin.assessments.statusArchived',AWAITING_REVIEW:'admin.assessments.statusAwaitingReview',GRADED:'admin.assessments.statusGraded',RELEASED:'admin.assessments.statusReleased',IN_PROGRESS:'admin.assessments.statusInProgress',ISSUED:'admin.assessments.statusIssued',REVOKED:'admin.assessments.statusRevoked'};

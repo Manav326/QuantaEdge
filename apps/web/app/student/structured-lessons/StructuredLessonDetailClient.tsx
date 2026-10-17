@@ -32,12 +32,12 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         ]);
         if ([lessonResponse, savedResponse].some(r => r.status === 401 || r.status === 403)) { router.replace('/login/student'); return; }
         const body = await lessonResponse.json();
-        if (!lessonResponse.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.lesson.is.not.available.yet.09b6c21c'));
+        if (!lessonResponse.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.this.lesson.is.not.available.yet.09b6c21c'));
         const savedBody = savedResponse.ok ? await savedResponse.json() : {};
-        if (!savedResponse.ok && savedResponse.status !== 404) throw new Error(savedBody.message || savedBody.detail || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.saved.progress.could.not.be.loaded.72d606a2'));
+        if (!savedResponse.ok && savedResponse.status !== 404) throw new Error(savedBody.message || savedBody.detail || translateUi(locale, 'legacy.web.saved.progress.could.not.be.loaded.72d606a2'));
         if (active) { setLesson(body as StructuredLesson); setSaved(savedBody || {}); }
       } catch (error) {
-        if (active) setError(error instanceof Error ? error.message : translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.lesson.could.not.be.loaded.1765a64a'));
+        if (active) setError(error instanceof Error ? error.message : translateUi(locale, 'legacy.web.the.lesson.could.not.be.loaded.1765a64a'));
       } finally { if (active) setBusy(false); }
     })();
     return () => { active = false; };
@@ -49,7 +49,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         body: JSON.stringify({ response }),
       });
     const body = await http.json();
-    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.response.was.not.saved.05e6bba1'));
+    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.the.response.was.not.saved.05e6bba1'));
     return { status: body.status, score: body.score, maxScore: body.maxScore, autoGraded: body.autoGraded,
       feedback: body.feedback, feedbackByLocale: body.feedbackByLocale } as QuestionResult;
   }
@@ -60,7 +60,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         body: JSON.stringify({ response: value }),
       });
     const body = await http.json();
-    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
+    if (!http.ok) throw new Error(body.message || body.detail || body.error || translateUi(locale, 'legacy.web.activity.response.was.not.saved.9ff3c1d7'));
   }
   const responses: Record<string, QuestionResponse> = {};
   const results: Record<string, QuestionResult> = {};
@@ -71,10 +71,10 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     submitted[id] = value.status === 'correct' || value.status === 'pending_review';
   });
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading"><Link href="/student/structured-lessons" className="back-link">← {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.all.structured.lessons.5f389f55')}</Link>
+    <header className="content-heading"><Link href="/student/structured-lessons" className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
       {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}</header>
-    {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.go.back.f75fdd65')}</Link></> :
-      busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
+    {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
+      busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
       <>
         <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
           onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
