@@ -1638,6 +1638,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     .put("assessmentAttemptId", attemptId)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
+                    .put("institutionCode", institutionBrandIdentity?.institutionCode.orEmpty())
             )
             when (route) {
                 AppRoute.PROGRESS -> loadProgressCertificateData(progressData)
