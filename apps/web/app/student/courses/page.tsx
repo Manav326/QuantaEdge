@@ -54,7 +54,10 @@ export default function StudentCoursesPage() {
       const serverActive = owned.find(course => course.is_enrolled === true || course.enrolled === true);
       const requestedFocus = typeof window !== 'undefined'
         ? Number(new URLSearchParams(window.location.search).get('focus') || 0) : 0;
-      const requested = owned.find(course => Number(course.id || course.course_id) === requestedFocus);
+      const requested = owned.find(course =>
+        Number(course.id || course.course_id) === requestedFocus &&
+        (course.is_enrolled === true || course.enrolled === true)
+      );
       const selected = requested || serverActive || owned[0] || null;
       const selectedId = selected ? Number(selected.id || selected.course_id) : null;
       setActiveCourseId(selectedId && Number.isSafeInteger(selectedId) ? selectedId : null);
@@ -75,9 +78,7 @@ export default function StudentCoursesPage() {
       results.forEach(result => { if (result) next[result.id] = result; });
       setProgress(next);
 
-      if (requested && selectedId && requested.is_enrolled !== true && requested.enrolled !== true) {
-        await activateCourse(selectedId, false);
-      } else if (selectedId) {
+      if (selectedId) {
         try { window.localStorage.setItem('qe:student:activeCourseId', String(selectedId)); } catch { /* storage is optional */ }
       }
     } catch (e: any) {
