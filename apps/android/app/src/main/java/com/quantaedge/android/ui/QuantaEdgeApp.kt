@@ -223,7 +223,7 @@ fun QuantaEdgeApp() {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
     }
     var currentSubject by rememberSaveable { mutableStateOf("maths") }
-    var currentCourseId by rememberSaveable { mutableStateOf(0L) }
+    var currentCourseId by rememberSaveable { mutableStateOf(preferences.getLong("activeCourseId", 0L)) }
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
     var parentSection by rememberSaveable { mutableStateOf("family") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
@@ -513,6 +513,22 @@ fun QuantaEdgeApp() {
             }.getOrNull()?.let { progress[id] = it }
         }
         courseProgress = progress
+        val serverActive = programs.firstOrNull {
+            it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
+        }
+        if (serverActive != null) {
+            val serverActiveId = serverActive.longAny("id", "course_id")
+            if (serverActiveId > 0L) {
+                currentCourseId = serverActiveId
+                preferences.edit().putLong("activeCourseId", serverActiveId).apply()
+            }
+        } else if (currentCourseId > 0L && programs.none {
+                it.longAny("id", "course_id") == currentCourseId &&
+                    (it.optBoolean("paused") || it.optBoolean("is_enrolled", it.optBoolean("enrolled")))
+            }) {
+            currentCourseId = 0L
+            preferences.edit().remove("activeCourseId").apply()
+        }
     }
 
     suspend fun refreshStudentTextbookDocuments() {
@@ -689,8 +705,13 @@ fun QuantaEdgeApp() {
             return
         }
         runTask {
-            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+            // The server owns the active-course transition. This also pauses the
+            // previous course while preserving its enrollment and learning history.
+            ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            refreshStudentPrograms()
             currentCourseId = courseId
+            preferences.edit().putLong("activeCourseId", courseId).apply()
+            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
             route = AppRoute.STUDENT_HOME
             status = if (language == "hi") "सीखने का course बदल गया।" else "Learning course changed."
         }
@@ -2697,6 +2718,19 @@ fun QuantaEdgeApp() {
                                     DropdownMenuItem(
                                         text = { Text((if (learningLanguage == "en") "✓ " else "") + "English") },
                                         onClick = { setLearningContentLanguage("en") },
+                                        enabled = !busy
+                                    )
+                                }
+                                if (!parentRole) {
+                                    HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp))
+                                    DropdownMenuItem(
+                                        text = { Text(if (language == "hi") "सभी courses" else "All courses") },
+                                        onClick = { accountMenuExpanded = false; openAllCourses() },
+                                        enabled = !busy
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text("Marketplace") },
+                                        onClick = { accountMenuExpanded = false; openMarketplace() },
                                         enabled = !busy
                                     )
                                 }
