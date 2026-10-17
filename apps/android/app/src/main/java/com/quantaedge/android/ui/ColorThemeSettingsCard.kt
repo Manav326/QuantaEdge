@@ -42,13 +42,13 @@ fun ColorThemeSettingsCard(language: String) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
                     selected = selected == QeAppearanceMode.INSTITUTION,
-                    onClick = { controller.setAppearanceMode(QeAppearanceMode.INSTITUTION) },
+                    onClick = { controller.updateAppearanceMode(QeAppearanceMode.INSTITUTION) },
                     label = { Text(label("Institution", "संस्था")) },
                     modifier = Modifier.weight(1f)
                 )
                 FilterChip(
                     selected = selected == QeAppearanceMode.SYSTEM,
-                    onClick = { controller.setAppearanceMode(QeAppearanceMode.SYSTEM) },
+                    onClick = { controller.updateAppearanceMode(QeAppearanceMode.SYSTEM) },
                     label = { Text(label("System", "डिवाइस")) },
                     modifier = Modifier.weight(1f)
                 )
@@ -56,13 +56,13 @@ fun ColorThemeSettingsCard(language: String) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
                     selected = selected == QeAppearanceMode.LIGHT,
-                    onClick = { controller.setAppearanceMode(QeAppearanceMode.LIGHT) },
+                    onClick = { controller.updateAppearanceMode(QeAppearanceMode.LIGHT) },
                     label = { Text(label("Light", "लाइट")) },
                     modifier = Modifier.weight(1f)
                 )
                 FilterChip(
                     selected = selected == QeAppearanceMode.DARK,
-                    onClick = { controller.setAppearanceMode(QeAppearanceMode.DARK) },
+                    onClick = { controller.updateAppearanceMode(QeAppearanceMode.DARK) },
                     label = { Text(label("Dark", "डार्क")) },
                     modifier = Modifier.weight(1f)
                 )
