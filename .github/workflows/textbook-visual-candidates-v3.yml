@@ -434,7 +434,7 @@ jobs:
         if: env.ANALYSIS_MODE == 'resume_layers_4_5'
         shell: bash
         env:
-          VISION_MODEL: ${{ inputs.vision_model }}
+          VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
           GHCR_OWNER: ${{ github.repository_owner }}
         run: |
           set -euo pipefail
