@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 340,
+    "assets_selected": 25,
     "assets_processed_this_run": 25,
-    "assets_analyzed": 337,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 315,
+    "assets_analyzed": 335,
+    "assets_failed": 15,
+    "assets_skipped_from_checkpoint": 0,
     "publication_allowed": false
   },
   "results": [
@@ -24,26 +24,27 @@
       "source_pdf_page_number": 1,
       "asset_path": "assets/b379b0ffc73e39f16041b956c9b880164f463607a8bcab39b7d1f4f45a8f1b24.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A QR code with the text '0777' at the bottom.",
-        "visual_type": "other",
+        "visual_type": "diagram",
         "visible_text": [
           "0777"
         ],
         "concepts": [],
-        "context_relation": "The QR code is likely related to educational content, possibly a link to a resource or quiz.",
+        "context_relation": "The QR code is likely a reference or link to additional educational content.",
         "limitations": [
-          "The QR code's content is not visible in the image."
+          "The QR code does not provide any specific information about the content of the textbook or the grade level."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:17:56Z"
+      "checkpointed_at": "2026-10-17T01:44:45Z"
     },
     {
       "asset_id": "5cb1722c6e008f3b155f0570",
@@ -53,20 +54,21 @@
       "source_pdf_page_number": 1,
       "asset_path": "assets/7bfa76162f627e7c5e8c2a0d5cd7d7e91b204403f2f440c0291c288a351038cd.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A group of children and adults are engaged in various activities in a garden, including planting, watering plants, and observing animals.",
+        "visual_summary": "A group of children and adults are engaged in various activities in a garden setting, including planting, watering plants, and observing animals.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [
           "gardening",
           "plant care",
           "animal observation",
-          "community activity"
+          "community involvement"
         ],
-        "context_relation": "The image depicts a community garden where children and adults are participating in educational activities related to gardening and animal observation.",
+        "context_relation": "The image depicts a community garden where children and adults are actively participating in gardening activities.",
         "limitations": [
           "The image does not provide specific details about the activities or the educational content being taught."
         ]
@@ -75,7 +77,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:21:27Z"
+      "checkpointed_at": "2026-10-17T01:49:15Z"
     },
     {
       "asset_id": "af9d18fb6b359051c8e93062",
@@ -117,6 +119,7 @@
       "source_pdf_page_number": 1,
       "asset_path": "page-0001.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "b87b3d027761852bad98417b4fc8ee84099061a523377427d90cc504a87ea8a3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -146,7 +149,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:34:29Z"
+      "checkpointed_at": "2026-10-17T01:53:03Z"
     },
     {
       "asset_id": "19dc88e351049dad86e11d15",
@@ -172,6 +175,7 @@
       "source_pdf_page_number": 2,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -180,16 +184,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "No visible content to analyze.",
+        "context_relation": "The page is a blank page in a textbook.",
         "limitations": [
-          "No visible content to analyze."
+          "The page is completely blank and does not contain any visible content or text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:40:05Z"
+      "checkpointed_at": "2026-10-17T01:53:19Z"
     },
     {
       "asset_id": "a5b2d9d5e7090b55e968cfff",
@@ -199,6 +203,7 @@
       "source_pdf_page_number": 2,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cd808e4a912bfb52898d94fe3d2f6c21971383f7d08bac244cb17ac3db0eb4e3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -216,7 +221,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:40:15Z"
+      "checkpointed_at": "2026-10-17T01:53:32Z"
     },
     {
       "asset_id": "bdb8332fb9f316fc59079355",
@@ -242,6 +247,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -257,7 +263,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:45:30Z"
+      "checkpointed_at": "2026-10-17T01:55:01Z"
     },
     {
       "asset_id": "87529e58d267f7916f48b91b",
@@ -267,24 +273,23 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_summary": "A twisted rope with a blue loop at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is unrelated to the text about the National Education Policy 2020.",
-        "limitations": [
-          "The image is a single object and does not represent any specific concept or relationship."
-        ]
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:46:41Z"
+      "checkpointed_at": "2026-10-17T01:56:35Z"
     },
     {
       "asset_id": "95adf2a57bed4fc1e54b082e",
@@ -294,25 +299,23 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A twisted rope or cord, possibly made of metal or rope, with a yellowish hue.",
+        "visual_summary": "A yellow rope with a black tip, coiled in a spiral pattern.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is not directly related to the text provided.",
-        "limitations": [
-          "The image does not provide any specific information or context related to the text.",
-          "The image is a standalone illustration and does not contribute to the content of the text."
-        ]
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:47:52Z"
+      "checkpointed_at": "2026-10-17T01:58:07Z"
     },
     {
       "asset_id": "cda543cbcdd029d4629a4d73",
@@ -321,25 +324,14 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 3,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page is likely part of a textbook or educational document.",
-        "limitations": [
-          "The page is blank and does not contain any visible text or images."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:48:05Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "82488ace4159be78881396e5",
@@ -349,6 +341,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -360,14 +353,14 @@
         "context_relation": "Foreword of a textbook discussing the National Education Policy 2020 and its goals.",
         "limitations": [
           "No visible content on the page.",
-          "No visible text or images to analyze."
+          "No diagrams, charts, or illustrations present."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:48:18Z"
+      "checkpointed_at": "2026-10-17T02:05:28Z"
     },
     {
       "asset_id": "2f86b5c5f393dd23a9c2b138",
@@ -377,6 +370,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1b4ff802d5cafeec42316ff0d2d6f63c6d38dd4da18bf7208097bc38854f57db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -387,14 +381,14 @@
         "concepts": [],
         "context_relation": "The page is likely a blank or introductory page in a textbook.",
         "limitations": [
-          "No visible text or images are present on the page."
+          "The page is completely black and has no visible text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:48:30Z"
+      "checkpointed_at": "2026-10-17T02:05:44Z"
     },
     {
       "asset_id": "fb955679a5a162ab8f8563e1",
@@ -403,74 +397,14 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 3,
       "asset_path": "page-0003.jpg",
-      "asset_kind": "page_preview",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its alignment with the National Curriculum Framework for School Education (NCF-SE) 2023.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Foreword",
-          "The National Education Policy 2020 envisages a system of education",
-          "in the country that is rooted in an Indian ethos and its civilisational",
-          "accomplishments in all fields of knowledge and human endeavour.",
-          "At the same time, it aims to prepare students to engage constructively",
-          "with the opportunities and challenges of the twenty-first century.",
-          "The basis for this aspirational vision has been well laid out by the",
-          "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "across curricular areas at all stages. By nurturing students’ inherent",
-          "abilities across all five planes of human existence (pañchakoshas), the",
-          "Foundational and Preparatory Stages set the Stage for further learning",
-          "at Middle Stage. Spanning Grades 6 to 8, the Middle Stage serves as",
-          "a critical three-year bridge between the Preparatory and Secondary",
-          "Stages.",
-          "The NCF-SE 2023, at the Middle Stage, aims to equip students with",
-          "the skills that are needed to grow, as they advance in their lives. It",
-          "endeavours to enhance their analytical, descriptive, and narrative",
-          "capabilities, and to prepare them for the challenges and opportunities",
-          "that await them. A diverse curriculum, covering nine subjects ranging",
-          "from three languages—including at least two languages native to",
-          "India—to Science, Mathematics, Social Sciences, Art Education, Physical",
-          "Education and Well-being, and Vocational Education promotes their",
-          "holistic development.",
-          "Such a transformative learning culture requires certain essential",
-          "conditions. One of them is to have appropriate textbooks in different",
-          "curricular areas, as these textbooks will play a central role in mediating",
-          "between content and pedagogy—a role that will strike a judicious",
-          "balance between direct instruction and opportunities for exploration",
-          "and inquiry. Among the other conditions, classroom arrangement and",
-          "teacher preparation are crucial to establish conceptual connections"
-        ],
-        "concepts": [
-          "National Education Policy 2020",
-          "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "curricular areas",
-          "Middle Stage",
-          "Foundational and Preparatory Stages",
-          "analytical, descriptive, and narrative capabilities",
-          "challenges and opportunities",
-          "holistic development",
-          "transformative learning culture",
-          "textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "experiential learning",
-          "real-world examples",
-          "curiosity, exploration, questioning, and critical thinking"
-        ],
-        "context_relation": "The foreword discusses the alignment of the National Education Policy 2020 with the National Curriculum Framework for School Education (NCF-SE) 2023, emphasizing the importance of textbooks and the development of students' abilities across different curricular areas.",
-        "limitations": [
-          "The foreword does not provide specific details about the content or structure of the textbook being discussed."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:52:33Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "37788c1f9a2ccb0eb06bdc89",
@@ -480,6 +414,35 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "155adb6d3c2b247a4197d31a1adb7581dc5207d516f128739c942c310c91f3a1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T02:10:59Z"
+    },
+    {
+      "asset_id": "54da49cb1518aaa3d968e7bd",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "155adb6d3c2b247a4197d31a1adb7581dc5207d516f128739c942c310c91f3a1",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -490,43 +453,14 @@
         "concepts": [],
         "context_relation": "The image is a blank page, possibly a template for educational content.",
         "limitations": [
-          "The page is blank and does not contain any visual or textual information."
+          "The page is blank and does not contain any specific content or visual elements."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:52:45Z"
-    },
-    {
-      "asset_id": "54da49cb1518aaa3d968e7bd",
-      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 4,
-      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a blank page, likely intended for text or content to be added.",
-        "limitations": [
-          "The page is blank and requires content to be added.",
-          "The page does not contain any specific visual elements or text.",
-          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:52:57Z"
+      "checkpointed_at": "2026-10-17T02:11:09Z"
     },
     {
       "asset_id": "eccf2bc9cc8b1e0c9ea7f2e8",
@@ -536,33 +470,7 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible text or images.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The page is a blank page with no visible content.",
-        "limitations": [
-          "The page is completely blank and does not contain any text or images."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:53:09Z"
-    },
-    {
-      "asset_id": "07d0135ca1918ca2e0516a30",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 4,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "155adb6d3c2b247a4197d31a1adb7581dc5207d516f128739c942c310c91f3a1",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -580,7 +488,35 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:53:20Z"
+      "checkpointed_at": "2026-10-17T02:11:24Z"
+    },
+    {
+      "asset_id": "07d0135ca1918ca2e0516a30",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "155adb6d3c2b247a4197d31a1adb7581dc5207d516f128739c942c310c91f3a1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T02:11:39Z"
     },
     {
       "asset_id": "31a9402daa13ef9136ec6df9",
@@ -590,12 +526,13 @@
       "source_pdf_page_number": 4,
       "asset_path": "page-0004.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "155adb6d3c2b247a4197d31a1adb7581dc5207d516f128739c942c310c91f3a1",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the integration of science subjects with cross-cutting themes and the use of hands-on activities to engage students.",
-        "visual_type": "uncertain",
+        "visual_summary": "A page from a textbook discussing the integration of science subjects and cross-cutting themes in education.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "The content attempts to integrate science subjects such as physics, chemistry, biology, and earth science with cross-cutting themes like environmental education, value education, inclusive education, and Indian Knowledge Systems (IKS). By incorporating hands-on activities, the textbook engages stude",
           "However, in addition to this textbook, students at this stage should also be encouraged to explore various other learning resources. School libraries play a crucial role in making such resources available. Besides, the role of parents and teachers will also be invaluable in guiding and encouraging s",
@@ -606,7 +543,13 @@
         "concepts": [
           "science subjects",
           "cross-cutting themes",
+          "environmental education",
+          "value education",
+          "inclusive education",
+          "Indian Knowledge Systems (IKS)",
           "hands-on activities",
+          "reflection",
+          "group discussions",
           "creativity",
           "innovation",
           "critical thinking",
@@ -617,22 +560,19 @@
           "parents",
           "teachers",
           "student-centred approach",
-          "stakeholders",
-          "suggestions",
-          "feedback",
-          "improvement"
+          "collaboration"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, its integration of science subjects, and the importance of various learning resources.",
+        "context_relation": "The page discusses the content and pedagogy of a textbook, emphasizing its integration of science subjects and cross-cutting themes, as well as the importance of various learning resources and stakeholders in its development.",
         "limitations": [
-          "The page does not provide specific details about the textbook's content or structure.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The page does not provide specific details about the textbook's content or pedagogy.",
+          "The page does not include any visual elements or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:56:43Z"
+      "checkpointed_at": "2026-10-17T02:15:59Z"
     },
     {
       "asset_id": "b69ca9c35da193a1a5a74140",
@@ -642,6 +582,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -650,14 +591,14 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Educational content for Grade 7 textbook",
+        "context_relation": "The image is a visual representation of a rope, likely used as an illustration in a science textbook.",
         "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:56:51Z"
+      "checkpointed_at": "2026-10-17T02:16:10Z"
     },
     {
       "asset_id": "f9a34bb45d05bc18a7febde8",
@@ -667,24 +608,25 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_summary": "A coiled rope with a blue loop at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is a visual representation of a rope, possibly used as an illustration in a science textbook.",
         "limitations": [
-          "The image does not provide specific details about the rope or its use in the context of the textbook."
+          "The image does not provide any specific information about the rope or its use in the context of the textbook."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:57:00Z"
+      "checkpointed_at": "2026-10-17T02:16:23Z"
     },
     {
       "asset_id": "2a272924e760857996e48e0f",
@@ -694,34 +636,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A yellow rope with a spiral pattern.",
-        "visual_type": "illustration",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a visual representation of a rope, possibly used as an illustration in a science textbook.",
-        "limitations": [
-          "The image does not provide any specific information or data that can be analyzed.",
-          "The image is a simple illustration and does not represent any complex scientific concept or data."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:57:10Z"
-    },
-    {
-      "asset_id": "9dc6dcd67dc472a6f0ce8ad9",
-      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 5,
-      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -733,14 +648,40 @@
         "context_relation": "The image is a visual representation of a rope, possibly used as an illustration in a science textbook.",
         "limitations": [
           "The image does not provide any specific information or context related to the text.",
-          "The image is a simple illustration and does not convey any specific scientific concept or data."
+          "The image is a simple illustration and does not represent any specific scientific concept or data."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:57:17Z"
+      "checkpointed_at": "2026-10-17T02:16:37Z"
+    },
+    {
+      "asset_id": "9dc6dcd67dc472a6f0ce8ad9",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to science in Grade 7",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T02:16:42Z"
     },
     {
       "asset_id": "b376e0ead7901fc2d427f437",
@@ -750,34 +691,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is a blank page, likely intended for educational content editing.",
-        "limitations": [
-          "The page is blank and does not contain any visual elements or text.",
-          "The page may be used as a template for educational content editing."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:57:47Z"
-    },
-    {
-      "asset_id": "398e5f6b5b6d7ca5c32e81e5",
-      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
-      "source_book_id": "ncert-c7-english-gecu1",
-      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
-      "source_pdf_page_number": 5,
-      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -788,14 +702,43 @@
         "concepts": [],
         "context_relation": "The image is a blank page, likely intended for educational content to be added.",
         "limitations": [
-          "The page is blank and requires content to be added."
+          "The page is blank and requires content to be added.",
+          "The page does not contain any specific visual elements or text that can be analyzed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:57:55Z"
+      "checkpointed_at": "2026-10-17T02:17:00Z"
+    },
+    {
+      "asset_id": "398e5f6b5b6d7ca5c32e81e5",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely intended for content insertion.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-17T02:17:10Z"
     },
     {
       "asset_id": "81ce70ab4f254b4331e7a323",
@@ -805,6 +748,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -813,16 +757,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "exploring the world of science in Grade 6",
+        "context_relation": "The image is a blank page with no visible content.",
         "limitations": [
-          "no visible content on the page"
+          "The page is completely black and has no visible text or images."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:58:06Z"
+      "checkpointed_at": "2026-10-17T02:17:25Z"
     },
     {
       "asset_id": "b83d8b403417a852b1fe839c",
@@ -832,6 +776,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3f268defa6e5c41b6a9fd3016d7b1b0d7bf811535c669860c1358b12748e4031",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -840,16 +785,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is a blank page in a textbook.",
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
-          "No visible content on the page."
+          "The page is completely black and has no visible content or text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T13:58:18Z"
+      "checkpointed_at": "2026-10-17T02:17:42Z"
     },
     {
       "asset_id": "ad81dce26759e074a1936b81",
