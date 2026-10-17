@@ -1,5 +1,6 @@
 'use client';
 
+import { UiText } from '../i18n/useUiTranslation';
 import { useEffect, useState } from 'react';
 import { LanguageSwitcher, LocaleText } from './LanguageProvider';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
@@ -252,6 +253,6 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     return () => window.removeEventListener('qe:session-expired', onSessionExpired);
   }, [isProtected, pathname]);
 
-  if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow">QUANTAEDGE</span><h1><LocaleText hinglish="आपका workspace check हो रहा है…" english="Checking your workspace…" /></h1><p><LocaleText hinglish="आपका account और saved session verify किया जा रहा है।" english="Your account and saved session are being verified." /></p></section></main>;
+  if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow">QUANTAEDGE</span><h1><UiText message="legacy.web.checking.your.workspace.6565b2ad" /></h1><p><UiText message="legacy.web.your.account.and.saved.session.are.bei.cbd53243" /></p></section></main>;
   return <>{children}</>;
 }
