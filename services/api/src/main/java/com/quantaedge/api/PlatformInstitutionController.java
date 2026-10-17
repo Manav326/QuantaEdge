@@ -3,7 +3,16 @@ package com.quantaedge.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -17,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +35,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /** HRMS-only cross-tenant control plane. Every mutating method requires QE_PLATFORM_OWNER. */
 @RestController
@@ -348,9 +360,9 @@ public class PlatformInstitutionController {
         ? value(body,"displayName") : String.valueOf(existing.get("display_name"));
     requireText(displayName,2,180,"Branded display name");
     String logo = body!=null && body.containsKey("logoAssetKey")
-        ? safeAssetKey(value(body,"logoAssetKey")) : nullableString(existing.get("logo_asset_key"));
+        ? ownedBrandAssetKey(institutionId, "LOGO", value(body,"logoAssetKey")) : nullableString(existing.get("logo_asset_key"));
     String icon = body!=null && body.containsKey("appIconAssetKey")
-        ? safeAssetKey(value(body,"appIconAssetKey")) : nullableString(existing.get("app_icon_asset_key"));
+        ? ownedBrandAssetKey(institutionId, "APP_ICON", value(body,"appIconAssetKey")) : nullableString(existing.get("app_icon_asset_key"));
     String storeListing = body!=null && body.containsKey("storeListingUrl")
         ? safeStoreListing(value(body,"storeListingUrl")) : nullableString(existing.get("store_listing_url"));
     String tokens = body!=null && body.containsKey("themeTokens")
@@ -370,6 +382,87 @@ public class PlatformInstitutionController {
         "appIconAssetKey",icon==null?"":icon,"storeListingUrl",storeListing==null?"":storeListing,
         "themeTokens",parseJsonObject(tokens),"brandingVersion",jdbc.queryForObject(
           "select version from institution_branding where institution_id=?",Long.class,institutionId));
+  }
+
+  @PostMapping(value="/{institutionId}/branding/assets/{assetType}", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+  @Transactional
+  public Map<String,Object> uploadBrandingAsset(
+      @PathVariable long institutionId,
+      @PathVariable String assetType,
+      @RequestPart("file") MultipartFile file,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner = requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    String type = assetType == null ? "" : assetType.trim().toLowerCase(Locale.ROOT);
+    String databaseType;
+    String keyColumn;
+    String urlSegment;
+    switch(type) {
+      case "logo" -> { databaseType="LOGO"; keyColumn="logo_asset_key"; urlSegment="logo"; }
+      case "app-icon" -> { databaseType="APP_ICON"; keyColumn="app_icon_asset_key"; urlSegment="app-icon"; }
+      default -> throw new IllegalArgumentException("Asset type must be logo or app-icon.");
+    }
+    if(file==null || file.isEmpty()) throw new IllegalArgumentException("Choose an image to upload.");
+    if(file.getSize()>2_097_152L) throw new IllegalArgumentException("Branding images must be 2 MiB or smaller.");
+    final byte[] bytes;
+    try { bytes=file.getBytes(); }
+    catch(IOException ex) { throw new IllegalArgumentException("The branding image could not be read."); }
+    String contentType;
+    if(bytes.length>=8 && (bytes[0]&0xff)==0x89 && bytes[1]=='P' && bytes[2]=='N' && bytes[3]=='G') {
+      contentType="image/png";
+    } else if(bytes.length>=3 && (bytes[0]&0xff)==0xff && (bytes[1]&0xff)==0xd8 && (bytes[2]&0xff)==0xff) {
+      contentType="image/jpeg";
+    } else {
+      throw new IllegalArgumentException("Branding images must be PNG or JPEG. SVG and animated formats are not accepted.");
+    }
+    int width;
+    int height;
+    try(ImageInputStream stream=ImageIO.createImageInputStream(new ByteArrayInputStream(bytes))) {
+      if(stream==null) throw new IllegalArgumentException("The branding image is invalid.");
+      Iterator<ImageReader> readers=ImageIO.getImageReaders(stream);
+      if(!readers.hasNext()) throw new IllegalArgumentException("The branding image is invalid.");
+      ImageReader reader=readers.next();
+      try {
+        reader.setInput(stream,true,true);
+        width=reader.getWidth(0);
+        height=reader.getHeight(0);
+        if(width<1 || height<1 || width>4096 || height>4096 || (long)width*height>16_000_000L) {
+          throw new IllegalArgumentException("Branding image dimensions must be at most 4096 by 4096 pixels.");
+        }
+        if(reader.read(0)==null) throw new IllegalArgumentException("The branding image could not be decoded.");
+      } finally { reader.dispose(); }
+    } catch(IOException ex) {
+      throw new IllegalArgumentException("The branding image is invalid or unreadable.");
+    }
+    String assetId=UUID.randomUUID().toString();
+    String digest;
+    try { digest=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
+    catch(NoSuchAlgorithmException ex) { throw new IllegalStateException("SHA-256 is unavailable.",ex); }
+    String original=file.getOriginalFilename()==null?"branding-image":file.getOriginalFilename();
+    String fileName=original.replaceAll("[^A-Za-z0-9._ -]","_");
+    if(fileName.length()>180) fileName=fileName.substring(fileName.length()-180);
+    if(fileName.isBlank()) fileName="branding-image";
+    jdbc.update("""
+        insert into institution_branding_asset(
+          asset_id,institution_id,asset_type,content_type,file_name,content_sha256,image_bytes,byte_length,created_by_staff_id)
+        values (?,?,?,?,?,?,?,?,?)
+        """,assetId,institutionId,databaseType,contentType,fileName,digest,bytes,bytes.length,owner.staffId());
+    jdbc.update("update institution_branding_asset set active=false where institution_id=? and asset_type=? and asset_id<>? and active=true",
+        institutionId,databaseType,assetId);
+    int updated=jdbc.update("update institution_branding set "+keyColumn+"=?,version=version+1,updated_by_staff_id=?,updated_at=now() where institution_id=?",
+        assetId,owner.staffId(),institutionId);
+    if(updated!=1) throw new IllegalStateException("Institution branding settings are not initialized.");
+    Long version=jdbc.queryForObject("select version from institution_branding where institution_id=?",Long.class,institutionId);
+    String tenantCode=jdbc.queryForObject("select tenant_code from institution_tenant where id=?",String.class,institutionId);
+    jdbc.update("""
+        insert into institution_membership_event(institution_id,event_type,actor_platform_staff_id,details)
+        values (?,'BRANDING_CHANGED',?,jsonb_build_object('assetType',?,'assetId',?,'sha256',?))
+        """,institutionId,owner.staffId(),databaseType,assetId,digest);
+    audit(owner,institutionId,"BRANDING_ASSET_UPLOADED","BRANDING_ASSET",assetId,
+        Map.of("assetType",databaseType,"contentType",contentType,"byteLength",bytes.length,"width",width,"height",height,"sha256",digest));
+    return Map.of("assetId",assetId,"assetType",databaseType,"contentType",contentType,"byteLength",bytes.length,
+        "assetUrl","/api/v1/institution/public/branding/"+tenantCode+"/assets/"+urlSegment+"?v="+version,
+        "brandingVersion",version);
   }
 
   @PutMapping("/{institutionId}/billing-contract")
@@ -647,6 +740,17 @@ public class PlatformInstitutionController {
     } catch (JsonProcessingException ex) {
       throw new IllegalStateException("Unable to serialize validated institution theme tokens.", ex);
     }
+  }
+
+  private String ownedBrandAssetKey(long institutionId,String assetType,String raw) {
+    if(raw==null || raw.isBlank()) return null;
+    String key=raw.trim();
+    Boolean owned=jdbc.queryForObject("""
+        select exists(select 1 from institution_branding_asset
+          where institution_id=? and asset_type=? and asset_id=? and active=true)
+        """,Boolean.class,institutionId,assetType,key);
+    if(!Boolean.TRUE.equals(owned)) throw new IllegalArgumentException("Select an image uploaded to this institution.");
+    return key;
   }
 
   private String safeAssetKey(String raw) {
