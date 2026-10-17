@@ -136,6 +136,44 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
 
+    def test_resume_drops_stale_asset_rows_when_inventory_changes(self):
+        output = self.root / "visual-analysis.v1.json"
+        run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        replacement_path = self.root / "page-0002.jpg"
+        replacement_path.write_bytes(b"replacement visual bytes")
+        replacement_hash = hashlib.sha256(replacement_path.read_bytes()).hexdigest()
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        inventory["assets"] = [{
+            "asset_id": "asset-2", "kind": "page_preview", "source_book_id": "book-c6-science",
+            "source_pdf_sha256": "a" * 64, "source_pdf_page_number": 2,
+            "asset_path": replacement_path.name, "asset_sha256": replacement_hash,
+            "media_type": "image/jpeg", "page_text_context": "Rainfall",
+        }]
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+
+        def replacement_opener(request, timeout=180):
+            return FakeResponse({"message": {"content": json.dumps({
+                "visual_summary": "A replacement visual.",
+                "visual_type": "diagram",
+                "visible_text": [],
+                "concepts": ["rainfall"],
+                "context_relation": "Relevant to the current source inventory.",
+                "limitations": [],
+            })}})
+
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=replacement_opener, output_path=output, resume=True,
+        )
+        self.assertEqual(0, resumed["summary"]["assets_skipped_from_checkpoint"])
+        self.assertEqual({"asset-2"}, {item["asset_id"] for item in resumed["results"]})
+        self.assertEqual(1, resumed["summary"]["assets_analyzed"])
+
     def test_resume_rejects_changed_model_or_source(self):
         output = self.root / "visual-analysis.v1.json"
         run_analysis(
