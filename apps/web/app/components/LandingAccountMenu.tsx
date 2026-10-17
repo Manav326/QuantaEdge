@@ -1,6 +1,8 @@
 'use client';
 
 import { UiText, useUiTranslation } from '../i18n/useUiTranslation';
+import { useLocale } from './LanguageProvider';
+import { useTenantBranding } from './TenantBrandingProvider';
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -14,6 +16,8 @@ function AccountIcon({ kind }: { kind: 'student' | 'parent' }) {
 
 export default function LandingAccountMenu() {
   const t = useUiTranslation();
+  const { locale } = useLocale();
+  const { brand, institutionContextRequested } = useTenantBranding();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -45,7 +49,7 @@ export default function LandingAccountMenu() {
         <svg className={open ? 'qe-account-chevron is-open' : 'qe-account-chevron'} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       {open && <div className="qe-account-menu" id="qe-account-menu" role="menu" aria-label={t('common.accountMenu.options')}>
-        <div className="qe-account-menu__heading"><strong><UiText message="legacy.web.sign.in.to.quantaedge.972d39f9" /></strong><span><UiText message="legacy.web.choose.your.account.type.6d9b63b8" /></span></div>
+        <div className="qe-account-menu__heading"><strong>{brand ? (locale === "english" ? "Sign in to " + brand.displayName : brand.displayName + " में साइन इन करें") : institutionContextRequested ? (locale === "english" ? "Sign in to your learning space" : "अपने learning space में साइन इन करें") : <UiText message="legacy.web.sign.in.to.quantaedge.972d39f9" />}</strong><span><UiText message="legacy.web.choose.your.account.type.6d9b63b8" /></span></div>
         <Link href="/login/student" role="menuitem" className="qe-account-menu__item" onClick={close}>
           <span className="qe-account-menu__icon"><AccountIcon kind="student" /></span>
           <span><strong><UiText message="legacy.web.student.login.9541c2d5" /></strong><small><UiText message="legacy.web.continue.learning.7a7da80e" /></small></span><span className="qe-account-menu__arrow">→</span>
