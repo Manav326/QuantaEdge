@@ -53,7 +53,7 @@ assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && 
 assert(editor.includes('appearance') && editor.includes('themePreviewGrid'), 'Institution editor must expose appearance and preview.');
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-preview') && editor.includes('themePreviewStates') && !editor.includes('contrastTextForPreview'), 'Institution preview must use the server-generated full palette rather than a duplicate client colour algorithm.');
 assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes('qeAppearance'), 'Web runtime must resolve system/light/dark appearance.');
-assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens'), 'Web runtime must map tenant tokens to semantic CSS roles.');
+assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens') && webRuntime.includes('accentContainer'), 'Web runtime must map all tenant semantic roles, including accent containers.');
 assert(webLayout.includes('<ColorThemeProvider>'), 'Learner web root must install the theme provider.');
 assert(webWorkspace.includes('<AppearanceModeButton />'), 'Learner/parent workspace must provide appearance control.');
 for (const role of ['background', 'surface', 'text-muted', 'primary-container', 'accent-container', 'on-accent-container', 'success-container', 'error-container']) {
@@ -69,7 +69,9 @@ assert(/--qe-brand-orange\s*:\s*#f97316\b/i.test(webCss), 'QuantaEdge orange def
 
 assert(androidController.includes('KEY_TENANT_THEME_PREFIX') && androidController.includes('activateCachedInstitutionTheme'), 'Android palettes must be cached per institution.');
 assert(androidController.includes('clearInstitutionTheme') && androidController.includes('schemaVersion'), 'Android must validate the version and clear stale tenant scope.');
+assert(androidController.includes('"accentContainer", "onAccentContainer"'), 'Android must require the full accent-container role pair.');
 assert(androidTheme.includes('darkColorScheme') && androidTheme.includes('lightColorScheme'), 'Android theme must support light and dark.');
+assert(androidTheme.includes('"accentContainer"') && androidTheme.includes('"onAccentContainer"'), 'Android Material secondary roles must consume accent-container tokens.');
 assert(androidSettings.includes('QeAppearanceMode.DARK') && androidSettings.includes('QeAppearanceMode.SYSTEM'), 'Android settings must expose appearance options.');
 assert(androidTutor.includes('MaterialTheme.colorScheme.primary') && !/Color\\(0xFF151B2C\\)|Color\\(0xFFFFF0E3\\)/i.test(androidTutor), 'Android tutor must use semantic theme roles rather than fixed brand colours.');
 assert(androidScanner.includes('scanPrimary = MaterialTheme.colorScheme.primary') && androidScanner.includes('scanOnPrimary = MaterialTheme.colorScheme.onPrimary'), 'Android scanner controls must use the active tenant palette.');
