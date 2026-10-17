@@ -280,8 +280,12 @@ public class InstitutionAuthService {
     return names.isEmpty() ? null : names.getFirst();
   }
 
-  @Transactional
   public Map<String,Object> redeemJoinCode(String suppliedCode, long studentId, String sourceHash) {
+    return redeemJoinCode(suppliedCode, studentId, sourceHash, null);
+  }
+
+  @Transactional
+  public Map<String,Object> redeemJoinCode(String suppliedCode, long studentId, String sourceHash, String expectedTenantCode) {
     if (suppliedCode == null || suppliedCode.isBlank()) {
       throw new IllegalArgumentException("Enter a valid institution code.");
     }
@@ -295,6 +299,10 @@ public class InstitutionAuthService {
     }
     jdbc.update("insert into institution_join_attempt(source_hash) values (?)", sourceHash);
 
+    String expectedTenant = expectedTenantCode == null ? "" : expectedTenantCode.trim().toUpperCase(Locale.ROOT);
+    if (!expectedTenant.isEmpty() && !expectedTenant.matches("^[A-Z0-9][A-Z0-9_-]{2,31}$")) {
+      throw new IllegalArgumentException("The school link is invalid.");
+    }
     String codeHash = hash(canonicalCode(suppliedCode));
     List<Map<String,Object>> codeRows = jdbc.queryForList("""
         select c.id as code_id,c.institution_id,c.use_limit,c.redeemed_count,t.tenant_code,
@@ -304,13 +312,14 @@ public class InstitutionAuthService {
         left join institution_branding b on b.institution_id=t.id
         join student st on st.id=? and st.active=true and st.environment='PRODUCTION'
         where c.code_hash=? and c.status='ACTIVE'
+          and (?='' or t.tenant_code=?)
           and (c.expires_at is null or c.expires_at>now())
           and (c.use_limit is null or c.redeemed_count<c.use_limit)
           and exists (select 1 from institution_billing_contract bc
             where bc.institution_id=t.id and bc.active=true and bc.effective_from<=current_date
               and (bc.effective_until is null or bc.effective_until>=current_date))
         for update of c
-        """, studentId, codeHash);
+        """, studentId, codeHash, expectedTenant, expectedTenant);
     if (codeRows.isEmpty()) throw new IllegalArgumentException("This institution code is invalid or no longer active.");
 
     Map<String,Object> codeRow = codeRows.getFirst();
