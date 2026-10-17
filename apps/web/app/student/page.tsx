@@ -4,6 +4,7 @@ import { UiText } from '../i18n/useUiTranslation';
 import { LocaleText } from '../components/LanguageProvider';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
 import {useRouter} from 'next/navigation';
 import { displayCount, displayPercent, lessonProgress, safeCount, safePercent } from './progressMetrics';
 
@@ -19,6 +20,18 @@ type StudentTextbook = {
   chapter_name?: string | null;
 };
 
+type DashboardLiveClass = {
+  session_id: number;
+  title: string;
+  starts_at: string;
+  ends_at: string;
+  status: string;
+  subject_code: string;
+  subject_name: string;
+  has_recording?: boolean;
+  currently_joined?: boolean;
+};
+
 export default function StudentHome(){
   const router=useRouter();
   const [data,setData]=useState<any>(null);
@@ -31,6 +44,10 @@ export default function StudentHome(){
   const [courseProgress,setCourseProgress]=useState<Record<number,any>>({});
   const [activeCourseId,setActiveCourseId]=useState<number|null>(null);
   const [courseError,setCourseError]=useState('');
+  const [dashboardClasses,setDashboardClasses]=useState<DashboardLiveClass[]>([]);
+  const [dashboardClassesLoading,setDashboardClassesLoading]=useState(false);
+  const [dashboardClassesError,setDashboardClassesError]=useState('');
+  const [dashboardClassesRefreshToken,setDashboardClassesRefreshToken]=useState(0);
 
   useEffect(()=>{(async()=>{try{
     const r=await fetch('/api/v1/students/me'); if(r.status===401||r.status===403){router.replace('/login/student');return}
@@ -81,6 +98,36 @@ export default function StudentHome(){
   },[router]);
 
   useEffect(()=>{
+    if(!Number.isSafeInteger(activeCourseId)||activeCourseId===null||activeCourseId<=0) {
+      setDashboardClasses([]);
+      setDashboardClassesLoading(false);
+      setDashboardClassesError('');
+      return;
+    }
+    let active=true;
+    setDashboardClassesLoading(true);
+    setDashboardClassesError('');
+    (async()=>{
+      try {
+        const query='courseId='+encodeURIComponent(String(activeCourseId))+'&limit=100&offset=0';
+        const response=await fetch('/api/v1/learning/live-classes?'+query,{credentials:'same-origin',cache:'no-store'});
+        if(response.status===401||response.status===403){router.replace('/login/student');return;}
+        const body=await response.json().catch(()=>({}));
+        if(!response.ok) throw new Error('Live classes could not be loaded.');
+        if(active) setDashboardClasses(Array.isArray(body.items)?body.items:[]);
+      } catch {
+        if(active) {
+          setDashboardClasses([]);
+          setDashboardClassesError('Live classes could not be loaded. Please try again.');
+        }
+      } finally {
+        if(active) setDashboardClassesLoading(false);
+      }
+    })();
+    return ()=>{active=false;};
+  },[activeCourseId,dashboardClassesRefreshToken,router]);
+
+  useEffect(()=>{
     let active=true;
     (async()=>{
       try {
@@ -127,6 +174,30 @@ export default function StudentHome(){
   const completionLabel = displayPercent(lessons.percent);
   const attemptsLabel = displayCount(safeCount(q.attempts));
   const accuracyLabel = displayPercent(safePercent(q.accuracy_percent));
+  const dashboardNow = Date.now();
+  const recentClassCutoff = dashboardNow - 3 * 24 * 60 * 60 * 1000;
+  const visibleDashboardClasses = dashboardClasses
+    .filter(item => {
+      const starts = Date.parse(item.starts_at);
+      const ends = Date.parse(item.ends_at);
+      return Number.isFinite(starts) && Number.isFinite(ends) && ends >= recentClassCutoff;
+    })
+    .sort((a,b) => {
+      const aUpcoming = Date.parse(a.ends_at) >= dashboardNow;
+      const bUpcoming = Date.parse(b.ends_at) >= dashboardNow;
+      if (aUpcoming !== bUpcoming) return aUpcoming ? -1 : 1;
+      return Date.parse(a.starts_at) - Date.parse(b.starts_at);
+    });
+  const dashboardClassesBySubject = new Map<string, { subjectName: string; subjectCode: string; items: DashboardLiveClass[] }>();
+  visibleDashboardClasses.forEach(item => {
+    const subjectCode = String(item.subject_code || '').trim();
+    const subjectName = String(item.subject_name || subjectCode || 'Live classes').trim();
+    const key = subjectCode || subjectName;
+    const group = dashboardClassesBySubject.get(key) || { subjectName, subjectCode, items: [] };
+    group.items.push(item);
+    dashboardClassesBySubject.set(key, group);
+  });
+  const dashboardClassGroups = [...dashboardClassesBySubject.values()];
   return <main className="app-shell">
     <div className="app-layout">
       <section className="app-content">
@@ -202,6 +273,45 @@ export default function StudentHome(){
               </div>
             </>
           )}
+        </section>
+
+        <section className="qe-dashboard-live-classes" aria-label="Live classes">
+          <div className="content-heading">
+            <h2><LocaleText hinglish="आपकी लाइव कक्षाएँ" english="Your Live Classes" /></h2>
+            <button type="button" className="button button-light" onClick={()=>setDashboardClassesRefreshToken(value=>value+1)} disabled={dashboardClassesLoading} aria-label="Refresh live classes" title="Refresh live classes">↻</button>
+          </div>
+          {dashboardClassesError && <p role="alert" className="feedback">{dashboardClassesError}</p>}
+          {dashboardClassesLoading ? <p role="status" className="eyebrow"><LocaleText hinglish="लाइव कक्षाएँ लोड हो रही हैं…" english="Loading live classes…" /></p>
+            : dashboardClassGroups.length > 0 ? <div className="task-list">
+              {dashboardClassGroups.map(group => <section key={group.subjectCode || group.subjectName} aria-label={group.subjectName}>
+                <div className="content-heading"><h3>{group.subjectName}</h3><span>{group.items.length} <LocaleText hinglish="कक्षाएँ" english="classes" /></span></div>
+                {group.items.map(item => {
+                  const startMillis=Date.parse(item.starts_at);
+                  const endMillis=Date.parse(item.ends_at);
+                  const upcoming=endMillis>=dashboardNow;
+                  const statusLabel=upcoming ? (startMillis<=dashboardNow ? (item.status==='LIVE' ? 'Live now' : 'In progress') : 'Upcoming') : 'Recently ended';
+                  const href='/student/classes?courseId='+encodeURIComponent(String(activeCourseId))
+                    +(group.subjectCode?'&subjectCode='+encodeURIComponent(group.subjectCode):'');
+                  return <article key={item.session_id} className="app-task">
+                    <span className="task-icon" aria-hidden="true">{upcoming ? '◷' : '✓'}</span>
+                    <div>
+                      <strong>{item.title || <LocaleText hinglish="लाइव कक्षा" english="Live class" />}</strong>
+                      <small>{statusLabel} · {formatUserTimestamp(upcoming ? item.starts_at : item.ends_at)}</small>
+                      {item.has_recording && !upcoming && <small><LocaleText hinglish="रिकॉर्डिंग उपलब्ध" english="Recording available" /></small>}
+                    </div>
+                    <Link href={href} className="task-action"><LocaleText hinglish="खोलें" english="Open" /> ↗</Link>
+                  </article>;
+                })}
+              </section>)}
+            </div>
+            : <article className="app-task next">
+              <span className="task-icon" aria-hidden="true">◷</span>
+              <div>
+                <strong><LocaleText hinglish="अभी कोई आगामी लाइव कक्षा नहीं है" english="No upcoming live classes" /></strong>
+                <small><LocaleText hinglish="यहाँ आगामी कक्षाएँ और पिछले 3 दिनों में समाप्त हुई कक्षाएँ दिखाई देंगी।" english="Upcoming sessions and sessions that ended in the last 3 days appear here." /></small>
+              </div>
+              {activeCourseId && <Link href={'/student/classes?courseId='+encodeURIComponent(String(activeCourseId))} className="task-action"><LocaleText hinglish="सभी देखें" english="View all" /> ↗</Link>}
+            </article>}
         </section>
 
         <div className="content-heading"><h2><UiText message="legacy.web.what.should.you.do.today.e962abaa" /></h2><span><UiText message="legacy.web.mastery.driven.6ffd2e51" /></span></div>
