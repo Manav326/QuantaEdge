@@ -84,3 +84,29 @@ The sample is not a full historical query. Manual deployment, release and audit 
 ## Expected operating model
 
 For the general textbook lesson data pipeline, operators now have **two primary workflows**. Use the separate textbook cache/extraction artifact workflows only when the upstream source/page artifact itself must be created or repaired. Use artifact audit/export workflows only for their named artifact. Do not add another workflow just to expose a button for a mode already supported by a core workflow; add a mode/input to the canonical entrypoint instead.
+
+## Deferred TODO: four resumable textbook-pipeline entrypoints
+
+**Status: TODO — intentionally blocked until the current Layers 6–8 generation has produced its intended output and the full Layers 1–8 data flow has been verified.**
+
+Do not restructure or rename the current entrypoints while that generation/verification work is still outstanding. The present two primary entrypoints remain the operating arrangement for now.
+
+After the completion gate passes, revise the workflow architecture to retain all four operator-facing entrypoints:
+
+1. **Complete Layers 1–8 orchestrator:** runs the canonical stages in order and can resume at the earliest incomplete or invalid layer/sub-layer checkpoint without rebuilding valid completed work.
+2. **Standalone Layers 1–3:** independently prepare or resume source inventory and candidate-preparation checkpoints.
+3. **Standalone Layers 4–5:** independently resume visual analysis and evidence/correction checkpoints.
+4. **Standalone Layers 6–8:** independently benchmark, generate/resume lesson drafts, validate, and prepare the relevant AI tutor dataset outputs.
+
+The end-to-end workflow must orchestrate the same canonical stage implementations, not fork or duplicate their business logic. Each stage entrypoint must remain independently usable. All four must share source-book/PDF-hash identity, artifact contracts, checkpoint validation, fail-closed behavior for missing or mismatched state, and the repository's output-location rule (pipeline data only under `data/`). Resume must preserve completed checkpoint work and restart only the necessary unfinished or invalid unit. Review-only/publication gates remain unchanged.
+
+### Completion gate — all conditions required before implementation
+
+- The current Layers 6–8 invocation has produced the intended output for its declared scope; a bounded or partial run is not mislabeled complete.
+- The complete eight-layer handoffs have been checked against the same whole-book source identity and PDF hash, including Layer 5 evidence readiness before Layers 6–8 generation.
+- Generated lesson and dataset artifacts pass their validators and reconcile with the canonical application schema/index and database-facing contracts; generated content remains review-only.
+- The relevant end-to-end tests and GitHub Actions checks pass, and logs show no unexplained skipped, failed, or partially completed work.
+- Resume behavior is verified at stage and sub-layer boundaries, including interruption/restart, reuse of completed checkpoints, and rejection of mismatched or missing required artifacts.
+
+**Only after this gate is satisfied:** implement and name the four entrypoints, update this audit/runbook to reflect the resulting architecture, and verify the Actions checks are green. This is a tracked future task, not authorization to start the workflow restructure now.
+
