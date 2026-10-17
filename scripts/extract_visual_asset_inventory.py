@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 try:
-    import fitz  # PyMuPDF
+    import pymupdf as fitz  # PyMuPDF
 except ImportError:  # pragma: no cover - exercised by CLI error path
     fitz = None
 
