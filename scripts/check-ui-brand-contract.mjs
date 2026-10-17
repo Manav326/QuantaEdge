@@ -31,6 +31,13 @@ function requireInteractionBaseline(source, app) {
 const branding = read('docs/branding.md');
 const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
 const tenantBrandingProvider = read('apps/web/app/components/TenantBrandingProvider.tsx');
+const learnerInstitutionsPage = read('apps/web/app/student/institutions/page.tsx');
+const androidTenantBrand = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeBrand.kt');
+const androidTenantRepository = read('apps/android/app/src/main/java/com/quantaedge/android/data/InstitutionBrandingRepository.kt');
+const androidAppManifest = read('apps/android/app/src/main/AndroidManifest.xml');
+const androidTenantMigration = read('services/api/src/main/resources/db/migration/V121__institution_branding_asset_storage.sql');
+const institutionTenantController = read('services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java');
+const institutionPlatformController = read('services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java');
 const adminBrandComponent = read('apps/admin/app/components/QuantaEdgeBrand.tsx');
 const peopleBrandComponent = read('apps/people/app/components/QuantaEdgeBrand.tsx');
 const adminSidebar = read('apps/admin/app/components/AdminSidebar.tsx');
@@ -56,6 +63,13 @@ assert(adminBrandComponent === peopleBrandComponent, 'Admin and People Operation
 assert(brandComponent.includes('useTenantBranding') && brandComponent.includes('brand.displayName'), 'Learner web brand lockup must consume resolved tenant branding.');
 assert(tenantBrandingProvider.includes('/api/v1/institution/public/branding/') && tenantBrandingProvider.includes('institution/memberships/me'), 'Tenant branding provider must resolve trusted institution codes and a single learner membership.');
 assert(!tenantBrandingProvider.includes('--qe-brand-orange'), 'Tenant identity resolution must leave palette variables to the shared theme system.');
+assert(learnerInstitutionsPage.includes('/api/v1/institution/memberships/me') && learnerInstitutionsPage.includes('/api/v1/institution/join'), 'Learner institution self-service must use the authenticated membership and join APIs.');
+assert(androidTenantBrand.includes('LocalInstitutionBrandIdentity') && androidTenantBrand.includes('institution.displayName'), 'Android shared brand lockup must render a resolved institution name.');
+assert(androidTenantRepository.includes('/api/v1/institution/public/branding/') && androidTenantRepository.includes('/api/v1/institution/join'), 'Android must resolve public school branding and use the membership join API.');
+assert(androidAppManifest.includes('qe-institution') && androidAppManifest.includes('/institution'), 'Android must declare institution invitation/deep-link entry points.');
+assert(androidTenantMigration.includes('CREATE TABLE institution_branding_asset') && androidTenantMigration.includes('image_bytes'), 'Institution branding image storage must be tenant-scoped and bounded.');
+assert(institutionTenantController.includes('/assets/{assetType}') && institutionTenantController.includes('assetUrl(normalized'), 'The API must serve verified logo and app-icon assets only through the resolved tenant.');
+assert(institutionPlatformController.includes('ownedBrandAssetKey') && institutionPlatformController.includes('uploadBrandingAsset'), 'Only uploaded, tenant-owned branding assets may be selected from HRMS.');
 assert(adminSidebar.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin sidebar must use the canonical shared brand component.');
 assert(adminWorkspaceLayout.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin mobile workspace header must use the shared brand component.');
 assert(adminWorkspaceLayout.includes('className="qe-admin-global-brand"'), 'Admin mobile workspace header must render the canonical brand lockup.');
