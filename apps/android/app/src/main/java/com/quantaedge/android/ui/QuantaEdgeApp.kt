@@ -255,7 +255,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             themeController.clearInstitutionTheme()
             return@LaunchedEffect
         }
-        var code = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
+        var code = InstitutionBrandingRepository.normalizeCode(launchTenantCode)
+            ?: InstitutionBrandingRepository.normalizeCode(activeTenantCode)
         try {
             if (pendingInstitutionJoinCode.isNotBlank() && role == "STUDENT" && stateOwnerKey != "anonymous") {
                 val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode, code)
@@ -266,11 +267,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     preferences.edit().putString("institutionCode", code).apply()
                 }
             }
-            if (code == null && role == "STUDENT" && stateOwnerKey != "anonymous") {
-                code = InstitutionBrandingRepository.soleActiveMembershipCode()
+            if (role == "STUDENT" && stateOwnerKey != "anonymous" && launchTenantCode == null) {
+                val rememberedSchoolIsCurrent = code != null &&
+                    InstitutionBrandingRepository.hasActiveMembership(code)
+                if (!rememberedSchoolIsCurrent) {
+                    code = InstitutionBrandingRepository.soleActiveMembershipCode()
+                }
                 if (code != null) {
                     activeTenantCode = code
                     preferences.edit().putString("institutionCode", code).apply()
+                } else {
+                    activeTenantCode = ""
+                    preferences.edit().remove("institutionCode").apply()
                 }
             }
             if (code == null) {
