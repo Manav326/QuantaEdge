@@ -39,44 +39,16 @@ function normalizedCode(input: unknown): string | null {
   return CODE_PATTERN.test(value) ? value : null;
 }
 
-function safeColor(value: unknown): string | null {
-  return typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value) ? value : null;
-}
-
 function approvedAssetUrl(url: unknown, code: string, type: 'logo' | 'app-icon'): url is string {
   if (typeof url !== 'string') return false;
   const prefix = '/api/v1/institution/public/branding/' + code + '/assets/' + type + '?v=';
   if (!url.startsWith(prefix)) return false;
-  return /^\d+$/.test(url.slice(prefix.length));
+  return /^\\d+$/.test(url.slice(prefix.length));
 }
 
-function updateTenantTheme(brand: TenantBrand | null) {
+/** Update identity metadata only; theme tokens/presets are managed by ColorThemeProvider. */
+function applyTenantIdentity(brand: TenantBrand | null) {
   const root = document.documentElement;
-  const tokens = brand?.themeTokens ?? {};
-  const primary = safeColor(tokens.primary);
-  const accent = safeColor(tokens.accent);
-  const background = safeColor(tokens.background);
-  const surface = safeColor(tokens.surface);
-  const text = safeColor(tokens.text);
-  const variables: Record<string, string | null> = {
-    '--institution-primary': primary,
-    '--institution-accent': accent,
-    '--institution-background': background,
-    '--institution-surface': surface,
-    '--institution-text': text,
-    '--qe-brand-orange': primary,
-    '--purple': primary,
-    '--purple-dark': accent,
-    '--qe-brand-orange-deep': accent,
-    '--purple-soft': safeColor(tokens.softSurface),
-    '--paper': background,
-    '--card': surface,
-    '--ink': text,
-  };
-  Object.entries(variables).forEach(([name, value]) => {
-    if (value) root.style.setProperty(name, value);
-    else root.style.removeProperty(name);
-  });
   if (brand) root.dataset.tenantBrandCode = brand.institutionCode;
   else delete root.dataset.tenantBrandCode;
 
@@ -87,20 +59,27 @@ function updateTenantTheme(brand: TenantBrand | null) {
   const appName = document.querySelector<HTMLMetaElement>('meta[name="application-name"]');
   if (appName) appName.content = title || 'QuantaEdge';
 
-  const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
-  if (!icon) return;
-  if (brand?.appIconUrl && approvedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon')) {
-    icon.href = brand.appIconUrl;
-  } else if (brand && title) {
-    const color = primary || '#F97316';
-    const letter = title.slice(0, 1).replace(/[<>&"]/g, '');
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="' +
-      color + '"/><text x="32" y="43" font-size="38" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#ffffff">' +
-      letter + '</text></svg>';
-    icon.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
-  } else {
-    icon.href = '/favicon.svg';
-  }
+  const iconUrl = brand?.appIconUrl && approvedAssetUrl(brand.appIconUrl, brand.institutionCode, 'app-icon')
+    ? brand.appIconUrl
+    : brand?.logoUrl && approvedAssetUrl(brand.logoUrl, brand.institutionCode, 'logo')
+      ? brand.logoUrl
+      : null;
+  const links = document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"], link[rel="apple-touch-icon"]');
+  links.forEach(link => {
+    if (iconUrl) {
+      link.href = iconUrl;
+    } else if (brand && title && link.rel.includes('icon')) {
+      // Fallback lettermark uses the active canonical theme token instead of defining a new palette.
+      const color = getComputedStyle(root).getPropertyValue('--qe-brand-orange').trim() || '#F97316';
+      const letter = title.slice(0, 1).replace(/[<>&"]/g, '');
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="' +
+        color + '"/><text x="32" y="43" font-size="38" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#ffffff">' +
+        letter + '</text></svg>';
+      link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+    } else {
+      link.href = link.rel === 'apple-touch-icon' ? '/branding/quantaedge-icon.png' : '/favicon.svg';
+    }
+  });
 }
 
 async function fetchTenantBrand(codeInput: string): Promise<TenantBrand> {
@@ -148,7 +127,7 @@ function saveSessionCode(code: string | null) {
     if (code) window.sessionStorage.setItem(BRAND_SESSION_KEY, code);
     else window.sessionStorage.removeItem(BRAND_SESSION_KEY);
   } catch {
-    // Branding is not an authentication control; storage denial falls back to this page only.
+    // Branding is not an authentication control; storage denial falls back to the current page.
   }
 }
 
@@ -165,11 +144,12 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const next = await fetchTenantBrand(code);
       setBrand(next);
       saveSessionCode(code);
-      updateTenantTheme(next);
+      applyTenantIdentity(next);
       return true;
     } catch {
+      saveSessionCode(null);
       setBrand(null);
-      updateTenantTheme(null);
+      applyTenantIdentity(null);
       return false;
     } finally {
       setIsResolving(false);
@@ -179,7 +159,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const clearTenantBrand = useCallback(() => {
     saveSessionCode(null);
     setBrand(null);
-    updateTenantTheme(null);
+    applyTenantIdentity(null);
   }, []);
 
   useEffect(() => {
@@ -196,21 +176,20 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           if (cancelled) return;
           setBrand(next);
           saveSessionCode(candidate);
-          updateTenantTheme(next);
+          applyTenantIdentity(next);
           return;
         } catch {
           if (cancelled) return;
           if (hasUrlCode) saveSessionCode(null);
           setBrand(null);
-          updateTenantTheme(null);
+          applyTenantIdentity(null);
         } finally {
           if (!cancelled) setIsResolving(false);
         }
         return;
       }
 
-      // Choose a tenant automatically only when the signed-in learner has exactly one
-      // active membership. Multi-institution learners need an explicit school link.
+      // Existing learners can inherit the school's brand only when membership is unambiguous.
       if (pathname.startsWith('/student')) {
         try {
           const response = await fetch('/api/v1/institution/memberships/me', {
@@ -229,17 +208,17 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
               if (cancelled) return;
               setBrand(next);
               saveSessionCode(next.institutionCode);
-              updateTenantTheme(next);
+              applyTenantIdentity(next);
               return;
             }
           }
         } catch {
-          // Membership lookup is best-effort; it must not block normal learner access.
+          // Membership lookup is best-effort and must not block ordinary learner access.
         }
       }
       if (!cancelled) {
         setBrand(null);
-        updateTenantTheme(null);
+        applyTenantIdentity(null);
       }
     };
     void run();
