@@ -276,3 +276,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Added `scripts/check-admin-assessments-i18n.mjs` to CI to enforce central-hook usage, presence of used keys in both locales, interpolation parity and removal of representative embedded strings.
 - This is a **first pass**, not full certification. Remaining in the same route are error/fallback messages, action confirmations, dynamic status labels and the detailed manual-grading/certificate audit dialog. Existing API calls, frozen attempt snapshots, status payloads, grader authorization, marks bounds, offline-delivery policy and result-release rules were not changed.
 - Baseline full build [run #3038](https://github.com/Manav326/QuantaEdge/actions/runs/39002946679) passed on the preceding `main` commit `b580cbecd10210dff0816fd6be190eb00bd68372`. The new Assessment migration requires its own non-cancelled run before this slice is marked build-verified.
+
+
+## Latest continuation — Admin Assessments grading and certificate review dialog (2026-10-17)
+
+- Extended the deeper `/assessments` migration into action validation/errors, create/status/offline-policy/grader feedback, dynamic test status labels, manual grading, saved-answer/reference-answer labels, certificate lookup/download states, audit text and modal actions.
+- Added 82 semantic `admin.assessments.*` messages. Canonical catalogs now contain **2486 keys per locale** with identical key sets and matching interpolation placeholders; the six app-local JSON copies are synchronized from the canonical catalog bytes.
+- Submission and audit timestamps now format with the selected Admin UI locale. API routes, server status payloads, grader permissions, answer data, mark validation, certificate eligibility and result-release decisions remain unchanged.
+- The CI route guard now recognizes both `t(...)` and `tRef.current(...)`, and adds regression checks for review-dialog text.
+- Source and catalog validation passed before commit. This slice awaits its own CI run; browser acceptance for both locales remains open. Remaining work on this route includes some list-row metadata/actions and queue/filter labels.

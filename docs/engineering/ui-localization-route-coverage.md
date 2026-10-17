@@ -40,7 +40,7 @@
 |---|---|---|---|
 | `/` | `apps/admin/app/page.tsx` | First pass — audit pending | Review dashboard retry/error, KPI and empty states. |
 | `/account-lifecycle` | `apps/admin/app/account-lifecycle/page.tsx` | First pass — audit pending | Check status actions, reason dialogs and feedback. |
-| `/assessments` | `apps/admin/app/assessments/page.tsx` | Localized in current slice — CI pending | Verify action errors, dynamic statuses, manual-grading dialog and audit/certificate states. |
+| `/assessments` | `apps/admin/app/assessments/page.tsx` | Grading/certificate dialog second pass — CI pending | Browser-check both locales, row metadata/actions, queue filters, grading validation and audit dates. |
 | `/certificates` | `apps/admin/app/certificates/page.tsx` | First pass — build-verified, audit pending | Verify filters, revocation/audit states and localized dates in browser. |
 | `/classes` | `apps/admin/app/classes/page.tsx` | Needs audit/migration | Translate live sessions, recordings and actions. |
 | `/content` | `apps/admin/app/content/page.tsx` | Needs audit/migration | Audit Content Studio editor, preview, visual review and validation. |

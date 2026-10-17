@@ -1,8 +1,9 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
+import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import PremiumPagination from '../components/PremiumPagination';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import styles from './Assessments.module.css';
 
@@ -22,22 +23,30 @@ async function api(url:string,init:RequestInit={}) {
   return body;
 }
 
-function fmtDate(value?:string|null){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString();}
-function answerText(value:any){if(value===null||value===undefined||value==='')return 'No answer submitted';if(typeof value==='string'){try{return JSON.stringify(JSON.parse(value),null,2)}catch{return value}}try{return JSON.stringify(value,null,2)}catch{return String(value)}}
-function referenceAnswerText(value:any){
+function fmtDate(value?:string|null,locale:'english'|'hinglish'='hinglish'){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString(locale==='english'?'en-IN':'hi-IN');}
+type Translator=(key:string,values?:Record<string,string|number>)=>string;
+function answerText(value:any,noAnswerText:string){if(value===null||value===undefined||value==='')return noAnswerText;if(typeof value==='string'){try{return JSON.stringify(JSON.parse(value),null,2)}catch{return value}}try{return JSON.stringify(value,null,2)}catch{return String(value)}}
+const STATUS_KEYS:Record<string,string>={DRAFT:'admin.assessments.statusDraft',PUBLISHED:'admin.assessments.statusPublished',ARCHIVED:'admin.assessments.statusArchived',AWAITING_REVIEW:'admin.assessments.statusAwaitingReview',GRADED:'admin.assessments.statusGraded',RELEASED:'admin.assessments.statusReleased',IN_PROGRESS:'admin.assessments.statusInProgress',ISSUED:'admin.assessments.statusIssued',REVOKED:'admin.assessments.statusRevoked'};
+const AUDIT_ACTION_KEYS:Record<string,string>={ASSESSMENT_CREATED:'admin.assessments.auditActionCreated',ASSESSMENT_STATUS_CHANGED:'admin.assessments.auditActionStatusChanged',GRADER_ASSIGNED:'admin.assessments.auditActionGraderAssigned',GRADING_SAVED:'admin.assessments.auditActionGradingSaved',RESULT_RELEASED:'admin.assessments.auditActionResultReleased'};
+function statusText(status:string,t:Translator){const key=STATUS_KEYS[status];return key?t(key):t('admin.assessments.statusUnknown',{status});}
+function auditActionText(action:string,t:Translator){const key=AUDIT_ACTION_KEYS[action];return key?t(key):action.replaceAll('_',' ').toLowerCase();}
+function referenceAnswerText(value:any,t:Translator){
   let parsed=value;
   if(typeof value==='string'){try{parsed=JSON.parse(value)}catch{return value}}
   if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)){
     if(parsed.kind==='TEXT')return String(parsed.value??'');
-    if(parsed.kind==='NUMERIC')return 'Expected numeric answer: '+String(parsed.value??'')+(parsed.tolerance!==undefined?' (tolerance ±'+parsed.tolerance+')':'');
-    if(parsed.kind==='OPTION')return 'Correct option: '+String(parsed.value??'');
+    if(parsed.kind==='NUMERIC')return parsed.tolerance!==undefined?t('admin.assessments.expectedNumericWithTolerance',{value:String(parsed.value??''),tolerance:String(parsed.tolerance)}):t('admin.assessments.expectedNumericAnswer',{value:String(parsed.value??'')});
+    if(parsed.kind==='OPTION')return t('admin.assessments.correctOption',{value:String(parsed.value??'')});
   }
   if(typeof parsed==='string')return parsed;
   try{return JSON.stringify(parsed,null,2)}catch{return String(parsed)}
 }
 
 export default function AssessmentsPage(){
+  const {locale}=useContext(AdminWorkspaceContext);
   const t=useUiTranslation();
+  const tRef=useRef(t);
+  useEffect(()=>{tRef.current=t;},[t]);
   const [classCode,setClassCode]=useState('6');
   const [subjectCode,setSubjectCode]=useState('maths');
   const [chapterId,setChapterId]=useState('');
@@ -101,7 +110,7 @@ export default function AssessmentsPage(){
       });
       setChapters([...chapterMap.values()]);
       setChapterId(current=>current&&chapterMap.has(Number(current))?current:'');
-    }catch(e){setError(e instanceof Error?e.message:'Could not load tests and staff permissions.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.loadFailed'));}
     finally{setLoading(false);}
   },[classCode,subjectCode,statusFilter,assessmentPage,assessmentPageSize]);
 
@@ -115,7 +124,7 @@ export default function AssessmentsPage(){
       setBank(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
       setBankTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
       setBankPage(nextPage);
-    }catch(e){setError(e instanceof Error?e.message:'Question bank could not be loaded.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.bankLoadFailed'));}
     finally{setBankLoading(false);}
   },[classCode,subjectCode,chapterId,search,bankPage,bankPageSize]);
 
@@ -128,7 +137,7 @@ export default function AssessmentsPage(){
       setQueue(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
       setQueueTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
       setQueuePage(nextPage);
-    }catch(e){setError(e instanceof Error?e.message:'Assessment review queue could not be loaded.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.queueLoadFailed'));}
     finally{setLoading(false);}
   },[queueStatus,query,queuePage,queuePageSize]);
 
@@ -137,8 +146,8 @@ export default function AssessmentsPage(){
 
   function toggleQuestion(id:number,checked:boolean){setSelectedQuestionIds(ids=>checked?[...ids,id]:ids.filter(x=>x!==id));}
   async function createAssessment(){
-    if(!title.trim()){setError('Enter a title for this test.');return;}
-    if(!selectedQuestionIds.length){setError('Choose at least one approved question.');return;}
+    if(!title.trim()){setError(tRef.current('admin.assessments.titleRequired'));return;}
+    if(!selectedQuestionIds.length){setError(tRef.current('admin.assessments.questionRequired'));return;}
     setBusy(true);setError('');setNotice('');
     try{
       const row=await api('/api/v1/admin/assessments',{method:'POST',body:JSON.stringify({
@@ -147,15 +156,15 @@ export default function AssessmentsPage(){
         durationMinutes:Number(duration),maxAttempts:Number(maxAttempts),questionIds:selectedQuestionIds
       })});
       setTitle('');setDescription('');setSelectedQuestionIds([]);
-      setNotice('Draft test created with '+row.question_count+' frozen question snapshots. Publish it when ready.');
+      setNotice(tRef.current('admin.assessments.draftCreated',{count:row.question_count}));
       await loadAssessments();
-    }catch(e){setError(e instanceof Error?e.message:'Could not create the test.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.createFailed'));}
     finally{setBusy(false);}
   }
   async function changeStatus(row:Assessment,status:'PUBLISHED'|'ARCHIVED'|'DRAFT'){
     setBusy(true);setError('');setNotice('');
-    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/status',{method:'PATCH',body:JSON.stringify({status})});setNotice('“'+row.title+'” is now '+status.toLowerCase()+'.');await loadAssessments();}
-    catch(e){setError(e instanceof Error?e.message:'Test status update failed.');}
+    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/status',{method:'PATCH',body:JSON.stringify({status})});setNotice(tRef.current('admin.assessments.statusUpdated',{title:row.title,status:statusText(status,tRef.current)}));await loadAssessments();}
+    catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.statusUpdateFailed'));}
     finally{setBusy(false);}
   }
   async function changeOfflinePolicy(row:Assessment,offlineEnabled:boolean){
@@ -164,17 +173,17 @@ export default function AssessmentsPage(){
       await api('/api/v1/admin/assessments/'+row.assessment_id+'/offline-policy',{
         method:'PATCH',body:JSON.stringify({offlineEnabled})
       });
-      setNotice('Protected offline delivery '+(offlineEnabled?'enabled':'disabled')+' for “'+row.title+'”.');
+      setNotice(tRef.current(offlineEnabled?'admin.assessments.offlineEnabledNotice':'admin.assessments.offlineDisabledNotice',{title:row.title}));
       await loadAssessments();
-    }catch(e){setError(e instanceof Error?e.message:'Offline policy update failed.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.offlinePolicyFailed'));}
     finally{setBusy(false);}
   }
   async function assignGrader(row:Assessment){
     const staffId=Number(graderByAssessment[row.assessment_id]||0);
-    if(!staffId){setError('Choose a staff member with the assessment grading permission first.');return;}
+    if(!staffId){setError(tRef.current('admin.assessments.graderRequired'));return;}
     setBusy(true);setError('');setNotice('');
-    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/graders',{method:'POST',body:JSON.stringify({staffId})});setNotice('Checker assigned to “'+row.title+'”.');await loadAssessments();}
-    catch(e){setError(e instanceof Error?e.message:'Grader assignment failed.');}
+    try{await api('/api/v1/admin/assessments/'+row.assessment_id+'/graders',{method:'POST',body:JSON.stringify({staffId})});setNotice(tRef.current('admin.assessments.graderAssigned',{title:row.title}));await loadAssessments();}
+    catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.graderAssignmentFailed'));}
     finally{setBusy(false);}
   }
   async function loadReviewCertificate(attemptId:number){
@@ -198,7 +207,7 @@ export default function AssessmentsPage(){
       (data.questions||[]).forEach((q:ReviewQuestion)=>{if(q.manualReviewRequired){nextMarks[q.answerId]=q.awardedMarks===null||q.awardedMarks===undefined?'':String(q.awardedMarks);nextFeedback[q.answerId]=q.teacherFeedback||'';}});
       setMarks(nextMarks);setFeedback(nextFeedback);setOverallNote('');
       if(data.status==='RELEASED')await loadReviewCertificate(attemptId);
-    }catch(e){setError(e instanceof Error?e.message:'Could not open this submitted test.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.openAttemptFailed'));}
     finally{setBusy(false);}
   }
   async function saveGrading(){
@@ -207,9 +216,9 @@ export default function AssessmentsPage(){
     const answers=[];
     for(const q of pending){
       const value=marks[q.answerId];
-      if(value===undefined||value.trim()===''){setError('Enter marks for every answer awaiting review. Use 0 when no marks are earned.');return;}
+      if(value===undefined||value.trim()===''){setError(tRef.current('admin.assessments.marksRequired'));return;}
       const number=Number(value);
-      if(!Number.isFinite(number)||number<0||number>Number(q.maxMarks)){setError('Marks for answer #'+q.answerId+' must be between 0 and '+q.maxMarks+'.');return;}
+      if(!Number.isFinite(number)||number<0||number>Number(q.maxMarks)){setError(tRef.current('admin.assessments.marksRange',{answerId:q.answerId,maxMarks:q.maxMarks}));return;}
       answers.push({answerId:q.answerId,marks:number,feedback:(feedback[q.answerId]||'').trim()});
     }
     setBusy(true);setError('');setNotice('');
@@ -221,10 +230,10 @@ export default function AssessmentsPage(){
       const nextMarks:Record<number,string>={},nextFeedback:Record<number,string>={};
       (data.questions||[]).forEach((q:ReviewQuestion)=>{if(q.manualReviewRequired){nextMarks[q.answerId]=q.awardedMarks===null||q.awardedMarks===undefined?'':String(q.awardedMarks);nextFeedback[q.answerId]=q.teacherFeedback||'';}});
       setMarks(nextMarks);setFeedback(nextFeedback);
-      setNotice(data.status==='RELEASED'?'All answers are graded and the result is released to the student.':'Saved grading. This test still has answers awaiting review.');
+      setNotice(tRef.current(data.status==='RELEASED'?'admin.assessments.allGradedReleased':'admin.assessments.savedPending'));
       if(data.status==='RELEASED')await loadReviewCertificate(data.attempt_id);
       await loadQueue();await loadAssessments();
-    }catch(e){setError(e instanceof Error?e.message:'Could not save grading.');}
+    }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.gradingSaveFailed'));}
     finally{setBusy(false);}
   }
 
@@ -272,7 +281,7 @@ export default function AssessmentsPage(){
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.governance')}</span><h2>{t('admin.assessments.testCatalogue')}</h2><p>{t('admin.assessments.catalogueDescription')}</p></div><select className={styles.filter} value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setAssessmentPage(0)}}><option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select></div>
           <div className={styles.fields+' '+styles.compactFields}><label>{t('admin.assessments.class')}<select value={classCode} onChange={e=>{setClassCode(e.target.value);setAssessmentPage(0)}}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label><label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setAssessmentPage(0)}}><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
           {loading?<p className={styles.empty}>{t('admin.assessments.loadingTests')}</p>:assessments.length===0?<div className={styles.empty}><b>{t('admin.assessments.noAssessmentsFilter')}</b><span>{t('admin.assessments.createDraftHint')}</span></div>:<div className={styles.testList}>{assessments.map(row=><article className={styles.testCard} key={row.assessment_id}>
-            <div className={styles.testIcon}>✓</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.title}</h3>{row.test_id&&<small>Test ID: {row.test_id}</small>}<span className={styles['status'+row.status]}>{row.status}</span></div><p>Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>{row.is_generated?(row.assessment_type==='TOPIC_END'?'System-generated · topic-end test':'System-generated · chapter-end test'):'Admin-created test'}{row.is_generated?' · version '+(row.generation_version||1):''}</small><small>{row.question_count} questions · {row.max_score} marks · {row.duration_minutes} min · {row.max_attempts} attempt(s)</small><small>{row.attempt_count} submitted/started · {row.review_count} awaiting review</small><small>Delivery: {row.offline_enabled?'Protected offline enabled':'Online only'}{row.offline_enabled?' · encrypted local answers, server-graded on sync':''}</small>
+            <div className={styles.testIcon}>✓</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.title}</h3>{row.test_id&&<small>{t('admin.assessments.testId',{testId:row.test_id})}</small>}<span className={styles['status'+row.status]}>{statusText(row.status,t)}</span></div><p>Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>{row.is_generated?(row.assessment_type==='TOPIC_END'?'System-generated · topic-end test':'System-generated · chapter-end test'):'Admin-created test'}{row.is_generated?' · version '+(row.generation_version||1):''}</small><small>{row.question_count} questions · {row.max_score} marks · {row.duration_minutes} min · {row.max_attempts} attempt(s)</small><small>{row.attempt_count} submitted/started · {row.review_count} awaiting review</small><small>Delivery: {row.offline_enabled?'Protected offline enabled':'Online only'}{row.offline_enabled?' · encrypted local answers, server-graded on sync':''}</small>
               <div className={styles.inlineAssign}><select aria-label={'Assign grader for '+row.title} value={graderByAssessment[row.assessment_id]||''} onChange={e=>setGraderByAssessment(m=>({...m,[row.assessment_id]:e.target.value}))}><option value="">Assign permitted staff checker…</option>{eligibleStaff.map(s=><option key={s.staff_id} value={s.staff_id}>{s.display_name} · {s.role}</option>)}</select><button type="button" disabled={busy||!eligibleStaff.length||!graderByAssessment[row.assessment_id]} onClick={()=>void assignGrader(row)}>Assign checker</button></div>
               {row.assigned_grader_names? <small>Assigned: {row.assigned_grader_names}</small>:null}
             </div><div className={styles.testActions}>{!row.is_generated&&row.status!=='ARCHIVED'&&<button className={styles.secondaryButton} type="button" disabled={busy} title="Only enable for low-stakes assessments; this is not high-stakes exam protection." onClick={()=>void changeOfflinePolicy(row,!row.offline_enabled)}>{row.offline_enabled?'Disable offline':'Allow offline'}</button>}{row.status==='DRAFT'&&<button className={styles.primaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'PUBLISHED')}>Publish</button>}{row.status==='PUBLISHED'&&!row.is_generated&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'ARCHIVED')}>Archive</button>}{row.status==='ARCHIVED'&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'DRAFT')}>Restore draft</button>}</div>
@@ -284,7 +293,7 @@ export default function AssessmentsPage(){
       </>:<section className={styles.panel}>
         <div className={styles.panelHeading}><div><span>{t('admin.assessments.teacherReviewQueue')}</span><h2>{t('admin.assessments.submittedAwaitingDecision')}</h2><p>{t('admin.assessments.reviewQueueDescription')}</p></div><select className={styles.filter} value={queueStatus} onChange={e=>{setQueueStatus(e.target.value);setQueuePage(0)}}><option value="AWAITING_REVIEW">Awaiting review</option><option value="GRADED">Graded · not released</option><option value="RELEASED">Released results</option><option value="ALL">All states</option></select></div>
         <div className={styles.queueSearch}><input aria-label="Search test, student or chapter" value={query} onChange={e=>{setQuery(e.target.value);setQueuePage(0)}} placeholder="Search test, student or chapter…"/><button type="button" className={styles.secondaryButton} onClick={()=>void loadQueue()}>Search</button></div>
-        {loading?<p className={styles.empty}>{t('admin.assessments.loadingGradingQueue')}</p>:queue.length===0?<div className={styles.empty}><b>{t('admin.assessments.noSubmittedTests')}</b><span>{t('admin.assessments.newAttemptsQueueHint')}</span></div>:<div className={styles.testList}>{queue.map(row=><article className={styles.testCard} key={row.attempt_id}><div className={styles.testIcon}>✎</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.assessment_title}</h3><span className={styles['status'+row.status]}>{row.status}</span></div><p>{row.student_name} · Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>Submitted {fmtDate(row.submitted_at)} · Attempt {row.attempt_number} · {row.question_count} questions · {row.pending_answers} awaiting manual check</small><small>Result {row.status==='RELEASED'?row.final_score+' / '+row.max_score:'not yet released'}</small></div><div className={styles.testActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openReview(row.attempt_id)}>{row.status==='AWAITING_REVIEW'?'Review test':'Open record'}</button></div></article>)}</div>}
+        {loading?<p className={styles.empty}>{t('admin.assessments.loadingGradingQueue')}</p>:queue.length===0?<div className={styles.empty}><b>{t('admin.assessments.noSubmittedTests')}</b><span>{t('admin.assessments.newAttemptsQueueHint')}</span></div>:<div className={styles.testList}>{queue.map(row=><article className={styles.testCard} key={row.attempt_id}><div className={styles.testIcon}>✎</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.assessment_title}</h3><span className={styles['status'+row.status]}>{statusText(row.status,t)}</span></div><p>{row.student_name} · Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>Submitted {fmtDate(row.submitted_at,locale)} · Attempt {row.attempt_number} · {row.question_count} questions · {row.pending_answers} awaiting manual check</small><small>Result {row.status==='RELEASED'?row.final_score+' / '+row.max_score:'not yet released'}</small></div><div className={styles.testActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openReview(row.attempt_id)}>{row.status==='AWAITING_REVIEW'?'Review test':'Open record'}</button></div></article>)}</div>}
         <PremiumPagination page={queuePage} total={queueTotal} pageSize={queuePageSize}
           onPageChange={setQueuePage} onPageSizeChange={size=>{setQueuePageSize(size);setQueuePage(0);}}
           itemLabel="submitted tests" loading={loading} />
@@ -292,43 +301,43 @@ export default function AssessmentsPage(){
 
       {review&&<div className={styles.modalBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setReview(null);}}>
         <section className={styles.reviewModal} role="dialog" aria-modal="true" aria-labelledby="review-title">
-          <div className={styles.modalHeader}><div><span>TEST-LEVEL REVIEW</span><h2 id="review-title">{review.assessment_title}</h2>{review.test_id&&<small>Test ID: {review.test_id}</small>}<p>{review.student_name} · Class {review.class_code} · {review.status}</p></div><button type="button" aria-label="Close review" onClick={()=>setReview(null)}>×</button></div>
-          <div className={styles.resultStats}><div><small>Test status</small><b>{review.status}</b></div><div><small>Maximum marks</small><b>{review.max_score}</b></div><div><small>Current result</small><b>{review.status==='RELEASED'?String(review.final_score):'Not released'}</b></div></div>
+          <div className={styles.modalHeader}><div><span>{t('admin.assessments.testLevelReview')}</span><h2 id="review-title">{review.assessment_title}</h2>{review.test_id&&<small>{t('admin.assessments.testId',{testId:review.test_id})}</small>}<p>{review.student_name} · Class {review.class_code} · {statusText(review.status,t)}</p></div><button type="button" aria-label={t('admin.assessments.closeReview')} onClick={()=>setReview(null)}>×</button></div>
+          <div className={styles.resultStats}><div><small>{t('admin.assessments.testStatus')}</small><b>{review.status}</b></div><div><small>{t('admin.assessments.maximumMarks')}</small><b>{review.max_score}</b></div><div><small>{t('admin.assessments.currentResult')}</small><b>{review.status==='RELEASED'?String(review.final_score):t('admin.assessments.notReleased')}</b></div></div>
           {review.status==='RELEASED'&&<section className={styles.certificatePanel} aria-live="polite">
-            <div><span className={styles.certificateEyebrow}>CERTIFICATE RECORD</span><h3>Certificate for this result</h3>
-              <p>Issuance is controlled by the server-side admin-test, released-score and subject-completion rules.</p></div>
-            {reviewCertificateLoading?<small>Checking certificate record…</small>:reviewCertificate?(
+            <div><span className={styles.certificateEyebrow}>{t('admin.assessments.certificateRecord')}</span><h3>{t('admin.assessments.certificateForResult')}</h3>
+              <p>{t('admin.assessments.certificateEligibility')}</p></div>
+            {reviewCertificateLoading?<small>{t('admin.assessments.checkingCertificateRecord')}</small>:reviewCertificate?(
               <div className={styles.certificateRecordActions}>
                 <span className={reviewCertificate.status==='ISSUED'?styles.certificateValid:styles.certificateRevoked}>
-                  {reviewCertificate.status==='ISSUED'?'ISSUED · VALID': 'REVOKED · AUDIT COPY'}
+                  {reviewCertificate.status==='ISSUED'?t('admin.assessments.statusIssuedValid'):t('admin.assessments.statusRevokedAudit')}
                 </span>
                 <small>{reviewCertificate.certificate_number}</small>
                 <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?format=pdf'}>
-                  {reviewCertificate.status==='ISSUED'?'View/download PDF':'Audit copy PDF'}
+                  {reviewCertificate.status==='ISSUED'?t('admin.assessments.viewDownloadPdf'):t('admin.assessments.auditCopyPdf')}
                 </a>
                 <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?format=png'}>
-                  {reviewCertificate.status==='ISSUED'?'Download PNG':'Audit copy PNG'}
+                  {reviewCertificate.status==='ISSUED'?t('admin.assessments.downloadPng'):t('admin.assessments.auditCopyPng')}
                 </a>
                 <button type="button" className={styles.secondaryButton}
-                  onClick={()=>void loadReviewCertificate(review.attempt_id)}>Refresh</button>
+                  onClick={()=>void loadReviewCertificate(review.attempt_id)}>{t('admin.assessments.refresh')}</button>
               </div>
             ):<div className={styles.certificateRecordActions}>
               <small>{reviewCertificateLookupFailed
-                ? 'Certificate status could not be checked with this account or is temporarily unavailable. An administrator can verify it in the certificate register.'
-                : 'No certificate has been issued for this attempt yet. The student can request it after all eligibility rules are met.'}</small>
+                ? t('admin.assessments.certificateLookupFailed')
+                : t('admin.assessments.noCertificateIssued')}</small>
               <button type="button" className={styles.secondaryButton}
-                onClick={()=>void loadReviewCertificate(review.attempt_id)}>Refresh certificate status</button>
-              <a href="/admin/certificates">Open certificate register ↗</a>
+                onClick={()=>void loadReviewCertificate(review.attempt_id)}>{t('admin.assessments.refreshCertificateStatus')}</button>
+              <a href="/admin/certificates">{t('admin.assessments.openCertificateRegister')}</a>
             </div>}
           </section>}
-          <div className={styles.reviewQuestions}>{review.questions.map((q,index)=><article key={q.attemptQuestionId} className={styles.reviewQuestion}><div className={styles.questionHeading}><span>QUESTION {index+1} · {q.question_type}</span><b>{q.maxMarks} marks</b></div><h3>{q.prompt}</h3>{(q.teacherOptions?.length?q.teacherOptions:q.options)?.length>0&&<ul>{(q.teacherOptions?.length?q.teacherOptions:q.options).map(o=><li key={o.key}>{o.label}{'isCorrect' in o&&o.isCorrect?' · Correct answer':''}</li>)}</ul>}{q.answerKey!==undefined&&q.answerKey!==null&&q.answerKey!==''&&<div className={styles.teacherReference}><small>REFERENCE ANSWER / RUBRIC · STAFF ONLY</small><pre>{referenceAnswerText(q.answerKey)}</pre></div>}<div className={styles.studentAnswer}><small>STUDENT'S SAVED ANSWER</small><p>{answerText(q.answer)}</p></div>
-            {q.manualReviewRequired&&<div className={styles.gradeFields}><label>Marks awarded (0–{q.maxMarks})<input type="number" min="0" max={Number(q.maxMarks)} step="0.25" value={marks[q.answerId]??''} onChange={e=>setMarks(m=>({...m,[q.answerId]:e.target.value}))}/></label><label>Feedback visible to student<textarea rows={2} maxLength={2000} value={feedback[q.answerId]??''} onChange={e=>setFeedback(m=>({...m,[q.answerId]:e.target.value}))} placeholder="Explain how the student can improve."/></label></div>}
-            {q.answerStatus==='AUTO_GRADED'&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>Auto-graded · {q.awardedMarks??0} / {q.maxMarks} marks{q.isCorrect===true?' · Correct':q.isCorrect===false?' · Incorrect':''}</div>}{q.answerStatus==='GRADED'&&!q.manualReviewRequired&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>Teacher checked · {q.awardedMarks??0} / {q.maxMarks} marks{q.isCorrect===true?' · Correct':q.isCorrect===false?' · Incorrect':''}</div>}
+          <div className={styles.reviewQuestions}>{review.questions.map((q,index)=><article key={q.attemptQuestionId} className={styles.reviewQuestion}><div className={styles.questionHeading}><span>{t('admin.assessments.questionNumberType',{index:index+1,type:q.question_type})}</span><b>{t('admin.assessments.marksCount',{count:q.maxMarks})}</b></div><h3>{q.prompt}</h3>{(q.teacherOptions?.length?q.teacherOptions:q.options)?.length>0&&<ul>{(q.teacherOptions?.length?q.teacherOptions:q.options).map(o=><li key={o.key}>{o.label}{'isCorrect' in o&&o.isCorrect?' · '+t('admin.assessments.correctAnswer'):''}</li>)}</ul>}{q.answerKey!==undefined&&q.answerKey!==null&&q.answerKey!==''&&<div className={styles.teacherReference}><small>{t('admin.assessments.referenceAnswerRubric')}</small><pre>{referenceAnswerText(q.answerKey,t)}</pre></div>}<div className={styles.studentAnswer}><small>{t('admin.assessments.studentSavedAnswer')}</small><p>{answerText(q.answer,t('admin.assessments.noAnswerSubmitted'))}</p></div>
+            {q.manualReviewRequired&&<div className={styles.gradeFields}><label>{t('admin.assessments.marksAwardedRange',{maxMarks:q.maxMarks})}<input type="number" min="0" max={Number(q.maxMarks)} step="0.25" value={marks[q.answerId]??''} onChange={e=>setMarks(m=>({...m,[q.answerId]:e.target.value}))}/></label><label>{t('admin.assessments.feedbackVisible')}<textarea rows={2} maxLength={2000} value={feedback[q.answerId]??''} onChange={e=>setFeedback(m=>({...m,[q.answerId]:e.target.value}))} placeholder={t('admin.assessments.improvePlaceholder')}/></label></div>}
+            {q.answerStatus==='AUTO_GRADED'&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>{t('admin.assessments.autoGradedMarks',{awarded:q.awardedMarks??0,maxMarks:q.maxMarks})}{q.isCorrect===true?' · '+t('admin.assessments.correct'):q.isCorrect===false?' · '+t('admin.assessments.incorrect'):''}</div>}{q.answerStatus==='GRADED'&&!q.manualReviewRequired&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>{t('admin.assessments.teacherCheckedMarks',{awarded:q.awardedMarks??0,maxMarks:q.maxMarks})}{q.isCorrect===true?' · '+t('admin.assessments.correct'):q.isCorrect===false?' · '+t('admin.assessments.incorrect'):''}</div>}
             {q.teacherFeedback&&!q.manualReviewRequired&&<p className={styles.feedbackText}>{q.teacherFeedback}</p>}
           </article>)}</div>
-          <label className={styles.overallNote}>Overall test review note (optional)<textarea rows={2} maxLength={1200} value={overallNote} onChange={e=>setOverallNote(e.target.value)} placeholder="Test-level note for the audit trail. Do not put question-by-question details here."/></label>
-          {review.audit?.length?<section className={styles.auditBox}><div><span>AUDIT TRAIL</span><h3>Who checked this test</h3><p>Test-level events only; individual question decisions are not written to the audit log.</p></div><div className={styles.auditList}>{review.audit.map(item=><article key={item.id}><span>{item.action.replaceAll('_',' ')}</span><b>{item.actor_name} · {item.actor_role}</b><small>{fmtDate(item.occurred_at)} · {item.previous_status||'—'} → {item.new_status||'—'}</small>{item.note&&<p>{item.note}</p>}</article>)}</div></section>:null}
-          <div className={styles.modalFooter}><button type="button" className={styles.secondaryButton} onClick={()=>setReview(null)}>Close</button>{review.status!=='RELEASED'&&review.status!=='IN_PROGRESS'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void saveGrading()}>{busy?'Saving…':'Save grading & release when complete'}</button>}</div>
+          <label className={styles.overallNote}>{t('admin.assessments.overallNoteOptional')}<textarea rows={2} maxLength={1200} value={overallNote} onChange={e=>setOverallNote(e.target.value)} placeholder={t('admin.assessments.auditNotePlaceholder')}/></label>
+          {review.audit?.length?<section className={styles.auditBox}><div><span>{t('admin.assessments.auditTrail')}</span><h3>{t('admin.assessments.whoCheckedTest')}</h3><p>{t('admin.assessments.testLevelAuditOnly')}</p></div><div className={styles.auditList}>{review.audit.map(item=><article key={item.id}><span>{auditActionText(item.action,t)}</span><b>{item.actor_name} · {item.actor_role}</b><small>{fmtDate(item.occurred_at,locale)} · {item.previous_status||'—'} → {item.new_status||'—'}</small>{item.note&&<p>{item.note}</p>}</article>)}</div></section>:null}
+          <div className={styles.modalFooter}><button type="button" className={styles.secondaryButton} onClick={()=>setReview(null)}>{t('admin.assessments.close')}</button>{review.status!=='RELEASED'&&review.status!=='IN_PROGRESS'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void saveGrading()}>{busy?t('admin.assessments.saving'):t('admin.assessments.saveGradingRelease')}</button>}</div>
         </section>
       </div>}
     </section>
