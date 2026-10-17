@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `3d617e8bcad8cea83911c86db45cc58931252fcc`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/3d617e8bcad8cea83911c86db45cc58931252fcc).
+**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `131aa02c67463ff10a905b017658480c97394e23`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/131aa02c67463ff10a905b017658480c97394e23).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -222,3 +222,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Added 168 semantic `people.attendance.*` messages for attendance recording/corrections, leave workflows, balance ledger/reversals, lifecycle approval rules, working-week configuration and government-sourced holiday calendar management. Major section labels, controls, validation/fallback notices and empty states are catalog-backed.
 - Permission checks, no-self-approval rules, immutable correction history, leave-balance ledger behavior, working-day calculations and official holiday source-attestation rules remain unchanged. Dynamic employee records, balances and API statuses remain data-driven.
 - All six generated app-local catalogs are updated from canonical `localization/catalogs` in this commit; inspect the newest CI run before marking route certification complete.
+
+
+## CI follow-up — teaching-class interpolation type fix
+
+- Build run [#3017](https://github.com/Manav326/QuantaEdge/actions/runs/38995880441) passed Android, Admin, API, web and content safeguards, but the People Operations image failed TypeScript at `app/my-classes/page.tsx(23,606)` and `(23,615)`: the `countSummary` translator received `LiveClass[]` for `{upcoming}`/`{past}` where `string | number` is required.
+- Fixed the call to pass `upcoming.length` and `past.length`. This only affects summary formatting; the underlying filtered class arrays and eligibility/join rules are unchanged.
+- The Attendance & Leave commit also refreshes catalog copies to 2,065 entries per locale, and a new full run must still validate that change. Do not mark the build green until the fix’s own non-cancelled run passes all required jobs.
