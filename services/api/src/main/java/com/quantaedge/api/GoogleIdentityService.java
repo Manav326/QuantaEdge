@@ -164,14 +164,14 @@ public class GoogleIdentityService {
       throw new SecurityException("This account is not enabled for learner sign-in.");
     }
 
-    Long studentId = jdbc.queryForObject("""
+    List<Map<String, Object>> learnerProfiles = jdbc.queryForList("""
       select id from student
       where user_account_id=? and active=true and environment='PRODUCTION'
       for update
-      """, Long.class, userId);
-    if (studentId == null) {
-      studentId = createLearnerProfile(userId, displayName);
-    }
+      """, userId);
+    long studentId = learnerProfiles.isEmpty()
+        ? createLearnerProfile(userId, displayName)
+        : ((Number) learnerProfiles.getFirst().get("id")).longValue();
     return new GoogleSignIn(
         new AuthContext(null, studentId, null, "STUDENT", displayName, "STUDENT"),
         created, email, displayName, picture);
