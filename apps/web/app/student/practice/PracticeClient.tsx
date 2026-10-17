@@ -1,5 +1,6 @@
 'use client';
 
+import { translateUi } from '../../i18n/catalog';
 import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import MathText from '../../components/MathText';
@@ -98,7 +99,7 @@ export default function PracticePage(){
         const me=await fetch('/api/v1/students/me',{cache:'no-store'});
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const studentBody=await readBody(me);
-        if(!me.ok)throw new Error(studentBody.detail||studentBody.message||tx('Student profile नहीं मिला।','Student profile was not found.'));
+        if(!me.ok)throw new Error(studentBody.detail||studentBody.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.student.profile.was.not.found.f6a78e13'));
         if(!active)return;
 
         let lessonBody:LessonDetail|null=null;
@@ -106,7 +107,7 @@ export default function PracticePage(){
           const language=learningLanguage;
           const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId+'?language='+language+courseQuery,{cache:'no-store'});
           const body=await readBody(lessonResponse);
-          if(!lessonResponse.ok)throw new Error(body.detail||body.message||tx('Lesson उपलब्ध नहीं है।','This lesson is unavailable.'));
+          if(!lessonResponse.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.lesson.is.unavailable.ae825be0'));
           lessonBody=body as LessonDetail;
           if(active)setLesson(lessonBody);
         }
@@ -114,7 +115,7 @@ export default function PracticePage(){
         if(requestedSessionId){
           const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId+'?language='+learningLanguage,{cache:'no-store'});
           const body=await readBody(sessionResponse);
-          if(!sessionResponse.ok)throw new Error(body.detail||body.message||tx('Practice session दोबारा नहीं खुल पाया।','Could not reopen this practice session.'));
+          if(!sessionResponse.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.could.not.reopen.this.practice.session.ef2cc8c0'));
           if(!active)return;
           const resumed:Array<Question>=Array.isArray(body.questions)?body.questions:[];
           setSessionId(Number(body.sessionId));
@@ -132,11 +133,11 @@ export default function PracticePage(){
           else if(firstUnanswered>=0&&resumed[firstUnanswered].attemptCount&&resumed[firstUnanswered].lastCorrect===false){
             setResult({correct:false,autoGraded:true,explanation:resumed[firstUnanswered].explanation});
           }
-          setNotice(tx('आपका saved practice session फिर से खुल गया।','Your saved practice session has been reopened.'));
+          setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.saved.practice.session.has.been.r.b819f911'));
           return;
         }
 
-        if(!lessonId)throw new Error(tx('Practice शुरू करने के लिए पहले lesson खोलें।','Open a lesson before starting practice.'));
+        if(!lessonId)throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.a.lesson.before.starting.practice.41e2102e'));
         const startResponse=await fetch('/api/v1/learning/practice/sessions/from-lesson',{
           method:'POST',headers:{'Content-Type':'application/json'},
           body:JSON.stringify({lessonId,language:learningLanguage})
@@ -145,19 +146,16 @@ export default function PracticePage(){
         if(startResponse.status===409){
           if(active){
             setNoPractice(true);
-            setNotice(tx(
-              'इस micro-topic के लिए अतिरिक्त approved practice questions अभी publish नहीं हुए हैं। आपके दिए हुए MCQ answers save हैं।',
-              'Additional approved practice questions have not been published for this micro-topic yet. Your submitted MCQ answers are saved.'
-            ));
+            setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.additional.approved.practice.questions.8038d774'));
           }
           return;
         }
-        if(!startResponse.ok)throw new Error(startBody.detail||startBody.message||tx('इस topic का practice set नहीं बन पाया।','Could not prepare practice for this topic.'));
+        if(!startResponse.ok)throw new Error(startBody.detail||startBody.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.could.not.prepare.practice.for.this.to.3eb12ea1'));
         if(!active)return;
         const loaded:Array<Question>=Array.isArray(startBody.questions)?startBody.questions:[];
         if(!loaded.length){
           setNoPractice(true);
-          setNotice(tx('इस micro-topic के लिए अभी practice questions उपलब्ध नहीं हैं।','No practice questions are currently available for this micro-topic.'));
+          setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.practice.questions.are.currently.av.fce92908'));
           return;
         }
         setSessionId(Number(startBody.sessionId));
@@ -165,12 +163,12 @@ export default function PracticePage(){
         setTranslationComplete(typeof startBody.translationComplete==='boolean'
           ? startBody.translationComplete : loaded.length>0&&loaded.every(q=>q.translated===true));
         setQuestions(loaded);setIndex(0);setSelected('');setResult(null);setScoreByQuestion({});
-        setNotice(String(startBody.message||tx('इस lesson का practice तैयार है।','Practice for this lesson is ready.')));
+        setNotice(String(startBody.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.practice.for.this.lesson.is.ready.4345bea9')));
         const url=new URL(window.location.href);
         url.searchParams.set('sessionId',String(startBody.sessionId));
         window.history.replaceState({},'',url.toString());
       }catch(e:any){
-        if(active)setError(e.message||tx('Practice load नहीं हो पाई।','Unable to load practice.'));
+        if(active)setError(e.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.load.practice.ea5f9da6'));
       }finally{
         if(active)setLoading(false);
       }
@@ -190,7 +188,7 @@ export default function PracticePage(){
         body:JSON.stringify({answer:value,practiceSessionId:sessionId})
       });
       const body=await readBody(response);
-      if(!response.ok)throw new Error(body.detail||body.message||tx('उत्तर save नहीं हुआ।','Could not save your answer.'));
+      if(!response.ok)throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.could.not.save.your.answer.de3eeeab'));
       setResult(body);
       setAttemptReset(old=>old+1);
       setScoreByQuestion(old=>({...old,[current.id]:body}));
@@ -202,7 +200,7 @@ export default function PracticePage(){
         if(Array.isArray(sessionBody.questions))setQuestions(sessionBody.questions);
       }
     }catch(e:any){
-      setAnswerError(e.message||tx('उत्तर save नहीं हुआ। फिर प्रयास करें।','Could not save your answer. Please try again.'));
+      setAnswerError(e.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.could.not.save.your.answer.please.try..31956e70'));
     }finally{
       setSaving(false);
     }
@@ -237,10 +235,10 @@ export default function PracticePage(){
 
   if(noPractice)return <main className="practice-page">
     <section className="practice-wrap">
-      <div className="eyebrow">{lesson?.subject_name||'QuantaEdge'} · {lesson?.chapter_name||tx('अध्याय','Chapter')}</div>
+      <div className="eyebrow">{lesson?.subject_name||'QuantaEdge'} · {lesson?.chapter_name||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.0a3bff81')}</div>
       <h1><UiText message="legacy.web.practice.set.is.not.available.yet.d6b87368" /></h1>
       <p>{notice}</p>
-      <div className="concept-card"><h2>{lesson?.title||tx('इस micro-topic','This micro-topic')}</h2><p><UiText message="legacy.web.instead.of.showing.questions.from.an.u.bfb8bb28" /></p></div>
+      <div className="concept-card"><h2>{lesson?.title||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.micro.topic.0b4594d6')}</h2><p><UiText message="legacy.web.instead.of.showing.questions.from.an.u.bfb8bb28" /></p></div>
       {recap.map(block=>{
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><UiText message="legacy.web.recap.d07fa8cc" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
@@ -255,7 +253,7 @@ export default function PracticePage(){
     <section className="practice-wrap">
       <div className="eyebrow"><UiText message="legacy.web.micro.topic.complete.1e23cb76" /></div>
       <h1><UiText message="legacy.web.well.done.practice.complete.1efc8d72" /></h1>
-      <p>{lesson?.title||tx('आपका practice session','Your practice session')} · {questions.length} <UiText message="legacy.web.questions.60fa1a6d" /></p>
+      <p>{lesson?.title||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.practice.session.8315f27d')} · {questions.length} <UiText message="legacy.web.questions.60fa1a6d" /></p>
       <div className="concept-card"><h2><UiText message="legacy.web.session.result.db276d70" /></h2>{gradedCount>0?<p>{correctCount} / {gradedCount} <UiText message="legacy.web.questions.have.a.correct.latest.graded.9c32685f" /></p>:<p><UiText message="legacy.web.your.submitted.answers.have.been.saved.fa0511e8" /></p>}<small><UiText message="legacy.web.your.answers.have.been.saved.mastery.i.0856cb2c" /></small></div>
       {recap.map(block=>{
         const data=parse<any>(block.content||'{}');
@@ -265,7 +263,7 @@ export default function PracticePage(){
     </section>
   </main>;
 
-  const questionTypeLabel=current.question_type==='MCQ'?tx('बहुविकल्पीय प्रश्न','Multiple choice'):current.question_type==='TRUE_FALSE'?tx('सही या गलत','True or false'):current.question_type==='NUMERICAL'?tx('संख्यात्मक प्रश्न','Numerical question'):current.question_type.replaceAll('_',' ').toLowerCase();
+  const questionTypeLabel=current.question_type==='MCQ'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.multiple.choice.649280af'):current.question_type==='TRUE_FALSE'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.true.or.false.43e5661e'):current.question_type==='NUMERICAL'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.numerical.question.3993dcf1'):current.question_type.replaceAll('_',' ').toLowerCase();
   const progressPercent=Math.round(((index+1)/Math.max(questions.length,1))*100);
   const selectedOptionIsWrong=result?.correct===false;
   const selectedOptionIsRight=result?.correct===true;
@@ -278,7 +276,7 @@ export default function PracticePage(){
         <p><UiText message="legacy.web.each.question.helps.deepen.your.unders.849160c7" /></p>
       </div>
 
-      <div className="qe-practice-progress" aria-label={tx('अभ्यास की प्रगति','Practice progress')}>
+      <div className="qe-practice-progress" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.practice.progress.b8450593')}>
         <div className="qe-practice-progress__meta"><span><UiText message="legacy.web.question.progress.19dd916c" /></span><strong>{Math.min(index+1,questions.length)} <i>/</i> {questions.length}</strong></div>
         <div className="qe-practice-progress__track"><span style={{width:progressPercent+'%'}}/></div>
       </div>
@@ -292,7 +290,7 @@ export default function PracticePage(){
           <span className="qe-question-index"><span>{String(index+1).padStart(2,'0')}</span></span>
           <div className="qe-question-card__labels">
             <span className="qe-question-type">{questionTypeLabel}</span>
-            <span className="qe-question-context">{current.exam_format||tx('Topic practice','Topic practice')}{current.marks?' · '+current.marks+' '+tx('अंक','marks'):''}</span>
+            <span className="qe-question-context">{current.exam_format||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.topic.practice.3f8b0ab5')}{current.marks?' · '+current.marks+' '+translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.57368a8d'):''}</span>
           </div>
           <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:<UiText message="legacy.web.quantaedge.question.57836f8f" />}</span>
         </div>
@@ -300,22 +298,22 @@ export default function PracticePage(){
         <div className="qe-question-card__prompt"><MathText text={current.prompt}/></div>
         <div className="qe-practice-hint"><span>✦</span><p><UiText message="legacy.web.think.it.through.first.then.answer.and.76c4914f" /></p></div>
 
-        {options.length>0?<div className="qe-answer-options" role="group" aria-label={tx('उत्तर के विकल्प','Answer choices')}>
+        {options.length>0?<div className="qe-answer-options" role="group" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.choices.436a84eb')}>
           {options.map((option,i)=>{
             const chosen=selected===option.key;
             const stateClass=chosen&&selectedOptionIsWrong?'is-incorrect':chosen&&selectedOptionIsRight?'is-correct':chosen?'is-selected':'';
             return <button type="button" key={option.key} disabled={saving||selectedOptionIsRight} aria-pressed={chosen} className={'qe-answer-option '+stateClass} onClick={()=>void answer(option.key)}>
               <span className="qe-answer-option__key">{option.key||String.fromCharCode(65+i)}</span>
               <span className="qe-answer-option__text"><MathText text={option.label}/></span>
-              {chosen&&selectedOptionIsRight&&<span className="qe-answer-option__status" aria-label={tx('सही','Correct')}>✓</span>}
-              {chosen&&selectedOptionIsWrong&&<span className="qe-answer-option__status" aria-label={tx('गलत','Incorrect')}>!</span>}
+              {chosen&&selectedOptionIsRight&&<span className="qe-answer-option__status" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.d01db0a2')}>✓</span>}
+              {chosen&&selectedOptionIsWrong&&<span className="qe-answer-option__status" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.incorrect.c7d63751')}>!</span>}
             </button>;
           })}
         </div>:current.question_type==='ORDER'?<OrderInput key={current.id+'-'+attemptReset} prompt={current.prompt} disabled={saving||selectedOptionIsRight} onSubmit={answer}/>:
         current.question_type==='MATCH'?<MatchInput key={current.id+'-'+attemptReset} disabled={saving||selectedOptionIsRight} onSubmit={answer}/>:
         <div className={'qe-answer-entry '+(result?.correct===false?'is-incorrect':result?.correct===true?'is-correct':'')}>
-          {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना संख्यात्मक उत्तर लिखें…','Enter your numerical answer…')}/>:
-            <textarea value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
+          {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.your.numerical.answer.65eb7d35')}/>:
+            <textarea value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.write.your.answer.or.reasoning.here.0daf3a15')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
           <button className="button button-dark" disabled={saving||!selected.trim()||selectedOptionIsRight} onClick={()=>void answer(selected)}>{saving?<UiText message="legacy.web.checking.answer.b4319f7e" />:<UiText message="legacy.web.submit.answer.10965fb7" />}</button>
         </div>}
 

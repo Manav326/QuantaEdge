@@ -1,5 +1,6 @@
 'use client';
 
+import { translateUi } from '../../i18n/catalog';
 import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import MathText from '../../components/MathText';
@@ -201,7 +202,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
   const [answerError,setAnswerError]=useState('');
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
   const submitted=result?.correct===true;
-  const questionLabel=q.question_type==='MCQ'?tx('बहुविकल्पीय प्रश्न','Multiple choice'):q.question_type==='TRUE_FALSE'?tx('सही या गलत','True or false'):q.question_type==='NUMERICAL'?tx('संख्यात्मक प्रश्न','Numerical question'):tx(q.question_type.replaceAll('_',' '),q.question_type.replaceAll('_',' '));
+  const questionLabel=q.question_type==='MCQ'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.multiple.choice.649280af'):q.question_type==='TRUE_FALSE'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.true.or.false.43e5661e'):q.question_type==='NUMERICAL'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.numerical.question.3993dcf1'):tx(q.question_type.replaceAll('_',' '),q.question_type.replaceAll('_',' '));
 
   async function submit(next:string) {
     setValue(next);
@@ -213,11 +214,11 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
-      if(!response.ok) throw new Error(body.detail||body.message||tx('उत्तर जाँच नहीं पाया।','Answer could not be checked.'));
+      if(!response.ok) throw new Error(body.detail||body.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.could.not.be.checked.bbb567f8'));
       setResult(body);
       onResult(q.id,body);
     } catch(e:any) {
-      setAnswerError(e.message||tx('उत्तर जाँच नहीं पाया। फिर प्रयास करें।','Answer could not be checked. Please try again.'));
+      setAnswerError(e.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.could.not.be.checked.please.try.716acfb3'));
     } finally { setBusy(false); }
   }
 
@@ -226,27 +227,27 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
       <span className="qe-question-index"><span>{String(index).padStart(2,'0')}</span></span>
       <div className="qe-question-card__labels">
         <span className="qe-question-type">{questionLabel}</span>
-        <span className="qe-question-context">{q.exam_format||tx('Lesson check','Lesson check')}{q.marks?' · '+q.marks+' '+tx('अंक','marks'):''}</span>
+        <span className="qe-question-context">{q.exam_format||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.lesson.check.73221abd')}{q.marks?' · '+q.marks+' '+translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.57368a8d'):''}</span>
       </div>
       <span className="qe-question-source">{q.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:q.source_kind?<MathText text={q.source_kind.replaceAll('_',' ').toLowerCase()}/>:<UiText message="legacy.web.quantaedge.question.57836f8f" />}</span>
     </div>
     <div className="qe-question-card__prompt"><MathText text={q.prompt}/></div>
 
-    {options.length>0 ? <div className="qe-answer-options" role="group" aria-label={tx('उत्तर के विकल्प','Answer choices')}>
+    {options.length>0 ? <div className="qe-answer-options" role="group" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.choices.436a84eb')}>
       {options.map((o,i)=>{
         const chosen=value===o.key;
         const stateClass=chosen&&result?.correct===false?'is-incorrect':chosen&&result?.correct===true?'is-correct':chosen?'is-selected':'';
         return <button type="button" key={o.key} disabled={busy||submitted} aria-pressed={chosen} className={'qe-answer-option '+stateClass} onClick={()=>void submit(o.key)}>
           <span className="qe-answer-option__key">{o.key||String.fromCharCode(65+i)}</span>
           <span className="qe-answer-option__text"><MathText text={o.label}/></span>
-          {chosen&&result?.correct===true&&<span className="qe-answer-option__status" aria-label={tx('सही','Correct')}>✓</span>}
-          {chosen&&result?.correct===false&&<span className="qe-answer-option__status" aria-label={tx('गलत','Incorrect')}>!</span>}
+          {chosen&&result?.correct===true&&<span className="qe-answer-option__status" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.d01db0a2')}>✓</span>}
+          {chosen&&result?.correct===false&&<span className="qe-answer-option__status" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.incorrect.c7d63751')}>!</span>}
         </button>;
       })}
     </div> : <div className={'qe-answer-entry '+(result?.correct===false?'is-incorrect':result?.correct===true?'is-correct':'')}>
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
-        <textarea value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
-        <input value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर लिखें…','Type your answer…')}/>}
+        <textarea value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.write.your.answer.or.reasoning.here.0daf3a15')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
+        <input value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.type.your.answer.3952914d')}/>}
       <div className="qe-answer-entry__actions">
         <button type="button" className="button button-dark button-small" disabled={busy||!value.trim()||submitted} onClick={()=>void submit(value)}>{busy?<UiText message="legacy.web.checking.45fef9a5" />:<UiText message="legacy.web.check.answer.293518af" />}</button>
         <button type="button" className="qe-tutor-link" onClick={()=>onTutorOpen(q.id)}><span>✦</span><UiText message="legacy.web.ask.the.tutor.3a67dbaf" /></button>
@@ -354,7 +355,7 @@ export default function LearnClient() {
         .filter(question=>question.question_type==='MCQ'&&question.attempted)
         .map(question=>[question.id,true])));
     } catch {
-      setError(tx('इस पाठ को खोलने या progress save करने में समस्या हुई। फिर प्रयास करें।','There was a problem opening this lesson or saving progress. Please try again.'));
+      setError(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.there.was.a.problem.opening.this.lesso.21e2eae0'));
     }
   }
 
@@ -366,13 +367,13 @@ export default function LearnClient() {
         const me=await fetch('/api/v1/students/me'+(selectedCourseId!==null?'?courseId='+selectedCourseId:selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):''));
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const student=await me.json();
-        if(!me.ok) throw new Error(student.message||tx('Student profile नहीं मिला','Student profile was not found'));
+        if(!me.ok) throw new Error(student.message||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.student.profile.was.not.found.0d806b0d'));
         setCourseDisplayName(String(student.programName||''));
         const requestedId=Number(searchParams.get('lessonId')||0);
         const selectedSubject=searchParams.get('subjectCode');
-        if(!requestedId && selectedCourseId!==null && !selectedSubject) throw new Error(tx('पहले course का subject चुनें।','Choose a subject from this course first.'));
+        if(!requestedId && selectedCourseId!==null && !selectedSubject) throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.choose.a.subject.from.this.course.firs.ccf1b720'));
         const scopedCourse=selectedCourseId!==null||Boolean(selectedProgram);
-        if(!requestedId && selectedSubject && (!/^[a-z0-9][a-z0-9_-]{0,39}$/i.test(selectedSubject)||(!scopedCourse&&!['maths','science'].includes(selectedSubject)))) throw new Error(tx('Subject सही नहीं है।','Invalid subject.'));
+        if(!requestedId && selectedSubject && (!/^[a-z0-9][a-z0-9_-]{0,39}$/i.test(selectedSubject)||(!scopedCourse&&!['maths','science'].includes(selectedSubject)))) throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.invalid.subject.4f71f3e5'));
         const programQuery=courseQuery;
         if(!requestedId && selectedSubject){
           const selectedLanguage=learningLanguage;
@@ -382,7 +383,7 @@ export default function LearnClient() {
           if(cancelled)return;
           const trackLessons=listBody as Lesson[];
           if(cancelled)return;
-          const subjectName=selectedSubject==='maths'?tx('गणित','Mathematics'):tx('विज्ञान','Science');
+          const subjectName=selectedSubject==='maths'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mathematics.4cf6be1a'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.science.f85a10aa');
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
           setTrackBrowse({classCode:String(trackLessons[0]?.class_code||student.class_code),subjectCode:selectedSubject,subjectName:String(trackLessons[0]?.subject_name||subjectName),lessons:trackLessons,courseId:selectedCourseId,courseName:String(student.programName||''),programCode:selectedProgram});
@@ -396,7 +397,7 @@ export default function LearnClient() {
           if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
           if(rec.ok&&rb.available&&rb.lesson) targetId=Number(rb.lesson.id);
         }
-        if(!targetId) throw new Error(tx('अभी कोई recommended lesson नहीं मिला।','No recommended lesson is available yet.'));
+        if(!targetId) throw new Error(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.recommended.lesson.is.available.yet.da29dcc9'));
         const selectedLanguage=learningLanguage;
         const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage+programQuery);
         if(!detail.ok) throw new Error('lesson');
@@ -413,7 +414,7 @@ export default function LearnClient() {
             .filter(question=>question.question_type==='MCQ'&&question.attempted)
             .map(question=>[question.id,true])));
         }
-      }catch(e:any){if(!cancelled)setError(e.message==='Student profile नहीं मिला'?tx('Student login ज़रूरी है।','Student sign-in is required.'):tx('Lesson load नहीं हो पाया।','Unable to load the lesson.'));}
+      }catch(e:any){if(!cancelled)setError(e.message==='Student profile नहीं मिला'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.student.sign.in.is.required.3c988af9'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.unable.to.load.the.lesson.52412c24'));}
     }
     void load();
     return ()=>{cancelled=true;};
@@ -437,7 +438,7 @@ export default function LearnClient() {
           if(!cancelled){
             const newLessons=Array.isArray(rows)?rows as Lesson[]:[];
             setLessons(newLessons);
-            setTrackBrowse(old=>old?{...old,subjectName:old.subjectCode==='maths'?tx('गणित','Mathematics'):tx('विज्ञान','Science'),lessons:newLessons}:old);
+            setTrackBrowse(old=>old?{...old,subjectName:old.subjectCode==='maths'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mathematics.4cf6be1a'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.science.f85a10aa'),lessons:newLessons}:old);
           }
           return;
         }
@@ -586,11 +587,11 @@ export default function LearnClient() {
   function translationGapText(gap: string) {
     const coverage=lesson?.translation_coverage;
     switch(gap){
-      case 'class_name': return tx('कक्षा का नाम','Class name');
-      case 'lesson_title_summary': return tx('पाठ का शीर्षक/सारांश','Lesson title/summary');
-      case 'chapter_name': return tx('अध्याय का नाम','Chapter name');
-      case 'subject_name': return tx('विषय का नाम','Subject name');
-      case 'objective_title': return tx('सीखने का उद्देश्य','Learning objective');
+      case 'class_name': return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.class.name.4af6f3b3');
+      case 'lesson_title_summary': return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.lesson.title.summary.5f9445c3');
+      case 'chapter_name': return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.name.4b8a805b');
+      case 'subject_name': return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.subject.name.a190525f');
+      case 'objective_title': return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.learning.objective.65da87a3');
       case 'lesson_blocks': { const missing=Math.max(0,Number(coverage?.blocks_total||0)-Number(coverage?.blocks_published||0)); return tx(missing+' शिक्षण भाग',''+missing+' teaching block(s)'); }
       case 'questions': { const missing=Math.max(0,Number(coverage?.questions_total||0)-Number(coverage?.questions_published||0)); return tx(missing+' प्रश्न',''+missing+' question(s)'); }
       default: return gap.replaceAll('_',' ');
@@ -601,14 +602,14 @@ export default function LearnClient() {
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><UiText message="legacy.web.unable.to.load.lesson.2df59c7d" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><UiText message="legacy.web.student.home.c4ae779f" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
     <section className="lesson-wrap">
-      <div className="lesson-meta"><span className="eyebrow">{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?(trackBrowse.courseName||courseDisplayName||tx('Course','Course'))+' · '+trackBrowse.subjectName:<><UiText message="legacy.web.class.98aaaa31" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</>}</span><span>{trackGroups.length} <UiText message="legacy.web.chapters.b7609a1c" /> · {trackBrowse.lessons.length} <UiText message="legacy.web.published.lessons.b59dcc4d" /></span></div>
+      <div className="lesson-meta"><span className="eyebrow">{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?(trackBrowse.courseName||courseDisplayName||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.course.0d5ab113'))+' · '+trackBrowse.subjectName:<><UiText message="legacy.web.class.98aaaa31" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</>}</span><span>{trackGroups.length} <UiText message="legacy.web.chapters.b7609a1c" /> · {trackBrowse.lessons.length} <UiText message="legacy.web.published.lessons.b59dcc4d" /></span></div>
       <h1>{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?trackBrowse.subjectName:trackBrowse.subjectCode==='maths'?<UiText message="legacy.web.mathematics.learning.f39c3269" />:<UiText message="legacy.web.science.learning.38127305" />}</h1>
       <p className="lesson-intro"><UiText message="legacy.web.open.a.chapter.to.see.its.topics.and.p.2ba51701" /></p>
       {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><UiText message="legacy.web.last.opened.topic.74a31687" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''))+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <UiText message="legacy.web.continue.3be96765" /></Link></div>}
       {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
         <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
           <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-          <span className="qe-student-pdf-copy"><span><UiText message="legacy.web.complete.subject.textbook.3fba5a6f" /></span><strong>{item.title}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} pages · {item.edition||tx('ऑनलाइन पढ़ें','Read online')}</small></span>
+          <span className="qe-student-pdf-copy"><span><UiText message="legacy.web.complete.subject.textbook.3fba5a6f" /></span><strong>{item.title}</strong><small>{item.language==='en'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.english.edition.7a790205'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.hindi.edition.242c7645')} · {item.page_count} pages · {item.edition||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.read.online.731d0a17')}</small></span>
           <span className="qe-student-pdf-action"><UiText message="legacy.web.open.pdf.a6054393" /> ↗</span>
         </Link>
       )}
@@ -637,7 +638,7 @@ export default function LearnClient() {
           </button>
           {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
             <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} {tx('पृष्ठ','pages')} · {textbookChapterTitle(item, learningLanguage)}</small></span>
+            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.pdf.8639d049')}</strong><small>{item.language==='en'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.english.edition.7a790205'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.hindi.edition.242c7645')} · {item.page_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.pages.216981bc')} · {textbookChapterTitle(item, learningLanguage)}</small></span>
             <span className="qe-student-pdf-action"><UiText message="legacy.web.open.pdf.a6054393" /> ↗</span>
           </Link>)}
           {expanded&&<div className="qe-student-chapter-content">
@@ -669,7 +670,7 @@ export default function LearnClient() {
                   </span>
                 </span>
                 {topicComplete
-                  ? <span className="qe-student-topic-complete" role="img" aria-label={tx('विषय पूरा हुआ','Topic completed')} title={tx('MCQ और practice पूरे','MCQs and practice completed')}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.1L19 6.8"/></svg></span>
+                  ? <span className="qe-student-topic-complete" role="img" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.topic.completed.8ab16ef3')} title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mcqs.and.practice.completed.850ed197')}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.1L19 6.8"/></svg></span>
                   : <span className="qe-student-topic-arrow" aria-hidden="true">→</span>}
               </Link>;
             })}</div>}
@@ -687,7 +688,7 @@ export default function LearnClient() {
   if(lesson.structured_lesson) return <main className="lesson-page qe-structured-student-page">
     <section className="lesson-wrap">
       <div className="lesson-meta">
-        <span className="eyebrow">{tx('संरचित पाठ','Structured lesson')} · {lesson.chapter_name}</span>
+        <span className="eyebrow">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.structured.lesson.17db6801')} · {lesson.chapter_name}</span>
         <span>{lesson.class_code} · {lesson.subject_name}</span>
       </div>
       <StructuredLessonExperience lesson={lesson.structured_lesson} locale={learningLanguage} mode="student" />
@@ -698,7 +699,7 @@ export default function LearnClient() {
   return <main className="lesson-page">
     <section className="lesson-wrap">
       <div className="lesson-meta">
-        <span className="eyebrow">{selectedCourseId!==null||selectedProgram?(courseDisplayName||tx('Course','Course'))+' · '+lesson.subject_name:<><UiText message="legacy.web.class.98aaaa31" /> {lesson.class_code} · {lesson.subject_name}</>} · {lesson.chapter_name}</span>
+        <span className="eyebrow">{selectedCourseId!==null||selectedProgram?(courseDisplayName||translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.course.0d5ab113'))+' · '+lesson.subject_name:<><UiText message="legacy.web.class.98aaaa31" /> {lesson.class_code} · {lesson.subject_name}</>} · {lesson.chapter_name}</span>
         <span>Lesson {currentIndex+1} / {lessons.length}</span>
       </div>
       <h1>{lesson.title}</h1>
@@ -714,7 +715,7 @@ export default function LearnClient() {
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <UiText message="legacy.web.help.0201f8c2" /></b><span><UiText message="legacy.web.explain.the.concept.in.your.own.words..8ad26ef4" /></span></div>}
 
       <div className="content-heading"><h2><UiText message="legacy.web.check.your.understanding.with.mcqs.858bdd53" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <UiText message="legacy.web.attempted.b3b638cd" /></span></div>
-      {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={tx('MCQ की प्रगति','MCQ progress')}><div><span><UiText message="legacy.web.answer.every.question.to.continue.5dafc788" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
+      {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mcq.progress.392d6eb6')}><div><span><UiText message="legacy.web.answer.every.question.to.continue.5dafc788" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
       {lessonMcqs.length ? lessonMcqs.map((q,index)=><QuestionCard key={q.id} q={q} index={index+1} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><UiText message="legacy.web.mcqs.have.not.been.published.for.this..18b64bb6" /></p></div>}
 
       <section className="concept-card practice-launch-card">
@@ -726,7 +727,7 @@ export default function LearnClient() {
           : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><UiText message="legacy.web.finish.the.mcqs.first.7354ffa5" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
 
-      {recapBlock&&<section className="lesson-recap" aria-label={tx('पाठ का दोहराव','Lesson recap')}>
+      {recapBlock&&<section className="lesson-recap" aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.lesson.recap.8d872474')}>
         <div className="content-heading">
           <h2><UiText message="legacy.web.recap.c772ab09" /></h2>
           <span><UiText message="legacy.web.key.takeaways.0c7d1936" /></span>
@@ -734,7 +735,7 @@ export default function LearnClient() {
         <Block key={recapBlock.id} block={recapBlock} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>
       </section>}
 
-      {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}} aria-label={tx('AI tutor खोलें','Open AI tutor')} title={tx('AI tutor खोलें','Open AI tutor')}>
+      {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.ai.tutor.5bd7c753')} title={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.ai.tutor.5bd7c753')}>
         <span className="tutor-launch-icon" aria-hidden="true">✦</span>
       </button>}
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />

@@ -1,5 +1,6 @@
 'use client';
 
+import { translateUi } from '../../i18n/catalog';
 import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import PremiumPagination from '../../components/PremiumPagination';
@@ -123,36 +124,36 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
       const correct=rightKeys.has(key);
       const wrongChosen=review&&chosen&&question.isCorrect===false;
       const tone=wrongChosen?styles.optionIncorrect:review&&(correct||(chosen&&question.isCorrect===true))?styles.optionCorrect:review&&chosen?styles.optionNeutral:'';
-      const hint=review&&chosen&&correct?t('Your answer · Correct answer','आपका उत्तर · सही उत्तर')
-        :review&&chosen&&question.isCorrect===false?t('Your recorded answer · Incorrect','आपका दर्ज उत्तर · गलत')
-        :review&&chosen&&question.isCorrect===true?t('Your recorded answer · Correct','आपका दर्ज उत्तर · सही')
-        :review&&chosen?t('Your recorded answer','आपका दर्ज उत्तर')
-        :review&&correct?t('Correct answer','सही उत्तर'):'';
+      const hint=review&&chosen&&correct?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.answer.correct.answer.e22f5a2c')
+        :review&&chosen&&question.isCorrect===false?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.recorded.answer.incorrect.f3522066')
+        :review&&chosen&&question.isCorrect===true?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.recorded.answer.correct.d15f6d71')
+        :review&&chosen?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.recorded.answer.a7e68292')
+        :review&&correct?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.answer.2a6f5308'):'';
       return <label key={option.key} className={[styles.option,!review&&chosen?styles.optionSelected:'',tone].filter(Boolean).join(' ')}>
         <input type="radio" name={'question-'+question.attemptQuestionId} value={key} checked={chosen} disabled={disabled||review} onChange={()=>onAnswer?.(option.key)}/>
         <span className={styles.optionKey}>{option.key}</span>
         <span className={styles.optionText}>{option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</span>
         {review&&(chosen||correct)&&<span className={styles.optionOutcome}
-          aria-label={wrongChosen?t('Incorrect answer','गलत उत्तर'):correct?t('Correct answer','सही उत्तर'):question.isCorrect===true?t('Correct','सही'):t('Recorded answer','दर्ज उत्तर')}>
+          aria-label={wrongChosen?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.incorrect.answer.e6b805c5'):correct?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.answer.2a6f5308'):question.isCorrect===true?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.d01db0a2'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.recorded.answer.02081560')}>
           {wrongChosen?'!':correct||question.isCorrect===true?'✓':'i'}
         </span>}
       </label>;
     })}</div>}
     {!hasOptions&&<label className={[styles.answerField,review?answerTone:''].filter(Boolean).join(' ')}>
-      <span>{question.question_type==='NUMERICAL'?t('Your numerical answer','आपका संख्यात्मक उत्तर'):t('Your answer','आपका उत्तर')}</span>
+      <span>{question.question_type==='NUMERICAL'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.numerical.answer.27c93cf9'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.answer.d70be76f')}</span>
       {question.question_type==='INPUT'||question.question_type==='NUMERICAL'
         ?<input value={answerText(response)} disabled={disabled||review} type={question.question_type==='NUMERICAL'?'number':'text'} onChange={event=>onAnswer?.(event.target.value)}
-          placeholder={t('Type your answer here…','अपना उत्तर यहाँ लिखें…')}/>
+          placeholder={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.type.your.answer.here.a5f3d012')}/>
         :<textarea value={answerText(response)} disabled={disabled||review} rows={6} onChange={event=>onAnswer?.(event.target.value)}
           placeholder={['MATCH','ORDER','CASE_BASED','ASSERTION_REASON'].includes(question.question_type)
-            ?t('Write your answer or reasoning clearly…','अपना उत्तर या तर्क स्पष्ट रूप से लिखें…')
-            :t('Enter your answer here…','अपना उत्तर यहाँ लिखें…')}/>}
+            ?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.write.your.answer.or.reasoning.clearly.f91bcdfd')
+            :translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.enter.your.answer.here.d508c830')}/>}
       {!review&&<small>{['INPUT','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].includes(question.question_type)
-        ?t('This response is sent for staff checking. Your final result is released after all required answers are reviewed.','यह उत्तर स्टाफ़ द्वारा जाँच के लिए भेजा जाता है। सभी ज़रूरी उत्तरों की समीक्षा के बाद अंतिम परिणाम जारी होगा।')
+        ?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.response.is.sent.for.staff.checki.78ad3ada')
         :''}</small>}
     </label>}
     {review&&correctText&&(!hasOptions||rightKeys.size===0)&&<div className={styles.correctAnswerBox}>
-      <strong>{t('Correct answer','सही उत्तर')}</strong><span>{correctText}</span>
+      <strong>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.answer.2a6f5308')}</strong><span>{correctText}</span>
     </div>}
   </>;
 }
@@ -241,21 +242,21 @@ export default function TestsClient(){
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
-  const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?t('Topic-end test','टॉपिक-एंड टेस्ट'):kind==='CHAPTER_END'?t('Chapter-end test','अध्याय-एंड टेस्ट'):t('Admin-created test','एडमिन द्वारा बनाया गया टेस्ट');
+  const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.topic.end.test.8a9ba225'):kind==='CHAPTER_END'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.chapter.end.test.fede453c'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.admin.created.test.7c1bcdfd');
   const certificateEligibilityMessage=(reason?:string|null)=>{
     switch(reason){
       case 'ADMIN_CREATED_TEST_ONLY':return '';
-      case 'RESULT_NOT_RELEASED':return t('Certificate unlocks after the final result is released.','अंतिम परिणाम जारी होने के बाद प्रमाणपत्र उपलब्ध होगा।');
-      case 'SUBJECT_TRACK_NOT_ACTIVE':return t('An active enrollment in this subject and current class is required.','इस कक्षा और विषय में सक्रिय नामांकन आवश्यक है।');
-      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return t('A released, passing admin-created test is enough for a test certificate; refresh results to retry eligibility.','टेस्ट प्रमाणपत्र के लिए जारी पास admin-created टेस्ट पर्याप्त है; पात्रता दोबारा जाँचने के लिए परिणाम रिफ्रेश करें।');
-      case 'SUBJECT_COMPLETION_REQUIRED':return t('Test certificates do not require completing every published lesson. Refresh results and retry eligibility.','टेस्ट प्रमाणपत्र के लिए सभी प्रकाशित पाठ पूरे करना ज़रूरी नहीं है। परिणाम रिफ्रेश करके पात्रता दोबारा जाँचें।');
+      case 'RESULT_NOT_RELEASED':return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.unlocks.after.the.final.re.70095f6c');
+      case 'SUBJECT_TRACK_NOT_ACTIVE':return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.an.active.enrollment.in.this.subject.a.36b70c5c');
+      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.a.released.passing.admin.created.test..7df706dd');
+      case 'SUBJECT_COMPLETION_REQUIRED':return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.certificates.do.not.require.compl.c6d71776');
       case 'PASS_THRESHOLD_NOT_MET':{
         const threshold=String(Object.values(certificateEligibility).find(item=>item.pass_threshold_percent)?.pass_threshold_percent||80);
         return t('The result is below the '+threshold+'% certificate threshold.','परिणाम प्रमाणपत्र की '+threshold+'% सीमा से कम है।');
       }
-      case 'INVALID_SCORE':return t('This result has no valid maximum score.','इस परिणाम का अधिकतम स्कोर मान्य नहीं है।');
-      case 'CERTIFICATE_REVOKED':return t('This certificate has been revoked; contact an administrator.','यह प्रमाणपत्र निरस्त है; एडमिन से संपर्क करें।');
-      default:return t('Certificate eligibility is unavailable. Refresh results to check again.','प्रमाणपत्र की पात्रता उपलब्ध नहीं है। दोबारा जाँचने के लिए परिणाम रिफ्रेश करें।');
+      case 'INVALID_SCORE':return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.result.has.no.valid.maximum.score.2ff9b3c6');
+      case 'CERTIFICATE_REVOKED':return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.certificate.has.been.revoked.cont.334c43c0');
+      default:return translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.eligibility.is.unavailable.28d87202');
     }
   };
 
@@ -269,7 +270,7 @@ export default function TestsClient(){
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.detail||body.message||body.error||'Certificate could not be issued.');
-      setNotice(t('Certificate issued successfully. View or download it from this result.','प्रमाणपत्र सफलतापूर्वक जारी हुआ। इसे इसी परिणाम से देखें या डाउनलोड करें।'));
+      setNotice(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.issued.successfully.view.o.48684d00'));
       await loadOverview();
       await refreshCertificateEligibilityForAttempts([attemptId]);
     }catch(e:any){
@@ -475,22 +476,22 @@ export default function TestsClient(){
     <section className={styles.wrap}>
       {!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
-        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{t('Available tests','उपलब्ध टेस्ट')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{t('My results','मेरे परिणाम')} <span>{resultsTotal}</span></button></div>
+        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.available.tests.83298a6c')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.my.results.f7fbefd3')} <span>{resultsTotal}</span></button></div>
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{t('YOUR ASSESSMENTS','आपके टेस्ट')}</span><h2>{t('Tests available to you','आपके लिए उपलब्ध टेस्ट')}</h2><p>{courseId!==null?t('Tests are shown for the selected course.','चुने गए course के टेस्ट यहाँ दिखते हैं।'):t('Tests are shown only for your enrolled class and subjects.','यहाँ केवल आपकी नामांकित कक्षा और विषयों के टेस्ट दिखते हैं।')}</p></div><label>{t('Subject','विषय')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{t('All subjects','सभी विषय')}</option><option value="maths">{t('Mathematics','गणित')}</option><option value="science">{t('Science','विज्ञान')}</option></select></label></div>
-          {loading?<div className={styles.empty}>{t('Loading your tests…','आपके टेस्ट लोड हो रहे हैं…')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{t('No published tests yet','अभी कोई प्रकाशित टेस्ट नहीं है')}</b><small>{t('Your teacher’s published tests will appear here.','शिक्षक द्वारा प्रकाशित टेस्ट यहाँ दिखेंगे।')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div><label>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.subject.0af41287')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.all.subjects.7895d918')}</option><option value="maths">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mathematics.4cf6be1a')}</option><option value="science">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.science.f85a10aa')}</option></select></label></div>
+          {loading?<div className={styles.empty}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.your.tests.ff94a584')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.published.tests.yet.04ce394c')}</b><small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.teacher.s.published.tests.will.ap.450888e9')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?t('Mathematics','गणित'):t('Science','विज्ञान')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3>{test.test_id&&<small>{t('Test ID','टेस्ट ID')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {t('questions','प्रश्न')}</span><span>◷ {test.duration_minutes} {t('min','मिनट')}</span><span>★ {test.max_score} {t('marks','अंक')}</span></div><div className={styles.attemptTrack}><span>{t('Attempts used','उपयोग किए गए प्रयास')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?t('Opening…','खुल रहा है…'):started?t('Resume test','टेस्ट फिर शुरू करें'):exhausted?t('Attempts used','प्रयास समाप्त'):t('Start test','टेस्ट शुरू करें')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {t('Top 20 leaderboard','शीर्ष 20 लीडरबोर्ड')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{t('Latest result ↗','नवीनतम परिणाम ↗')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{t('You have used all allowed attempts.','आप सभी अनुमत प्रयास उपयोग कर चुके हैं।')}</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mathematics.4cf6be1a'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.science.f85a10aa')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3>{test.test_id&&<small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.id.f22e0b35')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.questions.fa34dc08')}</span><span>◷ {test.duration_minutes} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.min.72242533')}</span><span>★ {test.max_score} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.57368a8d')}</span></div><div className={styles.attemptTrack}><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.attempts.used.1eef4b49')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.opening.c30c8984'):started?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.resume.test.f20ec881'):exhausted?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.attempts.used.6cc262d7'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.start.test.84f53ec2')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.top.20.leaderboard.9f98bf6d')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.latest.result.e927be6a')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.you.have.used.all.allowed.attempts.afaa7d9e')}</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
-            itemLabel={t('available tests','उपलब्ध टेस्ट')} loading={loading} />
+            itemLabel={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.available.tests.0852a38c')} loading={loading} />
         </>:<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{t('SAVED RESULTS','सहेजे गए परिणाम')}</span><h2>{t('Your test history','आपके टेस्ट का इतिहास')}</h2><p>{t('Only released results appear here. Pending teacher checks are not shown as final scores.','यहाँ केवल जारी परिणाम दिखते हैं। जाँच की प्रतीक्षा वाले परिणाम अंतिम स्कोर के रूप में नहीं दिखाए जाते।')}</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>{t('Refresh','रिफ्रेश')}</button></div>
-          {loading?<div className={styles.empty}>{t('Loading saved results…','सहेजे गए परिणाम लोड हो रहे हैं…')}</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>{t('No released results yet','अभी कोई जारी परिणाम नहीं है')}</b><small>{t('When you finish a test, your score and teacher feedback will be saved here after any required review.','टेस्ट पूरा होने पर, ज़रूरी समीक्षा के बाद आपका स्कोर और शिक्षक की प्रतिक्रिया यहाँ सहेजी जाएगी।')}</small></div>:<div className={styles.resultList}>{results.map(result=>{
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.saved.results.804cf2f3')}</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.test.history.6548bc4c')}</h2><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.only.released.results.appear.here.pend.8cf88a8d')}</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.refresh.944128d0')}</button></div>
+          {loading?<div className={styles.empty}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.loading.saved.results.0ba7f16c')}</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.released.results.yet.c64adf39')}</b><small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.when.you.finish.a.test.your.score.and..9b05ae07')}</small></div>:<div className={styles.resultList}>{results.map(result=>{
              const latestAttempts=Array.isArray(result.attempts)&&result.attempts.length?result.attempts.slice(0,3):[{attempt_id:result.attempt_id,attempt_number:result.attempt_number,status:result.status,submitted_at:result.submitted_at,released_at:result.released_at,final_score:result.final_score,max_score:result.max_score}];
              const bestScore=Number(result.best_score??Math.max(...latestAttempts.map(item=>Number(item.final_score??0))));
              const bestPercent=Number(result.max_score)>0?Math.round(bestScore/Number(result.max_score)*100):0;
@@ -498,15 +499,15 @@ export default function TestsClient(){
              return <article key={result.assessment_id} className={styles.resultCard}>
                <span className={styles.resultIcon}>✓</span>
                <div className={styles.resultSummary}>
-                 <h3>{result.assessment_title}</h3>{result.test_id&&<small>{t('Test ID','टेस्ट ID')}: {result.test_id}</small>}
+                 <h3>{result.assessment_title}</h3>{result.test_id&&<small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.id.f22e0b35')}: {result.test_id}</small>}
                  <p>{assessmentTypeLabel(result.assessment_type)} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''}</p>
-                 <small>{attemptsInHistory} {t('released attempt','जारी प्रयास')}{attemptsInHistory===1?'':t('s','')} · {result.question_count} {t('questions','प्रश्न')} · {t('Latest:','नवीनतम:')} {fmtDate(result.released_at)}</small>
+                 <small>{attemptsInHistory} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.released.attempt.a2ac0123')}{attemptsInHistory===1?'':translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.s.a6d7b636')} · {result.question_count} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.questions.fa34dc08')} · {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.latest.397aaf9b')} {fmtDate(result.released_at)}</small>
                </div>
                <div className={styles.score} aria-label={'Best score among latest attempts: '+bestScore+' out of '+result.max_score}>
                  <b>{bestScore} <small>/ {result.max_score}</small></b><span>{bestPercent}%</span><small>Best of last {Math.min(3,latestAttempts.length)}</small>
                </div>
                <div className={styles.resultAttemptPicker}>
-                 <span>{t('Open attempt feedback','प्रयास की प्रतिक्रिया खोलें')} <small>· {t('newest first','नवीनतम पहले')}</small></span>
+                 <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.open.attempt.feedback.b3629ab0')} <small>· {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.newest.first.8fc54e8c')}</small></span>
                  <div>{latestAttempts.map((item,attemptIndex)=>{
                    const positionLabel=attemptIndex===0?'Latest':attemptIndex===1?'Previous':'Earlier';
                    const scoreLabel=Number(item.final_score??0)+' / '+Number(item.max_score??result.max_score);
@@ -514,26 +515,26 @@ export default function TestsClient(){
                    const certificate=certificateEligibility[attemptId];
                    const certificateId=Number(certificate?.certificate_id||0);
                    return <div key={item.attempt_id} className={styles.resultAttemptItem}>
-                     <button type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(attemptId)} aria-label={t('Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel,'प्रयास #'+item.attempt_number+' खोलें, अंक '+scoreLabel)} title={positionLabel+' · '+t('Attempt','प्रयास')+' #'+item.attempt_number+' · '+scoreLabel}>
+                     <button type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(attemptId)} aria-label={t('Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel,'प्रयास #'+item.attempt_number+' खोलें, अंक '+scoreLabel)} title={positionLabel+' · '+translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.attempt.b10a594c')+' #'+item.attempt_number+' · '+scoreLabel}>
                        <b>{attemptIndex+1}</b><span>{positionLabel}</span>
                      </button>
                      {certificate?.certificate_status==='ISSUED'&&certificateId>0?(
                        <div className={styles.certificateActionLinks}>
-                         <Link href={'/student/certificates?certificateId='+certificateId}>{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</Link>
+                         <Link href={'/student/certificates?certificateId='+certificateId}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.view.certificate.07663aac')}</Link>
                          
                          
-                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
+                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verify.status.8146b8bf')}</a>
                        </div>
                      ):certificate?.certificate_status==='REVOKED'?(
                        <div className={styles.certificateActionLinks}>
-                         <small className={styles.certificateEligibilityHint}>{t('Certificate revoked','प्रमाणपत्र निरस्त')}</small>
-                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
+                         <small className={styles.certificateEligibilityHint}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.revoked.29f7fafd')}</small>
+                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verify.status.8146b8bf')}</a>
                        </div>
                      ):certificate?.eligible?(
                        <button type="button" className={styles.certificateIssueButton}
                          disabled={issuingCertificateAttemptId!==null}
                          onClick={()=>void issueCertificateForAttempt(attemptId)}>
-                         {issuingCertificateAttemptId===attemptId?t('Issuing…','जारी हो रहा है…'):t('Issue certificate','प्रमाणपत्र जारी करें')}
+                         {issuingCertificateAttemptId===attemptId?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issuing.1efee91b'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issue.certificate.2e69c02c')}
                        </button>
                      ):(
                        <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(certificate?.eligibility_reason)}</small>
@@ -542,7 +543,7 @@ export default function TestsClient(){
                  })}
                    <button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading}
                      onClick={()=>void openLeaderboard({assessment_id:result.assessment_id,title:result.assessment_title})}>
-                     <span aria-hidden="true">♛</span> {t('Leaderboard','लीडरबोर्ड')}
+                     <span aria-hidden="true">♛</span> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.leaderboard.5be07c6e')}
                    </button>
                  </div>
                </div>
@@ -550,11 +551,11 @@ export default function TestsClient(){
            })}</div>}
           <PremiumPagination page={resultsPage} total={resultsTotal} pageSize={resultsPageSize}
             onPageChange={setResultsPage} onPageSizeChange={size=>{setResultsPageSize(size);setResultsPage(0);}}
-            itemLabel={t('released results','जारी परिणाम')} loading={loading} />
+            itemLabel={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.released.results.cd3a88a6')} loading={loading} />
         </>}
       </>:<>
-        <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← {t('Tests & results','टेस्ट और परिणाम')}</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
-        <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1>{attempt.test_id&&<small>{t('Test ID','टेस्ट ID')}: {attempt.test_id}</small>}<p>{t('Attempt','प्रयास')} {attempt.attempt_number} · {attempt.questions.length} {t('questions','प्रश्न')} · {attempt.max_score} {t('marks','अंक')}</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>{t('TIME REMAINING','शेष समय')}</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?t('Saving answer…','उत्तर सहेजा जा रहा है…'):t('Answers auto-save','उत्तर अपने-आप सहेजे जाते हैं')}</span></div>}</div>
+        <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.tests.results.f949f4ee')}</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
+        <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1>{attempt.test_id&&<small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.id.f22e0b35')}: {attempt.test_id}</small>}<p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.attempt.b10a594c')} {attempt.attempt_number} · {attempt.questions.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.questions.fa34dc08')} · {attempt.max_score} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.57368a8d')}</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.time.remaining.6d99bc57')}</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.saving.answer.3950845d'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answers.auto.save.0f25a7cb')}</span></div>}</div>
         {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
         {attempt.translation_complete===false&&<div className={styles.languageNotice} role="status">
           <b><UiText message="legacy.web.language.coverage.047432da" /></b>
@@ -563,44 +564,44 @@ export default function TestsClient(){
         {released?<section className={styles.releasedResult} aria-live="polite">
           <div className={styles.resultHero}>
             <span className={styles.resultHeroIcon}>✓</span>
-            <div><span className={styles.eyebrow}>{t('RESULT READY','परिणाम तैयार')}</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your test is closed. Review one question at a time with Previous and Next.','आपका टेस्ट बंद हो गया है। पिछले और अगले बटन से एक समय में एक प्रश्न की समीक्षा करें।')}</p></div>
+            <div><span className={styles.eyebrow}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.result.ready.a835d9c8')}</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.submitted.successfully.70e5c363')}</h2><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.test.is.closed.review.one.questio.abbd2276')}</p></div>
           </div>
           <div className={styles.resultScoreGrid}>
             <article className={styles.resultScorePrimary}>
-              <small>{t('YOUR SCORE','आपके अंक')}</small>
+              <small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.score.67516f44')}</small>
               <strong>{resultScore} <span>/ {resultMax}</span></strong>
               <div className={styles.resultScoreProgress}><i style={{width:Math.min(100,Math.max(0,resultPercent))+'%'}}/></div>
-              <b>{resultPercent}%</b><p>{t('Overall score','कुल अंक')}</p>
+              <b>{resultPercent}%</b><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.overall.score.bddc06dc')}</p>
             </article>
-            <article className={styles.resultMetric}><strong>{correctCount}</strong><span>{t(t('Correct','सही'),'सही')}</span></article>
-            <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>{t('Incorrect','गलत')}</span></article>
-            <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>{t('Not answered','अनुत्तरित')}</span></article>
+            <article className={styles.resultMetric}><strong>{correctCount}</strong><span>{t(translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.d01db0a2'),'सही')}</span></article>
+            <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.incorrect.c7d63751')}</span></article>
+            <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.not.answered.f674e469')}</span></article>
           </div>
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
             const certificateId=Number(cert?.certificate_id||0);
             return <section className={styles.certificateResultPanel} aria-live="polite">
-              <div><span className={styles.eyebrow}>{t('CERTIFICATE','प्रमाणपत्र')}</span><h3>{t('Certificate for this result','इस परिणाम का प्रमाणपत्र')}</h3>
-                <p>{t('Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate. The class and subject track are included; certificate language follows your separate certificate-language preference, while the assessment title stays as authored.','टेस्ट प्रमाणपत्र के लिए एडमिन द्वारा बनाया गया गैर-जनरेटेड टेस्ट, जारी पास परिणाम और विषय में सक्रिय नामांकन आवश्यक है। सभी प्रकाशित पाठ पूरे करना केवल विषय-पूर्णता प्रमाणपत्र के लिए ज़रूरी है। कक्षा और विषय ट्रैक शामिल होते हैं। प्रमाणपत्र की भाषा अलग प्रमाणपत्र-भाषा सेटिंग के अनुसार होती है; टेस्ट का शीर्षक मूल भाषा में रहता है।')}</p>
+              <div><span className={styles.eyebrow}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.ea04cb7f')}</span><h3>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.certificate.for.this.result.3136e16b')}</h3>
+                <p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.certificates.require.an.admin.cre.07390e4d')}</p>
                 {cert?.subject_name && <small>{uiLanguage === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {uiLanguage === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)}</small>}
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
-                  <Link href={'/student/certificates?certificateId='+certificateId}>{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</Link>
+                  <Link href={'/student/certificates?certificateId='+certificateId}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.view.certificate.07663aac')}</Link>
                   
                   
-                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
+                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verify.status.8146b8bf')}</a>
                 </div>
               ):cert?.certificate_status==='REVOKED'?(
                 <div className={styles.certificateActionLinks}>
-                  <small className={styles.certificateEligibilityHint}>{t('This certificate has been revoked.','यह प्रमाणपत्र निरस्त कर दिया गया है।')}</small>
-                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
+                  <small className={styles.certificateEligibilityHint}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.certificate.has.been.revoked.6ccdb9f1')}</small>
+                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.verify.status.8146b8bf')}</a>
                 </div>
               ):cert?.eligible?(
                 <button type="button" className={styles.certificateIssueButton}
                   disabled={issuingCertificateAttemptId!==null}
                   onClick={()=>void issueCertificateForAttempt(Number(attempt?.attempt_id))}>
-                  {issuingCertificateAttemptId===Number(attempt?.attempt_id)?t('Issuing…','जारी हो रहा है…'):t('Issue certificate','प्रमाणपत्र जारी करें')}
+                  {issuingCertificateAttemptId===Number(attempt?.attempt_id)?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issuing.1efee91b'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.issue.certificate.2e69c02c')}
                 </button>
               ):(
                 cert?.eligibility_reason!=='ADMIN_CREATED_TEST_ONLY'
@@ -610,59 +611,59 @@ export default function TestsClient(){
             </section>;
           })()}
           <section className={styles.resultDetails}>
-            <div className={styles.resultDetailsHeading}><h3>{t('Question-wise result','प्रश्नवार परिणाम')}</h3><p>{t('Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.','अंक और परिणाम समीक्षा के लिए दिखाए गए हैं। जमा किए गए प्रश्न फिर से नहीं खोले या बदले जा सकते।')}</p></div>
+            <div className={styles.resultDetailsHeading}><h3>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.question.wise.result.4d0055f4')}</h3><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.and.outcomes.are.shown.for.revie.78f6eeaf')}</p></div>
             <div className={styles.resultReviewList}>
               {current&&(()=>{
                 const question=current;
                 const questionIndex=index;
-                const outcome=question.isCorrect===true?t('Correct','सही'):question.isCorrect===false?t('Incorrect','गलत'):isEmpty(question.answer)?t('Not answered','अनुत्तरित'):t('Reviewed','समीक्षा हुई');
+                const outcome=question.isCorrect===true?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.d01db0a2'):question.isCorrect===false?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.incorrect.c7d63751'):isEmpty(question.answer)?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.not.answered.f674e469'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.reviewed.6c5656b3');
                 const outcomeClass=question.isCorrect===true?styles.reviewCorrect:question.isCorrect===false?styles.reviewIncorrect:styles.reviewNeutral;
                 return <article className={styles.resultReviewItem} key={question.attemptQuestionId}>
                   <section className={styles.questionPanel}>
                     <div className={styles.questionPanelTop}>
-                      <span>{t('QUESTION ','प्रश्न ')}{questionIndex+1} {t('OF ','में से ')}{attempt.questions.length}</span>
-                      <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {t('marks','अंक')}</b>
+                      <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.question.92d71f93')}{questionIndex+1} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.b4f09a56')}{attempt.questions.length}</span>
+                      <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.57368a8d')}</b>
                     </div>
                     <div className={styles.questionProgress}><i style={{width:((questionIndex+1)/attempt.questions.length*100)+'%'}}/></div>
                     <QuestionContent question={question} response={question.answer} review disabled/>
                     <AnswerFeedback
                       outcome={question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded'}
-                      title={question.isCorrect===true?'✓ '+t('Correct','सही'):question.isCorrect===false?'✕ '+t('Incorrect','गलत'):isEmpty(question.answer)?t('Not answered','अनुत्तरित'):t('Answer reviewed','उत्तर की समीक्षा हुई')}
-                      message={<>{t('Marks','अंक')}: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
+                      title={question.isCorrect===true?'✓ '+translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.correct.d01db0a2'):question.isCorrect===false?'✕ '+translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.incorrect.c7d63751'):isEmpty(question.answer)?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.not.answered.f674e469'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answer.reviewed.2ac87d1a')}
+                      message={<>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.9797bead')}: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
                       explanation={question.explanation||undefined}
-                      explanationLabel={t('Explanation','व्याख्या')}
+                      explanationLabel={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.explanation.f09ea03b')}
                     />
                   </section>
                 </article>;
               })()}
             </div>
-            {attempt.questions.length>0&&<nav className={styles.resultQuestionNav} aria-label={t('Question review navigation','प्रश्न समीक्षा नेविगेशन')}>
+            {attempt.questions.length>0&&<nav className={styles.resultQuestionNav} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.question.review.navigation.2c58cc47')}>
               <button type="button" className={styles.secondaryButton} disabled={index===0}
-                onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {t('Previous','पिछला')}</button>
-              <span>{t('Question ','प्रश्न ')}{Math.min(index+1,attempt.questions.length)} {t('of','में से')} {attempt.questions.length}</span>
+                onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.9320332c')}</button>
+              <span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.question.85099273')}{Math.min(index+1,attempt.questions.length)} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.ffc7a9ee')} {attempt.questions.length}</span>
               <button type="button" className={styles.primaryButton} disabled={index>=attempt.questions.length-1}
-                onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{t('Next','अगला')} →</button>
+                onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.7c68200e')} →</button>
             </nav>}
           </section>
-          <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to results','परिणामों पर वापस जाएँ')}</button></div>
+          <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.results.fb465e0f')}</button></div>
         </section>
-        :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.','आपके उत्तर सहेज लिए गए हैं। रिक्त स्थान, छोटे और लंबे उत्तर कर्मचारी समीक्षक को भेजे गए हैं। सभी ज़रूरी जाँच पूरी होने पर अंतिम स्कोर और प्रतिक्रिया यहाँ दिखेगी।')}</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests and results','टेस्ट और परिणामों पर वापस जाएँ')}</button></div>
-        :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>{t('This attempt is closed','यह प्रयास बंद हो चुका है')}</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests','टेस्ट पर वापस जाएँ')}</button></div>
-        :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{t('This attempt is closed.','यह प्रयास बंद हो चुका है।')}</h2><p>{t('You cannot return to the question navigator after submission.','जमा करने के बाद प्रश्न नेविगेटर पर वापस नहीं जा सकते।')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests and results','टेस्ट और परिणामों पर वापस जाएँ')}</button></div>
+        :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.test.submitted.successfully.70e5c363')}</h2><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.answers.are.saved.fill.in.short.a.319393e7')}</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
+        :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.attempt.is.closed.056ad0ef')}</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.tests.0d539e53')}</button></div>
+        :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.this.attempt.is.closed.3b00ff63')}</h2><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.you.cannot.return.to.the.question.navi.83bf6290')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
         :<div className={styles.examLayout}>
-          <aside className={styles.questionRail}><div><b>{t('Questions','प्रश्न')}</b><small>{answeredCount}/{attempt.questions.length} {t('answered','उत्तर दिए')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={t('Question ','प्रश्न ')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{t('Current','वर्तमान')}</span><span><i className={styles.legendAnswered}/>{t('Answered','उत्तर दिया')}</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{t('QUESTION','प्रश्न')} {index+1} {t('OF','में से')} {attempt.questions.length}</span><b>{current.maxMarks} {t('mark(s)','अंक')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
+          <aside className={styles.questionRail}><div><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.answered.5531e37e')}</span></div></aside>
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.205487ae')} {attempt.questions.length}</span><b>{current.maxMarks} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
             {released&&<AnswerFeedback
               outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
               title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
               message={<>Marks: {current.awardedMarks??0} / {current.maxMarks}{current.teacherFeedback?<> · {current.teacherFeedback}</>:null}</>}
               explanation={current.explanation||undefined}
-              explanationLabel={t('Explanation','व्याख्या')}
+              explanationLabel={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.explanation.f09ea03b')}
             />}
-            <div className={styles.questionFooter}><span>{saving?t('Saving…','सहेजा जा रहा है…'):Object.keys(dirtyAnswers).length?t('Save pending','सहेजना बाकी है'):t('✓ Saved answers are preserved','✓ सहेजे गए उत्तर सुरक्षित हैं')}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {t('Previous','पिछला')}</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{t('Next question →','अगला प्रश्न →')}</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>{t('Review & submit','समीक्षा करें और जमा करें')}</button>:null}</div></div>
+            <div className={styles.questionFooter}><span>{saving?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.saving.0f10a0df'):Object.keys(dirtyAnswers).length?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.save.pending.0d2fabc1'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.saved.answers.are.preserved.689797b2')}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.previous.9320332c')}</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.next.question.e339ba3c')}</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.review.submit.e856cb00')}</button>:null}</div></div>
           </section>
         </div>}
-        {attempt.status==='IN_PROGRESS'&&showSubmit&&<div className={styles.confirmBackdrop}><section className={styles.confirmModal}><span className={styles.eyebrow}>{t('FINAL CHECK','अंतिम जाँच')}</span><h2>{t('Submit this test?','क्या यह टेस्ट जमा करें?')}</h2><p>You have answered {answeredCount} of {attempt.questions.length} questions. Unanswered questions will be saved as blank and marked accordingly. You cannot change answers after submission.</p><div><button type="button" className={styles.secondaryButton} onClick={()=>setShowSubmit(false)}>{t('Keep working','जारी रखें')}</button><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void submitTest(false)}>{busy?t('Submitting…','जमा हो रहा है…'):t('Submit test','टेस्ट जमा करें')}</button></div></section></div>}
+        {attempt.status==='IN_PROGRESS'&&showSubmit&&<div className={styles.confirmBackdrop}><section className={styles.confirmModal}><span className={styles.eyebrow}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.final.check.eb2b8cf0')}</span><h2>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.submit.this.test.2468974e')}</h2><p>You have answered {answeredCount} of {attempt.questions.length} questions. Unanswered questions will be saved as blank and marked accordingly. You cannot change answers after submission.</p><div><button type="button" className={styles.secondaryButton} onClick={()=>setShowSubmit(false)}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.keep.working.2fe8b3fa')}</button><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void submitTest(false)}>{busy?translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.submitting.ab455b91'):translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.submit.test.7f5c3b03')}</button></div></section></div>}
       </>}
     </section>
 
@@ -672,21 +673,21 @@ export default function TestsClient(){
           <div className={styles.leaderboardHeading}>
             <span className={styles.leaderboardEyebrow}>QUANTAEDGE · STUDENT RANKINGS</span>
             <h2 id="qe-leaderboard-title">{leaderboardData?.assessment_title||leaderboardTest.title}</h2>
-            <p>{t('Top 20 performers · Higher marks rank first; faster completion breaks a marks tie.','शीर्ष 20 विद्यार्थी · अधिक अंक पहले रैंक करते हैं; बराबर अंक पर कम समय लेने वाला आगे रहता है।')}</p>
+            <p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.top.20.performers.higher.marks.rank.fi.31b5b0df')}</p>
           </div>
-          <button type="button" className={styles.leaderboardClose} onClick={closeLeaderboard} aria-label={t('Close leaderboard','लीडरबोर्ड बंद करें')}>×</button>
+          <button type="button" className={styles.leaderboardClose} onClick={closeLeaderboard} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.close.leaderboard.bc21fd7c')}>×</button>
         </header>
-        {leaderboardError&&<div className={styles.leaderboardInlineError} role="alert"><span>{leaderboardError}</span><button type="button" className={styles.secondaryButton} onClick={()=>void openLeaderboard(leaderboardTest)}>{t('Try again','फिर प्रयास करें')}</button></div>}
-        {leaderboardLoading?<div className={styles.leaderboardLoading}><span className={styles.leaderboardSpinner}/><b>{t('Preparing the leaderboard','लीडरबोर्ड तैयार हो रहा है')}</b><small>{t('Only completed tests with released scores are ranked.','केवल पूरे हुए टेस्ट जिनके परिणाम जारी हैं, रैंक किए जाते हैं।')}</small></div>
+        {leaderboardError&&<div className={styles.leaderboardInlineError} role="alert"><span>{leaderboardError}</span><button type="button" className={styles.secondaryButton} onClick={()=>void openLeaderboard(leaderboardTest)}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.try.again.271e37a8')}</button></div>}
+        {leaderboardLoading?<div className={styles.leaderboardLoading}><span className={styles.leaderboardSpinner}/><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.preparing.the.leaderboard.079f41ea')}</b><small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.only.completed.tests.with.released.sco.bd353c93')}</small></div>
         :leaderboardData&&<>
           <div className={styles.leaderboardMetrics}>
-            <div><span>{t('PARTICIPANTS','प्रतिभागी')}</span><b>{leaderboardData.participant_count}</b></div>
-            <div><span>{t('RANKING RULE','रैंकिंग नियम')}</span><b>{t('Marks first','अंक पहले')} <i>·</i> {t('time second','समय दूसरे')}</b></div>
-            <div><span>{t('DISPLAYING','दिखाए जा रहे')}</span><b>{Math.min(20,leaderboardData.items.length)} {t('of','में से')} {leaderboardData.participant_count}</b></div>
+            <div><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.participants.206706e1')}</span><b>{leaderboardData.participant_count}</b></div>
+            <div><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.ranking.rule.4aea94a2')}</span><b>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.first.22616169')} <i>·</i> {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.time.second.2f076da4')}</b></div>
+            <div><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.displaying.887ee655')}</span><b>{Math.min(20,leaderboardData.items.length)} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.of.ffc7a9ee')} {leaderboardData.participant_count}</b></div>
           </div>
-          {leaderboardData.items.length===0?<div className={styles.leaderboardEmpty}><span>♛</span><h3>{t('The race starts here','शुरुआत यहाँ से होती है')}</h3><p>{t('No released scores are available for this test yet. The leaderboard will appear as results are finalised.','इस टेस्ट के लिए अभी जारी स्कोर उपलब्ध नहीं हैं। परिणाम अंतिम होने पर लीडरबोर्ड दिखेगा।')}</p></div>
+          {leaderboardData.items.length===0?<div className={styles.leaderboardEmpty}><span>♛</span><h3>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.the.race.starts.here.3bb5aef5')}</h3><p>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.no.released.scores.are.available.for.t.827f6137')}</p></div>
           :<>
-            {leaderboardData.items.length>=3&&<div className={styles.leaderboardPodium} aria-label={t('Top three students','शीर्ष तीन विद्यार्थी')}>
+            {leaderboardData.items.length>=3&&<div className={styles.leaderboardPodium} aria-label={translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.top.three.students.ccadc756')}>
               {[2,1,3].map(rank=>{
                 const entry=leaderboardData.items.find(item=>item.rank===rank);
                 if(!entry)return null;
@@ -697,28 +698,28 @@ export default function TestsClient(){
                   <b className={styles.leaderboardStudentName}>{entry.student_name}</b>
                   <strong className={styles.leaderboardPodiumScore}>{formatMarks(entry.score)}<small> / {formatMarks(entry.max_score)}</small></strong>
                   <span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(entry.time_taken_seconds)||0))}</span>
-                  {entry.is_current_student&&<span className={styles.leaderboardYou}>{t('YOU','आप')}</span>}
+                  {entry.is_current_student&&<span className={styles.leaderboardYou}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.you.5104625c')}</span>}
                 </article>;
               })}
             </div>}
             {(leaderboardData.items.length<3||leaderboardData.items.some(item=>item.rank>3))&&<div className={styles.leaderboardTableWrap}>
               <table className={styles.leaderboardTable}>
-                <thead><tr><th scope="col">{t('Rank','रैंक')}</th><th scope="col">{t('Student','विद्यार्थी')}</th><th scope="col">{t('Marks','अंक')}</th><th scope="col">{t('Time taken','लगा समय')}</th></tr></thead>
+                <thead><tr><th scope="col">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rank.6d8e5bba')}</th><th scope="col">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.student.bd93d3aa')}</th><th scope="col">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.9797bead')}</th><th scope="col">{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.time.taken.056e615b')}</th></tr></thead>
                 <tbody>{leaderboardData.items.filter(item=>leaderboardData.items.length<3||item.rank>3).map(entry=><tr key={entry.rank} className={entry.is_current_student?styles.leaderboardTableMine:''}>
                   <td><span className={styles.leaderboardRankNumber}>{String(entry.rank).padStart(2,'0')}</span></td>
-                  <td><div className={styles.leaderboardStudentCell}><span className={styles.leaderboardTableAvatar}>{studentInitials(entry.student_name)}</span><b>{entry.student_name}</b>{entry.is_current_student&&<span className={styles.leaderboardYou}>{t('YOU','आप')}</span>}</div></td>
+                  <td><div className={styles.leaderboardStudentCell}><span className={styles.leaderboardTableAvatar}>{studentInitials(entry.student_name)}</span><b>{entry.student_name}</b>{entry.is_current_student&&<span className={styles.leaderboardYou}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.you.5104625c')}</span>}</div></td>
                   <td><strong className={styles.leaderboardTableScore}>{formatMarks(entry.score)} <small>/ {formatMarks(entry.max_score)}</small></strong></td>
                   <td><span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(entry.time_taken_seconds)||0))}</span></td>
                 </tr>)}</tbody>
               </table>
             </div>}
             {leaderboardData.current_student&&leaderboardData.current_student.rank>20&&<div className={styles.leaderboardMyStanding}>
-              <div><span>{t('YOUR CURRENT POSITION','आपकी वर्तमान स्थिति')}</span><b>#{leaderboardData.current_student.rank} <small>{t('outside the Top 20','शीर्ष 20 से बाहर')}</small></b></div>
-              <strong>{formatMarks(leaderboardData.current_student.score)} <small>/ {formatMarks(leaderboardData.current_student.max_score)} {t('marks','अंक')}</small></strong>
+              <div><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.your.current.position.a3b4573d')}</span><b>#{leaderboardData.current_student.rank} <small>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.outside.the.top.20.f065ad68')}</small></b></div>
+              <strong>{formatMarks(leaderboardData.current_student.score)} <small>/ {formatMarks(leaderboardData.current_student.max_score)} {translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.marks.57368a8d')}</small></strong>
               <span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(leaderboardData.current_student.time_taken_seconds)||0))}</span>
             </div>}
           </>}
-          <footer className={styles.leaderboardFooter}><span>{t('Rankings use the best released attempt per student.','रैंकिंग में प्रति विद्यार्थी का सबसे अच्छा जारी प्रयास लिया जाता है।')}</span><button type="button" className={styles.secondaryButton} onClick={closeLeaderboard}>{t('Close leaderboard','लीडरबोर्ड बंद करें')}</button></footer>
+          <footer className={styles.leaderboardFooter}><span>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.rankings.use.the.best.released.attempt.c4aab20c')}</span><button type="button" className={styles.secondaryButton} onClick={closeLeaderboard}>{translateUi(locale === 'english' ? 'english' : 'hinglish', 'legacy.web.close.leaderboard.bc21fd7c')}</button></footer>
         </>}
       </section>
     </div>}
