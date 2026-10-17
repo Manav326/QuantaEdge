@@ -1,4 +1,6 @@
 'use client';
+
+import { formatUserTimestamp } from '../components/formatUserTimestamp';
 import { PeopleEmptyState, PeoplePageHeader, PeopleStatusBadge, PeopleFeedback } from '../components/PeopleUI';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
 import { getUiLocaleLanguage } from '../i18n/catalog';
@@ -9,7 +11,7 @@ type Session={staffId?:number;role?:string;displayName?:string};
 type LiveClass={session_id:number;title:string;description?:string;provider:string;starts_at:string;ends_at:string;status:string;provider_operation_status?:string;provider_error_message?:string|null;teaching_assignment_id:number;class_code:string;class_name:string;subject_code:string;subject_name:string;academic_period_name:string;joinable:boolean};
 async function api(path:string,init:RequestInit={}){const headers=new Headers(init.headers||{});headers.set('X-QE-Workspace','HRMS');if(init.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');const response=await fetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});const raw=await response.text();let data:any={};try{data=raw?JSON.parse(raw):{}}catch{data={message:raw}}if(!response.ok)throw new Error(data.message||data.detail||data.error||'Request failed ('+response.status+')');return data}
 function pretty(value:string){return String(value||'').replaceAll('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase())}
-function timeText(value:string,locale:string){const date=new Date(value);return Number.isNaN(date.getTime())?value:date.toLocaleString(getUiLocaleLanguage(locale)+'-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'})}
+function timeText(value:string,_locale:string){return formatUserTimestamp(value)}
 export default function MyTeachingClassesPage(){
  const router=useRouter();
  const {locale,t}=useUiTranslation();
