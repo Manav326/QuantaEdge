@@ -125,6 +125,8 @@ fun AccountIdentitySettingsScreen(
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.secondary, style = MaterialTheme.typography.bodySmall)
 
+        ColorThemeSettingsCard(language = language)
+
         Card(Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(t("Verification status", "सत्यापन स्थिति"),
