@@ -292,7 +292,7 @@ export default function PracticePage(){
             <span className="qe-question-type">{questionTypeLabel}</span>
             <span className="qe-question-context">{current.exam_format||translateUi(locale, 'legacy.web.topic.practice.3f8b0ab5')}{current.marks?' · '+current.marks+' '+translateUi(locale, 'legacy.web.marks.57368a8d'):''}</span>
           </div>
-          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:{locale==='english'?'Practice question':'अभ्यास प्रश्न'}}</span>
+          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<UiText message="legacy.web.textbook.aligned.0545ccf1" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:locale==='english'?'Practice question':'अभ्यास प्रश्न'}</span>
         </div>
 
         <div className="qe-question-card__prompt"><MathText text={current.prompt}/></div>
