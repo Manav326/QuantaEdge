@@ -300,3 +300,10 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - CI run [#3042](https://github.com/Manav326/QuantaEdge/actions/runs/39005066760) exposed a Java compile failure in `LearningResourceController.java`, inherited from the provider-neutral learning-resource catalogue changes; the failure was unrelated to the UI-localization commits.
 - Corrected three INSERT...RETURNING id calls to use `JdbcTemplate.queryForObject` (the scalar `Long` result is required rather than the `List` returned by `query`) and gave the recording/document subject and chapter pattern variables distinct names.
 - Request bodies, SQL, authorization and scope validation rules were otherwise left unchanged. This is a compile-fix only; the next full workflow must verify the fix before build status is marked green.
+
+
+## Admin Classes — scheduling-form first pass (2026-10-17)
+
+- Began `/classes` localization by centralizing the page/hero, class and subject filters, status filter, live-session tabs, scheduling-form labels and guidance, and key create-session validation/error fallbacks.
+- Added 60 semantic `admin.classes.*` messages. Canonical catalogs contain **2590 keys each** with matching key sets and interpolation placeholders; six application catalog copies are set to the canonical catalog bytes.
+- Added `scripts/check-admin-classes-i18n.mjs` and wired it into CI. This is explicitly a first pass; session-card actions/statuses, provider-operation notices, recording-management details and browser acceptance remain open.

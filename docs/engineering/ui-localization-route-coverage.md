@@ -42,7 +42,7 @@
 | `/account-lifecycle` | `apps/admin/app/account-lifecycle/page.tsx` | First pass — audit pending | Check status actions, reason dialogs and feedback. |
 | `/assessments` | `apps/admin/app/assessments/page.tsx` | Authoring, catalogue, queue and review dialog localized — CI pending | Browser-check both locales, API error details, validation, certificate records and audit-date formatting. |
 | `/certificates` | `apps/admin/app/certificates/page.tsx` | First pass — build-verified, audit pending | Verify filters, revocation/audit states and localized dates in browser. |
-| `/classes` | `apps/admin/app/classes/page.tsx` | Needs audit/migration | Translate live sessions, recordings and actions. |
+| `/classes` | `apps/admin/app/classes/page.tsx` | Scheduling form first pass — CI pending | Follow up on session-card actions, recording lifecycle copy, provider-operation notices and both-locale browser acceptance. |
 | `/content` | `apps/admin/app/content/page.tsx` | Needs audit/migration | Audit Content Studio editor, preview, visual review and validation. |
 | `/employees` | `apps/admin/app/employees/page.tsx` | Needs audit/migration | Audit employee and permission-facing text. |
 | `/legacy-content` | `apps/admin/app/legacy-content/page.tsx` | Needs audit/migration | Inspect retained route before deciding deprecation or migration. |
