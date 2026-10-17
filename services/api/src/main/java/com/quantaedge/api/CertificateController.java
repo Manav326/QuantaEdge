@@ -597,9 +597,13 @@ public class CertificateController {
     String certificateNumber = "QE-" + issuedAt.getYear() + "-"
         + HexFormat.of().withUpperCase().formatHex(randomBytes(8));
     CertificateRenderer.CertificateBranding issuer = resolveCertificateIssuer(studentId, courseId, institutionCode, snapshot);
-    CertificateRenderer.RenderedCertificate rendered = renderer.render(template, language, recipient,
-        title, summary, certificateNumber, issuedAt,
-        certificateDetails(snapshot, achievementType, language, classCode, title), false, issuer);
+    CertificateRenderer.CertificateDetails details =
+        certificateDetails(snapshot, achievementType, language, classCode, title);
+    // Keep the legacy render overload for direct QuantaEdge certificates. Besides preserving
+    // the original platform issuer contract, this avoids forcing callers to depend on tenant metadata.
+    CertificateRenderer.RenderedCertificate rendered = issuer == null
+        ? renderer.render(template, language, recipient, title, summary, certificateNumber, issuedAt, details, false)
+        : renderer.render(template, language, recipient, title, summary, certificateNumber, issuedAt, details, false, issuer);
     CertificateArtifactStorage.StoredArtifact pdf = null;
     CertificateArtifactStorage.StoredArtifact png = null;
     try {
@@ -683,9 +687,15 @@ public class CertificateController {
 
   private CertificateRenderer.CertificateBranding certificateBrandingFromSnapshot(Map<String,Object> snapshot) {
     String displayName=clean(snapshot.get("issuerDisplayName"));
-    long institutionId=number(snapshot.get("issuerInstitutionId"));
+    String rawInstitutionId=clean(snapshot.get("issuerInstitutionId"));
     String logoAssetId=clean(snapshot.get("issuerLogoAssetId"));
-    if (displayName.isBlank() || institutionId<1) return null;
+    // Older certificate snapshots predate tenant issuers. Treat absent or malformed issuer
+    // metadata as a platform-issued legacy certificate, rather than parsing "null" as a number.
+    if (displayName.isBlank() || rawInstitutionId.isBlank()) return null;
+    long institutionId;
+    try { institutionId=number(rawInstitutionId); }
+    catch (NumberFormatException ex) { return null; }
+    if (institutionId<1) return null;
     byte[] logo=null;
     if (!logoAssetId.isBlank()) {
       logo=queryOptionalByteArray("""
