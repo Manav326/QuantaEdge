@@ -17,6 +17,21 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("resume_layers_4_5", workflow)
         self.assertIn("resume_preparation", workflow)
 
+    def test_class6_visual_recovery_has_source_preflight_and_per_asset_savepoints(self):
+        workflow = read("quantaedge-layers-1-5-resume.yml")
+        preflight = workflow.index("- name: Preflight durable source and coverage checkpoint before model startup")
+        model_cache = workflow.index("- name: Restore the model cache when available")
+        ollama_start = workflow.index("- name: Start local Ollama and load the existing vision model")
+        retry = workflow.index("- name: Retry pending/error visuals with one-asset durable savepoints")
+        self.assertLess(preflight, model_cache)
+        self.assertLess(model_cache, ollama_start)
+        self.assertLess(ollama_start, retry)
+        self.assertIn("steps.recovery_preflight.outputs.needs_repair == 'true'", workflow)
+        self.assertIn('ledger_status == "COMPLETE"', workflow)
+        self.assertIn("for batch in $(seq 1 80); do", workflow)
+        self.assertIn("--max-assets 1 --include-page-previews", workflow)
+        self.assertIn('processed == "0"', workflow)
+
     def test_layers_1_to_3_launcher_locks_resume_preparation(self):
         wrapper = read("resume-textbook-visual-layers-1-3.yml")
         self.assertIn("uses: ./.github/workflows/textbook-visual-candidates-v3.yml", wrapper)
