@@ -5,7 +5,7 @@ import { translateUi } from '../../i18n/catalog';
 import Link from 'next/link';
 import PremiumPagination from '../../components/PremiumPagination';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Classes.module.css';
@@ -42,7 +42,22 @@ function percent(recording:Recording){return recording.duration_seconds?Math.min
 
 export default function StudentClassesClient(){
   const router=useRouter();
+  const searchParams=useSearchParams();
+  const requestedCourseIdText=searchParams.get('courseId') || '';
+  const requestedCourseId=Number(requestedCourseIdText);
+  const [activeCourseId,setActiveCourseId]=useState<number|null>(null);
   const {locale}=useLocale();
+  useEffect(()=>{
+    if(Number.isSafeInteger(requestedCourseId)&&requestedCourseId>0){
+      setActiveCourseId(requestedCourseId);
+      try{window.localStorage.setItem('qe:student:activeCourseId',String(requestedCourseId));}catch{}
+      return;
+    }
+    try{
+      const saved=Number(window.localStorage.getItem('qe:student:activeCourseId')||0);
+      setActiveCourseId(Number.isSafeInteger(saved)&&saved>0?saved:null);
+    }catch{setActiveCourseId(null);}
+  },[requestedCourseIdText]);
   const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [tab,setTab]=useState<'live'|'recorded'>('live');
   const [subjectFilter,setSubjectFilter]=useState('ALL');
@@ -72,6 +87,7 @@ export default function StudentClassesClient(){
     try{
       const params=new URLSearchParams();
       if(subjectFilter!=='ALL')params.set('subjectCode',subjectFilter);
+      if(activeCourseId!==null)params.set('courseId',String(activeCourseId));
       const liveParams=new URLSearchParams(params.toString());liveParams.set('limit',String(livePageSize));liveParams.set('offset',String(livePage*livePageSize));
       const recordingParams=new URLSearchParams(params.toString());recordingParams.set('limit',String(recordingPageSize));recordingParams.set('offset',String(recordingPage*recordingPageSize));
       const [live,videoRows]=await Promise.all([
@@ -88,7 +104,7 @@ export default function StudentClassesClient(){
       if(e?.auth){router.replace('/login/student');return;}
       setError(e instanceof Error?e.message:translateUi(locale, 'legacy.web.your.class.library.could.not.be.loaded.ef90dceb'));
     }finally{setLoading(false);}
-  },[subjectFilter,livePage,recordingPage,livePageSize,recordingPageSize,router,locale]);
+  },[subjectFilter,livePage,recordingPage,livePageSize,recordingPageSize,router,locale,activeCourseId]);
   useEffect(()=>{void load();},[load]);
 
   useEffect(()=>()=>{
