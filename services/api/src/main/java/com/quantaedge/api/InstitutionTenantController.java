@@ -194,7 +194,7 @@ public class InstitutionTenantController {
     if (student.studentId() == null) throw new SecurityException("An authenticated learner is required.");
     String address = request.getRemoteAddr() == null ? "unknown" : request.getRemoteAddr();
     String sourceHash = institutionAuth.hash("institution-join-source:" + address);
-    Map<String,Object> result = institutionAuth.redeemJoinCode(value(body,"code"), student.studentId(), sourceHash);
+    Map<String,Object> result = institutionAuth.redeemJoinCode(value(body,"code"), student.studentId(), sourceHash, value(body,"institutionCode"));
     jdbc.update("""
         insert into institution_audit_log(institution_id,action,target_type,target_id,details)
         select id,'MEMBERSHIP_JOINED','STUDENT',?,jsonb_build_object('source','institution_code')
