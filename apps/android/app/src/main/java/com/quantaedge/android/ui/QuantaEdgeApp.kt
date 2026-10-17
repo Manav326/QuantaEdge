@@ -255,6 +255,12 @@ fun QuantaEdgeApp() {
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var parentMarketplaceOffers by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var parentCourseRequests by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var parentCourseEntitlements by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var parentMarketplaceLoading by remember { mutableStateOf(false) }
+    var parentMarketplaceLoadFailed by remember { mutableStateOf(false) }
+    var parentMarketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
     var archivedChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentReport by remember { mutableStateOf(JSONObject()) }
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -859,6 +865,137 @@ fun QuantaEdgeApp() {
         status = ""
         route = AppRoute.MARKETPLACE
         refreshMarketplace()
+    }
+
+    suspend fun loadParentMarketplaceData() {
+        parentMarketplaceOffers = ApiClient.getArray("/api/v1/marketplace/family/courses").objectItems()
+        parentCourseRequests = ApiClient.getArray("/api/v1/parent/course-requests").objectItems()
+        parentCourseEntitlements = ApiClient.getArray("/api/v1/marketplace/family/entitlements").objectItems()
+        parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+    }
+
+    fun refreshParentMarketplace() {
+        parentMarketplaceLoading = true
+        parentMarketplaceLoadFailed = false
+        runTask {
+            try {
+                loadParentMarketplaceData()
+            } catch (exception: Exception) {
+                parentMarketplaceLoadFailed = true
+                throw exception
+            } finally {
+                parentMarketplaceLoading = false
+            }
+        }
+    }
+
+    fun openParentCourses() {
+        error = ""
+        status = ""
+        route = AppRoute.PARENT_COURSES
+        refreshParentMarketplace()
+    }
+
+    fun requestParentCoursePurchase(courseId: Long) {
+        if (courseId <= 0L || parentMarketplaceBusyCourseId > 0L) return
+        parentMarketplaceBusyCourseId = courseId
+        runTask {
+            try {
+                ApiClient.postObject("/api/v1/marketplace/courses/" + courseId + "/purchase-request", JSONObject())
+                status = if (language == "hi") "कोर्स खरीदने का अनुरोध अभिभावक को भेज दिया गया।"
+                    else "Course purchase request sent to your parent."
+            } finally {
+                parentMarketplaceBusyCourseId = 0L
+            }
+        }
+    }
+
+    fun addFreeFamilyCourse(courseId: Long, recipientType: String, studentId: Long = 0L) {
+        if (courseId <= 0L || busy) return
+        runTask {
+            val body = JSONObject().put("recipientType", recipientType)
+            if (recipientType == "CHILD" && studentId > 0L) body.put("studentId", studentId)
+            ApiClient.postObject("/api/v1/marketplace/family/courses/" + courseId + "/enroll-free", body)
+            loadParentMarketplaceData()
+            status = if (language == "hi") "निःशुल्क कोर्स चुने गए learning खाते में जोड़ दिया गया।"
+                else "Free course added to the selected learning account."
+        }
+    }
+
+    fun purchaseFamilyMarketplaceCourse(courseId: Long, recipientType: String, studentId: Long = 0L) {
+        if (courseId <= 0L || parentMarketplaceBusyCourseId > 0L) return
+        if (recipientType == "CHILD" && studentId <= 0L) {
+            error = if (language == "hi") "पहले बच्चे का चयन करें।" else "Choose a child first."
+            return
+        }
+        parentMarketplaceBusyCourseId = courseId
+        runTask {
+            try {
+                val body = JSONObject().put("recipientType", recipientType)
+                if (recipientType == "CHILD") body.put("studentId", studentId)
+                val order = ApiClient.postObject(
+                    "/api/v1/marketplace/family/courses/" + courseId + "/orders",
+                    body,
+                    mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+                )
+                val host = context as? RazorpayCourseCheckoutHost
+                    ?: throw IOException("Razorpay checkout is not available on this device.")
+                val localOrderId = order.optLong("localOrderId", 0L)
+                if (localOrderId <= 0L) throw IOException("The course order could not be identified. Please retry.")
+                host.launchCourseCheckout(order) { checkoutResult ->
+                    val paymentId = checkoutResult.paymentId.orEmpty()
+                    val orderId = checkoutResult.orderId.orEmpty()
+                    val signature = checkoutResult.signature.orEmpty()
+                    if (!checkoutResult.userMessage.isNullOrBlank()) {
+                        parentMarketplaceBusyCourseId = 0L
+                        status = checkoutResult.userMessage.orEmpty()
+                    } else if (paymentId.isBlank() || orderId.isBlank() || signature.isBlank()) {
+                        parentMarketplaceBusyCourseId = 0L
+                        status = if (language == "hi") "भुगतान की पुष्टि अधूरी है। दोबारा प्रयास करें।"
+                            else "The payment confirmation is incomplete. Please retry."
+                    } else {
+                        runTask {
+                            try {
+                                ApiClient.postObject(
+                                    "/api/v1/marketplace/family/orders/" + localOrderId + "/verify",
+                                    JSONObject().put("paymentId", paymentId).put("orderId", orderId).put("signature", signature)
+                                )
+                                loadParentMarketplaceData()
+                                status = if (language == "hi") "भुगतान सत्यापित है। कोर्स की पहुँच अपडेट हो गई।"
+                                    else "Payment verified. Course access has been updated."
+                            } finally {
+                                parentMarketplaceBusyCourseId = 0L
+                            }
+                        }
+                    }
+                }
+            } catch (exception: Exception) {
+                parentMarketplaceBusyCourseId = 0L
+                throw exception
+            }
+        }
+    }
+
+    fun dismissParentCourseRequest(requestId: Long) {
+        if (requestId <= 0L || busy) return
+        runTask {
+            ApiClient.postObject("/api/v1/parent/course-requests/" + requestId + "/dismiss", JSONObject())
+            loadParentMarketplaceData()
+            status = if (language == "hi") "कोर्स अनुरोध खारिज कर दिया गया।" else "Course request dismissed."
+        }
+    }
+
+    fun transferParentCourse(entitlementId: Long, studentId: Long) {
+        if (entitlementId <= 0L || studentId <= 0L || busy) return
+        runTask {
+            ApiClient.postObject(
+                "/api/v1/marketplace/family/entitlements/" + entitlementId + "/transfer",
+                JSONObject().put("studentId", studentId)
+            )
+            loadParentMarketplaceData()
+            status = if (language == "hi") "कोर्स स्थायी रूप से बच्चे को ट्रांसफर हो गया। इसे वापस नहीं लिया जा सकता।"
+                else "Course permanently transferred to the child. This transfer cannot be revoked."
+        }
     }
 
     fun purchaseMarketplaceCourse(courseId: Long) {
