@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.quantaedge.android.data.ApiClient
+import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiFailure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,6 +71,7 @@ fun StudentCertificatesScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val institutionBrand = LocalInstitutionBrandIdentity.current
     val scope = rememberCoroutineScope()
     val compact = LocalConfiguration.current.screenWidthDp < 390
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -256,6 +258,7 @@ fun StudentCertificatesScreen(
                     .put("assessmentAttemptId", attemptId)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
+                institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
                 val courseId = attempt.optLongValue("course_id", "courseId", "program_id", "programId")
                 if (courseId > 0L) body.put("courseId", courseId)
                 val knownId = attempt.optLongValue("certificate_id", "certificateId")
@@ -335,6 +338,7 @@ fun StudentCertificatesScreen(
                     .put("achievementType", selectedAchievement)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
+                institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
                     val selectedTrack = subjectTracks.firstOrNull {
                         it.optString("track_key") == selectedTrackKey
