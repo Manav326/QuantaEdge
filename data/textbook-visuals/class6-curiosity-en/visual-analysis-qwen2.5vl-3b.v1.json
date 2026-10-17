@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 146,
+    "assets_selected": 10,
     "assets_processed_this_run": 10,
-    "assets_analyzed": 145,
-    "assets_failed": 28,
-    "assets_skipped_from_checkpoint": 136,
+    "assets_analyzed": 150,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 0,
     "publication_allowed": false
   },
   "results": [
@@ -24,6 +24,7 @@
       "source_pdf_page_number": 1,
       "asset_path": "assets/d56a7d61ac86c9c2bad78a7d7eb645146a42c9d4cfdbc4ac83a2ba28d2b8785a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c83a7bac943a5d0f9a7e804a356f6ea9a5772ec8c00dfb43c22a32857816cde9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -40,8 +41,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:41:45Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:24:25Z"
     },
     {
       "asset_id": "196d95c2abf1c11a83efecae",
@@ -53,9 +54,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
+      "run_id": "38994583378",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4252 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -69,9 +70,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
+      "run_id": "38994583378",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4193 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -82,14 +83,38 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 1,
       "asset_path": "page-0001.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c83a7bac943a5d0f9a7e804a356f6ea9a5772ec8c00dfb43c22a32857816cde9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "visual_type is not in the supported classification set.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The cover page of a science textbook for Grade 6.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Curiosity",
+          "Textbook of Science for Grade 6",
+          "0677",
+          "not to be republished",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "science textbook",
+          "Grade 6",
+          "National Council of Educational Research and Training"
+        ],
+        "context_relation": "cover page",
+        "limitations": [
+          "The image does not provide specific content details or images.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:41:00Z"
     },
     {
       "asset_id": "579630c58aa2ee080c236857",
@@ -98,14 +123,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 2,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c90b96910a716e0fd436036475b40444fd628834028cdffb36314c8116fb28d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4353 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:41:14Z"
     },
     {
       "asset_id": "024a58f843fdac7ccc331325",
@@ -114,14 +151,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 2,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c90b96910a716e0fd436036475b40444fd628834028cdffb36314c8116fb28d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4294 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:41:28Z"
     },
     {
       "asset_id": "78e8c327c91cd5155f4b6b75",
@@ -130,14 +179,71 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 2,
       "asset_path": "page-0002.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4c90b96910a716e0fd436036475b40444fd628834028cdffb36314c8116fb28d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook with copyright information, publication details, and a table of contents.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "0677 – Curiosity",
+          "Textbook of Science for Grade 6",
+          "First Edition",
+          "July 2024 Jyeshtha 1946",
+          "Reprinted",
+          "December 2024 Pausha 1946",
+          "January 2026 Pausha 1947",
+          "PD 420T SM",
+          "© National Council of Educational Research and Training, 2024",
+          "OFFICES OF THE PUBLICATION",
+          "DIVISION, NCERT",
+          "NCERT Campus",
+          "Sri Aurobindo Marg",
+          "New Delhi 110 016",
+          "108, 100 Feet Road",
+          "Hosdakere Halli Extension",
+          "Banashankari III Stage",
+          "Bengaluru 560 085",
+          "Navjivan Trust Building",
+          "P.O. Navjivan",
+          "Ahmedabad 380 014",
+          "CWC Campus",
+          "Opp. Dhankal Bus Stop",
+          "Panihati",
+          "Kolkata 700 114",
+          "CWC Complex",
+          "Malgaoan",
+          "Guwahati 781 021",
+          "Phone : 011-26562708",
+          "Phone : 080-26725740"
+        ],
+        "concepts": [
+          "NCERT",
+          "National Council of Educational Research and Training",
+          "Textbook of Science for Grade 6",
+          "First Edition",
+          "Reprinted",
+          "December 2024",
+          "January 2026",
+          "Price",
+          "Publication Details",
+          "Office Addresses",
+          "Publication Team",
+          "Cover and Layout",
+          "Illustrations"
+        ],
+        "context_relation": "The page contains detailed information about a textbook, including its publication details, price, and the publication team.",
+        "limitations": [
+          "The page does not provide specific details about the content of the textbook."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:46:28Z"
     },
     {
       "asset_id": "4c240401caa64c727e899406",
@@ -147,6 +253,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -163,8 +270,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:50:53Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:03Z"
     },
     {
       "asset_id": "910de67ee70be09bdcd36138",
@@ -174,6 +281,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -190,8 +298,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:51:02Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:11Z"
     },
     {
       "asset_id": "a702fa340e7ed053694452d4",
@@ -200,14 +308,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 3,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4359 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:25Z"
     },
     {
       "asset_id": "eb8ceef9ce5d70d5105745b4",
