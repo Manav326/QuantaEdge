@@ -11,6 +11,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -24,10 +30,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountLifecycleScreen(
     data: JSONObject,
@@ -95,7 +104,18 @@ fun AccountLifecycleScreen(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(t("Account & eligibility", "Account और eligibility"),
                 style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
-            TextButton(onClick = onRefresh, enabled = !busy) { Text(t("Refresh", "Refresh")) }
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = { PlainTooltip { Text(t("Refresh account details", "खाते की जानकारी फिर लोड करें")) } },
+                state = rememberTooltipState()
+            ) {
+                IconButton(onClick = onRefresh, enabled = !busy) {
+                    Text("↻", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.semantics {
+                            contentDescription = t("Refresh account details", "खाते की जानकारी फिर लोड करें")
+                        })
+                }
+            }
         }
         if (busy) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
