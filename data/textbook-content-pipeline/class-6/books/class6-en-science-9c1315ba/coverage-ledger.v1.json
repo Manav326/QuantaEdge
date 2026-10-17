@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 247,
-    "successful_visual_analyses": 244,
-    "missing_visual_analyses": 1831,
+    "raw_analysis_result_rows": 250,
+    "successful_visual_analyses": 247,
+    "missing_visual_analyses": 1828,
     "failed_visual_analyses": 3,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1834,
+    "unresolved_count": 1831,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -14984,9 +14984,18 @@
       "asset_path": "assets/094ac57b8fd8639824ebd8b1dd616c09471d46545fa76017b44a86eae9172449.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a gradient transitioning from white to a light brown color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a header or footer in a document.",
+        "limitations": [
+          "The image does not contain any specific content or data that can be analyzed for educational content editing. It is a simple gradient bar with no additional elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15002,9 +15011,18 @@
       "asset_path": "assets/4492bd922154d661008410c3de36a6965d8cdcc9db692f1dac860044d9cbbc77.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm, golden color transitioning to a lighter shade on the right side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or header for educational content.",
+        "limitations": [
+          "The image does not contain any specific text or data points that can be analyzed for educational content. It is a simple, abstract visual element without any discernible information or data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15020,9 +15038,18 @@
       "asset_path": "assets/d0f8964356a580c3563a9af0a1826bf26721bc4bd5654dba9397e10095751fae.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
