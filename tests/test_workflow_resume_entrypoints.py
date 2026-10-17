@@ -91,6 +91,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         workflow = read("benchmark-class6-curiosity-after-layer5.yml")
         self.assertIn("workflow_run:", workflow)
         self.assertIn('workflows: ["Resume Class 6 NCERT Curiosity Layers 1-5 evidence ledger"]', workflow)
+        self.assertIn("if: github.event.workflow_run.conclusion == 'success'", workflow)
         gate = workflow.index("- name: Require a real COMPLETE Class 6 Curiosity Layer 5 ledger")
         ollama = workflow.index("- name: Start loopback-only Ollama")
         benchmark = workflow.index("- name: Benchmark the same source-bound NCERT segments under the current contract")
