@@ -152,7 +152,7 @@ public class PlatformInstitutionController {
         """,institutionId);
     if(rows.isEmpty()) throw new IllegalArgumentException("Institution not found.");
     Map<String,Object> result = new LinkedHashMap<>(rows.getFirst());
-    result.put("themeTokens", parseJsonObject(result.remove("theme_tokens")));
+    result.put("themeTokens", InstitutionThemeTokens.normalize(parseJsonObject(result.remove("theme_tokens"))));
     result.put("admins", jdbc.queryForList("""
         select id,username,display_name,active,must_change_password,last_login_at,created_at
         from institution_admin_account where institution_id=? order by created_at,id
@@ -380,7 +380,7 @@ public class PlatformInstitutionController {
         Map.of("displayName",displayName,"hasLogo",logo!=null,"hasAppIcon",icon!=null));
     return Map.of("institutionId",institutionId,"displayName",displayName,"logoAssetKey",logo==null?"":logo,
         "appIconAssetKey",icon==null?"":icon,"storeListingUrl",storeListing==null?"":storeListing,
-        "themeTokens",parseJsonObject(tokens),"brandingVersion",jdbc.queryForObject(
+        "themeTokens",InstitutionThemeTokens.normalize(parseJsonObject(tokens)),"brandingVersion",jdbc.queryForObject(
           "select version from institution_branding where institution_id=?",Long.class,institutionId));
   }
 
