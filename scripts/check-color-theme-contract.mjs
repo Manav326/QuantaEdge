@@ -36,6 +36,15 @@ const androidParentProfile = read('apps/android/app/src/main/java/com/quantaedge
 const androidAccountIdentity = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AccountIdentitySettingsScreen.kt');
 const androidTutor = read('apps/android/app/src/main/java/com/quantaedge/android/ui/TutorScreen.kt');
 const androidScanner = read('apps/android/app/src/main/java/com/quantaedge/android/ui/PremiumCodeScannerScreen.kt');
+const androidWelcome = read('apps/android/app/src/main/java/com/quantaedge/android/ui/WelcomeScreen.kt');
+const androidCourseCatalog = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentCourseCatalog.kt');
+const androidProgress = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentProgressScreen.kt');
+const androidLifecycle = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AccountLifecycleScreen.kt');
+const androidMarketplace = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentMarketplaceScreen.kt');
+const androidLessonContent = read('apps/android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt');
+const androidStructuredLesson = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt');
+const androidCertificates = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
+const androidParentMarketplace = read('apps/android/app/src/main/java/com/quantaedge/android/ui/ParentCourseMarketplaceScreen.kt');
 const docs = read('docs/product/white-label-color-theme-contract.md');
 
 assert(apiTheme.includes('SCHEMA_VERSION = 2'), 'API theme schema must be explicitly versioned.');
@@ -88,7 +97,17 @@ assert(androidTheme.includes('darkColorScheme') && androidTheme.includes('lightC
 assert(androidTheme.includes('"accentContainer"') && androidTheme.includes('"onAccentContainer"'), 'Android Material secondary roles must consume accent-container tokens.');
 assert(androidSettings.includes('QeAppearanceMode.DARK') && androidSettings.includes('QeAppearanceMode.SYSTEM'), 'Android settings must expose appearance options.');
 assert(androidStudentProfile.includes('ColorThemeSettingsCard(language = language)') && androidParentProfile.includes('ColorThemeSettingsCard(language = language)') && !androidAccountIdentity.includes('ColorThemeSettingsCard(language = language)'), 'Appearance controls must be discoverable in both student and parent profiles, not mixed into sign-in identity settings.');
-assert(androidTutor.includes('MaterialTheme.colorScheme.primary') && !/Color\\(0xFF151B2C\\)|Color\\(0xFFFFF0E3\\)/i.test(androidTutor), 'Android tutor must use semantic theme roles rather than fixed brand colours.');
+assert(androidTutor.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidTutor.includes('color = if (selectedMode == mode.key) MaterialTheme.colorScheme.primary'), 'Android tutor text must use accessible semantic roles while selected mode surfaces retain the tenant primary fill.');
+assert(androidWelcome.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidWelcome.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android welcome labels must use contrast-safe text and neutral supporting roles.');
+assert(androidCourseCatalog.includes('LocalQuantaEdgeSemanticColors.current.primaryText'), 'Android course progress labels must use contrast-safe text.');
+assert(androidProgress.includes('LocalQuantaEdgeSemanticColors.current.success') && androidProgress.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android progress and certificate labels must use semantic success and neutral roles.');
+assert(androidLifecycle.includes('LocalQuantaEdgeSemanticColors.current.success') && androidLifecycle.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android account lifecycle status and helper copy must use semantic roles.');
+assert(androidMarketplace.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidMarketplace.includes('LocalQuantaEdgeSemanticColors.current.success'), 'Android marketplace price, free and owned labels must be readable and semantically differentiated.');
+assert(androidLessonContent.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidLessonContent.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android lesson titles, solutions and captions must use contrast-safe roles.');
+assert(androidStructuredLesson.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidStructuredLesson.includes('"partially_correct" -> LocalQuantaEdgeSemanticColors.current.warning'), 'Structured lessons must use readable text and semantic practice feedback states.');
+assert(androidCertificates.includes('"ISSUED" -> LocalQuantaEdgeSemanticColors.current.success') && androidCertificates.includes('MaterialTheme.colorScheme.error'), 'Certificate validity and revocation must remain semantic status cues.');
+assert(androidAccountIdentity.includes('if (gmailVerified) LocalQuantaEdgeSemanticColors.current.success') && androidAccountIdentity.includes('if (mobileVerified) LocalQuantaEdgeSemanticColors.current.success'), 'Verified account methods must use semantic success, not the raw brand fill.');
+assert(androidParentMarketplace.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidParentMarketplace.includes('LocalQuantaEdgeSemanticColors.current.success'), 'Parent marketplace labels must use accessible primary text and semantic free/owned states.');
 assert(androidScanner.includes('scanPrimary = MaterialTheme.colorScheme.primary') && androidScanner.includes('scanOnPrimary = MaterialTheme.colorScheme.onPrimary'), 'Android scanner controls must use the active tenant palette.');
 assert(androidRepository.includes('val themeTokensJson: String') && androidRepository.includes('optJSONObject("themeTokens")'), 'Android tenant API response must carry theme JSON.');
 assert(androidApp.includes('themeController.applyInstitutionTheme(code, identity.themeTokensJson)'), 'Resolved Android tenant must activate its server palette.');
