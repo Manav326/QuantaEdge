@@ -44,7 +44,7 @@ assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'P
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-presets'), 'Institution editor must load server-owned presets.');
 assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && editor.includes('brandAccent'), 'Institution editor must save schema v2 source colours.');
 assert(editor.includes('appearance') && editor.includes('themePreviewGrid'), 'Institution editor must expose appearance and preview.');
-assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes('data-qe-appearance'), 'Web runtime must resolve system/light/dark appearance.');
+assert(webRuntime.includes('prefers-color-scheme: dark') && webRuntime.includes('qeAppearance'), 'Web runtime must resolve system/light/dark appearance.');
 assert(webRuntime.includes('--qe-color-') && webRuntime.includes('themeTokens'), 'Web runtime must map tenant tokens to semantic CSS roles.');
 assert(webLayout.includes('<ColorThemeProvider>'), 'Learner web root must install the theme provider.');
 assert(webWorkspace.includes('<AppearanceModeButton />'), 'Learner/parent workspace must provide appearance control.');
