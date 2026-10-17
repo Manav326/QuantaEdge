@@ -75,7 +75,11 @@ fun LearningClassesScreen(
     onRefresh: () -> Unit,
     onJoin: (JSONObject) -> Unit,
     onLeave: (JSONObject) -> Unit,
-    onRecording: (JSONObject) -> Unit
+    onRecording: (JSONObject) -> Unit,
+    offlineDownloadedIds: Set<Long> = emptySet(),
+    videoDownloadStates: Map<Long, String> = emptyMap(),
+    onDownloadRecording: (JSONObject) -> Unit = {},
+    onRemoveOfflineRecording: (JSONObject) -> Unit = {}
 ) {
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -187,6 +191,14 @@ fun LearningClassesScreen(
                     val done = item.optBoolean("completed")
                     val position = item.optLongAny("last_position_seconds")
                     val duration = item.optLongAny("duration_seconds")
+                    val recordingId = item.longAny("recorded_class_id", "recordingId", "id")
+                    val isDownloaded = recordingId in offlineDownloadedIds
+                    val downloadState = videoDownloadStates[recordingId].orEmpty()
+                    val transferActive = downloadState.startsWith("Downloading", ignoreCase = true) ||
+                        downloadState.startsWith("Queued", ignoreCase = true) ||
+                        downloadState.startsWith("डाउनलोड चल", ignoreCase = true) ||
+                        downloadState.startsWith("डाउनलोड कतार", ignoreCase = true)
+                    val downloadAllowed = item.optBoolean("download_allowed") && item.optLongAny("download_resource_id") > 0L
                     Card(modifier = Modifier.fillMaxWidth().clickable { onRecording(item) }) {
                         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                             Text(item.textAny("title").ifBlank { "Recorded class" }, style = MaterialTheme.typography.titleMedium)
@@ -197,6 +209,30 @@ fun LearningClassesScreen(
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                             Button(onClick = { onRecording(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
                                 Text(if (position > 0 && !done) t("Continue from where you left off", "जहाँ छोड़ा था वहीं से चलाएँ") else t("Play recording", "Recording चलाएँ"))
+                            }
+                            if (isDownloaded) {
+                                Text(t("Available offline on this device", "इस डिवाइस पर offline उपलब्ध"),
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                                Button(onClick = { onRemoveOfflineRecording(item) }, enabled = !busy && !transferActive,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("Remove offline copy", "Offline copy हटाएँ"))
+                                }
+                            } else if (downloadAllowed) {
+                                Button(onClick = { onDownloadRecording(item) }, enabled = !busy && !transferActive,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(when {
+                                        transferActive -> downloadState
+                                        downloadState.contains("failed", ignoreCase = true) ||
+                                            downloadState.contains("विफल", ignoreCase = true) -> t("Retry offline download", "Offline डाउनलोड फिर करें")
+                                        else -> t("Download for offline playback", "Offline देखने के लिए डाउनलोड करें")
+                                    })
+                                }
+                                if (downloadState.isNotBlank()) {
+                                    Text(downloadState, style = MaterialTheme.typography.bodySmall,
+                                        color = if (downloadState.contains("failed", ignoreCase = true) ||
+                                            downloadState.contains("विफल", ignoreCase = true)) MaterialTheme.colorScheme.error
+                                        else MaterialTheme.colorScheme.secondary)
+                                }
                             }
                         }
                     }
