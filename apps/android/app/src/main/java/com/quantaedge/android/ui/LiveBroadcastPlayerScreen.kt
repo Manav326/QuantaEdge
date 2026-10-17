@@ -70,7 +70,7 @@ fun LiveBroadcastPlayerScreen(title: String, videoId: String, onBack: () -> Unit
                   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
                   <style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000}iframe{display:block;width:100%;height:100%;border:0}</style>
                 </head><body>
-                  <iframe title="QuantaEdge live broadcast"
+                  <iframe title="Live broadcast"
                     src="https://www.youtube-nocookie.com/embed/$videoId?playsinline=1"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
