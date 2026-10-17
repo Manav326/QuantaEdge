@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 27,
+    "assets_selected": 35,
     "assets_processed_this_run": 10,
-    "assets_analyzed": 160,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 17,
+    "assets_analyzed": 166,
+    "assets_failed": 7,
+    "assets_skipped_from_checkpoint": 25,
     "publication_allowed": false
   },
   "results": [
@@ -401,7 +401,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38994583378",
-      "checkpointed_at": "2026-10-17T03:01:51Z"
+      "checkpointed_at": "2026-10-17T03:14:30Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1012,14 +1012,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 7,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4347 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:14:46Z"
     },
     {
       "asset_id": "536e0e377291f52f0660280e",
@@ -1028,14 +1041,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 7,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4288 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:15:02Z"
     },
     {
       "asset_id": "7e3d4a9251c90271df84b246",
@@ -1044,14 +1069,42 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 7,
       "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of keywords in scientific processes and the role of summaries in reinforcing key ideas.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "ideas and encourage them to think more deeply about the content.",
+          "The keywords related to scientific processes depict the steps or",
+          "procedure involved in the scientific activities. These words guide",
+          "learners on how scientific knowledge is generated, tested and",
+          "applied. ‘Summary’ offers an overview of the chapter’s main points",
+          "reinforcing the key ideas discussed. It serves to outline the content",
+          "presented in the chapter. A non-evaluative interesting element that",
+          "has been incorporated in some of the chapters is the introduction of",
+          "certain verses from various Indian texts to promote rootedness in"
+        ],
+        "concepts": [
+          "scientific processes",
+          "keywords",
+          "scientific knowledge",
+          "summary",
+          "Indian texts"
+        ],
+        "context_relation": "The page discusses the educational content of a textbook, focusing on keywords and summaries in scientific processes.",
+        "limitations": [
+          "The page does not provide specific examples or details about the content of the textbook."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:18:59Z"
     },
     {
       "asset_id": "66c6be28e7dc40045fe563f3",
@@ -1061,6 +1114,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1077,8 +1131,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:11:48Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:19:10Z"
     },
     {
       "asset_id": "bf47af0965fd3c1bcb3670b1",
@@ -1088,6 +1142,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1123,8 +1178,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:12:14Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:19:34Z"
     },
     {
       "asset_id": "3ebffa78ada58854febaed5b",
@@ -1133,14 +1188,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 8,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4353 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:19:50Z"
     },
     {
       "asset_id": "7b8b92579b15d1dcc24d0d09",
@@ -1149,14 +1216,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 8,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4294 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:20:04Z"
     },
     {
       "asset_id": "41955daad6a65c821a375d50",
@@ -1165,14 +1244,49 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 8,
       "asset_path": "page-0008.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "visual_type is not in the supported classification set.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a motivational message for learners.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "codes that have additional resources can be accessed by the learners",
+          "at their own convenience and pace. These additional resources",
+          "include videos, puzzles, games, quizzes, audio, documentaries and",
+          "additional content on some topics.",
+          "At the end of this book, learners will find a page titled ‘It is not the",
+          "end, my friend!’. This includes words of encouragement, motivating",
+          "learners to continue their educational journey and ignite their",
+          "curiosity for further learning. It is meant to be non-evaluative.",
+          "May the journey of every learner be filled with joy and continue",
+          "the curiosity in the higher grades as well!",
+          "We express our gratitude to all the members of the textbook",
+          "development committee for their contributions in shaping this",
+          "textbook. We look forward to the feedback of the readers.",
+          "TEXTBOOK DEVELOPMENT TEAM"
+        ],
+        "concepts": [
+          "motivational message",
+          "encouragement",
+          "curiosity",
+          "non-evaluative",
+          "textbook development committee",
+          "feedback"
+        ],
+        "context_relation": "The page is a motivational message for learners in a textbook.",
+        "limitations": [
+          "The page does not show any visual elements.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:24:04Z"
     },
     {
       "asset_id": "832113502906cc76508720ad",
@@ -1182,6 +1296,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1219,8 +1334,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:16:27Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:24:42Z"
     },
     {
       "asset_id": "b265e95e530d3aee11e276a1",
