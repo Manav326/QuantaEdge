@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 
 const BRAND_SESSION_KEY = 'qe.institution.brand-code.v1';
@@ -99,7 +99,7 @@ async function fetchTenantBrand(code: string): Promise<TenantBrand> {
   const response = await fetch(`/api/v1/institution/public/branding/${encodeURIComponent(code)}`, {
     credentials: 'same-origin',
     cache: 'no-store',
-    headers: { 'X-QE-Workspace': window.location.pathname.startsWith('/student') ? 'STUDENT' : 'PARENT' },
+    headers: { 'X-QE-Workspace': 'INSTITUTION' },
   });
   const body = await response.json().catch(() => ({})) as Partial<TenantBrand> & { message?: string; detail?: string };
   if (!response.ok) throw new Error(body.message || body.detail || 'School branding is unavailable.');
@@ -153,6 +153,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       updateTenantTheme(next);
       return true;
     } catch {
+      setBrand(null);
+      updateTenantTheme(null);
       return false;
     } finally {
       setIsResolving(false);
@@ -228,9 +230,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     return () => { cancelled = true; };
   }, [pathname]);
 
-  const value = useMemo(() => ({ brand, isResolving, resolveInstitutionCode, clearTenantBrand }),
-    [brand, isResolving]);
-  return <TenantBrandingContext.Provider value={value}>{children}</TenantBrandingContext.Provider>;
+  return <TenantBrandingContext.Provider value={{ brand, isResolving, resolveInstitutionCode, clearTenantBrand }}>{children}</TenantBrandingContext.Provider>;
 }
 
 export function useTenantBranding() {
