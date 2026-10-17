@@ -3754,8 +3754,8 @@ private fun LoginScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 6.dp)) {
             if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
             else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
-            if (mode == "LEARNER") Button(onClick = { mode = "LEARNER" }, enabled = !busy) { Text(localizedUiText("Learner")) }
-            else TextButton(onClick = { mode = "LEARNER"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text(localizedUiText("Learner")) }
+            if (mode == "LEARNER") Button(onClick = { mode = "LEARNER" }, enabled = !busy) { Text(if(language=="hi") "सामान्य खाता" else "Account") }
+            else TextButton(onClick = { mode = "LEARNER"; parentLoginMethod = "OTP"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text(if(language=="hi") "सामान्य खाता" else "Account") }
             if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text(localizedUiText("Parent")) }
             else TextButton(onClick = { mode = "PARENT"; parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text(localizedUiText("Parent")) }
         }
@@ -3798,20 +3798,51 @@ private fun LoginScreen(
                 }
             }
         } else if (mode == "LEARNER") {
-            OutlinedTextField(value = mobile, onValueChange = { mobile = it.filter(Char::isDigit).take(10) },
-                label = { Text(if (language == "hi") "Mobile (10 अंक)" else "Mobile (10 digits)") },
-                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
-            OutlinedTextField(value = password, onValueChange = { password = it },
-                label = { Text(if (language == "hi") "Password" else "Password") }, singleLine = true,
-                visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
-            Button(onClick = { onSignIn(mode, mobile, "", "", password) },
-                enabled = !busy && mobile.length == 10 && password.isNotBlank(),
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                Text(if (busy) "Signing in…" else if (language == "hi") "साइन इन करें" else "Sign in")
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth().padding(top = 5.dp)) {
+                if (parentLoginMethod == "OTP") Button(onClick = { parentLoginMethod = "OTP"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if(language=="hi") "मोबाइल OTP" else "Mobile OTP") }
+                else OutlinedButton(onClick = { parentLoginMethod = "OTP"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if(language=="hi") "मोबाइल OTP" else "Mobile OTP") }
+                if (parentLoginMethod == "PASSWORD") Button(onClick = { parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if(language=="hi") "यूज़रनेम" else "Username") }
+                else OutlinedButton(onClick = { parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if(language=="hi") "यूज़रनेम" else "Username") }
+            }
+            if (parentLoginMethod == "OTP") {
+                OutlinedTextField(value = mobile, onValueChange = { mobile = it.filter(Char::isDigit).take(10); otpRequested = false; otp = ""; devCode = "" },
+                    label = { Text(if (language == "hi") "मोबाइल नंबर (10 अंक)" else "Mobile number (10 digits)") },
+                    singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+                if (otpRequested) {
+                    OutlinedTextField(value = otp, onValueChange = { otp = it.filter(Char::isDigit).take(6) },
+                        label = { Text(if(language=="hi") "6 अंकों का OTP" else "6-digit OTP") },
+                        singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+                    if (devCode.isNotBlank()) Text((if(language=="hi") "विकास OTP: " else "Development OTP: ") + devCode,
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    Button(onClick = { onVerifyOtp(mobile, otp) }, enabled = !busy && otp.length == 6,
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                        Text(if(language=="hi") "सत्यापित करें और साइन इन करें" else "Verify and sign in")
+                    }
+                    TextButton(onClick = { otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) {
+                        Text(if(language=="hi") "मोबाइल बदलें" else "Change mobile")
+                    }
+                } else {
+                    Button(onClick = { onRequestOtp(mobile) { code -> otpRequested = true; devCode = code.orEmpty() } },
+                        enabled = !busy && mobile.length == 10, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                        Text(if(language=="hi") "OTP भेजें" else "Send OTP")
+                    }
+                }
+            } else {
+                OutlinedTextField(value = username, onValueChange = { username = it.lowercase().filter { ch -> ch.isLetterOrDigit() || ch in "._-" }.take(32) },
+                    label = { Text(if(language=="hi") "यूज़रनेम" else "Username") },
+                    singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+                OutlinedTextField(value = password, onValueChange = { password = it },
+                    label = { Text(if(language=="hi") "पासवर्ड" else "Password") }, singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+                Button(onClick = { onSignIn("LEARNER_USERNAME", "", "", username, password) },
+                    enabled = !busy && username.trim().length >= 3 && password.isNotBlank(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    Text(if (busy) "Signing in…" else if (language == "hi") "साइन इन करें" else "Sign in")
+                }
             }
         } else {
-            OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it.filter(Char::isDigit).take(10) },
-                label = { Text(if(language=="hi") "Parent mobile (10 digits)" else "Registered parent mobile (10 digits)") },
+            OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it.take(320) },
+                label = { Text(if(language=="hi") "अभिभावक का सत्यापित Gmail या मोबाइल" else "Parent's verified Gmail or mobile") },
                 singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
             OutlinedTextField(value = username, onValueChange = { username = it.trim().take(32) },
                 label = { Text(localizedUiText("Student username")) }, singleLine = true,
@@ -3821,7 +3852,7 @@ private fun LoginScreen(
                 singleLine = true, visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
             Button(onClick = { onSignIn(mode, mobile, parentMobile, username, password) },
-                enabled = !busy && parentMobile.length == 10 && username.isNotBlank() && password.isNotBlank(),
+                enabled = !busy && parentMobile.trim().length >= 5 && username.trim().length >= 3 && password.isNotBlank(),
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Text(if (busy) if (language=="hi") "साइन इन हो रहा है…" else "Signing in…" else if (language=="hi") "साइन इन करें" else "Sign in")
             }
