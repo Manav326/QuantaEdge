@@ -272,7 +272,7 @@ export default function InstitutionPortalPage() {
     const code = principal?.institutionCode?.trim().toUpperCase();
     const joinCode = principal?.joinCode?.trim();
     if (!code || !joinCode) return;
-    const link = new URL('/institution/' + encodeURIComponent(code), window.location.origin);
+    const link = new URL('/school/' + encodeURIComponent(code), window.location.origin);
     link.hash = new URLSearchParams({ join: joinCode }).toString();
     try {
       await navigator.clipboard.writeText(link.toString());
