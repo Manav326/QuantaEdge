@@ -4334,7 +4334,9 @@ private fun AccountSignupScreen(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if(language=="hi") "EN" else "हिंदी") }
         }
-        Text(if(language=="hi") "अपना " + (LocalInstitutionBrandIdentity.current?.displayName ?: "QuantaEdge") + " खाता बनाएँ" else "Create your " + (LocalInstitutionBrandIdentity.current?.displayName ?: "QuantaEdge") + " account",
+        val institutionDisplayName = LocalInstitutionBrandIdentity.current?.displayName
+            ?: if (LocalInstitutionBrandResolutionPending.current) "Your school" else "QuantaEdge"
+        Text(if(language=="hi") "अपना " + institutionDisplayName + " खाता बनाएँ" else "Create your " + institutionDisplayName + " account",
             style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
         Text(if(language=="hi")
             "पूरा नाम और मोबाइल नंबर दर्ज करें। सफल OTP सत्यापन के बाद मोबाइल सत्यापित दिखेगा।"
