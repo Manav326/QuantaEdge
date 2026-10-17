@@ -232,7 +232,29 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var pendingInstitutionJoinCode by rememberSaveable {
         mutableStateOf(InstitutionBrandingRepository.joinCodeFromIntent(launchIntent).orEmpty())
     }
-    var institutionBrandIdentity by remember { mutableStateOf<InstitutionBrandIdentity?>(null) }
+    val packagedTenantLogo = remember(configuredTenantCode) {
+        if (BuildConfig.IS_TENANT_BRANDED && configuredTenantCode != null)
+            runCatching { BitmapFactory.decodeResource(context.resources, R.drawable.qe_launcher_icon) }.getOrNull()
+        else null
+    }
+    fun fallbackInstitutionIdentity(code: String): InstitutionBrandIdentity {
+        val packagedForSchool = BuildConfig.IS_TENANT_BRANDED && code == configuredTenantCode
+        return InstitutionBrandIdentity(
+            code,
+            if (packagedForSchool) BuildConfig.INSTITUTION_DISPLAY_NAME else "Your school",
+            if (packagedForSchool) packagedTenantLogo else null,
+            null,
+            0L,
+            "{}"
+        )
+    }
+    var institutionBrandIdentity by remember(launchTenantCode, configuredTenantCode) {
+        mutableStateOf(launchTenantCode?.let(::fallbackInstitutionIdentity))
+    }
+    val displayedInstitutionBrandIdentity =
+        if (launchTenantCode != null && institutionBrandIdentity?.institutionCode != launchTenantCode)
+            fallbackInstitutionIdentity(launchTenantCode)
+        else institutionBrandIdentity
     var institutionBrandResolutionPending by remember {
         mutableStateOf(launchTenantCode != null ||
             !preferences.getString("institutionCode", null).isNullOrBlank() ||
@@ -3145,7 +3167,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
         color = MaterialTheme.colorScheme.background
     ) {
-        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalInstitutionBrandIdentity provides institutionBrandIdentity, LocalInstitutionBrandResolutionPending provides institutionBrandResolutionPending) {
+        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalInstitutionBrandIdentity provides displayedInstitutionBrandIdentity, LocalInstitutionBrandResolutionPending provides institutionBrandResolutionPending) {
         Row(modifier = Modifier.fillMaxSize()) {
             if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
