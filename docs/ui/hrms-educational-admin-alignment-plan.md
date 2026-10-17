@@ -166,10 +166,10 @@
 
 ## Phase 10 — Visual and functional regression / release
 
-- [x] Capture final screenshots that match baseline routes/viewports/states.
-- [x] Compare shared brand, type scale, spacing, page hierarchy, tables/forms, navigation and feedback patterns with Educational Admin.
+- [ ] Capture final screenshots that match baseline routes/viewports/states.
+- [ ] Compare shared brand, type scale, spacing, page hierarchy, tables/forms, navigation and feedback patterns with Educational Admin.
 - [ ] Check that HRMS has its own product identity and does not look like a direct copy or a patched assembly.
-- [x] Build both `apps/admin` and `apps/people`.
+- [ ] Build both `apps/admin` and `apps/people` for the latest UI commit.
 - [ ] Run available lint/type checks and targeted automated tests.
 - [ ] Exercise route access, CRUD, validation, permission-gated actions and feedback.
 - [ ] Check browser console and failed requests on the exercised routes.
@@ -231,3 +231,11 @@ Run `38372164855` validates commit `ddc83a1` (HRMS auth branding/components). Th
 ## Orange-led HRMS theme alignment — 2026-10-16
 
 **Status: implemented in CSS; build and visual verification still required.** The user explicitly clarified that People Operations/HRMS is the exception to the no-colour-change instruction because its standalone blue theme did not match QuantaEdge branding. HRMS-only theme alignment updates `apps/people/app/globals.css` to use the existing brand orange `#F97316`, deep orange `#C2410C`, soft orange `#FFF0E5`, and the established dark charcoal `#111A2B` for its login story panel. Active tabs, primary actions, focus outlines, and status pills now follow the orange-led brand palette. Semantic success/error colours and light work surfaces are preserved. No other app's palette, logo asset, wordmark, tagline, business logic, routes, permissions, API contracts, or data workflows are changed. No layout/placement changes are included in this pass.
+
+
+## Execution log — October 17, 2026
+
+- Updated the People Operations shared design stylesheet with route-wide form label/help/error treatment, disabled-control states, resilient table overflow and numeric alignment, row hover/focus states, compact pagination, responsive page actions, and reduced-motion-safe transitions. This is presentation-only; no route, API, permission, or workflow changes are intended.
+- Extended the People Operations UI contract to guard the warm-orange theme, readable numeric values, semantic invalid-form styling, horizontal table scrolling, and keyboard focus within table rows.
+- Latest theme and UI polish require the GitHub Actions run for the resulting commit. Browser screenshots, real viewport interaction checks, keyboard/screen-reader review, and end-to-end HR workflows remain separate verification gates and are not marked complete until actually exercised.
+- Scope note: this pass improves the shared People UI foundation. It does not claim that every page-specific workflow or all three applications have completed visual QA; those checks remain tracked above.
