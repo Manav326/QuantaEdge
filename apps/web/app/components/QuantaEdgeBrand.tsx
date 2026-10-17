@@ -28,7 +28,7 @@ export default function QuantaEdgeBrand({
   const tenantName = brand && brand.displayName ? brand.displayName.trim() : '';
   if (!brand && (isResolving || institutionContextRequested)) return <span className={'qe-brand-loading qe-brand--' + variant} aria-hidden="true" />;
   const accessibleLabel = tenantName || (institutionContextRequested ? 'Learning space' : BRAND_LABEL);
-  const logoUrl = approvedLogoUrl(brand && brand.logoUrl, brand && brand.institutionCode) ? brand!.logoUrl! : null;
+  const logoUrl = brand?.logoUrl && brand.institutionCode && approvedLogoUrl(brand.logoUrl, brand.institutionCode) ? brand.logoUrl : null;
   const lockup = (
     <span className={'qe-brand qe-brand--' + variant}>
       <span className="qe-brand__lockup">
