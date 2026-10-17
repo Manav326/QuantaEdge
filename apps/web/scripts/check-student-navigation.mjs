@@ -155,8 +155,8 @@ assert.deepEqual(androidStudentGroupIds, ['today', 'learn', 'practice', 'progres
 const androidParentGroupIds = [...androidApp.matchAll(/AppNavItem\("(family|children|profile)"/g)].map((match) => match[1]);
 assert.deepEqual(androidParentGroupIds, ['family', 'children', 'profile'], 'Android parent navigation must keep its three role-specific destinations.');
 assert.ok(androidApp.includes('LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE'), 'Android navigation must derive placement from device orientation.');
-assert.ok(androidApp.includes('if (signedIn && landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail'), 'Android landscape must use the left navigation rail outside the full-screen tutor and protected reader.');
-assert.ok(androidApp.includes('if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar'), 'Android portrait must use the bottom navigation bar outside the full-screen tutor and protected reader.');
+assert.ok(androidApp.includes('if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail'), 'Android landscape must use the left navigation rail outside the full-screen tutor and protected reader.');
+assert.ok(androidApp.includes('if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar'), 'Android portrait must use the bottom navigation bar outside the full-screen tutor and protected reader.');
 assert.ok(!androidApp.includes('screenWidthDp >= 600'), 'Screen width must not choose Android primary navigation placement.');
 // Testable, non-Compose route ownership: all detailed Android destinations map to one of the shared five groups.
 for (const routeGroup of [
@@ -196,5 +196,24 @@ for (const protectedCapability of [
 assert.ok(androidCertificates.includes('PremiumCodeScannerScreen(') && androidCertificates.includes('parseQuantaEdgeCertificateQr(rawValue, BuildConfig.DEBUG)'), 'The certificate centre must route scans through the branded scanner and validate scanned payloads.');
 assert.ok(androidScanner.includes('BarcodeScanning.getClient(scannerOptions(mode))') && androidScanner.includes('CameraSelector.DEFAULT_BACK_CAMERA'), 'The native scanner must analyse live camera frames with ML Kit.');
 assert.ok(androidScanner.includes('ScannerMode.QR_ONLY') && androidScanner.includes('ScannerMode.BARCODE_ONLY'), 'The scanner must retain explicit QR-only and linear-barcode modes.');
+
+// End-to-end provider contract across Admin, student web, API and Android.
+// Source assertions complement builds/unit tests; they do not claim live-account/device E2E.
+const adminClasses = read('../../admin/app/classes/page.tsx');
+const studentClasses = read('../app/student/classes/ClassesClient.tsx');
+const androidClasses = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
+const androidBroadcastPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/LiveBroadcastPlayerScreen.kt');
+const androidRecordedPlayer = read('../../android/app/src/main/java/com/quantaedge/android/ui/RecordedPlayerScreen.kt');
+const learningClassesApi = read('../../../services/api/src/main/java/com/quantaedge/api/LearningClassController.java');
+const learningClassesApiTests = read('../../../services/api/src/test/java/com/quantaedge/api/LearningClassControllerTest.java');
+
+assert.ok(adminClasses.includes('value="YOUTUBE_LIVE"') && adminClasses.includes("broadcastUrl:provider==='YOUTUBE_LIVE'?joinUrl.trim():null"), 'Admin must save the public YouTube broadcast reference separately.');
+assert.ok(adminClasses.includes("tRef.current('admin.classes.scheduleSecureMissingFields'));return;}"), 'Admin scheduling validation must remain syntactically valid.');
+assert.ok(studentClasses.includes("'/api/v1/learning/live-classes/'+session.session_id+'/join'") && studentClasses.includes('youtube-nocookie.com/embed/') && studentClasses.includes("activeJoined.provider==='YOUTUBE_LIVE'"), 'Student web must use authorized join before showing/reopening the YouTube embed.');
+assert.ok(learningClassesApi.includes('result.put("youtubeVideoId", session.get("youtube_video_id"))') && learningClassesApi.includes("cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null") && learningClassesApi.includes('insert into learning_class_attendance'), 'API must return video ID separately from private URLs and persist attendance.');
+assert.ok(learningClassesApiTests.includes('youtubeBroadcastJoinReturnsVideoIdAndRecordsAttendanceWithoutMeetingUrl'), 'API must test the YouTube join/attendance contract.');
+assert.ok(androidClasses.includes('item.textAny("provider") == "YOUTUBE_LIVE"') && androidClasses.includes('t("Watch live broadcast", "लाइव प्रसारण देखें")'), 'Android class catalogue must support YouTube start/reopen.');
+assert.ok(androidBroadcastPlayer.includes('isValidYouTubeVideoId(videoId)') && androidBroadcastPlayer.includes('https://www.youtube-nocookie.com/embed/$videoId') && androidBroadcastPlayer.includes('settings.allowFileAccess = false') && androidBroadcastPlayer.includes('settings.allowContentAccess = false'), 'Android must validate the broadcast ID and restrict the in-app player.');
+assert.ok(androidRecordedPlayer.includes('/api/v1/learning/recorded-classes/') && studentClasses.includes('/stream') && adminClasses.includes('/api/v1/admin/recorded-classes'), 'Admin upload, web stream and Android playback contracts must remain wired.');
 
 console.log('Navigation/language contract passed: five student groups, three parent destinations, orientation, independent language preferences, and Android-only offline/security features.');

@@ -99,11 +99,22 @@ fun LearningClassesScreen(
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                             Text(localizedUiText("Attendance: ") + (item.optLongAny("attended_seconds") / 60) + " मिनट • जुड़ने की संख्या: " + item.optInt("join_count"),
                                 style = MaterialTheme.typography.bodySmall)
+                            val youtubeLive = item.textAny("provider") == "YOUTUBE_LIVE"
                             if (joined) {
-                                Button(onClick = { onLeave(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("Class leave करें")) }
+                                if (youtubeLive) {
+                                    Button(onClick = { onJoin(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                                        Text(t("Watch live broadcast", "लाइव प्रसारण देखें"))
+                                    }
+                                }
+                                Button(onClick = { onLeave(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("Leave class and save attendance", "कक्षा छोड़ें और उपस्थिति सहेजें"))
+                                }
                             } else {
                                 Button(onClick = { onJoin(item) }, enabled = !busy && item.textAny("status") in setOf("SCHEDULED", "LIVE"),
-                                    modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("Live class join करें")) }
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(if (youtubeLive) t("Watch live broadcast", "लाइव प्रसारण देखें")
+                                        else t("Join live class", "लाइव कक्षा में शामिल हों"))
+                                }
                             }
                             if (item.optBoolean("has_recording")) {
                                 Text(localizedUiText("इस class की published recording भी उपलब्ध है।"), style = MaterialTheme.typography.bodySmall)

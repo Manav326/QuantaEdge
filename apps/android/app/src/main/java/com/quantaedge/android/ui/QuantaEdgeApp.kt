@@ -240,6 +240,9 @@ fun QuantaEdgeApp() {
     var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
+    var liveBroadcastVideoId by rememberSaveable { mutableStateOf("") }
+    var liveBroadcastTitle by rememberSaveable { mutableStateOf("") }
+    var liveBroadcastSessionId by rememberSaveable { mutableStateOf(0L) }
 
     // Each route owns its own snapshot counter. Updating a background route's counter
     // won't invalidate the currently visible route, unlike one shared SnapshotStateMap.
@@ -969,6 +972,9 @@ fun QuantaEdgeApp() {
     }
 
     fun openClasses(subjectCode: String = currentSubject) {
+        liveBroadcastVideoId = ""
+        liveBroadcastTitle = ""
+        liveBroadcastSessionId = 0L
         currentSubject = subjectCode
         liveClasses = emptyList()
         recordedClasses = emptyList()
@@ -988,37 +994,60 @@ fun QuantaEdgeApp() {
         runTask {
             val sessionId = item.longAny("session_id", "sessionId")
             val joined = ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/join")
+            val provider = joined.textAny("provider").ifBlank { item.textAny("provider") }
             val joinUrl = joined.textAny("joinUrl", "join_url")
-            if (joinUrl.isNotBlank()) {
-                val uri = android.net.Uri.parse(joinUrl)
-                if (uri.scheme != "https" && uri.scheme != "http") {
+            val youtubeVideoId = joined.textAny("youtubeVideoId", "youtube_video_id")
+            if (provider == "YOUTUBE_LIVE") {
+                if (!isValidYouTubeVideoId(youtubeVideoId)) {
+                    throw IOException("इस YouTube live class का सुरक्षित video reference उपलब्ध नहीं है।")
+                }
+                liveBroadcastVideoId = youtubeVideoId
+                liveBroadcastTitle = joined.textAny("title").ifBlank { item.textAny("title").ifBlank { "YouTube Live" } }
+                liveBroadcastSessionId = sessionId
+            } else {
+                if (joinUrl.isBlank()) throw IOException("इस live class का सुरक्षित meeting link उपलब्ध नहीं है।")
+                val uri = Uri.parse(joinUrl)
+                if (uri.scheme != "https" || uri.host.isNullOrBlank()) {
                     throw IOException("इस live class का सुरक्षित meeting link उपलब्ध नहीं है।")
                 }
-                context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, uri)
-                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+                context.startActivity(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }
             liveClasses = liveClasses.map { row ->
                 if (row.longAny("session_id", "sessionId") == sessionId)
                     JSONObject(row.toString()).put("currently_joined", true)
                 else row
             }
-            status = if (joinUrl.isBlank())
-                "Attendance दर्ज हो गई है, लेकिन इस session के लिए meeting link उपलब्ध नहीं है।"
-                else "Live class में शामिल होने की attendance दर्ज हो गई है।"
+            status = if (provider == "YOUTUBE_LIVE") {
+                if (language == "hi") "उपस्थिति दर्ज है। YouTube live प्रसारण QuantaEdge में खुल गया है।"
+                else "Attendance is recorded. The YouTube Live broadcast is open in QuantaEdge."
+            } else {
+                if (language == "hi") "Live class में शामिल होने की attendance दर्ज हो गई है।"
+                else "Attendance is recorded for the live class."
+            }
         }
     }
 
-    fun leaveLiveClass(item: JSONObject) {
+    fun leaveLiveClassById(sessionId: Long) {
+        if (sessionId <= 0L) return
         runTask {
-            val sessionId = item.longAny("session_id", "sessionId")
             ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/leave")
             liveClasses = liveClasses.map { row ->
                 if (row.longAny("session_id", "sessionId") == sessionId)
                     JSONObject(row.toString()).put("currently_joined", false)
                 else row
             }
-            status = "आपकी live class leave और attendance update हो गई।"
+            if (liveBroadcastSessionId == sessionId) {
+                liveBroadcastVideoId = ""
+                liveBroadcastTitle = ""
+                liveBroadcastSessionId = 0L
+            }
+            status = if (language == "hi") "आपकी live class leave और attendance update हो गई।"
+                else "You left the live class and attendance was updated."
         }
+    }
+
+    fun leaveLiveClass(item: JSONObject) {
+        leaveLiveClassById(item.longAny("session_id", "sessionId"))
     }
 
     fun tutorErrorMessage(exception: Exception): String {
@@ -2072,6 +2101,13 @@ fun QuantaEdgeApp() {
     )
 
     fun goBack() {
+        if (liveBroadcastVideoId.isNotBlank()) {
+            liveBroadcastVideoId = ""
+            liveBroadcastTitle = ""
+            liveBroadcastSessionId = 0L
+            error = ""
+            return
+        }
         route = when (route) {
             AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME -> route
             AppRoute.WELCOME -> AppRoute.WELCOME
@@ -2181,7 +2217,7 @@ fun QuantaEdgeApp() {
     ) {
         CompositionLocalProvider(LocalQuantaLanguage provides language) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (signedIn && landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
+            if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
                     NavigationRailItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true)
@@ -2852,7 +2888,24 @@ fun QuantaEdgeApp() {
                         onRetry = ::retryTutorConnection,
                         onClose = { tutorMinimized = false; route = AppRoute.LESSON }
                     )
-                    AppRoute.CLASSES -> LearningClassesScreen(
+                    AppRoute.CLASSES -> if (liveBroadcastVideoId.isNotBlank()) {
+                        LiveBroadcastPlayerScreen(
+                            title = liveBroadcastTitle,
+                            videoId = liveBroadcastVideoId,
+                            onBack = {
+                                liveBroadcastVideoId = ""
+                                liveBroadcastTitle = ""
+                                liveBroadcastSessionId = 0L
+                            },
+                            onLeave = {
+                                val sessionId = liveBroadcastSessionId
+                                liveBroadcastVideoId = ""
+                                liveBroadcastTitle = ""
+                                liveBroadcastSessionId = 0L
+                                leaveLiveClassById(sessionId)
+                            }
+                        )
+                    } else LearningClassesScreen(
                         subject = currentSubject,
                         liveItems = liveClasses,
                         recordedItems = recordedClasses,
@@ -2874,7 +2927,7 @@ fun QuantaEdgeApp() {
                 }
                 }
             }
-            if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar {
+            if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar {
                 navItems.forEach { item ->
                     NavigationBarItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) })

@@ -176,6 +176,32 @@ class LearningClassControllerTest {
   }
 
   @Test
+  void youtubeBroadcastJoinReturnsVideoIdAndRecordsAttendanceWithoutMeetingUrl() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    OffsetDateTime starts=OffsetDateTime.now().minusMinutes(1);
+    Map<String,Object> youtubeSession=new java.util.HashMap<>();
+    youtubeSession.put("id",88L);
+    youtubeSession.put("private_join_url",null);
+    youtubeSession.put("youtube_video_id","abcdefghijk");
+    youtubeSession.put("provider","YOUTUBE_LIVE");
+    youtubeSession.put("title","Live science");
+    youtubeSession.put("status","LIVE");
+    youtubeSession.put("starts_at",starts);
+    youtubeSession.put("ends_at",starts.plusMinutes(59));
+    youtubeSession.put("join_window_minutes",15);
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"),eq(7L),eq(88L)))
+        .thenReturn(List.of(youtubeSession));
+    Map<String,Object> result=controller.joinLiveClass(88L,student);
+    assertEquals("YOUTUBE_LIVE",result.get("provider"));
+    assertEquals("abcdefghijk",result.get("youtubeVideoId"));
+    assertEquals(null,result.get("joinUrl"));
+    assertEquals(true,result.get("joined"));
+    assertEquals(true,result.get("attendanceRecorded"));
+    verify(jdbc).update(contains("insert into learning_class_attendance"),eq(88L),eq(7L));
+    verifyNoInteractions(staffAudit,mediaStorage);
+  }
+
+  @Test
   void studentJoinWindowUsesTheConfiguredMinutes() {
     when(authorization.requireStudent(student)).thenReturn(student);
     OffsetDateTime starts=OffsetDateTime.now().plusMinutes(45);

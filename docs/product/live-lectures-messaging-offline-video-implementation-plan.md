@@ -286,3 +286,11 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - Existing recorded-class, learning-document and content-asset bytes are referenced by database ID rather than copied. The existing textbook reader remains responsible for protected learning-document pages.
 - Structured resource assignments require an actually published artifact. The first assignment creates an explicit mapping from its stable artifact_id to the chosen canonical chapter; subsequent assignments must respect that mapping, and class/subject/chapter metadata is checked again when learners access it.
 - Validation status: the new API/schema/test checkpoint is on main but not validated yet. The Admin catalogue page and student web/Android lesson surfaces still need to be implemented; offline Android video transfer and backup/restore/load tests remain open.
+
+
+### Implementation journal — 2026-10-17 (checkpoint 10: cross-surface YouTube Live parity)
+
+- Android now consumes the `youtubeVideoId` returned by the authorized join API, validates its shape, displays the privacy-enhanced YouTube embed in QuantaEdge, offers reopen for joined sessions and preserves a separate leave/attendance action. Meet and other private HTTPS providers retain the existing external handoff.
+- Added an Android video-ID validation unit test, an API regression proving that YouTube join returns a video ID without a private meeting URL while persisting attendance, and CI source-contract checks for Admin/student-web/API/Android wiring.
+- These are **source-contract, unit and build checks**, not proof that a real student completed a broadcast on web and a physical device. A controlled live broadcast/test account is required for runtime E2E.
+- Remaining completion gates: latest-main CI pass; runtime browser/device join/reopen/leave; V111 resource catalogue UI across Admin/student web/Android; Android app-private offline recordings across restart/account switch; durable classroom/private messaging; media backup/restore, retention and load evidence.
