@@ -439,3 +439,9 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Centralized advanced question JSON validation, teaching-block minimum, save/readiness statuses and Content Studio load/identity fallbacks.
 - Dynamic API error details are preserved; catalog copy is the fallback for client-generated messages.
 - Added paired catalog entries and CI raw-copy checks. Content Studio still needs its main form labels, publishing readiness text, visual-review controls and learner-preview copy migrated.
+
+
+## Visual-candidate contract test follow-up
+
+- Updated the visual end-to-end contract test to assert the semantic catalog key and its English/Hinglish catalog copy instead of requiring the old English sentence to remain hardcoded in Content Studio JSX.
+- This keeps the visual placement contract enforced while allowing static UI copy to remain centralized.

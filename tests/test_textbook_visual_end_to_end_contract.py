@@ -195,7 +195,11 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn("visualCandidateRelevanceScore", source)
         self.assertIn("visualCandidateBlockRelevanceScore", source)
         self.assertIn("source_pdf_sha256===candidate.source_pdf_sha256", source)
-        self.assertIn("strongest source-text overlap", source)
+        self.assertIn("admin.contentStudio.visualAddedSourceOverlap", source)
+        english_ui = json.loads((ROOT / "localization/catalogs/english.json").read_text(encoding="utf-8"))
+        hinglish_ui = json.loads((ROOT / "localization/catalogs/hinglish.json").read_text(encoding="utf-8"))
+        self.assertIn("strongest source-text match", english_ui["admin.contentStudio.visualAddedSourceOverlap"])
+        self.assertIn("Source text", hinglish_ui["admin.contentStudio.visualAddedSourceOverlap"])
 
     def test_renderers_follow_the_shared_visual_contract(self):
         expected_kinds = {item["id"] for item in self.contract["visual_kinds"]}
