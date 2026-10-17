@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useUiTranslation } from '../../i18n/useUiTranslation';
 import type { LessonLocale, StructuredExplainBlock, StructuredLesson } from './contract';
 import { isStudentRenderableAsset, readLocale } from './contract';
 import StructuredImageLightbox from './StructuredImageLightbox';
@@ -13,6 +14,7 @@ function localized(value: unknown, locale: LessonLocale, fallback = ''): string 
 }
 
 export function StructuredDiagramView({ block, locale }: { block: StructuredExplainBlock; locale: LessonLocale }) {
+  const uiT = useUiTranslation();
   const data = block.diagram_data || {};
   const nodes = Array.isArray(data.nodes) ? data.nodes as Array<Record<string, any>> : [];
   const edges = Array.isArray(data.edges) ? data.edges as Array<Record<string, any>> : [];
@@ -22,7 +24,7 @@ export function StructuredDiagramView({ block, locale }: { block: StructuredExpl
   };
   const contextLabel = value(data.context_label_by_locale);
   const outcomeLabel = value(data.outcome_by_locale);
-  if (!nodes.length) return <div className="qe-structured-muted" role="status">{locale === 'hi' ? 'यह आरेख अभी समीक्षा के लिए तैयार है।' : 'This diagram is not ready for display yet.'}</div>;
+  if (!nodes.length) return <div className="qe-structured-muted" role="status">{uiT('structured.ui.diagramNotReady')}</div>;
   return <figure className="qe-structured-diagram">
     {contextLabel && <p className="qe-structured-diagram__context">{contextLabel}</p>}
     <div className="qe-structured-diagram__nodes">
@@ -32,7 +34,7 @@ export function StructuredDiagramView({ block, locale }: { block: StructuredExpl
       </div>)}
     </div>
     {edges.length > 0 && <details className="qe-structured-diagram__connections">
-      <summary>{locale === 'hi' ? 'संबंध देखें' : 'View connections'}</summary>
+      <summary>{uiT('structured.ui.viewConnections')}</summary>
       <ul>{edges.map((edge, index) => {
         const endpointLabel = (id: unknown) => {
           const node = nodes.find(entry => String(entry.id ?? '') === String(id ?? ''));
@@ -52,6 +54,7 @@ export function StructuredDiagramView({ block, locale }: { block: StructuredExpl
 }
 
 function ActivityBlock({ block, locale, mode, onSave, initialResponses }: { block: StructuredExplainBlock; locale: LessonLocale; mode: Mode; onSave?: Props['onActivitySave']; initialResponses?: Record<string, string> }) {
+  const uiT = useUiTranslation();
   const [responses, setResponses] = useState<Record<string, string>>(() => initialResponses || {});
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -68,7 +71,7 @@ function ActivityBlock({ block, locale, mode, onSave, initialResponses }: { bloc
     Array.isArray(config.response_fields) ? config.response_fields : [];
   const controls = (config.controls_by_locale && config.controls_by_locale[locale]) || {};
   const title = localized(config.title_by_locale, locale) || localized((block as any).title_by_locale, locale) ||
-    (locale === 'hi' ? 'क्रियाकलाप' : 'Activity');
+    uiT('structured.ui.activity');
   const safety = localized((block as any).safety_note_by_locale, locale) ||
     localized((block as any).safety_and_scope, locale) ||
     localized((block as any).safety, locale);
@@ -83,13 +86,13 @@ function ActivityBlock({ block, locale, mode, onSave, initialResponses }: { bloc
     {safety && <p className="qe-structured-safety">{safety}</p>}
     {responseFields.length > 0 ? responseFields.map((field: Record<string, any>, index: number) => {
       const fieldId = String(field.id || 'response-' + index);
-      const fieldLabel = localized(field.label_by_locale, locale) || (locale === 'hi' ? 'उत्तर ' + (index + 1) : 'Response ' + (index + 1));
+      const fieldLabel = localized(field.label_by_locale, locale) || uiT('structured.ui.responseField', { index: index + 1 });
       return <label className="qe-structured-field" key={fieldId}>
         <span>{fieldLabel}</span>
         <textarea value={responses[fieldId] || ''} onChange={event => update(fieldId, event.target.value)} rows={2} />
       </label>;
     }) : <label className="qe-structured-field">
-      <span>{locale === 'hi' ? 'अपना अवलोकन या उत्तर लिखें' : 'Record your observation or response'}</span>
+      <span>{uiT('structured.ui.recordObservation')}</span>
       <textarea value={responses.response || ''} onChange={event => update('response', event.target.value)} rows={3} />
     </label>}
     <div className="qe-structured-actions">
@@ -97,30 +100,31 @@ function ActivityBlock({ block, locale, mode, onSave, initialResponses }: { bloc
         if (!onSave || saving) return;
         setSaving(true); setSaveError('');
         try { await onSave(block.id, JSON.stringify(responses)); setSaved(true); }
-        catch (error) { setSaveError(error instanceof Error ? error.message : (locale === 'hi' ? 'उत्तर सहेजा नहीं जा सका।' : 'Response could not be saved.')); }
+        catch (error) { setSaveError(error instanceof Error ? error.message : uiT('structured.ui.responseSaveFailed')); }
         finally { setSaving(false); }
       }}>
-        {saving ? (locale === 'hi' ? 'सहेज रहे हैं…' : 'Saving…') : String(controls.save || (locale === 'hi' ? 'उत्तर सहेजें' : 'Save response'))}
+        {saving ? uiT('structured.ui.saving') : String(controls.save || uiT('structured.ui.saveResponse'))}
       </button>
       <button type="button" className="qe-structured-button-secondary" onClick={() => { setResponses({}); setSaved(false); }}>
-        {String(controls.reset || (locale === 'hi' ? 'मिटाएँ' : 'Clear'))}
+        {String(controls.reset || uiT('structured.ui.clear'))}
       </button>
-      {saved && <span role="status">{locale === 'hi' ? (mode === 'admin-preview' ? 'उत्तर पूर्वावलोकन में सहेजा गया।' : 'सहेजने का अनुरोध भेजा गया।') : (mode === 'admin-preview' ? 'Preview response saved locally.' : 'Save request sent to the host.')}</span>}
-      {!onSave && <span role="status">{locale === 'hi' ? 'इस स्क्रीन पर उत्तर सहेजना अभी जुड़ा नहीं है।' : 'Response saving is not connected on this screen yet.'}</span>}
+      {saved && <span role="status">{mode === 'admin-preview' ? uiT('structured.ui.previewSaved') : uiT('structured.ui.saveRequestSent')}</span>}
+      {!onSave && <span role="status">{uiT('structured.ui.saveNotConnected')}</span>}
     </div>
   </section>;
 }
 
 export default function StructuredLessonContent({ lesson, locale, mode = 'student', onActivitySave, initialActivityResponses }: Props) {
+  const uiT = useUiTranslation();
   const [showBlocked, setShowBlocked] = useState(false);
   const blocks = lesson.explain.blocks.slice().sort((a, b) => a.order - b.order);
   return <section className="qe-structured-lesson" aria-label={localized(lesson.topic.title_by_locale, locale, 'Lesson')}>
     <header className="qe-structured-lesson__header">
-      <p className="qe-structured-eyebrow">{locale === 'hi' ? 'कक्षा ' : 'Class '}{String((lesson.curriculum as any)?.class ?? 6)} · {localized((lesson.curriculum as any)?.subject_by_locale || (lesson.curriculum as any)?.subject, locale, locale === 'hi' ? 'विज्ञान' : 'Science')}</p>
+      <p className="qe-structured-eyebrow">{uiT('structured.ui.class')} {String((lesson.curriculum as any)?.class ?? 6)} · {localized((lesson.curriculum as any)?.subject_by_locale || (lesson.curriculum as any)?.subject, locale, locale === 'hi' ? 'विज्ञान' : 'Science')}</p>
       <h1>{localized(lesson.chapter.title_by_locale, locale)}</h1>
       <h2>{localized(lesson.topic.title_by_locale, locale)}</h2>
       {lesson.learning_objectives?.length ? <div className="qe-structured-objectives">
-        <h3>{locale === 'hi' ? 'आप क्या सीखेंगे' : 'What you will learn'}</h3>
+        <h3>{uiT('structured.ui.whatLearn')}</h3>
         <ul>{lesson.learning_objectives.map(item => <li key={item.id}>{localized(item.statement_by_locale, locale)}</li>)}</ul>
       </div> : null}
     </header>
@@ -132,7 +136,7 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           {text?.heading && <h3>{text.heading}</h3>}
           {(text?.paragraphs || []).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
           {typeof text?.callout === 'string' && <aside className="qe-structured-callout">{text.callout}</aside>}
-          {typeof text?.key_point === 'string' && <p className="qe-structured-keypoint"><strong>{locale === 'hi' ? 'मुख्य बात:' : 'Key point:'}</strong> {text.key_point}</p>}
+          {typeof text?.key_point === 'string' && <p className="qe-structured-keypoint"><strong>{uiT('structured.ui.keyPoint')}</strong> {text.key_point}</p>}
         </article>;
         if (block.type === 'image') {
           const asset = block.asset || {};
@@ -143,9 +147,9 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           const alt = localized(asset.alt_by_locale, locale) || localized(block.alt_by_locale, locale);
           return <figure className="qe-structured-card qe-structured-image" key={block.id}>
             {canPreview && url ? <StructuredImageLightbox url={url} alt={alt} caption={localized(asset.caption_by_locale, locale) || localized(block.caption_by_locale, locale)} locale={locale} /> :
-              <div className="qe-structured-muted" role="status">{locale === 'hi' ? 'चित्र समीक्षा लंबित है; विद्यार्थी को नहीं दिखाया गया।' : 'Visual review is pending; hidden from students.'}</div>}
+              <div className="qe-structured-muted" role="status">{uiT('structured.ui.visualReviewPending')}</div>}
             <figcaption>{localized(asset.caption_by_locale, locale) || localized(block.caption_by_locale, locale)}</figcaption>
-            {mode === 'admin-preview' && <small>{String(asset.source_book_id || '')} · {locale === 'hi' ? 'PDF पृष्ठ ' : 'PDF page '}{String(asset.source_pdf_page_number || '—')} · {String(asset.review_status || 'UNREVIEWED')}</small>}
+            {mode === 'admin-preview' && <small>{String(asset.source_book_id || '')} · {uiT('structured.ui.pdfPage')} {String(asset.source_pdf_page_number || '—')} · {String(asset.review_status || 'UNREVIEWED')}</small>}
           </figure>;
         }
         if (block.type === 'diagram') {
@@ -155,9 +159,9 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
           const canPreview = canDisplay || mode === 'admin-preview';
           if (!canDisplay && mode === 'student') return null;
           return <article className="qe-structured-card" key={block.id}>
-            {!canDisplay && <div className="qe-structured-muted" role="status">{locale === 'hi' ? 'आरेख समीक्षा लंबित है; यह विद्यार्थी को नहीं दिखाया गया।' : 'Diagram review is pending; hidden from students.'}</div>}
+            {!canDisplay && <div className="qe-structured-muted" role="status">{uiT('structured.ui.diagramReviewPending')}</div>}
             {canPreview && <StructuredDiagramView block={block} locale={locale} />}
-            {mode === 'admin-preview' && <small>{locale === 'hi' ? 'दृश्य स्थिति:' : 'Visual status:'} {String(data.review_status || block.review_status || 'UNREVIEWED')}</small>}
+            {mode === 'admin-preview' && <small>{uiT('structured.ui.visualStatus')} {String(data.review_status || block.review_status || 'UNREVIEWED')}</small>}
           </article>;
         }
         if (block.type === 'interactive' || block.type === 'activity') return <ActivityBlock key={block.id} block={block} locale={locale} mode={mode} onSave={onActivitySave} initialResponses={initialActivityResponses?.[block.id]} />;
@@ -169,25 +173,25 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
             Array.isArray(selected) ? selected : typeof selected === 'string' ? [selected] : [];
           const vocabulary = recapObject && Array.isArray(recapObject.vocabulary) ? recapObject.vocabulary as Array<Record<string, unknown>> : [];
           return <aside className="qe-structured-card qe-structured-recap" key={block.id}>
-            <h3>{locale === 'hi' ? 'दोहराएँ' : 'Recap'}</h3>
+            <h3>{uiT('structured.ui.recap')}</h3>
             {takeaways.map((point, index) => <p key={index}>✓ {String(point)}</p>)}
             {vocabulary.length > 0 && <div className="qe-structured-vocabulary">
-              <h4>{locale === 'hi' ? 'मुख्य शब्द' : 'Key vocabulary'}</h4>
+              <h4>{uiT('structured.ui.keyVocabulary')}</h4>
               <dl>{vocabulary.map((item, index) => <div key={String(item.term || index)}>
                 <dt>{String(item.term || '')}</dt><dd>{String(item.meaning || '')}</dd>
               </div>)}</dl>
             </div>}
           </aside>;
         }
-        if (mode === 'admin-preview') return <div className="qe-structured-muted" key={block.id} role="status">{locale === 'hi' ? 'असमर्थित सामग्री ब्लॉक:' : 'Unsupported content block:'} {block.type}</div>;
+        if (mode === 'admin-preview') return <div className="qe-structured-muted" key={block.id} role="status">{uiT('structured.ui.unsupportedBlock')} {block.type}</div>;
         return null;
       })}
     </div>
     {mode === 'admin-preview' && <details className="qe-structured-debug">
-      <summary>{locale === 'hi' ? 'लेखक/समीक्षा विवरण' : 'Author/review details'}</summary>
-      <p>{locale === 'hi' ? 'कलाकृति:' : 'Artifact:'} {lesson.artifact_id}</p>
-      <p>{locale === 'hi' ? 'प्रकाशन अनुमति:' : 'Publication allowed:'} {String(lesson.workflow?.publication_allowed === true)}</p>
-      <button type="button" onClick={() => setShowBlocked(value => !value)}>{showBlocked ? (locale === 'hi' ? 'समीक्षा नोट छिपाएँ' : 'Hide review note') : (locale === 'hi' ? 'समीक्षा नोट दिखाएँ' : 'Show review note')}</button>
+      <summary>{uiT('structured.ui.authorReviewDetails')}</summary>
+      <p>{uiT('structured.ui.artifact')} {lesson.artifact_id}</p>
+      <p>{uiT('structured.ui.publicationAllowed')} {String(lesson.workflow?.publication_allowed === true)}</p>
+      <button type="button" onClick={() => setShowBlocked(value => !value)}>{showBlocked ? uiT('structured.ui.hideReviewNote') : uiT('structured.ui.showReviewNote')}</button>
       {showBlocked && <p>{localized(lesson.topic.title_by_locale, locale)} · {String(lesson.workflow?.status || 'UNKNOWN')} · {String(lesson.workflow?.source_completeness_status || 'SOURCE STATUS UNKNOWN')}</p>}
     </details>}
   </section>;
