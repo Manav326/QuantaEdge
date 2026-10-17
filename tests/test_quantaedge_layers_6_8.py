@@ -52,12 +52,13 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
       "summary":{"pages_scanned":1,"asset_count":1},"pages":[{"source_pdf_page_number":1,"page_text_sha256":sha(body)}],
       "assets":[{"asset_id":"asset-preview-1","kind":"page_preview","source_book_id":book,
         "source_pdf_sha256":pdfhash,"source_pdf_page_number":1,"asset_path":"assets/page-1.jpg",
-        "media_type":"image/jpeg","asset_sha256":asset_hash,"bbox":None}]}
+        "media_type":"image/jpeg","asset_sha256":asset_hash,"page_text_context":body[:1600],"bbox":None}]}
     write_json(inventory_path,inventory)
     raw_path=invdir/"visual-analysis-qwen2.5vl-3b.v1.json"
     raw_result={"asset_id":"asset-preview-1","asset_sha256":asset_hash,"source_book_id":book,
       "source_pdf_sha256":pdfhash,"source_pdf_page_number":1,"asset_path":"assets/page-1.jpg","asset_kind":"page_preview",
-      "model_provider":"ollama_local","model":"qwen2.5vl:3b","analysis_status":"DRAFT_REQUIRES_REVIEW","analysis":analysis,
+      "model_provider":"ollama_local","model":"qwen2.5vl:3b","prompt_version":"visual-analysis-prompt-v2",
+      "page_text_context_sha256":sha(body[:1600]),"analysis_status":"DRAFT_REQUIRES_REVIEW","analysis":analysis,
       "human_review_required":True,"publication_allowed":False}
     raw={"schema_version":"quantaedge.visual-analysis.v1","source_book_id":book,"source_pdf_sha256":pdfhash,
       "model":"qwen2.5vl:3b","prompt_version":"visual-analysis-prompt-v2","results":[raw_result],

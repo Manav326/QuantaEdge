@@ -263,6 +263,13 @@ def load_layer5_evidence(repo: Path, source: dict[str,Any]) -> tuple[Path,dict[s
         if (row.get("analysis_status")!="ANALYZED_REQUIRES_HUMAN_REVIEW" or
             not isinstance(row.get("effective_analysis"),dict) or raw_row is None or effective_row is None):
             raise ValueError(f"Layer 5 marks eligible visual {aid} incomplete despite COMPLETE status.")
+        expected_context_sha=sha(str(asset.get("page_text_context") or "")[:1600])
+        if raw_row.get("page_text_context_sha256")!=expected_context_sha:
+            raise ValueError(f"Layer 4 visual {aid} has a stale/missing page-text context fingerprint; resume Layers 1–5 before using this Layer 5 ledger.")
+        if (raw_row.get("source_book_id")!=source["book_id"] or
+            str(raw_row.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"] or
+            raw_row.get("model")!=raw.get("model") or raw_row.get("prompt_version")!=raw.get("prompt_version")):
+            raise ValueError(f"Layer 4 visual {aid} source/model/prompt fingerprint differs from its raw analysis sidecar.")
         if (raw_row.get("asset_sha256")!=asset_hash or raw_row.get("analysis_status")!="DRAFT_REQUIRES_REVIEW" or
             not isinstance(raw_row.get("analysis"),dict) or effective_row.get("asset_sha256")!=asset_hash or
             effective_row.get("effective_analysis")!=row.get("effective_analysis")):

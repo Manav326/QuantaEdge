@@ -103,6 +103,7 @@ jobs:
       contents: write
     env:
       CHECKPOINT_EVERY: ${{ inputs.checkpoint_every || '2' }}
+      MAX_MODEL_CALLS: ${{ inputs.max_model_calls || '6' }}
     steps:
       - name: Checkout main with checkpoint write permission
         uses: actions/checkout@v4
@@ -116,6 +117,7 @@ jobs:
       - name: Repeat checks on the execution checkout
         run: |
           [[ "$CHECKPOINT_EVERY" =~ ^[0-9]+$ ]] && (( CHECKPOINT_EVERY >= 1 && CHECKPOINT_EVERY <= 5 )) || { echo "checkpoint_every must be 1..5"; exit 2; }
+          [[ "$MAX_MODEL_CALLS" =~ ^[0-9]+$ ]] && (( MAX_MODEL_CALLS >= 1 && MAX_MODEL_CALLS <= 20 )) || { echo "max_model_calls must be 1..20"; exit 2; }
           python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
           python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
           python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v

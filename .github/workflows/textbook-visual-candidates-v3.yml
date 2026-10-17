@@ -286,6 +286,20 @@ jobs:
               source_meta=inv.get("source") or {}
               if inv.get("schema_version")!="quantaedge.visual-inventory.v1" or source_meta.get("book_id")!=source["book_id"] or str(source_meta.get("pdf_sha256") or "").lower()!=str(source["sha256"]).lower():
                   raise SystemExit(f"{source['book_slug']}: restored inventory identity/schema mismatch.")
+              text_path=work/source["text_jsonl_filename"]
+              if not text_path.is_file():
+                  raise SystemExit(f"{source['book_slug']}: current source page JSONL is missing; cannot verify saved inventory context.")
+              page_text_hashes={}
+              with text_path.open(encoding="utf-8") as stream:
+                  for line_no,line in enumerate(stream,1):
+                      if not line.strip(): continue
+                      try: row=json.loads(line)
+                      except json.JSONDecodeError as exc: raise SystemExit(f"{source['book_slug']}: malformed page JSONL line {line_no}.") from exc
+                      number=row.get("source_book_page_number",row.get("source_pdf_page_number"))
+                      text=row.get("text")
+                      if not isinstance(number,int) or isinstance(number,bool) or number<1 or not isinstance(text,str) or number in page_text_hashes:
+                          raise SystemExit(f"{source['book_slug']}: page JSONL has an invalid/duplicate page identity at line {line_no}.")
+                      page_text_hashes[number]=hashlib.sha256(text.encode("utf-8")).hexdigest()
               assets=inv.get("assets")
               if not isinstance(assets,list): raise SystemExit(f"{source['book_slug']}: inventory assets are malformed.")
               seen=set()
@@ -295,6 +309,9 @@ jobs:
                   if not isinstance(aid,str) or not aid or aid in seen: raise SystemExit(f"{source['book_slug']}: missing/duplicate inventory asset ID.")
                   seen.add(aid)
                   if asset.get("kind") not in {"embedded_image","page_preview"}: continue
+                  page_number=asset.get("source_pdf_page_number")
+                  if page_number not in page_text_hashes or asset.get("page_text_sha256")!=page_text_hashes[page_number]:
+                      raise SystemExit(f"{source['book_slug']}: extracted text changed or is unverifiable for visual {aid}; saved Layer 4 context cannot be resumed safely. Use analyze_all to rebuild the affected inventory/analysis.")
                   rel=asset.get("asset_path")
                   if not isinstance(rel,str) or not rel: raise SystemExit(f"{source['book_slug']}: eligible asset path missing.")
                   target=(invdir/rel).resolve()
