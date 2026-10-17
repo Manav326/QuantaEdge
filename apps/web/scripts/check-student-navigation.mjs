@@ -71,7 +71,7 @@ const studentMappedRoutes = [...new Set([...studentMapping.matchAll(/AppRoute\\.
 const parentMappedRoutes = [...new Set([...parentMapping.matchAll(/AppRoute\\.([A-Z_]+)/g)].map((match) => match[1]))].sort();
 assert.deepEqual(studentMappedRoutes, [...appRouteIds].sort(), 'Every Android route must have a documented student-group owner or explicit auth/parent exception.');
 assert.deepEqual(parentMappedRoutes, [...appRouteIds].sort(), 'Every Android route must have documented parent-group ownership or an explicit non-parent exception.');
-assert.ok(androidNavigationContract.includes('listOf("today", "courses", "learn", "practice", "progress", "library")'), 'Android contract must own the five canonical student group IDs.');
+assert.ok(androidNavigationContract.includes('listOf("today", "courses", "learn", "practice", "progress", "library")'), 'Android contract must own the six canonical student group IDs.');
 assert.ok(androidNavigationContract.includes('listOf("family", "children", "profile")'), 'Android contract must own the three parent group IDs.');
 
 const androidCertificates = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
@@ -321,17 +321,19 @@ const issue66StudentDashboardContract = read('../app/student/page.tsx');
 const issue66LiveClassApiContract = read('../../../services/api/src/main/java/com/quantaedge/api/LearningClassController.java');
 const issue66LiveClassTestsContract = read('../../../services/api/src/test/java/com/quantaedge/api/LearningClassControllerTest.java');
 assert.ok(issue66StudentDashboardContract.includes('/api/v1/learning/live-classes?') &&
+  issue66StudentDashboardContract.includes('&includeFuture=true&limit=100&offset=0') &&
   issue66StudentDashboardContract.includes('formatUserTimestamp(upcoming ? item.starts_at : item.ends_at)') &&
   issue66StudentDashboardContract.includes('dashboardNow - 3 * 24 * 60 * 60 * 1000') &&
   issue66StudentDashboardContract.includes('dashboardClassesBySubject'),
-  'The student dashboard must load authorized course-scoped live classes, show only future/current and the preceding three days, group by subject and format local user timestamps.');
+  'The student dashboard must load the full course-scoped live schedule, show only current/future and the preceding three days, group by subject, and format times consistently.');
 assert.ok(issue66LiveClassApiContract.includes('@GetMapping("/learning/live-classes")') &&
+  issue66LiveClassApiContract.includes('@RequestParam(defaultValue="false") Boolean includeFuture') &&
+  issue66LiveClassApiContract.includes("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')") &&
   issue66LiveClassApiContract.includes("cs.ends_at>now()-interval '60 days'") &&
-  !issue66LiveClassApiContract.slice(
-    issue66LiveClassApiContract.indexOf('@GetMapping("/learning/live-classes")'),
-    issue66LiveClassApiContract.indexOf('@PostMapping("/learning/live-classes/{sessionId}/join")')
-  ).includes("starts_at<=now()+interval '24 hours'"),
-  'The student class catalogue must keep recent history bounded while allowing scheduled classes beyond the next 24 hours; join eligibility remains a separate endpoint rule.');
-assert.ok(issue66LiveClassTestsContract.includes('studentClassCatalogueIncludesFarFutureScheduledSessionsAndKeepsCountScopeAligned') &&
-  issue66LiveClassTestsContract.includes('assertFalse(itemSql.getValue().contains("starts_at<=now()+interval \'24 hours\'"))'),
-  'Backend tests must guard full upcoming schedule visibility in both item and count SQL.');
+  issue66LiveClassApiContract.includes("Boolean.TRUE.equals(includeFuture)"),
+  'Full schedule visibility must be explicit for the dashboard while the normal class catalogue retains its 24-hour upcoming window and 60-day history boundary.');
+assert.ok(androidApp.includes('&includeFuture=true') &&
+  issue66LiveClassTestsContract.includes('studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow') &&
+  issue66LiveClassTestsContract.includes('eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0)'),
+  'Android dashboard and API tests must exercise the full-schedule query mode.');
+
