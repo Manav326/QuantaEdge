@@ -233,6 +233,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         mutableStateOf(InstitutionBrandingRepository.joinCodeFromIntent(launchIntent).orEmpty())
     }
     var institutionBrandIdentity by remember { mutableStateOf<InstitutionBrandIdentity?>(null) }
+    var institutionBrandResolutionPending by remember {
+        mutableStateOf(launchTenantCode != null ||
+            !preferences.getString("institutionCode", null).isNullOrBlank() ||
+            pendingInstitutionJoinCode.isNotBlank())
+    }
     LaunchedEffect(launchIntent) {
         val linkedCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
         val incomingJoinCode = InstitutionBrandingRepository.joinCodeFromIntent(launchIntent)
@@ -244,6 +249,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         val incomingCode = linkedCode ?: configuredTenantCode
         if (incomingCode != null) {
             val previousCode = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
+            if (previousCode != incomingCode) {
+                institutionBrandIdentity = null
+                themeController.clearInstitutionTheme()
+                institutionBrandResolutionPending = true
+            }
             activeTenantCode = incomingCode
             preferences.edit().putString("institutionCode", incomingCode).apply()
             if (previousCode != incomingCode && incomingJoinCode == null) {
@@ -252,6 +262,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         } else if (incomingJoinCode != null) {
             // A code-only invitation determines its tenant on the server; do not bind it
             // to a different school remembered from a previous learner/session.
+            institutionBrandIdentity = null
+            themeController.clearInstitutionTheme()
+            institutionBrandResolutionPending = true
             activeTenantCode = ""
             preferences.edit().remove("institutionCode").apply()
         }
@@ -268,10 +281,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (stateOwnerKey == "anonymous" && launchTenantCode == null) {
             institutionBrandIdentity = null
             themeController.clearInstitutionTheme()
+            activeTenantCode = ""
+            preferences.edit().remove("institutionCode").apply()
+            institutionBrandResolutionPending = pendingInstitutionJoinCode.isNotBlank()
             return@LaunchedEffect
         }
+        institutionBrandResolutionPending = true
         var code = InstitutionBrandingRepository.normalizeCode(launchTenantCode)
             ?: InstitutionBrandingRepository.normalizeCode(activeTenantCode)
+            ?: configuredTenantCode
         try {
             if (pendingInstitutionJoinCode.isNotBlank() && role == "STUDENT" && stateOwnerKey != "anonymous") {
                 val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode, code)
@@ -323,6 +341,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 InstitutionBrandIdentity(code, fallbackName, packagedLogo, null, 0L, "{}")
             } else null
             themeController.clearInstitutionTheme()
+        } finally {
+            institutionBrandResolutionPending = false
         }
     }
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
@@ -3125,7 +3145,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
         color = MaterialTheme.colorScheme.background
     ) {
-        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalInstitutionBrandIdentity provides institutionBrandIdentity) {
+        CompositionLocalProvider(LocalQuantaLanguage provides language, LocalInstitutionBrandIdentity provides institutionBrandIdentity, LocalInstitutionBrandResolutionPending provides institutionBrandResolutionPending) {
         Row(modifier = Modifier.fillMaxSize()) {
             if (signedIn && landscapeLayout && route != AppRoute.TUTOR && liveBroadcastVideoId.isBlank() && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
