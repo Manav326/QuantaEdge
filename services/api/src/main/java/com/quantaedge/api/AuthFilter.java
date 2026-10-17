@@ -27,6 +27,8 @@ public class AuthFilter extends OncePerRequestFilter {
   private String hrmsOrigins = "http://localhost:3002";
   @Value("${app.auth.workspace-origins.learning:http://localhost:3000}")
   private String learningOrigins = "http://localhost:3000";
+  @Value("${app.auth.workspace-origins.institution:http://localhost:3003}")
+  private String institutionOrigins = "http://localhost:3003";
 
   private static Set<String> parseOrigins(String raw) {
     if (raw == null || raw.isBlank()) return Set.of();
@@ -104,13 +106,15 @@ public class AuthFilter extends OncePerRequestFilter {
         Set<String> educationOrigins = parseOrigins(educationAdminOrigins);
         Set<String> hrmsOriginSet = parseOrigins(hrmsOrigins);
         Set<String> learningOriginSet = parseOrigins(learningOrigins);
+        Set<String> institutionOriginSet = parseOrigins(institutionOrigins);
         boolean expectedWorkspace =
             (educationOrigins.contains(origin) && ("STAFF".equals(workspace) || "EDUCATION_ADMIN".equals(workspace)))
             || (hrmsOriginSet.contains(origin) && "HRMS".equals(workspace))
             || (learningOriginSet.contains(origin)
-                && ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace)));
+                && ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace)))
+            || (institutionOriginSet.contains(origin) && "INSTITUTION".equals(workspace));
         boolean registeredOrigin = educationOrigins.contains(origin)
-            || hrmsOriginSet.contains(origin) || learningOriginSet.contains(origin);
+            || hrmsOriginSet.contains(origin) || learningOriginSet.contains(origin) || institutionOriginSet.contains(origin);
         if (!registeredOrigin || !expectedWorkspace) {
           response.setStatus(HttpServletResponse.SC_FORBIDDEN);
           response.setCharacterEncoding("UTF-8");
@@ -129,6 +133,14 @@ public class AuthFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().write("{\"error\":\"AUTH_OPERATION_SCOPE_MISMATCH\",\"message\":\"This authentication operation is not available in the requested application workspace.\"}");
+        return;
+      }
+      if (!preflight && "INSTITUTION".equals(workspace) && path.startsWith("/api/v1/")
+          && !path.startsWith("/api/v1/institution/") && !path.startsWith("/api/v1/auth/")) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"WORKSPACE_MISMATCH\",\"message\":\"Institution sessions can access only institution reporting endpoints.\"}");
         return;
       }
       if (!preflight && hrmsEndpoint && !"HRMS".equals(workspace)) {
