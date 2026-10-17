@@ -7,7 +7,7 @@ from pathlib import Path
 
 from scripts.prepare_visual_candidate_batch import (
     MANIFEST_SCHEMA, extract_archive, inventory_context, missing_artifact, validate_bundle,
-    validate_legacy_inventory, validate_pack, write_bundle_manifest,
+    validate_layer1_inventory, validate_legacy_inventory, validate_pack, write_bundle_manifest,
 )
 
 
@@ -64,6 +64,36 @@ class CandidateBundleCheckpointTests(unittest.TestCase):
             tar.add(item, arcname="../escape.txt")
         with self.assertRaisesRegex(ValueError, "unsafe archive path"):
             extract_archive(archive, self.root / "unpacked", self.source["book_slug"])
+
+    def _layer1_fixture(self):
+        work = self.root / "source-work"
+        inventory_dir = work / "inventory"
+        inventory_dir.mkdir(parents=True)
+        page_text = "Water cycle"
+        (work / "pages.jsonl").write_text(json.dumps({"source_book_page_number": 1, "text": page_text}) + "\n", encoding="utf-8")
+        (work / "source.manifest.json").write_text(json.dumps({"page_count": 1}), encoding="utf-8")
+        (inventory_dir / "page-0001.jpg").write_bytes(b"preview")
+        context_hash = hashlib.sha256(page_text.encode("utf-8")).hexdigest()
+        inventory = {
+            "schema_version": "quantaedge.visual-inventory.v1",
+            "source": {"book_id": self.source["book_id"], "pdf_sha256": self.source["sha256"], "pdf_page_count": 1},
+            "pages": [{"source_pdf_page_number": 1, "page_text_sha256": context_hash}],
+            "assets": [{"asset_id": "page-1", "kind": "page_preview", "source_pdf_page_number": 1,
+                        "page_text_sha256": context_hash, "asset_path": "page-0001.jpg",
+                        "asset_sha256": hashlib.sha256(b"preview").hexdigest()}],
+        }
+        (inventory_dir / "visual-inventory.v1.json").write_text(json.dumps(inventory), encoding="utf-8")
+        return work, dict(self.source, text_jsonl_filename="pages.jsonl"), inventory_dir
+
+    def test_layer1_inventory_validates_source_context_and_assets(self):
+        work, source, inventory_dir = self._layer1_fixture()
+        self.assertEqual("quantaedge.visual-inventory.v1", validate_layer1_inventory(work, source, inventory_dir)["schema_version"])
+        path = inventory_dir / "visual-inventory.v1.json"
+        inventory = json.loads(path.read_text(encoding="utf-8"))
+        inventory["assets"][0]["page_text_sha256"] = hashlib.sha256(b"stale").hexdigest()
+        path.write_text(json.dumps(inventory), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "stale/unverified text context"):
+            validate_layer1_inventory(work, source, inventory_dir)
 
     def test_only_explicit_registry_missing_responses_allow_rebuild(self):
         self.assertTrue(missing_artifact("Error: HTTP 404 manifest not found"))
