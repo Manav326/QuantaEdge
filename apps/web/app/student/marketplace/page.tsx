@@ -268,7 +268,7 @@ export default function StudentMarketplacePage() {
                     <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>Open course</Link>
                   ) : !validPrice ? (
                     <button className={styles.disabledButton} type="button" disabled>Not available for purchase</button>
-                  ) : offer.parent_managed ? (
+                  ) : offer.parent_managed && offer.price_paise > 0 ? (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null}
                       onClick={() => void askParentToBuy(offer.course_id)}>
                       {busyCourseId === offer.course_id ? 'Sending request…' : 'Ask parent to buy'}

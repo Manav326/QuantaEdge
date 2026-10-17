@@ -113,6 +113,8 @@ public class CourseMarketplaceController {
           where ce.course_id=p.id and ce.holder_user_id=?)
          or exists(select 1 from student st join student_program_enrollment e on e.student_id=st.id
           where st.user_account_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))) as owned_by_parent,
+        exists(select 1 from course_entitlement ce
+          where ce.course_id=p.id and ce.holder_user_id=? and ce.transfer_count=0) as transferable_by_parent,
         (exists(select 1 from course_entitlement ce
           join guardian_student gs on gs.student_id=ce.holder_student_id
           where ce.course_id=p.id and gs.guardian_user_id=?
@@ -134,7 +136,7 @@ public class CourseMarketplaceController {
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.status='PUBLISHED'
       order by p.display_name,p.id
-      """, parentId, parentId, parentId, parentId, parentId);
+      """, parentId, parentId, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
