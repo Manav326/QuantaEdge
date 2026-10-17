@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
+import { useTenantBranding } from '../../components/TenantBrandingProvider';
 import styles from './Certificates.module.css';
 
 function localizedTrackName(code: string | undefined, name: string | undefined, language: string) {
@@ -43,6 +44,7 @@ function StudentCertificatesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
+  const { brand } = useTenantBranding();
   const [profile, setProfile] = useState<any>(null);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [directCertificate, setDirectCertificate] = useState<Certificate | null>(null);
@@ -257,7 +259,7 @@ function StudentCertificatesContent() {
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'QuantaEdge-' + requestedCertificate.certificate_number + '.' + previewFormat;
+      link.download = 'Certificate-' + requestedCertificate.certificate_number + '.' + previewFormat;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -281,6 +283,7 @@ function StudentCertificatesContent() {
           templateId: 'CLASSIC',
           language,
         };
+        if (brand?.institutionCode) body.institutionCode = brand.institutionCode;
         if (Number(selectedAssessment.course_id) > 0) body.courseId = Number(selectedAssessment.course_id);
         const response = await fetch('/api/v1/students/me/certificates/issue', {
           method: 'POST',
@@ -312,6 +315,7 @@ function StudentCertificatesContent() {
     setNotice('');
     try {
       const body: Record<string, unknown> = { achievementType, templateId: 'CLASSIC', language };
+      if (brand?.institutionCode) body.institutionCode = brand.institutionCode;
       if (achievementType === 'SUBJECT_COMPLETION') {
         if (!selectedTrack) throw new Error(translateUi(locale, 'legacy.web.choose.an.active.subject.track.65a5b52d'));
         body.subjectCode = selectedTrack.subject_code;
