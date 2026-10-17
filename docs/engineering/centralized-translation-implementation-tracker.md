@@ -2,7 +2,7 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
-**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `780adccfd3b8f98c36c84776d0f6fb5a32dc1641`. [Baseline commit](https://github.com/Manav326/QuantaEdge/commit/780adccfd3b8f98c36c84776d0f6fb5a32dc1641).
+**Last reviewed:** 2026-10-17. Current reviewed `main` baseline: `0cbc2624be85bcfb61d90da9a629097c606405b5`. [Current baseline commit](https://github.com/Manav326/QuantaEdge/commit/0cbc2624be85bcfb61d90da9a629097c606405b5).
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
 
@@ -42,7 +42,7 @@
 | People Operations page bodies | Not complete | Shell/navigation/selector migrated; individual pages still need centralized interface strings. |
 | Dynamic server/API/database content | Not complete as a generalized runtime service | QuantaEdge already has contextual, source-versioned, review-gated curriculum translation tooling documented below. The new UI catalog does not translate arbitrary database/API text, and no frontend should call an AI provider directly. |
 | Coverage inventory and anti-regression guard | In progress | CI verifies catalog and app-copy parity. A complete page/component string-coverage check and exception register remain to be built. |
-| Production build validation | Pending after last fixes | See CI state below; do not mark green until the follow-up run on the latest commit has finished successfully. |
+| Production build validation | Pending after current fix | [Run #2991](https://github.com/Manav326/QuantaEdge/actions/runs/38994304777) for `0cbc2624be85` was queued when last checked. The previous run #2981 failed the Admin image build on malformed retry-button JSX; that exact syntax issue was fixed in `0cbc2624be85`. Do not mark green until #2991 required jobs finish. |
 
 ### Representative implementation commits
 
@@ -126,7 +126,7 @@ Preserve these rules when implementing the next phase:
 
 ## CI history and current validation status
 
-Recent runs exposed integration issues during the active migration. The earlier failures included duplicate `UiText` imports, a stale admin navigation property access after navigation items became key-based, and a People UI contract asserting the old inline label rather than the new catalog key; those were fixed in commit `07e72efdd2c99524b985b6a6886504bb36cc9498`. Run #2962 then surfaced four TutorDock TypeScript errors from incorrectly invoking the standalone translator as a property of `languageRef.current` / `current`; this was fixed in `fd5f1f725c6a25e875966e355edd7fdd29339298`. The follow-up run #2967 for admin login at `7cd22a47a9457738a7c7dc8672f8010e81c89220` was still running when the next changes were made. The current Language Review page is at `d188ac4fc09383b24514e45d1bf2ed26f5ab155a`; its build run #2970 was queued at last check. Catalog validation during the current session shows **1,578 keys per locale**, identical key sets, zero blank messages, and all six generated catalog copies byte-identical. Latest known full CI run is [#2981 on `780adccfd3`](https://github.com/Manav326/QuantaEdge/actions/runs/38993842189), which was still `in_progress` at the latest status check; only the initial `Checkout` steps for the first jobs had been observed, with no failure reported yet. Treat it as **pending**, not green, until all required jobs finish successfully. This is a source-level parity check; the GitHub workflow must still pass before P0 is complete. Do not interpret cancelled superseded runs as successful validation.
+Recent runs exposed integration issues during the active migration. Earlier regressions—duplicate `UiText` imports, a stale admin navigation property access after navigation items became key-based, and a People UI contract asserting the old inline label—were fixed in `07e72efdd2c99524b985b6a6886504bb36cc9498`. Run #2962 exposed TutorDock TypeScript errors and was fixed in `fd5f1f725c6a25e875966e355edd7fdd29339298`. The catalog currently has **1,578 keys per locale**, identical key sets, zero blank values, and all six generated JSON copies byte-identical (source-level verification on `main`). Run [#2981 on `780adccfd3`](https://github.com/Manav326/QuantaEdge/actions/runs/38993842189) has since completed with a **Build admin image failure**: `apps/admin/app/page.tsx` contained a malformed retry button whose opening `<button>` tag lacked the terminating `>` before the translated label. That exact syntax error was fixed on `main` in [commit `0cbc2624be85`](https://github.com/Manav326/QuantaEdge/commit/0cbc2624be85bcfb61d90da9a629097c606405b5). Follow-up run [#2991](https://github.com/Manav326/QuantaEdge/actions/runs/38994304777) was pending when this tracker was updated. Treat CI as **not yet green** until #2991 finishes all required jobs successfully; cancelled superseded runs do not count as successful validation.
 
 ## Latest session update — 2026-10-17
 
@@ -144,3 +144,14 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 
 
 
+
+
+## Latest session update — 2026-10-17 (after Admin build failure investigation)
+
+- Resumed from the latest repository state instead of relying on the earlier chat checkpoint. Latest `main` baseline at this note: [ `0cbc2624be85` ](https://github.com/Manav326/QuantaEdge/commit/0cbc2624be85bcfb61d90da9a629097c606405b5). No new branch was created.
+- Confirmed catalog integrity directly against the files on this `main`: **1,578 English keys, 1,578 Hinglish keys, identical key sets, 0 blank messages in either locale**. All six generated JSON copies across web/admin/People exactly match the two canonical catalog files.
+- Inspected [run #2981](https://github.com/Manav326/QuantaEdge/actions/runs/38993842189). Android, API verification, content safeguards, web image and People image passed, but **Admin image build failed** due a JSX parse error in the dashboard retry button at `apps/admin/app/page.tsx:69`.
+- Fixed the exact defect in [ `0cbc2624be85` ](https://github.com/Manav326/QuantaEdge/commit/0cbc2624be85bcfb61d90da9a629097c606405b5) by properly terminating the opening `<button>` tag before its localized label. This changes no dashboard data, access, or action behavior.
+- Triggered follow-up [run #2991](https://github.com/Manav326/QuantaEdge/actions/runs/38994304777) for the fix commit. It was `pending` at documentation time; do **not** claim green until its Admin build and all required checks finish successfully.
+- Latest implementation scope already represented in this tracker includes centralized static interface keys and hooks, shared locale preference, shell/nav copy, landing/login, parent portal, broad student learning/practice/tests/textbooks/profile/progress/certificates/classes, TutorDock, student account lifecycle, legal/session messages, and early Admin dashboard/Language Review/student/parent directory work. Remaining high-priority scope remains the rest of Admin page bodies, all People page bodies, full route/string coverage guard, locale persistence/browser tests, and a deliberate design using the existing source-versioned review-gated translator for dynamic learning content—not an unreviewed duplicate AI service.
+- Next: inspect #2991's result; fix any further errors it reports; then continue the Admin and People route-by-route migration. Update this tracker after each meaningful batch and record the exact commit and CI result.
