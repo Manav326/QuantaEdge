@@ -268,6 +268,20 @@ export default function InstitutionPortalPage() {
     }
   }
 
+  async function copyLearnerLink() {
+    const code = principal?.institutionCode?.trim().toUpperCase();
+    const joinCode = principal?.joinCode?.trim();
+    if (!code || !joinCode) return;
+    const link = new URL('/institution/' + encodeURIComponent(code), window.location.origin);
+    link.hash = new URLSearchParams({ join: joinCode }).toString();
+    try {
+      await navigator.clipboard.writeText(link.toString());
+      setNotice('School learning link copied. Share it with your enrolled learners.');
+    } catch {
+      setNotice('Copy this school learning link: ' + link.toString());
+    }
+  }
+
   const heading = principal?.institutionName || brand?.displayName || 'Institution portal';
   const customPrimary = brand?.themeTokens?.primary;
   const cssStyle = {
@@ -361,9 +375,14 @@ export default function InstitutionPortalPage() {
         <section className="institution-dashboard">
           <div className="institution-page-heading">
             <div><span className="institution-eyebrow">INSTITUTION REPORTS</span><h1>{heading}</h1><p>View-only insight into the learners and courses linked to this institution.</p></div>
-            <button type="button" className="institution-code-button" onClick={() => void copyCode()} disabled={!principal.joinCode}>
-              <span>Institution join code</span><strong>{principal.joinCode || 'Not available'}</strong><small>{principal.joinCode ? 'Copy and share with learners' : 'Ask the platform owner to issue a code'}</small>
-            </button>
+            <div className="institution-enrollment-actions">
+              <button type="button" className="institution-code-button" onClick={() => void copyLearnerLink()} disabled={!principal.joinCode || !principal.institutionCode}>
+                <span>School learning link</span><strong>{principal.institutionCode ? heading : 'Link unavailable'}</strong><small>{principal.joinCode ? 'Copy and share with learners' : 'Ask the platform owner to issue a code'}</small>
+              </button>
+              <button type="button" className="institution-quiet-button" onClick={() => void copyCode()} disabled={!principal.joinCode}>
+                Copy join code
+              </button>
+            </div>
           </div>
           <nav className="institution-tabs" aria-label="Institution report sections">
             {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses']] as const).map(([id,label]) =>
