@@ -281,7 +281,6 @@ public class InstitutionAuthService {
   }
 
   @Transactional
-  @Transactional
   public Map<String,Object> redeemJoinCode(String suppliedCode, long studentId, String sourceHash) {
     return redeemJoinCode(suppliedCode, studentId, sourceHash, null);
   }
