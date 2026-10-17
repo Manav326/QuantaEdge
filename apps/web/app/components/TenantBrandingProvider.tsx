@@ -280,6 +280,55 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
             saveSessionCode(joinedCode);
             applyTenantIdentity(joinedBrand);
           }
+
+          // A remembered school may belong to the previous account on this browser.
+          // After learner authentication, validate it against this account before retaining it.
+          if (pathname.startsWith('/student') && !joinedCode && !urlCode && !hasUrlJoin &&
+              !storedJoinTenant && !readPendingJoinCode()) {
+            const membershipResponse = await fetch(
+              '/api/v1/institution/memberships/me?institutionCode=' + encodeURIComponent(candidate),
+              { credentials: 'same-origin', cache: 'no-store',
+                headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' } }
+            );
+            if (membershipResponse.ok) {
+              const scoped = await membershipResponse.json() as { institutions?: Array<{
+                tenant_code?: string; institution_status?: string; membership_status?: string;
+              }> };
+              const belongsToCandidate = (scoped.institutions || []).some(item =>
+                normalizedCode(item.tenant_code) === candidate &&
+                item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE');
+              if (!belongsToCandidate) {
+                saveSessionCode(null);
+                const fallbackResponse = await fetch('/api/v1/institution/memberships/me', {
+                  credentials: 'same-origin', cache: 'no-store',
+                  headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' },
+                });
+                let fallbackCode: string | null = null;
+                if (fallbackResponse.ok) {
+                  const fallback = await fallbackResponse.json() as { institutions?: Array<{
+                    tenant_code?: string; institution_status?: string; membership_status?: string;
+                  }>; requiresInstitutionContext?: boolean };
+                  const active = (fallback.institutions || []).filter(item =>
+                    item.institution_status === 'ACTIVE' && item.membership_status === 'ACTIVE');
+                  if (active.length === 1) fallbackCode = normalizedCode(active[0].tenant_code);
+                  if (fallback.requiresInstitutionContext) setInstitutionContextRequested(true);
+                }
+                if (fallbackCode) {
+                  const fallbackBrand = await fetchTenantBrand(fallbackCode);
+                  if (cancelled) return;
+                  setBrand(fallbackBrand);
+                  setInstitutionContextRequested(true);
+                  saveSessionCode(fallbackCode);
+                  applyTenantIdentity(fallbackBrand);
+                } else {
+                  setBrand(null);
+                  setInstitutionContextRequested(true);
+                  applyTenantIdentity(null, true);
+                }
+                return;
+              }
+            }
+          }
           return;
         } catch {
           if (cancelled) return;
