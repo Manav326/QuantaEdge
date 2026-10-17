@@ -368,7 +368,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var resultsTotal by remember { mutableStateOf(0) }
     var assessmentCertificateEligibility by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var pendingCertificateBytes by remember { mutableStateOf<ByteArray?>(null) }
-    var pendingCertificateFilename by remember { mutableStateOf("quantaedge-certificate.pdf") }
+    var pendingCertificateFilename by remember { mutableStateOf("certificate.pdf") }
     var certificatePreviewOpen by rememberSaveable { mutableStateOf(false) }
     var certificatePreviewFile by remember { mutableStateOf<java.io.File?>(null) }
     var certificatePreviewBitmap by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
@@ -835,7 +835,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 // Preserve the session-validation error even if the best-effort logout call fails.
                 runCatching { ApiClient.postObject("/api/v1/auth/logout", JSONObject()) }
                 ApiClient.clearSession()
-                throw IOException("QuantaEdge could not confirm the verified Google account.")
+                throw IOException("The verified Google account could not be confirmed.")
             }
             ApiClient.setWorkspace(workspace)
             refreshUser()
@@ -1672,7 +1672,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val directory = java.io.File(context.cacheDir, "certificates")
             if (!directory.exists() && !directory.mkdirs()) throw IOException("Could not prepare certificate preview.")
-            val file = java.io.File(directory, "quantaedge-certificate-" + certificateId + ".pdf")
+            val file = java.io.File(directory, "certificate-" + certificateId + ".pdf")
             withContext(Dispatchers.IO) { file.writeBytes(bytes) }
             val rendered = withContext(Dispatchers.IO) { renderCertificatePreviewPage(file, 0) }
             certificatePreviewFile = file
@@ -1697,7 +1697,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 .replace(Regex("[^A-Za-z0-9_-]"), "_")
                 .ifBlank { certificateId.toString() }
             pendingCertificateBytes = bytes
-            pendingCertificateFilename = "quantaedge-$certificateNumber.$format"
+            pendingCertificateFilename = "certificate-$certificateNumber.$format"
             if (format == "pdf") resultCertificatePdfLauncher.launch(pendingCertificateFilename)
             else resultCertificatePngLauncher.launch(pendingCertificateFilename)
         }
@@ -1817,8 +1817,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 else row
             }
             status = if (provider == "YOUTUBE_LIVE") {
-                if (language == "hi") "उपस्थिति दर्ज है। YouTube live प्रसारण QuantaEdge में खुल गया है।"
-                else "Attendance is recorded. The YouTube Live broadcast is open in QuantaEdge."
+                if (language == "hi") "उपस्थिति दर्ज है। YouTube live प्रसारण खुल गया है।"
+                else "Attendance is recorded. The YouTube Live broadcast is open."
             } else {
                 if (language == "hi") "Live class में शामिल होने की attendance दर्ज हो गई है।"
                 else "Attendance is recorded for the live class."
@@ -2662,7 +2662,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val directory = java.io.File(context.cacheDir, "certificates")
             if (!directory.exists() && !directory.mkdirs()) throw IOException("Could not prepare certificate preview.")
-            val file = java.io.File(directory, "quantaedge-child-" + childId + "-certificate-" + certificateId + ".pdf")
+            val file = java.io.File(directory, "child-certificate-" + childId + "-certificate-" + certificateId + ".pdf")
             withContext(Dispatchers.IO) { file.writeBytes(bytes) }
             val uri = androidx.core.content.FileProvider.getUriForFile(
                 context, context.packageName + ".fileprovider", file
@@ -2686,7 +2686,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             pendingCertificateBytes = bytes
-            pendingCertificateFilename = "quantaedge-child-$childId-certificate-$certificateId.$format"
+            pendingCertificateFilename = "child-$childId-certificate-$certificateId.$format"
             if (format == "pdf") resultCertificatePdfLauncher.launch(pendingCertificateFilename)
             else resultCertificatePngLauncher.launch(pendingCertificateFilename)
         }
@@ -5139,7 +5139,7 @@ private fun LessonScreen(
                 onClick = onRestoreTutor,
                 modifier = Modifier.align(Alignment.BottomEnd).padding(end = 18.dp, bottom = 84.dp)
                     .semantics {
-                        contentDescription = if (language == "hi") "क्वांटाएज ट्यूटर फिर खोलें" else "Restore QuantaEdge Tutor"
+                        contentDescription = if (language == "hi") "ट्यूटर फिर खोलें" else "Restore tutor"
                     },
                 containerColor = Color(0xFF172033),
                 contentColor = Color.White
@@ -6250,8 +6250,8 @@ private fun ResourcesScreen(
             TextButton(onClick = onRefresh, enabled = !busy) { Text(t("Refresh", "रिफ्रेश")) }
         }
         Text(
-            t("Read protected learning content inside QuantaEdge. Offline copies are encrypted and remain private to this account on this device.",
-                "संरक्षित सामग्री QuantaEdge ऐप में पढ़ें। Offline copies encrypted रहती हैं और इस डिवाइस पर इसी खाते के लिए निजी रहती हैं।"),
+            t("Read protected learning content in this app. Offline copies are encrypted and remain private to this account on this device.",
+                "संरक्षित सामग्री इस ऐप में पढ़ें। Offline copies encrypted रहती हैं और इस डिवाइस पर इसी खाते के लिए निजी रहती हैं।"),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -6642,8 +6642,8 @@ private fun DocumentReaderScreen(
             }
         }
 
-        Text(t("Protected learning content stays inside QuantaEdge; download/export/share of the source PDF is not available.",
-            "संरक्षित पढ़ाई की सामग्री QuantaEdge में ही रहती है; मूल PDF को डाउनलोड/export/share नहीं किया जा सकता।"),
+        Text(t("Protected learning content stays inside this app; download/export/share of the source PDF is not available.",
+            "संरक्षित पढ़ाई की सामग्री इसी ऐप में रहती है; मूल PDF को डाउनलोड/export/share नहीं किया जा सकता।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
     }
 }
