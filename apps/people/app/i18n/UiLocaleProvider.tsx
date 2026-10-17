@@ -69,3 +69,17 @@ export function useUiTranslation() {
   if (!context) throw new Error('useUiTranslation must be used inside UiLocaleProvider');
   return context;
 }
+
+
+export function PeopleLanguageSwitcher() {
+  const { locale, setLocale, t } = useUiTranslation();
+  return (
+    <label className="qe-people-language-select">
+      <span>{t('common.language.label')}</span>
+      <select value={locale} onChange={event => setLocale(event.target.value as UiLocale)} aria-label={t('common.language.label')}>
+        <option value="hinglish">{t('common.language.hinglish')}</option>
+        <option value="english">{t('common.language.english')}</option>
+      </select>
+    </label>
+  );
+}

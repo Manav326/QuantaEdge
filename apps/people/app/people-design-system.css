@@ -1534,3 +1534,8 @@ button:disabled,
 .qe-people-language-select{display:flex;align-items:center;gap:8px;min-width:0;color:var(--muted);font-size:12px;font-weight:650;white-space:nowrap}
 .qe-people-language-select select{width:auto;max-width:220px;min-height:38px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font:inherit}
 @media(max-width:760px){.qe-people-language-select>span{display:none}.qe-people-language-select select{max-width:160px}}
+
+
+.qe-people-auth-language{display:flex;justify-content:flex-end;margin-bottom:16px}
+.qe-people-auth-language .qe-people-language-select{white-space:normal}
+.qe-people-auth-language .qe-people-language-select>span{display:none}

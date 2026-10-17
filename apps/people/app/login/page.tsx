@@ -1,11 +1,12 @@
 'use client';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
+import { useUiTranslation, PeopleLanguageSwitcher } from '../i18n/UiLocaleProvider';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-async function api(path: string, body: Record<string, unknown>) {
+async function api(path: string, body: Record<string, unknown>, statusMessage: (status: number) => string) {
   const response = await fetch(path, {
     method: 'POST',
     credentials: 'same-origin',
@@ -16,12 +17,13 @@ async function api(path: string, body: Record<string, unknown>) {
   const raw = await response.text();
   let data: Record<string, any> = {};
   try { data = raw ? JSON.parse(raw) : {}; } catch { data = { message: raw }; }
-  if (!response.ok) throw new Error(data.message || data.detail || data.error || `Sign-in failed (${response.status}).`);
+  if (!response.ok) throw new Error(data.message || data.detail || data.error || statusMessage(response.status));
   return data;
 }
 
 export default function PeopleLogin() {
   const router = useRouter();
+  const { t } = useUiTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -31,7 +33,7 @@ export default function PeopleLogin() {
     setBusy(true);
     setError('');
     try {
-      const session = await api('/api/v1/auth/hrms-login', { username: username.trim(), password });
+      const session = await api('/api/v1/auth/hrms-login', { username: username.trim(), password }, status => t('people.auth.signInFailed', { status }));
       const meResponse = await fetch('/api/v1/auth/me', {
         headers: { 'X-QE-Workspace': 'HRMS' },
         credentials: 'same-origin',
@@ -39,11 +41,11 @@ export default function PeopleLogin() {
       });
       const me = await meResponse.json();
       if (!meResponse.ok || !me.staffId || me.workspace !== 'HRMS') {
-        throw new Error(me.message || 'Could not validate the HRMS session.');
+        throw new Error(me.message || t('people.auth.sessionInvalid'));
       }
       router.replace(session.mustChangePassword || me.mustChangePassword ? '/change-password' : '/');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not sign in to People Operations.');
+      setError(cause instanceof Error ? cause.message : t('people.auth.signInError'));
     } finally {
       setBusy(false);
     }
@@ -52,22 +54,23 @@ export default function PeopleLogin() {
   return (
     <main className="login-wrap">
       <aside className="login-story">
-        <div className="qe-people-login-brand"><QuantaEdgeBrand href={null} variant="auth" className="qe-people-login-brand-lockup" /><span>PEOPLE OPERATIONS</span></div>
+        <div className="qe-people-login-brand"><QuantaEdgeBrand href={null} variant="auth" className="qe-people-login-brand-lockup" /><span>{t('people.auth.brandTitle')}</span></div>
         <div>
-          <div className="eyebrow">SECURE HRMS WORKSPACE</div>
-          <h1>Great learning starts with great people.</h1>
-          <p>Employee records, attendance, leave, payroll and team operations in a dedicated, access-controlled workspace.</p>
+          <div className="eyebrow">{t('people.auth.secureWorkspace')}</div>
+          <h1>{t('people.auth.loginHeadline')}</h1>
+          <p>{t('people.auth.loginDescription')}</p>
         </div>
-        <footer className="small" style={{ color: '#c3d0e5' }}>QUANTAEDGE · PEOPLE OPERATIONS</footer>
+        <footer className="small" style={{ color: '#c3d0e5' }}>{t('people.auth.brandTitle')}</footer>
       </aside>
       <section className="login-panel">
         <div className="login-card">
-          <div className="eyebrow">EMPLOYEE ACCESS</div>
-          <h2>Sign in to People Operations</h2>
-          <p>Use the HRMS username and password assigned to your account. HRMS sign-in does not use OTP.</p>
+          <div className="qe-people-auth-language"><PeopleLanguageSwitcher /></div>
+          <div className="eyebrow">{t('people.auth.employeeAccess')}</div>
+          <h2>{t('people.auth.loginTitle')}</h2>
+          <p>{t('people.auth.loginInstructions')}</p>
           {error && <PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
           <form onSubmit={(event) => { event.preventDefault(); if (!busy) void signIn(); }}>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">{t('people.auth.username')}</label>
             <input
               id="username"
               className="input"
@@ -77,7 +80,7 @@ export default function PeopleLogin() {
               placeholder="HRMS_Admin"
               required
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('people.auth.password')}</label>
             <input
               id="password"
               className="input"
@@ -88,10 +91,10 @@ export default function PeopleLogin() {
               required
             />
             <PeopleButton variant="primary" loading={busy} disabled={!username.trim() || !password}>
-              {busy ? 'Signing in securely…' : 'Sign in securely'}
+              {busy ? t('people.auth.signingIn') : t('people.auth.signIn')}
             </PeopleButton>
           </form>
-          <p className="small">For a forgotten password, contact the authorised People Operations administrator. Never share your password.</p>
+          <p className="small">{t('people.auth.forgottenPassword')}</p>
         </div>
       </section>
     </main>
