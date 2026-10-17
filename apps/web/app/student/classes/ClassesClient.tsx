@@ -257,7 +257,7 @@ export default function StudentClassesClient(){
         <PremiumPagination page={recordingPage} total={recordingsTotal} pageSize={recordingPageSize} onPageChange={setRecordingPage}
           onPageSizeChange={size=>{setRecordingPageSize(size);setRecordingPage(0);}} itemLabel={translateUi(locale, 'legacy.web.recordings.081cdae6')} loading={loading} />
       </>}
-      <div className={styles.privacyNote}><span>🔒</span><p><b>{translateUi(locale, 'legacy.web.protected.class.access.e1bd23e6')}</b> {translateUi(locale, 'legacy.web.meeting.links.and.video.file.paths.are.6b5c8429')}</p></div>
+      <div className={styles.privacyNote}><span>🔒</span><p><b>{translateUi(locale, 'legacy.web.protected.class.access.e1bd23e6')}</b> {t('Meeting links and video paths are not listed publicly. The app verifies your account and active subject enrollment for join and playback. A browser cannot fully prevent recording of content already displayed.', 'मीटिंग लिंक और वीडियो पथ सार्वजनिक रूप से नहीं दिखाए जाते। ऐप जुड़ने और प्लेबैक से पहले आपके खाते और सक्रिय विषय नामांकन की जाँच करता है। ब्राउज़र पर दिखाई गई सामग्री की रिकॉर्डिंग को पूरी तरह रोकना संभव नहीं है।')}</p></div>
     </section>
 
     {selectedRecording&&<div className={styles.playerBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)closeRecording();}}>
