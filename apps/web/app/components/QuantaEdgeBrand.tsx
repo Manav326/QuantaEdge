@@ -24,10 +24,10 @@ export default function QuantaEdgeBrand({
   variant = 'header',
   className = '',
 }: QuantaEdgeBrandProps) {
-  const { brand, isResolving } = useTenantBranding();
+  const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const tenantName = brand && brand.displayName ? brand.displayName.trim() : '';
-  if (!brand && isResolving) return <span className={'qe-brand-loading qe-brand--' + variant} aria-hidden="true" />;
-  const accessibleLabel = tenantName || BRAND_LABEL;
+  if (!brand && (isResolving || institutionContextRequested)) return <span className={'qe-brand-loading qe-brand--' + variant} aria-hidden="true" />;
+  const accessibleLabel = tenantName || (institutionContextRequested ? 'Learning space' : BRAND_LABEL);
   const logoUrl = approvedLogoUrl(brand && brand.logoUrl, brand && brand.institutionCode) ? brand!.logoUrl! : null;
   const lockup = (
     <span className={'qe-brand qe-brand--' + variant}>
