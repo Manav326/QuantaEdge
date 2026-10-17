@@ -1,6 +1,6 @@
 'use client';
 
-import { UiText } from '../../i18n/useUiTranslation';
+import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import Link from 'next/link';
@@ -97,7 +97,7 @@ async function prepareProfilePhoto(file: File): Promise<string> {
 export default function ParentProfilePage() {
   const router = useRouter();
   const { locale, setLocale } = useLocale();
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+  const { t } = useUiTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
   const [identity, setIdentity] = useState<ParentIdentity>({ mobile: '', publicUserId: '', profileImageUrl: null });
@@ -182,7 +182,7 @@ export default function ParentProfilePage() {
       setDraft(current => ({ ...current, profileImageDataUrl: '' }));
       setPhotoChanged(false);
       setPhotoName(file.name);
-      setNotice(tx('आपकी photo profile में save हो गई है।','Your photo has been saved to your profile.'));
+      setNotice(t('parent.profile.photoSaved'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to save this photo.');
@@ -227,8 +227,8 @@ export default function ParentProfilePage() {
         profileImageDataUrl: '',
       });
       if (body.preferred_language === 'English') setLocale('english');
-      else if (body.preferred_language === 'Hindi' || body.preferred_language === 'Hindi & English') setLocale('hindi');
-      setNotice(tx('आपकी parent profile save हो गई है।','Your parent profile has been saved.'));
+      else if (body.preferred_language === 'Hindi' || body.preferred_language === 'Hindi & English') setLocale('hinglish');
+      setNotice(t('parent.profile.saved'));
       window.dispatchEvent(new Event('qe:profile-updated'));
       setPhotoName('');
       setPhotoChanged(false);
@@ -255,7 +255,7 @@ export default function ParentProfilePage() {
       setDraft(current => ({ ...current, profileImageDataUrl: '' }));
       setPhotoChanged(false);
       setPhotoName('');
-      setNotice(tx('आपकी photo profile से हटा दी गई है।','Your photo has been removed from your profile.'));
+      setNotice(t('parent.profile.photoRemoved'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Your photo could not be removed.');
@@ -308,12 +308,12 @@ export default function ParentProfilePage() {
             <section className="parent-profile-card">
               <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2><UiText message="legacy.web.personal.details.2c540009" /></h2><p><UiText message="legacy.web.your.parent.account.details.32242915" /></p></div></div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.full.name.f7576097" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={tx('अपना नाम डालें','Enter your name')} autoComplete="name" /></label>
+                <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.full.name.f7576097" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={t('parent.profile.namePlaceholder')} autoComplete="name" /></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.email.address.8779888d" /> <span className="parent-profile-field__optional"><UiText message="legacy.web.optional.7371513d" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.mobile.number.678acd99" /><input value={identity.mobile} readOnly aria-readonly="true"/><small><UiText message="legacy.web.used.for.otp.sign.in.contact.support.i.c11e2aed" /></small></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={identity.publicUserId} readOnly aria-readonly="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={tx('जैसे Patna','e.g. Patna')} autoComplete="address-level2" /></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={tx('जैसे Bihar','e.g. Bihar')} autoComplete="address-level1" /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={t('parent.profile.cityPlaceholder')} autoComplete="address-level2" /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={t('parent.profile.statePlaceholder')} autoComplete="address-level1" /></label>
               </div>
               <p className="parent-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <UiText message="legacy.web.city.and.state.are.enough.please.do.no.8802cd0a" /></p>
             </section>
@@ -321,8 +321,8 @@ export default function ParentProfilePage() {
             <section className="parent-profile-card">
               <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.optional.details.to.personalise.your.a.31049107" /></p></div></div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field"><UiText message="legacy.web.what.is.your.occupation.d860ed36" /><input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder={tx('जैसे Teacher, business owner','e.g. Teacher, business owner')} autoComplete="organization-title" /></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.organisation.or.workplace.2ab67251" /><input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder={tx('Optional','Optional')} autoComplete="organization" /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.what.is.your.occupation.d860ed36" /><input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder={t('parent.profile.occupationPlaceholder')} autoComplete="organization-title" /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.organisation.or.workplace.2ab67251" /><input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder={t('parent.profile.optionalPlaceholder')} autoComplete="organization" /></label>
                 <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.preferred.learning.language.7005a1e9" /><select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English"><UiText message="common.language.english" /></option><option value="Hindi">हिन्दी</option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other"><UiText message="legacy.web.other.affe01d9" /></option></select></label>
               </div>
             </section>

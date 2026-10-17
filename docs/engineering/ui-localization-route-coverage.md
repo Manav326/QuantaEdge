@@ -13,10 +13,10 @@
 | `/` | `apps/web/app/page.tsx` | First pass — audit pending | Check labels, forms, validation and public errors. |
 | `/certificate/verify` | `apps/web/app/certificate/verify/page.tsx` | First pass — audit pending | Check verification status/error variants and locale persistence. |
 | `/login` | `apps/web/app/login/page.tsx` | First pass — audit pending | Check all fields, accessibility labels and failures. |
-| `/login/student` | `apps/web/app/login/student/page.tsx` | First pass — audit pending | Check parent-mobile, child credentials and validation. |
+| `/login/student` | `apps/web/app/login/student/page.tsx` | Static inline-pair extraction — CI pending, route audit still open | Verify login validation, remaining literal JSX/accessibility text and session errors in both locales. |
 | `/parent` | `apps/web/app/parent/page.tsx` | First pass — audit pending | Check family dashboard and progress labels. |
-| `/parent/children` | `apps/web/app/parent/children/page.tsx` | First pass — audit pending | Check child creation and credential dialog. |
-| `/parent/profile` | `apps/web/app/parent/profile/page.tsx` | First pass — audit pending | Check profile form and save/error states. |
+| `/parent/children` | `apps/web/app/parent/children/page.tsx` | Static inline-pair extraction — CI pending, route audit still open | Verify child creation, credential dialog, raw fallback errors and remaining literal text. |
+| `/parent/profile` | `apps/web/app/parent/profile/page.tsx` | Static inline-pair extraction — CI pending, route audit still open | Verify photo/profile feedback, placeholders, residual fallback errors and language preferences. |
 | `/privacy` | `apps/web/app/privacy/page.tsx` | First pass — audit pending | Verify entire legal body and language selector. |
 | `/session` | `apps/web/app/session/page.tsx` | First pass — audit pending | Check session recovery and boundary messages. |
 | `/student` | `apps/web/app/student/page.tsx` | First pass — audit pending | Audit dashboard widgets and empty/error states. |

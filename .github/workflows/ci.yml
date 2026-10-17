@@ -58,6 +58,9 @@ jobs:
       - name: Verify centralized UI localization catalogs and app copies
         run: python3 scripts/sync_ui_localization.py --check
 
+      - name: Verify centralized static copy on migrated web routes
+        run: node scripts/check-web-static-copy.mjs
+
       - name: Verify Admin certificates localization coverage
         run: node scripts/check-admin-certificates-i18n.mjs
 

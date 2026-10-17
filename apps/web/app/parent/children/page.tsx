@@ -1,6 +1,6 @@
 'use client';
 
-import { UiText } from '../../i18n/useUiTranslation';
+import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
@@ -34,7 +34,7 @@ async function readJson(response:Response):Promise<any>{
 export default function ParentChildrenPage(){
   const router=useRouter();
   const { locale } = useLocale();
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+  const { t } = useUiTranslation();
   const [account,setAccount]=useState<Account|null>(null);
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
@@ -110,17 +110,17 @@ export default function ParentChildrenPage(){
         body:JSON.stringify({...draft,consentAccepted:consent,requestId})
       });
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to create the student profile.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.createFailed'));
       setDraft(emptyDraft);setConsent(false);setCreationRequestId('');
-      const successMessage=tx('Student profile बन गया है और login details save हो गई हैं। अब बच्चा आपके बनाए username और password से sign in कर सकता है।','Student profile and login details are saved. Your child can now sign in with the username and password you created.');
+      const successMessage=t('parent.children.created');
       setNotice(successMessage);
       try{
         await load();
         setNotice(successMessage);
       }catch{
-        setError(tx('Profile बन गया है, लेकिन list refresh नहीं हो पाई। दोबारा profile न बनाएँ; page reload करके जाँचें।','The profile was created successfully, but the list could not refresh. Do not create it again; reload the page to verify.'));
+        setError(t('parent.children.createdRefreshFailed'));
       }
-    }catch(e:any){setError(e.message||'Unable to create student profile.');}
+    }catch(e:any){setError(e.message||t('parent.children.createFailed'));}
     finally{setBusy(false);}
   }
 
@@ -139,10 +139,10 @@ export default function ParentChildrenPage(){
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(profile)
       });
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to update the child profile.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.updateProfileFailed'));
       await load();
-      setNotice(tx('Student profile की details save हो गई हैं; पुरानी learning history सुरक्षित है.','Student profile details have been saved; previous learning history is preserved.'));
-    }catch(e:any){setError(e.message||'Unable to update the child profile.');}
+      setNotice(t('parent.children.profileSaved'));
+    }catch(e:any){setError(e.message||t('parent.children.updateProfileFailed'));}
     finally{setBusyProfile(null);}
   }
 
@@ -154,10 +154,10 @@ export default function ParentChildrenPage(){
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(draft)
       });
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to save student login details.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.saveCredentialsFailed'));
       await load();
-      setNotice(tx('Login details '+child.display_name+' के लिए save हो गई हैं। Username और password बच्चे के साथ safely share करें.','Login details for '+child.display_name+' have been saved. Share the username and password with your child securely.'));
-    }catch(e:any){setError(e.message||'Unable to save student login details.');}
+      setNotice(t('parent.children.credentialsSaved',{ name: child.display_name }));
+    }catch(e:any){setError(e.message||t('parent.children.saveCredentialsFailed'));}
   }
 
   async function assignCourse(child:Child,course:any){
@@ -168,10 +168,10 @@ export default function ParentChildrenPage(){
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
       });
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to assign this course.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.assignCourseFailed'));
       await load();
-      setNotice(tx(course.display_name+' बच्चे के learning track में जोड़ दिया गया है.',course.display_name+' has been added to the child’s learning tracks.'));
-    }catch(e:any){setError(e.message||'Unable to assign this course.');}
+      setNotice(t('parent.children.courseAssigned',{ course: course.display_name }));
+    }catch(e:any){setError(e.message||t('parent.children.assignCourseFailed'));}
     finally{setBusyCourse('');}
   }
 
@@ -183,46 +183,40 @@ export default function ParentChildrenPage(){
         method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({trackCodes})
       });
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to update tracks.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.updateTracksFailed'));
       await load();
-      setNotice(tx(`${child.display_name} के learning subjects save हो गए हैं।`,`Learning subjects for ${child.display_name} have been saved.`));
-    }catch(e:any){setError(e.message||'Unable to update tracks.');}
+      setNotice(t('parent.children.tracksSaved',{ name: child.display_name }));
+    }catch(e:any){setError(e.message||t('parent.children.updateTracksFailed'));}
     finally{setBusyTrack(null);}
   }
 
   async function restoreChild(child:Child){
-    if(!window.confirm(tx(
-      'मैं authorised guardian हूँ और इस profile को restore करने व current guardian consent देने की पुष्टि करता/करती हूँ।',
-      'I confirm that I am an authorised guardian and consent to restoring this profile.'
-    )))return;
+    if(!window.confirm(t('parent.children.restoreConfirm')))return;
     setError('');setNotice('');
     try{
       const response=await fetch('/api/v1/guardians/children/'+child.id+'/restore',{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({consentAccepted:true})
       });
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to restore the profile.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.restoreFailed'));
       await load();
-      setNotice(tx(
-        child.display_name+' का profile restore हो गया है। Security के लिए student login credentials फिर से set करें।',
-        child.display_name+'’s profile has been restored. Set the student login credentials again for security.'
-      ));
-    }catch(e:any){setError(e.message||'Unable to restore profile.');}
+      setNotice(t('parent.children.restored',{ name: child.display_name }));
+    }catch(e:any){setError(e.message||t('parent.children.restoreFailed'));}
   }
 
   async function archiveChild(child:Child){
-    if(!window.confirm(tx(`${child.display_name} का profile archive करें? Learning history बनी रहेगी, लेकिन parent link हट जाएगा.`,`Archive ${child.display_name}'s profile? Their learning history will be retained, but this parent link will be revoked.`)))return;
+    if(!window.confirm(t('parent.children.archiveConfirm',{ name: child.display_name })))return;
     setError('');setNotice('');
     try{
       const response=await fetch(`/api/v1/guardians/children/${child.id}`,{method:'DELETE'});
       const body=await readJson(response);
-      if(!response.ok)throw new Error(body.message||'Unable to archive the profile.');
+      if(!response.ok)throw new Error(body.message||t('parent.children.archiveFailed'));
       await load();
-      setNotice(tx(`${child.display_name} का profile archive हो गया है। पुराने learning records सुरक्षित हैं।`,`The profile for ${child.display_name} has been archived. Previous learning records are retained.`));
-    }catch(e:any){setError(e.message||'Unable to archive profile.');}
+      setNotice(t('parent.children.archived',{ name: child.display_name }));
+    }catch(e:any){setError(e.message||t('parent.children.archiveFailed'));}
   }
 
-  const trackOptions=[{code:'maths',label:'गणित · Maths'},{code:'science',label:'विज्ञान · Science'}];
+  const trackOptions=[{code:'maths',label:t('parent.children.maths')},{code:'science',label:t('parent.children.science')}];
 
   return <main className="parent-app">
     <section className="parent-dashboard parent-manage">
@@ -241,7 +235,7 @@ export default function ParentChildrenPage(){
           {children.map(child=><article className="parent-child-card" key={child.id}>
             <div className="parent-child-overview">
               <div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div>
-              <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · {tx('पढ़ाई की भाषा: '+((child.language||'hi')==='en'?'English':'हिन्दी'),'Learning content: '+((child.language||'hi')==='en'?'English':'Hindi'))}</p>
+              <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · {t('parent.children.learningContentLanguage',{ language: (child.language||'hi')==='en' ? t('common.language.english') : t('parent.children.hindiLanguage') })}</p>
                 <div className="track-pill-row">{(trackDrafts[child.id]||[]).map(code=><span className="track-pill" key={code}>{code==='maths'?'गणित':'विज्ञान'}</span>)}</div>
               </div>
               <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}><UiText message="legacy.web.archive.profile.4dc003f9" /></button>
@@ -270,8 +264,8 @@ export default function ParentChildrenPage(){
               </div>
               {child.login_username&&<p className="parent-credentials-current"><UiText message="legacy.web.current.username.440d701d" /> <strong>{child.login_username}</strong></p>}
               <div className="parent-child-form parent-credentials-form">
-                <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off" /></label>
-                <label><UiText message="legacy.web.set.or.reset.password.d599fa87" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password" /></label>
+                <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder={t('parent.children.usernameExample')} autoComplete="off" /></label>
+                <label><UiText message="legacy.web.set.or.reset.password.d599fa87" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password" /></label>
               </div>
               <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><UiText message="legacy.web.save.login.details.bcf9bcd7" /></button>
             </div>
@@ -280,7 +274,7 @@ export default function ParentChildrenPage(){
               <div className="parent-track-options">{trackOptions.map(option=><label key={option.code}>
                 <input type="checkbox" checked={(trackDrafts[child.id]||[]).includes(option.code)}
                   onChange={e=>toggleTrack(child.id,option.code,e.target.checked)}/>
-                <span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):(option.label)}</span>
+                <span>{option.label}</span>
               </label>)}</div>
               <button className="button button-dark button-small" disabled={busyTrack===child.id||(trackDrafts[child.id]||[]).length===0}
                 onClick={()=>saveTracks(child)}>{busyTrack===child.id?<UiText message="legacy.web.saving.ec034ad4" />:<UiText message="legacy.web.save.subjects.123d5ff5" />}</button>
@@ -316,11 +310,11 @@ export default function ParentChildrenPage(){
         {(account?.remainingSlots??0)<=0
           ? <div className="parent-empty"><strong><UiText message="legacy.web.you.have.reached.your.account.s.profil.819488f8" /></strong><p><UiText message="legacy.web.contact.support.to.increase.your.profi.3aa0e91d" /></p></div>
           : <div className="parent-child-form">
-            <label><UiText message="legacy.web.child.s.name.8e59b3df" /><input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder={tx('बच्चे का नाम डालें','Enter child’s name')} autoComplete="off"/></label>
+            <label><UiText message="legacy.web.child.s.name.8e59b3df" /><input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder={t('parent.children.childNamePlaceholder')} autoComplete="off"/></label>
             <label><UiText message="legacy.web.class.9c9232e5" /><select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6"><UiText message="legacy.web.class.6.c917d5d1" /></option><option value="7"><UiText message="legacy.web.class.7.0a63ed61" /></option><option value="8"><UiText message="legacy.web.class.8.ccf4ad25" /></option></select></label>
             <label><UiText message="legacy.web.learning.language.8be9be9d" /><select value={draft.language} onChange={e=>setDraft({...draft,language:e.target.value})}><option value="hi">हिन्दी (Hindi)</option><option value="en">English</option></select></label>
-            <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off"/></label>
-            <label><UiText message="legacy.web.student.password.9ba6b0cd" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password"/></label>
+            <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={t('parent.children.usernameExample')} autoComplete="off"/></label>
+            <label><UiText message="legacy.web.student.password.9ba6b0cd" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password"/></label>
             <fieldset className="parent-track-fieldset"><legend><UiText message="legacy.web.choose.subjects.1c060640" /></legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):option.label}</span></label>)}</fieldset>
             <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span><UiText message="legacy.web.i.am.the.child.s.authorised.guardian.a.45b1acdf" /></span></label>
             <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?<UiText message="legacy.web.creating.profile.03f9567c" />:<UiText message="legacy.web.create.student.profile.b50fed07" />}</button>

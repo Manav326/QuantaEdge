@@ -340,3 +340,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Replaced hardcoded two-option language lists in Student/Parent Web, Admin and People Operations selectors with the shared generated options. Removed visible explanatory/help copy from those selectors while keeping accessible names. Existing learning-language and certificate-language settings remain independent.
 - Updated this tracker and route matrix to distinguish registry readiness from still-incomplete inline-copy and route acceptance work.
 - This patch is not marked CI-verified until its own new Actions run completes successfully.
+
+
+## Latest implementation checkpoint — Parent profile/child management and Student login copy extraction
+
+- Added central semantic keys for Parent child creation, profile updates, credential saving, course/track actions, restore/archive confirmations, profile-photo feedback and Student login validation/placeholders.
+- Migrated the inline two-language `tx()` helpers and calls from `/parent/children`, `/parent/profile` and `/login/student` to `useUiTranslation()`. The long mixed-language child-creation sentence is now two short clauses. Parameterized messages preserve student/course names.
+- Fixed the Parent profile’s legacy `setLocale('hindi')` call to the registered `hinglish` ID while retaining old stored `hindi`/ `hi` aliases in the provider/registry. Learning-language preference remains separate from UI language.
+- Added `scripts/check-web-static-copy.mjs` and wired it into CI to prevent inline `tx()` regressions on these three migrated routes and to verify the new semantic keys in both catalogs. This guard is intentionally scoped; it is not evidence that every web route is clean yet.
+- The changed routes remain **first-pass, audit pending** for residual literal JSX labels, native/browser messages, accessibility text, and server-error fallback strings. This migration is not complete until its own CI build passes and the remaining route audit is green.
