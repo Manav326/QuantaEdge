@@ -472,7 +472,7 @@ class AuthServiceTest {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     String mobile = "+917070107483";
     when(jdbc.queryForObject(
-        contains("role in ('PARENT','LEARNER') and active=true"), eq(Boolean.class), eq(mobile)).thenReturn(true);
+        contains("role in ('PARENT','LEARNER') and active=true"), eq(Boolean.class), eq(mobile))).thenReturn(true);
     when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class), eq(mobile), eq(60))).thenReturn(0L);
     when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(mobile))).thenReturn(0L);
 
