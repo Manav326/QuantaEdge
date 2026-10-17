@@ -33,6 +33,9 @@ const NAVIGATION: NavigationGroup[] = [
       'HR_ASSET_VIEW', 'HR_ASSET_MANAGE', 'HR_EXIT_VIEW', 'HR_EXIT_MANAGE',
     ] },
   ] },
+  { message: 'people.navigation.group.platform', items: [
+    { message: 'people.navigation.institutions', href: '/institutions', icon: '▦', permissions: ['QE_PLATFORM_OWNER'] },
+  ] },
   { message: 'people.navigation.group.access', items: [
     { message: 'people.navigation.loginAccess', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
   ] },
@@ -173,6 +176,9 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
       ...group,
       items: group.items.filter(item => {
         if (!session?.staffId) return false;
+        // Cross-institution operations are special: even a role labelled ADMIN
+        // must carry the explicit platform-owner grant in the HRMS workspace.
+        if (item.href === '/institutions') return permissions.includes('QE_PLATFORM_OWNER');
         if (item.href === '/self-service') {
           const role = String(session.role || '').toUpperCase();
           const employeeWorkspacePermissions = [
