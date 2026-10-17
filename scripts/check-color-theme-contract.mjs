@@ -93,6 +93,7 @@ assert(androidScanner.includes('scanPrimary = MaterialTheme.colorScheme.primary'
 assert(androidRepository.includes('val themeTokensJson: String') && androidRepository.includes('optJSONObject("themeTokens")'), 'Android tenant API response must carry theme JSON.');
 assert(androidApp.includes('themeController.applyInstitutionTheme(code, identity.themeTokensJson)'), 'Resolved Android tenant must activate its server palette.');
 assert(androidApp.includes('themeController.clearInstitutionTheme()'), 'Android must clear the palette when tenant context is absent/invalid.');
+assert(androidApp.includes('containerColor = MaterialTheme.colorScheme.primary') && androidApp.includes('contentColor = MaterialTheme.colorScheme.onPrimary') && !androidApp.includes('containerColor = Color(0xFF172033)'), 'The floating tutor restore action must use tenant theme roles rather than a fixed navy palette.');
 assert(docs.includes('Contract version') && docs.toLowerCase().includes('acceptance'), 'Contract and acceptance criteria must be documented.');
 
 if (failures.length) {

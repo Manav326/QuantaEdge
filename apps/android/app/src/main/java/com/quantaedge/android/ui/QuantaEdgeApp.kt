@@ -5218,8 +5218,8 @@ private fun LessonScreen(
                     .semantics {
                         contentDescription = if (language == "hi") "ट्यूटर फिर खोलें" else "Restore tutor"
                     },
-                containerColor = Color(0xFF172033),
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text("✦", fontSize = 23.sp)
             }
