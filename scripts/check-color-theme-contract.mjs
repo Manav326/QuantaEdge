@@ -29,6 +29,8 @@ const androidTheme = read('apps/android/app/src/main/java/com/quantaedge/android
 const androidApp = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidRepository = read('apps/android/app/src/main/java/com/quantaedge/android/data/InstitutionBrandingRepository.kt');
 const androidSettings = read('apps/android/app/src/main/java/com/quantaedge/android/ui/ColorThemeSettingsCard.kt');
+const androidTutor = read('apps/android/app/src/main/java/com/quantaedge/android/ui/TutorScreen.kt');
+const androidScanner = read('apps/android/app/src/main/java/com/quantaedge/android/ui/PremiumCodeScannerScreen.kt');
 const docs = read('docs/product/white-label-color-theme-contract.md');
 
 assert(apiTheme.includes('SCHEMA_VERSION = 2'), 'API theme schema must be explicitly versioned.');
@@ -53,6 +55,10 @@ for (const role of ['background', 'surface', 'text-muted', 'primary-container', 
   assert(webCss.includes('--qe-color-' + role), 'Web CSS is missing semantic role: ' + role);
 }
 assert(webCss.includes('html[data-qe-appearance="dark"]'), 'Web CSS must define dark-mode surfaces/states.');
+assert(webCss.includes('/* Tenant semantic compatibility layer for the legacy tutor and parent controls.'), 'Legacy tutor and parent controls must have a semantic-token bridge.');
+assert(webCss.includes('.tutor-launch {\n  background: var(--qe-color-primary);'), 'Tutor launch action must use the active tenant primary colour.');
+assert(webCss.includes('.tutor-message.user {\n  background: var(--qe-color-primary-container);'), 'Tutor learner messages must use tenant semantic container colours.');
+assert(webCss.includes('.parent-notice, .parent-courses-page__alert {\n  border-color: var(--qe-color-success-container);'), 'Parent feedback must keep semantic success colours while adopting a tenant palette.');
 assert(!/(?:background|color):#[0-9a-fA-F]{3,8}(?:background|color):/.test(webCss), 'CSS must not contain concatenated duplicate declarations.');
 assert(/--qe-brand-orange\s*:\s*#f97316\b/i.test(webCss), 'QuantaEdge orange default must be preserved.');
 
@@ -60,6 +66,8 @@ assert(androidController.includes('KEY_TENANT_THEME_PREFIX') && androidControlle
 assert(androidController.includes('clearInstitutionTheme') && androidController.includes('schemaVersion'), 'Android must validate the version and clear stale tenant scope.');
 assert(androidTheme.includes('darkColorScheme') && androidTheme.includes('lightColorScheme'), 'Android theme must support light and dark.');
 assert(androidSettings.includes('QeAppearanceMode.DARK') && androidSettings.includes('QeAppearanceMode.SYSTEM'), 'Android settings must expose appearance options.');
+assert(androidTutor.includes('MaterialTheme.colorScheme.primary') && !/Color\\(0xFF151B2C\\)|Color\\(0xFFFFF0E3\\)/i.test(androidTutor), 'Android tutor must use semantic theme roles rather than fixed brand colours.');
+assert(androidScanner.includes('scanPrimary = MaterialTheme.colorScheme.primary') && androidScanner.includes('scanOnPrimary = MaterialTheme.colorScheme.onPrimary'), 'Android scanner controls must use the active tenant palette.');
 assert(androidRepository.includes('val themeTokensJson: String') && androidRepository.includes('optJSONObject("themeTokens")'), 'Android tenant API response must carry theme JSON.');
 assert(androidApp.includes('themeController.applyInstitutionTheme(code, identity.themeTokensJson)'), 'Resolved Android tenant must activate its server palette.');
 assert(androidApp.includes('themeController.clearInstitutionTheme()'), 'Android must clear the palette when tenant context is absent/invalid.');
