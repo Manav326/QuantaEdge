@@ -86,11 +86,16 @@ public class PlatformInstitutionController {
     AuthContext owner = requirePlatformOwner(context);
     audit(owner,null,"COURSE_CATALOG_VIEWED","COURSE_CATALOG",null,Map.of());
     return jdbc.queryForList("""
-        select p.id,p.code,p.display_name,c.code as class_code
+        select p.id,p.code,p.display_name,
+          string_agg(distinct c.code, ', ' order by c.code) as class_code
         from curriculum_program p
-        left join curriculum_class c on c.id=p.class_id
+        left join curriculum_program_subject ps on ps.program_id=p.id
+        left join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+          and s.class_id=ps.class_id and s.active=true
+        left join curriculum_class c on c.id=s.class_id and c.active=true
         where p.status='ACTIVE' and p.code<>'GENERAL'
-        order by c.sort_order nulls last,p.display_name,p.code
+        group by p.id,p.code,p.display_name
+        order by p.display_name,p.code
         """);
   }
 
