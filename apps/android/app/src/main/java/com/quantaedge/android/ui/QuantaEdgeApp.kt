@@ -119,16 +119,21 @@ private data class ResourceDownloadUiState(
     val active: Boolean = false
 )
 
-private fun courseSessionTimestamp(item: JSONObject): Long? {
-    val value = item.textAny(
-        "start_at", "starts_at", "start_time", "scheduled_start_at", "scheduledAt", "startAt",
-        "recorded_at", "recordedAt", "started_at", "startedAt", "created_at"
-    ).trim()
+private fun parseCourseTimestamp(value: String): Long? {
     if (value.isBlank()) return null
     return runCatching { java.time.OffsetDateTime.parse(value).toInstant().toEpochMilli() }.getOrNull()
         ?: runCatching { java.time.Instant.parse(value).toEpochMilli() }.getOrNull()
         ?: runCatching { java.time.LocalDateTime.parse(value).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli() }.getOrNull()
 }
+
+private fun courseSessionTimestamp(item: JSONObject): Long? = parseCourseTimestamp(item.textAny(
+    "start_at", "starts_at", "start_time", "scheduled_start_at", "scheduledAt", "startAt",
+    "recorded_at", "recordedAt", "started_at", "startedAt", "created_at"
+).trim())
+
+private fun courseSessionEndTimestamp(item: JSONObject): Long? = parseCourseTimestamp(item.textAny(
+    "ends_at", "endsAt", "end_at", "endAt", "scheduled_end_at", "scheduledEndAt"
+).trim())
 
 private fun courseReadableTimestamp(item: JSONObject, language: String): String {
     val instant = courseSessionTimestamp(item) ?: return ""
@@ -583,12 +588,6 @@ fun QuantaEdgeApp() {
             }
             if (liveResponse.isFailure) anyRequestFailed = true
             gathered.addAll(liveResponse.getOrDefault(emptyList()))
-            val recordedResponse = runCatching {
-                ApiClient.getObject("/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery)
-                    .optJSONArray("items").objectItems()
-            }
-            if (recordedResponse.isFailure) anyRequestFailed = true
-            gathered.addAll(recordedResponse.getOrDefault(emptyList()))
         }
         dashboardClasses = gathered.distinctBy {
             val recordedId = it.longAny("recorded_class_id", "recordingId")
@@ -3871,13 +3870,18 @@ private fun StudentHomeScreen(
     val nowMillis = System.currentTimeMillis()
     val recentThreshold = nowMillis - 3L * 24L * 60L * 60L * 1000L
     val upcomingClasses = dashboardClasses.filter {
-        val whenMillis = courseSessionTimestamp(it)
-        whenMillis != null && whenMillis >= nowMillis
-    }.sortedBy { courseSessionTimestamp(it) ?: Long.MAX_VALUE }.take(3)
+        val endMillis = courseSessionEndTimestamp(it)
+        endMillis != null && endMillis >= nowMillis
+    }.sortedBy { courseSessionTimestamp(it) ?: Long.MAX_VALUE }
     val recentClasses = dashboardClasses.filter {
-        val whenMillis = courseSessionTimestamp(it)
-        whenMillis != null && whenMillis < nowMillis && whenMillis >= recentThreshold
-    }.sortedByDescending { courseSessionTimestamp(it) ?: 0L }.take(3)
+        val endMillis = courseSessionEndTimestamp(it)
+        endMillis != null && endMillis < nowMillis && endMillis >= recentThreshold
+    }.sortedByDescending { courseSessionEndTimestamp(it) ?: 0L }
+    fun groupClassesBySubject(items: List<JSONObject>): Map<String, List<JSONObject>> =
+        items.groupBy {
+            it.textAny("subject_name", "subjectName", "subject_code", "subjectCode")
+                .ifBlank { if (language == "hi") "अन्य विषय" else "Other subjects" }
+        }.toSortedMap().take(3)
     val greeting = HomeGreeting.text(LocalTime.now().hour, language)
 
     Column(
@@ -4051,15 +4055,27 @@ private fun StudentHomeScreen(
                 if (upcomingClasses.isNotEmpty()) {
                     Text(if (language == "hi") "आने वाली" else "Upcoming",
                         style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-                    upcomingClasses.forEach { item ->
-                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { dashboardDefaultSubject }) }
+                    groupClassesBySubject(upcomingClasses).forEach { (subjectName, items) ->
+                        Text(subjectName, style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.secondary)
+                        items.take(3).forEach { item ->
+                            DashboardLiveClassCard(item = item, language = language, showSubject = false) {
+                                onClasses(item.textAny("subject_code", "subjectCode").ifBlank { dashboardDefaultSubject })
+                            }
+                        }
                     }
                 }
                 if (recentClasses.isNotEmpty()) {
                     Text(if (language == "hi") "हाल की · पिछले 3 दिन" else "Recent · last 3 days",
                         style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-                    recentClasses.forEach { item ->
-                        DashboardLiveClassCard(item = item, language = language) { onClasses(item.textAny("subject_code", "subjectCode").ifBlank { dashboardDefaultSubject }) }
+                    groupClassesBySubject(recentClasses).forEach { (subjectName, items) ->
+                        Text(subjectName, style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.secondary)
+                        items.take(3).forEach { item ->
+                            DashboardLiveClassCard(item = item, language = language, showSubject = false) {
+                                onClasses(item.textAny("subject_code", "subjectCode").ifBlank { dashboardDefaultSubject })
+                            }
+                        }
                     }
                 }
             }
@@ -4119,7 +4135,12 @@ private fun StudentHomeScreen(
 }
 
 @Composable
-private fun DashboardLiveClassCard(item: JSONObject, language: String, onOpen: () -> Unit) {
+private fun DashboardLiveClassCard(
+    item: JSONObject,
+    language: String,
+    showSubject: Boolean = true,
+    onOpen: () -> Unit
+) {
     val title = item.textAny("title", "session_title", "name").ifBlank {
         if (language == "hi") "Live class" else "Live class"
     }
@@ -4139,10 +4160,14 @@ private fun DashboardLiveClassCard(item: JSONObject, language: String, onOpen: (
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                if (subject.isNotBlank()) Text(subject, style = MaterialTheme.typography.bodySmall,
+                if (showSubject && subject.isNotBlank()) Text(subject, style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (timeLabel.isNotBlank()) Text(timeLabel, style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary)
+                if (item.optBoolean("has_recording", item.optBoolean("hasRecording"))) {
+                    Text(if (language == "hi") "रिकॉर्डिंग उपलब्ध" else "Recording available",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                }
             }
             Text("→", color = MaterialTheme.colorScheme.primary)
         }
