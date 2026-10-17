@@ -98,6 +98,160 @@ public class CourseMarketplaceController {
     return offers;
   }
 
+  /** Published offers for the parent workspace; these are not inferred from curriculum rows. */
+  @GetMapping("/family/courses")
+  public List<Map<String,Object>> familyCourses(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context = authorization.requireParent(context);
+    long parentId = context.userId();
+    List<Map<String,Object>> offers = jdbc.queryForList("""
+      select p.id as course_id,p.public_id,p.code as course_code,
+        coalesce(nullif(o.title_override,''),p.display_name) as title,
+        p.display_name as course_name,p.curriculum_version,o.description,
+        o.price_paise,o.currency,o.status as offer_status,
+        exists(select 1 from course_entitlement ce
+          where ce.course_id=p.id and ce.holder_user_id=?) as owned_by_parent,
+        exists(select 1 from course_entitlement ce
+          join guardian_student gs on gs.student_id=ce.holder_student_id
+          where ce.course_id=p.id and gs.guardian_user_id=?
+            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL') as owned_by_child
+      from course_marketplace_offer o
+      join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      where o.status='PUBLISHED'
+      order by p.display_name,p.id
+      """, parentId, parentId);
+    for (Map<String,Object> offer : offers) {
+      long courseId = ((Number) offer.get("course_id")).longValue();
+      offer.put("subjects", jdbc.queryForList("""
+        select s.code as subject_code,s.display_name as subject_name,
+          count(distinct ch.id) as chapters,count(distinct l.id) as lessons
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+          and s.class_id=ps.class_id and s.active=true
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+          and ch.content_status='PUBLISHED'
+        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+        where ps.program_id=?
+        group by s.id,s.code,s.display_name,s.sort_order
+        order by s.sort_order,s.id
+        """, courseId));
+    }
+    return offers;
+  }
+
+  /** Only a parent's own, not-yet-transferred purchases are eligible for assignment to a child. */
+  @GetMapping("/family/entitlements")
+  public List<Map<String,Object>> familyEntitlements(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context = authorization.requireParent(context);
+    return jdbc.queryForList("""
+      select ce.id as entitlement_id,ce.course_id,ce.source_purchase_id,
+        ce.holder_student_id,st.display_name as current_learner_name,
+        ce.transfer_count,ce.created_at,p.public_id as course_public_id,
+        coalesce(nullif(o.title_override,''),p.display_name) as course_name
+      from course_entitlement ce
+      join curriculum_program p on p.id=ce.course_id
+      left join course_marketplace_offer o on o.course_id=p.id
+      left join student st on st.id=ce.holder_student_id
+      where ce.holder_user_id=? and ce.transfer_count=0
+        and p.status='ACTIVE' and p.code<>'GENERAL'
+      order by ce.created_at desc,ce.id desc
+      """, context.userId());
+  }
+
+  /** One-way transfer. The parent's owner reference is removed permanently; the child becomes the sole holder. */
+  @PostMapping("/family/entitlements/{entitlementId}/transfer")
+  @Transactional
+  public Map<String,Object> transferEntitlement(
+      @PathVariable long entitlementId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context = authorization.requireParent(context);
+    Object raw = body.get("studentId");
+    if (!(raw instanceof Number number) || number.longValue() <= 0) {
+      throw new IllegalArgumentException("Choose a linked child to receive this course.");
+    }
+    long targetStudentId = number.longValue();
+    long parentId = context.userId();
+    requireFullGuardianChildAccess(parentId, targetStudentId);
+
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+      select ce.id,ce.course_id,ce.source_purchase_id,ce.holder_student_id,
+        ce.transfer_count,p.display_name as course_name
+      from course_entitlement ce
+      join curriculum_program p on p.id=ce.course_id and p.status='ACTIVE'
+      where ce.id=? and ce.holder_user_id=? and ce.transfer_count=0
+      for update of ce
+      """, entitlementId, parentId);
+    if (rows.isEmpty()) {
+      throw new IllegalArgumentException("This course is not owned by your account or has already been transferred.");
+    }
+    Map<String,Object> entitlement = rows.getFirst();
+    if (entitlement.get("source_purchase_id") == null) {
+      throw new IllegalStateException("This entitlement has no purchase ledger record and cannot be transferred safely.");
+    }
+    long courseId = ((Number) entitlement.get("course_id")).longValue();
+    long purchaseId = ((Number) entitlement.get("source_purchase_id")).longValue();
+    long currentStudentId = ((Number) entitlement.get("holder_student_id")).longValue();
+    if (currentStudentId == targetStudentId) {
+      throw new IllegalArgumentException("This course is already assigned to that learner.");
+    }
+    if (hasAccess(targetStudentId, courseId)) {
+      throw new IllegalArgumentException("That learner already has access to this course. No transfer was made.");
+    }
+
+    try {
+      jdbc.update("""
+        update course_purchase set student_id=?
+        where id=? and student_id=? and course_id=?
+        """, targetStudentId, purchaseId, currentStudentId, courseId);
+    } catch (DuplicateKeyException ex) {
+      throw new IllegalArgumentException("That child already has a purchase for this course. No transfer was made.", ex);
+    }
+    int changed = jdbc.update("""
+      update course_entitlement
+      set holder_user_id=null,holder_student_id=?,transfer_count=1,
+          transferred_at=now(),updated_at=now()
+      where id=? and holder_user_id=? and transfer_count=0
+      """, targetStudentId, entitlementId, parentId);
+    if (changed != 1) throw new IllegalStateException("The entitlement changed while transferring. Reload and try again.");
+
+    jdbc.update("""
+      update student_program_enrollment
+      set status='ENDED',ended_at=now(),updated_at=now()
+      where student_id=? and program_id=? and status in ('ACTIVE','PAUSED')
+      """, currentStudentId, courseId);
+    jdbc.update("""
+      update student_program_enrollment set status='PAUSED',updated_at=now()
+      where student_id=? and status='ACTIVE' and program_id<>?
+      """, targetStudentId, courseId);
+    jdbc.update("""
+      insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
+      values(?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(student_id,program_id) do update set
+        status='ACTIVE',enrolled_at=case when student_program_enrollment.status='ACTIVE'
+          then student_program_enrollment.enrolled_at else now() end,
+        ended_at=null,updated_at=now()
+      """, targetStudentId, courseId);
+    jdbc.update("""
+      insert into student_track_enrollment(student_id,subject_id,status)
+      select ?,s.id,'ACTIVE'
+      from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+        and s.class_id=ps.class_id and s.active=true
+      where ps.program_id=?
+      on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+      """, targetStudentId, courseId);
+    jdbc.update("""
+      insert into course_entitlement_transfer_audit(
+        entitlement_id,course_id,from_user_id,to_student_id,transfer_number
+      ) values(?,?,?,?,1)
+      """, entitlementId, courseId, parentId, targetStudentId);
+
+    return Map.of("transferred", true, "permanent", true, "revocable", false,
+        "entitlementId", entitlementId, "courseId", courseId, "studentId", targetStudentId);
+  }
+
   /** Create an order for an already authenticated learner. Amount and recipient always come from server records. */
   @PostMapping("/courses/{courseId}/orders")
   public Map<String, Object> createOrder(
