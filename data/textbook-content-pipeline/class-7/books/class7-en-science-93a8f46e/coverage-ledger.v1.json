@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 350,
-    "successful_visual_analyses": 144,
+    "successful_visual_analyses": 169,
     "missing_visual_analyses": 7138,
-    "failed_visual_analyses": 206,
+    "failed_visual_analyses": 181,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7344,
+    "unresolved_count": 7319,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -16564,9 +16564,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16582,9 +16591,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16600,9 +16618,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16618,9 +16645,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16636,9 +16672,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16654,9 +16699,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16672,9 +16726,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16690,9 +16753,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16708,9 +16780,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16726,9 +16807,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16744,9 +16834,18 @@
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16762,9 +16861,18 @@
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook, specifically Chapter 7 titled 'Heat'.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook's content or the chapter it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16780,9 +16888,16 @@
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Chapter 1",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16798,9 +16913,18 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16816,9 +16940,18 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16834,9 +16967,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, no visible text or images present"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16852,9 +16994,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16870,9 +17021,67 @@
       "asset_path": "page-0019.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table of contents for a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Contents",
+          "Foreword",
+          "About this Book",
+          "Chapter 1",
+          "The Ever-Evolving World of Science",
+          "Chapter 2",
+          "Exploring Substances: Acidic, Basic, and Neutral",
+          "Chapter 3",
+          "Electricity: Circuits and their Components",
+          "Chapter 4",
+          "The World of Metals and Non-metals",
+          "Chapter 5",
+          "Changes Around Us: Physical and Chemical",
+          "Chapter 6",
+          "Adolescence: A Stage of Growth and Change",
+          "Chapter 7",
+          "Heat Transfer in Nature",
+          "Chapter 8",
+          "Measurement of Time and Motion",
+          "Chapter 9",
+          "Life Processes in Animals",
+          "Chapter 10",
+          "Life Processes in Plants",
+          "Chapter 11",
+          "Light: Shadows and Reflections",
+          "Chapter 12",
+          "Earth, Moon, and the Sun"
+        ],
+        "concepts": [
+          "Foreword",
+          "About this Book",
+          "Chapter 1",
+          "The Ever-Evolving World of Science",
+          "Chapter 2",
+          "Exploring Substances: Acidic, Basic, and Neutral",
+          "Chapter 3",
+          "Electricity: Circuits and their Components",
+          "Chapter 4",
+          "The World of Metals and Non-metals",
+          "Chapter 5",
+          "Changes Around Us: Physical and Chemical",
+          "Chapter 6",
+          "Adolescence: A Stage of Growth and Change",
+          "Chapter 7",
+          "Heat Transfer in Nature",
+          "Chapter 8",
+          "Measurement of Time and Motion",
+          "Chapter 9",
+          "Life Processes in Animals"
+        ],
+        "context_relation": "The table of contents for a textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content or structure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16888,9 +17097,42 @@
       "asset_path": "assets/fbacc19bb222b338f01cffe7807cc12871695f813d45d912a59d2929c5cbdee7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It encourages seeking support from counselors and provides a national toll-free number.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "If you are stressed, anxious, worried, sad or confused about ....",
+          "Studies and Exams",
+          "Personal Relationships",
+          "Career Concerns",
+          "Peer Pressure",
+          "Seek Support of Counsellors",
+          "Call",
+          "8448440632",
+          "National Toll-free Counselling Tele-Helpline",
+          "8am to 8pm",
+          "All days of the week",
+          "MANODARPAN",
+          "Psychosocial Support for Mental Health & Well-being of Students",
+          "during the COVID-19 Outbreak and beyond",
+          "(An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
+          "www.https://manodarpan.education.gov.in"
+        ],
+        "concepts": [
+          "Counseling",
+          "Mental Health",
+          "Students",
+          "COVID-19",
+          "Ministry of Education",
+          "Atma Nirbhar Bharat Abhiyan"
+        ],
+        "context_relation": "The advertisement is promoting a counseling service for students during the COVID-19 pandemic.",
+        "limitations": [
+          "The advertisement does not provide specific details about the counseling services offered."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16906,9 +17148,18 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled in.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16924,9 +17175,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16942,9 +17202,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16960,9 +17229,36 @@
       "asset_path": "page-0020.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a toll-free number for support.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If you are stressed, anxious, worried, sad or confused about ....",
+          "Studies and Exams",
+          "Personal Relationships",
+          "Career Concerns",
+          "Peer Pressure",
+          "Seek Support of Counsellors",
+          "Call 8448440632",
+          "MANODARPAN",
+          "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond (An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
+          "www.https://manodarpan.education.gov.in"
+        ],
+        "concepts": [
+          "counseling",
+          "mental health",
+          "students",
+          "COVID-19",
+          "Ministry of Education",
+          "Atma Nirbhar Bharat Abhiyan"
+        ],
+        "context_relation": "The advertisement is promoting a counseling service for students during the COVID-19 pandemic.",
+        "limitations": [
+          "The advertisement does not provide specific details about the counseling services offered."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16978,9 +17274,24 @@
       "asset_path": "assets/3bd8a0abff7fa725fa2d9485d7701d075742a98d3f91c801c1a298774aa44e51.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children playing with paper airplanes in a park, with a toy rocket in the sky and birds flying nearby.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Children playing",
+          "Paper airplanes",
+          "Toy rocket",
+          "Birds flying",
+          "Park setting"
+        ],
+        "context_relation": "The image depicts a playful and leisurely scene in a park, where children are engaged in a simple outdoor activity involving paper airplanes and a toy rocket.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the grade level."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16996,9 +17307,18 @@
       "asset_path": "assets/c6afc184abe5abd3427bc0118a597ef7663c09cad042ad7edff71962f4e6653c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_STALE_CONTEXT",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

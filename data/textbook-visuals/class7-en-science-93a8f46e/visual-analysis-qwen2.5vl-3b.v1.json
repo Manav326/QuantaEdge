@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 148,
+    "assets_selected": 169,
     "assets_processed_this_run": 25,
     "assets_analyzed": 331,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 123,
+    "assets_skipped_from_checkpoint": 144,
     "publication_allowed": false
   },
   "results": [
@@ -4796,22 +4796,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:48:44Z"
+      "checkpointed_at": "2026-10-17T04:30:12Z"
     },
     {
       "asset_id": "385040da5a6939d58d2ca2b1",
@@ -4821,22 +4824,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:48:49Z"
+      "checkpointed_at": "2026-10-17T04:30:18Z"
     },
     {
       "asset_id": "d31cedfe011dc5a14c190dba",
@@ -4846,22 +4852,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:48:54Z"
+      "checkpointed_at": "2026-10-17T04:30:23Z"
     },
     {
       "asset_id": "7b771171c815dd27f4f53767",
@@ -4871,22 +4880,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:48:58Z"
+      "checkpointed_at": "2026-10-17T04:30:28Z"
     },
     {
       "asset_id": "e85bc0ac1fda3b175936b3c6",
@@ -4896,22 +4908,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:03Z"
+      "checkpointed_at": "2026-10-17T04:30:33Z"
     },
     {
       "asset_id": "081fd01790bc4fe4cd517107",
@@ -4921,22 +4936,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:08Z"
+      "checkpointed_at": "2026-10-17T04:30:38Z"
     },
     {
       "asset_id": "d9df62b9cc6aa07b334ebda6",
@@ -4946,22 +4964,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:13Z"
+      "checkpointed_at": "2026-10-17T04:30:43Z"
     },
     {
       "asset_id": "e9c2473b377201465b0fe91d",
@@ -4971,22 +4992,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:17Z"
+      "checkpointed_at": "2026-10-17T04:30:48Z"
     },
     {
       "asset_id": "b16447756cec58827f5e7e1e",
@@ -4996,22 +5020,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:22Z"
+      "checkpointed_at": "2026-10-17T04:30:53Z"
     },
     {
       "asset_id": "a9106a036da41db0f324c868",
@@ -5021,22 +5048,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:27Z"
+      "checkpointed_at": "2026-10-17T04:30:58Z"
     },
     {
       "asset_id": "944e74fc3a1f6f79b913bb62",
@@ -5046,22 +5076,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a36fcc2fcd4634c7be97e532f8e5ffbc9cdd404f6424240837b3017b1eb57e97.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A green circular emblem or badge with a white center.",
-        "visual_type": "illustration",
+        "visual_summary": "A green circular emblem with a white center.",
+        "visual_type": "diagram",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is a visual element related to the educational content of a textbook.",
-        "limitations": []
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:31Z"
+      "checkpointed_at": "2026-10-17T04:31:03Z"
     },
     {
       "asset_id": "acadabd134df0e32abd7d0d6",
@@ -5071,6 +5104,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5088,7 +5122,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:41Z"
+      "checkpointed_at": "2026-10-17T04:31:17Z"
     },
     {
       "asset_id": "e4c8e61857756435f6a26f75",
@@ -5098,24 +5132,23 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_summary": "A yellow rope with a blue loop at one end.",
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "Educational content related to science and physics",
-        "limitations": [
-          "The image does not provide specific information about the textbook or its content."
-        ]
+        "context_relation": "Chapter 1",
+        "limitations": []
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:49:50Z"
+      "checkpointed_at": "2026-10-17T04:31:27Z"
     },
     {
       "asset_id": "a32d68cdd53eb51aefeee7ec",
@@ -5125,6 +5158,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5142,7 +5176,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:50:02Z"
+      "checkpointed_at": "2026-10-17T04:31:44Z"
     },
     {
       "asset_id": "389ac0b69d3354e32935bc0b",
@@ -5152,11 +5186,12 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_summary": "A blank page with a light green border.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
@@ -5169,7 +5204,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:50:11Z"
+      "checkpointed_at": "2026-10-17T04:31:53Z"
     },
     {
       "asset_id": "2f23ee59fcb77635b865fcf1",
@@ -5179,25 +5214,25 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible content.",
+        "visual_summary": "A black page with no visible text or images.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": [
-          "unclear if the page is a full page or a cropped figure",
-          "no visible text or content"
+          "unclear if the page is a full page or a cropped figure, no visible text or images present"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:50:23Z"
+      "checkpointed_at": "2026-10-17T04:32:10Z"
     },
     {
       "asset_id": "d46b78b2f560d25988fe9c39",
@@ -5207,6 +5242,7 @@
       "source_pdf_page_number": 19,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5215,16 +5251,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is a blank page in the textbook.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and has no visible text or images."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:50:35Z"
+      "checkpointed_at": "2026-10-17T04:32:25Z"
     },
     {
       "asset_id": "8f4d2820f54c7629b728d8b8",
@@ -5234,12 +5270,13 @@
       "source_pdf_page_number": 19,
       "asset_path": "page-0019.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "ee49f04d58678ffb376ff09600f6b659a96882ad9e9b4f2c4ef27c4a5be0d195",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "Table of contents for a textbook.",
-        "visual_type": "table",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Contents",
           "Foreword",
@@ -5291,16 +5328,16 @@
           "Chapter 9",
           "Life Processes in Animals"
         ],
-        "context_relation": "Table of contents for a textbook.",
+        "context_relation": "The table of contents for a textbook.",
         "limitations": [
-          "The page only shows the table of contents, not the actual content of the chapters."
+          "The image does not provide specific details about the textbook's content or structure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:54:06Z"
+      "checkpointed_at": "2026-10-17T04:36:52Z"
     },
     {
       "asset_id": "8c653523c8425e238d06b307",
@@ -5310,11 +5347,12 @@
       "source_pdf_page_number": 20,
       "asset_path": "assets/fbacc19bb222b338f01cffe7807cc12871695f813d45d912a59d2929c5cbdee7.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b54c9246be071202887ec5deeb5d6727c7bacd78529a94766ae94cbf42d0b09",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a national toll-free counseling telehelpline number and website.",
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It encourages seeking support from counselors and provides a national toll-free number.",
         "visual_type": "diagram",
         "visible_text": [
           "If you are stressed, anxious, worried, sad or confused about ....",
@@ -5323,10 +5361,15 @@
           "Career Concerns",
           "Peer Pressure",
           "Seek Support of Counsellors",
-          "Call 8448440632",
-          "National Toll-free Counselling Tele-Helpline 8am to 8pm All days of the week",
+          "Call",
+          "8448440632",
+          "National Toll-free Counselling Tele-Helpline",
+          "8am to 8pm",
+          "All days of the week",
           "MANODARPAN",
-          "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond (An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
+          "Psychosocial Support for Mental Health & Well-being of Students",
+          "during the COVID-19 Outbreak and beyond",
+          "(An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
           "www.https://manodarpan.education.gov.in"
         ],
         "concepts": [
@@ -5346,7 +5389,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:55:27Z"
+      "checkpointed_at": "2026-10-17T04:38:46Z"
     },
     {
       "asset_id": "f1ec407a01e2437476fd2671",
@@ -5356,6 +5399,7 @@
       "source_pdf_page_number": 20,
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b54c9246be071202887ec5deeb5d6727c7bacd78529a94766ae94cbf42d0b09",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5364,16 +5408,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is likely a blank page in a textbook.",
+        "context_relation": "The page is likely intended for educational content to be filled in.",
         "limitations": [
-          "The page is blank and does not contain any text or images."
+          "The page is blank and requires content to be added."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:55:37Z"
+      "checkpointed_at": "2026-10-17T04:38:58Z"
     },
     {
       "asset_id": "f46c83beb48a161c64a2cf8e",
@@ -5383,6 +5427,7 @@
       "source_pdf_page_number": 20,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b54c9246be071202887ec5deeb5d6727c7bacd78529a94766ae94cbf42d0b09",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5391,16 +5436,16 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The page is a blank page with no visible content.",
+        "context_relation": "unclear",
         "limitations": [
-          "The page is completely black and has no visible text, images, or other elements."
+          "unclear"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:55:47Z"
+      "checkpointed_at": "2026-10-17T04:39:08Z"
     },
     {
       "asset_id": "8d5902c3f2c1bc4bf3987209",
@@ -5410,6 +5455,7 @@
       "source_pdf_page_number": 20,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b54c9246be071202887ec5deeb5d6727c7bacd78529a94766ae94cbf42d0b09",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5427,7 +5473,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:55:57Z"
+      "checkpointed_at": "2026-10-17T04:39:20Z"
     },
     {
       "asset_id": "125bdced65b706ecf8e358d2",
@@ -5437,12 +5483,13 @@
       "source_pdf_page_number": 20,
       "asset_path": "page-0020.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "5b54c9246be071202887ec5deeb5d6727c7bacd78529a94766ae94cbf42d0b09",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a toll-free number for support.",
-        "visual_type": "diagram",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "If you are stressed, anxious, worried, sad or confused about ....",
           "Studies and Exams",
@@ -5450,11 +5497,7 @@
           "Career Concerns",
           "Peer Pressure",
           "Seek Support of Counsellors",
-          "Call",
-          "8448440632",
-          "National Toll-free Counselling Tele-Helpline",
-          "8am to 8pm",
-          "All days of the week",
+          "Call 8448440632",
           "MANODARPAN",
           "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond (An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
           "www.https://manodarpan.education.gov.in"
@@ -5464,9 +5507,8 @@
           "mental health",
           "students",
           "COVID-19",
-          "toll-free number",
-          "helpline",
-          "psychosocial support"
+          "Ministry of Education",
+          "Atma Nirbhar Bharat Abhiyan"
         ],
         "context_relation": "The advertisement is promoting a counseling service for students during the COVID-19 pandemic.",
         "limitations": [
@@ -5477,7 +5519,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T15:59:06Z"
+      "checkpointed_at": "2026-10-17T04:43:16Z"
     },
     {
       "asset_id": "af084d7b267424d174a676ff",
@@ -5487,6 +5529,7 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/3bd8a0abff7fa725fa2d9485d7701d075742a98d3f91c801c1a298774aa44e51.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5495,14 +5538,13 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [
-          "play",
-          "paper airplanes",
-          "park",
-          "toy rocket",
-          "birds",
-          "sky"
+          "Children playing",
+          "Paper airplanes",
+          "Toy rocket",
+          "Birds flying",
+          "Park setting"
         ],
-        "context_relation": "The image depicts a playful and leisurely scene in a park, where children are engaged in a simple outdoor activity.",
+        "context_relation": "The image depicts a playful and leisurely scene in a park, where children are engaged in a simple outdoor activity involving paper airplanes and a toy rocket.",
         "limitations": [
           "The image does not provide specific details about the educational content or the grade level."
         ]
@@ -5511,7 +5553,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:02:36Z"
+      "checkpointed_at": "2026-10-17T04:47:49Z"
     },
     {
       "asset_id": "9bb13c17a8b00fd4df0e67ec",
@@ -5521,6 +5563,7 @@
       "source_pdf_page_number": 21,
       "asset_path": "assets/c6afc184abe5abd3427bc0118a597ef7663c09cad042ad7edff71962f4e6653c.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -5538,7 +5581,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
-      "checkpointed_at": "2026-10-16T16:03:41Z"
+      "checkpointed_at": "2026-10-17T04:49:20Z"
     },
     {
       "asset_id": "fe90750499a77fa48db34728",
