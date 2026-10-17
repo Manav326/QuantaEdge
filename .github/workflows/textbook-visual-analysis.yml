@@ -221,7 +221,7 @@ jobs:
           batch_size=25
           while true; do
             batch="$batch_size"
-            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID" --timeout 360 --num-ctx 8192 --num-predict 1024 --output "$analysis_output")
+            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID" --timeout 0 --num-ctx 8192 --num-predict 1024 --output "$analysis_output")
             if [[ -f "$analysis_output" ]]; then args+=(--resume); fi
             python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
             batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$analysis_output")"

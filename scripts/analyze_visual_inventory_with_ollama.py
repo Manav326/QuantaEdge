@@ -79,7 +79,7 @@ def analyze_one(
     *,
     endpoint: str,
     model: str,
-    timeout: int = 300,
+    timeout: int | None = None,
     num_ctx: int = 8192,
     num_predict: int = 1024,
     opener=urllib.request.urlopen,
@@ -195,7 +195,7 @@ def run_analysis(
     model: str,
     max_assets: int | None,
     include_page_previews: bool,
-    timeout: int = 300,
+    timeout: int | None = None,
     num_ctx: int = 8192,
     num_predict: int = 1024,
     opener=urllib.request.urlopen,
@@ -416,7 +416,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434", help="Local Ollama endpoint.")
     parser.add_argument("--max-assets", type=int, help="Optional per-invocation batch size; omit it to process every remaining eligible visual. Never limits total assets.")
     parser.add_argument("--include-page-previews", action="store_true", help="Include full-page previews; these may cost more context.")
-    parser.add_argument("--timeout", type=int, default=300)
+    parser.add_argument("--timeout", type=int, default=0, help="HTTP request timeout in seconds; 0 waits for the model response without a per-request timeout.")
     parser.add_argument("--num-ctx", type=int, default=8192, help="Ollama context size; 8192 avoids prior 4096-token input failures.")
     parser.add_argument("--num-predict", type=int, default=1024, help="Bounded output-token budget for visual JSON.")
     parser.add_argument("--output", type=Path, help="Optional checkpoint path; use a model-specific path to preserve checkpoints across model comparisons.")
@@ -428,8 +428,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.max_assets is not None and args.max_assets < 1:
             raise ValueError("--max-assets, when supplied as a per-invocation batch size, must be positive.")
-        if args.timeout < 10 or args.timeout > 900:
-            raise ValueError("--timeout must be between 10 and 900 seconds.")
+        if args.timeout != 0 and (args.timeout < 10 or args.timeout > 900):
+            raise ValueError("--timeout must be 0 (no per-request timeout) or between 10 and 900 seconds.")
         if output_path.exists() and not (args.resume or args.overwrite):
             raise FileExistsError(f"Refusing to overwrite {output_path}; pass --resume to continue or --overwrite to restart.")
         if args.resume and args.overwrite:
@@ -439,7 +439,7 @@ def main(argv: list[str] | None = None) -> int:
         result = run_analysis(
             args.inventory, endpoint=args.endpoint, model=args.model,
             max_assets=args.max_assets, include_page_previews=args.include_page_previews,
-            timeout=args.timeout, num_ctx=args.num_ctx, num_predict=args.num_predict,
+            timeout=None if args.timeout == 0 else args.timeout, num_ctx=args.num_ctx, num_predict=args.num_predict,
             output_path=output_path, resume=args.resume, run_id=args.run_id,
         )
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:

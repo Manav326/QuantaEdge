@@ -8,7 +8,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis, _json_object_from_response
+from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis, _json_object_from_response, main
 
 
 class FakeResponse:
@@ -343,6 +343,36 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(1, result["summary"]["assets_failed"])
         self.assertIn("Ollama HTTP 400", result["results"][0]["error"])
         self.assertIn("image exceeds supported dimensions", result["results"][0]["error"])
+
+
+    def test_default_request_timeout_is_unbounded(self):
+        observed_timeouts = []
+
+        def capture_timeout(request, timeout=None):
+            observed_timeouts.append(timeout)
+            return self._opener(request, timeout)
+
+        run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=capture_timeout,
+        )
+        self.assertEqual([None], observed_timeouts)
+
+    def test_cli_timeout_zero_disables_per_request_timeout(self):
+        with patch("sys.argv", [
+            "analyze_visual_inventory_with_ollama.py",
+            "--inventory", str(self.inventory_path),
+            "--model", "qwen2.5vl:3b",
+            "--timeout", "0",
+        ]):
+            with patch(
+                "scripts.analyze_visual_inventory_with_ollama.run_analysis",
+                return_value={"summary": {"assets_analyzed": 0}},
+            ) as mocked_run:
+                self.assertEqual(0, main())
+        self.assertIsNone(mocked_run.call_args.kwargs["timeout"])
+
 
 
 if __name__ == "__main__":
