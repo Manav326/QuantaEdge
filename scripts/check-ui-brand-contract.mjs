@@ -33,6 +33,7 @@ const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
 const adminBrandComponent = read('apps/admin/app/components/QuantaEdgeBrand.tsx');
 const peopleBrandComponent = read('apps/people/app/components/QuantaEdgeBrand.tsx');
 const adminSidebar = read('apps/admin/app/components/AdminSidebar.tsx');
+const adminWorkspaceLayout = read('apps/admin/app/components/AdminWorkspaceLayout.tsx');
 const peopleWorkspace = read('apps/people/app/components/PeopleWorkspaceLayout.tsx');
 const peopleLogin = read('apps/people/app/login/page.tsx');
 const peopleChangePassword = read('apps/people/app/change-password/page.tsx');
@@ -52,6 +53,10 @@ assert(brandComponent.includes('Smarter Decisions. Greater Growth.'), 'Live Quan
 assert(adminBrandComponent === brandComponent, 'Admin must use a byte-identical copy of the canonical QuantaEdge brand component.');
 assert(peopleBrandComponent === brandComponent, 'People Operations must use a byte-identical copy of the canonical QuantaEdge brand component.');
 assert(adminSidebar.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin sidebar must use the canonical shared brand component.');
+assert(adminWorkspaceLayout.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin mobile workspace header must use the shared brand component.');
+assert(adminWorkspaceLayout.includes('className="qe-admin-global-brand"'), 'Admin mobile workspace header must render the canonical brand lockup.');
+assert(peopleWorkspace.includes('className="qe-people-mobile-brand-lockup"'), 'People mobile workspace header must render the canonical brand lockup.');
+assert(!peopleWorkspace.includes('<span>QUANTAEDGE</span>'), 'People workspace must not hard-code a duplicate brand name outside the shared component.');
 assert(peopleWorkspace.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'People workspace must use the canonical shared brand component.');
 assert(!adminSidebar.includes('quantaedge-wordmark.png'), 'Admin sidebar must not render the invalid legacy wordmark PNG.');
 assert(!peopleWorkspace.includes('quantaedge-wordmark.png') && !peopleLogin.includes('quantaedge-wordmark.png') && !peopleChangePassword.includes('quantaedge-wordmark.png'), 'People workspace and authentication must not render the invalid legacy wordmark PNG.');

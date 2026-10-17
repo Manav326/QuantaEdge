@@ -186,3 +186,6 @@ The user explicitly directed implementation of the planned UI/UX work end to end
 - People Operations: orange-led alignment and shared form/table/pagination responsive polish, retaining its separate product shell.
 - Cross-app automation: a lightweight, dependency-free contract verifies official brand assets/lockup, palette parity, responsive breakpoints and accessibility baseline, then runs in CI.
 - Verification gate remains evidence-based: builds and structural contracts are not the same as browser screenshots, screen-reader testing, or end-to-end HR workflow testing. Mark those only after they are actually exercised.
+
+
+**Mobile brand consistency — October 17, 2026:** Admin and People Operations mobile workspace headers now render the shared `QuantaEdgeBrand` component instead of repeating the organization name as disconnected text. The cross-app contract guards these entry points.

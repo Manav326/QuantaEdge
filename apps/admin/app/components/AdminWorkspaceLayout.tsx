@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
+import QuantaEdgeBrand from './QuantaEdgeBrand';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
 import {
   ADMIN_NAV_GROUPS,
@@ -172,7 +173,8 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       <div className="qe-admin-workspace-content">
         <header className="qe-admin-global-header">
           <div className="qe-admin-global-context">
-            <span>QUANTAEDGE</span>
+            <span className="qe-admin-global-context-label">QUANTAEDGE</span>
+            <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-global-brand" />
             <strong>Staff workspace</strong>
           </div>
           <div className="qe-admin-global-actions">

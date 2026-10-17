@@ -257,3 +257,6 @@ The user explicitly directed implementation of the full cross-app UI/UX plan, in
 - The component is copied byte-identically into independently built app bundles; the contract checks exact component parity and byte-identical canonical Q-mark assets.
 - Login and forced-password-change screens use the same Q mark, wordmark text and tagline. App-scoped white lockup surfaces preserve the approved navy/orange wordmark and tagline treatment.
 - The older wordmark PNG remains a legacy/export asset and is not used in these live lockups.
+
+
+- **Mobile header follow-up — October 17, 2026:** the responsive People header uses the shared canonical lockup; the collapsed desktop rail centers the Q mark; mobile and desktop keep the same navy/orange wordmark and untouched tagline.

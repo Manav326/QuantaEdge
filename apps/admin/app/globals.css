@@ -1002,3 +1002,21 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-shared-sidebar.is-collapsed .qe-admin-brand-context{display:none}
 .qe-admin-brand-lockup:focus-visible{outline:3px solid #fdba74;outline-offset:3px;border-radius:9px}
 @media(max-width:980px){.qe-admin-brand-lockup .qe-brand__name{font-size:18px}.qe-admin-brand-lockup .qe-brand__tagline{font-size:6.1px}}
+
+
+/* Mobile workspace header uses the same canonical brand component as the desktop sidebar. */
+.qe-admin-global-brand{display:none;max-width:100%;text-decoration:none;color:inherit}
+.qe-admin-global-brand .qe-brand{display:flex;min-width:0;max-width:100%;flex-direction:column;align-items:flex-start;gap:2px}
+.qe-admin-global-brand .qe-brand__lockup{display:flex;align-items:center;gap:6px;min-width:0;max-width:100%;padding:0;background:transparent;border:0}
+.qe-admin-global-brand .qe-brand__icon{display:block;flex:0 0 26px;width:26px;height:26px;object-fit:contain}
+.qe-admin-global-brand .qe-brand__copy{display:flex;min-width:0;max-width:100%;flex-direction:column;gap:2px}
+.qe-admin-global-brand .qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.qe-admin-global-brand .qe-brand__name-quant{color:#152038}
+.qe-admin-global-brand .qe-brand__name-edge{color:#F97316}
+.qe-admin-global-brand .qe-brand__tagline{display:block;color:#566176;font-size:5.8px;line-height:1.2;letter-spacing:0;white-space:nowrap}
+.qe-admin-global-brand:focus-visible{outline:3px solid #fdba74;outline-offset:3px;border-radius:7px}
+@media(max-width:900px){
+  .qe-admin-global-context-label{display:none}
+  .qe-admin-global-brand{display:inline-flex}
+  .qe-admin-global-context>strong{font-size:10px}
+}

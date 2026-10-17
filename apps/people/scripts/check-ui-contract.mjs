@@ -34,6 +34,8 @@ assert(sessionBoundary.includes("'HRMS'"), 'Session boundary must preserve HRMS 
 assert(workspace.includes("pathname === '/change-password'"), 'Forced password-change route must remain outside the workspace chrome.');
 assert(workspace.includes('id="main-content" tabIndex={-1}'), 'Skip link target must be programmatically focusable.');
 assert(workspace.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'HRMS workspace must use the shared canonical brand component.');
+assert(workspace.includes('className="qe-people-mobile-brand-lockup"'), 'HRMS mobile workspace header must use the canonical brand lockup.');
+assert(!workspace.includes('<span>QUANTAEDGE</span>'), 'HRMS mobile workspace must not hard-code a duplicate brand name.');
 assert(!workspace.includes('quantaedge-wordmark.png'), 'HRMS workspace must not reference the invalid legacy wordmark PNG.');
 assert(workspace.includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"), 'HRMS access management must be permission-gated in navigation.');
 assert(workspace.includes("label: 'Access governance'"), 'Access management must have a distinct Access Governance navigation group.');

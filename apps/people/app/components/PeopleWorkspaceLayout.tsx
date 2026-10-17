@@ -348,7 +348,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             >{mobileMenuOpen ? '×' : '☰'}</button>
             <div className="qe-people-header-context">
-              <span>QUANTAEDGE</span>
+              <QuantaEdgeBrand href="/" variant="compact" className="qe-people-mobile-brand-lockup" />
               <strong>People Operations</strong>
             </div>
           </div>
