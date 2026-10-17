@@ -1810,30 +1810,45 @@ fun QuantaEdgeApp() {
         if (documentId <= 0L || pageCount <= 0) return
         val requested = pages.distinct().filter { it in 1..pageCount }
         documentThumbnailImages = documentThumbnailImages.filterKeys { it in requested }
-        requested.forEach { pageNumber ->
-            val requestKey = "$documentId:$pageNumber"
-            if (documentThumbnailImages.containsKey(pageNumber) || requestKey in documentThumbnailRequests) return@forEach
-            documentThumbnailRequests = documentThumbnailRequests + requestKey
-            scope.launch {
-                try {
-                    val bytes = resourceStore.readPage(documentId, pageNumber)
-                        ?: ApiClient.getBytes("/api/v1/learning/documents/" + documentId + "/pages/" + pageNumber)
-                    val options = BitmapFactory.Options().apply {
-                        inSampleSize = 4
-                        inPreferredConfig = android.graphics.Bitmap.Config.RGB_565
-                    }
-                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
-                    if (bitmap != null && selectedDocument.optLongAny("document_id", "id") == documentId &&
-                        pageNumber in ((documentPage - 4).coerceAtLeast(1)..(documentPage + 4).coerceAtMost(pageCount))) {
-                        documentThumbnailImages = documentThumbnailImages + (pageNumber to bitmap.asImageBitmap())
-                    }
-                } catch (_: Exception) {
-                    // Keep the page-number tile available; the main reader remains the retry path.
-                } finally {
-                    documentThumbnailRequests = documentThumbnailRequests - requestKey
+        val pendingPages = requested.filter { pageNumber ->
+        !documentThumbnailImages.containsKey(pageNumber) &&
+            "$documentId:$pageNumber" !in documentThumbnailRequests
+    }
+    if (pendingPages.isEmpty()) return
+    val pendingKeys = pendingPages.map { "$documentId:$it" }.toSet()
+    documentThumbnailRequests = documentThumbnailRequests + pendingKeys
+    scope.launch {
+        try {
+            val firstPage = pendingPages.minOrNull() ?: return@launch
+            val lastPage = pendingPages.maxOrNull() ?: return@launch
+            val batch = ApiClient.getObject(
+                "/api/v1/learning/documents/" + documentId + "/pages" +
+                    "?startPage=" + firstPage + "&limit=" + (lastPage - firstPage + 1) +
+                    "&rendition=thumbnail"
+            )
+            val returnedPages = batch.optJSONArray("items")?.objectItems().orEmpty()
+            returnedPages.forEach { item ->
+                val pageNumber = item.optInt("pageNumber", 0)
+                if (pageNumber !in pendingPages) return@forEach
+                val encoded = item.optString("contentBase64")
+                if (encoded.isBlank()) return@forEach
+                val bytes = android.util.Base64.decode(encoded, android.util.Base64.DEFAULT)
+                val options = BitmapFactory.Options().apply {
+                    inSampleSize = 2
+                    inPreferredConfig = android.graphics.Bitmap.Config.RGB_565
+                }
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+                if (bitmap != null && selectedDocument.optLongAny("document_id", "id") == documentId &&
+                    pageNumber in ((documentPage - 4).coerceAtLeast(1)..(documentPage + 4).coerceAtMost(pageCount))) {
+                    documentThumbnailImages = documentThumbnailImages + (pageNumber to bitmap.asImageBitmap())
                 }
             }
+        } catch (_: Exception) {
+            // Keep thumbnail placeholders; main-page navigation stays independently usable.
+        } finally {
+            documentThumbnailRequests = documentThumbnailRequests - pendingKeys
         }
+    }
     }
 
     fun downloadDocument(document: JSONObject) {
