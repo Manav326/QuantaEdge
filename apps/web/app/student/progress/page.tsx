@@ -3,6 +3,7 @@
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import { useTenantBranding } from '../../components/TenantBrandingProvider';
 
 import Link from 'next/link';
 import {useCallback,useEffect,useState} from 'react';
@@ -12,6 +13,7 @@ import { curriculumProgress, displayCount, displayPercent, lessonProgress, safeC
 export default function ProgressPage(){
   const router=useRouter();
   const {locale}=useLocale();
+  const {brand}=useTenantBranding();
   const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [data,setData]=useState<any>(null); const [error,setError]=useState('');
   const [courseId,setCourseId]=useState<number|null>(null);
@@ -51,7 +53,7 @@ export default function ProgressPage(){
     try{
       const response=await fetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
-        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi',...(courseId!==null?{courseId}:{})})
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi',...(courseId!==null?{courseId}:{}),...(brand?.institutionCode?{institutionCode:brand.institutionCode}:{})})
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
