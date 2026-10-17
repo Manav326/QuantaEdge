@@ -1135,7 +1135,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v5"
     cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger_path.parent/"layer-8-rag-corpus.v1.jsonl"
-    if args.preflight_only:
+    if getattr(args, "preflight_only", False):
         if cpfile.exists():
             prior_doc=read_json(cpfile)
             if prior_doc.get("input_fingerprint")!=fingerprint:
