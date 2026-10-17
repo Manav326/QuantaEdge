@@ -426,8 +426,8 @@ public class AuthService {
       throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
     String registrationPasswordHash=passwordEncoder.encode(newPassword);
     Long userId=jdbc.queryForObject("""
-      insert into user_account(public_id,mobile_e164,display_name,role,password_hash)
-      values (?,?,?,?,?) returning id
+      insert into user_account(public_id,mobile_e164,display_name,role,password_hash,mobile_verified_at)
+      values (?,?,?,?,?,now()) returning id
       """,Long.class,UUID.randomUUID(),normalized,displayName,"PARENT",registrationPasswordHash);
     jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
     return contextForUser(userId);
@@ -682,14 +682,19 @@ public class AuthService {
     return contextForStudent(null,((Number)row.get("student_id")).longValue());
   }
 
-  /** Student credentials are scoped to the parent mobile; direct student login never receives parent-account access. */
+  /** Student credentials are scoped to a verified parent contact; child access stays parent-owned. */
   public AuthContext loginStudentByParent(String parentMobile,String username,String password) {
-    String normalized=normalizeMobile(parentMobile);
-    if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
-      throw new IllegalArgumentException("Enter a valid 10-digit parent mobile number.");
+    String supplied=parentMobile==null?"":parentMobile.trim();
+    String email=supplied.toLowerCase(java.util.Locale.ROOT);
+    boolean emailIdentifier=email.contains("@");
+    String normalized=emailIdentifier?"":normalizeMobile(supplied);
+    if(emailIdentifier && !email.matches("^[^@\\s]+@gmail\\.com$"))
+      throw new IllegalArgumentException("Enter the parent's verified Gmail address or mobile number.");
+    if(!emailIdentifier && !(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
+      throw new IllegalArgumentException("Enter the parent's verified Gmail address or 10-digit mobile number.");
     String cleanUsername=validateUsername(username);
     if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your student password.");
-    String attemptIdentity=normalized+"|"+cleanUsername;
+    String attemptIdentity=(emailIdentifier?email:normalized)+"|"+cleanUsername;
     assertPasswordLoginAllowed("STUDENT",attemptIdentity);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select c.student_id,c.password_hash
@@ -697,10 +702,13 @@ public class AuthService {
       join student_login_credential c on c.guardian_user_id=u.id and c.active=true
       join guardian_student gs on gs.guardian_user_id=u.id and gs.student_id=c.student_id
       join student st on st.id=c.student_id
-      where u.mobile_e164=? and u.active=true and u.role='PARENT'
+      where ((?<>'' and u.mobile_e164=?) or
+             (?<>'' and lower(u.email)=? and u.email_verified_at is not null
+               and u.google_subject is not null))
+        and u.active=true and u.role='PARENT'
         and lower(c.username)=? and gs.active=true and gs.consent_status='CONSENTED'
         and st.active=true and st.environment='PRODUCTION'
-      """,normalized,cleanUsername);
+      """,normalized,normalized,emailIdentifier?email:"",emailIdentifier?email:"",cleanUsername);
     if(rows.isEmpty()) {
       recordPasswordLoginFailure("STUDENT",attemptIdentity);
       throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
@@ -712,6 +720,36 @@ public class AuthService {
       throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
     }
     clearPasswordLoginFailures("STUDENT",attemptIdentity);
+    return contextForStudent(null,((Number)row.get("student_id")).longValue());
+  }
+
+  /** Global username/password login for an ordinary account or parent account. */
+  public AuthContext loginAccountByUsername(String username,String password) {
+    String cleanUsername=validateUsername(username);
+    if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your password.");
+    assertPasswordLoginAllowed("LEARNER",cleanUsername);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select u.id as user_id,u.role,u.password_hash,st.id as student_id
+      from user_account u
+      left join student st on st.user_account_id=u.id and st.active=true and st.environment='PRODUCTION'
+      where lower(u.username)=? and u.active=true and u.role in ('PARENT','LEARNER')
+      order by st.id limit 1
+      """,cleanUsername);
+    if(rows.isEmpty()) {
+      recordPasswordLoginFailure("LEARNER",cleanUsername);
+      throw new IllegalArgumentException("Username or password is incorrect.");
+    }
+    Map<String,Object> row=rows.getFirst();
+    String stored=row.get("password_hash")==null?"":String.valueOf(row.get("password_hash"));
+    if(stored.isBlank() || !passwordEncoder.matches(password,stored)) {
+      recordPasswordLoginFailure("LEARNER",cleanUsername);
+      throw new IllegalArgumentException("Username or password is incorrect.");
+    }
+    String role=String.valueOf(row.get("role"));
+    clearPasswordLoginFailures("LEARNER",cleanUsername);
+    long userId=((Number)row.get("user_id")).longValue();
+    if("PARENT".equals(role)) return contextForUser(userId);
+    if(row.get("student_id")==null) throw new IllegalStateException("The learner profile is not available for this account.");
     return contextForStudent(null,((Number)row.get("student_id")).longValue());
   }
 
