@@ -19,6 +19,7 @@ const apiTheme = read('services/api/src/main/java/com/quantaedge/api/Institution
 const platformApi = read('services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java');
 const tenantApi = read('services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java');
 const apiTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionThemeTokensTest.java');
+const tintContrastTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionThemeTintContrastTest.java');
 const editor = read('apps/people/app/institutions/page.tsx');
 const webRuntime = read('apps/web/app/components/ColorThemeProvider.tsx');
 const webLayout = read('apps/web/app/layout.tsx');
@@ -42,6 +43,7 @@ assert(platformApi.includes('"/theme-preview"') && platformApi.includes('Institu
 assert(tenantApi.includes('InstitutionThemeTokens.normalize'), 'Public tenant API must return generated palettes.');
 assert(apiTests.includes('alreadyMaterializedThemeCanBeReadAndNormalizedAgain'), 'Theme round-trip regression test is required.');
 assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'Palette contrast coverage must include curated presets.');
+assert(tintContrastTests.includes('primaryTextKeepsAccessibleContrastOnLightAndDarkTintedContainers'), 'Tinted-container contrast regression test must remain in CI.');
 
 assert(editor.includes('/api/v1/hrms/platform/institutions/theme-presets'), 'Institution editor must load server-owned presets.');
 assert(editor.includes('schemaVersion:2') && editor.includes('brandPrimary') && editor.includes('brandAccent'), 'Institution editor must save schema v2 source colours.');
