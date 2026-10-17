@@ -137,3 +137,10 @@ The backend includes resource/assignment lifecycle, source checks, per-resource 
 - Android's YouTube join flow consumes the protected API response's `youtubeVideoId`, validates the identifier, renders the privacy-enhanced embed in a restricted WebView, supports reopening a joined broadcast and keeps leave/attendance separate from the player.
 - Admin's schedule parser fix is on main. An Android video-ID unit test and API join regression are added, with cross-surface contract assertions in the CI source-contract script.
 - Evidence boundary: these are source/unit/build checks. A real signed-in browser session and physical Android device playback against a controlled live broadcast have not been executed by this change. Offline video, resource assignment UI, native messaging and media backup/restore remain outstanding.
+
+
+## Join-window parity update — 2026-10-17
+
+- Replaced fixed Admin dropdown choices with any whole-number minute input plus an explicit “Allow joining anytime” toggle for both creation and scheduled-session edits. The toggle stores 0, which removes only the early-join check; enrollment, eligible approved assignment, session status/provider validity and end time remain enforced by the server. The scheduled-session visibility window is still 24 hours.
+- Student web now computes its join state from the API's persisted `join_window_minutes` rather than hardcoding 15 minutes. Android uses the same value to gate joining/reopening and displays a pre-start hint. Both clients refresh their local clock while the screen is visible; API authorization remains authoritative.
+- Validation must be repeated on the exact resulting main commit. These checks do not replace controlled signed-in browser and physical Android device E2E.

@@ -42,8 +42,13 @@
 .cardBody{display:grid;gap:5px;min-width:0}
 .joinWindowControl{display:flex;align-items:end;gap:8px;flex-wrap:wrap;margin-top:7px;padding:9px;border:1px solid #f1d7c4;border-radius:9px;background:#fffaf6}
 .joinWindowControl label{display:flex;flex-direction:column;gap:5px;color:#586579;font-size:9px;font-weight:800}
-.joinWindowControl select{max-width:240px;min-width:165px;padding:7px 9px;border:1px solid #e7c6ad;border-radius:7px;background:#fff;color:#26344b;font:inherit;font-size:10px}
+.joinWindowControl input[type=number]{max-width:130px;min-width:95px;padding:7px 9px;border:1px solid #e7c6ad;border-radius:7px;background:#fff;color:#26344b;font:inherit;font-size:10px}
+.joinWindowControl label.joinWindowToggle{display:flex;flex-direction:row;align-items:center;gap:5px;padding-bottom:6px}
+.joinWindowControl label.joinWindowToggle input[type=checkbox]{width:15px;min-width:15px;min-height:15px;padding:0;accent-color:#f29b6c}
 .joinWindowControl button{min-height:29px;padding:7px 9px}
+.fields label.joinWindowToggle{display:flex;flex-direction:row;align-items:center;gap:8px;align-self:end;min-height:40px}
+.fields label.joinWindowToggle input[type=checkbox]{width:18px;min-width:18px;min-height:18px;padding:0;accent-color:#f29b6c}
+.fields label.joinWindowToggle span{line-height:1.5}
 .cardTitle{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .cardTitle h3{font-size:12px;line-height:1.45;color:#202e46;margin:0}
 .cardBody p{font-size:10px;line-height:1.5;color:#6f7b90;margin:0}

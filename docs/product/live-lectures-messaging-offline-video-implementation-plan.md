@@ -294,3 +294,11 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - Added an Android video-ID validation unit test, an API regression proving that YouTube join returns a video ID without a private meeting URL while persisting attendance, and CI source-contract checks for Admin/student-web/API/Android wiring.
 - These are **source-contract, unit and build checks**, not proof that a real student completed a broadcast on web and a physical device. A controlled live broadcast/test account is required for runtime E2E.
 - Remaining completion gates: latest-main CI pass; runtime browser/device join/reopen/leave; V111 resource catalogue UI across Admin/student web/Android; Android app-private offline recordings across restart/account switch; durable classroom/private messaging; media backup/restore, retention and load evidence.
+
+
+### Implementation journal — 2026-10-17 (checkpoint 11: custom join-window and anytime control)
+
+- Replaced fixed Admin dropdown choices with a numeric input accepting any whole number from 1 to 1440 minutes and an explicit “Allow joining anytime” checkbox. The same interaction is available when scheduling a class and when editing a scheduled session. The anytime choice is represented to the API as 0; while off, the selected minute count is saved.
+- Fixed student-side parity at the same time: student web and Android now use the persisted `join_window_minutes` value returned by the session API instead of hardcoding 15 minutes in web or relying only on an API rejection in Android. Both preserve the server's authorization as the definitive gate. Android shows a pre-start hint and refreshes its local clock while the class screen is visible.
+- Added regression coverage for the Android minute boundary, zero/anytime semantics, ended/completed sessions and malformed times; CI source-contract assertions check Admin schedule/edit, web, Android and API wiring. Updated the UI catalogues in all workspaces.
+- **Validation status:** pending the full build on this commit. This is not evidence of real-account/device E2E; controlled browser and Android playback must be tested separately.

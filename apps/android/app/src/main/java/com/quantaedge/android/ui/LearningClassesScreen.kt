@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,6 +26,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 import com.quantaedge.android.data.optLongAny
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import kotlinx.coroutines.delay
+
+internal fun parseLiveClassTimestampMillis(value: String): Long? {
+    val text = value.trim()
+    if (text.isEmpty()) return null
+    return runCatching { OffsetDateTime.parse(text).toInstant().toEpochMilli() }.getOrElse {
+        runCatching { Instant.parse(text).toEpochMilli() }.getOrElse {
+            runCatching { LocalDateTime.parse(text).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() }.getOrNull()
+        }
+    }
+}
+
+internal fun isLiveClassJoinWindowOpen(
+    status: String, startsAt: String, endsAt: String, joinWindowMinutes: Int, nowMillis: Long
+): Boolean {
+    if (status !in setOf("SCHEDULED", "LIVE")) return false
+    val startMillis = parseLiveClassTimestampMillis(startsAt) ?: return false
+    val endMillis = parseLiveClassTimestampMillis(endsAt) ?: return false
+    if (endMillis <= nowMillis) return false
+    val minutes = joinWindowMinutes.coerceIn(0, 1440)
+    return minutes == 0 || startMillis <= nowMillis + minutes.toLong() * 60_000L
+}
+
+internal fun isLiveClassWaitingForJoinWindow(
+    status: String, startsAt: String, endsAt: String, joinWindowMinutes: Int, nowMillis: Long
+): Boolean {
+    if (status !in setOf("SCHEDULED", "LIVE")) return false
+    val minutes = joinWindowMinutes.coerceIn(0, 1440)
+    if (minutes == 0) return false
+    val startMillis = parseLiveClassTimestampMillis(startsAt) ?: return false
+    val endMillis = parseLiveClassTimestampMillis(endsAt) ?: return false
+    return endMillis > nowMillis && startMillis > nowMillis + minutes.toLong() * 60_000L
+}
 
 @Composable
 fun LearningClassesScreen(
@@ -41,6 +79,13 @@ fun LearningClassesScreen(
 ) {
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
+    var clockNowMillis by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            clockNowMillis = System.currentTimeMillis()
+            delay(30_000)
+        }
+    }
     var tab by rememberSaveable { mutableStateOf("LIVE") }
     Column(modifier = Modifier.fillMaxSize().padding(14.dp)) {
         Text(localizedUiText("Live classes और recordings"), style = MaterialTheme.typography.headlineSmall)
@@ -88,6 +133,12 @@ fun LearningClassesScreen(
             LazyColumn(modifier = Modifier.weight(1f).padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(liveItems) { item ->
                     val joined = item.optBoolean("currently_joined")
+                    val status = item.textAny("status")
+                    val joinWindowMinutes = item.optInt("join_window_minutes", item.optInt("joinWindowMinutes", 15)).coerceIn(0, 1440)
+                    val startsAt = item.textAny("starts_at", "startsAt")
+                    val endsAt = item.textAny("ends_at", "endsAt")
+                    val joinWindowOpen = isLiveClassJoinWindowOpen(status, startsAt, endsAt, joinWindowMinutes, clockNowMillis)
+                    val waitingForJoinWindow = isLiveClassWaitingForJoinWindow(status, startsAt, endsAt, joinWindowMinutes, clockNowMillis)
                     Card(modifier = Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                             Text(item.textAny("title").ifBlank { "Live class" }, style = MaterialTheme.typography.titleMedium)
@@ -102,7 +153,7 @@ fun LearningClassesScreen(
                             val youtubeLive = item.textAny("provider") == "YOUTUBE_LIVE"
                             if (joined) {
                                 if (youtubeLive) {
-                                    Button(onClick = { onJoin(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                                    Button(onClick = { onJoin(item) }, enabled = !busy && joinWindowOpen, modifier = Modifier.fillMaxWidth()) {
                                         Text(t("Watch live broadcast", "लाइव प्रसारण देखें"))
                                     }
                                 }
@@ -110,10 +161,16 @@ fun LearningClassesScreen(
                                     Text(t("Leave class and save attendance", "कक्षा छोड़ें और उपस्थिति सहेजें"))
                                 }
                             } else {
-                                Button(onClick = { onJoin(item) }, enabled = !busy && item.textAny("status") in setOf("SCHEDULED", "LIVE"),
+                                Button(onClick = { onJoin(item) }, enabled = !busy && joinWindowOpen,
                                     modifier = Modifier.fillMaxWidth()) {
                                     Text(if (youtubeLive) t("Watch live broadcast", "लाइव प्रसारण देखें")
                                         else t("Join live class", "लाइव कक्षा में शामिल हों"))
+                                }
+                                if (waitingForJoinWindow) {
+                                    Text(t("Joining opens ", "कक्षा में जुड़ना शुरू होगा: ") + joinWindowMinutes +
+                                        t(" minutes before start.", " मिनट पहले।"),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.secondary)
                                 }
                             }
                             if (item.optBoolean("has_recording")) {
