@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -133,8 +135,53 @@ public class InstitutionTenantController {
     result.put("appIconAssetKey", row.get("app_icon_asset_key"));
     result.put("storeListingUrl", row.get("store_listing_url"));
     result.put("brandingVersion", row.get("branding_version"));
+    long brandingVersion = ((Number) row.get("branding_version")).longValue();
+    result.put("logoUrl", assetUrl(normalized, "logo", brandingVersion, row.get("logo_asset_key")));
+    result.put("appIconUrl", assetUrl(normalized, "app-icon", brandingVersion, row.get("app_icon_asset_key")));
     result.put("themeTokens", parseJsonObject(row.get("theme_tokens")));
     return result;
+  }
+
+  @GetMapping("/public/branding/{tenantCode}/assets/{assetType}")
+  public ResponseEntity<byte[]> publicBrandingAsset(
+      @PathVariable String tenantCode,
+      @PathVariable String assetType) {
+    String normalized = tenantCode == null ? "" : tenantCode.trim().toUpperCase(Locale.ROOT);
+    if (!normalized.matches("^[A-Z0-9][A-Z0-9_-]{2,31}$")) {
+      throw new IllegalArgumentException("Institution code is invalid.");
+    }
+    String selectedType = assetType == null ? "" : assetType.trim().toLowerCase(Locale.ROOT);
+    String databaseType = switch (selectedType) {
+      case "logo" -> "LOGO";
+      case "app-icon" -> "APP_ICON";
+      default -> throw new IllegalArgumentException("Branding asset type is invalid.");
+    };
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select a.content_type,a.image_bytes,a.content_sha256
+        from institution_tenant t
+        join institution_branding b on b.institution_id=t.id
+        join institution_branding_asset a
+          on a.institution_id=t.id
+          and a.asset_id=case when ?='LOGO' then b.logo_asset_key else b.app_icon_asset_key end
+          and a.asset_type=? and a.active=true
+        where t.tenant_code=? and t.status='ACTIVE'
+        """, databaseType, databaseType, normalized);
+    if (rows.isEmpty()) throw new IllegalArgumentException("Branding asset is not available.");
+    Map<String,Object> asset = rows.getFirst();
+    byte[] bytes = (byte[]) asset.get("image_bytes");
+    String contentType = String.valueOf(asset.get("content_type"));
+    String digest = String.valueOf(asset.get("content_sha256"));
+    return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(contentType))
+        .header(HttpHeaders.CACHE_CONTROL, "public, max-age=300, stale-while-revalidate=60")
+        .header(HttpHeaders.ETAG, "\"" + digest + "\"")
+        .header("X-Content-Type-Options", "nosniff")
+        .body(bytes);
+  }
+
+  private static String assetUrl(String tenantCode, String assetType, long version, Object assetKey) {
+    if (assetKey == null || String.valueOf(assetKey).isBlank()) return "";
+    return "/api/v1/institution/public/branding/" + tenantCode + "/assets/" + assetType + "?v=" + version;
   }
 
   /** Authenticated learner joins the institution represented by a secret join code. */
