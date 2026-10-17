@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5d4450d1bb20018b4f20d169311a01bd70f828e8d9a5be7d0d8a4be29b033c91",
+  "raw_analysis_sha256": "65d5705fdab418a3b9f5dcbe37a57c65b0c2a0cfd97c5205a01a29ba6be162d1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1209,6 +1209,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/2fab82d277e72841ef8eaf165be9a4ba365b0dc52a2524408ff3eb6430f6ed24.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1217,18 +1218,29 @@
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image is likely related to educational content, possibly a textbook or a learning resource.",
+        "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
-          "The image does not provide specific details about the educational content it represents."
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a general illustration and does not represent any particular concept or question from the text."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:19:05Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:27:34Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy holding a pen and a notebook.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a general illustration and does not represent any particular concept or question from the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1239,24 +1251,36 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/12e42805247f349ef5e78ce53e027bb77c3b03cfc66cf8d4ebf9a8ebec013f26.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character holding a notebook and pen, possibly a teacher or student.",
+        "visual_summary": "A cartoon illustration of a person holding a notebook and pen, possibly a teacher or student.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is likely related to educational content, possibly a teaching scenario or a student's study session.",
-        "limitations": []
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context it represents."
+        ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:20:10Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:29:06Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a notebook and pen, possibly a teacher or student.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to educational content, possibly a teaching scenario or a student's study session.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1267,6 +1291,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/e0cfe73eefb91143643de85b53e5bf6435306808d72eb24bad47177ceefa1d3c.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1275,18 +1300,29 @@
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image does not provide a direct relation to the text.",
+        "context_relation": "The image does not provide a direct context to the text.",
         "limitations": [
-          "The image does not contain any text or labels that can be used to infer a specific context or question related to the text."
+          "The image does not directly relate to the text provided.",
+          "The text is about open-ended questions in a chapter, not the image's content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:21:20Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:30:40Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is climbing a staircase, appearing to be in a hurry or stressed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct context to the text.",
+        "limitations": [
+          "The image does not directly relate to the text provided.",
+          "The text is about open-ended questions in a chapter, not the image's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1297,26 +1333,38 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/01abca31df965bc57122f6f5d7b6af230eda16c86979b477da3d0e13e80e1eb3.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character is climbing stairs, pointing towards the top.",
+        "visual_summary": "A cartoon character climbing stairs, pointing towards the top.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image does not provide a direct relation to the text.",
+        "context_relation": "The image does not provide a direct context to the text.",
         "limitations": [
-          "The image does not contain any text or labels that can be used to infer a specific context or question related to the text."
+          "The image does not directly relate to the text provided.",
+          "The text is about open-ended questions in textbooks, not the image content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:22:29Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:32:14Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, pointing towards the top.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct context to the text.",
+        "limitations": [
+          "The image does not directly relate to the text provided.",
+          "The text is about open-ended questions in textbooks, not the image content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1327,26 +1375,38 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A black page with no visible text or images.",
+        "visual_summary": "The image is a black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "unclear",
+        "context_relation": "uncertain",
         "limitations": [
-          "unclear"
+          "The image is a black page with no visible content.",
+          "The visible text is empty."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:22:39Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:32:28Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The image is a black page with no visible content.",
+          "The visible text is empty."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1357,26 +1417,36 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image is a black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "unclear",
+        "context_relation": "The image is a blank page with no visible content.",
         "limitations": [
-          "unclear"
+          "The image is a blank page with no visible content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:22:49Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:32:42Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1387,6 +1457,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "page-0006.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1413,7 +1484,7 @@
         ],
         "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1421,9 +1492,35 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:26:12Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:37:11Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
+          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
+          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
+          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
+        ],
+        "concepts": [
+          "open-ended questions",
+          "critical thinking",
+          "curiosity",
+          "teamwork",
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
+        ],
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "limitations": [
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1434,11 +1531,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/d8049899e9e47e777dca48f2ea6763f0db96ae3267db58e57a8429183c24aa5b.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon character pointing upwards with a smile.",
+        "visual_summary": "A cartoon character pointing upwards with a smile on his face.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
@@ -1452,9 +1550,19 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:27:20Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:38:47Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character pointing upwards with a smile on his face.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the textbook content.",
+          "The image is a cartoon character and does not represent any specific scientific concept or experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1465,6 +1573,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/9e797f35cf452a6458a425963d3c73a4e3bfd0421198153eed2d94c30b7a5b88.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1473,23 +1582,37 @@
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [
-          "teacher",
-          "student",
           "book",
-          "pen"
+          "pen",
+          "teacher",
+          "student"
         ],
         "context_relation": "The image likely represents an educational setting, possibly a classroom or library.",
         "limitations": [
-          "The image does not provide specific details about the content of the book or the subject being taught."
+          "The image does not provide specific details about the content of the book or the activities being performed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:28:32Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:40:21Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a book and a pen, possibly a teacher or student.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "book",
+          "pen",
+          "teacher",
+          "student"
+        ],
+        "context_relation": "The image likely represents an educational setting, possibly a classroom or library.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or the activities being performed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1500,6 +1623,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/72aa0d29f61a77d39cf78215315730bd3c91f1255966e765a8bcb65fbf02404a.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1517,9 +1641,18 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:29:36Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:41:49Z",
+      "effective_analysis": {
+        "visual_summary": "A green backpack with a face and a carrot on it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about scientific heritage and experiments.",
+        "limitations": [
+          "The image does not provide any information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1530,6 +1663,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/e25ca837dff2d755b61118a5a38c10c9a986f8f824752c666eadfb56da9f5b6d.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1538,19 +1672,29 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image appears to be related to the theme of scientific heritage and the contributions of institutions and personalities to scientific progress.",
+        "context_relation": "The image appears to be related to the theme of scientific heritage and contributions to societal development.",
         "limitations": [
           "The image does not provide specific details about the experiment or modifications that can be made.",
-          "The image does not show any text or labels that could provide additional context or information."
+          "The image does not show any text or labels that would provide additional context or information."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:30:46Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:43:23Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a camera, with a backpack next to them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of scientific heritage and contributions to societal development.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that would provide additional context or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1561,6 +1705,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/6db773af7252f87de76872ca3b2f795d52a7931cfab56bf620bfd366c7c2e3f5.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1575,18 +1720,33 @@
           "books",
           "cartoon character"
         ],
-        "context_relation": "The image depicts a character in a scientific setting, possibly related to a textbook or educational content.",
+        "context_relation": "The image likely represents a scene from an educational content, possibly related to science or library work.",
         "limitations": [
-          "The image does not provide specific details about the textbook or its content."
+          "The image does not provide specific details about the educational content it represents."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:31:58Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:45:00Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a lab coat is climbing a ladder to reach a bookshelf filled with books.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "lab coat",
+          "ladder",
+          "bookshelf",
+          "books",
+          "cartoon character"
+        ],
+        "context_relation": "The image likely represents a scene from an educational content, possibly related to science or library work.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1597,6 +1757,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/ec5c4775532a11200f87cfad2bed9509170b5dbcad8ef0522144ea6b950deedf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1604,19 +1765,42 @@
         "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a bookshelf.",
         "visual_type": "cartoon",
         "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image depicts a character interacting with a bookshelf, possibly organizing or selecting a book.",
+        "concepts": [
+          "cartoon",
+          "character",
+          "ladder",
+          "bookshelf",
+          "book"
+        ],
+        "context_relation": "The image depicts a character interacting with a bookshelf, likely in a library or bookstore setting.",
         "limitations": [
-          "The image does not provide any specific information about the context or the character's actions beyond the general activity of reaching for a book."
+          "The image does not provide any specific information about the context or the character's actions.",
+          "The visible text is empty, indicating no additional information is provided."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:33:08Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:46:37Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "character",
+          "ladder",
+          "bookshelf",
+          "book"
+        ],
+        "context_relation": "The image depicts a character interacting with a bookshelf, likely in a library or bookstore setting.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the character's actions.",
+          "The visible text is empty, indicating no additional information is provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1627,31 +1811,36 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/ca4defa5e99a2fa4a2a4a1adf258afbba4f68c35269afe33d6a2d0c8eb9bce73.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Illustration of a student holding a book and a backpack, possibly in a classroom setting.",
+        "visual_summary": "A cartoon character holding a book and a backpack, possibly a student or a teacher.",
         "visual_type": "cartoon",
         "visible_text": [],
-        "concepts": [
-          "student",
-          "book",
-          "backpack",
-          "classroom"
-        ],
-        "context_relation": "The image likely represents a student preparing for or engaged in a study session.",
+        "concepts": [],
+        "context_relation": "The image appears to be related to educational content, possibly a textbook or a learning resource.",
         "limitations": [
-          "The image does not provide specific details about the educational content or the student's activities."
+          "The image does not provide specific details about the educational content or the textbook it is associated with."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:34:14Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:48:07Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and a backpack, possibly a student or a teacher.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to educational content, possibly a textbook or a learning resource.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the textbook it is associated with."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1662,6 +1851,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/764e4285ee3863e627163fcd37a853270de1bd41f5c40bb74a17e27a308345f1.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1669,19 +1859,38 @@
         "visual_summary": "A cartoon illustration of a student raising their hand in a classroom setting.",
         "visual_type": "cartoon",
         "visible_text": [],
-        "concepts": [],
-        "context_relation": "The image is likely related to an educational context, possibly a classroom or a learning environment.",
+        "concepts": [
+          "classroom",
+          "student",
+          "teacher",
+          "raising hand"
+        ],
+        "context_relation": "The image likely represents a classroom scenario where a student is participating in a discussion or asking a question.",
         "limitations": [
-          "The image does not provide specific details about the educational content or the specific chapter it is from."
+          "The image does not provide specific details about the educational content or the context of the question being asked."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:35:22Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:49:42Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student raising their hand in a classroom setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "classroom",
+          "student",
+          "teacher",
+          "raising hand"
+        ],
+        "context_relation": "The image likely represents a classroom scenario where a student is participating in a discussion or asking a question.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context of the question being asked."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1692,26 +1901,36 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/b42fb6ae16b81a1a77be70155ef298d99b51c4d67238a3b81a98d551686700fd.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon illustration of five people standing in a row, with one person pointing upwards.",
+        "visual_summary": "A group of five people standing together, with one person pointing upwards.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image appears to be unrelated to the provided text about scientific heritage and contributions.",
+        "context_relation": "The image appears to be a part of an educational content, possibly related to a textbook or educational material.",
         "limitations": [
-          "The image does not provide any specific information about the text's content."
+          "The image does not provide specific details about the educational content or the context it is part of."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:36:31Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:51:16Z",
+      "effective_analysis": {
+        "visual_summary": "A group of five people standing together, with one person pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a part of an educational content, possibly related to a textbook or educational material.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context it is part of."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1722,28 +1941,23 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/b78f2465ef8cb8c10459b07791088ce6199a00de33a6be715478348e8733729f.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A cartoon scientist wearing goggles, gloves, and a lab coat, holding a test tube and a beaker.",
+        "visual_summary": "A cartoon scientist wearing goggles, gloves, and a lab coat, holding a beaker and a test tube.",
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [
-          "science",
-          "experiment",
-          "research",
-          "education",
-          "learning",
-          "innovation",
-          "progress",
-          "heritage",
-          "history",
-          "institutions",
-          "personality",
-          "work"
+          "scientist",
+          "goggles",
+          "gloves",
+          "lab coat",
+          "beaker",
+          "test tube"
         ],
-        "context_relation": "The image represents a cartoon representation of a scientist, which is likely used as an educational tool to engage students in the topic of science and its contributions to society.",
+        "context_relation": "The image represents a cartoon scientist conducting a scientific experiment, which is likely related to the educational content about scientific heritage and contributions.",
         "limitations": [
           "The image does not provide specific details about the experiment or the scientific heritage being discussed."
         ]
@@ -1752,9 +1966,25 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:37:45Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:52:52Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles, gloves, and a lab coat, holding a beaker and a test tube.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "goggles",
+          "gloves",
+          "lab coat",
+          "beaker",
+          "test tube"
+        ],
+        "context_relation": "The image represents a cartoon scientist conducting a scientific experiment, which is likely related to the educational content about scientific heritage and contributions.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientific heritage being discussed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1765,6 +1995,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/dc4ba5bc885d417b103d5848b863f6575dfba7eab056531d0660d6f9dd237b9c.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1777,19 +2008,33 @@
           "microscope",
           "scientific research"
         ],
-        "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
+        "context_relation": "The image represents a scientific activity, possibly related to the text about scientific heritage and contributions.",
         "limitations": [
-          "The image does not provide specific details about the experiment or modifications that can be made.",
-          "The image does not show any text or labels that could provide additional context or information."
+          "The image does not provide specific details about the experiment or modifications.",
+          "The text is not directly related to the image."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:38:56Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:54:27Z",
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "scientific research"
+        ],
+        "context_relation": "The image represents a scientific activity, possibly related to the text about scientific heritage and contributions.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications.",
+          "The text is not directly related to the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1800,6 +2045,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/a6e3031767aac8afd3662f41ce6948116c3dc72efb91bfde08180fc18e732c21.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1816,16 +2062,31 @@
         "context_relation": "The image represents a scientific activity, possibly related to astronomy or observational science.",
         "limitations": [
           "The image does not provide specific details about the telescope or the person's actions.",
-          "The image does not include any text or labels that provide additional context."
+          "The image does not include any text or labels that would provide additional context."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:40:08Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:56:06Z",
+      "effective_analysis": {
+        "visual_summary": "A person using a telescope, sitting on a stool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "telescope",
+          "astronomy",
+          "observation",
+          "scientific inquiry"
+        ],
+        "context_relation": "The image represents a scientific activity, possibly related to astronomy or observational science.",
+        "limitations": [
+          "The image does not provide specific details about the telescope or the person's actions.",
+          "The image does not include any text or labels that would provide additional context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1836,6 +2097,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/ed911787dc3f1cbf5e7c51a84722222509d2f64ae63be0dc54e3b1900d1131bf.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1847,23 +2109,36 @@
           "scientist",
           "microscope",
           "laboratory",
-          "experiment",
-          "progress",
-          "heritage",
-          "scientific development"
+          "scientific research"
         ],
         "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
         "limitations": [
-          "The image does not provide specific details about the experiment or the scientist's work."
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that could provide additional context or information."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:41:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:57:43Z",
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope in a laboratory setting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "laboratory",
+          "scientific research"
+        ],
+        "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1874,6 +2149,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/f604695fb2ba053d1f9dce778dcffc7337cb2b7c18da60cf27e8f8c37d1db591.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1882,18 +2158,31 @@
         "visual_type": "cartoon",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image does not provide any specific context or information.",
+        "context_relation": "The image does not provide any specific context or relation to the text.",
         "limitations": [
-          "The image does not contain any text or information that can be used to infer a specific context or relationship."
+          "The image does not contain any text or information related to the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the textbook's content or structure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:42:24Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:59:16Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the textbook's content or structure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1904,36 +2193,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "asset_kind": "embedded_image",
-      "model_provider": "ollama_local",
-      "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A black page with no visible content.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [],
-        "concepts": [],
-        "context_relation": "No specific context or relation provided.",
-        "limitations": [
-          "No visible content or text present on the page."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:42:35Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
-      "correction_status": "NONE"
-    },
-    {
-      "asset_id": "016a9d44621a6ad6d2e1884d",
-      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "source_book_id": "ncert-c8-english-hecu1",
-      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
-      "source_pdf_page_number": 7,
-      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
-      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1951,9 +2211,58 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:42:44Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T02:59:29Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "016a9d44621a6ad6d2e1884d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-17T02:59:41Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -1964,11 +2273,12 @@
       "source_pdf_page_number": 7,
       "asset_path": "page-0007.jpg",
       "asset_kind": "page_preview",
+      "page_text_context_sha256": "b779c7be75a703c00144f8a2db87a7c523227510cd1813eee71d4bac464b6285",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -1980,36 +2290,63 @@
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
+          "Keep the curiosity alive",
           "Keywords",
-          "scientific activities",
-          "curiosity",
-          "exercises",
+          "NEP 2020",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the content of the chapters."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:46:07Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:04:04Z",
+      "effective_analysis": {
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "applications, showing how science has contributed to societal development.",
+          "Our scientific heritage offers information about institutions which have contributed to the progress of scientific temper and any personality or their works of 'heritage level repute'.",
+          "You will find a Think like a scientist section in some chapters, where you can explore the experiment further by making modifications or trying different approaches. It will help you to investigate more deeply and allow new questions to emerge in your minds.",
+          "Some chapters also feature a section called Be a scientist, where you can learn about the contributions of Indian and international scientists related to the topic. These sections include brief biographies and show how scientists have made a difference. Additionally, an interesting element that has ",
+          "The Snapshots section provides the summary of a chapter, which offers an overview of the chapter's main points, reinforcing the key ideas discussed. Each chapter includes Keywords in between the text that highlight key concepts and steps in science, helping learners understand ideas and think critic",
+          "Keep the curiosity alive includes a range of exercises, from pictorial questions and puzzles to multiple choice questions, offering a challenging and engaging experience. These questions also help assess the competencies developed by learners in each chapter. We recommend teachers to use questions s"
+        ],
+        "concepts": [
+          "scientific heritage",
+          "Think like a scientist",
+          "Be a scientist",
+          "Snapshots",
+          "Keep the curiosity alive",
+          "Keywords",
+          "NEP 2020",
+          "Indian texts",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "challenging and engaging experience",
+          "competencies",
+          "evaluation"
+        ],
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
+        "limitations": [
+          "The page does not provide specific examples or exercises for the exercises mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -2020,6 +2357,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/a80610c3ae132d907370e10793a914273693686e3814ce0f1a9d8f25ba6eb291.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c72d4dfb74c6c73081525bf91bd7a8c35388ff969698a708db2f0564d46fd1b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -2028,18 +2366,27 @@
         "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
-        "context_relation": "The image likely represents a student or teacher presenting information, possibly related to the educational activities mentioned in the text.",
+        "context_relation": "The image likely represents a student or teacher presenting information or a project.",
         "limitations": [
-          "The image does not provide specific details about the content of the paper or book being held."
+          "The image does not provide specific details about the content of the paper or book."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904509019",
-      "checkpointed_at": "2026-10-16T14:47:18Z",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "PAGE_TEXT_CONTEXT_MISMATCH",
+      "checkpointed_at": "2026-10-17T03:05:38Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a large piece of paper or a book, possibly presenting or showing something.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a student or teacher presenting information or a project.",
+        "limitations": [
+          "The image does not provide specific details about the content of the paper or book."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
