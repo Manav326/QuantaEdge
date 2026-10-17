@@ -222,6 +222,7 @@ export function PeoplePagination({
   const current = Math.min(pages, Math.floor(offset / limit) + 1);
   const first = total === 0 ? 0 : offset + 1;
   const last = Math.min(total, offset + limit);
+  if (Math.max(0, Number(total) || 0) <= 10) return null;
   return (
     <div className="toolbar qe-people-pagination" aria-label={t('common.pagination.tableNavigation')}>
       <span className="small">{t('common.pagination.showingRange',{ first, last, total })}</span>
