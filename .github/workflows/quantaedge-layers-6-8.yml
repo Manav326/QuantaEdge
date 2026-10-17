@@ -52,6 +52,12 @@ on:
         type: number
         default: 6
         required: true
+      checkpoint_every:
+        description: "Durable Git savepoint interval in model calls; 1 minimizes work at risk on interruption, larger values reduce commit overhead"
+        type: choice
+        options: ["1", "2", "3", "5"]
+        default: "2"
+        required: true
       allow_experimental_model:
         description: "Explicitly permit unapproved model output as review-only draft candidates"
         type: boolean
@@ -95,6 +101,8 @@ jobs:
     timeout-minutes: 360
     permissions:
       contents: write
+    env:
+      CHECKPOINT_EVERY: ${{ inputs.checkpoint_every || '2' }}
     steps:
       - name: Checkout main with checkpoint write permission
         uses: actions/checkout@v4
@@ -107,6 +115,7 @@ jobs:
           python-version: "3.12"
       - name: Repeat checks on the execution checkout
         run: |
+          [[ "$CHECKPOINT_EVERY" =~ ^[0-9]+$ ]] && (( CHECKPOINT_EVERY >= 1 && CHECKPOINT_EVERY <= 5 )) || { echo "checkpoint_every must be 1..5"; exit 2; }
           python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py scripts/validate_structured_lesson_artifacts.py scripts/register_structured_lesson_drafts.py
           python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
           python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
@@ -145,7 +154,7 @@ jobs:
             --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
             --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
             --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
-            --checkpoint-every 2 --request-timeout 180 \
+            --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180 \
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model --preflight-only --require-existing-checkpoint \
             > "$RUNNER_TEMP/resume-preflight.json"
