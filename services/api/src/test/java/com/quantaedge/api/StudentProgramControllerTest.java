@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
@@ -50,11 +51,23 @@ class StudentProgramControllerTest {
   }
 
   @Test
+  void unlistedOrPaidCourseCannotBeSelfEnrolledWithoutExistingEntitlement() {
+    when(jdbc.queryForList(contains("where p.id=? and p.status='ACTIVE'"), eq(7L), eq(91L)))
+        .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
+    when(jdbc.queryForObject(contains("course_marketplace_offer"), eq(Boolean.class),
+        eq(7L), eq(91L), eq(7L), eq(91L), eq(91L))).thenReturn(false);
+
+    assertThrows(SecurityException.class, () -> controller.enrollById(91L, student));
+  }
+
+  @Test
   void enrolmentUsesExistingClassIdentityAndCourseSubjects() {
     when(jdbc.queryForList(contains("upper(p.code)=?"), eq(7L), eq("NAVODAYA_BATCH")))
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","class_code","6")));
     when(jdbc.queryForList(contains("where p.id=? and p.status='ACTIVE'"), eq(7L), eq(91L)))
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
+    when(jdbc.queryForObject(contains("course_marketplace_offer"), eq(Boolean.class),
+        eq(7L), eq(91L), eq(7L), eq(91L), eq(91L))).thenReturn(true);
     when(jdbc.queryForList(contains("where ps.program_id=? order by"), eq(91L)))
         .thenReturn(List.of(Map.of("id",901L,"code","maths"),Map.of("id",902L,"code","science")));
     when(jdbc.update(contains("update student_program_enrollment set status='PAUSED'"), eq(7L), eq(91L))).thenReturn(0);
