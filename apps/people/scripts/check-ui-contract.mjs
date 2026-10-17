@@ -129,6 +129,18 @@ for (const [route, path] of [
 assert(styles.includes('.login-story .brand img'), 'Login wordmark must have responsive presentation styles.');
 assert(styles.includes('.login-card .qe-people-button'), 'Authentication primary actions must retain adequate button sizing.');
 
+
+// Route-wide responsive polish and accessible state presentation.
+assert(styles.includes('--brand: #f97316;') && styles.includes('--brand2: #c2410c;'), 'HRMS primary and deep accents must match QuantaEdge orange.');
+assert(styles.includes('--brand-soft: #fff0e5;'), 'HRMS soft accent must use the approved light-orange surface.');
+assert(styles.includes('background: #fffaf6;'), 'Data-table hover states must stay within the approved warm-neutral palette.');
+assert(styles.includes('input[aria-invalid="true"]') && styles.includes('textarea[aria-invalid="true"]'), 'Invalid form controls must have a visible semantic error border.');
+assert(styles.includes('font-variant-numeric: tabular-nums;'), 'Numeric HR/payroll values must align for scanning.');
+assert(styles.includes('overscroll-behavior-inline: contain;'), 'Scrollable data tables must preserve horizontal touch-scroll behavior.');
+assert(styles.includes('tbody tr:focus-within'), 'Keyboard focus within data rows must remain visually discoverable.');
+assert(styles.includes('qe-people-page-actions > *'), 'Responsive page actions must have a tablet layout rule.');
+assert(styles.includes('.qe-people-page-slot .qe-people-pagination'), 'Pagination must have a responsive shared layout.');
+
 assert(alignmentPlan.includes('Phase 10'), 'Persistent HRMS alignment plan must be present.');
 
 if (failures.length) {
