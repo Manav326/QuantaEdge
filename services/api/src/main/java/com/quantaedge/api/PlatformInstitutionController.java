@@ -44,7 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/hrms/platform/institutions")
 public class PlatformInstitutionController {
   private static final ZoneId BILLING_ZONE = ZoneId.of("Asia/Kolkata");
-  private static final Set<String> THEME_KEYS = Set.of("primary","accent","background","surface","text");
 
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -68,6 +67,15 @@ public class PlatformInstitutionController {
     AuthContext owner = requirePlatformOwner(context);
     audit(owner, null, "THEME_PRESETS_VIEWED", "THEME_PRESETS", null, Map.of());
     return InstitutionThemeTokens.presets();
+  }
+
+  @PostMapping("/theme-preview")
+  public Map<String,Object> previewTheme(
+      @RequestBody(required=false) Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requirePlatformOwner(context);
+    Object raw = body == null ? null : body.get("themeTokens");
+    return Map.of("themeTokens", InstitutionThemeTokens.normalize(raw));
   }
 
   @GetMapping("/overview")
