@@ -103,20 +103,21 @@ export default function InstitutionPortalPage() {
 
   const applyBrand = useCallback((value: Brand | null) => {
     setBrand(value);
-    if (value?.themeTokens) {
-      const root = document.documentElement;
-      const mapping: Record<string, string> = {
-        primary: '--institution-primary',
-        accent: '--institution-accent',
-        background: '--institution-background',
-        surface: '--institution-surface',
-        text: '--institution-text',
-      };
-      Object.entries(mapping).forEach(([key, token]) => {
-        const color = value.themeTokens?.[key];
-        if (typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color)) root.style.setProperty(token, color);
-      });
-    }
+    // Always reset all tenant tokens before applying a new tenant or signing out.
+    // Otherwise an institution with no custom token could inherit the previous tenant's theme.
+    const root = document.documentElement;
+    const mapping: Record<string, { css: string; fallback: string }> = {
+      primary: { css: '--institution-primary', fallback: '#F97316' },
+      accent: { css: '--institution-accent', fallback: '#C2410C' },
+      background: { css: '--institution-background', fallback: '#F7F8FC' },
+      surface: { css: '--institution-surface', fallback: '#FFFFFF' },
+      text: { css: '--institution-text', fallback: '#152038' },
+    };
+    Object.entries(mapping).forEach(([key, token]) => {
+      const color = value?.themeTokens?.[key];
+      root.style.setProperty(token.css,
+        typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color) ? color : token.fallback);
+    });
   }, []);
 
   const loadData = useCallback(async (current: Principal) => {
@@ -245,6 +246,7 @@ export default function InstitutionPortalPage() {
   async function logout() {
     try { await api('/api/v1/institution/auth/logout', { method: 'POST' }); } catch {}
     setPrincipal(null);
+    applyBrand(null);
     setOverview(null);
     setLearners([]);
     setCourses([]);
