@@ -98,7 +98,11 @@ fun StudentMarketplaceScreen(
                                 pricePaise == 0L -> if (hi) "मुफ़्त" else "Free"
                                 else -> if (hi) "अभी उपलब्ध नहीं" else "Unavailable"
                             },
-                            style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleSmall, color = when {
+                                owned || pricePaise == 0L -> LocalQuantaEdgeSemanticColors.current.success
+                                pricePaise > 0L && currency == "INR" -> LocalQuantaEdgeSemanticColors.current.primaryText
+                                else -> MaterialTheme.colorScheme.error
+                            }, fontWeight = FontWeight.Bold
                         )
                     }
                     offer.optString("description").takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }

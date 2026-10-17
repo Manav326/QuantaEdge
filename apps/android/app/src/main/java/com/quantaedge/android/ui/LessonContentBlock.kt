@@ -102,7 +102,7 @@ fun LessonContentBlock(
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Text(title, style = MaterialTheme.typography.titleMedium, color = LocalQuantaEdgeSemanticColors.current.primaryText)
             when (type) {
                 "PREREQUISITE", "EXPLANATION" -> {
                     val content = if (html.isNotBlank()) htmlToPlainText(html) else body
@@ -119,7 +119,7 @@ fun LessonContentBlock(
                     val answer = data.textAny("answer")
                     if (answer.isNotBlank()) {
                         LearningMathText((if (language == "hi") "हल: " else "Solution: ") + answer,
-                            style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+                            style = MaterialTheme.typography.bodyLarge, color = LocalQuantaEdgeSemanticColors.current.primaryText)
                     }
                 }
                 "GUIDED_PRACTICE", "INDEPENDENT_PRACTICE", "CHALLENGE", "HINT" -> {
@@ -127,12 +127,12 @@ fun LessonContentBlock(
                     val hint = data.textAny("hint")
                     if (hint.isNotBlank()) {
                         LearningMathText((if (language == "hi") "संकेत: " else "Hint: ") + hint,
-                            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+                            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
                 "IMAGE", "DIAGRAM", "ANIMATION" -> {
                     if (visualKind.isNotBlank()) Text(visualKindLabel(visualKind, language),
-                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (description.isNotBlank()) LearningMathText(description, style = MaterialTheme.typography.bodyMedium)
                     val mediaPath = url.substringBefore("?").lowercase()
                     val animationVideo = type == "ANIMATION" &&
@@ -158,14 +158,14 @@ fun LessonContentBlock(
                         }, style = MaterialTheme.typography.bodyMedium)
                     }
                     if (caption.isNotBlank()) LearningMathText(caption,
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (sourceCandidateId.isNotBlank()) {
                         LearningMathText(
                             (if (language == "hi") "स्रोत: " else "Source: ") +
                                 sourceBookTitle + " · " +
                                 (if (language == "hi") "PDF पृष्ठ " else "PDF page ") + sourcePdfPage,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (sourcePageUrl.startsWith("https://")) {
                             TextButton(onClick = {
@@ -195,7 +195,7 @@ fun LessonContentBlock(
                                 sourceBookTitle + " · " +
                                 (if (language == "hi") "PDF पृष्ठ " else "PDF page ") + sourcePdfPage,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (sourcePageUrl.startsWith("https://")) {
                             TextButton(onClick = {
@@ -361,7 +361,7 @@ private fun LessonImage(url: String, alt: String) {
         }
     } else if (loadFailed) {
         Text(if (alt.isNotBlank()) alt else localizedUiText("Image unavailable"), style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary)
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
     } else {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
