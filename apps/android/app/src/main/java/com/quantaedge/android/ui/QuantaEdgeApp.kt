@@ -314,7 +314,14 @@ fun QuantaEdgeApp() {
 
     LaunchedEffect(route, lesson.longAny("id", "lesson_id"), tutorScopeLessonId) {
         val activeLessonId = lesson.longAny("id", "lesson_id")
-        if (route != AppRoute.LESSON ||
+        if (route == AppRoute.TUTOR) {
+            // The tutor is now a lesson overlay. Recover old saved navigation state
+            // without leaving a full-screen tutor route available outside a lesson.
+            route = if (activeLessonId > 0L) AppRoute.LESSON else AppRoute.SUBJECT_LESSONS
+            tutorOpen = activeLessonId > 0L
+            tutorMinimized = false
+            tutorScopeLessonId = activeLessonId.takeIf { it > 0L } ?: 0L
+        } else if (route != AppRoute.LESSON ||
             (tutorOpen && tutorScopeLessonId > 0L && activeLessonId > 0L && tutorScopeLessonId != activeLessonId)) {
             tutorOpen = false
             tutorMinimized = false
