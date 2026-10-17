@@ -1,7 +1,10 @@
+'use client';
+
 import { UiText } from './i18n/useUiTranslation';
 import { LanguageSwitcher, LocaleText } from './components/LanguageProvider';
 import Link from 'next/link';
 import QuantaEdgeBrand from './components/QuantaEdgeBrand';
+import { useTenantBranding } from './components/TenantBrandingProvider';
 import LandingAccountMenu from './components/LandingAccountMenu';
 
 const subjects = [
@@ -16,6 +19,31 @@ const promises = [
 ];
 
 export default function Home() {
+  const { brand } = useTenantBranding();
+  const { locale } = useLocale();
+  const english = locale === 'english';
+  if (brand) return (
+    <main className="site qe-tenant-landing">
+      <header className="topbar">
+        <QuantaEdgeBrand variant="header" />
+        <div className="top-actions"><LanguageSwitcher compact /><LandingAccountMenu /></div>
+      </header>
+      <section className="hero">
+        <div className="hero-copy">
+          <div className="eyebrow">{english ? 'YOUR SCHOOL LEARNING SPACE' : 'आपके विद्यालय का सीखने का स्थान'}</div>
+          <h1>{english ? 'Learn with' : 'सीखें'}<br /><em>{brand.displayName}</em></h1>
+          <p className="hero-lead">{english ? 'Continue your lessons, practise concepts, take tests and track your progress through your school learning space.' : 'अपने विद्यालय के माध्यम से पाठ पढ़ें, अभ्यास करें, परीक्षा दें और अपनी प्रगति देखें।'}</p>
+          <div className="hero-actions">
+            <Link href="/login/student" className="button button-dark">{english ? 'Student sign in' : 'विद्यार्थी लॉगिन'} <span>→</span></Link>
+            <Link href="/login" className="button button-light">{english ? 'Parent sign in' : 'अभिभावक लॉगिन'}</Link>
+            <Link href="/signup" className="text-link">{english ? 'Create account' : 'खाता बनाएँ'}</Link>
+          </div>
+        </div>
+        <div className="hero-device" aria-hidden="true"><div className="device-glow" /><div className="student-card"><div className="student-head"><div><span className="muted-small">{english ? 'YOUR LEARNING JOURNEY' : 'आपकी सीखने की यात्रा'}</span><h3>{english ? 'Ready to continue?' : 'आगे बढ़ें?'}</h3></div><span className="avatar">{brand.displayName.slice(0, 1).toUpperCase()}</span></div><div className="mission-card"><div><span className="mission-label">{english ? 'NEXT STEP' : 'अगला चरण'}</span><strong>{english ? 'Learn · Practise · Grow' : 'सीखें · अभ्यास करें · बढ़ें'}</strong><small>{english ? 'Your progress stays with your account.' : 'आपकी प्रगति आपके खाते में सुरक्षित रहेगी।'}</small></div></div></div></div>
+      </section>
+      <footer className="footer"><QuantaEdgeBrand href={null} variant="footer" /><span>{english ? 'Learning with ' : ''}{english ? brand.displayName : brand.displayName + ' के साथ सीखें'}</span></footer>
+    </main>
+  );
   return (
     <main className="site">
       <header className="topbar">
