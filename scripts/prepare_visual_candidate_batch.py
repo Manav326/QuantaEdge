@@ -426,7 +426,10 @@ def missing_artifact(message: str, expected_reference: str | None = None) -> boo
         return True
     if expected_reference:
         reference = expected_reference.lower()
-        exact_missing = f"failed to resolve {reference}: {reference}: not found"
+        # ORAS/GHCR reports the tag after "failed to resolve", then the full
+        # package:tag reference. Match that exact pair, not just any "not found".
+        expected_tag = reference.rsplit(":", 1)[-1]
+        exact_missing = f"failed to resolve {expected_tag}: {reference}: not found"
         if exact_missing in lower:
             return True
     return False
