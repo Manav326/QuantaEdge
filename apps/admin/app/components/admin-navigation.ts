@@ -94,10 +94,6 @@ export function adminNavHref(item: AdminNavItem, role: string): string {
   return item.key === 'staff' && role !== 'ADMIN' ? '/employees?view=audit' : item.href;
 }
 
-export function adminNavHref(item: AdminNavItem, role: string): string {
-  return item.key === 'staff' && role !== 'ADMIN' ? '/employees?view=audit' : item.href;
-}
-
 export function adminNavLabel(item: AdminNavItem, locale: AdminLocale, role: string): string {
   if (item.key === 'staff' && role !== 'ADMIN') return translateUi(locale, 'admin.role.activityTrail');
   return translateUi(locale, ITEM_MESSAGE_KEYS[item.key]);
