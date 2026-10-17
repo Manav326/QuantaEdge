@@ -9,7 +9,7 @@ type Child = { id: number; display_name: string; class_code?: string; board?: st
 type Course = {
   course_id: number; title: string; course_name: string; course_code: string;
   description?: string | null; price_paise: number; currency: string;
-  owned_by_parent?: boolean; owned_by_child?: boolean;
+  owned_by_parent?: boolean; owned_by_child?: boolean; owned_child_ids?: string | null;
   subjects?: Array<{ subject_code?: string; subject_name?: string; chapters?: number; lessons?: number }>;
 };
 type PurchaseRequest = {
@@ -316,26 +316,38 @@ export default function ParentCoursesPage() {
           {loading ? <p className="parent-courses-page__empty"><LocaleText hinglish="कोर्स लोड हो रहे हैं…" english="Loading courses…" /></p>
             : courses.length === 0 ? <p className="parent-courses-page__empty"><LocaleText hinglish="अभी कोई प्रकाशित कोर्स ऑफर नहीं है।" english="There are no published course offers yet." /></p>
             : <div className="parent-courses-page__grid">{courses.map(course => {
-              const owned = course.owned_by_parent === true || course.owned_by_child === true;
+              const ownedByParent = course.owned_by_parent === true;
               const isFree = Number(course.price_paise) === 0;
               const selectedChild = Number(childByCourse[course.course_id] || 0);
+              const ownedChildIds = new Set(String(course.owned_child_ids || '').split(',')
+                .map(value => Number(value.trim())).filter(value => Number.isSafeInteger(value) && value > 0));
+              const selectedChildAlreadyOwns = selectedChild > 0 && ownedChildIds.has(selectedChild);
               return <article className="parent-courses-page__course" key={course.course_id}>
                 <div className="parent-courses-page__course-top"><span className="parent-courses-page__course-icon" aria-hidden="true">✦</span>
-                  <span className="parent-courses-page__price">{owned
-                    ? (english ? 'Already owned' : 'पहले से उपलब्ध')
-                    : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}</span></div>
+                  <span className="parent-courses-page__price">{ownedByParent && !isFree
+                    ? (english ? 'Owned by you' : 'आपके पास उपलब्ध')
+                    : course.owned_by_child === true
+                      ? (english ? 'A child has access' : 'एक बच्चे के पास पहुँच है')
+                      : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}</span></div>
                 <h3>{course.title || course.course_name}</h3>
                 <small className="parent-courses-page__course-code">{course.course_code}</small>
                 {course.description && <p>{course.description}</p>}
                 {!!course.subjects?.length && <div className="parent-courses-page__subjects">{course.subjects.map(subject =>
                   <span key={subject.subject_code}>{subject.subject_name || subject.subject_code}</span>)}</div>}
-                {owned ? <p className="parent-courses-page__owned-note"><LocaleText hinglish="यह कोर्स पहले से आपके या आपके बच्चे के खाते में है।" english="This course is already held by you or a linked child." /></p>
+                {ownedByParent && !isFree
+                  ? <p className="parent-courses-page__owned-note">
+                      <LocaleText hinglish="यह paid कोर्स आपके पास है। दोबारा खरीदने के बजाय नीचे से किसी जुड़े बच्चे को स्थायी रूप से ट्रांसफर करें।"
+                        english="You own this paid course. Transfer it permanently to a linked child below instead of purchasing it again." />
+                    </p>
                   : <div className="parent-courses-page__buy-actions">
-                    <button className="button button-dark button-small" type="button" disabled={busy !== ''}
+                    <button className="button button-dark button-small" type="button"
+                      disabled={busy !== '' || (ownedByParent && isFree)}
                       onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void startPaidCheckout(course.course_id, 'SELF')}>
                       {busy === 'checkout-' + course.course_id || busy === 'free-' + course.course_id
                         ? (english ? 'Working…' : 'प्रक्रिया जारी…')
-                        : <LocaleText hinglish="अपने लिए" english="Buy for me" />}
+                        : ownedByParent && isFree
+                          ? (english ? 'Already in your courses' : 'आपके कोर्स में पहले से है')
+                          : <LocaleText hinglish="अपने लिए" english="Buy for me" />}
                     </button>
                     <label><span><LocaleText hinglish="बच्चे के लिए" english="For child" /></span>
                       <select value={selectedChild || ''} onChange={e => setChildByCourse(current => ({ ...current, [course.course_id]: Number(e.target.value) || 0 }))}>
@@ -343,10 +355,17 @@ export default function ParentCoursesPage() {
                         {children.map(child => <option key={child.id} value={child.id}>{child.display_name}</option>)}
                       </select>
                     </label>
-                    <button className="button button-light button-small" type="button" disabled={busy !== '' || !selectedChild}
+                    <button className="button button-light button-small" type="button"
+                      disabled={busy !== '' || !selectedChild || selectedChildAlreadyOwns}
                       onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
-                      <LocaleText hinglish="बच्चे के लिए जोड़ें" english={isFree ? 'Add for child' : 'Buy for child'} />
+                      {selectedChildAlreadyOwns
+                        ? (english ? 'Already has access' : 'पहले से पहुँच है')
+                        : <LocaleText hinglish="बच्चे के लिए जोड़ें" english={isFree ? 'Add for child' : 'Buy for child'} />}
                     </button>
+                    {selectedChildAlreadyOwns && <p className="parent-courses-page__owned-note">
+                      <LocaleText hinglish="चुने गए बच्चे के पास इस कोर्स की पहुँच पहले से है। किसी दूसरे बच्चे को चुनें।"
+                        english="The selected child already has access to this course. Choose another child." />
+                    </p>}
                   </div>}
               </article>;
             })}</div>}

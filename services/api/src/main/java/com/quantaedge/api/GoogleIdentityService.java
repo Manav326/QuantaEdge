@@ -43,7 +43,7 @@ public class GoogleIdentityService {
   public GoogleSignIn authenticate(String credential) {
     GoogleProfile profile = verifyCredential(credential);
     List<Map<String, Object>> subjectRows = jdbc.queryForList("""
-      select id,role,display_name,google_subject
+      select id,role,display_name,google_subject,active
       from user_account where google_subject=?
       for update
       """, profile.subject());
@@ -52,6 +52,9 @@ public class GoogleIdentityService {
     boolean created = false;
     if (!subjectRows.isEmpty()) {
       Map<String, Object> row = subjectRows.getFirst();
+      if (!Boolean.TRUE.equals(row.get("active"))) {
+        throw new SecurityException("This QuantaEdge account is inactive. Contact support.");
+      }
       userId = ((Number) row.get("id")).longValue();
       String role = String.valueOf(row.get("role"));
       if ("ADMIN".equals(role)) {
@@ -60,12 +63,15 @@ public class GoogleIdentityService {
       updateGoogleProfile(userId, profile);
     } else {
       List<Map<String, Object>> emailRows = jdbc.queryForList("""
-        select id,role,display_name,google_subject
+        select id,role,display_name,google_subject,active
         from user_account where lower(email)=?
         for update
         """, profile.email());
       if (!emailRows.isEmpty()) {
         Map<String, Object> row = emailRows.getFirst();
+        if (!Boolean.TRUE.equals(row.get("active"))) {
+          throw new SecurityException("This QuantaEdge account is inactive. Contact support.");
+        }
         if (row.get("google_subject") != null
             && !profile.subject().equals(String.valueOf(row.get("google_subject")))) {
           throw new SecurityException("This Gmail address is already linked to a different Google identity.");
@@ -192,7 +198,7 @@ public class GoogleIdentityService {
 
   private void updateGoogleProfile(long userId, GoogleProfile profile) {
     try {
-      jdbc.update("""
+      int changed = jdbc.update("""
         update user_account
         set email=?,email_verified_at=now(),google_subject=?,google_picture_url=?,
             google_given_name=?,google_family_name=?,google_locale=?,
@@ -202,6 +208,7 @@ public class GoogleIdentityService {
         """, profile.email(), profile.subject(), profile.pictureUrl(),
             nullable(profile.givenName()), nullable(profile.familyName()), nullable(profile.locale()),
             profile.name(), userId);
+      if (changed != 1) throw new SecurityException("This QuantaEdge account is inactive. Contact support.");
     } catch (DuplicateKeyException ex) {
       throw new IllegalStateException("This Gmail address is already linked to another account.", ex);
     }
