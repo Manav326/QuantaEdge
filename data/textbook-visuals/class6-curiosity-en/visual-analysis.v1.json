@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 146,
+    "assets_selected": 71,
     "assets_processed_this_run": 10,
-    "assets_analyzed": 145,
-    "assets_failed": 28,
-    "assets_skipped_from_checkpoint": 136,
+    "assets_analyzed": 169,
+    "assets_failed": 4,
+    "assets_skipped_from_checkpoint": 61,
     "publication_allowed": false
   },
   "results": [
@@ -24,6 +24,7 @@
       "source_pdf_page_number": 1,
       "asset_path": "assets/d56a7d61ac86c9c2bad78a7d7eb645146a42c9d4cfdbc4ac83a2ba28d2b8785a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c83a7bac943a5d0f9a7e804a356f6ea9a5772ec8c00dfb43c22a32857816cde9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -40,8 +41,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:41:45Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:24:25Z"
     },
     {
       "asset_id": "196d95c2abf1c11a83efecae",
@@ -53,9 +54,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
+      "run_id": "38994583378",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4252 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -69,9 +70,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
+      "run_id": "38994583378",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4193 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -82,14 +83,38 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 1,
       "asset_path": "page-0001.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c83a7bac943a5d0f9a7e804a356f6ea9a5772ec8c00dfb43c22a32857816cde9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "visual_type is not in the supported classification set.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The cover page of a science textbook for Grade 6.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Curiosity",
+          "Textbook of Science for Grade 6",
+          "0677",
+          "not to be republished",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "science textbook",
+          "Grade 6",
+          "National Council of Educational Research and Training"
+        ],
+        "context_relation": "cover page",
+        "limitations": [
+          "The image does not provide specific content details or images.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:41:00Z"
     },
     {
       "asset_id": "579630c58aa2ee080c236857",
@@ -98,14 +123,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 2,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c90b96910a716e0fd436036475b40444fd628834028cdffb36314c8116fb28d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4353 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:41:14Z"
     },
     {
       "asset_id": "024a58f843fdac7ccc331325",
@@ -114,14 +151,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 2,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c90b96910a716e0fd436036475b40444fd628834028cdffb36314c8116fb28d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4294 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:41:28Z"
     },
     {
       "asset_id": "78e8c327c91cd5155f4b6b75",
@@ -130,14 +179,71 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 2,
       "asset_path": "page-0002.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4c90b96910a716e0fd436036475b40444fd628834028cdffb36314c8116fb28d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook with copyright information, publication details, and a table of contents.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "0677 – Curiosity",
+          "Textbook of Science for Grade 6",
+          "First Edition",
+          "July 2024 Jyeshtha 1946",
+          "Reprinted",
+          "December 2024 Pausha 1946",
+          "January 2026 Pausha 1947",
+          "PD 420T SM",
+          "© National Council of Educational Research and Training, 2024",
+          "OFFICES OF THE PUBLICATION",
+          "DIVISION, NCERT",
+          "NCERT Campus",
+          "Sri Aurobindo Marg",
+          "New Delhi 110 016",
+          "108, 100 Feet Road",
+          "Hosdakere Halli Extension",
+          "Banashankari III Stage",
+          "Bengaluru 560 085",
+          "Navjivan Trust Building",
+          "P.O. Navjivan",
+          "Ahmedabad 380 014",
+          "CWC Campus",
+          "Opp. Dhankal Bus Stop",
+          "Panihati",
+          "Kolkata 700 114",
+          "CWC Complex",
+          "Malgaoan",
+          "Guwahati 781 021",
+          "Phone : 011-26562708",
+          "Phone : 080-26725740"
+        ],
+        "concepts": [
+          "NCERT",
+          "National Council of Educational Research and Training",
+          "Textbook of Science for Grade 6",
+          "First Edition",
+          "Reprinted",
+          "December 2024",
+          "January 2026",
+          "Price",
+          "Publication Details",
+          "Office Addresses",
+          "Publication Team",
+          "Cover and Layout",
+          "Illustrations"
+        ],
+        "context_relation": "The page contains detailed information about a textbook, including its publication details, price, and the publication team.",
+        "limitations": [
+          "The page does not provide specific details about the content of the textbook."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:46:28Z"
     },
     {
       "asset_id": "4c240401caa64c727e899406",
@@ -147,6 +253,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -163,8 +270,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:50:53Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:03Z"
     },
     {
       "asset_id": "910de67ee70be09bdcd36138",
@@ -174,6 +281,7 @@
       "source_pdf_page_number": 3,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -190,8 +298,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:51:02Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:11Z"
     },
     {
       "asset_id": "a702fa340e7ed053694452d4",
@@ -200,14 +308,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 3,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4359 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:25Z"
     },
     {
       "asset_id": "eb8ceef9ce5d70d5105745b4",
@@ -216,14 +336,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 3,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4300 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy 2020 and its vision for education in India.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:48:45Z"
     },
     {
       "asset_id": "8d35dc673109641624e2223c",
@@ -232,14 +365,43 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 3,
       "asset_path": "page-0003.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ede9ed97f5293dbbdcc2683111de434ef885c55ab171bf7016d4fbf54c19805f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "FOREWORD",
+          "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
+          "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
+          "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
+          "The National Council of Educational Research and Training, on its part, is committed to providing students with such high-quality textbooks. Various Curricular Area Groups, which have been constituted for this purpose, comprising notable subject-experts, pedagogues, and practising teachers as their "
+        ],
+        "concepts": [
+          "National Education Policy 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "pañchakoshas",
+          "Middle Stage",
+          "Foundational and Preparatory Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Curricular Area Groups"
+        ],
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "limitations": [
+          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:09:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -249,6 +411,7 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -293,8 +456,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:55:34Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:54:01Z"
     },
     {
       "asset_id": "6081f3aa50114e3079c63e5a",
@@ -304,6 +467,7 @@
       "source_pdf_page_number": 4,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -348,8 +512,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:56:08Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:54:34Z"
     },
     {
       "asset_id": "18744dff72aac7d5c753a203",
@@ -358,14 +522,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 4,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4365 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:54:51Z"
     },
     {
       "asset_id": "c46181e89835d17ab1839069",
@@ -374,14 +550,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 4,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4306 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T02:55:07Z"
     },
     {
       "asset_id": "34297b4098a78ae6d37eb165",
@@ -390,14 +578,56 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 4,
       "asset_path": "page-0004.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7139f288eb334a9afd4d8aac6c7986babe3098369155af2335274bd9ed78bc50",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the development and features of a science textbook for Grade 6.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "all possible efforts to develop such textbooks. Curiosity, Textbook\nof Science for Grade 6, is one of these. It has been developed in\nconsonance with the recommendations of NEP 2020 and the\nNCF-SE 2023 to take students on a journey of experiential learning\nby citing examples from the world of the le",
+          "To encourage creativity and innovation, it is feasible to regard\nstudents as active participants in the learning process, rather than\nmere recipients of a predetermined set of knowledge. This can\nonly be achieved if the necessary number of hours are dedicated to\nscience teaching-learning annually as",
+          "However, in addition to this textbook, students at this stage\nshould also be encouraged to explore various other learning\nresources. School libraries play a crucial role in making such\nresources available. Besides, the role of parents and teachers will\nalso be invaluable in guiding and encouraging s",
+          "With this, I express my gratitude to all those who have been\ninvolved in the development of this textbook and hope that it\nwill meet the expectations of all stakeholders. At the same time, I\nalso invite suggestions and feedback from all its users for further\nimprovement in the coming years.",
+          "DINESH PRASAD SAKLANI\nDirector\nNational Council of Educational\nResearch and Training",
+          "New Delhi\n30 June 2024"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Textbook",
+          "Science",
+          "Grade 6",
+          "NEP 2020",
+          "NCF-SE 2023",
+          "Experiential learning",
+          "Curiosity",
+          "Exploration",
+          "Questioning",
+          "Critical thinking",
+          "Physics",
+          "Chemistry",
+          "Biology",
+          "Earth science",
+          "Environmental education",
+          "Value education",
+          "Inclusive education",
+          "Indian Knowledge Systems (IKS)",
+          "Integrated approach"
+        ],
+        "context_relation": "The page discusses the development and features of a science textbook for Grade 6, including its alignment with educational guidelines and its pedagogical approach.",
+        "limitations": [
+          "The page does not provide specific details about the textbook's content or structure.",
+          "The page does not include any visual elements or illustrations.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:05Z"
     },
     {
       "asset_id": "5fe69a802c2a490bd1bb4448",
@@ -407,6 +637,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -423,8 +654,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-14T23:59:54Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:16Z"
     },
     {
       "asset_id": "25a519ef8f386ff959746a30",
@@ -434,6 +665,7 @@
       "source_pdf_page_number": 5,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -450,8 +682,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:00:01Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:24Z"
     },
     {
       "asset_id": "8acaf09f0cabf7ba518940ae",
@@ -460,14 +692,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 5,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4352 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:00:39Z"
     },
     {
       "asset_id": "67fcb1d37cd895f2b19a9074",
@@ -476,14 +721,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 5,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4293 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:02:07Z"
     },
     {
       "asset_id": "f00ffacb201c54f63a988333",
@@ -492,14 +750,76 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 5,
       "asset_path": "page-0005.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f2db6b9a8f62f5e11ac60723030ee9d68a4a125f3f6cfc9060fccfe59e04fdcb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook about the curriculum and goals for a science textbook for Grade 6.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "About the Book",
+          "Curiosity, Textbook of Science for Grade 6 learners has been crafted",
+          "in alignment with the recommendations of the National Education",
+          "Policy (NEP) 2020 and the National Curriculum Framework for",
+          "School Education (NCF-SE) 2023. The policy advocates a radical shift",
+          "from a content-based education to a competency-based education",
+          "particularly in the realm of science. Therefore, the formulation of",
+          "curricular goals for Science, subsequent competencies and learning",
+          "outcomes are tailored towards competency-based learning. These",
+          "curricular goals encompass various scientific concepts, including",
+          "matter, the physical and living world, health, hygiene, and the",
+          "exploration of the interface between science, society and technology.",
+          "Additionally, the goals focus on the nature of science, its processes,",
+          "historical and contemporary aspects of the development of science",
+          "and science communication. While these goals are explicitly",
+          "articulated, they are interdependent and collectively contribute",
+          "to a better understanding of the world around us. Accordingly, the",
+          "chapters of this textbook are structured around creative activities,",
+          "reflective questions, processes and illustrations. The integration of",
+          "the concepts from biology, chemistry, physics and earth science, and",
+          "cross-cutting themes, such as value education, inclusive education,",
+          "Indian Knowledge Systems (IKS) and environmental education",
+          "have been interwoven in the content. Thus, the textbook aims to",
+          "provide experience-based learning, rather than simply reading and",
+          "memorising the concepts.",
+          "In the Middle Stage, science teaching-learning adopts an integrated approach. This integrated approach develops fundamental capacities across biology, chemistry, physics and earth science. The use of an integrated approach helps the learners to appreciate the interrelations between subjects and make",
+          "Curiosity, Textbook of Science for Grade 6, comprises twelve chapters. As the name of the textbook suggests, there are numerous opportunities for the learners to explore the world of science and its nature. Through the chapters, learners will embark on a journey that will connect them to the world a"
+        ],
+        "concepts": [
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "Competency-based education",
+          "Curricular goals",
+          "Science",
+          "Competencies",
+          "Learning outcomes",
+          "Matter",
+          "Physical and living world",
+          "Health",
+          "Hygiene",
+          "Science communication",
+          "Nature of science",
+          "Processes",
+          "Historical and contemporary aspects",
+          "Indian Knowledge Systems (IKS)",
+          "Environmental education",
+          "Cross-cutting themes",
+          "Value education",
+          "Inclusive education"
+        ],
+        "context_relation": "The text provides information about the curriculum and goals of a science textbook for Grade 6.",
+        "limitations": [
+          "The text does not provide specific details about the content or structure of the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:06:54Z"
     },
     {
       "asset_id": "08c9cff8bfd4ef5bf5776772",
@@ -509,6 +829,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11a3f607feba5db1456194b2106732e2c89fd578c10f26502f2428a9c0003407",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -525,8 +846,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:03:55Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:07:06Z"
     },
     {
       "asset_id": "d2cdc6da7287e5e25eb9c978",
@@ -536,6 +857,7 @@
       "source_pdf_page_number": 6,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11a3f607feba5db1456194b2106732e2c89fd578c10f26502f2428a9c0003407",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -552,8 +874,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:04:01Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:07:12Z"
     },
     {
       "asset_id": "b3954618c027f3d2d0e5c88b",
@@ -562,14 +884,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 6,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11a3f607feba5db1456194b2106732e2c89fd578c10f26502f2428a9c0003407",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4357 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:07:28Z"
     },
     {
       "asset_id": "fbec9dd5a194d2cf561dad5d",
@@ -578,14 +912,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 6,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11a3f607feba5db1456194b2106732e2c89fd578c10f26502f2428a9c0003407",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4298 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:07:44Z"
     },
     {
       "asset_id": "c6a831694848458053f2aa82",
@@ -597,9 +943,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
+      "run_id": "38994583378",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -611,6 +957,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -627,8 +974,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:07:49Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:13:12Z"
     },
     {
       "asset_id": "71e2c81fb29557d709be3d58",
@@ -638,6 +985,7 @@
       "source_pdf_page_number": 7,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -654,8 +1002,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:07:57Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:13:19Z"
     },
     {
       "asset_id": "a123f1e89ed063a86528eedb",
@@ -664,14 +1012,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 7,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4347 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:14:46Z"
     },
     {
       "asset_id": "536e0e377291f52f0660280e",
@@ -680,14 +1041,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 7,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4288 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:15:02Z"
     },
     {
       "asset_id": "7e3d4a9251c90271df84b246",
@@ -696,14 +1069,42 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 7,
       "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9d94c7edc362c871d295c5150c68db48ce4fa3262f207c9cca57b2997f912a06",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of keywords in scientific processes and the role of summaries in reinforcing key ideas.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "ideas and encourage them to think more deeply about the content.",
+          "The keywords related to scientific processes depict the steps or",
+          "procedure involved in the scientific activities. These words guide",
+          "learners on how scientific knowledge is generated, tested and",
+          "applied. ‘Summary’ offers an overview of the chapter’s main points",
+          "reinforcing the key ideas discussed. It serves to outline the content",
+          "presented in the chapter. A non-evaluative interesting element that",
+          "has been incorporated in some of the chapters is the introduction of",
+          "certain verses from various Indian texts to promote rootedness in"
+        ],
+        "concepts": [
+          "scientific processes",
+          "keywords",
+          "scientific knowledge",
+          "summary",
+          "Indian texts"
+        ],
+        "context_relation": "The page discusses the educational content of a textbook, focusing on keywords and summaries in scientific processes.",
+        "limitations": [
+          "The page does not provide specific examples or details about the content of the textbook."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:18:59Z"
     },
     {
       "asset_id": "66c6be28e7dc40045fe563f3",
@@ -713,6 +1114,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -729,8 +1131,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:11:48Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:19:10Z"
     },
     {
       "asset_id": "bf47af0965fd3c1bcb3670b1",
@@ -740,6 +1142,7 @@
       "source_pdf_page_number": 8,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -775,8 +1178,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:12:14Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:19:34Z"
     },
     {
       "asset_id": "3ebffa78ada58854febaed5b",
@@ -785,14 +1188,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 8,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4353 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:19:50Z"
     },
     {
       "asset_id": "7b8b92579b15d1dcc24d0d09",
@@ -801,14 +1216,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 8,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4294 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:20:04Z"
     },
     {
       "asset_id": "41955daad6a65c821a375d50",
@@ -817,14 +1244,49 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 8,
       "asset_path": "page-0008.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b05a920c6f3e7bef80a6fac958e7fd5218ded0f81b804fea8381020309d4b633",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "visual_type is not in the supported classification set.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a motivational message for learners.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "codes that have additional resources can be accessed by the learners",
+          "at their own convenience and pace. These additional resources",
+          "include videos, puzzles, games, quizzes, audio, documentaries and",
+          "additional content on some topics.",
+          "At the end of this book, learners will find a page titled ‘It is not the",
+          "end, my friend!’. This includes words of encouragement, motivating",
+          "learners to continue their educational journey and ignite their",
+          "curiosity for further learning. It is meant to be non-evaluative.",
+          "May the journey of every learner be filled with joy and continue",
+          "the curiosity in the higher grades as well!",
+          "We express our gratitude to all the members of the textbook",
+          "development committee for their contributions in shaping this",
+          "textbook. We look forward to the feedback of the readers.",
+          "TEXTBOOK DEVELOPMENT TEAM"
+        ],
+        "concepts": [
+          "motivational message",
+          "encouragement",
+          "curiosity",
+          "non-evaluative",
+          "textbook development committee",
+          "feedback"
+        ],
+        "context_relation": "The page is a motivational message for learners in a textbook.",
+        "limitations": [
+          "The page does not show any visual elements.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:24:04Z"
     },
     {
       "asset_id": "832113502906cc76508720ad",
@@ -834,6 +1296,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -871,8 +1334,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:16:27Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:24:42Z"
     },
     {
       "asset_id": "b265e95e530d3aee11e276a1",
@@ -882,6 +1345,7 @@
       "source_pdf_page_number": 9,
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -919,8 +1383,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:17:00Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:26:23Z"
     },
     {
       "asset_id": "621e7f15906dd556ba8cb629",
@@ -929,14 +1393,27 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 9,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4392 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images present."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:26:40Z"
     },
     {
       "asset_id": "f819e786c5753684dd868453",
@@ -945,14 +1422,26 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 9,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 400: {\"error\":\"request (4333 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content or text present on the page."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:26:56Z"
     },
     {
       "asset_id": "aecc6234857605276de86b42",
@@ -961,14 +1450,66 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 9,
       "asset_path": "page-0009.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "37560badb270fa4c999af83f36f564acacd26eed81896eadd436301c01c3ec7d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38672043506",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of committee members for National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching Learning\nMaterial Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational\nPlanning and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council–Prime\nMinister (EAC–PM)",
+          "5. Shekhar Mande, Former Director General, CSIR, Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shan",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton\nAcademy, Bengaluru",
+          "9. Michel Danino, Visiting Professor, IIT–Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General,\nHIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bhasha Samiti, Ministry\nof Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council–Prime\nMinister (EAC–PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office, NSTC",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusha Kumar Mandal, Professor, Department of Education\nin Social Science, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor and Head, Planning and Monitoring\nDivision, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Committee members",
+          "Chancellor",
+          "Professor",
+          "Economic Advisory Council",
+          "Distinguished Professor",
+          "Music Maestro",
+          "Badminton Academy",
+          "HIPA",
+          "Ministry of Education",
+          "Economic Advisory Council–Prime Minister",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Department of Education in Social Science",
+          "Planning and Monitoring Division",
+          "Department of Education in Languages",
+          "Department of Curriculum Studies and Development"
+        ],
+        "context_relation": "The list of committee members for the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is incomplete, with some names and positions missing."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:31:35Z"
     },
     {
       "asset_id": "9221c92f66926af1dc38caf8",
@@ -978,6 +1519,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f.jpeg",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -992,8 +1534,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:22:11Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:33:05Z"
     },
     {
       "asset_id": "1524c5f474314fd0235cd96e",
@@ -1003,6 +1545,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1019,8 +1562,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:23:46Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:34:37Z"
     },
     {
       "asset_id": "cde1cdc68d8262fad2aecb47",
@@ -1030,6 +1573,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1052,8 +1596,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:25:21Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:36:09Z"
     },
     {
       "asset_id": "d3d95345c1d0b1349bf16a32",
@@ -1063,6 +1607,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1077,8 +1622,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:26:49Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:37:34Z"
     },
     {
       "asset_id": "7d6f5537786277f7ed78a53e",
@@ -1088,6 +1633,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1104,8 +1650,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:28:18Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:39:02Z"
     },
     {
       "asset_id": "68909d5d05113f04eabe5dfb",
@@ -1115,6 +1661,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1138,8 +1685,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:29:51Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:41:42Z"
     },
     {
       "asset_id": "a506f06afd74433d84125ee1",
@@ -1149,6 +1696,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1165,8 +1713,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:31:20Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:43:09Z"
     },
     {
       "asset_id": "fe12eefaed55fddbe759af81",
@@ -1176,6 +1724,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/23f807fdb3087675e1d4319c2c0f229c3ffe1207b5596d72f4d1fc334ea95910.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1194,8 +1743,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:32:56Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:44:42Z"
     },
     {
       "asset_id": "a41027195d283dddb030af44",
@@ -1205,6 +1754,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/f0ceac7c356550391c15d3d95b6d8413b36571dd39e1f2abfe89d00bb8195012.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1221,8 +1771,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:34:29Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:46:09Z"
     },
     {
       "asset_id": "686d4adc8c601eb83edb6f2d",
@@ -1232,6 +1782,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/9e94478c8e82a9b36758bb0c2406569431e81a5d3f997f8e0e1b9893422524be.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1253,8 +1804,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:36:05Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:47:43Z"
     },
     {
       "asset_id": "686012908e59d25fb26d157b",
@@ -1264,6 +1815,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/f6316d5187ab07d2a43a700ce37bd5c0de7f5433105f616c19b6a81b75ffa68e.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1278,8 +1830,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:37:38Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:49:13Z"
     },
     {
       "asset_id": "be7fa06c2a91a27cf5d4716e",
@@ -1289,6 +1841,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d979c6cba3c257d639a05c2274f741c514c6bc6a9b93338e3674599c00cede0a.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1306,8 +1859,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:39:12Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:50:45Z"
     },
     {
       "asset_id": "e4843a4ab6c2194b74704e65",
@@ -1317,6 +1870,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/0c0a73c4080068558eada4673c40e0b4b758deba5c343d867ad798a6ea9b2a10.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1331,8 +1885,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:40:45Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:52:15Z"
     },
     {
       "asset_id": "53b5fda522a1309a02fc6b10",
@@ -1342,6 +1896,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/95201d97472cd53f6b93b45dc2aebc2f097955865c0c804b03cec8e0bfa86e40.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1358,8 +1913,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:42:17Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:53:45Z"
     },
     {
       "asset_id": "f9f3c251b27ab4c4e97b77b6",
@@ -1369,6 +1924,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/9c4be7d4f16a4be6c85a7fd9326ad85841647423fe2add4e1adddaeb4e089c46.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1385,8 +1941,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:43:40Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:56:17Z"
     },
     {
       "asset_id": "9580eb68bcb07aab9e179c1e",
@@ -1396,6 +1952,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/57ea5c9493c3e89d19840edb86c44dcdb8b9ce3459a0cd0b72c6dd1ff3730312.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1412,8 +1969,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:45:18Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:57:50Z"
     },
     {
       "asset_id": "d98a20de5c66bd421f4b78c3",
@@ -1423,6 +1980,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/181b37062a0751ab7dc31dda1cc13741b435bfe3006671e9b5a1d2ed08cf13bd.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1444,8 +2002,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:46:51Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T03:59:21Z"
     },
     {
       "asset_id": "dbd4bcb5d81f964514e50255",
@@ -1455,6 +2013,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2def1e799ccc0f47d1e9ddaaa58453b0c083f96ea04a531c1a72045fdef03ad4.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1477,8 +2036,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:48:29Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:00:56Z"
     },
     {
       "asset_id": "fa09a24695c79b7c7a831d86",
@@ -1488,6 +2047,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/e8e9badff08f53d06b24a91e0e09b424e3b33bd12949e9a0d17db6bb06889c26.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1504,8 +2064,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:50:00Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:02:20Z"
     },
     {
       "asset_id": "7d08988be26a93d6d2862ffe",
@@ -1515,6 +2075,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d508b5cb200fa464570853152ac81ac26ad272bf909458736abb06d919c1705f.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1531,8 +2092,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:51:33Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:03:48Z"
     },
     {
       "asset_id": "a1c4787cde44882a4e50794e",
@@ -1542,6 +2103,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/1d2f6921145c1f32f4889247731e3e3283e50195051b5ddb118c4544cc539e91.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1563,8 +2125,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:53:13Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:05:25Z"
     },
     {
       "asset_id": "f36094cee2427ce001124344",
@@ -1574,6 +2136,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/99b464e48def161dae350b699ad094ac41b53c3d0a6e032485ddc143640c5671.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1596,8 +2159,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:54:52Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:07:00Z"
     },
     {
       "asset_id": "1e5e78363f372a4079251398",
@@ -1607,6 +2170,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c6008e9c0247f30c0d5045954a4b42daa3c10c54213941adfc557dbb30eecc41.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1628,8 +2192,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:56:35Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:08:41Z"
     },
     {
       "asset_id": "34fbf3622f8eec86cc267c1f",
@@ -1639,6 +2203,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2dda13f097444900abfef3a5152f237842412cdae789bc1edd09871facda62d4.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1660,8 +2225,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:58:11Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:11:22Z"
     },
     {
       "asset_id": "c69d4d68c2b470c0964f40a6",
@@ -1671,6 +2236,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/2aa0b2b20783414944630b221601e8ed170d19adc58d81908752649761e15b7b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1687,8 +2253,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T00:59:38Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:12:47Z"
     },
     {
       "asset_id": "1823e9e073f9ef554498f8a7",
@@ -1698,6 +2264,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/ff0faef63dd4213fe7c50fb852a496bc73557e0643cceaa95fc579fb9993b6d1.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1716,8 +2283,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:01:13Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:14:19Z"
     },
     {
       "asset_id": "bab84f5054483c1ee589f5da",
@@ -1727,6 +2294,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/b5b4b2636a6e6b2689defe3a54d9b66741a3c712e4bae2bd2b03b48628b656cc.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1743,8 +2311,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:02:47Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:15:49Z"
     },
     {
       "asset_id": "259432731a10bb47ff9ba58d",
@@ -1754,6 +2322,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/dc6fb20ed0404b50cb59f52e240f5c5e85435c8cbc1236b63c59a284a9d780f7.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1770,8 +2339,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:04:27Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:17:27Z"
     },
     {
       "asset_id": "a48e669518255c0038a4121c",
@@ -1781,6 +2350,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/1ed137499d78e146b5d4b55a89971718b6ae87403390ebe68d40c7d47981f5ca.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1797,8 +2367,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:05:57Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:18:52Z"
     },
     {
       "asset_id": "1ede912f83cb746298ba01f4",
@@ -1808,6 +2378,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/c79ae7d144fad7e02c59441d27b36926a9af79c0609e028a8cdc6921f12ca57b.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1824,8 +2395,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:07:28Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:20:21Z"
     },
     {
       "asset_id": "5c4108fcc599f2f207c3c5bc",
@@ -1835,6 +2406,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/61cabfac624a633491799e52bd0320df576ae2031fee6d934e30af6bba941264.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1859,8 +2431,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:09:06Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:21:56Z"
     },
     {
       "asset_id": "bc8bf0628ca6918e2a5f6d2b",
@@ -1870,6 +2442,7 @@
       "source_pdf_page_number": 10,
       "asset_path": "assets/d5d50c185ace6f86619ae00e283a1dfbec4e164316afa3423fd13ae0eaf1e7e8.png",
       "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
@@ -1892,8 +2465,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
-      "checkpointed_at": "2026-10-15T01:10:42Z"
+      "run_id": "38994583378",
+      "checkpointed_at": "2026-10-17T04:23:29Z"
     },
     {
       "asset_id": "2887e2147ae0d1ca0297a870",
