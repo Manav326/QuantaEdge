@@ -60,6 +60,7 @@ export default function InstitutionsAdminPage() {
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [joinCode,setJoinCode]=useState('');
+  const [joinCodeInstitutionId,setJoinCodeInstitutionId]=useState<number|null>(null);
   const [codeExpiry,setCodeExpiry]=useState('');
   const [create,setCreate]=useState({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
   const [admin,setAdmin]=useState({username:'',displayName:'',initialPassword:''});
@@ -198,7 +199,7 @@ export default function InstitutionsAdminPage() {
   }
   async function rotateCode(){
     if(!detail||!window.confirm('Rotate the join code? The old code stops working immediately.'))return;setSaving(true);setError('');
-    try{const result=await api<{joinCode:string;expiresAt:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/join-code/rotate',{method:'POST',body:JSON.stringify({})});setJoinCode(result.joinCode);setCodeExpiry(result.expiresAt);setNotice('Join code rotated; the old code was revoked.');}
+    try{const result=await api<{joinCode:string;expiresAt:string}>('/api/v1/hrms/platform/institutions/'+detail.id+'/join-code/rotate',{method:'POST',body:JSON.stringify({})});setJoinCode(result.joinCode);setJoinCodeInstitutionId(detail.id);setCodeExpiry(result.expiresAt);setNotice('Join code rotated; the old code was revoked.');}
     catch(e){setError(e instanceof Error?e.message:'Join code could not be rotated.');}finally{setSaving(false);}
   }
   async function reconcileBilling(){
@@ -212,8 +213,34 @@ export default function InstitutionsAdminPage() {
     }catch(e){setError(e instanceof Error?e.message:'Billing ledger could not be reconciled.');}
     finally{setSaving(false);}
   }
+  function learnerAppOrigin(): string {
+    const configured=process.env.NEXT_PUBLIC_LEARNER_APP_ORIGIN?.trim();
+    if(configured){
+      try{
+        const parsed=new URL(configured);
+        const local=parsed.hostname==='localhost'||parsed.hostname==='127.0.0.1';
+        if(parsed.protocol==='https:'||(local&&parsed.protocol==='http:'))return parsed.origin;
+      }catch{/* Use the documented deployment fallback below. */}
+    }
+    if(typeof window!=='undefined'&&(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'))return 'http://localhost:3000';
+    return 'https://qe.thinkwithsujeet.in';
+  }
+  function schoolLearningLink(): string {
+    if(!detail||!joinCode||joinCodeInstitutionId!==detail.id)return '';
+    const url=new URL('/school/'+encodeURIComponent(detail.tenant_code),learnerAppOrigin());
+    url.searchParams.set('joinCode',joinCode);
+    return url.toString();
+  }
   async function copyCode(){
-    if(!joinCode)return;try{await navigator.clipboard.writeText(joinCode);setNotice('Join code copied.');}catch{setNotice('Copy the join code manually: '+joinCode);}
+    if(!joinCode||!detail||joinCodeInstitutionId!==detail.id)return;
+    try{await navigator.clipboard.writeText(joinCode);setNotice('Join code copied.');}
+    catch{setNotice('Copy the join code manually: '+joinCode);}
+  }
+  async function copySchoolLink(){
+    const link=schoolLearningLink();
+    if(!link)return;
+    try{await navigator.clipboard.writeText(link);setNotice('School-branded learner link copied. Share it only with this school’s learners.');}
+    catch{setNotice('Copy the school learner link manually: '+link);}
   }
   async function createAdmin(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
@@ -233,7 +260,7 @@ export default function InstitutionsAdminPage() {
   return <main className={styles.page}>
     <header className={styles.pageHeader}><div><span className={styles.eyebrow}>HRMS · PLATFORM OWNER</span><h1>Institution operations</h1><p>Control school and college tenants, course authorisation, white-label identity and billable enrollments.</p></div><div className={styles.headerActions}><button className={styles.secondary} onClick={()=>void loadBase()} disabled={loading}>Refresh data</button><button className={styles.primary} onClick={()=>setShowCreate(v=>!v)}>{showCreate?'Close form':'＋ Add institution'}</button></div></header>
     {error?<div className={styles.error} role="alert">{error}</div>:null}{notice?<div className={styles.notice} role="status">{notice}</div>:null}
-    {joinCode?<div className={styles.codeNotice}><div><span>JOIN CODE · SHARE SECURELY</span><strong>{joinCode}</strong><small>Expires {fmt(codeExpiry)}. The full code is not repeated in the institution list.</small></div><button className={styles.secondary} onClick={()=>void copyCode()}>Copy code</button><button className={styles.quiet} onClick={()=>setJoinCode('')}>Dismiss</button></div>:null}
+    {joinCode&&detail&&joinCodeInstitutionId===detail.id?<div className={styles.codeNotice}><div><span>SCHOOL LEARNING LINK · SHARE SECURELY</span><strong>{detail.brand_display_name||detail.display_name}</strong><small>Expires {fmt(codeExpiry)}. This invitation is scoped to {detail.tenant_code} and links learners directly into the school-branded app.</small><small className={styles.invitationLinkPreview}>{schoolLearningLink()}</small></div><button className={styles.primary} onClick={()=>void copySchoolLink()}>Copy school learning link</button><button className={styles.secondary} onClick={()=>void copyCode()}>Copy code only</button><button className={styles.quiet} onClick={()=>{setJoinCode('');setJoinCodeInstitutionId(null);}}>Dismiss</button></div>:null}
     <section className={styles.metrics}>
       <article><span>All institutions</span><strong>{overview?.institutions?.institutions_total??institutions.length}</strong><small>Customer tenants</small></article>
       <article><span>Active</span><strong>{overview?.institutions?.institutions_active??institutions.filter(x=>x.status==='ACTIVE').length}</strong><small>Sign-in and joins enabled</small></article>
