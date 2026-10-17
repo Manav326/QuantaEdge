@@ -747,13 +747,50 @@ fun QuantaEdgeApp() {
             val body = JSONObject().put("mobile", mobile.trim()).put("otp", otp.trim())
                 .put("purpose", purpose).put("password", password)
             if (purpose == "SIGNUP") body.put("displayName", displayName.trim())
-            ApiClient.postObject("/api/v1/auth/verify-otp", body)
+            val signedIn = ApiClient.postObject("/api/v1/auth/verify-otp", body)
+            if (purpose == "LOGIN") {
+                val workspace = signedIn.optString("workspace").uppercase()
+                if (workspace !in setOf("PARENT", "STUDENT")) throw IOException("The sign-in account could not be confirmed.")
+                ApiClient.setWorkspace(workspace)
+            } else {
+                ApiClient.setWorkspace("PARENT")
+            }
             status = when (purpose) {
                 "SIGNUP" -> if (language == "hi") "अभिभावक खाता बन गया।" else "Parent account created."
                 "PASSWORD_RESET" -> if (language == "hi") "पासवर्ड अपडेट हो गया।" else "Password updated."
                 else -> if (language == "hi") "OTP से साइन इन सफल रहा।" else "Signed in with OTP."
             }
             refreshUser()
+            AppRoute.values().forEach { savedRoute ->
+                saveableStateHolder.removeState("anonymous:${savedRoute.name}")
+            }
+        }
+    }
+
+    fun requestAccountSignupOtp(mobile: String, onRequested: (String?) -> Unit) {
+        runTask {
+            ApiClient.setWorkspace("STUDENT")
+            val response = ApiClient.postObject("/api/v1/auth/account-signup/request-otp",
+                JSONObject().put("mobile", mobile.trim()))
+            val devCode = response.optString("devCode").takeIf { it.isNotBlank() && it != "null" }
+            status = if (devCode != null) "Development OTP: $devCode"
+                else if (language == "hi") "मोबाइल OTP भेजने का अनुरोध स्वीकार हुआ।" else "Mobile OTP request accepted."
+            onRequested(devCode)
+        }
+    }
+
+    fun verifyAccountSignupOtp(mobile: String, displayName: String, otp: String) {
+        runTask {
+            ApiClient.setWorkspace("STUDENT")
+            val session = ApiClient.postObject("/api/v1/auth/account-signup/verify-otp",
+                JSONObject().put("mobile", mobile.trim()).put("displayName", displayName.trim()).put("otp", otp.trim()))
+            if (session.optString("workspace") != "STUDENT" || session.optLong("studentId") <= 0L) {
+                ApiClient.postObject("/api/v1/auth/logout", JSONObject())
+                ApiClient.clearSession()
+                throw IOException("The learner account could not be confirmed.")
+            }
+            refreshUser()
+            status = if (language == "hi") "आपका खाता बन गया है।" else "Your account has been created."
             AppRoute.values().forEach { savedRoute ->
                 saveableStateHolder.removeState("anonymous:${savedRoute.name}")
             }
@@ -3032,7 +3069,17 @@ fun QuantaEdgeApp() {
                         onRequestOtp = { number, callback -> requestParentOtp("LOGIN", number, callback) },
                         onVerifyOtp = { number, otp -> verifyParentOtp("LOGIN", number, "", otp, "") },
                         onSignup = { route = AppRoute.PARENT_SIGNUP },
+                        onAccountSignup = { route = AppRoute.ACCOUNT_SIGNUP },
                         onResetPassword = { route = AppRoute.PARENT_RESET }
+                    )
+                    AppRoute.ACCOUNT_SIGNUP -> AccountSignupScreen(
+                        language = language,
+                        onToggleLanguage = ::toggleLanguage,
+                        busy = busy,
+                        status = status,
+                        onRequestOtp = ::requestAccountSignupOtp,
+                        onVerify = ::verifyAccountSignupOtp,
+                        onBackToLogin = { route = AppRoute.LOGIN }
                     )
                     AppRoute.PARENT_SIGNUP -> ParentOtpFlowScreen(
                         language = language,
@@ -3665,6 +3712,7 @@ private fun LoginScreen(
     onRequestOtp: (String, (String?) -> Unit) -> Unit,
     onVerifyOtp: (String, String) -> Unit,
     onSignup: () -> Unit,
+    onAccountSignup: () -> Unit,
     onResetPassword: () -> Unit
 ) {
     var mode by rememberSaveable(initialMode) { mutableStateOf(initialMode) }
@@ -3780,8 +3828,12 @@ private fun LoginScreen(
         }
         if (mode == "PARENT") {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                TextButton(onClick = onSignup, enabled = !busy) { Text(if(language=="hi") "Create account" else "Create account") }
-                TextButton(onClick = onResetPassword, enabled = !busy) { Text(if(language=="hi") "Forgot password?" else "Forgot password?") }
+                TextButton(onClick = onSignup, enabled = !busy) { Text(if(language=="hi") "अभिभावक खाता" else "Parent account") }
+                TextButton(onClick = onResetPassword, enabled = !busy) { Text(if(language=="hi") "पासवर्ड भूल गए?" else "Forgot password?") }
+            }
+        } else if (mode == "LEARNER") {
+            TextButton(onClick = onAccountSignup, enabled = !busy, modifier = Modifier.padding(top = 4.dp)) {
+                Text(if(language=="hi") "नया खाता बनाएँ" else "Create a new account")
             }
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error,
@@ -3791,6 +3843,77 @@ private fun LoginScreen(
             color = MaterialTheme.colorScheme.secondary)
     }
 }
+@Composable
+private fun AccountSignupScreen(
+    language: String,
+    onToggleLanguage: () -> Unit,
+    busy: Boolean,
+    status: String,
+    onRequestOtp: (String, (String?) -> Unit) -> Unit,
+    onVerify: (String, String, String) -> Unit,
+    onBackToLogin: () -> Unit
+) {
+    var mobile by rememberSaveable { mutableStateOf("") }
+    var displayName by rememberSaveable { mutableStateOf("") }
+    var otp by rememberSaveable { mutableStateOf("") }
+    var requested by rememberSaveable { mutableStateOf(false) }
+    var devCode by rememberSaveable { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        QuantaEdgeBrand(modifier = Modifier.fillMaxWidth(), compact = false, centered = true)
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if(language=="hi") "EN" else "हिंदी") }
+        }
+        Text(if(language=="hi") "अपना QuantaEdge खाता बनाएँ" else "Create your QuantaEdge account",
+            style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+        Text(if(language=="hi")
+            "पूरा नाम और मोबाइल नंबर दर्ज करें। सफल OTP सत्यापन के बाद मोबाइल सत्यापित दिखेगा।"
+            else "Enter your full name and mobile number. Your mobile is marked verified only after a successful OTP.",
+            style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp, bottom = 14.dp))
+        if (!requested) {
+            OutlinedTextField(value = displayName, onValueChange = { displayName = it.take(120) },
+                label = { Text(if(language=="hi") "पूरा नाम" else "Full name") },
+                singleLine = true, enabled = !busy, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = mobile, onValueChange = { mobile = it.filter(Char::isDigit).take(10) },
+                label = { Text(if(language=="hi") "मोबाइल नंबर" else "Mobile number") },
+                singleLine = true, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+            Button(onClick = { onRequestOtp(mobile) { code -> requested = true; devCode = code.orEmpty() } },
+                enabled = !busy && displayName.trim().length >= 2 && mobile.length == 10,
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
+                Text(if(language=="hi") "OTP भेजें" else "Send OTP")
+            }
+        } else {
+            Text((if(language=="hi") "मोबाइल: +91 " else "Mobile: +91 ") + mobile,
+                style = MaterialTheme.typography.bodyMedium, modifier = Modifier.fillMaxWidth())
+            if (devCode.isNotBlank()) Text(
+                (if(language=="hi") "विकास OTP: " else "Development OTP: ") + devCode,
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(top = 8.dp))
+            OutlinedTextField(value = otp, onValueChange = { otp = it.filter(Char::isDigit).take(6) },
+                label = { Text(if(language=="hi") "6 अंकों का OTP" else "6-digit OTP") },
+                singleLine = true, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+            Button(onClick = { onVerify(mobile, displayName, otp) },
+                enabled = !busy && otp.length == 6,
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
+                Text(if(language=="hi") "सत्यापित करें और खाता बनाएँ" else "Verify and create account")
+            }
+            TextButton(onClick = { requested = false; otp = ""; devCode = "" }, enabled = !busy) {
+                Text(if(language=="hi") "मोबाइल नंबर बदलें" else "Change mobile number")
+            }
+        }
+        if (status.isNotBlank()) Text(localizedUiText(status),
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.padding(top = 8.dp))
+        TextButton(onClick = onBackToLogin, enabled = !busy) {
+            Text(if(language=="hi") "साइन इन पर वापस जाएँ" else "Back to sign in")
+        }
+    }
+}
+
 @Composable
 private fun ParentOtpFlowScreen(
     language: String,
