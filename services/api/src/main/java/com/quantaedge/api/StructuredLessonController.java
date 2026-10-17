@@ -40,12 +40,27 @@ public class StructuredLessonController {
   @GetMapping
   public List<Map<String, Object>> catalogue(
       @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestParam(required = false) String subjectCode,
+      @RequestParam(required = false) Integer classNumber,
+      @RequestParam(required = false) Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     String locale = normalizeLanguage(language);
+    String requestedSubject = subjectCode == null ? "" : subjectCode.trim();
+    if (classNumber != null && classNumber < 1) {
+      throw new IllegalArgumentException("Class number must be positive.");
+    }
+    if (courseId != null && courseId < 1L) {
+      throw new IllegalArgumentException("Course ID must be positive.");
+    }
     List<Map<String, Object>> result = new ArrayList<>();
     for (StructuredLessonArtifactService.PublishedArtifact artifact : artifacts.listPublishedArtifacts()) {
-      if (!studentHasTrackAccess(context.studentId(), artifact)) continue;
+      if (!requestedSubject.isBlank()
+          && !requestedSubject.equalsIgnoreCase(artifacts.subjectCode(artifact))) continue;
+      if (classNumber != null && classNumber != artifacts.classNumber(artifact)) continue;
+      if (courseId != null) {
+        if (!studentHasCourseTrackAccess(context.studentId(), courseId, artifact)) continue;
+      } else if (!studentHasTrackAccess(context.studentId(), artifact)) continue;
       JsonNode source = artifact.source();
       Map<String, Object> item = new LinkedHashMap<>();
       item.put("artifactId", artifact.artifactId());
@@ -223,6 +238,26 @@ public class StructuredLessonController {
     if (!studentHasTrackAccess(studentId, artifact)) {
       throw new SecurityException("Student access to this structured lesson is not permitted.");
     }
+  }
+
+  private boolean studentHasCourseTrackAccess(long studentId, long courseId,
+      StructuredLessonArtifactService.PublishedArtifact artifact) {
+    Long allowed = jdbc.queryForObject("""
+      select count(*)
+      from student st
+      join student_program_enrollment spe on spe.student_id=st.id
+        and spe.program_id=? and spe.status='ACTIVE'
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+      join curriculum_program_subject ps on ps.program_id=p.id
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+        and s.class_id=ps.class_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      where st.id=? and st.active=true
+        and lower(s.code)=lower(?)
+        and regexp_replace(c.code, '[^0-9]', '', 'g')=?
+      """, Long.class, courseId, studentId, artifacts.subjectCode(artifact),
+        String.valueOf(artifacts.classNumber(artifact)));
+    return allowed != null && allowed > 0;
   }
 
   private boolean studentHasTrackAccess(long studentId,
