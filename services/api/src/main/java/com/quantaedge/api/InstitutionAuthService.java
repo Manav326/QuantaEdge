@@ -153,7 +153,7 @@ public class InstitutionAuthService {
   @Transactional
   public SessionTokens refresh(String rawRefreshToken) {
     if (rawRefreshToken == null || rawRefreshToken.isBlank()) {
-      throw new SecurityException("Institution session expired. Please sign in again.");
+      throw new SecurityException("Session expired. Please sign in again.");
     }
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select s.id as session_id,s.institution_admin_id,s.institution_id
@@ -288,6 +288,9 @@ public class InstitutionAuthService {
         where c.code_hash=? and c.status='ACTIVE'
           and (c.expires_at is null or c.expires_at>now())
           and (c.use_limit is null or c.redeemed_count<c.use_limit)
+          and exists (select 1 from institution_billing_contract bc
+            where bc.institution_id=t.id and bc.active=true and bc.effective_from<=current_date
+              and (bc.effective_until is null or bc.effective_until>=current_date))
         for update of c
         """, studentId, codeHash);
     if (codeRows.isEmpty()) throw new IllegalArgumentException("This institution code is invalid or no longer active.");
