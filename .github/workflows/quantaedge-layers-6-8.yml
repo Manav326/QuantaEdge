@@ -21,9 +21,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Benchmark first; generation is a separate explicitly experimental run"
+        description: "Benchmark models, start a budgeted generation run, or explicitly resume its matching saved checkpoints"
         type: choice
-        options: ["benchmark", "run"]
+        options: ["benchmark", "run", "resume"]
         default: "benchmark"
         required: true
       class_no:
@@ -62,7 +62,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ inputs.mode || 'push' }}
+  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ (inputs.mode == 'benchmark' && 'benchmark') || 'generation' }}
   cancel-in-progress: false
 
 jobs:
@@ -139,7 +139,7 @@ jobs:
           set -euo pipefail
           if [[ "$MODE" == "benchmark" ]]; then
             IFS=',' read -r -a candidates <<< "$BENCHMARK_MODELS"
-          else
+          elif [[ "$MODE" == "run" || "$MODE" == "resume" ]]; then
             candidates=("$GENERATION_MODEL")
           fi
           for model in "${candidates[@]}"; do
@@ -159,7 +159,7 @@ jobs:
             --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --commit-checkpoints
       - name: Run bounded single-book draft generation
-        if: inputs.mode == 'run'
+        if: inputs.mode == 'run' || inputs.mode == 'resume'
         shell: bash
         env:
           CLASS_NO: "${{ inputs.class_no }}"
@@ -186,7 +186,8 @@ jobs:
             echo "## QuantaEdge Layers 6-8"
             echo "- Provider: native local Ollama /api/chat; no OpenAI API key or hosted endpoint."
             echo "- One whole-book source per run and a strict model-call budget."
-            echo "- Git savepoints are pushed to main; reruns resume from source, edition, model and prompt fingerprints."
+            echo "- Git savepoints are pushed to main; resume reuses matching source, edition, model, prompt, contract and visual-evidence fingerprints."
+            if [[ "${{ inputs.mode }}" == "resume" ]]; then echo "- Explicit RESUME mode selected: completed matching segments are reused; only pending/error segments within the new model-call budget are attempted."; fi
             echo "- Lessons, retrieval records and SFT examples remain review-only; production selection remains pending human review."
             echo "- IN_PROGRESS means repeat the same inputs to resume. It is never a false completion."
           } >> "$GITHUB_STEP_SUMMARY"
