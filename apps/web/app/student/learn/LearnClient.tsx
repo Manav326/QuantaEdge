@@ -290,6 +290,7 @@ export default function LearnClient() {
   const courseStartQuery=selectedCourseId!==null?'?courseId='+selectedCourseId:selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):'';
   const [courseDisplayName,setCourseDisplayName]=useState('');
 
+  const lessonSwipeStartRef=useRef<{x:number;y:number}|null>(null);
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
   const orderedBlocks=useMemo(()=>lesson ? orderLearnerBlocks(lesson.blocks) : [],[lesson]);
   // The lesson screen teaches the concept first. Recap is rendered after the student's
@@ -695,7 +696,22 @@ export default function LearnClient() {
   </main>;
 
   return <main className="lesson-page">
-    <section className="lesson-wrap">
+    <section className="lesson-wrap"
+      onTouchStart={event=>{
+        const touch=event.changedTouches[0];
+        lessonSwipeStartRef.current=touch?{x:touch.clientX,y:touch.clientY}:null;
+      }}
+      onTouchEnd={event=>{
+        const start=lessonSwipeStartRef.current;
+        lessonSwipeStartRef.current=null;
+        const touch=event.changedTouches[0];
+        if(!start||!touch||!lesson||currentIndex<0)return;
+        const dx=touch.clientX-start.x;
+        const dy=touch.clientY-start.y;
+        if(Math.abs(dx)<80||Math.abs(dx)<Math.abs(dy)*1.35)return;
+        if(dx>0&&currentIndex>0)void loadLesson(lessons[currentIndex-1].id);
+        else if(dx<0&&currentIndex<lessons.length-1)void loadLesson(lessons[currentIndex+1].id);
+      }}>
       <div className="lesson-meta">
         <span className="eyebrow">{selectedCourseId!==null||selectedProgram?(courseDisplayName||translateUi(locale, 'legacy.web.course.0d5ab113'))+' · '+lesson.subject_name:<><UiText message="legacy.web.class.98aaaa31" /> {lesson.class_code} · {lesson.subject_name}</>} · {lesson.chapter_name}</span>
         <span>Lesson {currentIndex+1} / {lessons.length}</span>
