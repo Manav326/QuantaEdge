@@ -3531,5 +3531,9 @@
   "web.workspace.parentFallbackName": "Parent account",
   "web.workspace.progressSavesAutomatically": "Progress saves automatically",
   "web.workspace.safeLearningSpace": "Safe learning space",
-  "web.workspace.studentFallbackName": "Student"
+  "web.workspace.studentFallbackName": "Student",
+  "web.navigation.student.coursesMarketplace": "Courses & Marketplace",
+  "web.navigation.student.mobileCourses": "Courses",
+  "web.navigation.student.allCourses": "All Courses",
+  "web.navigation.student.marketplace": "Marketplace"
 }
