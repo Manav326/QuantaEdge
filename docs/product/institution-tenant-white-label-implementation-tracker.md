@@ -381,3 +381,25 @@ The epic is complete only when all mandatory tasks pass, existing consumer signu
 - Root cause: Mockito expands Java varargs in `InvocationOnMock.getArguments()`; the test treated argument 1 as the original `Object[]`, but it was the first SQL parameter (`String`), throwing `ClassCastException`.
 - Corrected the test to read the unexpanded invocation arguments with `getRawArguments()[1]`. The SQL predicates, exact tenant/version/asset parameters, response bytes, MIME type, ETag and security-header assertions are retained.
 - **Verification status: pending a new exact-`main` Actions run.** Do not mark this release gate complete until API verification and the API image job succeed; other white-label integration and browser/device gates remain open.
+
+
+## Latest CI and asset-onboarding audit — 2026-10-18
+
+### GitHub Actions repair status
+
+This addendum supersedes the earlier “pending a new exact-main Actions run” note for the specific API test failure described above.
+
+- Run [#3771](https://github.com/Manav326/QuantaEdge/actions/runs/39095046634) failed in `InstitutionBrandingAssetControlTest.publicAssetRouteServesOnlyAnActiveAssetAtTheExactCurrentBrandVersion`. The test attempted to cast Mockito's expanded invocation argument to `Object[]`; the value was actually the first SQL parameter (`String`).
+- Commit [`6c86243ade08d6a3b2f632d2f06100a1b3233a01`](https://github.com/Manav326/QuantaEdge/commit/6c86243ade08d6a3b2f632d2f06100a1b3233a01) corrected the test to read `invocation.getRawArguments()[1]`, retaining the query-parameter, asset, ETag and security assertions.
+- Follow-up run [#3772](https://github.com/Manav326/QuantaEdge/actions/runs/39095464683) completed successfully. The Android APK build, affected-component detection, content import safeguards, web/Admin/People Operations image builds, API verification and API image build all succeeded.
+- At the start of this audit, `main` was `9fd95ff328b415741229efa58a54dd35690588f4`, five commits ahead of the green run. GitHub's compare endpoint showed only generated textbook pipeline JSON/visual-analysis data files changed after `6c86243`; no application, test or workflow source changed. However, the newer SHA itself had no attached Actions result, so it must not be described as exact-SHA green until a fresh run completes.
+- The earlier `#39091733537` compile-time errors and the later #3771 runtime mock error are distinct failures; the follow-up green run addresses the later one. White-label migration, authorization, real browser/device and signed school-build acceptance gates remain open.
+
+### School logo intake: current capability and gap
+
+- HRMS platform-owner onboarding can upload, replace and remove institution logos and app-icon assets. The API stores tenant-owned raster asset bytes and exposes only the currently selected active asset/version; web resolves the approved tenant branding dynamically.
+- Both the HRMS picker and `InstitutionBrandingAssetValidator` currently accept **PNG/JPEG only**. PDF is rejected. Validation is server-side and checks the real image signature/decoder, with a 2 MiB file ceiling, dimensions no larger than 4096 × 4096 and a 16-million-pixel limit; animated PNG and SVG/GIF/WebP are rejected.
+- The present upload path validates/stores the submitted raster. It does **not** provide logo normalization, safe PDF-to-image conversion, component-specific derived renditions, or an onboarding preview/crop/contain approval flow. A separate app-icon input exists; do not assume a wide school logo is a valid square app icon.
+- Actionable next steps are recorded in the course/branding visibility audit and should be implemented against the actual shared brand component/CSS geometry rather than guessed dimensions. Retain tenant/version scoping, audit events, stale-asset rejection and existing security validation.
+
+Release status remains **NOT READY** until a fresh exact-main workflow is green and all required API, browser/device and school-specific build acceptance evidence exists.
