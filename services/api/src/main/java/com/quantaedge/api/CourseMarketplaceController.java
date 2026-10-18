@@ -592,6 +592,13 @@ public class CourseMarketplaceController {
     long amountPaise = ((Number) offer.get("price_paise")).longValue();
     String currency = String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT);
     String title = String.valueOf(offer.getOrDefault("title", "Course access"));
+    String institutionDisplayName=jdbc.queryForObject("""
+      select coalesce(nullif(b.display_name,''),t.display_name)
+      from institution_tenant t left join institution_branding b on b.institution_id=t.id
+      where t.id=? and t.status='ACTIVE'
+      """,String.class,institutionId);
+    if(institutionDisplayName==null || institutionDisplayName.isBlank())
+      throw new IllegalStateException("Institution payment branding is not configured.");
 
     jdbc.update("""
         update course_payment_order set status='EXPIRED',updated_at=now()
@@ -609,7 +616,7 @@ public class CourseMarketplaceController {
     if (!keyedOrders.isEmpty()) {
       Map<String, Object> previous = keyedOrders.getFirst();
       String previousStatus = String.valueOf(previous.get("status"));
-      if ("PENDING".equals(previousStatus)) return checkoutResponse(previous, courseId, title);
+      if ("PENDING".equals(previousStatus)) return checkoutResponse(previous, courseId, title, institutionDisplayName);
       if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
@@ -620,7 +627,7 @@ public class CourseMarketplaceController {
     if (!open.isEmpty()) {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
-        return checkoutResponse(prior, courseId, title);
+        return checkoutResponse(prior, courseId, title, institutionDisplayName);
       }
       throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
     }
@@ -642,7 +649,7 @@ public class CourseMarketplaceController {
     } catch (DuplicateKeyException conflict) {
       List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
-        return checkoutResponse(racedOrders.getFirst(), courseId, title);
+        return checkoutResponse(racedOrders.getFirst(), courseId, title, institutionDisplayName);
       }
       if (!racedOrders.isEmpty()) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
@@ -675,7 +682,7 @@ public class CourseMarketplaceController {
       if (updated != 1) {
         throw new IllegalStateException("This checkout expired while it was being prepared. Please start checkout again.");
       }
-      return checkoutResponse(localOrderId, providerOrderId, amountPaise, currency, courseId, title);
+      return checkoutResponse(localOrderId, providerOrderId, amountPaise, currency, courseId, title, institutionDisplayName);
     } catch (Exception exception) {
       jdbc.update("""
           update course_payment_order set status='FAILED',failure_code='ORDER_CREATE_FAILED',updated_at=now()
@@ -699,7 +706,7 @@ public class CourseMarketplaceController {
   }
 
   private Map<String, Object> checkoutResponse(
-      Map<String, Object> order, long courseId, String title) {
+      Map<String, Object> order, long courseId, String title, String institutionDisplayName) {
     if (!isReusablePendingOrder(order)) {
       throw new IllegalStateException("The previous course checkout is not ready. Please retry shortly.");
     }
@@ -709,12 +716,13 @@ public class CourseMarketplaceController {
         ((Number) order.get("offer_price_paise")).longValue(),
         String.valueOf(order.get("currency")),
         courseId,
-        title);
+        title,
+        institutionDisplayName);
   }
 
   private Map<String, Object> checkoutResponse(
       long localOrderId, String providerOrderId, long amountPaise,
-      String currency, long courseId, String title) {
+      String currency, long courseId, String title, String institutionDisplayName) {
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("orderId", providerOrderId);
     result.put("localOrderId", localOrderId);
@@ -722,7 +730,7 @@ public class CourseMarketplaceController {
     result.put("currency", currency);
     result.put("keyId", keyId);
     result.put("courseId", courseId);
-    result.put("name", "QuantaEdge");
+    result.put("name", institutionDisplayName);
     result.put("description", title == null || title.isBlank() ? "Course access" : title);
     return result;
   }
