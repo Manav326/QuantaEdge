@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,17 @@ public class AuthController {
   public AuthController(AuthService auth, StaffAuditService staffAudit,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
     this(auth, staffAudit, null, secureCookies);
+  }
+
+  /**
+   * Exposes only the public OAuth client ID so every client uses the exact same
+   * audience as the API verifier. The identifier is not an OAuth client secret.
+   */
+  @GetMapping("/google/config")
+  public ResponseEntity<Map<String,Object>> googleSignInConfig() {
+    String clientId = googleIdentity == null ? "" : googleIdentity.publicClientId();
+    return ResponseEntity.ok().cacheControl(CacheControl.noStore())
+        .body(Map.of("configured", !clientId.isBlank(), "clientId", clientId));
   }
 
   @PostMapping("/my-learning-session")

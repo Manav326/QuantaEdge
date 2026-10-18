@@ -39,6 +39,11 @@ public class GoogleIdentityService {
             .build();
   }
 
+  /** A public OAuth client ID, safe for browser/mobile clients to use as the token audience. */
+  public String publicClientId() {
+    return clientId;
+  }
+
   @Transactional
   public GoogleSignIn authenticate(String credential) {
     GoogleProfile profile = verifyCredential(credential);
