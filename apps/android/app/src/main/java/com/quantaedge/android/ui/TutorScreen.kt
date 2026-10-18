@@ -417,7 +417,7 @@ fun TutorScreen(
                 )
                 else -> Image(
                     painter = painterResource(R.drawable.quantaedge_icon),
-                    contentDescription = "QuantaEdge",
+                    contentDescription = institutionBrand?.displayName ?: if (institutionBrandResolving) "School tutor" else "QuantaEdge",
                     modifier = Modifier.size(29.dp).clip(RoundedCornerShape(8.dp))
                 )
             }
