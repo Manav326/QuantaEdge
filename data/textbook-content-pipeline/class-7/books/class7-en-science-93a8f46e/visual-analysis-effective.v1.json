@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d713ce4d4d0d269889aa7eb5c4fdf8e401e8112e934bac35f426a6361980711b",
+  "raw_analysis_sha256": "230b97e6b960e79a50064f2567c412367592de26184adebc26a883d9d58af09a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:44:26Z",
+      "checkpointed_at": "2026-10-18T02:48:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:44:45Z",
+      "checkpointed_at": "2026-10-18T02:48:53Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -20448,6 +20448,162 @@
         "context_relation": "The image shows a scene from a science fair where children received a white sheet with a message on it.",
         "limitations": [
           "The image does not show the actual message on the white sheet."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f59b227e18ec7d4a4b50f92",
+      "asset_sha256": "c19e1a51e340d152da9fdaddac7f99da9cf7c3ec869d2c40bdb0db726b2ae509",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/c19e1a51e340d152da9fdaddac7f99da9cf7c3ec869d2c40bdb0db726b2ae509.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.1"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not provide specific details about the liquid used or the exact words that appeared on the paper."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:49:29Z",
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.1"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not provide specific details about the liquid used or the exact words that appeared on the paper."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6c1c371ed2c9e6632ccac45f",
+      "asset_sha256": "1ea5a38f9bdb6a2ff3aa3d19d41719c83715df0aea5ce255f39b6a59b097be92",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/1ea5a38f9bdb6a2ff3aa3d19d41719c83715df0aea5ce255f39b6a59b097be92.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not provide specific details about the liquid used or the exact wording of the words that appeared on the paper."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:50:07Z",
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not provide specific details about the liquid used or the exact wording of the words that appeared on the paper."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c1ea922dc2c53e3c51b5fcaf",
+      "asset_sha256": "cc47c0b8422d4c95a6304c841282c39e3d4df95cd6b8524e22525aff7116da3a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/cc47c0b8422d4c95a6304c841282c39e3d4df95cd6b8524e22525aff7116da3a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome message"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:50:44Z",
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome message"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

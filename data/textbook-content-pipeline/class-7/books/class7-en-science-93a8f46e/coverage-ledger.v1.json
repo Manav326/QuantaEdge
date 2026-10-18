@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 425,
-    "successful_visual_analyses": 419,
-    "missing_visual_analyses": 7063,
+    "raw_analysis_result_rows": 428,
+    "successful_visual_analyses": 422,
+    "missing_visual_analyses": 7060,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7069,
+    "unresolved_count": 7066,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -25111,9 +25111,24 @@
       "asset_path": "assets/c19e1a51e340d152da9fdaddac7f99da9cf7c3ec869d2c40bdb0db726b2ae509.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.1"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not provide specific details about the liquid used or the exact words that appeared on the paper."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25129,9 +25144,24 @@
       "asset_path": "assets/1ea5a38f9bdb6a2ff3aa3d19d41719c83715df0aea5ce255f39b6a59b097be92.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not provide specific details about the liquid used or the exact wording of the words that appeared on the paper."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25147,9 +25177,24 @@
       "asset_path": "assets/cc47c0b8422d4c95a6304c841282c39e3d4df95cd6b8524e22525aff7116da3a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome message"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
