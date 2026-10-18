@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "98fc2491b2a222d9be03a91abca0bf9e5bac1b95a5349d390f7d1d3ed66a3aa4",
+  "raw_analysis_sha256": "788aae0d8d0db3844d73b155a6d4edb3607279893a1abf349fdae344d603b6af",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T12:03:48Z",
+      "checkpointed_at": "2026-10-18T12:09:56Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -42112,6 +42112,288 @@
         "context_relation": "Experimental procedure",
         "limitations": [
           "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a3cf8134a9e1a9d1edbc47ea",
+      "asset_sha256": "e9ac8c36b0367d47a6484405de59fc20eef8dab55e877a02caed5f3d4325f10d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/e9ac8c36b0367d47a6484405de59fc20eef8dab55e877a02caed5f3d4325f10d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red liquid in a test tube on a wooden surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Droppers",
+          "Lemon juice",
+          "Soap solution",
+          "Colour changes",
+          "Table 2.3"
+        ],
+        "context_relation": "The image is related to an experiment involving the addition of lemon juice and soap solution to test tubes.",
+        "limitations": [
+          "The image does not provide information about the specific experiment or the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:11:15Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red liquid in a test tube on a wooden surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Droppers",
+          "Lemon juice",
+          "Soap solution",
+          "Colour changes",
+          "Table 2.3"
+        ],
+        "context_relation": "The image is related to an experiment involving the addition of lemon juice and soap solution to test tubes.",
+        "limitations": [
+          "The image does not provide information about the specific experiment or the results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2410abf578f90b159515c58c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image provided, only text instructions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:15:59Z",
+      "effective_analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image provided, only text instructions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6b1b1eedbb2d863c6372aae6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:20:41Z",
+      "effective_analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions are visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "50bb88ccaf6e9f0cc402293e",
+      "asset_sha256": "40c67af0cbf635df9ffcd4f1f1c015e1970297e652f25788aa7ff8b7f116eec6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "page-0033.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for a science experiment involving lemon juice and soap solution in test tubes, with a diagram showing the setup and a table for recording observations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Add 20–30 drops of lemon juice in test tube A and 20–30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3.",
+          "Repeat the same with the other samples used in Activity 2.1 and record your observations in Table 2.3.",
+          "Fig. 2.8: The changes in colour of the red rose extract on adding lemon juice (A) and soap solution (B)",
+          "Table 2.3: Testing the nature of samples with the red rose extract",
+          "S.No. Name of the sample The colour of the red rose extract after adding the sample Nature of the substance",
+          "1. Lemon juice",
+          "2. Soap solution",
+          "3. Amla juice",
+          "4. ...",
+          "Discuss your observations with your classmates.",
+          "Are the samples that change the colour of the flower extract to a shade of red the same as those that changed the colour of blue litmus paper to red? (Group A, Table 2.2)",
+          "Are the samples that change the colour of the flower extract to a shade of green the same as those that changed the colour of red litmus paper to blue? (Group B, Table 2.2)",
+          "Are the samples that do not change the colour of the flower extract the same as those that did not change the colour of red and blue litmus papers? (Group C, Table 2.2)",
+          "From the above activity, we can conclude that the red rose extract can also be used to test the nature of the substances; hence, it is another example of an acid-base indicator. We can conclude that the red rose extract seems to give red colour in an acidic solution and green colour in a basic solut",
+          "Can you now fill in the nature of the substances in Table 2.3"
+        ],
+        "concepts": [
+          "Science Experiment",
+          "Lemon Juice",
+          "Soap Solution",
+          "Red Rose Extract",
+          "Litmus Paper",
+          "Acid-Base Indicator",
+          "Nature of Substances"
+        ],
+        "context_relation": "The image is a page from a textbook that provides instructions for a science experiment involving the use of lemon juice and soap solution to test the nature of substances using a red rose extract and litmus paper.",
+        "limitations": [
+          "The image does not provide specific instructions for the experiment, only general guidelines.",
+          "The image does not show the actual experiment setup or results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:24:23Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for a science experiment involving lemon juice and soap solution in test tubes, with a diagram showing the setup and a table for recording observations.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Add 20–30 drops of lemon juice in test tube A and 20–30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3.",
+          "Repeat the same with the other samples used in Activity 2.1 and record your observations in Table 2.3.",
+          "Fig. 2.8: The changes in colour of the red rose extract on adding lemon juice (A) and soap solution (B)",
+          "Table 2.3: Testing the nature of samples with the red rose extract",
+          "S.No. Name of the sample The colour of the red rose extract after adding the sample Nature of the substance",
+          "1. Lemon juice",
+          "2. Soap solution",
+          "3. Amla juice",
+          "4. ...",
+          "Discuss your observations with your classmates.",
+          "Are the samples that change the colour of the flower extract to a shade of red the same as those that changed the colour of blue litmus paper to red? (Group A, Table 2.2)",
+          "Are the samples that change the colour of the flower extract to a shade of green the same as those that changed the colour of red litmus paper to blue? (Group B, Table 2.2)",
+          "Are the samples that do not change the colour of the flower extract the same as those that did not change the colour of red and blue litmus papers? (Group C, Table 2.2)",
+          "From the above activity, we can conclude that the red rose extract can also be used to test the nature of the substances; hence, it is another example of an acid-base indicator. We can conclude that the red rose extract seems to give red colour in an acidic solution and green colour in a basic solut",
+          "Can you now fill in the nature of the substances in Table 2.3"
+        ],
+        "concepts": [
+          "Science Experiment",
+          "Lemon Juice",
+          "Soap Solution",
+          "Red Rose Extract",
+          "Litmus Paper",
+          "Acid-Base Indicator",
+          "Nature of Substances"
+        ],
+        "context_relation": "The image is a page from a textbook that provides instructions for a science experiment involving the use of lemon juice and soap solution to test the nature of substances using a red rose extract and litmus paper.",
+        "limitations": [
+          "The image does not provide specific instructions for the experiment, only general guidelines.",
+          "The image does not show the actual experiment setup or results."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
