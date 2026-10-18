@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 352,
-    "successful_visual_analyses": 348,
-    "missing_visual_analyses": 7136,
+    "raw_analysis_result_rows": 356,
+    "successful_visual_analyses": 352,
+    "missing_visual_analyses": 7132,
     "failed_visual_analyses": 4,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7140,
+    "unresolved_count": 7136,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -22918,9 +22918,27 @@
       "asset_path": "assets/5661f1437f270ba8bf3d9f085fe5f71d906bf11bab5e53386678bab93d5edff2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing changes in human bodies during the middle-school years, including physical changes and the impact of life processes on animals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "However, it isn’t just changes in materials around us that we see, or the hidden changes in water that we do not see. As we are growing, our bodies are changing as well. Especially around the middle-school years, our bodies are changing rapidly! Why? Not just us humans, there are life processes that",
+          "The text discusses changes in human bodies during the middle-school years, including physical changes and the impact of life processes on animals."
+        ],
+        "concepts": [
+          "Changes in human bodies",
+          "Middle-school years",
+          "Physical changes",
+          "Life processes",
+          "Impact on animals"
+        ],
+        "context_relation": "The text is discussing the changes in human bodies during the middle-school years and the impact of life processes on animals.",
+        "limitations": [
+          "The text does not provide specific details about the physical changes in human bodies during the middle-school years."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22936,9 +22954,18 @@
       "asset_path": "assets/bb3888d71d24d99b8a77ab55cb5fcad919c663231887993f3eaa96e0b310d93e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue container with a green plant in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "Unclear if the image is part of a larger educational content or not."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22954,9 +22981,18 @@
       "asset_path": "assets/7db55f0e7e82ff1289e2f0b89a8d0bed5295bcbb63ffc92378e39041cb89201a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a person's body, possibly a photograph.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The image is blurred and not clear enough to identify specific details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22972,9 +23008,16 @@
       "asset_path": "assets/c09c5ad8c352bfcba76edc366a4d939bbfab6dd463518aae5507066f1f7bc4b6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two blue square objects on a pole, possibly a street sign or a decorative element.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
