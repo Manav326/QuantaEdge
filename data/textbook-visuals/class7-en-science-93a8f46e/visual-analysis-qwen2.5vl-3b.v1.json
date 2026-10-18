@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 925,
+    "assets_selected": 929,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 924,
-    "assets_remaining": 6564,
-    "assets_completion_percent": 12.3,
+    "assets_analyzed": 928,
+    "assets_remaining": 6560,
+    "assets_completion_percent": 12.4,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 920,
+    "assets_skipped_from_checkpoint": 924,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T16:48:39Z"
+      "checkpointed_at": "2026-10-18T16:54:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -34419,6 +34419,140 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T16:53:46Z"
+    },
+    {
+      "asset_id": "bfb75771bc435c35df23f913",
+      "asset_sha256": "03f8e1a5cc1896d0e4ba0ac758b449134302a8f1e272a2e6c48d12169ed75d7c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/03f8e1a5cc1896d0e4ba0ac758b449134302a8f1e272a2e6c48d12169ed75d7c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl is standing near a tree, looking up at a butterfly and a spider.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A girl is standing near a tree, looking up at a butterfly and a spider."
+        ],
+        "concepts": [
+          "tree",
+          "butterfly",
+          "spider",
+          "girl"
+        ],
+        "context_relation": "The girl is observing the butterfly and the spider in the tree.",
+        "limitations": [
+          "The image does not provide information about the chemical reaction described in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:55:44Z"
+    },
+    {
+      "asset_id": "c58a58c9257536eb8d5bef84",
+      "asset_sha256": "fe379d84abe851d2bd66014c1a91c52ea83ff1aa81667d7f23009acdef6576f1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/fe379d84abe851d2bd66014c1a91c52ea83ff1aa81667d7f23009acdef6576f1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A man pointing to a field with a bowl of water in his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or visible text.",
+          "The image does not provide any specific context or relation to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:56:46Z"
+    },
+    {
+      "asset_id": "21ef735b6ad4543c85f8d6a8",
+      "asset_sha256": "3c1ad7cf5e89bd5457180a60747a411aaf06979e006982c3e4122f27f013e548",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/3c1ad7cf5e89bd5457180a60747a411aaf06979e006982c3e4122f27f013e548.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two people planting seeds in a field.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "agriculture",
+          "planting",
+          "field"
+        ],
+        "context_relation": "The image shows people engaged in agricultural activities.",
+        "limitations": [
+          "The image does not provide specific details about the type of seeds or the field."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:57:47Z"
+    },
+    {
+      "asset_id": "5c5e9ddd60054604b79d039f",
+      "asset_sha256": "3c1f6923d8b74677ca62f7acce45f6a3e3ea56863f11b8b3fbf556cc4dc264e4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/3c1f6923d8b74677ca62f7acce45f6a3e3ea56863f11b8b3fbf556cc4dc264e4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a drop of blue litmus solution turning red and then blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red.",
+          "When lime water is added to this test tube, the colour of the solution eventually changes from red to blue.",
+          "This shows that the solution in the test tube is no longer acidic.",
+          "Lime water has neutralised the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus test",
+          "Neutralisation"
+        ],
+        "context_relation": "The image illustrates the neutralisation process between an acid and a base, using litmus test as a visual aid.",
+        "limitations": [
+          "The image does not provide specific chemical equations or detailed steps of the reaction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:59:06Z"
     }
   ]
 }

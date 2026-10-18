@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 934,
-    "successful_visual_analyses": 925,
-    "missing_visual_analyses": 6554,
+    "raw_analysis_result_rows": 938,
+    "successful_visual_analyses": 929,
+    "missing_visual_analyses": 6550,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6563,
+    "unresolved_count": 6559,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45392,9 +45392,25 @@
       "asset_path": "assets/03f8e1a5cc1896d0e4ba0ac758b449134302a8f1e272a2e6c48d12169ed75d7c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl is standing near a tree, looking up at a butterfly and a spider.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A girl is standing near a tree, looking up at a butterfly and a spider."
+        ],
+        "concepts": [
+          "tree",
+          "butterfly",
+          "spider",
+          "girl"
+        ],
+        "context_relation": "The girl is observing the butterfly and the spider in the tree.",
+        "limitations": [
+          "The image does not provide information about the chemical reaction described in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45410,9 +45426,19 @@
       "asset_path": "assets/fe379d84abe851d2bd66014c1a91c52ea83ff1aa81667d7f23009acdef6576f1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A man pointing to a field with a bowl of water in his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or visible text.",
+          "The image does not provide any specific context or relation to the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45428,9 +45454,22 @@
       "asset_path": "assets/3c1ad7cf5e89bd5457180a60747a411aaf06979e006982c3e4122f27f013e548.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two people planting seeds in a field.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "agriculture",
+          "planting",
+          "field"
+        ],
+        "context_relation": "The image shows people engaged in agricultural activities.",
+        "limitations": [
+          "The image does not provide specific details about the type of seeds or the field."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45446,9 +45485,28 @@
       "asset_path": "assets/3c1f6923d8b74677ca62f7acce45f6a3e3ea56863f11b8b3fbf556cc4dc264e4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a drop of blue litmus solution turning red and then blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red.",
+          "When lime water is added to this test tube, the colour of the solution eventually changes from red to blue.",
+          "This shows that the solution in the test tube is no longer acidic.",
+          "Lime water has neutralised the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus test",
+          "Neutralisation"
+        ],
+        "context_relation": "The image illustrates the neutralisation process between an acid and a base, using litmus test as a visual aid.",
+        "limitations": [
+          "The image does not provide specific chemical equations or detailed steps of the reaction."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
