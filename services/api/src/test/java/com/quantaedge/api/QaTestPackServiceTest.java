@@ -53,7 +53,7 @@ class QaTestPackServiceTest {
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "local");
     when(jdbc.queryForObject("select current_database()", String.class)).thenReturn("quantaedge");
 
-    var status = service(true, true, "ci-qa", "QAfixture!2026", environment).environmentStatus();
+    var status = service(true, true, "ci-qa", "quantaedge_qa", "QAfixture!2026", environment).environmentStatus();
     assertFalse(Boolean.TRUE.equals(status.get("writeAllowed")));
     assertFalse(Boolean.TRUE.equals(status.get("databaseApproved")));
   }
