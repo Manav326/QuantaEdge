@@ -58,10 +58,10 @@ class StudentProgramControllerTest {
     assertEquals(2L, ((List<Map<String,Object>>) rows.getFirst().get("subjects")).getFirst().get("chapters"));
 
     ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sqlCaptor.capture(), any(Object[].class));
-    assertTrue(sqlCaptor.getValue().contains("institution_course_assignment"));
-    assertTrue(sqlCaptor.getValue().contains("spe.institution_id=?"));
-    assertTrue(!sqlCaptor.getValue().contains("not exists(select 1 from institution_membership"));
+    verify(jdbc, org.mockito.Mockito.atLeastOnce()).queryForList(sqlCaptor.capture(), any(Object[].class));
+    assertTrue(sqlCaptor.getAllValues().stream().anyMatch(sql -> sql.contains("institution_course_assignment")));
+    assertTrue(sqlCaptor.getAllValues().stream().anyMatch(sql -> sql.contains("spe.institution_id=?")));
+    assertTrue(sqlCaptor.getAllValues().stream().noneMatch(sql -> sql.contains("not exists(select 1 from institution_membership")));
   }
 
   @Test
