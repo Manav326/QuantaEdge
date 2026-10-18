@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7e44aefe647dd1c8d0da5b870db00213f0bcff2183be40b5b0992f84b6d01adf",
+  "raw_analysis_sha256": "8325bf4641692c711ea35aa7fa7200c12b2248f24338e6ea968449ca34717129",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T23:01:15Z",
+      "checkpointed_at": "2026-10-18T23:04:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T23:01:36Z",
+      "checkpointed_at": "2026-10-18T23:04:53Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -71876,6 +71876,198 @@
         "context_relation": "The image is related to the text discussing the components of a torch.",
         "limitations": [
           "The image is a close-up and does not show the entire torch or its components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f9b559c27811c6500c892ef4",
+      "asset_sha256": "7530d3eb7b8b348bcd41c88e3b04020d2b883e3a65bc27fefe6e48ab81b10a8f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/7530d3eb7b8b348bcd41c88e3b04020d2b883e3a65bc27fefe6e48ab81b10a8f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a simple electrical circuit, specifically focusing on the torch.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "simple electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, which is a part of an electrical circuit.",
+        "limitations": [
+          "The page does not provide detailed information about the components or how they work."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T23:05:37Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a simple electrical circuit, specifically focusing on the torch.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "simple electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, which is a part of an electrical circuit.",
+        "limitations": [
+          "The page does not provide detailed information about the components or how they work."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4509002528320742e5c434eb",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a simple electrical circuit, specifically focusing on a torch.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "simple electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the negative component.",
+        "limitations": [
+          "The page does not provide detailed information about the components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T23:06:20Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a simple electrical circuit, specifically focusing on a torch.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "simple electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the negative component.",
+        "limitations": [
+          "The page does not provide detailed information about the components or their functions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e9dcc60e55764884eca6665b",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, focusing on the electrical circuit and its components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit and its components.",
+        "limitations": [
+          "The page does not provide any visual aids or diagrams to support the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T23:06:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, focusing on the electrical circuit and its components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit and its components.",
+        "limitations": [
+          "The page does not provide any visual aids or diagrams to support the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
