@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "df81a1053012b93d3ca47758459aa2ca695a7fb3ab6076ef5297598212d9c6d4",
+  "raw_analysis_sha256": "fd8d5549ad0dace4dfb8db3db1691493fabe948126ef0d09dacba88946ad9efa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:55:21Z",
+      "checkpointed_at": "2026-10-18T23:01:20Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:56:12Z",
+      "checkpointed_at": "2026-10-18T23:02:09Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:56:52Z",
+      "checkpointed_at": "2026-10-18T23:02:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -31195,6 +31195,112 @@
         "limitations": [
           "The image does not provide specific details or labels that would allow for a precise interpretation of its content. The visible text is incomplete and does not provide additional context or information about the image's purpose or the topic it is related to."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "366c586d6fe4b5e38d731535",
+      "asset_sha256": "3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations, likely representing different states or components of a material.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A",
+          "B",
+          "C"
+        ],
+        "concepts": [
+          "material",
+          "state",
+          "components"
+        ],
+        "context_relation": "The illustrations are part of a sequence that explains the relationship between different states or components of a material and their effects on weather events.",
+        "limitations": [
+          "The specific details of the material or components are not clear."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:04:25Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations, likely representing different states or components of a material.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A",
+          "B",
+          "C"
+        ],
+        "concepts": [
+          "material",
+          "state",
+          "components"
+        ],
+        "context_relation": "The illustrations are part of a sequence that explains the relationship between different states or components of a material and their effects on weather events.",
+        "limitations": [
+          "The specific details of the material or components are not clear."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "702edef005638dc56eaf1660",
+      "asset_sha256": "3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations: a plate with a rock, a beaker with water, and a balloon. The illustrations are connected by lines, suggesting a sequence or process.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "rock",
+          "beaker",
+          "water",
+          "balloon",
+          "sequence",
+          "process"
+        ],
+        "context_relation": "The illustrations are connected by lines, suggesting a sequence or process.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:04:35Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations: a plate with a rock, a beaker with water, and a balloon. The illustrations are connected by lines, suggesting a sequence or process.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "rock",
+          "beaker",
+          "water",
+          "balloon",
+          "sequence",
+          "process"
+        ],
+        "context_relation": "The illustrations are connected by lines, suggesting a sequence or process.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

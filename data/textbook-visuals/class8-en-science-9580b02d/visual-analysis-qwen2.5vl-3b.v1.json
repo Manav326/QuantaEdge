@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 712,
+    "assets_selected": 714,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 709,
-    "assets_remaining": 1582,
-    "assets_completion_percent": 30.9,
+    "assets_analyzed": 711,
+    "assets_remaining": 1580,
+    "assets_completion_percent": 31.0,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 707,
+    "assets_skipped_from_checkpoint": 709,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:55:21Z"
+      "checkpointed_at": "2026-10-18T23:01:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:56:12Z"
+      "checkpointed_at": "2026-10-18T23:02:09Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:56:52Z"
+      "checkpointed_at": "2026-10-18T23:02:47Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -21359,6 +21359,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T23:00:09Z"
+    },
+    {
+      "asset_id": "366c586d6fe4b5e38d731535",
+      "asset_sha256": "3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations, likely representing different states or components of a material.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A",
+          "B",
+          "C"
+        ],
+        "concepts": [
+          "material",
+          "state",
+          "components"
+        ],
+        "context_relation": "The illustrations are part of a sequence that explains the relationship between different states or components of a material and their effects on weather events.",
+        "limitations": [
+          "The specific details of the material or components are not clear."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:04:25Z"
+    },
+    {
+      "asset_id": "702edef005638dc56eaf1660",
+      "asset_sha256": "3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations: a plate with a rock, a beaker with water, and a balloon. The illustrations are connected by lines, suggesting a sequence or process.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "rock",
+          "beaker",
+          "water",
+          "balloon",
+          "sequence",
+          "process"
+        ],
+        "context_relation": "The illustrations are connected by lines, suggesting a sequence or process.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:04:35Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 719,
-    "successful_visual_analyses": 712,
-    "missing_visual_analyses": 1572,
+    "raw_analysis_result_rows": 721,
+    "successful_visual_analyses": 714,
+    "missing_visual_analyses": 1570,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1579,
+    "unresolved_count": 1577,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28186,9 +28186,26 @@
       "asset_path": "assets/3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations, likely representing different states or components of a material.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A",
+          "B",
+          "C"
+        ],
+        "concepts": [
+          "material",
+          "state",
+          "components"
+        ],
+        "context_relation": "The illustrations are part of a sequence that explains the relationship between different states or components of a material and their effects on weather events.",
+        "limitations": [
+          "The specific details of the material or components are not clear."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28204,9 +28221,23 @@
       "asset_path": "assets/3f4e832e31135af443484735f12f332eff1c71e3ae1cf2382095915017d70eec.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a sequence of three illustrations: a plate with a rock, a beaker with water, and a balloon. The illustrations are connected by lines, suggesting a sequence or process.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "rock",
+          "beaker",
+          "water",
+          "balloon",
+          "sequence",
+          "process"
+        ],
+        "context_relation": "The illustrations are connected by lines, suggesting a sequence or process.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
