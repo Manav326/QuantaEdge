@@ -921,7 +921,7 @@ public class CourseMarketplaceController {
           select 1 from course_entitlement ce
           where ce.institution_id=? and ce.course_id=? and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
         )
-        """, studentId, institutionId, courseId, studentId, institutionId, courseId,
+        """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
         studentId, institutionId, courseId, institutionId, courseId, studentId, studentId);
     return Boolean.TRUE.equals(value);
   }
