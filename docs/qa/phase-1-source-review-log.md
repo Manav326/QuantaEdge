@@ -133,7 +133,7 @@ This is improved source evidence, but still not a completed UI audit: callbacks 
 5. **Runtime still open.** All screens remain marked not runtime-verified pending browser/device execution evidence.
 6. **QA pack is not yet implemented.** No global test-data installation ownership mechanism was demonstrated by the preliminary `is_test_data` search.
 
-The representative controller and guard scan now has its own [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md). Treat that map as a high-risk first pass, not as a complete OpenAPI or endpoint-to-permission inventory.
+The representative controller and guard scan is documented in the [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md). A separate [435-row API route inventory](./phase-1-api-route-inventory.csv) has now been extracted from Spring request/STOMP mapping annotations across 48 source files. Its scenario IDs are candidate traceability links; full method/filter/service review is still required. Remaining priorities are in the [consolidated coverage gap plan](./phase-1-coverage-gaps.md).
 
 ## 6. Next source-review pass
 
