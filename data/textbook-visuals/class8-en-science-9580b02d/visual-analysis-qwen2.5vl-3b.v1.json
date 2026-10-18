@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 581,
+    "assets_selected": 584,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 579,
-    "assets_remaining": 1712,
-    "assets_completion_percent": 25.3,
+    "assets_analyzed": 582,
+    "assets_remaining": 1709,
+    "assets_completion_percent": 25.4,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 576,
+    "assets_skipped_from_checkpoint": 579,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T16:07:13Z"
+      "checkpointed_at": "2026-10-18T16:14:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T16:08:34Z"
+      "checkpointed_at": "2026-10-18T16:15:25Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -17065,6 +17065,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T16:12:22Z"
+    },
+    {
+      "asset_id": "251459d6eb8a64207aec40a4",
+      "asset_sha256": "2d2ed1eb8e2750afdd2b76eeaa93f146456ecf0d042b6d0568a21a93d7d14ce6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/2d2ed1eb8e2750afdd2b76eeaa93f146456ecf0d042b6d0568a21a93d7d14ce6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a bright light source in the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover image for a textbook",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T16:16:35Z"
+    },
+    {
+      "asset_id": "067b4d66326007810b8677c4",
+      "asset_sha256": "6e9974c06bb9aefc87be10ea1cfa250fc5cd3a3a7432a4fc526d78bd2296080a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/6e9974c06bb9aefc87be10ea1cfa250fc5cd3a3a7432a4fc526d78bd2296080a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T16:17:47Z"
+    },
+    {
+      "asset_id": "0d6ac8ae14cb74c582263b1c",
+      "asset_sha256": "15cc74ec06bdd3a596101fcdf92220b433e6053d3d7199350fc3cfd1cab5843d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/15cc74ec06bdd3a596101fcdf92220b433e6053d3d7199350fc3cfd1cab5843d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid-colored rectangular shape with a gradient effect.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a solid-colored rectangle with a gradient effect.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T16:19:01Z"
     }
   ]
 }
