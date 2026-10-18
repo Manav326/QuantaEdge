@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 776,
+    "assets_selected": 779,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 774,
-    "assets_remaining": 1304,
-    "assets_completion_percent": 37.2,
-    "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 771,
+    "assets_analyzed": 776,
+    "assets_remaining": 1302,
+    "assets_completion_percent": 37.3,
+    "assets_failed": 17,
+    "assets_skipped_from_checkpoint": 774,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:32:05Z"
+      "checkpointed_at": "2026-10-18T16:37:52Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23294,7 +23294,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:33:10Z"
+      "checkpointed_at": "2026-10-18T16:38:56Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -23834,6 +23834,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T16:36:36Z"
+    },
+    {
+      "asset_id": "f543b66a983d8e380dd8e9fa",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d729e13b51742bf611f9d748a1fb41e891d596a404b49945c59bc9d9c4db942",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:39:10Z"
+    },
+    {
+      "asset_id": "1945650a23405191d83bfc0c",
+      "asset_sha256": "b38e41a5eae40af6c703442304b612cf4506ece6b6748633fe61d6ba46dc3c72",
+      "page_text_context_sha256": "7d729e13b51742bf611f9d748a1fb41e891d596a404b49945c59bc9d9c4db942",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 36,
+      "asset_path": "page-0036.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "462e4b4da057a078c1996646",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0e8abc1d65f8ed9a2f5e88f21a0b597d18b9212a551a593a27f7354c72a82112",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation of plant roots and leaf venation",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:44:28Z"
     }
   ]
 }
