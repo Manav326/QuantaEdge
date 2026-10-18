@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d8e41edd241a004c4348eae4a57fba2c4040a259d5917992533dcf993b4d7398",
+  "raw_analysis_sha256": "322f822f9e6d6a4da44b1e31a38a93b0fa10699d7280fc5ef09b51c4f50113f6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T20:24:35Z",
+      "checkpointed_at": "2026-10-18T20:28:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T20:24:56Z",
+      "checkpointed_at": "2026-10-18T20:28:24Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -61685,6 +61685,186 @@
         "concepts": [],
         "context_relation": "None",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "be231d30d068c483d2c914c8",
+      "asset_sha256": "439e088c035baf43aea5c64f78098b5bcf8a3dd0ddf031318f89342a309aae6e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/439e088c035baf43aea5c64f78098b5bcf8a3dd0ddf031318f89342a309aae6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustrations of various fruits and vegetables, including a banana, a watermelon, and a tomato.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "banana",
+          "watermelon",
+          "tomato"
+        ],
+        "concepts": [
+          "fruits",
+          "vegetables"
+        ],
+        "context_relation": "The image is likely related to the topic of fruits and vegetables, possibly as part of a presentation on the uses of electricity.",
+        "limitations": [
+          "The image does not provide specific details about the uses of electricity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:29:03Z",
+      "effective_analysis": {
+        "visual_summary": "Illustrations of various fruits and vegetables, including a banana, a watermelon, and a tomato.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "banana",
+          "watermelon",
+          "tomato"
+        ],
+        "concepts": [
+          "fruits",
+          "vegetables"
+        ],
+        "context_relation": "The image is likely related to the topic of fruits and vegetables, possibly as part of a presentation on the uses of electricity.",
+        "limitations": [
+          "The image does not provide specific details about the uses of electricity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "da46bb39631f49d10f093630",
+      "asset_sha256": "37b81c49d426c0112c0c48c1efd93206f02984b910e76138379b0128210a4442",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/37b81c49d426c0112c0c48c1efd93206f02984b910e76138379b0128210a4442.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pattern of various icons and symbols, including a globe, satellite, microphone, and other objects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "school trip",
+          "presentation",
+          "uses of electricity"
+        ],
+        "context_relation": "The image is a background pattern for the text about the school trip and the presentation assignment.",
+        "limitations": [
+          "The image does not provide specific details about the school trip or the presentation assignment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:29:51Z",
+      "effective_analysis": {
+        "visual_summary": "A pattern of various icons and symbols, including a globe, satellite, microphone, and other objects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "school trip",
+          "presentation",
+          "uses of electricity"
+        ],
+        "context_relation": "The image is a background pattern for the text about the school trip and the presentation assignment.",
+        "limitations": [
+          "The image does not provide specific details about the school trip or the presentation assignment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "410b305b7af1338ff3660945",
+      "asset_sha256": "7d83eb791611ad20c7648057a687dbeda8c65e3d0591a757b8546a9cdff90a98",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/7d83eb791611ad20c7648057a687dbeda8c65e3d0591a757b8546a9cdff90a98.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a hydroelectric power plant with a turbine and water flowing.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "hydroelectric power",
+          "turbine",
+          "water flow"
+        ],
+        "context_relation": "The image is related to the topic of electricity and its generation using water power.",
+        "limitations": [
+          "The image does not provide specific details about the components of the hydroelectric power plant or the process of electricity generation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:30:29Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a hydroelectric power plant with a turbine and water flowing.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "hydroelectric power",
+          "turbine",
+          "water flow"
+        ],
+        "context_relation": "The image is related to the topic of electricity and its generation using water power.",
+        "limitations": [
+          "The image does not provide specific details about the components of the hydroelectric power plant or the process of electricity generation."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
