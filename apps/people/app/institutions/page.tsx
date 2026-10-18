@@ -6,7 +6,7 @@ import styles from './Institutions.module.css';
 import InstitutionBrandAssetEditor from './InstitutionBrandAssetEditor';
 
 type Session = { staffId?: number; displayName?: string; permissions?: string[] };
-type EditableCard = 'courses' | 'admins' | 'branding' | 'billing';
+type EditableCard = 'status' | 'courses' | 'admins' | 'branding' | 'billing';
 type Institution = {
   id: number; tenant_code: string; display_name: string; legal_name?: string | null; status: string;
   brand_display_name?: string | null; active_memberships?: number; authorized_courses?: number;
@@ -219,7 +219,9 @@ export default function InstitutionsAdminPage() {
       try{data=raw?JSON.parse(raw):{};}catch{data={message:raw};}
       if(!response.ok)throw new Error(String(data.message||data.detail||data.error||'Image upload failed ('+response.status+')'));
       setNotice(assetType==='logo'?'School logo uploaded and versioned.':'School app icon uploaded and versioned.');
+      const resumeBrandEdit=editingCard==='branding';
       await loadDetail(detail.id);
+      if(resumeBrandEdit)setEditingCard('branding');
     }catch(e){setError(e instanceof Error?e.message:'Branding image could not be uploaded.');}
     finally{setSaving(false);}
   }
@@ -235,7 +237,9 @@ export default function InstitutionsAdminPage() {
       setNotice(result.removed
         ? (assetType==='logo'?'School logo removed. Learner surfaces will use the school initial until another logo is uploaded.':'School app icon removed. Learner browser icons will use the school initial until another icon is uploaded.')
         : 'There was no active '+label+' to remove.');
+      const resumeBrandEdit=editingCard==='branding';
       await loadDetail(detail.id);
+      if(resumeBrandEdit)setEditingCard('branding');
     }catch(e){setError(e instanceof Error?e.message:'The branding asset could not be removed.');}
     finally{setSaving(false);}
   }
@@ -326,15 +330,18 @@ export default function InstitutionsAdminPage() {
     <div className={styles.columns}>
       <section className={styles.panel}><div className={styles.panelHeading}><div><h2>Customer institutions</h2><p>Tenant boundary, course scope and billing scope are separate.</p></div><b>{institutions.length}</b></div>
         <input className={styles.search} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search name, code or status…" aria-label="Search institutions"/>
-        <div className={styles.list}>{filtered.map(item=><button type="button" key={item.id} onClick={()=>void loadDetail(item.id)} className={styles.listItem+(detail?.id===item.id?' '+styles.selected:'')}>
+        <div className={styles.list}>{filtered.map(item=><button type="button" key={item.id} onClick={()=>{if(editingCard!==null&&!window.confirm('Leave this edit state? Unsaved changes on the current card will be discarded.'))return;void loadDetail(item.id);}} className={styles.listItem+(detail?.id===item.id?' '+styles.selected:'')}>
           <span className={styles.avatar}>{(item.brand_display_name||item.display_name).trim().slice(0,1).toUpperCase()}</span><span className={styles.listCopy}><strong>{item.display_name}</strong><small>{item.tenant_code} · {item.active_memberships||0} learners</small><small>{item.authorized_courses||0} authorised courses</small></span><span className={styles.status+(item.status==='ACTIVE'?' '+styles.active:item.status==='SUSPENDED'?' '+styles.suspended:'')}>{item.status}</span>
         </button>)}{!filtered.length?<p className={styles.emptyText}>{loading?'Loading…':'No matching institutions. Add a real customer to begin.'}</p>:null}</div>
       </section>
       <section className={styles.detailColumn}>{!detail?<div className={styles.emptyPanel}><div className={styles.emptyIcon}>▤</div><h2>Select an institution</h2><p>Its settings and reports will appear here. All changes are audited and institution admins remain read-only.</p></div>:<>
         <section className={styles.panel}><div className={styles.detailHeader}><div><span className={styles.eyebrow}>{detail.tenant_code}</span><h2>{detail.display_name}</h2><p>{detail.legal_name||'Legal name not supplied'}</p></div><span className={styles.status+(detail.status==='ACTIVE'?' '+styles.active:detail.status==='SUSPENDED'?' '+styles.suspended:'')}>{detail.status}</span></div>
           <div className={styles.actions}><button className={styles.secondary} onClick={()=>{void navigator.clipboard?.writeText(detail.tenant_code).then(()=>setNotice('Tenant code copied.')).catch(()=>setNotice('Institution code: '+detail.tenant_code));}}>Copy tenant code</button>
-            {detail.status==='ACTIVE'?<button className={styles.warning} disabled={saving||editingCard!==null} onClick={()=>void changeStatus('SUSPENDED')}>Suspend</button>:detail.status==='SUSPENDED'?<button className={styles.primary} disabled={saving||editingCard!==null} onClick={()=>void changeStatus('ACTIVE')}>Reactivate</button>:null}
-            {detail.status!=='CLOSED'?<button className={styles.danger} disabled={saving||editingCard!==null} onClick={()=>void changeStatus('CLOSED')}>Close tenant</button>:null}</div>
+            {editingCard==='status'?<>
+              {detail.status==='ACTIVE'?<button className={styles.warning} disabled={saving} onClick={()=>void changeStatus('SUSPENDED')}>Suspend</button>:detail.status==='SUSPENDED'?<button className={styles.primary} disabled={saving} onClick={()=>void changeStatus('ACTIVE')}>Reactivate</button>:null}
+              {detail.status!=='CLOSED'?<button className={styles.danger} disabled={saving} onClick={()=>void changeStatus('CLOSED')}>Close tenant</button>:null}
+              <button type="button" className={styles.quiet} disabled={saving} onClick={()=>cancelCardEdit('status')}>Done</button>
+            </>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>setEditingCard('status')}>Edit status</button>}</div>
           <nav className={styles.tabs}>{([['summary','Settings'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
         </section>
         {tab==='summary'?<>
