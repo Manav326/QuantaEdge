@@ -271,6 +271,7 @@ public class CertificateRenderer {
     Color issuerPrimaryText = institutionIssued ? issuerColor(branding, "primaryText", NAVY) : NAVY;
     Color issuerOrange = institutionIssued ? issuerColor(branding, "primary", ORANGE) : ORANGE;
     Color issuerAccent = institutionIssued ? issuerColor(branding, "accent", DEEP_ORANGE) : DEEP_ORANGE;
+    Color issuerAccentText = institutionIssued ? issuerColor(branding, "accentText", DEEP_ORANGE) : DEEP_ORANGE;
     Color issuerBorder = institutionIssued ? issuerColor(branding, "borderSubtle", GOLD) : GOLD;
     Color issuerText = institutionIssued ? issuerColor(branding, "text", INK) : INK;
     Color issuerMuted = institutionIssued ? issuerColor(branding, "textMuted", MUTED) : MUTED;
@@ -286,7 +287,7 @@ public class CertificateRenderer {
         String initial = branding.displayName().trim().substring(0, 1).toUpperCase(Locale.ROOT);
         drawCentered(g, font(hindi, Font.BOLD, 46), initial, 176, 154, 78);
       }
-      g.setColor(issuerPrimary);
+      g.setColor(issuerPrimaryText);
       drawCentered(g, font(hindi, Font.BOLD, 42), branding.displayName().trim(), WIDTH - 470, 150, 760);
     } else {
       BufferedImage canonicalIcon = brandIcon();
@@ -326,12 +327,12 @@ public class CertificateRenderer {
     drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
         WIDTH / 2, headingY + 72, WIDTH - 520);
     int recipientY = headingY + 188;
-    g.setColor(NAVY);
+    g.setColor(issuerPrimaryText);
     drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, recipientY, WIDTH - 480);
     g.setColor(issuerOrange);
     g.setStroke(new BasicStroke(5));
     g.drawLine(WIDTH / 2 - 350, recipientY + 32, WIDTH / 2 + 350, recipientY + 32);
-    g.setColor(MUTED);
+    g.setColor(issuerMuted);
     drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, recipientY + 94, WIDTH - 520);
 
     g.setColor(NAVY);
@@ -411,7 +412,7 @@ public class CertificateRenderer {
     drawCentered(g, font(hindi, Font.PLAIN, 21),
         (hindi ? "जारी दिनांक: " : "Issue Date: ") + (sample ? (hindi ? "नमूना पूर्वावलोकन" : "Preview only") : formatDate(issuedAt.toString(), hindi)),
         1080, 1350, 650);
-    g.setColor(DEEP_ORANGE); drawCentered(g, font(hindi, Font.BOLD, 19), hindi ? "सत्यापन" : "VERIFICATION", 1930, 1257, 800);
+    g.setColor(issuerAccentText); drawCentered(g, font(hindi, Font.BOLD, 19), hindi ? "सत्यापन" : "VERIFICATION", 1930, 1257, 800);
     if (!sample) {
       drawCentered(g, font(hindi, Font.BOLD, 15), hindi ? "प्रमाणपत्र बारकोड" : "CERTIFICATE BARCODE", 1980, 1311, 500);
       g.setColor(MUTED); drawCentered(g, font(false, Font.BOLD, 14), number, 1980, 1400, 500);
