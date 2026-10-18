@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0698be94075d46e2c7d34134fb0f5833f1c061533e45caa4b206262a219a49f0",
+  "raw_analysis_sha256": "5ed9a4545b0d5e6e05c14fb1b056e931ea0a7c53cf656f486e9906e53b21b770",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T14:50:35Z",
+      "checkpointed_at": "2026-10-18T14:56:49Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -48688,6 +48688,310 @@
         "context_relation": "The image shows the process of making a greeting card for Guru Purnima.",
         "limitations": [
           "The image does not show the final product of the greeting card."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9fc30f1b49729bd551d1770d",
+      "asset_sha256": "837dbc20d05a294985429d01668651ada667cabff03e2e534845134aac1f3131",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/837dbc20d05a294985429d01668651ada667cabff03e2e534845134aac1f3131.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a turmeric paste design and text in Odia.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Greeting card"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual greeting card or the text written in Odia"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:58:00Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card with a turmeric paste design and text in Odia.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Greeting card"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual greeting card or the text written in Odia"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7e8b193633b5ecfff6a1f5c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card made by Ashwin for Guru Purnima, featuring turmeric paste and written in Odia.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Greeting card"
+        ],
+        "context_relation": "The image shows the process of making a greeting card for Guru Purnima, which is a religious festival in India.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:58:38Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin for Guru Purnima, featuring turmeric paste and written in Odia.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Greeting card"
+        ],
+        "context_relation": "The image shows the process of making a greeting card for Guru Purnima, which is a religious festival in India.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4bca8e1e8dcb5de299ada847",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card made by Ashwin for his teacher on Guru Purnima, featuring turmeric paste and written in Odia.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "turmeric paste",
+          "Odia language",
+          "written wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, emphasizing the use of turmeric paste and Odia language.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:59:18Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin for his teacher on Guru Purnima, featuring turmeric paste and written in Odia.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "turmeric paste",
+          "Odia language",
+          "written wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, emphasizing the use of turmeric paste and Odia language.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "29f4fc22e0dbb2668f9ebb5b",
+      "asset_sha256": "bf6342c7c6afe226f365aea07061c5a1c7633065eedbf3e4b57cd731bda3c6db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "page-0036.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a message written in Odia language on a dried turmeric paste.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia",
+          "language) on the dried paper",
+          "using one of the solutions",
+          "tested in Table 2.4. Which",
+          "solution can be used to write",
+          "the message? His teacher",
+          "applauded his creative use",
+          "of this concept.",
+          "Are there any substances",
+          "whose odours change on",
+          "adding acidic or basic",
+          "substances?",
+          "There are some substances whose odours change in an acidic",
+          "or basic medium. These are called olfactory indicators.",
+          "Let us explore more!",
+          "Activity 2.6: Let us investigate",
+          "Take some finely chopped onions in a container, along with",
+          "some strips of clean cotton cloth or filter paper.",
+          "Tightly close the container and leave it overnight.",
+          "Take two of the cotton cloth or filter paper strips from the",
+          "container and check their odour.",
+          "Keep them on a clean surface and put a few drops of",
+          "tamarind water on one strip and a few drops of baking soda",
+          "solution on the other. Allow the drops to spread on the strips.",
+          "Check the odour again.",
+          "Do you notice any change in the odour of the onion strips"
+        ],
+        "concepts": [
+          "Odour",
+          "Odia language",
+          "Olfactory indicators",
+          "Acidic and basic substances",
+          "Tamarind water",
+          "Baking soda",
+          "Activity 2.6"
+        ],
+        "context_relation": "The image is a page from a textbook that provides instructions for an activity related to olfactory indicators.",
+        "limitations": [
+          "The image does not show the actual activity being performed, only the instructions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:02:38Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card with a message written in Odia language on a dried turmeric paste.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia",
+          "language) on the dried paper",
+          "using one of the solutions",
+          "tested in Table 2.4. Which",
+          "solution can be used to write",
+          "the message? His teacher",
+          "applauded his creative use",
+          "of this concept.",
+          "Are there any substances",
+          "whose odours change on",
+          "adding acidic or basic",
+          "substances?",
+          "There are some substances whose odours change in an acidic",
+          "or basic medium. These are called olfactory indicators.",
+          "Let us explore more!",
+          "Activity 2.6: Let us investigate",
+          "Take some finely chopped onions in a container, along with",
+          "some strips of clean cotton cloth or filter paper.",
+          "Tightly close the container and leave it overnight.",
+          "Take two of the cotton cloth or filter paper strips from the",
+          "container and check their odour.",
+          "Keep them on a clean surface and put a few drops of",
+          "tamarind water on one strip and a few drops of baking soda",
+          "solution on the other. Allow the drops to spread on the strips.",
+          "Check the odour again.",
+          "Do you notice any change in the odour of the onion strips"
+        ],
+        "concepts": [
+          "Odour",
+          "Odia language",
+          "Olfactory indicators",
+          "Acidic and basic substances",
+          "Tamarind water",
+          "Baking soda",
+          "Activity 2.6"
+        ],
+        "context_relation": "The image is a page from a textbook that provides instructions for an activity related to olfactory indicators.",
+        "limitations": [
+          "The image does not show the actual activity being performed, only the instructions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
