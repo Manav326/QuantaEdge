@@ -13,14 +13,6 @@ val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
-// Google Identity Services / Credential Manager returns a real Google ID token.
-// Use the OAuth Web application client ID here as the server audience.
-val configuredGoogleWebClientId = providers.gradleProperty("googleWebClientId")
-    .orElse(providers.environmentVariable("GOOGLE_WEB_CLIENT_ID"))
-    .orElse("")
-    .get()
-    .trim()
-
 val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
 
 val configuredInstitutionCode = providers.gradleProperty("quantaedgeInstitutionCode")
@@ -116,7 +108,6 @@ android {
         versionCode = configuredVersionCode
         versionName = configuredVersionName
         buildConfigField("String", "API_BASE_URL", "\"$configuredApiBaseUrl\"")
-        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$configuredGoogleWebClientId\"")
         buildConfigField("String", "INSTITUTION_CODE", buildConfigString(configuredInstitutionCode))
         buildConfigField("String", "INSTITUTION_DISPLAY_NAME", buildConfigString(configuredInstitutionDisplayName))
         buildConfigField("boolean", "IS_TENANT_BRANDED", configuredInstitutionCode.isNotBlank().toString())

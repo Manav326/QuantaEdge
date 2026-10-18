@@ -718,8 +718,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 else -> exception.message
             }
             is GoogleSignInConfigurationException -> if (language == "hi")
-                "इस ऐप में Google साइन-इन कॉन्फ़िगर नहीं है। कृपया अपडेट किया गया ऐप इंस्टॉल करें या सहायता से संपर्क करें।"
-                else "Google sign-in isn't configured in this app build. Please install an updated app or contact support."
+                "सर्वर पर Google साइन-इन कॉन्फ़िगर नहीं है। कृपया सहायता से संपर्क करें।"
+                else "Google sign-in isn't configured on the server. Please contact support."
             is IOException -> if (language == "hi") "सर्वर से संपर्क नहीं हो पाया। नेटवर्क और कनेक्शन जाँचें।"
                 else "Couldn't reach the learning service. Check your network connection."
             else -> exception.message?.takeIf { it.isNotBlank() }
@@ -936,7 +936,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun signInWithGoogle(context: Context) {
         runTask {
-            val idToken = GoogleCredentialFlow.requestIdToken(context, BuildConfig.GOOGLE_WEB_CLIENT_ID)
+            val idToken = GoogleCredentialFlow.requestIdToken(context)
             val session = ApiClient.postObject("/api/v1/auth/google",
                 JSONObject().put("credential", idToken))
             val workspace = session.optString("workspace").uppercase()
@@ -1011,7 +1011,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun linkGoogleIdentity(context: Context) {
         runTask {
-            val idToken = GoogleCredentialFlow.requestIdToken(context, BuildConfig.GOOGLE_WEB_CLIENT_ID)
+            val idToken = GoogleCredentialFlow.requestIdToken(context)
             ApiClient.postObject("/api/v1/auth/google/link", JSONObject().put("credential", idToken))
             accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
             status = if (language == "hi") "Gmail सफलतापूर्वक लिंक हो गया।" else "Gmail linked successfully."

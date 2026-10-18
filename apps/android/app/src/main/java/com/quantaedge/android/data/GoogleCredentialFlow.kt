@@ -8,14 +8,19 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import java.io.IOException
 
-/** Raised before the account picker if this APK was built without its Google OAuth Web client ID. */
-class GoogleSignInConfigurationException : IOException("Google sign-in configuration is missing from this app build.")
+/** Raised when the server has no public Google OAuth Web client ID configured. */
+class GoogleSignInConfigurationException : IOException("Google sign-in is not configured on the server.")
 
-/** Requests a real Google ID token for server-side verification; never fabricates a verified identity. */
+/** Loads the server's public OAuth audience and requests a real Google ID token for server-side verification. */
 object GoogleCredentialFlow {
-    suspend fun requestIdToken(context: Context, webClientId: String): String {
-        val clientId = webClientId.trim()
-        if (clientId.isBlank()) {
+    suspend fun requestIdToken(context: Context): String {
+        val config = try {
+            ApiClient.getObject("/api/v1/auth/google/config")
+        } catch (error: Exception) {
+            throw IOException("Google sign-in configuration could not be loaded. Check your connection and retry.", error)
+        }
+        val clientId = config.optString("clientId").trim()
+        if (clientId.isBlank() || !config.optBoolean("configured", false)) {
             throw GoogleSignInConfigurationException()
         }
         val manager = CredentialManager.create(context)
