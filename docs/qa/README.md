@@ -10,7 +10,7 @@
 - [Phase 1 Source Review Log](./phase-1-source-review-log.md): first-pass actions/API observations by route and Android shell mappings.
 - [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md): inspected authorization/workspace guards and sensitive controller families.
 - [Data Relationship and Cleanup Map](./phase-1-data-and-cleanup-map.md): identity/tenant/course/learning/HRMS dependencies, protected baseline data and safe-uninstall requirements.
-- [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 70 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
+- [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 72 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
 - [Existing Test Evidence](./phase-1-existing-test-evidence.md): links current API/Android test sources to scenario domains and separates tests-present from runtime-verified evidence.
 - [Android Composition Map](./phase-1-android-composition-map.md): maps all 34 native routes to their actual shell/component renderers and documents BackHandler return contracts.
 - [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 93 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
@@ -22,9 +22,9 @@
 | Measure | Current count/status |
 |---|---:|
 | UI route/destination entries | 93 (29 Web, 19 Admin, 11 HRMS, 34 Android) |
-| API mapped handler entries | 435 request/STOMP mapping rows across 48 source files; static extraction only |
+| API mapped handler entries | 435 request/STOMP mapping rows across 48 source files; all 435 linked to existing scenario IDs, static extraction only |
 | Screen entries linked to scenario IDs | 93; references validated against the scenario register |
-| Workflow scenarios | 70 total: 63 `NOT_EXECUTED`, 7 `NOT_IMPLEMENTED` (future QA installer lifecycle) |
+| Workflow scenarios | 72 total: 65 `NOT_EXECUTED`, 7 `NOT_IMPLEMENTED` (future QA installer lifecycle) |
 | Browser/Android runtime-verified screens | 0 in this audit pass |
 | Per-screen state coverage | 93 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
 | Test-data ownership/uninstall implementation | Not started; schema and cleanup requirements documented only |
