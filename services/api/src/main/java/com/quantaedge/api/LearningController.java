@@ -563,12 +563,7 @@ public class LearningController {
           where legacy_grant.student_id=? and legacy_grant.course_id=?
             and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT'
         )
-        or exists(
-          select 1 from course_marketplace_offer o
-          where o.course_id=? and o.status='PUBLISHED'
-            and o.price_paise=0 and o.currency='INR'
-        )
-      """,Boolean.class,programId,studentId,studentId,programId,studentId,programId,programId);
+      """,Boolean.class,programId,studentId,studentId,programId,studentId,programId);
     if(!Boolean.TRUE.equals(allowed)) {
       throw new SecurityException("This course is not authorised for your institution or direct purchase.");
     }
