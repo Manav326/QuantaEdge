@@ -52,7 +52,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const { locale } = useLocale();
-  const { brand, enrollmentIssue, clearEnrollmentIssue } = useTenantBranding();
+  const { brand, enrollmentIssue, clearEnrollmentIssue, retryEnrollment } = useTenantBranding();
   const t = (key: string) => translateUi(locale, key);
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
@@ -286,8 +286,15 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               : (locale === 'english' ? 'School enrollment is not confirmed' : locale === 'hinglish' ? 'School enrollment confirm nahi hua' : 'विद्यालय में नामांकन की पुष्टि नहीं हुई')}</strong>
             <p>{enrollmentIssueText}</p>
           </div>
-          <button type="button" className="qe-enrollment-issue-dismiss" onClick={clearEnrollmentIssue}
-            aria-label={locale === 'english' ? 'Dismiss enrollment message' : locale === 'hinglish' ? 'Message band karein' : 'संदेश बंद करें'}>×</button>
+          <div className="qe-enrollment-issue-actions">
+            {enrollmentIssue === 'temporary' || enrollmentIssue === 'rate-limited' ? (
+              <button type="button" className="qe-enrollment-issue-retry" onClick={retryEnrollment}>
+                {locale === 'english' ? 'Retry' : locale === 'hinglish' ? 'Dobara try karein' : 'फिर प्रयास करें'}
+              </button>
+            ) : null}
+            <button type="button" className="qe-enrollment-issue-dismiss" onClick={clearEnrollmentIssue}
+              aria-label={locale === 'english' ? 'Dismiss enrollment message' : locale === 'hinglish' ? 'Message band karein' : 'संदेश बंद करें'}>×</button>
+          </div>
         </section>
       ) : null}
       {children}
