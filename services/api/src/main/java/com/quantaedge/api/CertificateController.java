@@ -627,7 +627,7 @@ public class CertificateController {
     if(requestedCourseId!=null && !requestedCourseId.equals(courseId)) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"The selected course does not match this assessment attempt.");
     }
-    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
+    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId,institutionId);
     if (!"ADMIN_CREATED".equals(clean(achievement.get("assessment_type")))
         || Boolean.TRUE.equals(achievement.get("is_generated"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -729,7 +729,7 @@ public class CertificateController {
           INSERT INTO certificate_audit_log(certificate_id,actor_student_id,actor_role,action,detail)
           VALUES (?,?,'STUDENT','ISSUED',?::jsonb)
           """, certificateId, studentId, json(snapshot));
-      return publicCertificateById(certificateId, studentId);
+      return publicCertificateById(certificateId,studentId,institutionId);
     } catch (RuntimeException ex) {
       if (png != null) storage.deleteQuietly(png.storageKey());
       if (pdf != null) storage.deleteQuietly(pdf.storageKey());
