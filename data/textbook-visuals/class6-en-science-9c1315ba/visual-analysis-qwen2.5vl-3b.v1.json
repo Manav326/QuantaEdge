@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 379,
+    "assets_selected": 382,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 377,
-    "assets_remaining": 1701,
-    "assets_completion_percent": 18.1,
+    "assets_analyzed": 380,
+    "assets_remaining": 1698,
+    "assets_completion_percent": 18.3,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 374,
+    "assets_skipped_from_checkpoint": 377,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T02:57:38Z"
+      "checkpointed_at": "2026-10-18T03:00:56Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T02:58:20Z"
+      "checkpointed_at": "2026-10-18T03:01:36Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -11328,6 +11328,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T03:00:06Z"
+    },
+    {
+      "asset_id": "b6c47f9d6f9790deef6dc6eb",
+      "asset_sha256": "8ac97ae8f9d800cb716aa02fd466e4d96c85aec0b645d33d53f82366d8324250",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8ac97ae8f9d800cb716aa02fd466e4d96c85aec0b645d33d53f82366d8324250.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid gold-colored rectangular object with a gradient effect.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:02:12Z"
+    },
+    {
+      "asset_id": "d088e4f26e08ff998f6121f1",
+      "asset_sha256": "a97bc79413ba5fe3bc3e424359d575b3009610fba6ace5631e10b53fba4a8101",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/a97bc79413ba5fe3bc3e424359d575b3009610fba6ace5631e10b53fba4a8101.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:02:46Z"
+    },
+    {
+      "asset_id": "5aee0c78b99c13abbc0bcaa1",
+      "asset_sha256": "7c51c35b48aee5299bd89a4aa8382647f2461449b47ca9949eff5219b09bd99d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/7c51c35b48aee5299bd89a4aa8382647f2461449b47ca9949eff5219b09bd99d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "background",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:03:20Z"
     }
   ]
 }
