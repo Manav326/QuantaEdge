@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 826,
-    "successful_visual_analyses": 818,
-    "missing_visual_analyses": 6662,
+    "raw_analysis_result_rows": 830,
+    "successful_visual_analyses": 822,
+    "missing_visual_analyses": 6658,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6670,
+    "unresolved_count": 6666,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41429,9 +41429,18 @@
       "asset_path": "assets/b9f1976e261542dbeeeb0f4b21ceb4fa5c953077e0710a73d8c1965dc7f3fb33.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing sunglasses and a light blue shirt, with one hand on their chin and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person thinking or contemplating.",
+        "limitations": [
+          "The image does not provide any specific information about the person or the context it is depicting."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41447,9 +41456,29 @@
       "asset_path": "assets/bf3a3b351f945e87b36613b629dd861a83729356aae7a50cc1292c3506b53161.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card with text in Odia language.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia language) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Odia language",
+          "Turmeric paste",
+          "Greeting card"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual greeting card.",
+          "The text is in Odia language, which may not be easily readable without translation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41465,9 +41494,28 @@
       "asset_path": "assets/63b816910b0783a8ef71a60d342684db42738c8d990466fb2fed7f27189885ce.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card with text in Odia language.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia language) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, including the use of turmeric paste and Odia language.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41483,9 +41531,23 @@
       "asset_path": "assets/8c3fb5a2e947d215cedbf24aea5f858365ff5d70be1196c6b2365d871bb02261.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A watering can watering a plant.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A watering can watering a plant."
+        ],
+        "concepts": [
+          "Watering can",
+          "Plant"
+        ],
+        "context_relation": "The image shows a gardening activity.",
+        "limitations": [
+          "The image does not provide specific details about the type of plant or the watering can."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
