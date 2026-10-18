@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "db43afbbd6de95ee980f05f0f4fa44cf760918b255fa5d06f098f6dd02ede9dc",
+  "raw_analysis_sha256": "93bfb51dd5dc8738760fe265bbc2d86a9825cde38d083de83cacedf503305fbb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T15:39:08Z",
+      "checkpointed_at": "2026-10-18T15:45:05Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -51142,6 +51142,238 @@
         "context_relation": "The text discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
         "limitations": [
           "The image does not show any diagrams, charts, graphs, tables, maps, cartoons, photos, illustrations, equations, or other visual elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3ac7b67a340e34bf06e18829",
+      "asset_sha256": "1bc471bf4b27a03118a39f37e25a04b0a6b6c5443302aea4eb7149f0bc9ee069",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/1bc471bf4b27a03118a39f37e25a04b0a6b6c5443302aea4eb7149f0bc9ee069.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science in India.",
+          "Neutral"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science in India"
+        ],
+        "context_relation": "The text discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about his contributions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:46:29Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science in India.",
+          "Neutral"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science in India"
+        ],
+        "context_relation": "The text discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about his contributions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b179a96f20882912236051fb",
+      "asset_sha256": "905503f31e2cb39c5e7dace2da57d06d88999ed148b9845e1b5f5de23798a8c2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/905503f31e2cb39c5e7dace2da57d06d88999ed148b9845e1b5f5de23798a8c2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Chemistry"
+        ],
+        "context_relation": "Introduction to a historical figure in chemistry",
+        "limitations": [
+          "The text is incomplete and does not provide full details about Acharya Prafulla Chandra Ray's contributions to chemistry."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:47:39Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with text on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Chemistry"
+        ],
+        "context_relation": "Introduction to a historical figure in chemistry",
+        "limitations": [
+          "The text is incomplete and does not provide full details about Acharya Prafulla Chandra Ray's contributions to chemistry."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "07d7caf97885e31e897050cd",
+      "asset_sha256": "f784a8236bbfb7d7b1f19fc4bc8c7f21d9582d1bfcfe143e82f8bb15cc41f253",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/f784a8236bbfb7d7b1f19fc4bc8c7f21d9582d1bfcfe143e82f8bb15cc41f253.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A banner with text and a decorative element at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing",
+          "scienti"
+        ],
+        "concepts": [
+          "Father of Modern Indian Chemistry",
+          "P.C. Ray",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Contributions to Chemistry"
+        ],
+        "context_relation": "The image is a part of a textbook discussing Acharya Prafulla Chandra Ray's contributions to chemistry.",
+        "limitations": [
+          "The image does not provide specific details about the contributions of P.C. Ray to chemistry."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:48:53Z",
+      "effective_analysis": {
+        "visual_summary": "A banner with text and a decorative element at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing",
+          "scienti"
+        ],
+        "concepts": [
+          "Father of Modern Indian Chemistry",
+          "P.C. Ray",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Contributions to Chemistry"
+        ],
+        "context_relation": "The image is a part of a textbook discussing Acharya Prafulla Chandra Ray's contributions to chemistry.",
+        "limitations": [
+          "The image does not provide specific details about the contributions of P.C. Ray to chemistry."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "28f8974b136bfa1945facd49",
+      "asset_sha256": "059786b86ba38951e7ea76b21b62b0919723bcca5af6ed83919c4c6a0dffde72",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/059786b86ba38951e7ea76b21b62b0919723bcca5af6ed83919c4c6a0dffde72.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A dark red bowl with a pink object inside, placed on a wooden surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or information related to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the context provided in the text.",
+          "The image is a standalone visual and does not provide any additional context or information beyond what is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:49:57Z",
+      "effective_analysis": {
+        "visual_summary": "A dark red bowl with a pink object inside, placed on a wooden surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or information related to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the context provided in the text.",
+          "The image is a standalone visual and does not provide any additional context or information beyond what is visible in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 886,
-    "successful_visual_analyses": 877,
-    "missing_visual_analyses": 6602,
+    "raw_analysis_result_rows": 890,
+    "successful_visual_analyses": 881,
+    "missing_visual_analyses": 6598,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6611,
+    "unresolved_count": 6607,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43688,9 +43688,34 @@
       "asset_path": "assets/1bc471bf4b27a03118a39f37e25a04b0a6b6c5443302aea4eb7149f0bc9ee069.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science in India.",
+          "Neutral"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science in India"
+        ],
+        "context_relation": "The text discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about his contributions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43706,9 +43731,27 @@
       "asset_path": "assets/905503f31e2cb39c5e7dace2da57d06d88999ed148b9845e1b5f5de23798a8c2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with text on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Chemistry"
+        ],
+        "context_relation": "Introduction to a historical figure in chemistry",
+        "limitations": [
+          "The text is incomplete and does not provide full details about Acharya Prafulla Chandra Ray's contributions to chemistry."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43724,9 +43767,28 @@
       "asset_path": "assets/f784a8236bbfb7d7b1f19fc4bc8c7f21d9582d1bfcfe143e82f8bb15cc41f253.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A banner with text and a decorative element at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing",
+          "scienti"
+        ],
+        "concepts": [
+          "Father of Modern Indian Chemistry",
+          "P.C. Ray",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Contributions to Chemistry"
+        ],
+        "context_relation": "The image is a part of a textbook discussing Acharya Prafulla Chandra Ray's contributions to chemistry.",
+        "limitations": [
+          "The image does not provide specific details about the contributions of P.C. Ray to chemistry."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43742,9 +43804,19 @@
       "asset_path": "assets/059786b86ba38951e7ea76b21b62b0919723bcca5af6ed83919c4c6a0dffde72.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A dark red bowl with a pink object inside, placed on a wooden surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or information related to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the context provided in the text.",
+          "The image is a standalone visual and does not provide any additional context or information beyond what is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
