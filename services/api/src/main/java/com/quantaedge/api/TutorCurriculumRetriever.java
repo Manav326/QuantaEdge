@@ -32,6 +32,16 @@ public class TutorCurriculumRetriever {
   }
 
   public String retrieve(long sessionId, String language, String learnerMessage, String currentTopic) {
+    return retrieveInternal(sessionId,null,language,learnerMessage,currentTopic);
+  }
+
+  public String retrieve(long sessionId, long institutionId, String language,
+      String learnerMessage, String currentTopic) {
+    return retrieveInternal(sessionId,institutionId,language,learnerMessage,currentTopic);
+  }
+
+  private String retrieveInternal(long sessionId, Long institutionId, String language,
+      String learnerMessage, String currentTopic) {
     Set<String> queryTerms = terms(learnerMessage + " " + currentTopic);
     if (queryTerms.isEmpty()) return "";
 
@@ -50,13 +60,14 @@ public class TutorCurriculumRetriever {
           and t.source_hash::text=md5(b.content::text)
         order by t.version_no desc,t.id desc limit 1
       ) bt on true
-      where ts.id=? and ts.ended_at is null
+      where ts.id=? and ts.ended_at is null __TENANT_SCOPE__
         and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
         and b.block_type in ('PREREQUISITE','EXPLANATION','WORKED_EXAMPLE','SUMMARY','RECAP')
       order by l.id,b.sequence_no,b.id
       limit ?
-      """, language, sessionId, MAX_CANDIDATES);
+      """.replace("__TENANT_SCOPE__", institutionId==null ? "" : "and ts.institution_id=?"),
+        retrieverArgs(language,sessionId,institutionId,MAX_CANDIDATES));
 
     List<ScoredBlock> scored = new ArrayList<>();
     for (Map<String, Object> row : candidates) {
@@ -90,7 +101,7 @@ public class TutorCurriculumRetriever {
           .append(excerpt).append("\n");
       added++;
     }
-    String textbookPages = retrieveTextbookPages(sessionId, language, learnerMessage, currentTopic);
+    String textbookPages = retrieveTextbookPages(sessionId,institutionId,language,learnerMessage,currentTopic);
     if (!textbookPages.isBlank()) {
       if (result.length() > 0) result.append("\n");
       result.append("APPROVED-SOURCE TEXTBOOK PAGE EXCERPTS (source/page metadata follows):\n")
@@ -99,7 +110,20 @@ public class TutorCurriculumRetriever {
     return result.toString();
   }
 
-  private String retrieveTextbookPages(long sessionId, String language, String learnerMessage, String currentTopic) {
+  private Object[] retrieverArgs(Object first,Object second,Long institutionId,Object last) {
+    return institutionId==null
+        ? new Object[]{first,second,last}
+        : new Object[]{first,second,institutionId,last};
+  }
+
+  private Object[] retrieverArgs(long sessionId,Long institutionId,int limit) {
+    return institutionId==null
+        ? new Object[]{sessionId,limit}
+        : new Object[]{sessionId,institutionId,limit};
+  }
+
+  private String retrieveTextbookPages(long sessionId, Long institutionId, String language,
+      String learnerMessage, String currentTopic) {
     String query = (learnerMessage + " " + currentTopic).trim();
     if (query.isBlank()) return "";
     if (query.length() > 400) query = query.substring(0, 400);
