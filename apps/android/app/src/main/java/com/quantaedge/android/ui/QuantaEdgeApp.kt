@@ -447,6 +447,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
     }
     var currentSubject by rememberSaveable { mutableStateOf("maths") }
+    var resourceSubjectFilter by rememberSaveable { mutableStateOf("ALL") }
     var currentCourseId by rememberSaveable { mutableStateOf(preferences.getLong("activeCourseId", 0L)) }
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
     var parentSection by rememberSaveable { mutableStateOf("family") }
@@ -2341,24 +2342,22 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun openResources(subjectCode: String = currentSubject) {
-        currentSubject = subjectCode
+    fun openResources(subjectCode: String = "ALL") {
+        resourceSubjectFilter = subjectCode.ifBlank { "ALL" }
         documents = emptyList()
         route = AppRoute.RESOURCES
         runTask {
             val local = resourceStore.downloadedDocuments()
             val online = runCatching {
                 val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
-                val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(subjectCode) +
-                    "&language=" + learningContentLanguage + courseQuery
-                ApiClient.getArray(path).objectItems()
+                ApiClient.getArray("/api/v1/learning/documents?language=" + learningContentLanguage + courseQuery).objectItems()
             }.getOrElse {
                 status = "ऑफ़लाइन: केवल इस डिवाइस पर पहले डाउनलोड की गई सामग्री दिखाई जा रही है।"
                 emptyList()
             }
             val combined = (online + local).distinctBy { it.optLongAny("document_id", "id") }
-                .filter { it.textAny("subject_code", "subjectCode").isBlank() || it.textAny("subject_code", "subjectCode") == subjectCode }
                 .filter { it.textAny("language").isBlank() || it.textAny("language") == learningContentLanguage }
+                .filter { currentCourseId <= 0L || it.optLongAny("course_id", "courseId") <= 0L || it.optLongAny("course_id", "courseId") == currentCourseId }
             documents = combined
             route = AppRoute.RESOURCES
         }
@@ -2487,17 +2486,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val uniqueWorkName = "qe-resource-" + resourceOwner.take(16) + "-" + id
             WorkManager.getInstance(context.applicationContext).cancelUniqueWork(uniqueWorkName)
             withContext(Dispatchers.IO) { resourceStore.removeOfflineCopy(id) }
+            val courseQuery = if (currentCourseId > 0L) "&courseId=" + currentCourseId else ""
             val online = runCatching {
-                ApiClient.getArray(
-                    "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(currentSubject) +
-                        "&language=" + learningContentLanguage
-                ).objectItems()
+                ApiClient.getArray("/api/v1/learning/documents?language=" + learningContentLanguage + courseQuery).objectItems()
             }.getOrDefault(emptyList())
             documents = (online + resourceStore.downloadedDocuments())
                 .distinctBy { it.optLongAny("document_id", "id") }
-                .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
-                    it.textAny("subject_code", "subjectCode") == currentSubject }
                 .filter { it.textAny("language").isBlank() || it.textAny("language") == learningContentLanguage }
+                .filter { currentCourseId <= 0L || it.optLongAny("course_id", "courseId") <= 0L || it.optLongAny("course_id", "courseId") == currentCourseId }
             resourceDownloadStates.remove(id)
             status = "इस डिवाइस से offline copy हटाई गई। Server पर मूल पुस्तक नहीं बदली गई।"
         }
@@ -3991,18 +3987,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     AppRoute.RESOURCES -> ResourcesScreen(
                         documents = documents,
-                        subject = currentSubject,
+                        subject = resourceSubjectFilter,
                         language = language,
                         store = resourceStore,
                         busy = busy,
                         error = error,
                         downloadStatus = status,
                         downloadStates = resourceDownloadStates,
-                        onSubject = ::openResources,
+                        onSubject = { resourceSubjectFilter = it },
                         onOpen = ::openDocument,
                         onDownload = ::downloadDocument,
                         onRemoveOffline = ::removeOfflineDownload,
-                        onRefresh = { openResources(currentSubject) }
+                        onRefresh = { openResources(resourceSubjectFilter) }
                     )
                     AppRoute.DOCUMENT_READER -> DocumentReaderScreen(
                         document = selectedDocument,
@@ -6395,26 +6391,39 @@ private fun ResourcesScreen(
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
-    var chaptersExpanded by rememberSaveable(subject) { mutableStateOf(true) }
-    var chapterPage by rememberSaveable(subject) { mutableStateOf(1) }
-    var chapterPageSize by rememberSaveable(subject) { mutableStateOf(10) }
+    var subjectFilter by rememberSaveable { mutableStateOf(subject.ifBlank { "ALL" }) }
+    var expandedSubject by rememberSaveable { mutableStateOf(subject.ifBlank { "" }) }
+    var chapterPageSize by rememberSaveable { mutableIntStateOf(10) }
+    val chapterPages = remember { mutableStateMapOf<String, Int>() }
 
-    val subjectBooks = documents
-        .filter { it.textAny("scope").equals("SUBJECT_BOOK", true) }
-        .sortedWith(compareBy<JSONObject> { it.optInt("book_part", 0) }.thenBy { it.optLongAny("document_id", "id") })
-    // Keep the API's curriculum teaching order; do not alphabetically sort chapter codes.
-    val chapterBooks = documents.filter {
-        it.textAny("scope").equals("CHAPTER_PDF", true) ||
-            it.textAny("chapter_name", "chapterName").isNotBlank()
+    LaunchedEffect(subject) {
+        if (subject.isNotBlank() && subject != "ALL" && subjectFilter == "ALL") {
+            subjectFilter = subject
+            expandedSubject = subject
+        }
     }
-    val otherResources = documents.filter { doc ->
-        !doc.textAny("scope").equals("SUBJECT_BOOK", true) &&
-            !doc.textAny("scope").equals("CHAPTER_PDF", true) &&
-            doc.textAny("chapter_name", "chapterName").isBlank()
+
+    val subjectGroups = documents
+        .filter { subjectFilter == "ALL" || it.textAny("subject_code", "subjectCode").equals(subjectFilter, true) }
+        .groupBy { it.textAny("subject_code", "subjectCode").ifBlank { "other" } }
+        .map { (code, rows) ->
+            val books = rows.filter { it.textAny("scope").equals("SUBJECT_BOOK", true) }
+                .sortedWith(compareBy<JSONObject> { it.optInt("book_part", 0) }.thenBy { it.optLongAny("document_id", "id") })
+            val chapters = rows.filter {
+                it.textAny("scope").equals("CHAPTER_PDF", true) || it.textAny("chapter_name", "chapterName").isNotBlank()
+            }
+            val others = rows.filter { doc ->
+                !doc.textAny("scope").equals("SUBJECT_BOOK", true) &&
+                    !doc.textAny("scope").equals("CHAPTER_PDF", true) &&
+                    doc.textAny("chapter_name", "chapterName").isBlank()
+            }
+            Triple(code, rows, Triple(books, chapters, others))
+        }
+        .sortedBy { (_, rows, _) -> rows.firstOrNull()?.textAny("subject_name", "subjectName")?.lowercase().orEmpty() }
+
+    val visibleDocumentCount = documents.count {
+        subjectFilter == "ALL" || it.textAny("subject_code", "subjectCode").equals(subjectFilter, true)
     }
-    val chapterPageCount = ((chapterBooks.size + chapterPageSize - 1) / chapterPageSize).coerceAtLeast(1)
-    val safeChapterPage = chapterPage.coerceIn(1, chapterPageCount)
-    val visibleChapters = chapterBooks.drop((safeChapterPage - 1) * chapterPageSize).take(chapterPageSize)
 
     if (pendingRemoval != null) {
         AlertDialog(
@@ -6441,7 +6450,7 @@ private fun ResourcesScreen(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(t("Textbook library", "पाठ्यपुस्तक लाइब्रेरी"), style = MaterialTheme.typography.headlineSmall)
-                Text(t("Subject → complete book/parts → chapter PDFs", "विषय → पूरी पुस्तक/भाग → अध्याय PDF"),
+                Text(t("Browse published books and chapter PDFs by subject", "विषय के अनुसार प्रकाशित पुस्तकें और अध्याय PDF देखें"),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(t("Refresh", "रिफ्रेश")) }
@@ -6453,18 +6462,40 @@ private fun ResourcesScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(6.dp))
+        Text(t("Subject", "विषय"), style = MaterialTheme.typography.labelMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                Text(t("Mathematics", "गणित"))
-            } else OutlinedButton(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                Text(t("Mathematics", "गणित"))
-            }
-            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                Text(t("Science", "विज्ञान"))
-            } else OutlinedButton(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                Text(t("Science", "विज्ञान"))
+            val filters = listOf("ALL" to t("All subjects", "सभी विषय")) +
+                documents.map { it.textAny("subject_code", "subjectCode") to it.textAny("subject_name", "subjectName") }
+                    .filter { it.first.isNotBlank() }
+                    .distinctBy { it.first }
+                    .sortedBy { it.second.lowercase() }
+            filters.forEach { (code, label) ->
+                if (subjectFilter.equals(code, true)) {
+                    Button(onClick = {
+                        subjectFilter = code
+                        expandedSubject = if (code == "ALL") "" else code
+                        chapterPages.clear()
+                        onSubject(code)
+                    }, enabled = !busy, contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp, vertical = 7.dp)) {
+                        Text(label.ifBlank { code })
+                    }
+                } else {
+                    OutlinedButton(onClick = {
+                        subjectFilter = code
+                        expandedSubject = if (code == "ALL") "" else code
+                        chapterPages.clear()
+                        onSubject(code)
+                    }, enabled = !busy, contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp, vertical = 7.dp)) {
+                        Text(label.ifBlank { code })
+                    }
+                }
             }
         }
+        Text(
+            t("$visibleDocumentCount resources · ${subjectGroups.size} subjects", "$visibleDocumentCount संसाधन · ${subjectGroups.size} विषय"),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 
         if (busy && documents.isEmpty()) {
             Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
@@ -6480,10 +6511,10 @@ private fun ResourcesScreen(
                     Button(onClick = onRefresh, enabled = !busy) { Text(t("Retry", "फिर प्रयास करें")) }
                 }
             }
-        } else if (documents.isEmpty()) {
+        } else if (visibleDocumentCount == 0) {
             Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                 EmptyState(
-                    t("No published textbooks yet", "अभी कोई प्रकाशित पाठ्यपुस्तक नहीं"),
+                    t("No published PDFs available yet", "अभी कोई प्रकाशित PDF उपलब्ध नहीं है"),
                     t("Published books and chapter PDFs for this subject and learning language will appear here.",
                         "इस विषय और चुनी गई पढ़ाई की भाषा के लिए प्रकाशित पुस्तकें और अध्याय PDF यहाँ दिखेंगे।")
                 )
@@ -6493,105 +6524,127 @@ private fun ResourcesScreen(
                 verticalArrangement = Arrangement.spacedBy(9.dp),
                 modifier = Modifier.weight(1f).fillMaxWidth().padding(top = 7.dp)
             ) {
-                if (subjectBooks.isNotEmpty()) {
-                    item(key = "subject-book-heading") {
-                        Text(t("Complete book and book parts", "पूरी पुस्तक और पुस्तक के भाग"),
-                            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                subjectGroups.forEach { (code, rows, grouped) ->
+                    val books = grouped.first
+                    val chapters = grouped.second
+                    val others = grouped.third
+                    val name = rows.firstOrNull()?.textAny("subject_name", "subjectName").orEmpty().ifBlank { code }
+                    val expanded = expandedSubject == code
+                    val pageCount = ((chapters.size + chapterPageSize - 1) / chapterPageSize).coerceAtLeast(1)
+                    val page = (chapterPages[code] ?: 1).coerceIn(1, pageCount)
+                    val visibleChapters = chapters.drop((page - 1) * chapterPageSize).take(chapterPageSize)
+                    val metadata = books.firstOrNull() ?: rows.firstOrNull()
+                    val title = when {
+                        books.any { it.optInt("book_part", 0) > 0 } -> t("$name textbook parts", "$name की पाठ्यपुस्तक के भाग")
+                        books.isNotEmpty() -> t("$name textbook", "$name की पाठ्यपुस्तक")
+                        else -> t("$name chapter collection", "$name के अध्याय")
                     }
-                    items(subjectBooks, key = { "book-" + it.optLongAny("document_id", "id") }) { doc ->
-                        ResourceDocumentCard(
-                            doc = doc, store = store, busy = busy, language = language,
-                            downloadState = downloadStates[doc.optLongAny("document_id", "id")],
-                            onOpen = onOpen, onDownload = onDownload,
-                            onRemoveOffline = { pendingRemoval = it }
-                        )
-                    }
-                }
-
-                if (chapterBooks.isNotEmpty()) {
-                    item(key = "chapter-pdf-heading") {
-                        Card(modifier = Modifier.fillMaxWidth(), onClick = { chaptersExpanded = !chaptersExpanded }) {
+                    item(key = "subject-group-$code") {
+                        Card(modifier = Modifier.fillMaxWidth(), onClick = {
+                            expandedSubject = if (expanded) "" else code
+                            if (!expanded) chapterPages[code] = 1
+                        }) {
                             Row(
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = 13.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                    Text(t("Chapter PDFs", "अध्याय PDF"), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                                        Text(t("Subject: $name", "विषय: $name"), style = MaterialTheme.typography.bodySmall)
+                                        metadata?.textAny("class_code", "classCode")?.takeIf { it.isNotBlank() }?.let {
+                                            Text(t("· Class $it", "· कक्षा $it"), style = MaterialTheme.typography.bodySmall)
+                                        }
+                                    }
                                     Text(
-                                        chapterBooks.size.toString() + " " + t("published chapter resources", "प्रकाशित अध्याय संसाधन"),
+                                        t("${books.size} books/parts · ${chapters.size} chapter PDFs", "${books.size} पुस्तक/भाग · ${chapters.size} अध्याय PDF"),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                                Text(if (chaptersExpanded) "−" else "+", style = MaterialTheme.typography.titleLarge)
+                                Text(if (expanded) "−" else "+", style = MaterialTheme.typography.titleLarge)
                             }
                         }
                     }
-                    if (chaptersExpanded) {
-                        item(key = "chapter-pagination-top") {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(t("Rows", "पंक्तियाँ"), style = MaterialTheme.typography.labelMedium)
-                                listOf(10, 20, 30, 50).forEach { size ->
-                                    if (chapterPageSize == size) Button(
-                                        onClick = { chapterPageSize = size; chapterPage = 1 },
-                                        enabled = !busy,
-                                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
-                                    ) { Text(size.toString()) }
-                                    else TextButton(
-                                        onClick = { chapterPageSize = size; chapterPage = 1 },
-                                        enabled = !busy,
-                                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
-                                    ) { Text(size.toString()) }
-                                }
+                    if (expanded) {
+                        if (books.isNotEmpty()) {
+                            item(key = "books-heading-$code") {
+                                Text(t("Complete book and book parts", "पूरी पुस्तक और पुस्तक के भाग"),
+                                    style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            }
+                            items(books, key = { "book-$code-" + it.optLongAny("document_id", "id") }) { doc ->
+                                ResourceDocumentCard(
+                                    doc = doc, store = store, busy = busy, language = language,
+                                    downloadState = downloadStates[doc.optLongAny("document_id", "id")],
+                                    onOpen = onOpen, onDownload = onDownload,
+                                    onRemoveOffline = { pendingRemoval = it }
+                                )
                             }
                         }
-                        items(visibleChapters, key = { "chapter-" + it.optLongAny("document_id", "id") }) { doc ->
-                            val index = chapterBooks.indexOfFirst { it.optLongAny("document_id", "id") == doc.optLongAny("document_id", "id") } + 1
-                            ResourceDocumentCard(
-                                doc = doc, store = store, busy = busy, language = language,
-                                downloadState = downloadStates[doc.optLongAny("document_id", "id")],
-                                onOpen = onOpen, onDownload = onDownload,
-                                onRemoveOffline = { pendingRemoval = it }, chapterIndex = index
-                            )
-                        }
-                        item(key = "chapter-pagination-bottom") {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(t("Page $safeChapterPage of $chapterPageCount", "पृष्ठ $safeChapterPage / $chapterPageCount"),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Spacer(Modifier.weight(1f))
-                                TextButton(onClick = { chapterPage = (safeChapterPage - 1).coerceAtLeast(1) }, enabled = !busy && safeChapterPage > 1) {
-                                    Text(t("Previous", "पिछला"))
-                                }
-                                TextButton(onClick = { chapterPage = (safeChapterPage + 1).coerceAtMost(chapterPageCount) }, enabled = !busy && safeChapterPage < chapterPageCount) {
-                                    Text(t("Next", "अगला"))
+                        if (chapters.isNotEmpty()) {
+                            item(key = "chapters-heading-$code") {
+                                Text(t("Chapter PDFs", "अध्याय PDF"), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            }
+                            item(key = "chapter-size-$code") {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("Rows", "पंक्तियाँ"), style = MaterialTheme.typography.labelMedium)
+                                    listOf(10, 20, 30, 50).forEach { size ->
+                                        if (chapterPageSize == size) Button(
+                                            onClick = { chapterPageSize = size; chapterPages[code] = 1 },
+                                            enabled = !busy,
+                                            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                                        ) { Text(size.toString()) }
+                                        else TextButton(
+                                            onClick = { chapterPageSize = size; chapterPages[code] = 1 },
+                                            enabled = !busy,
+                                            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                                        ) { Text(size.toString()) }
+                                    }
                                 }
                             }
+                            items(visibleChapters, key = { "chapter-$code-" + it.optLongAny("document_id", "id") }) { doc ->
+                                val index = chapters.indexOfFirst { it.optLongAny("document_id", "id") == doc.optLongAny("document_id", "id") } + 1
+                                ResourceDocumentCard(
+                                    doc = doc, store = store, busy = busy, language = language,
+                                    downloadState = downloadStates[doc.optLongAny("document_id", "id")],
+                                    onOpen = onOpen, onDownload = onDownload,
+                                    onRemoveOffline = { pendingRemoval = it }, chapterIndex = index
+                                )
+                            }
+                            item(key = "chapter-page-footer-$code") {
+                                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text(t("Page $page of $pageCount", "पृष्ठ $page / $pageCount"),
+                                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Spacer(Modifier.weight(1f))
+                                    TextButton(onClick = { chapterPages[code] = (page - 1).coerceAtLeast(1) }, enabled = !busy && page > 1) {
+                                        Text(t("Previous", "पिछला"))
+                                    }
+                                    TextButton(onClick = { chapterPages[code] = (page + 1).coerceAtMost(pageCount) }, enabled = !busy && page < pageCount) {
+                                        Text(t("Next", "अगला"))
+                                    }
+                                }
+                            }
+                        } else {
+                            item(key = "no-chapters-$code") {
+                                Text(t("No chapter PDFs published yet", "अभी अध्याय PDF प्रकाशित नहीं हैं"),
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
                         }
-                    }
-                }
-
-                if (otherResources.isNotEmpty()) {
-                    item(key = "other-resource-heading") {
-                        Text(t("Other learning resources", "अन्य पढ़ाई के संसाधन"),
-                            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    }
-                    items(otherResources, key = { "other-" + it.optLongAny("document_id", "id") }) { doc ->
-                        ResourceDocumentCard(
-                            doc = doc, store = store, busy = busy, language = language,
-                            downloadState = downloadStates[doc.optLongAny("document_id", "id")],
-                            onOpen = onOpen, onDownload = onDownload,
-                            onRemoveOffline = { pendingRemoval = it }
-                        )
+                        if (others.isNotEmpty()) {
+                            item(key = "other-heading-$code") {
+                                Text(t("Other learning resources", "अन्य पढ़ाई के संसाधन"),
+                                    style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            }
+                            items(others, key = { "other-$code-" + it.optLongAny("document_id", "id") }) { doc ->
+                                ResourceDocumentCard(
+                                    doc = doc, store = store, busy = busy, language = language,
+                                    downloadState = downloadStates[doc.optLongAny("document_id", "id")],
+                                    onOpen = onOpen, onDownload = onDownload,
+                                    onRemoveOffline = { pendingRemoval = it }
+                                )
+                            }
+                        }
                     }
                 }
             }
