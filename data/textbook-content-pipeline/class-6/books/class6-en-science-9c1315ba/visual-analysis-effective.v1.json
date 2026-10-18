@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9ba21b88f3b467d3cef740419388038226e61ca65f02e66e50a362f12cb5544e",
+  "raw_analysis_sha256": "a7a7e9ec9a92e9dcdc001d5fd92e4f1297554e002d2c64592a15e2cdf9005efa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:33:49Z",
+      "checkpointed_at": "2026-10-18T12:41:51Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29152,6 +29152,212 @@
         "context_relation": "The image promotes a counseling service for students during the COVID-19 pandemic, providing support for various issues.",
         "limitations": [
           "The image does not provide specific details about the counseling services offered."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1a7dbcdd7fd9501efe416022",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:42:03Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c46f3a2930e02af9b8b4fb0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:42:12Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d1514bb9de0940936c961b00",
+      "asset_sha256": "c6689f5b9fe59e276bc80577b7fdb7c50d45c3ec6626623425d18759f8dda1af",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 18,
+      "asset_path": "page-0018.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a toll-free number for support.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "If you are stressed, anxious, worried, sad or confused about ....",
+          "Studies and Exams",
+          "Personal Relationships",
+          "Career Concerns",
+          "Peer Pressure",
+          "Seek Support of Counsellors",
+          "Call 84440632",
+          "National Toll-free Counselling Tele-Helpline",
+          "8am to 8pm",
+          "All days of the week",
+          "MANODARPAN",
+          "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond",
+          "An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan",
+          "www.https://manodarpnan.education.gov.in"
+        ],
+        "concepts": [
+          "counseling",
+          "mental health",
+          "students",
+          "COVID-19",
+          "well-being",
+          "toll-free number"
+        ],
+        "context_relation": "advertising",
+        "limitations": [
+          "the specific issues addressed (studies, exams, personal relationships, career concerns, peer pressure)"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:46:19Z",
+      "effective_analysis": {
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a toll-free number for support.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "If you are stressed, anxious, worried, sad or confused about ....",
+          "Studies and Exams",
+          "Personal Relationships",
+          "Career Concerns",
+          "Peer Pressure",
+          "Seek Support of Counsellors",
+          "Call 84440632",
+          "National Toll-free Counselling Tele-Helpline",
+          "8am to 8pm",
+          "All days of the week",
+          "MANODARPAN",
+          "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond",
+          "An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan",
+          "www.https://manodarpnan.education.gov.in"
+        ],
+        "concepts": [
+          "counseling",
+          "mental health",
+          "students",
+          "COVID-19",
+          "well-being",
+          "toll-free number"
+        ],
+        "context_relation": "advertising",
+        "limitations": [
+          "the specific issues addressed (studies, exams, personal relationships, career concerns, peer pressure)"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aaefcae0b8c754437763dc57",
+      "asset_sha256": "a12e3b3c86793960081d77d7588634bb0a4e5721bd5c3f7855371d551487c7a0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/a12e3b3c86793960081d77d7588634bb0a4e5721bd5c3f7855371d551487c7a0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a981137472f56312bfb161596b9eff592a8866ec9a6bd852ba0166a91f3e65da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue textured surface, possibly a piece of fabric or paper, with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:47:54Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue textured surface, possibly a piece of fabric or paper, with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook or its content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
