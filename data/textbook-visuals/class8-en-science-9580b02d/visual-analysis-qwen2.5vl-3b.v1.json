@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 694,
+    "assets_selected": 696,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 691,
-    "assets_remaining": 1600,
+    "assets_analyzed": 693,
+    "assets_remaining": 1598,
     "assets_completion_percent": 30.2,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 689,
+    "assets_skipped_from_checkpoint": 691,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:01:32Z"
+      "checkpointed_at": "2026-10-18T22:06:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:02:21Z"
+      "checkpointed_at": "2026-10-18T22:06:53Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:02:59Z"
+      "checkpointed_at": "2026-10-18T22:07:32Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20765,6 +20765,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T22:04:54Z"
+    },
+    {
+      "asset_id": "791b823d4b6af2b537192843",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely the first page of a chapter in a textbook.",
+        "limitations": [
+          "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:07:49Z"
+    },
+    {
+      "asset_id": "2db6db7b77222cc7b072596a",
+      "asset_sha256": "95f230f4a528b4f3a265014da1098a8d69132dc6b98ec45fb3db4606540271f7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "page-0021.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page inviting young scientists to explore the investigative world of science with questions and a QR code for additional information.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "1",
+          "Exploring the Investigative World of Science",
+          "Probe and ponder",
+          "Dear Young Scientists,\nWelcome back! On the first page of each chapter, you will find a set of questions.\nThese are not meant for any exam—they are unique invitations to spark your\ncuriosity to explore the world of science!\nWhy is one side of a puri thinner than the other?\nAre there more grains of s",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Investigative World of Science",
+          "Young Scientists",
+          "Questions to Spark Curiosity",
+          "Diversity of Plants and Animals",
+          "Insects",
+          "Diversity of Leaves",
+          "Curiosity",
+          "Nature",
+          "Grains of Sand",
+          "Beaches and Deserts",
+          "Galaxy",
+          "Puri",
+          "Grade 6"
+        ],
+        "context_relation": "The page is a part of an educational textbook designed to engage young scientists with investigative questions and encourage curiosity about the world.",
+        "limitations": [
+          "The page does not provide specific answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:12:05Z"
     }
   ]
 }
