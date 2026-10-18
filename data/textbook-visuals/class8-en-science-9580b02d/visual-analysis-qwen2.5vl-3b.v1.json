@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 515,
+    "assets_selected": 518,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 513,
-    "assets_remaining": 1778,
-    "assets_completion_percent": 22.4,
+    "assets_analyzed": 516,
+    "assets_remaining": 1775,
+    "assets_completion_percent": 22.5,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 510,
+    "assets_skipped_from_checkpoint": 513,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T13:38:22Z"
+      "checkpointed_at": "2026-10-18T13:45:12Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T13:39:44Z"
+      "checkpointed_at": "2026-10-18T13:46:33Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -15210,6 +15210,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T13:43:31Z"
+    },
+    {
+      "asset_id": "ed84d59312af415aeebcb523",
+      "asset_sha256": "37576b303a6a6abe669b80f2d8868e91e2725f9e28a934d0692eccf7cacae5de",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/37576b303a6a6abe669b80f2d8868e91e2725f9e28a934d0692eccf7cacae5de.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T13:47:44Z"
+    },
+    {
+      "asset_id": "016c122c7c185d0004dd8cae",
+      "asset_sha256": "8afabac4232f1fd0318e332cd4aa3a313ac8e635ef001d10fd8b955dc52b3a62",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8afabac4232f1fd0318e332cd4aa3a313ac8e635ef001d10fd8b955dc52b3a62.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T13:48:50Z"
+    },
+    {
+      "asset_id": "927b4794908953018963e298",
+      "asset_sha256": "53cbb78aed445f7be51113b4f70e2ecf2e1600623fb9aa8484ca3727ff8c4260",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/53cbb78aed445f7be51113b4f70e2ecf2e1600623fb9aa8484ca3727ff8c4260.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade, possibly representing a progress bar or a loading indicator.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Progress or completion indicator",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T13:50:10Z"
     }
   ]
 }
