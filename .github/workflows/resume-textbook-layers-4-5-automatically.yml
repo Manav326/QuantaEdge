@@ -158,16 +158,34 @@ jobs:
           fi
 
           pending="$(python - <<'PY'
-          import json
+          import hashlib, json
           from pathlib import Path
           root=Path("data/textbook-content-pipeline/resume-control/completed")
+          repo=Path.cwd()
           pending=[]
           for grade in (6,7,8):
               p=root/f"class-{grade}.v1.json"
               try:
                   d=json.loads(p.read_text(encoding="utf-8"))
-                  complete=(d.get("schema_version")=="quantaedge.textbook-layer45-class-completion.v1" and d.get("class_no")==grade and d.get("status")=="COMPLETE")
-              except (OSError,json.JSONDecodeError):
+                  evidence=d.get("source_ledgers")
+                  complete=(d.get("schema_version")=="quantaedge.textbook-layer45-class-completion.v1" and d.get("class_no")==grade and d.get("status")=="COMPLETE" and isinstance(evidence,list) and bool(evidence))
+                  if complete:
+                      for item in evidence:
+                          rel=Path(str(item.get("ledger_path","")))
+                          if rel.is_absolute() or ".." in rel.parts or not rel.parts:
+                              complete=False; break
+                          ledger_path=repo/rel
+                          if not ledger_path.is_file():
+                              complete=False; break
+                          raw=ledger_path.read_bytes()
+                          if hashlib.sha256(raw).hexdigest()!=item.get("ledger_sha256"):
+                              complete=False; break
+                          ledger=json.loads(raw.decode("utf-8"))
+                          summary=ledger.get("summary") or {}
+                          identity=ledger.get("source") or {}
+                          if (ledger.get("schema_version")!="quantaedge.textbook-coverage-ledger.v1" or ledger.get("ledger_status")!="COMPLETE" or summary.get("unresolved_count")!=0 or identity.get("source_book_id")!=item.get("source_book_id") or str(identity.get("source_pdf_sha256") or "").lower()!=str(item.get("source_pdf_sha256") or "").lower()):
+                              complete=False; break
+              except (OSError,ValueError,TypeError,json.JSONDecodeError):
                   complete=False
               if not complete: pending.append(str(grade))
           print(" ".join(pending))
