@@ -44,6 +44,12 @@ jobs:
       - name: Generate machine-readable UI route inventory
         run: node scripts/inventory_ui_routes.mjs --output "$RUNNER_TEMP/ui-localization-route-inventory.json"
 
+      - name: Test QA register validator
+        run: node --test scripts/validate_qa_registers.test.mjs
+
+      - name: Validate cross-register QA documentation
+        run: node scripts/validate_qa_registers.mjs --root .
+
       - name: Upload UI localization route inventory
         uses: actions/upload-artifact@v4
         with:
