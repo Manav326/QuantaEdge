@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 862,
-    "successful_visual_analyses": 854,
-    "missing_visual_analyses": 6626,
+    "raw_analysis_result_rows": 866,
+    "successful_visual_analyses": 858,
+    "missing_visual_analyses": 6622,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6634,
+    "unresolved_count": 6630,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -42833,9 +42833,33 @@
       "asset_path": "assets/91e51b6ec6fc3e59caae833ad3013a9ed4c87fc29a0582fb11c9bd5763ca5d8f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not provide specific details about his contributions or achievements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42851,9 +42875,33 @@
       "asset_path": "assets/666dd750d5fd76f783b29e09f8039e5d10b4656be9f652f6c462cb85eb8b9722.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not provide specific details about his contributions or achievements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42869,9 +42917,33 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not contain any images or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42887,9 +42959,35 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Father of Modern Indian Chemistry",
+          "Acharya Prafulla Chandra Ray",
+          "Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations.",
+          "The page does not provide any specific information about Acharya Prafulla Chandra Ray's work or achievements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
