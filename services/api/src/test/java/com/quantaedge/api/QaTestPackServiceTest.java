@@ -22,9 +22,9 @@ class QaTestPackServiceTest {
   @Mock private PlatformTransactionManager transactionManager;
 
   private QaTestPackService service(boolean enabled, boolean approved, String label,
-      String fixturePassword, MockEnvironment environment) {
+      String targetDatabase, String fixturePassword, MockEnvironment environment) {
     return new QaTestPackService(jdbc, environment, transactionManager, new ObjectMapper(),
-        enabled, approved, label, fixturePassword);
+        enabled, approved, label, targetDatabase, fixturePassword);
   }
 
   @Test
@@ -32,7 +32,7 @@ class QaTestPackServiceTest {
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "local");
     when(jdbc.queryForObject("select current_database()", String.class)).thenReturn("quantaedge_qa");
 
-    MapAssert.assertGate(service(false, true, "local-qa", "QAfixture!2026", environment).environmentStatus(),
+    MapAssert.assertGate(service(false, true, "local-qa", "quantaedge_qa", "QAfixture!2026", environment).environmentStatus(),
         false, "APP_QA_ENABLED");
     verify(jdbc, never()).update(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.any(Object[].class));
   }
@@ -43,7 +43,7 @@ class QaTestPackServiceTest {
     environment.setActiveProfiles("production");
     when(jdbc.queryForObject("select current_database()", String.class)).thenReturn("quantaedge_qa");
 
-    var status = service(true, true, "ci-qa", "QAfixture!2026", environment).environmentStatus();
+    var status = service(true, true, "ci-qa", "quantaedge_qa", "QAfixture!2026", environment).environmentStatus();
     assertFalse(Boolean.TRUE.equals(status.get("writeAllowed")));
     assertTrue(Boolean.TRUE.equals(status.get("productionProfileDetected")));
   }
@@ -63,7 +63,7 @@ class QaTestPackServiceTest {
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "local");
     when(jdbc.queryForObject("select current_database()", String.class)).thenReturn("quantaedge_qa");
 
-    var status = service(true, true, "ci-qa", "", environment).environmentStatus();
+    var status = service(true, true, "ci-qa", "quantaedge_qa", "", environment).environmentStatus();
     assertFalse(Boolean.TRUE.equals(status.get("writeAllowed")));
     assertFalse(Boolean.TRUE.equals(status.get("fixtureCredentialsConfigured")));
   }
@@ -71,7 +71,7 @@ class QaTestPackServiceTest {
   @Test
   void onlyTheCodeOwnedStarterPackIsReturned() {
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "local");
-    var packs = service(false, false, "", "", environment).packs();
+    var packs = service(false, false, "", "", "", environment).packs();
 
     assertEquals(1, packs.size());
     assertEquals("TENANT_LEARNER_BOUNDARY_V1", packs.getFirst().get("packKey"));
