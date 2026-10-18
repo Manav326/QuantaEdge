@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 388,
-    "successful_visual_analyses": 382,
-    "missing_visual_analyses": 7100,
+    "raw_analysis_result_rows": 392,
+    "successful_visual_analyses": 386,
+    "missing_visual_analyses": 7096,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7106,
+    "unresolved_count": 7102,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -23900,9 +23900,19 @@
       "asset_path": "assets/90829a31569c0a57e8473cf802c939c84925f401843970279351ddf61cfbff1a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a person's face, possibly a student or teacher, with a neutral expression.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a photograph of a person, possibly a student or teacher, in a classroom or educational setting.",
+        "limitations": [
+          "The image is blurred and not clearly identifiable.",
+          "The visible text is incomplete and not readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23918,9 +23928,29 @@
       "asset_path": "assets/63fbfb471584bdbca5c085e309b8c3e5e7245ac3f0be3af254ca4e17ffbb7541.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The page does not provide specific details or examples about how light and shadows have influenced our understanding of the universe."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23936,9 +23966,18 @@
       "asset_path": "assets/fb8f632cad06d15bdb6b9c152fce999d6f44af654ce6f6bbb556136c49684261.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or information"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23954,9 +23993,16 @@
       "asset_path": "assets/14c1612ff789893b6602ee57e394991e737d1491edfa40f2c93721e16991c453.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a rope with a yellow and orange color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

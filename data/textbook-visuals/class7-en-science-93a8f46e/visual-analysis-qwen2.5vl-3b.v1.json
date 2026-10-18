@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 382,
+    "assets_selected": 386,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 381,
-    "assets_remaining": 7107,
+    "assets_analyzed": 385,
+    "assets_remaining": 7103,
     "assets_completion_percent": 5.1,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 377,
+    "assets_skipped_from_checkpoint": 381,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:16:12Z"
+      "checkpointed_at": "2026-10-18T02:19:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12387,6 +12387,128 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T02:18:29Z"
+    },
+    {
+      "asset_id": "339490189985f00a5ce67935",
+      "asset_sha256": "90829a31569c0a57e8473cf802c939c84925f401843970279351ddf61cfbff1a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/90829a31569c0a57e8473cf802c939c84925f401843970279351ddf61cfbff1a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a person's face, possibly a student or teacher, with a neutral expression.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a photograph of a person, possibly a student or teacher, in a classroom or educational setting.",
+        "limitations": [
+          "The image is blurred and not clearly identifiable.",
+          "The visible text is incomplete and not readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:19:42Z"
+    },
+    {
+      "asset_id": "dd80610b3f74e9146708eb05",
+      "asset_sha256": "63fbfb471584bdbca5c085e309b8c3e5e7245ac3f0be3af254ca4e17ffbb7541",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/63fbfb471584bdbca5c085e309b8c3e5e7245ac3f0be3af254ca4e17ffbb7541.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The page does not provide specific details or examples about how light and shadows have influenced our understanding of the universe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:20:20Z"
+    },
+    {
+      "asset_id": "d8f4319805a0434a197bbc6e",
+      "asset_sha256": "fb8f632cad06d15bdb6b9c152fce999d6f44af654ce6f6bbb556136c49684261",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/fb8f632cad06d15bdb6b9c152fce999d6f44af654ce6f6bbb556136c49684261.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or information"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:20:52Z"
+    },
+    {
+      "asset_id": "ca48eeef2b106b6177689d8d",
+      "asset_sha256": "14c1612ff789893b6602ee57e394991e737d1491edfa40f2c93721e16991c453",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/14c1612ff789893b6602ee57e394991e737d1491edfa40f2c93721e16991c453.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope with a yellow and orange color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:21:23Z"
     }
   ]
 }
