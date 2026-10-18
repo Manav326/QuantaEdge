@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 684,
+    "assets_selected": 686,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 681,
-    "assets_remaining": 1610,
-    "assets_completion_percent": 29.7,
+    "assets_analyzed": 683,
+    "assets_remaining": 1608,
+    "assets_completion_percent": 29.8,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 679,
+    "assets_skipped_from_checkpoint": 681,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:28:53Z"
+      "checkpointed_at": "2026-10-18T21:35:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:29:41Z"
+      "checkpointed_at": "2026-10-18T21:36:16Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:30:20Z"
+      "checkpointed_at": "2026-10-18T21:36:54Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20408,6 +20408,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T21:34:15Z"
+    },
+    {
+      "asset_id": "f22b7fe36ee24646b2a67408",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e6db02c46bf5a03145fc1776dd879d0914396ee3131a2ce6371b52e2d41dca0b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the Constitution of India, specifically Articles 12 to 35, which guarantee Fundamental Rights.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "CONSTITUTION OF INDIA",
+          "Part III (Articles 12 – 35)",
+          "(Subject to certain conditions, some exceptions and reasonable restrictions)",
+          "guarantees these",
+          "Fundamental Rights",
+          "Right to Equality",
+          "before law and equal protection of laws;",
+          "irrespective of religion, race, caste, sex or place of birth;",
+          "of opportunity in public employment;",
+          "by abolition of untouchability and titles.",
+          "Right to Freedom",
+          "of expression, assembly, association, movement, residence and profession;",
+          "of certain protections in re"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Articles 12 – 35",
+          "Fundamental Rights",
+          "Equality",
+          "Freedom"
+        ],
+        "context_relation": "The page is discussing the specific articles and rights mentioned in the Constitution of India.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The text is in English and appears to be a part of a textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:37:37Z"
+    },
+    {
+      "asset_id": "c45bbada37c3fec408daae1f",
+      "asset_sha256": "6c3ca7b772355180c23da90a55306c624dcec42da4d8ce4d4882f18e3ef490cf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 20,
+      "asset_path": "page-0020.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e6db02c46bf5a03145fc1776dd879d0914396ee3131a2ce6371b52e2d41dca0b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from the Constitution of India outlining various fundamental rights.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "CONSTITUTION OF INDIA",
+          "Part III (Articles 12 – 35)",
+          "(Subject to certain conditions, some exceptions and reasonable restrictions)",
+          "guarantees these",
+          "Fundamental Rights",
+          "Right to Equality",
+          "before law and equal protection of laws;",
+          "irrespective of religion, race, caste, sex or place of birth;",
+          "of opportunity in public employment;",
+          "by abolition of untouchability and titles.",
+          "Right to Freedom",
+          "of expression, assembly, association, movement, residence and profession;",
+          "of certain protections in respect of conviction for offences;",
+          "of protection of life and personal liberty;",
+          "of free and compulsory education for children between the age of six and fourteen years;",
+          "of protection against arrest and detention in certain cases.",
+          "Right against Exploitation",
+          "for prohibition of traffic in human beings and forced labour;",
+          "for prohibition of employment of children in hazardous jobs.",
+          "Right to Freedom of Religion",
+          "freedom of conscience and free profession, practice and propagation of religion;",
+          "freedom to manage religious affairs;",
+          "freedom as to payment of taxes for promotion of any particular religion;",
+          "freedom as to attendance at religious instruction or religious worship in certain educational institutions.",
+          "Cultural and Educational Rights",
+          "for protection of interests of minorities;",
+          "for minorities to establish and administer educational institutions;",
+          "saving of certain Laws 31A–31D.",
+          "Right to Constitutional Remedies",
+          "by issuance of directions or orders or writs by the Supreme Court and High Courts for enforcement of these Fundamental Rights."
+        ],
+        "concepts": [
+          "Fundamental Rights",
+          "Equality",
+          "Freedom",
+          "Exploitation",
+          "Religion",
+          "Cultural and Educational Rights",
+          "Constitutional Remedies"
+        ],
+        "context_relation": "The page outlines various fundamental rights guaranteed by the Constitution of India.",
+        "limitations": [
+          "The page does not provide specific details about the conditions, exceptions, and reasonable restrictions mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:42:08Z"
     }
   ]
 }
