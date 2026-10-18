@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b4a14fed69b951de94f4ba672d8e47f6df35c24cbf3b956974bef917e3e63cd8",
+  "raw_analysis_sha256": "3364dbe431305353cbf853d3905b446a4437791681dd166d2bd9922cc7487d26",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:48:35Z",
+      "checkpointed_at": "2026-10-18T22:50:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:48:58Z",
+      "checkpointed_at": "2026-10-18T22:51:03Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -71164,6 +71164,130 @@
         "context_relation": "The page is likely part of an educational content editor's analysis of a textbook page.",
         "limitations": [
           "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "79bbc448b9853ba138d248e2",
+      "asset_sha256": "90e50152108662b7ede2d02c15e8ae958a90d480a851cd779acacc75bbecff2c",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "page-0044.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f3b7e3c73bf24731b01738e4",
+      "asset_sha256": "5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:53:09Z",
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bb492eda1ba028c144ba0b19",
+      "asset_sha256": "9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a simple electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is related to the text discussing the components of a torch and an electrical circuit.",
+        "limitations": [
+          "The image does not provide specific details about the components or the electrical circuit.",
+          "The image is a simple diagram and does not include any measurements or specific components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:53:50Z",
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a simple electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is related to the text discussing the components of a torch and an electrical circuit.",
+        "limitations": [
+          "The image does not provide specific details about the components or the electrical circuit.",
+          "The image is a simple diagram and does not include any measurements or specific components."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
