@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1042,
+    "assets_selected": 1045,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1040,
-    "assets_remaining": 6448,
+    "assets_analyzed": 1043,
+    "assets_remaining": 6445,
     "assets_completion_percent": 13.9,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1037,
+    "assets_skipped_from_checkpoint": 1040,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:54:00Z"
+      "checkpointed_at": "2026-10-18T19:57:00Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:54:21Z"
+      "checkpointed_at": "2026-10-18T19:57:21Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -38369,6 +38369,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T19:56:19Z"
+    },
+    {
+      "asset_id": "094817c02fdbe842bdb0c9f4",
+      "asset_sha256": "88406a6d25e54bb011b5b5af071dbf339f286fbad7a8dc93640feb0bb1f5d077",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/88406a6d25e54bb011b5b5af071dbf339f286fbad7a8dc93640feb0bb1f5d077.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An orange background with a black line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:57:56Z"
+    },
+    {
+      "asset_id": "3c5083441e3daf7f1745a5dc",
+      "asset_sha256": "cd2a9586b9770fead155b870e847966f36cf16fb13ff1caa8a7a60018e37d783",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/cd2a9586b9770fead155b870e847966f36cf16fb13ff1caa8a7a60018e37d783.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about vinegar and soap solutions.",
+        "limitations": [
+          "The image does not provide any information about vinegar or soap solutions.",
+          "The image is a simple illustration of a twisted rope with blue rings, not a complex diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:58:32Z"
+    },
+    {
+      "asset_id": "a3c3e51ef39a4a1e09c0d038",
+      "asset_sha256": "d8b6cc0eab9dece6e50005ff9b99cfd8952f1c4ed1e21c8b35b035424df31d5b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/d8b6cc0eab9dece6e50005ff9b99cfd8952f1c4ed1e21c8b35b035424df31d5b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction between vinegar and an eggshell or marble, and the lack of reaction with soap solution.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "EEPER",
+          "Aman accidentally spilt vinegar on some pieces",
+          "of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another",
+          "piece of eggshell or marble, but no bubbles",
+          "appeared.",
+          "Why did bubbles occur with vinegar",
+          "but not with soap solution?"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Acids and bases",
+          "Eggshell and marble"
+        ],
+        "context_relation": "The image is related to the question about why bubbles occurred with vinegar but not with soap solution.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:59:14Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1054,
-    "successful_visual_analyses": 1042,
-    "missing_visual_analyses": 6434,
+    "raw_analysis_result_rows": 1057,
+    "successful_visual_analyses": 1045,
+    "missing_visual_analyses": 6431,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6446,
+    "unresolved_count": 6443,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49228,9 +49228,16 @@
       "asset_path": "assets/88406a6d25e54bb011b5b5af071dbf339f286fbad7a8dc93640feb0bb1f5d077.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An orange background with a black line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49246,9 +49253,19 @@
       "asset_path": "assets/cd2a9586b9770fead155b870e847966f36cf16fb13ff1caa8a7a60018e37d783.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with blue rings at both ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about vinegar and soap solutions.",
+        "limitations": [
+          "The image does not provide any information about vinegar or soap solutions.",
+          "The image is a simple illustration of a twisted rope with blue rings, not a complex diagram or chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49264,9 +49281,31 @@
       "asset_path": "assets/d8b6cc0eab9dece6e50005ff9b99cfd8952f1c4ed1e21c8b35b035424df31d5b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction between vinegar and an eggshell or marble, and the lack of reaction with soap solution.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "EEPER",
+          "Aman accidentally spilt vinegar on some pieces",
+          "of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another",
+          "piece of eggshell or marble, but no bubbles",
+          "appeared.",
+          "Why did bubbles occur with vinegar",
+          "but not with soap solution?"
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Acids and bases",
+          "Eggshell and marble"
+        ],
+        "context_relation": "The image is related to the question about why bubbles occurred with vinegar but not with soap solution.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
