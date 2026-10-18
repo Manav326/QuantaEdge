@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 732,
+    "assets_selected": 736,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 731,
-    "assets_remaining": 1347,
-    "assets_completion_percent": 35.2,
+    "assets_analyzed": 735,
+    "assets_remaining": 1343,
+    "assets_completion_percent": 35.4,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 727,
+    "assets_skipped_from_checkpoint": 731,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:49:54Z"
+      "checkpointed_at": "2026-10-18T14:56:07Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -22198,6 +22198,133 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T14:54:53Z"
+    },
+    {
+      "asset_id": "755748fdc552628ba673f448",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:56:22Z"
+    },
+    {
+      "asset_id": "2c57775db91ee3d7413d2adc",
+      "asset_sha256": "35892bf4c81b06b6cab1cc7142de5dd6952a88240cc90128dbe51f1d3e991e5c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "page-0026.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of children walking in the rain, with a text box containing a quote about being a wise person.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration. Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking questions.",
+          "After all, to be a wise person, you must be a \"whys\" person!"
+        ],
+        "concepts": [
+          "exploration",
+          "wisdom",
+          "scientific inquiry"
+        ],
+        "context_relation": "The image is a visual representation of the quote and the concept of scientific exploration.",
+        "limitations": [
+          "The image does not provide specific details about the quote's origin or the author."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:00:12Z"
+    },
+    {
+      "asset_id": "efceebb94a5122bd0a806f61",
+      "asset_sha256": "16148b034a5f133ac8d1119b60e95a398a54ba9f2a07fb452a0779acd564ccd0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/16148b034a5f133ac8d1119b60e95a398a54ba9f2a07fb452a0779acd564ccd0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green fabric with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a green fabric with a torn edge, possibly from a textbook page.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the fabric and its torn edge."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:01:48Z"
+    },
+    {
+      "asset_id": "0cc695755f98ff87c484bd54",
+      "asset_sha256": "fd39f98df172a3c7e35101f0d2a9f764681e837441d842aa7e85d34887bf9054",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/fd39f98df172a3c7e35101f0d2a9f764681e837441d842aa7e85d34887bf9054.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of children and adults are in a forest, engaging in various activities such as observing animals, taking pictures, and listening to a guide. The scene is vibrant with greenery, flowers, and wildlife.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "forest",
+          "children",
+          "adults",
+          "observation",
+          "wildlife",
+          "nature",
+          "education"
+        ],
+        "context_relation": "The image depicts a natural educational setting where children and adults are learning about nature and wildlife.",
+        "limitations": [
+          "The image does not provide specific details about the activities or the guide."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:03:30Z"
     }
   ]
 }

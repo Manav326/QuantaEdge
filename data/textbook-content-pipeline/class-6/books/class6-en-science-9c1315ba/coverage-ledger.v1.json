@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 745,
-    "successful_visual_analyses": 732,
-    "missing_visual_analyses": 1333,
+    "raw_analysis_result_rows": 749,
+    "successful_visual_analyses": 736,
+    "missing_visual_analyses": 1329,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1346,
+    "unresolved_count": 1342,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29302,9 +29302,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29320,9 +29329,25 @@
       "asset_path": "page-0026.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of children walking in the rain, with a text box containing a quote about being a wise person.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration. Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking questions.",
+          "After all, to be a wise person, you must be a \"whys\" person!"
+        ],
+        "concepts": [
+          "exploration",
+          "wisdom",
+          "scientific inquiry"
+        ],
+        "context_relation": "The image is a visual representation of the quote and the concept of scientific exploration.",
+        "limitations": [
+          "The image does not provide specific details about the quote's origin or the author."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29338,9 +29363,18 @@
       "asset_path": "assets/16148b034a5f133ac8d1119b60e95a398a54ba9f2a07fb452a0779acd564ccd0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green fabric with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a green fabric with a torn edge, possibly from a textbook page.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the fabric and its torn edge."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29356,9 +29390,26 @@
       "asset_path": "assets/fd39f98df172a3c7e35101f0d2a9f764681e837441d842aa7e85d34887bf9054.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of children and adults are in a forest, engaging in various activities such as observing animals, taking pictures, and listening to a guide. The scene is vibrant with greenery, flowers, and wildlife.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "forest",
+          "children",
+          "adults",
+          "observation",
+          "wildlife",
+          "nature",
+          "education"
+        ],
+        "context_relation": "The image depicts a natural educational setting where children and adults are learning about nature and wildlife.",
+        "limitations": [
+          "The image does not provide specific details about the activities or the guide."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
