@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 655,
+    "assets_selected": 658,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 653,
-    "assets_remaining": 1425,
-    "assets_completion_percent": 31.4,
+    "assets_analyzed": 657,
+    "assets_remaining": 1421,
+    "assets_completion_percent": 31.6,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 650,
+    "assets_skipped_from_checkpoint": 653,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:09:48Z"
+      "checkpointed_at": "2026-10-18T12:17:05Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -19461,6 +19461,142 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "8551e2314c6448c5d5b38b70",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16c16f72b228d553278d78ed1d411644ae7381b3fac44372e691bd44febc6c27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgements section of a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The National Council of Educational Research and Training (NCERT) acknowledges the guidance and support of the esteemed Chairperson and members of the Curricular Area Group (CAG): Science and other concerned CAGs for their guidelines on cross-cutting themes in developing this textbook.",
+          "The Council is grateful to the members of the Textbook Development Team, for their contribution in the development of this textbook.",
+          "The Council also gratefully acknowledges the contribution of the participating members for giving inputs in refining of the textbook—Ankita Dur"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "Chairperson",
+          "Curricular Area Group (CAG)",
+          "Science",
+          "Textbook Development Team",
+          "Participating members"
+        ],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific image is provided, only text is visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:17:32Z"
+    },
+    {
+      "asset_id": "57a5b4b387267d66344616cf",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16c16f72b228d553278d78ed1d411644ae7381b3fac44372e691bd44febc6c27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The National Council of Educational Research and Training (NCERT) acknowledges the guidance and support of the esteemed Chairperson and members of the Curricular Area Group (CAG): Science and other concerned CAGs for their guidelines on cross-cutting themes in developing this textbook.",
+          "The Council is grateful to the members of the Textbook Development Team, for their contribution in the development of this textbook.",
+          "The Council also gratefully acknowledges the contribution of the participating members for giving inputs in refining of the textbook—Ankita Dur"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "Chairperson",
+          "Curricular Area Group (CAG)",
+          "Science",
+          "Textbook Development Team",
+          "Participating members"
+        ],
+        "context_relation": "Acknowledgements",
+        "limitations": [
+          "No specific visual elements are present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:17:52Z"
+    },
+    {
+      "asset_id": "fd2e6c20cdd37f6a8dea2d78",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16c16f72b228d553278d78ed1d411644ae7381b3fac44372e691bd44febc6c27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:18:07Z"
+    },
+    {
+      "asset_id": "d8425f27bc56d31ebb673735",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "16c16f72b228d553278d78ed1d411644ae7381b3fac44372e691bd44febc6c27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:18:22Z"
     }
   ]
 }

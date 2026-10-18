@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 661,
-    "successful_visual_analyses": 654,
-    "missing_visual_analyses": 1417,
+    "raw_analysis_result_rows": 665,
+    "successful_visual_analyses": 658,
+    "missing_visual_analyses": 1413,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1424,
+    "unresolved_count": 1420,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26637,9 +26637,30 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Acknowledgements section of a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The National Council of Educational Research and Training (NCERT) acknowledges the guidance and support of the esteemed Chairperson and members of the Curricular Area Group (CAG): Science and other concerned CAGs for their guidelines on cross-cutting themes in developing this textbook.",
+          "The Council is grateful to the members of the Textbook Development Team, for their contribution in the development of this textbook.",
+          "The Council also gratefully acknowledges the contribution of the participating members for giving inputs in refining of the textbook—Ankita Dur"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "Chairperson",
+          "Curricular Area Group (CAG)",
+          "Science",
+          "Textbook Development Team",
+          "Participating members"
+        ],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No specific image is provided, only text is visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26655,9 +26676,30 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The National Council of Educational Research and Training (NCERT) acknowledges the guidance and support of the esteemed Chairperson and members of the Curricular Area Group (CAG): Science and other concerned CAGs for their guidelines on cross-cutting themes in developing this textbook.",
+          "The Council is grateful to the members of the Textbook Development Team, for their contribution in the development of this textbook.",
+          "The Council also gratefully acknowledges the contribution of the participating members for giving inputs in refining of the textbook—Ankita Dur"
+        ],
+        "concepts": [
+          "Acknowledgements",
+          "National Council of Educational Research and Training (NCERT)",
+          "Chairperson",
+          "Curricular Area Group (CAG)",
+          "Science",
+          "Textbook Development Team",
+          "Participating members"
+        ],
+        "context_relation": "Acknowledgements",
+        "limitations": [
+          "No specific visual elements are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26673,9 +26715,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26691,9 +26742,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
