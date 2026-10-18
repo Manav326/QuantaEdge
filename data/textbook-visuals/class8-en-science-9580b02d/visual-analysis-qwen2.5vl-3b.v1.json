@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 680,
+    "assets_selected": 682,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 677,
-    "assets_remaining": 1614,
+    "assets_analyzed": 679,
+    "assets_remaining": 1612,
     "assets_completion_percent": 29.6,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 675,
+    "assets_skipped_from_checkpoint": 677,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:14:01Z"
+      "checkpointed_at": "2026-10-18T21:21:36Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:14:49Z"
+      "checkpointed_at": "2026-10-18T21:22:24Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:15:28Z"
+      "checkpointed_at": "2026-10-18T21:23:02Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20204,6 +20204,114 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T21:20:24Z"
+    },
+    {
+      "asset_id": "dcdcdbbdc3066298df12b37c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3128e35c20741979ef896ac5b3c5ddac105b67c4a3b2d73ee4d60d848211e201",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in a textbook.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:23:17Z"
+    },
+    {
+      "asset_id": "00361186b1a827a439a6009f",
+      "asset_sha256": "cbccbea0e2dca60dc796f5b1ac6c59ee32b1e7c8b2dfdcd023da671c58f30cca",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 19,
+      "asset_path": "page-0019.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "3128e35c20741979ef896ac5b3c5ddac105b67c4a3b2d73ee4d60d848211e201",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table of contents for a textbook.",
+        "visual_type": "table",
+        "visible_text": [
+          "Contents",
+          "Foreword",
+          "About this Book",
+          "Chapter 1",
+          "Exploring the Investigative World of Science",
+          "Chapter 2",
+          "The Invisible Living World: Beyond Our Naked Eye",
+          "Chapter 3",
+          "Health: The Ultimate Treasure",
+          "Chapter 4",
+          "Electricity: Magnetic and Heating Effects",
+          "Chapter 5",
+          "Exploring Forces",
+          "Chapter 6",
+          "Pressure, Winds, Storms, and Cyclones",
+          "Chapter 7",
+          "Particulate Nature of Matter",
+          "Chapter 8",
+          "Nature of Matter: Elements, Compounds, and Mixtures",
+          "Chapter 9",
+          "The Amazing World of Solutes, Solvents, and Solutions",
+          "Chapter 10",
+          "Light: Mirrors and Lenses",
+          "Chapter 11",
+          "Keeping Time with the Skies",
+          "Chapter 12",
+          "How Nature Works in Harmony",
+          "Chapter 13",
+          "Our Home: Earth, A Unique Life Sustaining Planet"
+        ],
+        "concepts": [
+          "Foreword",
+          "About this Book",
+          "Investigative World of Science",
+          "Invisible Living World",
+          "Health",
+          "Electricity",
+          "Magnetic and Heating Effects",
+          "Forces",
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones",
+          "Particulate Nature of Matter",
+          "Nature of Matter",
+          "Solutes",
+          "Solvents",
+          "Solutions",
+          "Light",
+          "Mirrors",
+          "Lenses"
+        ],
+        "context_relation": "The table of contents provides an organized list of chapters and their respective page numbers.",
+        "limitations": [
+          "The table does not include any images or illustrations.",
+          "The table does not provide any information about the content or structure of the chapters."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:27:42Z"
     }
   ]
 }
