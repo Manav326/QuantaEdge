@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 569,
-    "successful_visual_analyses": 561,
-    "missing_visual_analyses": 6919,
+    "raw_analysis_result_rows": 572,
+    "successful_visual_analyses": 564,
+    "missing_visual_analyses": 6916,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6927,
+    "unresolved_count": 6924,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31766,9 +31766,24 @@
       "asset_path": "assets/4ccc569b7890bb2db8820ad523091b0adc6a34ce898cfa5666927aed17d1d683.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome message"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual text 'Welcome to the Wonderful World of Science' on the paper, only the process of it appearing after being sprayed with a liquid."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31784,9 +31799,34 @@
       "asset_path": "assets/86e40eef11bc901cf69ce920a6622ec11f6c3101cfc365f9557157fb9910f776.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A collage of various scientific symbols and objects.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day.",
+          "At the entry gate, siblings Ashwin and Keerthi were greeted with a white sheet of paper.",
+          "They were curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper.",
+          "The siblings also got their white sheets sprayed.",
+          "To their surprise, the words ‘Welcome to the Wonderful World of Science’ appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Science symbols",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image is related to the text about the school's celebration of National Science Day and the science fair.",
+        "limitations": [
+          "The image does not provide specific details about the science fair or the substances being explored."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31802,9 +31842,36 @@
       "asset_path": "assets/b1f9dee792907699a3aedd33e9f1ccd5c6a4cb7af8b98208c5d2bbe4b1ed51e0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing various scientific tools and objects.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate National Science Day.",
+          "At the entry gate, siblings Ashwin and Keerthi were greeted with a white sheet of paper.",
+          "They were curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper.",
+          "The siblings also got their white sheets sprayed.",
+          "To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Acidic, Basic, and Neutral substances",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the science fair and the white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing on it.",
+        "limitations": [
+          "The image does not provide specific details about the science fair or the white sheet of paper.",
+          "The image does not show the actual science fair or the volunteers.",
+          "The image does not show the substances being sprayed or their properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
