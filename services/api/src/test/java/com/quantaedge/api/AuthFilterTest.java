@@ -75,6 +75,48 @@ class AuthFilterTest {
   }
 
   @Test
+  void oversizedBrandingUploadIsRejectedBeforeMultipartParsing() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthorizationService authorization = mock(AuthorizationService.class);
+    AuthFilter filter = new AuthFilter(auth, audit, authorization);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "POST", "/api/v1/hrms/platform/institutions/42/branding/assets/logo");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "HRMS");
+    request.addHeader("Origin", "http://localhost:3002");
+    request.setContentLength(2_300_000);
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(413, response.getStatus());
+    assertEquals(null, chain.getRequest());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
+  void anonymousBrandingUploadIsRejectedBeforeMultipartParsing() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthorizationService authorization = mock(AuthorizationService.class);
+    AuthFilter filter = new AuthFilter(auth, audit, authorization);
+    MockHttpServletRequest request = new MockHttpServletRequest(
+        "POST", "/api/v1/hrms/platform/institutions/42/branding/assets/app-icon");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "HRMS");
+    request.addHeader("Origin", "http://localhost:3002");
+    request.setContentLength(128);
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(403, response.getStatus());
+    assertEquals(null, chain.getRequest());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
   void corsPreflightDoesNotRequireWorkspaceCookie() throws Exception {
     AuthService auth = mock(AuthService.class);
     StaffAuditService audit = mock(StaffAuditService.class);
