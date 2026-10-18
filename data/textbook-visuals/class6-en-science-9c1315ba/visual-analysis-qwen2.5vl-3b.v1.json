@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 532,
+    "assets_selected": 535,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 530,
-    "assets_remaining": 1548,
-    "assets_completion_percent": 25.5,
+    "assets_analyzed": 533,
+    "assets_remaining": 1545,
+    "assets_completion_percent": 25.6,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 527,
+    "assets_skipped_from_checkpoint": 530,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T05:47:28Z"
+      "checkpointed_at": "2026-10-18T05:50:48Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T05:48:12Z"
+      "checkpointed_at": "2026-10-18T05:51:28Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -15710,6 +15710,93 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T05:49:59Z"
+    },
+    {
+      "asset_id": "a3c26f316c16cd751c8c3b3b",
+      "asset_sha256": "420c19be7084958b82c49d9714c8d2a94563939738475f6bc285722c60c0b26a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/420c19be7084958b82c49d9714c8d2a94563939738475f6bc285722c60c0b26a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a solid color background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T05:52:03Z"
+    },
+    {
+      "asset_id": "b367012ac82a58b0bd0c6cb5",
+      "asset_sha256": "c1f651b180da34498972d8b8f552b05f6bd002e8359d30d51f06eeaab56b4921",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c1f651b180da34498972d8b8f552b05f6bd002e8359d30d51f06eeaab56b4921.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, orange-to-brown color transition.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T05:52:37Z"
+    },
+    {
+      "asset_id": "056abbaee7e658ee2a44ac2f",
+      "asset_sha256": "d7c857c699a1926ca68e5a3b74d45fe001f8ca6ad2776e8b553fa6fca6b4aeb1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d7c857c699a1926ca68e5a3b74d45fe001f8ca6ad2776e8b553fa6fca6b4aeb1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and white striped background with a white square in the top left corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "white square"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T05:53:12Z"
     }
   ]
 }
