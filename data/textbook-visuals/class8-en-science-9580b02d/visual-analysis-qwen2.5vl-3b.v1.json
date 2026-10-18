@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 458,
+    "assets_selected": 461,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 456,
-    "assets_remaining": 1835,
-    "assets_completion_percent": 19.9,
+    "assets_analyzed": 459,
+    "assets_remaining": 1832,
+    "assets_completion_percent": 20.0,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 453,
+    "assets_skipped_from_checkpoint": 456,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T11:30:04Z"
+      "checkpointed_at": "2026-10-18T11:36:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T11:31:25Z"
+      "checkpointed_at": "2026-10-18T11:38:08Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -13575,6 +13575,96 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T11:35:08Z"
+    },
+    {
+      "asset_id": "dd6449aac6826c3e1bb8d2f1",
+      "asset_sha256": "8cf73a115fa46dbd3ed588781cd88582c16c23c4ca16104f189e88c6ceff080c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8cf73a115fa46dbd3ed588781cd88582c16c23c4ca16104f189e88c6ceff080c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:39:20Z"
+    },
+    {
+      "asset_id": "decaa73ccb890f41e8cb3a93",
+      "asset_sha256": "97c71c244e287b4154e54d0e0c955e38e0bacc3d495bf9d3f96366f4d4567002",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/97c71c244e287b4154e54d0e0c955e38e0bacc3d495bf9d3f96366f4d4567002.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:40:35Z"
+    },
+    {
+      "asset_id": "bdfe368e7766b7a9ee945aa6",
+      "asset_sha256": "1dde85e4ed077c20cd52dfd8c73016fe177da507f435da7299ea21aa1ea93a48",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1dde85e4ed077c20cd52dfd8c73016fe177da507f435da7299ea21aa1ea93a48.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to a light beige color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "white to light beige transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or objects are visible",
+          "text is incomplete"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:41:51Z"
     }
   ]
 }
