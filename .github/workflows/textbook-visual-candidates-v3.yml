@@ -387,7 +387,7 @@ jobs:
           python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$GITHUB_WORKSPACE" "ghcr.io/$owner/quantaedge-textbook-visuals" <<'PY'
           import hashlib, json, shutil, subprocess, sys, tarfile
           from pathlib import Path, PurePosixPath
-          from scripts.prepare_visual_candidate_batch import missing_artifact
+          from scripts.prepare_visual_candidate_batch import extract_archive, missing_artifact, validate_layer1_bundle
           selection_path, source_root_arg, repo_arg, expected_package = sys.argv[1:]
           selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
           source_root, repo = Path(source_root_arg), Path(repo_arg)
@@ -462,15 +462,43 @@ jobs:
                           raise SystemExit(f"{slug}: inventory bundle tar SHA-256 mismatch; refusing to regenerate over a corrupt checkpoint.")
                       with tarfile.open(archive,"r:gz") as tar:
                           members=tar.getmembers()
-                          for member in members:
-                              name=PurePosixPath(member.name)
-                              if name.is_absolute() or ".." in name.parts or not name.parts or name.parts[0] not in {"inventory","source.manifest.json",source["text_jsonl_filename"]}:
-                                  raise SystemExit(f"{slug}: unsafe inventory bundle member {member.name!r}.")
-                              if member.issym() or member.islnk() or member.isdev():
-                                  raise SystemExit(f"{slug}: links/devices are forbidden in inventory bundle.")
-                          inventory_members=[m for m in members if PurePosixPath(m.name).parts[0]=="inventory"]
-                          if not inventory_members: raise SystemExit(f"{slug}: bundle has no inventory directory.")
-                          tar.extractall(path=work,members=inventory_members,filter="data")
+                          if not members:
+                              raise SystemExit(f"{slug}: inventory bundle archive is empty.")
+                          # Current Layer 1 preparation bundles use a slug-layer1/ wrapper and
+                          # include a per-file manifest. Older pipeline checkpoints use inventory/
+                          # at archive root. Accept both layouts without weakening path validation.
+                          wrapper=f"{slug}-layer1"
+                          wrapped=[PurePosixPath(m.name).parts[0]==wrapper for m in members if PurePosixPath(m.name).parts]
+                          if any(wrapped):
+                              if not all(wrapped):
+                                  raise SystemExit(f"{slug}: inventory bundle mixes wrapped and root-level paths.")
+                              layer1_root=extract_archive(archive,pull_dir,wrapper)
+                              manifest_path=layer1_root/"layer1-bundle-manifest.v1.json"
+                              if not manifest_path.is_file():
+                                  raise SystemExit(f"{slug}: wrapped Layer 1 inventory bundle manifest is missing.")
+                              layer1_manifest=json.loads(manifest_path.read_text(encoding="utf-8"))
+                              fingerprint=layer1_manifest.get("preparation_fingerprint")
+                              tag_prefix=f"visual-inventory-v1-class{selection['class']}-{slug}-prep-"
+                              tag=bundle["tag"]
+                              tag_fingerprint=tag[len(tag_prefix):] if tag.startswith(tag_prefix) else ""
+                              if (len(tag_fingerprint)!=24
+                                  or any(ch not in "0123456789abcdef" for ch in tag_fingerprint)
+                                  or not isinstance(fingerprint,str)
+                                  or not fingerprint.startswith(tag_fingerprint)):
+                                  raise SystemExit(f"{slug}: Layer 1 bundle tag/fingerprint mismatch.")
+                              validate_layer1_bundle(layer1_root,source,work,fingerprint)
+                              shutil.rmtree(invdir,ignore_errors=True)
+                              shutil.copytree(layer1_root/"inventory",invdir)
+                          else:
+                              for member in members:
+                                  name=PurePosixPath(member.name)
+                                  if name.is_absolute() or ".." in name.parts or not name.parts or name.parts[0] not in {"inventory","source.manifest.json",source["text_jsonl_filename"]}:
+                                      raise SystemExit(f"{slug}: unsafe inventory bundle member {member.name!r}.")
+                                  if member.issym() or member.islnk() or member.isdev() or member.isfifo():
+                                      raise SystemExit(f"{slug}: links/devices are forbidden in inventory bundle.")
+                              inventory_members=[m for m in members if PurePosixPath(m.name).parts[0]=="inventory"]
+                              if not inventory_members: raise SystemExit(f"{slug}: bundle has no inventory directory.")
+                              tar.extractall(path=work,members=inventory_members,filter="data")
                       inv=validate_inventory(work,source)
                       if not (work/".inventory-restored-from-ghcr.json").is_file():
                           (work/".inventory-restored-from-ghcr.json").write_text(json.dumps({"source_pdf_sha256":source["sha256"],"tag":bundle["tag"],"tar_sha256":bundle["tar_sha256"]},indent=2)+"\n",encoding="utf-8")
