@@ -28,7 +28,7 @@ class ApplicationStartupSmokeTest {
 
 
   @Test
-  void classSixThroughEightAreRealCourseProductsWithMappedLegacyTracksAndNoAutomaticEnrollment() {
+  void classSixThroughEightArePublishedOrdinaryCoursesWithMappedTracksAndGrandfatheredAccess() {
     assertEquals(3, jdbc.queryForObject("""
       select count(*) from curriculum_program p
       where p.code in ('CLASS_6','CLASS_7','CLASS_8')
@@ -42,11 +42,30 @@ class ApplicationStartupSmokeTest {
         and s.program_id is null and s.active=true
       where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.status='ACTIVE'
     """, Integer.class));
+    assertEquals(3, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join course_marketplace_offer o on o.course_id=p.id
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+        and p.status='ACTIVE' and o.status='PUBLISHED'
+        and o.price_paise=100000 and o.currency='INR'
+    """, Integer.class), "Each class course must be published at INR 1,000.");
+    assertTrue(jdbc.queryForObject("select to_regclass('public.student_course_access_grant') is not null", Boolean.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id
       where p.code in ('CLASS_6','CLASS_7','CLASS_8')
-    """, Integer.class), "Creating course products must not auto-enrol existing learners.");
+        and not exists(select 1 from student_course_access_grant g
+          where g.student_id=spe.student_id and g.course_id=spe.program_id
+            and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
+        and not exists(select 1 from course_purchase cp
+          where cp.student_id=spe.student_id and cp.course_id=spe.program_id)
+        and not exists(
+          select 1 from institution_membership im
+          join institution_course_entitlement e on e.institution_id=im.institution_id
+            and e.program_id=spe.program_id and e.status='ACTIVE'
+          where im.student_id=spe.student_id and im.status='ACTIVE'
+        )
+    """, Integer.class), "Every course enrollment must have a documented legacy grant, purchase, or institution entitlement.");
   }
 
   @Test
