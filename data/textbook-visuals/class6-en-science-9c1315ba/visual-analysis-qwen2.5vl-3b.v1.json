@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 699,
+    "assets_selected": 701,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 696,
-    "assets_remaining": 1382,
-    "assets_completion_percent": 33.5,
+    "assets_analyzed": 700,
+    "assets_remaining": 1378,
+    "assets_completion_percent": 33.7,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 694,
+    "assets_skipped_from_checkpoint": 696,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T13:37:10Z"
+      "checkpointed_at": "2026-10-18T13:48:34Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -21071,6 +21071,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T13:47:21Z"
+    },
+    {
+      "asset_id": "3f07b6e6e10d63f89b6ead7e",
+      "asset_sha256": "6dd206a55769403b23de7c688bcc1d06874a4802d16b0ffaa11e1b6212bf793c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/6dd206a55769403b23de7c688bcc1d06874a4802d16b0ffaa11e1b6212bf793c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a red pen over an open book with a red pill on the page.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "learning",
+          "exploration",
+          "questions",
+          "book"
+        ],
+        "context_relation": "The image represents a learning scenario where a person is engaged in reading and writing in a book.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or the actions of the person in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:50:12Z"
+    },
+    {
+      "asset_id": "4c8f430c3b7946501dc06322",
+      "asset_sha256": "ff136a6eaeec1a121d0464f303edb527e655ee8264818971381ad8224f4b9cdd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/ff136a6eaeec1a121d0464f303edb527e655ee8264818971381ad8224f4b9cdd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:51:48Z"
+    },
+    {
+      "asset_id": "1fcbfcb151b1ba9b1511f866",
+      "asset_sha256": "71f3b67cb0a7051034430edd784c19a4b56d057b1ecbe9337a699513f91579a8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/71f3b67cb0a7051034430edd784c19a4b56d057b1ecbe9337a699513f91579a8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:53:25Z"
+    },
+    {
+      "asset_id": "56b276d93884a50e5beba920",
+      "asset_sha256": "3f65b10bbea164c13a6811d6f7eee61abc0136a6d38a823e2208a8e02f1cc589",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/3f65b10bbea164c13a6811d6f7eee61abc0136a6d38a823e2208a8e02f1cc589.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:54:57Z"
     }
   ]
 }

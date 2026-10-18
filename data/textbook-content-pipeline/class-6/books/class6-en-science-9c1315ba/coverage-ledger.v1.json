@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 709,
-    "successful_visual_analyses": 697,
-    "missing_visual_analyses": 1369,
+    "raw_analysis_result_rows": 713,
+    "successful_visual_analyses": 701,
+    "missing_visual_analyses": 1365,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1381,
+    "unresolved_count": 1377,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28209,9 +28209,23 @@
       "asset_path": "assets/6dd206a55769403b23de7c688bcc1d06874a4802d16b0ffaa11e1b6212bf793c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a red pen over an open book with a red pill on the page.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "learning",
+          "exploration",
+          "questions",
+          "book"
+        ],
+        "context_relation": "The image represents a learning scenario where a person is engaged in reading and writing in a book.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or the actions of the person in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28227,9 +28241,18 @@
       "asset_path": "assets/ff136a6eaeec1a121d0464f303edb527e655ee8264818971381ad8224f4b9cdd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28245,9 +28268,18 @@
       "asset_path": "assets/71f3b67cb0a7051034430edd784c19a4b56d057b1ecbe9337a699513f91579a8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28263,9 +28295,18 @@
       "asset_path": "assets/3f65b10bbea164c13a6811d6f7eee61abc0136a6d38a823e2208a8e02f1cc589.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
