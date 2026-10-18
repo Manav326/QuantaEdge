@@ -23,6 +23,7 @@ public class AuthFilter extends OncePerRequestFilter {
   private final AuthService auth;
   private final StaffAuditService staffAudit;
   private final AuthorizationService authorization;
+  private final InstitutionTenantContextService institutionTenantContextService;
 
   @Value("${app.auth.workspace-origins.education-admin:http://localhost:3001}")
   private String educationAdminOrigins = "http://localhost:3001";
@@ -79,15 +80,32 @@ public class AuthFilter extends OncePerRequestFilter {
   }
 
   @Autowired
-  public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization) {
+  @Autowired
+  public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization,
+      InstitutionTenantContextService institutionTenantContextService) {
     this.auth = auth;
     this.staffAudit = staffAudit;
     this.authorization = authorization;
+    this.institutionTenantContextService = institutionTenantContextService;
+  }
+
+  /** Compatibility constructor for focused tests that do not exercise tenant resolution. */
+  public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization) {
+    this(auth, staffAudit, authorization, null);
   }
 
   /** Compatibility constructor for isolated tests that do not exercise branding uploads. */
   AuthFilter(AuthService auth, StaffAuditService staffAudit) {
-    this(auth, staffAudit, null);
+    this(auth, staffAudit, null, null);
+  }
+
+  private static boolean acceptsLearnerInstitutionSelector(String path, String workspace) {
+    if (path == null || !path.startsWith("/api/v1/")
+        || path.startsWith("/api/v1/auth/")
+        || path.startsWith("/api/v1/institution/")
+        || path.startsWith("/api/v1/hrms/")
+        || path.startsWith("/api/v1/hr/")) return false;
+    return "STUDENT".equals(workspace) || "PARENT".equals(workspace) || "LEARNING".equals(workspace);
   }
 
   private static boolean isBrandingAssetUpload(HttpServletRequest request) {
@@ -222,6 +240,24 @@ public class AuthFilter extends OncePerRequestFilter {
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={} workspace={} context-present={}",
           token != null, workspace, context != null);
       if (context != null) {
+        // Resolve a learner-request tenant selector centrally. The resulting context is routing
+        // metadata only; endpoint/service authorization must still enforce membership, assignment,
+        // offer publication and course entitlement for that exact institution.
+        if (institutionTenantContextService != null
+            && acceptsLearnerInstitutionSelector(uri, workspace)) {
+          String requestedInstitutionCode = request.getHeader(InstitutionTenantContextService.HEADER_NAME);
+          if (requestedInstitutionCode != null && !requestedInstitutionCode.isBlank()) {
+            try {
+              InstitutionTenantContext tenantContext = institutionTenantContextService.resolve(requestedInstitutionCode);
+              if (tenantContext != null) {
+                request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, tenantContext);
+              }
+            } catch (InstitutionTenantContextService.InvalidInstitutionContextException ex) {
+              writeJsonError(response, ex.statusCode(), ex.errorCode(), ex.getMessage());
+              return;
+            }
+          }
+        }
         request.setAttribute("authContext", context);
         request.setAttribute("authWorkspace", workspace);
         if ("HRMS".equals(workspace) && context.staffId() != null

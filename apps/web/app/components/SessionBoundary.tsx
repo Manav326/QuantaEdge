@@ -45,6 +45,57 @@ function navigateWithFallback(router: ReturnType<typeof useRouter>, href: string
   }, 1_500);
 }
 
+function normalizedInstitutionCode(raw: string | null | undefined): string | null {
+  const code = String(raw ?? '').trim().toUpperCase();
+  return /^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(code) ? code : null;
+}
+
+/**
+ * Sends a tenant selector from the school entry route or route-scoped identity handoff.
+ * This client-side value is never an authorization decision; the API validates it against
+ * the authenticated member and the requested course/offer on each tenant-scoped operation.
+ */
+function institutionCodeForRequest(): string | null {
+  const path = window.location.pathname;
+  // Institution-admin and HRMS scope comes from their own authenticated session/control plane.
+  if (path.startsWith('/institution') || path.startsWith('/hrms') || path.startsWith('/admin')) return null;
+
+  const segments = path.split('/').filter(Boolean);
+  if (segments.length >= 2 && segments[0].toLowerCase() === 'school') {
+    const routeCode = normalizedInstitutionCode(segments[1]);
+    if (routeCode) return routeCode;
+  }
+  const query = new URLSearchParams(window.location.search);
+  const queryCode = normalizedInstitutionCode(
+    query.get('institution') || query.get('institutionCode') || query.get('institution_code') || query.get('tenant')
+  );
+  if (queryCode) return queryCode;
+
+  const routeCookies = [
+    { path: '/login/student', name: 'qe-tenant-login-student' },
+    { path: '/student', name: 'qe-tenant-student' },
+    { path: '/signup', name: 'qe-tenant-signup' },
+    { path: '/session', name: 'qe-tenant-session' },
+  ];
+  const matchingCookie = routeCookies.find(cookie => path === cookie.path || path.startsWith(cookie.path + '/'));
+  if (matchingCookie) {
+    const raw = document.cookie.split(';').map(part => part.trim())
+      .find(part => part.startsWith(matchingCookie.name + '='))
+      ?.slice(matchingCookie.name.length + 1);
+    if (raw) {
+      try {
+        const cookieCode = normalizedInstitutionCode(decodeURIComponent(raw));
+        if (cookieCode) return cookieCode;
+      } catch { /* Invalid tenant metadata is ignored and cannot authenticate a request. */ }
+    }
+  }
+  if (path.startsWith('/student') || path.startsWith('/parent') || path.startsWith('/session')) {
+    try { return normalizedInstitutionCode(window.sessionStorage.getItem('qe.institution.brand-code.v1')); }
+    catch { return null; }
+  }
+  return null;
+}
+
 function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
   new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
@@ -54,6 +105,8 @@ function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request
     ? 'INSTITUTION'
     : path.startsWith('/student') || path === '/login/student' ? 'STUDENT' : 'PARENT';
   headers.set('X-QE-Workspace', explicitWorkspace || inferredWorkspace);
+  const institutionCode = institutionCodeForRequest();
+  if (institutionCode) headers.set('X-QE-Institution-Code', institutionCode);
   return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
 }
 

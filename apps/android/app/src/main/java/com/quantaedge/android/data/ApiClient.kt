@@ -22,7 +22,25 @@ object ApiClient {
     @Volatile private var client: OkHttpClient? = null
     @Volatile private var cookies: SecureCookieJar? = null
     @Volatile private var activeWorkspace: String = "STUDENT"
+    @Volatile private var activeInstitutionCode: String? = normalizeInstitutionCode(BuildConfig.INSTITUTION_CODE)
     private val refreshLock = Any()
+
+    private fun normalizeInstitutionCode(value: String?): String? {
+        val normalized = value?.trim()?.uppercase() ?: return null
+        return normalized.takeIf { it.matches(Regex("^[A-Z0-9][A-Z0-9_-]{2,31}$")) }
+    }
+
+    /**
+     * Activates a previously resolved tenant selector for the general app. Branded builds
+     * remain pinned to their compile-time institution code and cannot switch via a deep link.
+     */
+    fun setInstitutionCode(value: String?) {
+        val pinned = normalizeInstitutionCode(BuildConfig.INSTITUTION_CODE)
+        activeInstitutionCode = pinned ?: normalizeInstitutionCode(value)
+    }
+
+    private fun currentInstitutionCode(): String? =
+        normalizeInstitutionCode(BuildConfig.INSTITUTION_CODE) ?: activeInstitutionCode
 
     fun initialize(context: Context) {
         if (client != null) return
@@ -31,6 +49,10 @@ object ApiClient {
             val jar = SecureCookieJar(context.applicationContext)
             cookies = jar
             activeWorkspace = jar.workspace()
+            val tenantPreferences = context.applicationContext.getSharedPreferences("qe_preferences", Context.MODE_PRIVATE)
+            activeInstitutionCode = normalizeInstitutionCode(BuildConfig.INSTITUTION_CODE)
+                ?: activeInstitutionCode
+                ?: normalizeInstitutionCode(tenantPreferences.getString("qe_active_theme_institution_code_v2", null))
             jar.synchronizeRecoverySnapshot()
             client = OkHttpClient.Builder().cookieJar(jar)
                 .connectTimeout(20, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS)
@@ -132,6 +154,7 @@ object ApiClient {
             if (!absoluteRequestUrl) {
                 builder.header("X-QE-Workspace", currentWorkspace())
                     .header("X-QE-Client", "ANDROID")
+                currentInstitutionCode()?.let { builder.header("X-QE-Institution-Code", it) }
             }
             additionalHeaders.forEach { (name, value) ->
                 require(name.matches(Regex("[A-Za-z0-9-]{1,64}")) && !value.contains('\r') && !value.contains('\n')) {
@@ -152,13 +175,14 @@ object ApiClient {
             if (response.code == 401 && !absoluteRequestUrl && shouldAttemptRefresh(path)) {
                 response.close()
                 synchronized(refreshLock) {
-                    val refreshRequest = Request.Builder()
+                    val refreshBuilder = Request.Builder()
                         .url(BuildConfig.API_BASE_URL.trimEnd('/') + "/api/v1/auth/refresh")
                         .post("{}".toRequestBody(jsonType))
                         .header("Accept", "application/json")
                         .header("X-QE-Workspace", currentWorkspace())
                         .header("X-QE-Client", "ANDROID")
-                        .build()
+                    currentInstitutionCode()?.let { refreshBuilder.header("X-QE-Institution-Code", it) }
+                    val refreshRequest = refreshBuilder.build()
                     val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
                     if (!refreshed) {
                         throw ApiFailure(401, "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।")
