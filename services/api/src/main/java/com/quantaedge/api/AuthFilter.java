@@ -101,7 +101,7 @@ public class AuthFilter extends OncePerRequestFilter {
     response.setStatus(status);
     response.setCharacterEncoding("UTF-8");
     response.setContentType("application/json");
-    response.getWriter().write("{\\"error\\":\\"" + code + "\\",\\"message\\":\\"" + message + "\\"}");
+    response.getWriter().write("{\"error\":\"" + code + "\",\"message\":\"" + message + "\"}");
   }
 
   private static String cookieValue(HttpServletRequest request, String name) {
