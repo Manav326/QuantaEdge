@@ -177,20 +177,29 @@ public class GuardianController {
   }
 
   @GetMapping("/children")
-  public List<Map<String,Object>> children(@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public List<Map<String,Object>> children(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     context=authorization.requireParent(context);
+    Long institutionId=tenant==null?null:tenant.institutionId();
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
              slc.username as login_username,gs.relationship,gs.consent_status,
              coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
                join curriculum_subject s on s.id=ste.subject_id
-               where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
+               join institution_membership m on m.student_id=ste.student_id
+                 and m.institution_id=ste.institution_id and m.status='ACTIVE'
+               where ste.student_id=st.id and ste.institution_id=?
+                 and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
       left join curriculum_class cc on cc.code=st.class_code
-      left join student_login_credential slc on slc.guardian_user_id=gs.guardian_user_id and slc.student_id=st.id and slc.active=true
-      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL'
-        and st.active=true and st.environment='PRODUCTION' order by st.created_at
-      """,context.userId());
+      left join student_login_credential slc on slc.guardian_user_id=gs.guardian_user_id
+        and slc.student_id=st.id and slc.active=true
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+        and gs.access_level='FULL' and st.active=true and st.environment='PRODUCTION'
+      order by st.created_at
+      """,institutionId,context.userId());
   }
 
   @GetMapping("/children/archived")
@@ -271,17 +280,30 @@ public class GuardianController {
   }
 
   @GetMapping("/children/{studentId}/report")
-  public Map<String,Object> report(@PathVariable long studentId,@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> report(@PathVariable long studentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
     Boolean allowed=jdbc.queryForObject("""
-      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED' and access_level='FULL')
-      """,Boolean.class,context.userId(),studentId);
-    if(!allowed) throw new SecurityException("Child access denied");
+      select exists(select 1 from guardian_student gs
+        join student st on st.id=gs.student_id and st.active=true
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where gs.guardian_user_id=? and gs.student_id=? and gs.active=true
+          and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+          and st.environment='PRODUCTION')
+      """,Boolean.class,institutionId,context.userId(),studentId);
+    if(!Boolean.TRUE.equals(allowed)) throw new SecurityException("Child access denied in the selected institution.");
     Map<String,Object> child=jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language
-      from student where id=? and active=true
-      """,studentId);
-    Map<String,Object> result=new java.util.LinkedHashMap<>(learningMetrics.statsFor(studentId));
+      select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language
+      from student st join institution_membership m on m.student_id=st.id
+        and m.institution_id=? and m.status='ACTIVE'
+      where st.id=? and st.active=true and st.environment='PRODUCTION'
+      """,institutionId,studentId);
+    Map<String,Object> result=new java.util.LinkedHashMap<>(
+        learningMetrics.statsFor(studentId,null,institutionId));
     result.putAll(child);
     return result;
   }
