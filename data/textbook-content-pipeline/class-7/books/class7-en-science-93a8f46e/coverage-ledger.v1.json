@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1237,
-    "successful_visual_analyses": 1222,
-    "missing_visual_analyses": 6251,
+    "raw_analysis_result_rows": 1240,
+    "successful_visual_analyses": 1225,
+    "missing_visual_analyses": 6248,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6266,
+    "unresolved_count": 6263,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -57155,9 +57155,32 @@
       "asset_path": "assets/8a21ba95aeca12f9d4d470ea50d76fd83a3b2a1b09e19e59dea5bd4baa37c209.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a simple electrical circuit with a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep   Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its",
+          "components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "Electrical Circuit",
+          "Torch",
+          "Electric Cell",
+          "Components"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and components, specifically focusing on the torch.",
+        "limitations": [
+          "The image does not provide specific details about the components of the torch or the electrical circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57173,9 +57196,16 @@
       "asset_path": "assets/6e9bea2a686cd8570a38bea08b31b0b28e320ae181eaee59d1debbfedba544ef.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or educational document.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -57191,9 +57221,29 @@
       "asset_path": "assets/e410f67953129e0375e448e7363cb3ec2837ebbf8fdb597cad700f3badc898cc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a simple electrical circuit, including a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a simple electrical circuit",
+          "torch"
+        ],
+        "context_relation": "The image is a visual representation of the components of a simple electrical circuit, specifically focusing on the torch.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
