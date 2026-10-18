@@ -1504,6 +1504,16 @@ public class AssessmentController {
   }
 
   private Map<String, Object> attemptDetails(long attemptId, AuthContext context, boolean staffView) {
+    if (!staffView) throw missingInstitutionContext();
+    return attemptDetails(attemptId,context,staffView,null);
+  }
+
+  private Map<String, Object> attemptDetails(long attemptId, AuthContext context,
+      boolean staffView, Long institutionId) {
+    if (!staffView && institutionId == null) throw missingInstitutionContext();
+    String tenantPredicate = institutionId == null ? "" : " and att.institution_id=?";
+    Object[] queryArgs = institutionId == null
+        ? new Object[]{attemptId} : new Object[]{attemptId,institutionId};
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,a.public_id as test_id,att.student_id,att.attempt_number,att.status,
              att.started_at,att.deadline_at,att.submitted_at,att.graded_at,att.released_at,
@@ -1516,8 +1526,7 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id
       join student st on st.id=att.student_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
-      where att.id=?
-      """, attemptId);
+      where att.id=?""" + tenantPredicate,queryArgs);
     if (attempts.isEmpty()) throw notFound("Assessment attempt", attemptId);
     Map<String, Object> attempt = new LinkedHashMap<>(attempts.getFirst());
     attempt.put("offlineMode",Boolean.TRUE.equals(attempt.get("offline_mode")));
