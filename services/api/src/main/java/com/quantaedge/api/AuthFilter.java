@@ -80,7 +80,6 @@ public class AuthFilter extends OncePerRequestFilter {
   }
 
   @Autowired
-  @Autowired
   public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization,
       InstitutionTenantContextService institutionTenantContextService) {
     this.auth = auth;

@@ -3,6 +3,11 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import jakarta.servlet.http.Cookie;
+import java.util.List;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockFilterChain;
@@ -114,6 +119,31 @@ class AuthFilterTest {
     assertEquals(403, response.getStatus());
     assertEquals(null, chain.getRequest());
     verifyNoInteractions(auth);
+  }
+
+
+  @Test
+  void malformedInstitutionSelectorIsRejectedBeforeTheControllerRuns() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/students/me/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.addHeader(InstitutionTenantContextService.HEADER_NAME, "bad code");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("STUDENT"), "valid-session"));
+    when(auth.currentForWorkspace("valid-session", "STUDENT"))
+        .thenReturn(new AuthContext(null, 42L, null, "STUDENT", "Learner", "STUDENT"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(400, response.getStatus());
+    assertEquals("INVALID_INSTITUTION_CODE", response.getContentAsString().contains("INVALID_INSTITUTION_CODE")
+        ? "INVALID_INSTITUTION_CODE" : "missing error code");
+    assertEquals(null, chain.getRequest());
   }
 
   @Test
