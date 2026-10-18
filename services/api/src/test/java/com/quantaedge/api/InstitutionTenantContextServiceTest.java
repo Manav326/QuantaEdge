@@ -30,11 +30,10 @@ class InstitutionTenantContextServiceTest {
   void legacyLearnerRoutesRequireInstitutionContext() {
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/42/lessons"));
-    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/preview"));
-    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile"));
-    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile-photo"));
-    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/language"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/preview"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile-photo"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/language"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic/attempts/12/submit"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/recommendations/next"));
@@ -43,15 +42,13 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
-  void marketplaceDiscoveryAndExplicitCheckoutRequireTenantButNotPriorMembership() {
+  void marketplaceDiscoveryAndCheckoutRequireActiveMembershipLikeOtherLearnerRoutes() {
     assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/marketplace/courses"));
-    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/marketplace/courses"));
-    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/marketplace/family/courses"));
-    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("POST","/api/v1/marketplace/courses/123/orders"));
-    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("POST","/api/v1/marketplace/family/courses/123/enroll-free"));
-    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("POST","/api/v1/marketplace/family/orders/567/verify"));
-    assertEquals(true,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/learning/sessions"));
-    assertEquals(true,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/students/me"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/marketplace/family/courses"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/marketplace/courses/123/orders"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/marketplace/family/courses/123/enroll-free"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/marketplace/family/orders/567/verify"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me"));
   }
 
   @Test
