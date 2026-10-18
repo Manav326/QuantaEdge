@@ -245,16 +245,20 @@ public class AuthFilter extends OncePerRequestFilter {
         if (institutionTenantContextService != null
             && acceptsLearnerInstitutionSelector(uri, workspace)) {
           String requestedInstitutionCode = request.getHeader(InstitutionTenantContextService.HEADER_NAME);
-          if (requestedInstitutionCode != null && !requestedInstitutionCode.isBlank()) {
-            try {
-              InstitutionTenantContext tenantContext = institutionTenantContextService.resolve(requestedInstitutionCode);
-              if (tenantContext != null) {
-                request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, tenantContext);
-              }
-            } catch (InstitutionTenantContextService.InvalidInstitutionContextException ex) {
-              writeJsonError(response, ex.statusCode(), ex.errorCode(), ex.getMessage());
-              return;
+          try {
+            InstitutionTenantContext tenantContext;
+            if (InstitutionTenantContextService.requiresInstitutionContext(uri)) {
+              tenantContext = institutionTenantContextService.requireSelector(requestedInstitutionCode);
+              institutionTenantContextService.assertActiveMembership(context, tenantContext);
+            } else {
+              tenantContext = institutionTenantContextService.resolve(requestedInstitutionCode);
             }
+            if (tenantContext != null) {
+              request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, tenantContext);
+            }
+          } catch (InstitutionTenantContextService.InvalidInstitutionContextException ex) {
+            writeJsonError(response, ex.statusCode(), ex.errorCode(), ex.getMessage());
+            return;
           }
         }
         request.setAttribute("authContext", context);

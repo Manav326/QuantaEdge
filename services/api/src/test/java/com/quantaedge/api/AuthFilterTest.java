@@ -148,6 +148,57 @@ class AuthFilterTest {
 
   @Test
   void corsPreflightDoesNotRequireWorkspaceCookie() throws Exception {
+
+  @Test
+  void tenantScopedCourseCatalogueRejectsMissingInstitutionContext() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(mock(JdbcTemplate.class));
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/students/me/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("STUDENT"), "valid-session"));
+    when(auth.currentForWorkspace("valid-session", "STUDENT"))
+        .thenReturn(new AuthContext(null, 42L, null, "STUDENT", "Learner", "STUDENT"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(400, response.getStatus());
+    assertEquals(true, response.getContentAsString().contains("INSTITUTION_CONTEXT_REQUIRED"));
+    assertEquals(null, chain.getRequest());
+  }
+
+  @Test
+  void activeTenantContextDoesNotAuthorizeANonMember() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    when(jdbc.queryForList(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.any(Object[].class)))
+        .thenReturn(java.util.List.of(java.util.Map.<String,Object>of(
+            "id", 91L, "tenant_code", "SCHOOL-A", "display_name", "School A")));
+    when(jdbc.queryForObject(org.mockito.ArgumentMatchers.contains("institution_membership"),
+        org.mockito.ArgumentMatchers.eq(Boolean.class), org.mockito.ArgumentMatchers.<Object[]>any()))
+        .thenReturn(false);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/students/me/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.addHeader(InstitutionTenantContextService.HEADER_NAME, "school-a");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("STUDENT"), "valid-session"));
+    when(auth.currentForWorkspace("valid-session", "STUDENT"))
+        .thenReturn(new AuthContext(null, 42L, null, "STUDENT", "Learner", "STUDENT"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(403, response.getStatus());
+    assertEquals(true, response.getContentAsString().contains("INSTITUTION_MEMBERSHIP_REQUIRED"));
+    assertEquals(null, chain.getRequest());
+  }
+
     AuthService auth = mock(AuthService.class);
     StaffAuditService audit = mock(StaffAuditService.class);
     AuthFilter filter = new AuthFilter(auth, audit);
