@@ -8,6 +8,7 @@
 - [Phase 1 — System and UI Audit](./phase-1-system-ui-audit.md): verified source baseline, application boundaries, audit findings, persona/workflow map, and exit criteria.
 - [UI Screen Inventory](./ui-screen-inventory.csv): machine-readable register of web routes and Android navigation destinations.
 - [Phase 1 Source Review Log](./phase-1-source-review-log.md): first-pass actions/API observations by route and Android shell mappings.
+- [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md): inspected authorization/workspace guards and sensitive controller families.
 
 ## Evidence and status rules
 
