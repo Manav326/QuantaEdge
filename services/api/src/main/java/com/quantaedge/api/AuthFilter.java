@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class AuthFilter extends OncePerRequestFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
+  private static final long MAX_BRANDING_ASSET_REQUEST_BYTES = 2_250_000L;
   private final AuthService auth;
   private final StaffAuditService staffAudit;
+  private final AuthorizationService authorization;
 
   @Value("${app.auth.workspace-origins.education-admin:http://localhost:3001}")
   private String educationAdminOrigins = "http://localhost:3001";
@@ -75,9 +78,30 @@ public class AuthFilter extends OncePerRequestFilter {
     return false;
   }
 
-  public AuthFilter(AuthService auth, StaffAuditService staffAudit) {
+  @Autowired
+  public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization) {
     this.auth = auth;
     this.staffAudit = staffAudit;
+    this.authorization = authorization;
+  }
+
+  /** Compatibility constructor for isolated tests that do not exercise branding uploads. */
+  AuthFilter(AuthService auth, StaffAuditService staffAudit) {
+    this(auth, staffAudit, null);
+  }
+
+  private static boolean isBrandingAssetUpload(HttpServletRequest request) {
+    return "POST".equalsIgnoreCase(request.getMethod())
+        && request.getRequestURI().matches(
+            "^/api/v1/hrms/platform/institutions/[0-9]+/branding/assets/(logo|app-icon)$");
+  }
+
+  private static void writeJsonError(HttpServletResponse response, int status, String code, String message)
+      throws IOException {
+    response.setStatus(status);
+    response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    response.getWriter().write("{\\"error\\":\\"" + code + "\\",\\"message\\":\\"" + message + "\\"}");
   }
 
   private static String cookieValue(HttpServletRequest request, String name) {
@@ -197,6 +221,28 @@ public class AuthFilter extends OncePerRequestFilter {
       }
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={} workspace={} context-present={}",
           token != null, workspace, context != null);
+      if (isBrandingAssetUpload(request) && !preflight) {
+        // Guard the request before Spring parses its multipart body to avoid buffering large
+        // files ahead of the owner permission check or the controller's per-file validator.
+        long contentLength = request.getContentLengthLong();
+        if (contentLength > MAX_BRANDING_ASSET_REQUEST_BYTES) {
+          writeJsonError(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE,
+              "BRANDING_ASSET_TOO_LARGE", "Branding upload requests must be 2 MiB plus multipart overhead or smaller.");
+          return;
+        }
+        if (contentLength < 0) {
+          writeJsonError(response, HttpServletResponse.SC_LENGTH_REQUIRED,
+              "BRANDING_ASSET_LENGTH_REQUIRED", "A content length is required for branding image uploads.");
+          return;
+        }
+        if (context == null || authorization == null
+            || !authorization.hasPermission(context, "QE_PLATFORM_OWNER")) {
+          writeJsonError(response, HttpServletResponse.SC_FORBIDDEN,
+              "PLATFORM_OWNER_REQUIRED", "Platform owner access is required to upload institution branding.");
+          return;
+        }
+      }
+
       if (context != null) {
         request.setAttribute("authContext", context);
         request.setAttribute("authWorkspace", workspace);
