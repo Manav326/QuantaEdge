@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 751,
+    "assets_selected": 755,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 750,
-    "assets_remaining": 6738,
-    "assets_completion_percent": 10.0,
-    "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 746,
+    "assets_analyzed": 753,
+    "assets_remaining": 6735,
+    "assets_completion_percent": 10.1,
+    "assets_failed": 8,
+    "assets_skipped_from_checkpoint": 750,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T12:42:38Z"
+      "checkpointed_at": "2026-10-18T12:47:33Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -27705,6 +27705,178 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T12:46:39Z"
+    },
+    {
+      "asset_id": "11767890426925ffd27c62e5",
+      "asset_sha256": "4984935a1012a521b750eba8304804b8ba27c1ae8b2426a60f8bbcf290f36d58",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/4984935a1012a521b750eba8304804b8ba27c1ae8b2426a60f8bbcf290f36d58.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "205f5c0cc3a54f6d2de95f0a",
+      "asset_sha256": "6947bde956e8d712f134f62056027070c6708b5618d095d6ab140276d0f949d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/6947bde956e8d712f134f62056027070c6708b5618d095d6ab140276d0f949d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a vibrant purple flower with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Hydrangea",
+          "Cooler climates",
+          "Vegetables",
+          "Fruits",
+          "Flowers",
+          "Extracts",
+          "Testing",
+          "Acid-base indicators"
+        ],
+        "context_relation": "The image is related to the text discussing the use of hydrangea and other flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the hydrangea or its properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:52:03Z"
+    },
+    {
+      "asset_id": "c6ffa67742a630faed1fc792",
+      "asset_sha256": "6fdfd2e0f76eb50b4ab7af7dd733989016129a4d8826c13a28fcfbb1cb91bd61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/6fdfd2e0f76eb50b4ab7af7dd733989016129a4d8826c13a28fcfbb1cb91bd61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "results",
+          "process",
+          "substances",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "FASCINATING FACTS",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The text is discussing the results of a process involving the preparation and testing of substances, including vegetables, fruits, and flowers, and mentions that these substances can act as acid-base indicators.",
+        "limitations": [
+          "The text does not provide specific details about the process or the substances being tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:53:37Z"
+    },
+    {
+      "asset_id": "3edd686f7d23a76fb96f32f9",
+      "asset_sha256": "0baa909fd695515f7aa4b4a52020133baf50d450b192de8e721b58d329dfa809",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/0baa909fd695515f7aa4b4a52020133baf50d450b192de8e721b58d329dfa809.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "results",
+          "process",
+          "substances",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "FASCINATING FACTS",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The text is discussing the results of a process involving the preparation and testing of substances, including vegetables, fruits, and flowers, and mentions hydrangea as a fascinating fact.",
+        "limitations": [
+          "The text does not provide specific details about the process or the substances being tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:55:10Z"
     }
   ]
 }
