@@ -21,7 +21,7 @@ The UI must explain blocked/unknown states and partial cleanup. It must never ma
 ## 2. Non-negotiable safety boundaries
 
 - **Default off:** QA write operations require explicit feature enablement and explicit environment approval. Missing, malformed or conflicting configuration fails closed.
-- **Database safety:** before any mutation, the server confirms the current database is an approved QA/test/CI database using an explicit environment allow-list. Production profiles and production-labelled targets are always rejected. The caller cannot submit an arbitrary database, schema, SQL statement, file path or resource locator.
+- **Database safety:** before any mutation, the server confirms the current database name has an approved QA/test/CI suffix and exactly matches the server-owned `APP_QA_TARGET_DATABASE`; the caller cannot select or override the database. `APP_QA_ENABLED`, `APP_QA_ENVIRONMENT_APPROVED`, `APP_QA_ENVIRONMENT_LABEL`, `APP_QA_TARGET_DATABASE` and `APP_QA_FIXTURE_PASSWORD` must all be configured consistently. Production/live profiles and production-labelled targets are rejected. The caller cannot submit an arbitrary database, schema, SQL statement, file path or resource locator.
 - **Permission:** API authorization requires the existing QE_PLATFORM_OWNER capability in the HRMS workspace. UI visibility is not authorization.
 - **Run ownership:** every install has a random immutable run UUID, pack key/version, actor, target environment, source revision, start/end times, state, counts and a checksum over its manifest.
 - **Exact manifest:** each created SQL row, identity, uploaded file and external provider object is registered under the run using its actual primary/public ID or exact provider/storage key. Manifest ownership is authoritative; a generic test flag is not sufficient for deletion.
@@ -99,7 +99,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 ## 7. CI and evidence rules
 
 - API unit tests cover authorization, state machine, idempotency, environment gate, ownership-manifest validation and cleanup ordering.
-- Disposable PostgreSQL integration tests apply the actual Flyway migrations and verify database constraints, transactional rollback, multiple concurrent runs and post-uninstall before/after snapshots.
+- `QaTestPackLifecycleIntegrationTest` now targets the dedicated `quantaedge_qa` database, applies the actual Flyway migrations, installs two distinct runs, checks idempotent replay and starter-pack invariants, uninstalls run A while proving run B remains, checks protected-baseline fingerprints, and then cleans run B. CI provisions this database and opts into the test. The test remains `NOT_EXECUTED` until that exact-head CI job finishes successfully.
 - Web E2E must exercise QA Center permissions, install confirmation, persona list, scenario runner, dry-run preview, confirmation phrase/run-ID match, interrupted cleanup and report download.
 - Android E2E must use the same installed synthetic personas to exercise the agreed critical learner/parent flows and compare their API-visible state.
 - External adapters run in deterministic fake mode in CI; a test fails if a live credential/environment is detected.
@@ -109,7 +109,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 ## 8. Current implementation ledger
 
 - QA route inventory, 72 workflow scenarios, 94 UI/state inventory rows, 443 source-derived API mapping rows and role/data cleanup documentation exist. Endpoints remain source-derived and not fully reviewed.
-- The feature branch now implements a tenant/learner starter pack, run/resource/event/check manifest, default-off database/environment/credential gates, starter data invariants, manifest-based uninstall, and an HRMS QA Center UI/API. It does not yet implement the full HRMS/payroll/media/provider pack or browser/device scenario runner.
+- The feature branch now implements a tenant/learner starter pack, run/resource/event/check manifest, default-off gate requiring an exact server-configured database target and explicit fixture secret, starter data invariants, manifest-based uninstall, and an HRMS QA Center UI/API. A separate PostgreSQL integration test and CI database-provisioning step are added; they remain unverified until CI passes. This is not yet the full HRMS/payroll/media/provider pack or browser/device scenario runner.
 - QA-001, QA-002, QA-004, QA-005 and QA-007 have starter-slice code but remain NOT_EXECUTED; QA-003 scenario runner/coverage report and QA-006 external-provider sandbox isolation remain NOT_IMPLEMENTED.
 - The local-preview isolation fix with regression tests is included on this feature branch. Draft PR #78 still exists separately and had a failing API run because of broader institution-context/mocking failures; do not describe either candidate as merged or passing without exact-head CI evidence.
 - The current-main API run [#39151812977](https://github.com/Manav326/QuantaEdge/actions/runs/39151812977) failed before this feature branch. Keep that baseline regression separate from the new branch's results.
@@ -117,7 +117,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 
 ## 9. Next implementation sequence
 
-1. Verify preview isolation and the new manifest/check schema through exact-head CI; fix the pre-existing institution-context API test failures rather than masking them.
+1. Verify preview isolation, server-configured database targeting, the manifest/check schema, and the dedicated PostgreSQL lifecycle test through exact-head CI; fix the pre-existing institution-context API test failures rather than masking them.
 2. Prove starter-pack install rollback, same-key retry/concurrency, data invariant checks and manifest reconciliation against a disposable migrated PostgreSQL database.
 3. Install run A and run B, uninstall A, and prove B and protected baseline rows remain unchanged; test interrupted cleanup and retry.
 4. Implement QA-003 scenario execution/reporting and QA-006 fake/sandbox provider adapters before claiming complete lifecycle coverage.
