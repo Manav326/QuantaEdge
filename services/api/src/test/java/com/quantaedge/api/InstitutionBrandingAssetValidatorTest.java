@@ -82,7 +82,9 @@ class InstitutionBrandingAssetValidatorTest {
   }
 
   private static byte[] imageBytes(String format, int width, int height) throws IOException {
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage image = new BufferedImage(width, height,
+        (format.equalsIgnoreCase("jpg") || format.equalsIgnoreCase("jpeg"))
+            ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB);
     try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
       if (!ImageIO.write(image, format, output)) throw new IllegalStateException("Image writer unavailable: " + format);
       return output.toByteArray();
