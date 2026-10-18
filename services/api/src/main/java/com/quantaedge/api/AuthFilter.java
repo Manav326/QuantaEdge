@@ -107,6 +107,19 @@ public class AuthFilter extends OncePerRequestFilter {
     return "STUDENT".equals(workspace) || "PARENT".equals(workspace) || "LEARNING".equals(workspace);
   }
 
+  private static Long guardianChildId(String path) {
+    if (path == null || !path.startsWith("/api/v1/guardians/children/")) return null;
+    String remainder = path.substring("/api/v1/guardians/children/".length());
+    int slash = remainder.indexOf('/');
+    String candidate = slash < 0 ? remainder : remainder.substring(0, slash);
+    if (!candidate.matches("[0-9]+")) return null;
+    try {
+      return Long.valueOf(candidate);
+    } catch (NumberFormatException ignored) {
+      return null;
+    }
+  }
+
   private static boolean isBrandingAssetUpload(HttpServletRequest request) {
     return "POST".equalsIgnoreCase(request.getMethod())
         && request.getRequestURI().matches(
@@ -251,6 +264,11 @@ public class AuthFilter extends OncePerRequestFilter {
             if (InstitutionTenantContextService.requiresInstitutionContext(uri)) {
               tenantContext = institutionTenantContextService.requireSelector(selectedInstitutionCode);
               institutionTenantContextService.assertActiveMembership(context, tenantContext);
+              Long targetChildId = guardianChildId(uri);
+              if (targetChildId != null) {
+                institutionTenantContextService.assertGuardianChildMembership(
+                    context, tenantContext, targetChildId.longValue());
+              }
             } else {
               tenantContext = institutionTenantContextService.resolve(selectedInstitutionCode);
             }
