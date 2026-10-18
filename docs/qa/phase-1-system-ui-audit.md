@@ -199,6 +199,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
 - [x] Add 70 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
 - [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
+- [x] Trace all 34 declared Android routes through the destination switch and document component branches plus the custom back/return contract (device verification remains open).
 - [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
 - [x] Record the initial test-data marker search result and its limits.
 
