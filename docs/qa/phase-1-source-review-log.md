@@ -116,6 +116,8 @@ Android screen/API dependencies are partly passed as lambdas from the shell. End
 5. **Runtime still open.** All screens remain marked not runtime-verified pending browser/device execution evidence.
 6. **QA pack is not yet implemented.** No global test-data installation ownership mechanism was demonstrated by the preliminary `is_test_data` search.
 
+The representative controller and guard scan now has its own [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md). Treat that map as a high-risk first pass, not as a complete OpenAPI or endpoint-to-permission inventory.
+
 ## 6. Next source-review pass
 
 For each inventory row:
