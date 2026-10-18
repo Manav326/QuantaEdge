@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 400,
-    "successful_visual_analyses": 394,
-    "missing_visual_analyses": 7088,
+    "raw_analysis_result_rows": 404,
+    "successful_visual_analyses": 398,
+    "missing_visual_analyses": 7084,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7094,
+    "unresolved_count": 7090,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -24273,9 +24273,29 @@
       "asset_path": "assets/e01b7abd432c39f393f0dab6e6b63045d1ed91d8cf087110d2d3d1f4d381da45.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The text does not provide specific details about the understanding of the universe."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24291,9 +24311,18 @@
       "asset_path": "assets/35e181c2e2ad0b6d3d7f20f19fbfd5e8387dad0c5d791d63bd21cc7c1f2717c9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pencil with a eraser on top, placed vertically.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a pencil with an eraser, possibly used for educational purposes.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text provided in the source PDF page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24309,9 +24338,16 @@
       "asset_path": "assets/6aa272a1c3af3c04382b2754ee113ba7fa986bcd495ab4b93e0cea2b7a0109a7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass with a pink line indicating the level of liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a glass with a pink line indicating the level of liquid inside.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24327,9 +24363,20 @@
       "asset_path": "assets/e35982337ee0bc74803184a2a53199ddaefded81c2c194ff64930b6cbead1da8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a pen with a red cap.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a hand holding a pen, possibly used for writing or drawing.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content.",
+          "The pen is the only object visible in the image, and its details are not specified.",
+          "The image does not show any text or symbols related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

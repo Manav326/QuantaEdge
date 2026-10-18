@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 394,
+    "assets_selected": 398,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 393,
-    "assets_remaining": 7095,
-    "assets_completion_percent": 5.2,
+    "assets_analyzed": 397,
+    "assets_remaining": 7091,
+    "assets_completion_percent": 5.3,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 389,
+    "assets_skipped_from_checkpoint": 393,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:25:05Z"
+      "checkpointed_at": "2026-10-18T02:27:32Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12772,6 +12772,129 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T02:26:54Z"
+    },
+    {
+      "asset_id": "665c56408447bf8452ea0e18",
+      "asset_sha256": "e01b7abd432c39f393f0dab6e6b63045d1ed91d8cf087110d2d3d1f4d381da45",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/e01b7abd432c39f393f0dab6e6b63045d1ed91d8cf087110d2d3d1f4d381da45.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The text does not provide specific details about the understanding of the universe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:28:10Z"
+    },
+    {
+      "asset_id": "df865b0c1123c07f6fb9e3be",
+      "asset_sha256": "35e181c2e2ad0b6d3d7f20f19fbfd5e8387dad0c5d791d63bd21cc7c1f2717c9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/35e181c2e2ad0b6d3d7f20f19fbfd5e8387dad0c5d791d63bd21cc7c1f2717c9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pencil with a eraser on top, placed vertically.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a pencil with an eraser, possibly used for educational purposes.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text provided in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:28:44Z"
+    },
+    {
+      "asset_id": "4c7041b58ddfa038d23cd103",
+      "asset_sha256": "6aa272a1c3af3c04382b2754ee113ba7fa986bcd495ab4b93e0cea2b7a0109a7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/6aa272a1c3af3c04382b2754ee113ba7fa986bcd495ab4b93e0cea2b7a0109a7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A glass with a pink line indicating the level of liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a glass with a pink line indicating the level of liquid inside.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:29:16Z"
+    },
+    {
+      "asset_id": "43731dac2e9ab7e8d5de1dde",
+      "asset_sha256": "e35982337ee0bc74803184a2a53199ddaefded81c2c194ff64930b6cbead1da8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/e35982337ee0bc74803184a2a53199ddaefded81c2c194ff64930b6cbead1da8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a pen with a red cap.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a hand holding a pen, possibly used for writing or drawing.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content.",
+          "The pen is the only object visible in the image, and its details are not specified.",
+          "The image does not show any text or symbols related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:29:50Z"
     }
   ]
 }
