@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 380,
+    "assets_selected": 383,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 378,
-    "assets_remaining": 1913,
-    "assets_completion_percent": 16.5,
+    "assets_analyzed": 381,
+    "assets_remaining": 1910,
+    "assets_completion_percent": 16.6,
     "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 375,
+    "assets_skipped_from_checkpoint": 378,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:40:41Z"
+      "checkpointed_at": "2026-10-18T04:47:09Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:41:29Z"
+      "checkpointed_at": "2026-10-18T04:47:58Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -11324,6 +11324,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T04:46:00Z"
+    },
+    {
+      "asset_id": "aaebe164fa86704f1b356664",
+      "asset_sha256": "a95317fbefed9526091fe296c520e37f56a2efe0bd954b9660149bb3743161bf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/a95317fbefed9526091fe296c520e37f56a2efe0bd954b9660149bb3743161bf.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:49:23Z"
+    },
+    {
+      "asset_id": "6e97e8a35d5f555330f17ef7",
+      "asset_sha256": "e06e962c0b8751b44291b341299507ab4c6c345c38729e4f768e0828209b26af",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e06e962c0b8751b44291b341299507ab4c6c345c38729e4f768e0828209b26af.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid gold-colored horizontal bar with a gradient effect.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a solid gold-colored horizontal bar with a gradient effect.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:50:56Z"
+    },
+    {
+      "asset_id": "e61dcd8b0b84c29d43e2cf64",
+      "asset_sha256": "28a88178e7491700826aec3625a22464e54cb5aa0a0c986184bfb66add7844a1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/28a88178e7491700826aec3625a22464e54cb5aa0a0c986184bfb66add7844a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:52:23Z"
     }
   ]
 }
