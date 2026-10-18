@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useLocale } from '../../components/LanguageProvider';
-import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
 
 export default function SchoolLearningEntryPage() {
@@ -35,9 +34,6 @@ export default function SchoolLearningEntryPage() {
 
   return (
     <main className="qe-school-entry">
-      <header className="qe-school-entry-header">
-        <QuantaEdgeBrand href={null} variant="header" />
-      </header>
       <section className="qe-school-entry-panel">
         {brand.logoUrl
           ? <img className="qe-school-entry-logo" src={brand.logoUrl} alt="" aria-hidden="true" />
