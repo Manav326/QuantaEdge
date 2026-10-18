@@ -142,8 +142,7 @@ jobs:
           if [ -n "$GOOGLE_WEB_CLIENT_ID" ]; then
             echo "Repository/organization-scoped Google client ID is available."
           else
-            echo "::error::Google client ID is not available outside an environment. Configure a repository-level Actions secret/variable or verify the intended environment scope."
-            exit 1
+            echo "::warning::Google client ID is not available outside an environment. Production image/APK jobs still require it in the scope they use."
           fi
 
   build-android-apk:
