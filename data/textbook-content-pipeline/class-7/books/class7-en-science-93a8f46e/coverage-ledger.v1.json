@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 404,
-    "successful_visual_analyses": 398,
-    "missing_visual_analyses": 7084,
+    "raw_analysis_result_rows": 408,
+    "successful_visual_analyses": 402,
+    "missing_visual_analyses": 7080,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7090,
+    "unresolved_count": 7086,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -24392,9 +24392,28 @@
       "asset_path": "assets/2f6da8642fa9c0ec0aaff02743b98c3c91f4a9c2a8791a0244f91f5773abe9de.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a light bulb with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The image is a close-up of a light bulb, which is related to the concept of light and its understanding in the context of the text.",
+        "limitations": [
+          "The image does not provide specific details about the light bulb or its function."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24410,9 +24429,22 @@
       "asset_path": "assets/b735569e5841a42452bb658c7b1011b8673cc18af30451937a13a74248bc7c69.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A partial solar eclipse with a red, partially obscured sun against a dark background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "solar eclipse",
+          "partial eclipse",
+          "red sun"
+        ],
+        "context_relation": "The image represents a partial solar eclipse, which is a natural phenomenon where the moon partially obscures the sun.",
+        "limitations": [
+          "The image does not provide any additional information or context beyond the eclipse itself."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24428,9 +24460,29 @@
       "asset_path": "assets/cbd77599e466490451ee18dc125ece89f0ba72e25a2946af732c24e3bf6ae0c0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram showing the Earth's rotation and the path of light from the Sun.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Earth",
+          "Sun",
+          "light",
+          "Earth's rotation",
+          "path of light"
+        ],
+        "concepts": [
+          "Earth's rotation",
+          "path of light",
+          "Sun"
+        ],
+        "context_relation": "The image illustrates the concept of Earth's rotation and the path of light from the Sun.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not depict the Earth's rotation speed or the path of light in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24446,9 +24498,16 @@
       "asset_path": "assets/9e914b5cb1fc29a815b0400aef60a9dbbf6584b51399b6f0c3acbc52f2f0637d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

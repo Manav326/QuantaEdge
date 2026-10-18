@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 398,
+    "assets_selected": 402,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 397,
-    "assets_remaining": 7091,
-    "assets_completion_percent": 5.3,
+    "assets_analyzed": 401,
+    "assets_remaining": 7087,
+    "assets_completion_percent": 5.4,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 393,
+    "assets_skipped_from_checkpoint": 397,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:27:32Z"
+      "checkpointed_at": "2026-10-18T02:30:28Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12895,6 +12895,141 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T02:29:50Z"
+    },
+    {
+      "asset_id": "130786cda1574d82c9f15655",
+      "asset_sha256": "2f6da8642fa9c0ec0aaff02743b98c3c91f4a9c2a8791a0244f91f5773abe9de",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/2f6da8642fa9c0ec0aaff02743b98c3c91f4a9c2a8791a0244f91f5773abe9de.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a light bulb with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The image is a close-up of a light bulb, which is related to the concept of light and its understanding in the context of the text.",
+        "limitations": [
+          "The image does not provide specific details about the light bulb or its function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:31:05Z"
+    },
+    {
+      "asset_id": "03cfe976a1b035d1771d34c9",
+      "asset_sha256": "b735569e5841a42452bb658c7b1011b8673cc18af30451937a13a74248bc7c69",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/b735569e5841a42452bb658c7b1011b8673cc18af30451937a13a74248bc7c69.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A partial solar eclipse with a red, partially obscured sun against a dark background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "solar eclipse",
+          "partial eclipse",
+          "red sun"
+        ],
+        "context_relation": "The image represents a partial solar eclipse, which is a natural phenomenon where the moon partially obscures the sun.",
+        "limitations": [
+          "The image does not provide any additional information or context beyond the eclipse itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:31:40Z"
+    },
+    {
+      "asset_id": "690d4c5351a449aaec898602",
+      "asset_sha256": "cbd77599e466490451ee18dc125ece89f0ba72e25a2946af732c24e3bf6ae0c0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/cbd77599e466490451ee18dc125ece89f0ba72e25a2946af732c24e3bf6ae0c0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram showing the Earth's rotation and the path of light from the Sun.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Earth",
+          "Sun",
+          "light",
+          "Earth's rotation",
+          "path of light"
+        ],
+        "concepts": [
+          "Earth's rotation",
+          "path of light",
+          "Sun"
+        ],
+        "context_relation": "The image illustrates the concept of Earth's rotation and the path of light from the Sun.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not depict the Earth's rotation speed or the path of light in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:32:17Z"
+    },
+    {
+      "asset_id": "3297735af62b6d30f56f57a1",
+      "asset_sha256": "9e914b5cb1fc29a815b0400aef60a9dbbf6584b51399b6f0c3acbc52f2f0637d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/9e914b5cb1fc29a815b0400aef60a9dbbf6584b51399b6f0c3acbc52f2f0637d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:32:49Z"
     }
   ]
 }
