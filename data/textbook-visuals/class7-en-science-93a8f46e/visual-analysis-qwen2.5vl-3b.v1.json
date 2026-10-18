@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 700,
+    "assets_selected": 703,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 698,
-    "assets_remaining": 6790,
-    "assets_completion_percent": 9.3,
+    "assets_analyzed": 701,
+    "assets_remaining": 6787,
+    "assets_completion_percent": 9.4,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 695,
+    "assets_skipped_from_checkpoint": 698,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:05:07Z"
+      "checkpointed_at": "2026-10-18T07:07:32Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:05:26Z"
+      "checkpointed_at": "2026-10-18T07:07:51Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -25842,6 +25842,131 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T07:06:53Z"
+    },
+    {
+      "asset_id": "0eb2784c27f0972275bb4e5c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:07:57Z"
+    },
+    {
+      "asset_id": "599d4707cfa2e8b04c09f64f",
+      "asset_sha256": "51128bd9d88e82536a8a387ac9a38d84bee83a5095cd3b33547d2a0cbcafcfc8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "page-0031.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the taste and nature of substances in Group A of Table 2.2, emphasizing that sour-tasting substances contain acids.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible? Have you",
+          "ever tasted these edible substances? Can you recall their taste?",
+          "You will ﬁnd that all these substances taste sour. Thus, we can",
+          "say that substances that taste sour tend to contain acids and are",
+          "acidic in nature.",
+          "Caution — Do not taste anything until asked to do so. Do not taste any",
+          "unknown substance.",
+          "Some common edible substances and the names of the most",
+          "common acids present in them are given in Fig. 2.4.",
+          "Fig. 2.4: The most common acids present in some edible substances",
+          "Find out and write the names of the most common acids",
+          "present in the following substances—",
+          "Lemon, Curd, Tamarind, Vinegar",
+          "Now, let us take one of the substances—baking soda",
+          "solution—from Group B. Rub the baking soda solution between",
+          "your ﬁngers. What do you observe?",
+          "It feels soapy or slippery. Basic substances are generally",
+          "slippery to touch.",
+          "Also, bases generally taste bitter, but",
+          "everything that tastes bitter may not",
+          "contain a base. For example, bitter gourd",
+          "(karela) possesses a bitter taste but is not",
+          "basic in nature.",
+          "If litmus is not available, are there",
+          "some other natural substances",
+          "that can serve as acid-base",
+          "indicators?"
+        ],
+        "concepts": [
+          "Acids",
+          "Basic substances",
+          "Baking soda",
+          "Litmus",
+          "Bitter taste",
+          "Acid-base indicators"
+        ],
+        "context_relation": "Exploring Substances: Acidic, Basic, and Neutral",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:09:37Z"
+    },
+    {
+      "asset_id": "80b87e27ac21cf5c625cf228",
+      "asset_sha256": "18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0786e4c9bc62233f8dc0dac0730874a2e765743556809e96e2a93c2ac9660135",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red rose petal with a dashed line indicating its shape.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "red rose",
+          "petal",
+          "dashed line"
+        ],
+        "context_relation": "The image is related to the activity of preparing indicators using fallen petals of red roses.",
+        "limitations": [
+          "The image does not provide any additional information beyond the shape of the rose petal."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:09:44Z"
     }
   ]
 }
