@@ -864,10 +864,23 @@ public class QaTestPackService {
 
   private Map<String,Object> baselineSnapshot() {
     Map<String,Object> snapshot = new LinkedHashMap<>();
-    for (String table : List.of("institution_tenant","institution_branding","user_account","student","guardian_student","institution_user_membership","institution_membership","student_track_enrollment","student_lesson_progress","student_question_attempt")) {
+    Map<String,String> primaryKeys = Map.of(
+        "institution_tenant", "id",
+        "institution_branding", "institution_id",
+        "user_account", "id",
+        "student", "id",
+        "guardian_student", "id",
+        "institution_user_membership", "id",
+        "institution_membership", "id",
+        "student_track_enrollment", "id",
+        "student_lesson_progress", "id",
+        "student_question_attempt", "id");
+    for (Map.Entry<String,String> tableEntry : primaryKeys.entrySet()) {
+      String table = tableEntry.getKey();
+      String primaryKey = tableEntry.getValue();
       Map<String,Object> result = jdbc.queryForMap(
-          "select count(*) as row_count, md5(coalesce(string_agg(md5(to_jsonb(t)::text), '' order by t.id),'')) as fingerprint from "
-              + table + " t where qa_test_run_id is null");
+          "select count(*) as row_count, md5(coalesce(string_agg(md5(to_jsonb(t)::text), '' order by t."
+              + primaryKey + "),'')) as fingerprint from " + table + " t where qa_test_run_id is null");
       Map<String,Object> tableSnapshot = new LinkedHashMap<>();
       tableSnapshot.put("count", number(result.get("row_count")));
       tableSnapshot.put("fingerprint", String.valueOf(result.get("fingerprint")));
