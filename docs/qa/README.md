@@ -14,12 +14,15 @@
 - [Existing Test Evidence](./phase-1-existing-test-evidence.md): links current API/Android test sources to scenario domains and separates tests-present from runtime-verified evidence.
 - [Android Composition Map](./phase-1-android-composition-map.md): maps all 34 native routes to their actual shell/component renderers and documents BackHandler return contracts.
 - [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 93 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
+- [API Route Inventory](./phase-1-api-route-inventory.csv): source-extracted register of 435 Spring request/STOMP route mappings across 48 Java source files, including path composition, method name, source line and static guard hints.
+- [Role/Workspace Permission Matrix](./phase-1-role-workspace-matrix.md): source-derived Education Admin, HRMS, platform-owner, institution-admin and learner/guardian permission boundaries.
 
 ## Current audit snapshot
 
 | Measure | Current count/status |
 |---|---:|
 | UI route/destination entries | 93 (29 Web, 19 Admin, 11 HRMS, 34 Android) |
+| API mapped handler entries | 435 request/STOMP mapping rows across 48 source files; static extraction only |
 | Screen entries linked to scenario IDs | 93; references validated against the scenario register |
 | Workflow scenarios | 70 total: 63 `NOT_EXECUTED`, 7 `NOT_IMPLEMENTED` (future QA installer lifecycle) |
 | Browser/Android runtime-verified screens | 0 in this audit pass |
