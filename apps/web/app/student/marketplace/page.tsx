@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './marketplace.module.css';
+import { useTenantBranding } from '../../components/TenantBrandingProvider';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
 type Offer = {
@@ -60,6 +61,7 @@ async function ensureRazorpayCheckout(): Promise<void> {
 
 export default function StudentMarketplacePage() {
   const router = useRouter();
+  const { brand, institutionContextRequested, isResolving } = useTenantBranding();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -115,6 +117,10 @@ export default function StudentMarketplacePage() {
 
   async function buyCourse(courseId: number) {
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
+    if (institutionContextRequested && (!brand || isResolving)) {
+      setStatus('We could not verify your school identity. Reopen the official link shared by your school before starting checkout.');
+      return;
+    }
     setBusyCourseId(courseId);
     setStatus('');
     try {
@@ -138,7 +144,7 @@ export default function StudentMarketplacePage() {
         key: order.keyId,
         amount: Number(order.amount),
         currency: order.currency,
-        name: 'QuantaEdge',
+        name: brand?.displayName || 'QuantaEdge',
         description: order.description || 'Course access',
         order_id: order.orderId,
         theme: { color: '#E87524' },
