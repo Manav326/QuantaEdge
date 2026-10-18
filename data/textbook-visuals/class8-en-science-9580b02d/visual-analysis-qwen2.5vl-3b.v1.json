@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 491,
+    "assets_selected": 494,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 489,
-    "assets_remaining": 1802,
-    "assets_completion_percent": 21.3,
+    "assets_analyzed": 492,
+    "assets_remaining": 1799,
+    "assets_completion_percent": 21.5,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 486,
+    "assets_skipped_from_checkpoint": 489,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T12:44:15Z"
+      "checkpointed_at": "2026-10-18T12:51:04Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T12:45:35Z"
+      "checkpointed_at": "2026-10-18T12:52:24Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -14546,6 +14546,95 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T12:49:23Z"
+    },
+    {
+      "asset_id": "11248f00bd0f0f44d3f6e56c",
+      "asset_sha256": "d31f5c93bfc99ea4736baf23e6308a560a7dfe78b984a7634c8fef4e23b94d17",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d31f5c93bfc99ea4736baf23e6308a560a7dfe78b984a7634c8fef4e23b94d17.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light yellow to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal banner"
+        ],
+        "context_relation": "The banner is likely a decorative element on a page, possibly a header or footer.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the banner."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T12:53:49Z"
+    },
+    {
+      "asset_id": "e6b6569707455bcff70f606c",
+      "asset_sha256": "b4af14f03644fcc0135ab9d5fb7050b595cda5b9994df7cf718a1f1ce87582f9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/b4af14f03644fcc0135ab9d5fb7050b595cda5b9994df7cf718a1f1ce87582f9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T12:55:00Z"
+    },
+    {
+      "asset_id": "674f320b6880bd69683e448d",
+      "asset_sha256": "e8adb38875fbb1e4a220f149fd7e21b54659dff45e4dc76d6fb2b27126c487e8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e8adb38875fbb1e4a220f149fd7e21b54659dff45e4dc76d6fb2b27126c487e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or labels are visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T12:56:13Z"
     }
   ]
 }
