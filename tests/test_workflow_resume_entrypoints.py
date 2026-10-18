@@ -77,6 +77,12 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("age >= 1800", coordinator)
         self.assertIn("/actions/runs/$run_id/cancel", coordinator)
         self.assertIn("stale runner cancellation requested", coordinator.lower())
+        self.assertIn("baseline=latest or started", coordinator)
+        self.assertIn("checkpoint(content): Layer 4-5", coordinator)
+        self.assertIn("all_processing_steps_stale", coordinator)
+        self.assertIn("source_ledgers", coordinator)
+        self.assertIn("ledger_sha256", coordinator)
+        self.assertIn("summary.get(\"unresolved_count\")!=0", coordinator)
 
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
