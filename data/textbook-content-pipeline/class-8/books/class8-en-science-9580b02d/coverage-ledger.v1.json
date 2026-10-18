@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 427,
-    "successful_visual_analyses": 425,
-    "missing_visual_analyses": 1864,
+    "raw_analysis_result_rows": 430,
+    "successful_visual_analyses": 428,
+    "missing_visual_analyses": 1861,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1866,
+    "unresolved_count": 1863,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -19746,9 +19746,23 @@
       "asset_path": "assets/f2925b3d4b0b2dcb075b4b8055d2e54265d455ab947b7f6cd670bd183e0376f3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a blend of colors transitioning from light yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19764,9 +19778,19 @@
       "asset_path": "assets/d4088b4229c98a3c919160f9453004a10d7ad795f5d35135eefb7c11a7c59a13.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a gradient bar, possibly used as a design element or a placeholder for text.",
+        "limitations": [
+          "The image does not contain any text or data points.",
+          "The image is a simple gradient bar without any specific context or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19782,9 +19806,16 @@
       "asset_path": "assets/3506d1f2b4be4223dcae689575e826b043405dadbfe967aaf9a91442cda71395.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
