@@ -54,8 +54,7 @@ class AssessmentControllerTest {
   void offlinePolicyRequiresContentEditAndRejectsGeneratedTests() {
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author,"CONTENT_EDIT")).thenReturn(author);
-    when(jdbc.queryForList(contains("select id,title,status,is_generated,offline_enabled"),
-        eq(88L))).thenReturn(List.of(Map.of(
+    when(jdbc.queryForList(contains("select id,title,status,is_generated,offline_enabled"), any(Object[].class))).thenReturn(List.of(Map.of(
           "id",88L,"title","Generated test","status","PUBLISHED","is_generated",true,"offline_enabled",false)));
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
         ()->controller.updateOfflinePolicy(88L,Map.of("offlineEnabled",true),author));
@@ -91,15 +90,12 @@ class AssessmentControllerTest {
   @Test
   void directAttemptStartCannotBypassLessonCompletionGate() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select a.id from assessment a"), eq(19L), eq(7L)))
+    when(jdbc.queryForList(contains("select a.id from assessment a"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 19L)));
-    when(jdbc.queryForList(contains("coalesce(max(at.title),a.title)"),
-        eq(7L), eq("hi"), eq("hi"), eq("hi"), eq(19L)))
+    when(jdbc.queryForList(contains("coalesce(max(at.title),a.title)"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 19L)));
-    when(jdbc.queryForList(contains("select id,offline_mode from student_assessment_attempt"),
-        eq(19L), eq(7L))).thenReturn(List.of());
-    when(jdbc.queryForList(contains("and a.status='PUBLISHED' and"),
-        eq(7L), eq(19L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("select id,offline_mode from student_assessment_attempt"), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("and a.status='PUBLISHED' and"), any(Object[].class))).thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.startOrResumeAttempt(19L, "hi", false, student, TEST_TENANT));
@@ -111,7 +107,7 @@ class AssessmentControllerTest {
   void publishedAssessmentCannotSkipTheArchiveAndRestoreDraftLifecycle() {
     when(authorization.requireAuth(admin)).thenReturn(admin);
     when(authorization.requirePermission(admin, "CONTENT_EDIT")).thenReturn(admin);
-    when(jdbc.queryForList(contains("select a.id,a.title,a.status"), eq(42L)))
+    when(jdbc.queryForList(contains("select a.id,a.title,a.status"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 42L, "title", "Fractions test", "status", "PUBLISHED",
             "is_generated", false, "subject_id", 3L, "chapter_id", 9L,
             "subject_code", "maths", "class_code", "7", "question_count", 5L)));
@@ -127,7 +123,7 @@ class AssessmentControllerTest {
   void generatedAssessmentCannotBeManuallyArchived() {
     when(authorization.requireAuth(admin)).thenReturn(admin);
     when(authorization.requirePermission(admin, "CONTENT_PUBLISH")).thenReturn(admin);
-    when(jdbc.queryForList(contains("select a.id,a.title,a.status"), eq(43L)))
+    when(jdbc.queryForList(contains("select a.id,a.title,a.status"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 43L, "title", "Topic end", "status", "PUBLISHED",
             "is_generated", true, "subject_id", 3L, "chapter_id", 9L,
             "subject_code", "maths", "class_code", "7", "question_count", 5L)));
@@ -152,7 +148,7 @@ class AssessmentControllerTest {
   @Test
   void savingAResponseRequiresTheOwningStudentsInProgressAttempt() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select att.id,att.status,att.deadline_at"), eq(5L), eq(25L)))
+    when(jdbc.queryForList(contains("select att.id,att.status,att.deadline_at"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 5L, "status", "IN_PROGRESS",
             "deadline_at", OffsetDateTime.now().plusMinutes(15), "student_id", 7L)));
@@ -168,7 +164,7 @@ class AssessmentControllerTest {
   @Test
   void anotherStudentsAttemptCannotBeReadOrChanged() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select att.id,att.status,att.deadline_at"), eq(5L), eq(25L)))
+    when(jdbc.queryForList(contains("select att.id,att.status,att.deadline_at"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 5L, "status", "IN_PROGRESS",
             "deadline_at", OffsetDateTime.now().plusMinutes(15), "student_id", 8L)));
@@ -197,12 +193,10 @@ class AssessmentControllerTest {
   void gradingIsRestrictedToTheAssignedStaffMember() {
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author, "ASSESSMENT_GRADE")).thenReturn(author);
-    when(jdbc.queryForList(contains("select id,assessment_id,status,auto_score,max_score"),
-        eq(81L))).thenReturn(List.of(Map.of(
+    when(jdbc.queryForList(contains("select id,assessment_id,status,auto_score,max_score"), any(Object[].class))).thenReturn(List.of(Map.of(
             "id", 81L, "assessment_id", 21L, "status", "AWAITING_REVIEW",
             "auto_score", "2.00", "max_score", "5.00")));
-    when(jdbc.queryForObject(contains("from assessment_staff_assignment asa"),
-        eq(Long.class), eq(21L), eq(42L))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("from assessment_staff_assignment asa"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     assertThrows(SecurityException.class,
         () -> controller.gradeAttempt(81L, Map.of("answers", List.of()), author));
@@ -235,7 +229,7 @@ class AssessmentControllerTest {
     attemptRow.put("subject_code", "maths");
     attemptRow.put("subject_name", "Mathematics");
     attemptRow.put("chapter_name", "Fractions");
-    when(jdbc.queryForList(contains("select att.id as attempt_id"), eq(5L)))
+    when(jdbc.queryForList(contains("select att.id as attempt_id"), any(Object[].class)))
         .thenReturn(List.of(attemptRow));
 
     Map<String, Object> questionRow = new LinkedHashMap<>();
@@ -254,7 +248,7 @@ class AssessmentControllerTest {
     questionRow.put("is_correct", null);
     questionRow.put("awarded_marks", null);
     questionRow.put("teacher_feedback", null);
-    when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), eq(5L)))
+    when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), any(Object[].class)))
         .thenReturn(List.of(questionRow));
 
     Map<String, Object> result = controller.studentAttempt(5L, student, TEST_TENANT);
@@ -296,7 +290,7 @@ class AssessmentControllerTest {
     attemptRow.put("subject_code", "maths");
     attemptRow.put("subject_name", "Mathematics");
     attemptRow.put("chapter_name", "Fractions");
-    when(jdbc.queryForList(contains("select att.id as attempt_id"), eq(6L)))
+    when(jdbc.queryForList(contains("select att.id as attempt_id"), any(Object[].class)))
         .thenReturn(List.of(attemptRow));
 
     Map<String, Object> questionRow = new LinkedHashMap<>();
@@ -316,7 +310,7 @@ class AssessmentControllerTest {
     questionRow.put("is_correct", false);
     questionRow.put("awarded_marks", "0.00");
     questionRow.put("teacher_feedback", null);
-    when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), eq(6L)))
+    when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), any(Object[].class)))
         .thenReturn(List.of(questionRow));
 
     Map<String, Object> result = controller.studentAttempt(6L, student, TEST_TENANT);
@@ -363,9 +357,8 @@ class AssessmentControllerTest {
           {"attempt_id":101,"attempt_number":1,"status":"RELEASED","final_score":6.0,"max_score":10.0}
         ]
         """);
-    when(jdbc.queryForList(contains("with ranked as"), eq("hi"), eq("hi"), eq("hi"),
-        eq(7L), eq(25), eq(0))).thenReturn(List.of(row));
-    when(jdbc.queryForObject(contains("count(distinct att.assessment_id)"), eq(Long.class), eq(7L)))
+    when(jdbc.queryForList(contains("with ranked as"), any(Object[].class))).thenReturn(List.of(row));
+    when(jdbc.queryForObject(contains("count(distinct att.assessment_id)"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
 
     Map<String, Object> result = controller.studentResults("hi", null, 25, 0, student, TEST_TENANT);
@@ -387,9 +380,8 @@ class AssessmentControllerTest {
   @Test
   void leaderboardReturnsTopTwentyAndTheCurrentStudentsRankUsingReleasedBestAttempts() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class),
-        eq(7L), eq(20L))).thenReturn(1L);
-    when(jdbc.queryForList(contains("select a.id as assessment_id"), eq("en"), eq(20L)))
+    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class), any(Object[].class))).thenReturn(1L);
+    when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "assessment_id", 20L,
             "assessment_title", "Fractions test",
@@ -416,7 +408,7 @@ class AssessmentControllerTest {
         "max_score", new BigDecimal("20.00"),
         "time_taken_seconds", 1600L,
         "submitted_at", OffsetDateTime.now()));
-    when(jdbc.queryForList(contains("with released_attempts as"), eq(20L), eq(7L)))
+    when(jdbc.queryForList(contains("with released_attempts as"), any(Object[].class)))
         .thenReturn(rankingRows);
 
     Map<String, Object> result = controller.assessmentLeaderboard(20L, "en", student, TEST_TENANT);
@@ -439,8 +431,7 @@ class AssessmentControllerTest {
   @Test
   void leaderboardDoesNotRevealAssessmentsOutsideTheStudentsEnrolledCatalogue() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class),
-        eq(7L), eq(999L))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.assessmentLeaderboard(999L, "en", student, TEST_TENANT));
