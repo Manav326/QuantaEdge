@@ -106,7 +106,8 @@ class InstitutionBrandingAssetControlTest {
     String digest = "a".repeat(64);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
       String sql = invocation.getArgument(0);
-      Object[] args = invocation.getArgument(1);
+      // Mockito expands varargs in getArguments(); keep the SQL bind parameters together.
+      Object[] args = (Object[]) invocation.getRawArguments()[1];
       assertTrue(sql.contains("a.asset_id=case when ?='LOGO'"));
       assertTrue(sql.contains("a.asset_type=? and a.active=true"));
       assertTrue(sql.contains("t.tenant_code=? and t.status='ACTIVE' and b.version=?"));

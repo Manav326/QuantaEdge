@@ -373,3 +373,11 @@ The epic is complete only when all mandatory tasks pass, existing consumer signu
 5. **Exact-main CI and database:** successful Actions including API test execution/API image, Flyway clean install and upgrade from the current schema, asset replacement/remove/cache tests, workspace/role denials and learner A/B negative tests.
 
 **Do not mark white-label complete from source assertions or a successful generic debug APK.** Release remains blocked until the exact current `main` workflow is green and the tenant-specific API, browser and signed Android acceptance evidence is attached to issue #67.
+
+
+## GitHub Actions repair — 2026-10-18
+
+- Latest inspected main workflow, [run #3771](https://github.com/Manav326/QuantaEdge/actions/runs/39095046634), failed in API verification at `InstitutionBrandingAssetControlTest.publicAssetRouteServesOnlyAnActiveAssetAtTheExactCurrentBrandVersion`.
+- Root cause: Mockito expands Java varargs in `InvocationOnMock.getArguments()`; the test treated argument 1 as the original `Object[]`, but it was the first SQL parameter (`String`), throwing `ClassCastException`.
+- Corrected the test to read the unexpanded invocation arguments with `getRawArguments()[1]`. The SQL predicates, exact tenant/version/asset parameters, response bytes, MIME type, ETag and security-header assertions are retained.
+- **Verification status: pending a new exact-`main` Actions run.** Do not mark this release gate complete until API verification and the API image job succeed; other white-label integration and browser/device gates remain open.
