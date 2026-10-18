@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 938,
-    "successful_visual_analyses": 931,
-    "missing_visual_analyses": 6550,
-    "failed_visual_analyses": 7,
+    "raw_analysis_result_rows": 940,
+    "successful_visual_analyses": 934,
+    "missing_visual_analyses": 6548,
+    "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6557,
+    "unresolved_count": 6554,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -24761,7 +24761,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
+        "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
@@ -24770,12 +24770,12 @@
           "Activity 1.1: Question the Answer"
         ],
         "concepts": [
-          "eclipse",
+          "Eclipse",
           "Earth's rotation",
           "Moon's orbit",
-          "day and night",
-          "scientific thinking",
-          "hands-on experiments"
+          "Day and night",
+          "Science experiments",
+          "Questioning answers"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
@@ -43629,9 +43629,34 @@
       "asset_path": "assets/158f64c449dc7a51b1f56e6bd45be561f64d8903fd2bb928cd38bedc5da53b7d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page is discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or images.",
+          "The page is a text-based page with no visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45560,9 +45585,26 @@
       "asset_path": "assets/7abe97cbba47f1d24b7bfd2533085d9c7633ec7722a2f55797cdd30de3647185.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a focus on the color change of litmus solution.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus solution",
+          "Color change",
+          "Neutralisation"
+        ],
+        "context_relation": "The image illustrates the neutralization process between an acid and a base, as described in the text.",
+        "limitations": [
+          "The image does not show the actual reaction between the acid and base, only the visual result of the neutralization."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45578,9 +45620,18 @@
       "asset_path": "assets/e3ab6240b9c7acea968b8f5834dbe7a4bc909ad9bf21d9ede2d8e1c341256dcc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the text.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
