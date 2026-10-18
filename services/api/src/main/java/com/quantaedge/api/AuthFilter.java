@@ -263,9 +263,7 @@ public class AuthFilter extends OncePerRequestFilter {
             InstitutionTenantContext tenantContext;
             if (InstitutionTenantContextService.requiresInstitutionContext(uri)) {
               tenantContext = institutionTenantContextService.requireSelector(selectedInstitutionCode);
-              if (InstitutionTenantContextService.requiresActiveMembership(request.getMethod(),uri)) {
-                institutionTenantContextService.assertActiveMembership(context,tenantContext);
-              }
+              institutionTenantContextService.assertActiveMembership(context,tenantContext);
               Long targetChildId = guardianChildId(uri);
               if (targetChildId != null) {
                 institutionTenantContextService.assertGuardianChildMembership(
