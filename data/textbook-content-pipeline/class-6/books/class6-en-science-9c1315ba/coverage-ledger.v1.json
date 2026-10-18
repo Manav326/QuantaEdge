@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 741,
-    "successful_visual_analyses": 728,
-    "missing_visual_analyses": 1337,
+    "raw_analysis_result_rows": 745,
+    "successful_visual_analyses": 732,
+    "missing_visual_analyses": 1333,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1350,
+    "unresolved_count": 1346,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29174,9 +29174,28 @@
       "asset_path": "assets/26977f75ba09cdbbdfb44c01e2caee726098040cd61c8f162ee9a520d0f4cf66.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three children standing in the rain, enjoying the experience.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries",
+          "Questions"
+        ],
+        "context_relation": "The image illustrates the theme of scientific exploration and the importance of curiosity in learning.",
+        "limitations": [
+          "The image does not provide specific details about the children or their activities."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29192,9 +29211,28 @@
       "asset_path": "assets/8507922d548fb41ae038b406113f3db31090a97ee15ad284d66bc3ee92223917.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "People walking in the rain, focusing on their feet and shoes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries",
+          "Questions"
+        ],
+        "context_relation": "The image is a visual representation of the text, emphasizing the importance of curiosity and exploration in scientific inquiry.",
+        "limitations": [
+          "The image does not provide specific details about the rain or the people's activities."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29210,9 +29248,18 @@
       "asset_path": "assets/1aafecd6fa3b66ccd6c7ca18f40d475967f05c3420d900c6dea2cdd97da34243.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person walking barefoot on a wet sidewalk with grass on the side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of scientific exploration and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the person or the location."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29228,9 +29275,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

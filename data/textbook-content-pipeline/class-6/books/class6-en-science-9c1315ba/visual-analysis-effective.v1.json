@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f24a3069f6a9d3e0b04f8e69a07196f066621b89093b9714784c455e70754ee7",
+  "raw_analysis_sha256": "b77ab537c38c5604b8b257fbed48161bc720b98c76222fd8e9bf90bb2f4e8ede",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:42:27Z",
+      "checkpointed_at": "2026-10-18T14:49:54Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -32268,6 +32268,206 @@
         "context_relation": "The image illustrates the theme of scientific exploration and curiosity, encouraging children to enjoy their scientific journey and never stop asking questions.",
         "limitations": [
           "The image does not provide specific details about the children's activities or the environment they are in."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f1073efb7c4270a8dcf07bd4",
+      "asset_sha256": "26977f75ba09cdbbdfb44c01e2caee726098040cd61c8f162ee9a520d0f4cf66",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "assets/26977f75ba09cdbbdfb44c01e2caee726098040cd61c8f162ee9a520d0f4cf66.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three children standing in the rain, enjoying the experience.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries",
+          "Questions"
+        ],
+        "context_relation": "The image illustrates the theme of scientific exploration and the importance of curiosity in learning.",
+        "limitations": [
+          "The image does not provide specific details about the children or their activities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:51:32Z",
+      "effective_analysis": {
+        "visual_summary": "Three children standing in the rain, enjoying the experience.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries",
+          "Questions"
+        ],
+        "context_relation": "The image illustrates the theme of scientific exploration and the importance of curiosity in learning.",
+        "limitations": [
+          "The image does not provide specific details about the children or their activities."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fe6a28454cc8cc5134e4c0b2",
+      "asset_sha256": "8507922d548fb41ae038b406113f3db31090a97ee15ad284d66bc3ee92223917",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "assets/8507922d548fb41ae038b406113f3db31090a97ee15ad284d66bc3ee92223917.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "People walking in the rain, focusing on their feet and shoes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries",
+          "Questions"
+        ],
+        "context_relation": "The image is a visual representation of the text, emphasizing the importance of curiosity and exploration in scientific inquiry.",
+        "limitations": [
+          "The image does not provide specific details about the rain or the people's activities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:53:09Z",
+      "effective_analysis": {
+        "visual_summary": "People walking in the rain, focusing on their feet and shoes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries",
+          "Questions"
+        ],
+        "context_relation": "The image is a visual representation of the text, emphasizing the importance of curiosity and exploration in scientific inquiry.",
+        "limitations": [
+          "The image does not provide specific details about the rain or the people's activities."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "83e1aa36a627284900902f57",
+      "asset_sha256": "1aafecd6fa3b66ccd6c7ca18f40d475967f05c3420d900c6dea2cdd97da34243",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "assets/1aafecd6fa3b66ccd6c7ca18f40d475967f05c3420d900c6dea2cdd97da34243.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person walking barefoot on a wet sidewalk with grass on the side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of scientific exploration and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the person or the location."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:54:38Z",
+      "effective_analysis": {
+        "visual_summary": "A person walking barefoot on a wet sidewalk with grass on the side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of scientific exploration and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the person or the location."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5ea6d696afc12cd7e2545edf",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:54:53Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
