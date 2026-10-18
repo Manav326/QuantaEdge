@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a4e95f1115e20b045c058033b7e9cbc5e4141292e971f8855544b0a4e137d1d8",
+  "raw_analysis_sha256": "0d653699cd5cd0fa9a3aaa1a5d59a25791e4894c169dc38b01fb7bb7eb52ad8c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:02:37Z",
+      "checkpointed_at": "2026-10-18T18:10:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:02:59Z",
+      "checkpointed_at": "2026-10-18T18:10:42Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -54691,6 +54691,164 @@
         "limitations": [
           "The image does not show the actual chemical reaction or the neutralisation process."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "28f7586125d530e54c75cb9e",
+      "asset_sha256": "6347ee0026b144fe8b8bb3d895fb7146ec36600dc7389b692c21188f4adddc63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "page-0038.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of neutralization in daily life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base in suﬀicient quantity, we ﬁnd that the resulting solution is neither acidic nor basic. Such reactions are called neutralisation reactions. In a neutralisation reaction, salt and water are formed with the evolution (i.e., release) of h",
+          "Acid + Base → Salt + Water + Heat",
+          "There are many examples in everyday life where you can observe the use of neutralisation processes. Let us ﬁnd out!",
+          "2.3 Neutralisation in Daily Life",
+          "Situation 1: Keerthi was observing a butterfly in the garden with her hand resting on a tree trunk. Suddenly, a red ant bit her, leaving her skin red with stinging pain (Fig. 2.11). Her brother helped her by applying moist baking soda to the aﬀected area, which relieved the pain. What do you think m",
+          "When an ant bites, it injects an acidic liquid (formic acid) into the skin. The eﬀect of the acid can be neutralised by rubbing moist baking soda, which is a base.",
+          "What remedies do people use to treat ant bites in your region?",
+          "Situation 2: On the Farmer’s Portal (an online platform from the Department of Agriculture, Cooperation and Farmers Welfare), a query from a farmer states, “My plants are not growing well lately”. After a detailed discussion, it was found that the excessive use of chemical fertilisers (substances ad",
+          "When the soil is too acidic, the plants do not grow well. It can be treated with lime, which is a base. (Fig. 2.12).",
+          "Fig. 2.11: Stinging eﬀect of an ant bite",
+          "Fig. 2.12: Neutralising the acidic nature of soil"
+        ],
+        "concepts": [
+          "neutralisation",
+          "acid",
+          "base",
+          "lime",
+          "baking soda",
+          "ant bites",
+          "soil acidity",
+          "chemical fertilisers",
+          "plant growth"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:12:41Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of neutralization in daily life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base in suﬀicient quantity, we ﬁnd that the resulting solution is neither acidic nor basic. Such reactions are called neutralisation reactions. In a neutralisation reaction, salt and water are formed with the evolution (i.e., release) of h",
+          "Acid + Base → Salt + Water + Heat",
+          "There are many examples in everyday life where you can observe the use of neutralisation processes. Let us ﬁnd out!",
+          "2.3 Neutralisation in Daily Life",
+          "Situation 1: Keerthi was observing a butterfly in the garden with her hand resting on a tree trunk. Suddenly, a red ant bit her, leaving her skin red with stinging pain (Fig. 2.11). Her brother helped her by applying moist baking soda to the aﬀected area, which relieved the pain. What do you think m",
+          "When an ant bites, it injects an acidic liquid (formic acid) into the skin. The eﬀect of the acid can be neutralised by rubbing moist baking soda, which is a base.",
+          "What remedies do people use to treat ant bites in your region?",
+          "Situation 2: On the Farmer’s Portal (an online platform from the Department of Agriculture, Cooperation and Farmers Welfare), a query from a farmer states, “My plants are not growing well lately”. After a detailed discussion, it was found that the excessive use of chemical fertilisers (substances ad",
+          "When the soil is too acidic, the plants do not grow well. It can be treated with lime, which is a base. (Fig. 2.12).",
+          "Fig. 2.11: Stinging eﬀect of an ant bite",
+          "Fig. 2.12: Neutralising the acidic nature of soil"
+        ],
+        "concepts": [
+          "neutralisation",
+          "acid",
+          "base",
+          "lime",
+          "baking soda",
+          "ant bites",
+          "soil acidity",
+          "chemical fertilisers",
+          "plant growth"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "68a5ed3410c110170a3ca1fb",
+      "asset_sha256": "454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane with a trail of smoke or vapor behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane in motion.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:13:16Z",
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a trail of smoke or vapor behind it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane in motion.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f1e09fc46a4244ef186a9a83",
+      "asset_sha256": "8c3401abca37be6c8862e8deb762e8ab762d54011c58883c182b8a758c055744",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/8c3401abca37be6c8862e8deb762e8ab762d54011c58883c182b8a758c055744.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red dashed circle with a small red dot inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:13:50Z",
+      "effective_analysis": {
+        "visual_summary": "A red dashed circle with a small red dot inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
