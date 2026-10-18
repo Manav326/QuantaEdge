@@ -98,7 +98,7 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(new BigDecimal("1.00"), new BigDecimal(savedAnswer.get("awarded_marks").toString()));
 
     List<Map<String,Object>> afterSubmit = (List<Map<String,Object>>) controller
-        .studentAssessmentCatalog(null, "hi", 24, 0, fixture.student()).get("items");
+        .studentAssessmentCatalog(null, null, "hi", 24, 0, fixture.student(), fixture.tenant()).get("items");
     assertFalse(afterSubmit.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()),
         "An archived test must no longer appear as an actionable test after its attempt is submitted.");
