@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e697c7c1b781526b2d175149e9a76b6bf08ae912bf416aa5d34a7bf28d81c604",
+  "raw_analysis_sha256": "fe9b12590664b4df15a8bbf9586084d2fc1cb8877d8cee1669b42055ab657c87",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:12:35Z",
+      "checkpointed_at": "2026-10-18T19:15:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:12:57Z",
+      "checkpointed_at": "2026-10-18T19:16:16Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -57891,6 +57891,136 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eafaaf8bb5519333e48f597e",
+      "asset_sha256": "454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red paper airplane with a trail of smoke or vapor coming from its rear end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:16:21Z",
+      "effective_analysis": {
+        "visual_summary": "A red paper airplane with a trail of smoke or vapor coming from its rear end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6fa80588a18701762db0c7bb",
+      "asset_sha256": "8c3401abca37be6c8862e8deb762e8ab762d54011c58883c182b8a758c055744",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/8c3401abca37be6c8862e8deb762e8ab762d54011c58883c182b8a758c055744.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red dashed circle with a small red dot inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:16:26Z",
+      "effective_analysis": {
+        "visual_summary": "A red dashed circle with a small red dot inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4c1707571edf9569de595880",
+      "asset_sha256": "d2b70125092828cadfc3ea0392d85f953d53b097be1f20aad8caf2fae827dc84",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/d2b70125092828cadfc3ea0392d85f953d53b097be1f20aad8caf2fae827dc84.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a question about testing solutions for acidity or basicity using an indicator.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "21",
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for writing the message on the white sheet of paper (given at Neutral)"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basicity",
+          "Indicator",
+          "Writing materials"
+        ],
+        "context_relation": "The question is about testing solutions for acidity or basicity using an indicator, and the context is related to writing materials for a message on a white sheet of paper.",
+        "limitations": [
+          "The question does not provide specific details about the solutions or the indicator to be used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:17:10Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a question about testing solutions for acidity or basicity using an indicator.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "21",
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for writing the message on the white sheet of paper (given at Neutral)"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basicity",
+          "Indicator",
+          "Writing materials"
+        ],
+        "context_relation": "The question is about testing solutions for acidity or basicity using an indicator, and the context is related to writing materials for a message on a white sheet of paper.",
+        "limitations": [
+          "The question does not provide specific details about the solutions or the indicator to be used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
