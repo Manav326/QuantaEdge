@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 517,
+    "assets_selected": 520,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 515,
-    "assets_remaining": 1563,
-    "assets_completion_percent": 24.8,
+    "assets_analyzed": 518,
+    "assets_remaining": 1560,
+    "assets_completion_percent": 24.9,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 512,
+    "assets_skipped_from_checkpoint": 515,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T05:30:17Z"
+      "checkpointed_at": "2026-10-18T05:33:35Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T05:30:57Z"
+      "checkpointed_at": "2026-10-18T05:34:16Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -15277,6 +15277,89 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T05:32:43Z"
+    },
+    {
+      "asset_id": "02015b6daa60041f1a689f5b",
+      "asset_sha256": "009b51d4f3c5d744ab95c5a936061ce9fee696cac8cb1c299be171af3899578f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/009b51d4f3c5d744ab95c5a936061ce9fee696cac8cb1c299be171af3899578f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to light orange, possibly representing a warm, autumnal theme.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely serves as a background or cover for educational content, possibly related to the theme of autumn or fall.",
+        "limitations": [
+          "The image does not contain any specific text or data points that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T05:34:55Z"
+    },
+    {
+      "asset_id": "6ccef20561f2b055c49366e2",
+      "asset_sha256": "07324d20256250cf4c802f5858aa4929c9ad364246222d5cc8067656b2e7146d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/07324d20256250cf4c802f5858aa4929c9ad364246222d5cc8067656b2e7146d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred gradient background with shades of orange and white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or labels"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T05:35:32Z"
+    },
+    {
+      "asset_id": "7cc79999302e46f01635c9c8",
+      "asset_sha256": "d25235d8c2f83ececa96ade1e347cc12973ea59078de39b2e40db07cfe539973",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d25235d8c2f83ececa96ade1e347cc12973ea59078de39b2e40db07cfe539973.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a white and gold color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T05:36:09Z"
     }
   ]
 }
