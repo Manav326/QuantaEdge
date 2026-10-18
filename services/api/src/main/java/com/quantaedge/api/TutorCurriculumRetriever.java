@@ -110,6 +110,12 @@ public class TutorCurriculumRetriever {
     return result.toString();
   }
 
+  private Object[] retrieverPageArgs(String language,long sessionId,Long institutionId,String query) {
+    return institutionId==null
+        ? new Object[]{language,sessionId,query,query}
+        : new Object[]{language,sessionId,institutionId,query,query};
+  }
+
   private Object[] retrieverArgs(Object first,Object second,Long institutionId,Object last) {
     return institutionId==null
         ? new Object[]{first,second,last}
@@ -143,7 +149,7 @@ public class TutorCurriculumRetriever {
       left join textbook_source_book sb on sb.id=p.source_book_id
       left join learning_document d on d.id=p.learning_document_id
       left join curriculum_chapter ch on ch.id=p.chapter_id
-      where ts.id=? and ts.ended_at is null
+      where ts.id=? and ts.ended_at is null __TENANT_SCOPE__
         and p.quality_status='READY'
         and p.extraction_method in ('PDF_TEXT','OCR')
         and length(trim(p.extracted_text))>=35
@@ -162,7 +168,8 @@ public class TutorCurriculumRetriever {
         ts_rank_cd(to_tsvector('simple',coalesce(p.extracted_text,'')),plainto_tsquery('simple',?)) desc,
         p.page_no
       limit 1
-      """, language, sessionId, query, query);
+      """.replace("__TENANT_SCOPE__", institutionId==null ? "" : "and ts.institution_id=?"),
+        retrieverPageArgs(language,sessionId,institutionId,query));
     StringBuilder context = new StringBuilder();
     for (Map<String, Object> row : pages) {
       if (context.length() >= 800) break;
