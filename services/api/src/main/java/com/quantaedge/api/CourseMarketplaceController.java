@@ -60,46 +60,43 @@ public class CourseMarketplaceController {
   /** Only explicitly published offers are discoverable; this is not a list of every curriculum row. */
   @GetMapping("/courses")
   public List<Map<String, Object>> courses(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    if (tenant == null) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED", "Select an institution before opening the marketplace.");
+    }
+    long institutionId = tenant.institutionId();
     List<Map<String, Object>> offers = jdbc.queryForList("""
         select p.id as course_id, p.public_id, p.code as course_code,
           coalesce(nullif(o.title_override,''),p.display_name) as title,
           p.display_name as course_name, p.curriculum_version,
           o.description, o.price_paise, o.currency, o.status as offer_status,
           (exists(select 1 from student_program_enrollment e
-            where e.student_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
+            where e.institution_id=? and e.student_id=? and e.program_id=p.id
+              and e.status in ('ACTIVE','PAUSED'))
             or exists(select 1 from student_course_access_grant legacy_grant
-              where legacy_grant.student_id=? and legacy_grant.course_id=p.id
-                and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')) as has_access,
+              where legacy_grant.institution_id=? and legacy_grant.student_id=?
+                and legacy_grant.course_id=p.id and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')) as has_access,
           exists(select 1 from course_purchase cp
-            where cp.student_id=? and cp.course_id=p.id) as purchased,
+            where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id) as purchased,
           exists(select 1 from student_login_credential c
             where c.student_id=? and c.active=true) as parent_managed
-        from course_marketplace_offer o
+        from institution_marketplace_offer o
+        join institution_course_assignment assignment
+          on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id
+          and assignment.status='ASSIGNED'
+        join institution_course_release release
+          on release.id=o.course_release_id and release.program_id=o.course_id
+        join institution_tenant tenant_scope
+          on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where o.status='PUBLISHED'
-          and (
-            not exists(select 1 from institution_membership m
-              where m.student_id=? and m.status='ACTIVE')
-            or exists(
-              select 1 from institution_membership m
-              join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-              join institution_course_entitlement entitlement on entitlement.institution_id=m.institution_id
-                and entitlement.program_id=p.id and entitlement.status='ACTIVE'
-                and entitlement.valid_from<=now()
-                and (entitlement.valid_until is null or entitlement.valid_until>now())
-              where m.student_id=? and m.status='ACTIVE'
-            )
-            or exists(select 1 from course_purchase cp
-              where cp.student_id=? and cp.course_id=p.id)
-            or exists(select 1 from student_course_access_grant legacy_grant
-              where legacy_grant.student_id=? and legacy_grant.course_id=p.id
-                and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-          )
+        where o.institution_id=? and o.status='PUBLISHED'
         order by p.display_name,p.id
-        """, context.studentId(), context.studentId(), context.studentId(), context.studentId(),
-        context.studentId(), context.studentId(), context.studentId(), context.studentId());
+        """, institutionId, context.studentId(), institutionId, context.studentId(),
+        institutionId, context.studentId(), context.studentId(), institutionId);
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -107,8 +104,8 @@ public class CourseMarketplaceController {
             count(distinct ch.id) as chapters, count(distinct l.id) as lessons
           from curriculum_program_subject ps
           join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+            and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
           left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
             and ch.content_status='PUBLISHED'
           left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
