@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "43ee0d768a79d6bd9e4de59b0d0d95cc6287c22b95532c22c5db9a7d25b35f12",
+  "raw_analysis_sha256": "c85105bba58f1ffe37751b8574b46c8b47cae6c409e307781b63223cd1669de8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:30:56Z",
+      "checkpointed_at": "2026-10-18T18:32:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:31:17Z",
+      "checkpointed_at": "2026-10-18T18:33:10Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -55871,6 +55871,120 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "758814f88c19e39de4283def",
+      "asset_sha256": "6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5bb30676b90667338b704b3a",
+      "asset_sha256": "dde6b3268e3ce4d11e21c6e67c057e955aae91c83d7084ed2f2e125993d87266",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/dde6b3268e3ce4d11e21c6e67c057e955aae91c83d7084ed2f2e125993d87266.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope with a golden or yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:33:56Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope with a golden or yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ea1a72354056897b3c9a50b9",
+      "asset_sha256": "34e79e4fe7b466c3b60396ec3f8a5d81033454354ddf8a06857b4780aa746f14",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/34e79e4fe7b466c3b60396ec3f8a5d81033454354ddf8a06857b4780aa746f14.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health, specifically focusing on the role of organic matter in neutralizing basic soil and addressing nutrient deficiencies.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutral soil",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the effects of soil pH on plant health, specifically focusing on the role of organic matter in neutralizing basic soil and addressing nutrient deficiencies.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs.",
+          "The image does not include any illustrations or cartoons."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:34:43Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health, specifically focusing on the role of organic matter in neutralizing basic soil and addressing nutrient deficiencies.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutral soil",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the effects of soil pH on plant health, specifically focusing on the role of organic matter in neutralizing basic soil and addressing nutrient deficiencies.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs.",
+          "The image does not include any illustrations or cartoons."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
