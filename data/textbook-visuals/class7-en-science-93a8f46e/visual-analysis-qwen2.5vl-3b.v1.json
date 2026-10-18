@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 996,
+    "assets_selected": 999,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 994,
-    "assets_remaining": 6494,
+    "assets_analyzed": 997,
+    "assets_remaining": 6491,
     "assets_completion_percent": 13.3,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 991,
+    "assets_skipped_from_checkpoint": 994,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:07:07Z"
+      "checkpointed_at": "2026-10-18T19:10:06Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:07:28Z"
+      "checkpointed_at": "2026-10-18T19:10:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -36864,6 +36864,101 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T19:09:23Z"
+    },
+    {
+      "asset_id": "7b46ce4ad82e289590d0cb6a",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:10:31Z"
+    },
+    {
+      "asset_id": "9d35aa182da1bfb0b44e10f4",
+      "asset_sha256": "40dfa116a93e6187cbf9d2b6bbb6ff2d4182f5b12116132c45a1f9485faff7c0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/40dfa116a93e6187cbf9d2b6bbb6ff2d4182f5b12116132c45a1f9485faff7c0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A series of yellowish, circular objects arranged in a row.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or a cropped figure",
+          "unclear if the image is a diagram, chart, graph, table, map, cartoon, photo, or other"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:11:10Z"
+    },
+    {
+      "asset_id": "636310bd74bcaba35cfb20ff",
+      "asset_sha256": "29af1857d25fc8c4792c18458060530cfa9a865bfb3400273f59636cd26bda40",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/29af1857d25fc8c4792c18458060530cfa9a865bfb3400273f59636cd26bda40.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "blue color",
+          "reverse change"
+        ],
+        "context_relation": "The question is about identifying the solution that would reverse the color change of litmus paper from blue to red.",
+        "limitations": [
+          "The question does not provide the solution that initially turns the litmus paper blue."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:11:53Z"
     }
   ]
 }
