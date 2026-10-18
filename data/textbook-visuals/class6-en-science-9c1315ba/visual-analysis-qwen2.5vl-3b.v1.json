@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 779,
+    "assets_selected": 781,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 776,
-    "assets_remaining": 1302,
-    "assets_completion_percent": 37.3,
+    "assets_analyzed": 779,
+    "assets_remaining": 1299,
+    "assets_completion_percent": 37.5,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 774,
+    "assets_skipped_from_checkpoint": 776,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:37:52Z"
+      "checkpointed_at": "2026-10-18T16:45:46Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23294,7 +23294,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:38:56Z"
+      "checkpointed_at": "2026-10-18T16:46:51Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -23907,6 +23907,106 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T16:44:28Z"
+    },
+    {
+      "asset_id": "10987a7c70d45300207ef27f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0e8abc1d65f8ed9a2f5e88f21a0b597d18b9212a551a593a27f7354c72a82112",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:47:06Z"
+    },
+    {
+      "asset_id": "461e909d69eb06114af5e03e",
+      "asset_sha256": "2651636c44c4ba0e3696a1db4eaffb6e110d06e9c14809e848f85e26bfa0ea40",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 37,
+      "asset_path": "page-0037.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0e8abc1d65f8ed9a2f5e88f21a0b597d18b9212a551a593a27f7354c72a82112",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing types of leaf venation and roots for different plants.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.4: Types of leaf venation and roots",
+          "S. no.    Name of the  Type of leaf  Type of root",
+          "plant    venation  (reticulate/  (fibrous/tap)",
+          "1. Lemongrass  Parallel  Fibrous",
+          "2.",
+          "3.",
+          "4.",
+          "5."
+        ],
+        "concepts": [
+          "leaf venation",
+          "root types",
+          "plants"
+        ],
+        "context_relation": "The table is a result of the activity described in the text.",
+        "limitations": [
+          "The table is incomplete, missing data for rows 2, 3, 4, and 5."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:51:11Z"
+    },
+    {
+      "asset_id": "130ebca8ca1e4fcbf16cf5c4",
+      "asset_sha256": "6efff78c67b642c859c2f5a68ea43219d2bea5e3573e8a1874489fcba30903f1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/6efff78c67b642c859c2f5a68ea43219d2bea5e3573e8a1874489fcba30903f1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bea1743f5b81d502422f0298e807d095bcd1c463eaa25de9937cfffcd32ae5c3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a maize seed, showing its structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "maize seed",
+          "structure of a maize seed"
+        ],
+        "context_relation": "Comparison between chickpea and maize seeds",
+        "limitations": [
+          "No specific questions or instructions are provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:52:47Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 795,
-    "successful_visual_analyses": 778,
-    "missing_visual_analyses": 1283,
+    "raw_analysis_result_rows": 798,
+    "successful_visual_analyses": 781,
+    "missing_visual_analyses": 1280,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1300,
+    "unresolved_count": 1297,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30969,9 +30969,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30987,9 +30996,31 @@
       "asset_path": "page-0037.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table listing types of leaf venation and roots for different plants.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.4: Types of leaf venation and roots",
+          "S. no.    Name of the  Type of leaf  Type of root",
+          "plant    venation  (reticulate/  (fibrous/tap)",
+          "1. Lemongrass  Parallel  Fibrous",
+          "2.",
+          "3.",
+          "4.",
+          "5."
+        ],
+        "concepts": [
+          "leaf venation",
+          "root types",
+          "plants"
+        ],
+        "context_relation": "The table is a result of the activity described in the text.",
+        "limitations": [
+          "The table is incomplete, missing data for rows 2, 3, 4, and 5."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31005,9 +31036,21 @@
       "asset_path": "assets/6efff78c67b642c859c2f5a68ea43219d2bea5e3573e8a1874489fcba30903f1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a maize seed, showing its structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "maize seed",
+          "structure of a maize seed"
+        ],
+        "context_relation": "Comparison between chickpea and maize seeds",
+        "limitations": [
+          "No specific questions or instructions are provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
