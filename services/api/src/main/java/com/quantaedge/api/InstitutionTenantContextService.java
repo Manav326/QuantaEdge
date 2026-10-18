@@ -49,7 +49,7 @@ public class InstitutionTenantContextService {
       "/api/v1/structured-lessons",
       "/api/v1/practice",
       "/api/v1/learning/",
-      "/api/v1/guardians/children",
+      "/api/v1/guardians/children/",
       "/api/v1/certificates",
       "/api/v1/tutor",
       "/api/v1/learning-chat"
@@ -159,6 +159,17 @@ public class InstitutionTenantContextService {
 
   public static boolean requiresInstitutionContext(String requestPath) {
     if (requestPath == null) return false;
+
+    // Family identity management is intentionally institution-independent. It may list or
+    // update only the authenticated parent's own child links; tenant learning/report/course APIs
+    // remain protected below. An institution selector must not be used to grant the child a
+    // membership as a side effect of profile creation or editing.
+    if (requestPath.equals("/api/v1/guardians/children")
+        || requestPath.equals("/api/v1/guardians/children/archived")
+        || requestPath.matches("^/api/v1/guardians/children/[0-9]+(?:/(?:restore|profile|credentials))?$")) {
+      return false;
+    }
+
     // Public identity, account/session, institution join, institution-admin and HRMS-control
     // routes are intentionally not classified as learner-content APIs.
     if (requestPath.startsWith("/api/v1/auth/")
