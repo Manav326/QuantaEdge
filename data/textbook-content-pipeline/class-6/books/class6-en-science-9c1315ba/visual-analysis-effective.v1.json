@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "35f4f507769b7eabdc7c0616da67109a8a5c5b0994d8569b54b2862c022aa693",
+  "raw_analysis_sha256": "cae7697e621a101d654d30e05326c99f16daecc826f8045fa8d31833a96c41f7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T06:41:43Z",
+      "checkpointed_at": "2026-10-18T06:45:06Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T06:42:25Z",
+      "checkpointed_at": "2026-10-18T06:45:50Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -24836,6 +24836,122 @@
         "context_relation": "Background for educational content",
         "limitations": [
           "No specific content or text visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "36f4fa5687d73dc8f0de6d7e",
+      "asset_sha256": "5454236387af1d97771f0ae8c2ea3aa0dc80fa8ee0decb758595eced93ac5e7b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/5454236387af1d97771f0ae8c2ea3aa0dc80fa8ee0decb758595eced93ac5e7b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T06:46:25Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c839cf74120be2f238f9549",
+      "asset_sha256": "1afcafa433f622e047adc893e2fc0b69c7e91d3a7a019b89659531493848ba70",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1afcafa433f622e047adc893e2fc0b69c7e91d3a7a019b89659531493848ba70.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from orange to yellow to beige.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or decorative element for the page.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T06:47:04Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from orange to yellow to beige.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or decorative element for the page.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1a4f65574dbfc7eddce4dc68",
+      "asset_sha256": "048d95e1fb7a9da981c5e34f4be0ed58c5ad0928ddcde79ecc25d99f2598f26b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/048d95e1fb7a9da981c5e34f4be0ed58c5ad0928ddcde79ecc25d99f2598f26b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light yellow to dark brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The banner appears to be a decorative element, possibly for a page header or footer in a textbook.",
+        "limitations": [
+          "The banner does not contain any text or images that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T06:47:42Z",
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light yellow to dark brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The banner appears to be a decorative element, possibly for a page header or footer in a textbook.",
+        "limitations": [
+          "The banner does not contain any text or images that can be analyzed for content or context."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
