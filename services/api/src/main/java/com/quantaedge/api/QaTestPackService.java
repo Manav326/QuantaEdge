@@ -113,6 +113,7 @@ public class QaTestPackService {
     Map<String,Object> run = findRun(runId);
     if (run == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "QA run not found.");
     Map<String,Object> result = new LinkedHashMap<>(run);
+    result.put("fixtureSummary", readJsonMap(run.get("fixture_summary")));
     result.put("resources", jdbc.queryForList("""
       select resource_key,resource_kind,resource_id,resource_ref,dependency_keys,
              cleanup_order,state,created_at,cleaned_at,cleanup_detail
@@ -121,6 +122,10 @@ public class QaTestPackService {
     result.put("events", jdbc.queryForList("""
       select event_type,from_state,to_state,details,created_at
       from qa_test_run_event where run_id=? order by id
+      """, runId));
+    result.put("checks", jdbc.queryForList("""
+      select check_key,status,expected,actual,details,tested_commit_sha,executed_at
+      from qa_test_run_check where run_id=? order by executed_at desc,id desc
       """, runId));
     return result;
   }
@@ -214,10 +219,10 @@ public class QaTestPackService {
       String manifestHash = manifestChecksum(runId);
       jdbc.update("""
         update qa_test_run set state='INSTALLED',planned_resource_count=?,
-          created_resource_count=?,cleaned_resource_count=0,manifest_sha256=?,
+          created_resource_count=?,cleaned_resource_count=0,manifest_sha256=?,fixture_summary=?::jsonb,
           installed_at=now(),updated_at=now(),error_code=null,error_summary=null
         where run_id=?
-        """, resourceCount, resourceCount, manifestHash, runId);
+        """, resourceCount, resourceCount, manifestHash, json(fixtureResult.get("fixtureSummary")), runId);
       addEvent(runId, "INSTALL_SUCCEEDED", "INSTALLING", "INSTALLED", actorStaffId,
           Map.of("createdResourceCount", resourceCount, "manifestSha256", manifestHash));
       Map<String,Object> result = getRun(runId);
@@ -323,6 +328,164 @@ public class QaTestPackService {
     result.put("replayed", false);
     result.put("uninstallPlan", uninstallPlan(runId));
     return result;
+  }
+
+  public Map<String,Object> verifyRun(UUID runId, Long actorStaffId) {
+    requireWritableEnvironment(evaluateGate());
+    Map<String,Object> run = findRun(runId);
+    if (run == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "QA run not found.");
+    if (!"INSTALLED".equals(String.valueOf(run.get("state")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "Only an installed QA run can be verified.");
+    }
+    List<Map<String,Object>> checks = new ArrayList<>();
+    long tenantCount = scalarCount("select count(*) from institution_tenant where qa_test_run_id=?", runId);
+    addCheck(runId, checks, "PACK_TWO_TENANTS", tenantCount == 2, "2 run-owned active institutions",
+        Long.toString(tenantCount), Map.of("actual", tenantCount));
+
+    long parentCount = scalarCount("select count(*) from user_account where qa_test_run_id=? and role='PARENT' and active=true", runId);
+    addCheck(runId, checks, "PACK_TWO_PARENTS", parentCount == 2, "2 active synthetic parent accounts",
+        Long.toString(parentCount), Map.of("actual", parentCount));
+
+    long studentCount = scalarCount("select count(*) from student where qa_test_run_id=? and active=true", runId);
+    addCheck(runId, checks, "PACK_THREE_LEARNERS", studentCount == 3, "3 active synthetic student profiles",
+        Long.toString(studentCount), Map.of("actual", studentCount));
+
+    long guardianCount = scalarCount("select count(*) from guardian_student where qa_test_run_id=? and active=true and consent_status='CONSENTED'", runId);
+    addCheck(runId, checks, "PACK_TWO_CONSENTED_GUARDIAN_LINKS", guardianCount == 2,
+        "2 active, consented parent-child relationships", Long.toString(guardianCount), Map.of("actual", guardianCount));
+
+    long crossTenantGuardianLinks = scalarCount("""
+      select count(*) from guardian_student gs
+      join institution_user_membership um on um.user_id=gs.guardian_user_id and um.status='ACTIVE'
+      join institution_membership sm on sm.student_id=gs.student_id and sm.status='ACTIVE'
+      where gs.qa_test_run_id=? and um.qa_test_run_id=? and sm.qa_test_run_id=?
+        and um.institution_id<>sm.institution_id
+      """, runId, runId, runId);
+    addCheck(runId, checks, "GUARDIAN_LINKS_STAY_IN_TENANT", crossTenantGuardianLinks == 0,
+        "0 parent-child links crossing institution membership", Long.toString(crossTenantGuardianLinks),
+        Map.of("unexpectedCrossTenantLinks", crossTenantGuardianLinks));
+
+    long userMembershipCount = scalarCount("select count(*) from institution_user_membership where qa_test_run_id=? and status='ACTIVE'", runId);
+    addCheck(runId, checks, "PACK_THREE_USER_MEMBERSHIPS", userMembershipCount == 3,
+        "3 active user institution memberships", Long.toString(userMembershipCount), Map.of("actual", userMembershipCount));
+
+    long studentMembershipCount = scalarCount("select count(*) from institution_membership where qa_test_run_id=? and status='ACTIVE'", runId);
+    addCheck(runId, checks, "PACK_THREE_STUDENT_MEMBERSHIPS", studentMembershipCount == 3,
+        "3 active student institution memberships", Long.toString(studentMembershipCount), Map.of("actual", studentMembershipCount));
+
+    long offScopeProgress = scalarCount("""
+      select count(*) from student_lesson_progress p
+      where p.qa_test_run_id=? and not exists (
+        select 1 from institution_membership m
+        where m.student_id=p.student_id and m.institution_id=p.institution_id
+          and m.status='ACTIVE' and m.qa_test_run_id=?
+      )
+      """, runId, runId);
+    addCheck(runId, checks, "LEARNING_PROGRESS_HAS_TENANT_MEMBERSHIP", offScopeProgress == 0,
+        "0 progress rows without matching active tenant membership", Long.toString(offScopeProgress),
+        Map.of("offScopeRows", offScopeProgress));
+
+    long progressCount = scalarCount("select count(*) from student_lesson_progress where qa_test_run_id=?", runId);
+    addCheck(runId, checks, "PACK_THREE_PROGRESS_ROWS", progressCount == 3,
+        "3 synthetic lesson progress rows", Long.toString(progressCount), Map.of("actual", progressCount));
+
+    long correctAttempts = scalarCount("select count(*) from student_question_attempt where qa_test_run_id=? and correct=true", runId);
+    long incorrectAttempts = scalarCount("select count(*) from student_question_attempt where qa_test_run_id=? and correct=false", runId);
+    addCheck(runId, checks, "PACK_CONTRASTING_ANSWER_OUTCOMES", correctAttempts == 2 && incorrectAttempts == 1,
+        "2 correct and 1 incorrect synthetic question attempt",
+        "correct=" + correctAttempts + ", incorrect=" + incorrectAttempts,
+        Map.of("correct", correctAttempts, "incorrect", incorrectAttempts));
+
+    List<Map<String,Object>> resources = jdbc.queryForList("""
+      select id,resource_key,resource_kind,resource_id,state
+      from qa_test_run_resource where run_id=? order by resource_key
+      """, runId);
+    long missingOwnedResources = 0;
+    for (Map<String,Object> resource : resources) {
+      boolean found = resourceIsOwned(runId, resource);
+      if (!found) missingOwnedResources++;
+      String key = "RESOURCE_OWNED_" + String.valueOf(resource.get("resource_key")).replaceAll("[^A-Za-z0-9_]", "_");
+      addCheck(runId, checks, key, found, "Exact manifest ID exists with this run ownership marker",
+          found ? "row exists and is owned by this run" : "row missing or ownership marker mismatched",
+          Map.of("resourceKind", String.valueOf(resource.get("resource_kind")),
+              "resourceId", String.valueOf(resource.get("resource_id"))));
+    }
+    addCheck(runId, checks, "MANIFEST_RESOURCE_OWNERSHIP_COMPLETE", missingOwnedResources == 0,
+        "Every manifest entry resolves to its exact run-owned row",
+        "missingOrUnowned=" + missingOwnedResources + "; manifestRows=" + resources.size(),
+        Map.of("missingOrUnowned", missingOwnedResources, "manifestRows", resources.size()));
+
+    Map<String,Object> baselineBefore = readJsonMap(run.get("protected_baseline"));
+    Map<String,Object> baselineAfter = baselineSnapshot();
+    boolean baselineMatches = mapper.valueToTree(baselineBefore).equals(mapper.valueToTree(baselineAfter));
+    addCheck(runId, checks, "PROTECTED_BASELINE_UNCHANGED", baselineMatches,
+        "Protected non-QA institution/account/student fingerprints match the captured baseline",
+        baselineMatches ? "baseline matches" : "protected counts or row fingerprints changed",
+        Map.of("baselineBefore", baselineBefore, "baselineAfter", baselineAfter));
+
+    long unexpectedExternalResources = scalarCount("""
+      select count(*) from qa_test_run_resource
+      where run_id=? and resource_kind not in (
+        'INSTITUTION','INSTITUTION_BRANDING','USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT',
+        'INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP','STUDENT_LOGIN_CREDENTIAL',
+        'STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT'
+      )
+      """, runId);
+    addCheck(runId, checks, "STARTER_PACK_HAS_NO_EXTERNAL_RESOURCES", unexpectedExternalResources == 0,
+        "No external provider or storage resource is created by this starter pack",
+        Long.toString(unexpectedExternalResources), Map.of("unexpectedExternalResources", unexpectedExternalResources));
+
+    long failed = checks.stream().filter(check -> "FAIL".equals(check.get("status"))).count();
+    long passed = checks.size() - failed;
+    String overall = failed == 0 ? "PASS" : "FAIL";
+    addEvent(runId, "VERIFY_COMPLETED", "INSTALLED", "INSTALLED", actorStaffId,
+        Map.of("overallStatus", overall, "passedChecks", passed, "failedChecks", failed));
+    Map<String,Object> result = getRun(runId);
+    result.put("verification", Map.of("overallStatus", overall, "passedChecks", passed, "failedChecks", failed));
+    return result;
+  }
+
+  private void addCheck(UUID runId, List<Map<String,Object>> output, String checkKey,
+      boolean passed, String expected, String actual, Map<String,Object> details) {
+    String status = passed ? "PASS" : "FAIL";
+    jdbc.update("""
+      insert into qa_test_run_check(run_id,check_key,status,expected,actual,details,tested_commit_sha)
+      values (?,?,?,?,?,?::jsonb,?)
+      """, runId, checkKey, status, expected, actual, json(details), sourceCommitSha());
+    Map<String,Object> row = new LinkedHashMap<>();
+    row.put("check_key", checkKey);
+    row.put("status", status);
+    row.put("expected", expected);
+    row.put("actual", actual);
+    row.put("details", details);
+    row.put("executed_at", Instant.now().toString());
+    output.add(row);
+  }
+
+  private long scalarCount(String sql, Object... args) {
+    Long value = jdbc.queryForObject(sql, Long.class, args);
+    return value == null ? 0L : value;
+  }
+
+  private boolean resourceIsOwned(UUID runId, Map<String,Object> resource) {
+    long id = number(resource.get("resource_id"));
+    String kind = String.valueOf(resource.get("resource_kind"));
+    String sql = switch (kind) {
+      case "STUDENT_QUESTION_ATTEMPT" -> "select exists(select 1 from student_question_attempt where id=? and qa_test_run_id=?)";
+      case "STUDENT_LESSON_PROGRESS" -> "select exists(select 1 from student_lesson_progress where id=? and qa_test_run_id=?)";
+      case "STUDENT_TRACK_ENROLLMENT" -> "select exists(select 1 from student_track_enrollment where id=? and qa_test_run_id=?)";
+      case "STUDENT_LOGIN_CREDENTIAL" -> "select exists(select 1 from student_login_credential where id=? and qa_test_run_id=?)";
+      case "GUARDIAN_STUDENT" -> "select exists(select 1 from guardian_student where id=? and qa_test_run_id=?)";
+      case "INSTITUTION_MEMBERSHIP" -> "select exists(select 1 from institution_membership where id=? and qa_test_run_id=?)";
+      case "INSTITUTION_USER_MEMBERSHIP" -> "select exists(select 1 from institution_user_membership where id=? and qa_test_run_id=?)";
+      case "STUDENT" -> "select exists(select 1 from student where id=? and qa_test_run_id=?)";
+      case "USER_ACCOUNT" -> "select exists(select 1 from user_account where id=? and qa_test_run_id=?)";
+      case "INSTITUTION_BRANDING" -> "select exists(select 1 from institution_branding where institution_id=? and qa_test_run_id=?)";
+      case "INSTITUTION" -> "select exists(select 1 from institution_tenant where id=? and qa_test_run_id=?)";
+      default -> throw new IllegalArgumentException("Unsupported manifest resource kind for verification.");
+    };
+    Boolean found = jdbc.queryForObject(sql, Boolean.class, id, runId);
+    return Boolean.TRUE.equals(found);
   }
 
   private Map<String,Object> seedTenantLearnerPack(UUID runId, Long actorStaffId) {
@@ -627,7 +790,7 @@ public class QaTestPackService {
       select run_id,pack_key,pack_version,idempotency_key,state,environment_label,
         target_database_label,source_commit_sha,pack_definition_sha256,created_by_staff_id,
         planned_resource_count,created_resource_count,cleaned_resource_count,protected_baseline,
-        cleanup_report,error_code,error_summary,created_at,updated_at,installed_at,uninstalled_at
+        fixture_summary,cleanup_report,error_code,error_summary,created_at,updated_at,installed_at,uninstalled_at
       from qa_test_run where run_id=?
       """, runId);
     return rows.isEmpty() ? null : rows.getFirst();
