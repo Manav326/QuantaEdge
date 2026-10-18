@@ -112,7 +112,7 @@ class LearningDocumentControllerTest {
   @Test
   void outOfScopeStudentCannotCausePdfBytesToBeRead() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("from learning_document d"), eq(7L), eq(55L)))
+    when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
@@ -127,7 +127,7 @@ class LearningDocumentControllerTest {
   void activeChapterPdfCanBePublishedBeforeLessonContentIsPublished() {
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author, "CONTENT_PUBLISH")).thenReturn(author);
-    when(jdbc.queryForList(contains("from learning_document d"), eq(88L))).thenReturn(List.of(
+    when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of(
         Map.ofEntries(
             Map.entry("id", 88L), Map.entry("document_id", 88L), Map.entry("scope", "CHAPTER_PDF"), Map.entry("subject_id", 3L),
             Map.entry("chapter_id", 9L), Map.entry("status", "DRAFT"),
@@ -151,7 +151,7 @@ class LearningDocumentControllerTest {
   void publishingOneMathsPartDoesNotArchiveTheOtherPart() {
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author, "CONTENT_PUBLISH")).thenReturn(author);
-    when(jdbc.queryForList(contains("from learning_document d"), eq(88L))).thenReturn(List.of(
+    when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of(
         Map.ofEntries(
             Map.entry("id", 88L), Map.entry("document_id", 88L),
             Map.entry("scope", "SUBJECT_BOOK"), Map.entry("subject_id", 3L),
@@ -212,12 +212,9 @@ class LearningDocumentControllerTest {
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
-    when(jdbc.queryForList(
-        contains("where d.id=? and d.status='PUBLISHED'"), eq(7L), eq(88L)))
+    when(jdbc.queryForList(contains("where d.id=? and d.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of(metadata));
-    when(jdbc.queryForObject(
-        contains("select pdf_bytes from learning_pdf_asset where id=?"),
-        eq(byte[].class), eq(12L))).thenReturn(sourcePdf);
+    when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
     var pageOne = controller.studentDocumentPage(88L, 1, "full", student, TEST_TENANT);
     var pageTwo = controller.studentDocumentPage(88L, 2, "full", student, TEST_TENANT);
@@ -255,12 +252,9 @@ class LearningDocumentControllerTest {
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
-    when(jdbc.queryForList(
-        contains("where d.id=? and d.status='PUBLISHED'"), eq(7L), eq(88L)))
+    when(jdbc.queryForList(contains("where d.id=? and d.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of(metadata));
-    when(jdbc.queryForObject(
-        contains("select pdf_bytes from learning_pdf_asset where id=?"),
-        eq(byte[].class), eq(12L))).thenReturn(sourcePdf);
+    when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
     Map<String, Object> finalBatch =
         controller.studentDocumentPageBatch(88L, 2, 10, "thumbnail", student, TEST_TENANT);
