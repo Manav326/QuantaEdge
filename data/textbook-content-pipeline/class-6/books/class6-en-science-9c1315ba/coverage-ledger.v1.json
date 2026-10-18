@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 487,
-    "successful_visual_analyses": 487,
-    "missing_visual_analyses": 1591,
+    "raw_analysis_result_rows": 490,
+    "successful_visual_analyses": 490,
+    "missing_visual_analyses": 1588,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1591,
+    "unresolved_count": 1588,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21758,9 +21758,19 @@
       "asset_path": "assets/670e8d6f30e3280f6fd000cfc7898a0530552de04034b082bc53af08a62ea461.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness",
+          "No specific text or labels visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21776,9 +21786,23 @@
       "asset_path": "assets/7e200528a052e4d97d66e0dbc8bef84866c9d291a09b10dcf7457f469c5a18a3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal bar chart with a gradient background.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The visible text is related to the concept of reprinting something from the year 2026-27.",
+        "limitations": [
+          "The image does not provide specific details about what is being reprinted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -21794,9 +21818,16 @@
       "asset_path": "assets/98789dc59d1b30200020e7085c62f46462b107bd6e970542dc3c00cd86ca4768.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm orange, possibly representing a sunrise or sunset.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content, possibly for a page with text or images.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
