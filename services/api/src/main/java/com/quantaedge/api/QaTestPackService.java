@@ -237,22 +237,25 @@ public class QaTestPackService {
     }
 
     try {
-      @SuppressWarnings("unchecked")
-      Map<String,Object> fixtureResult = transaction.execute(status -> seedTenantLearnerPack(runId, actorStaffId));
-      int resourceCount = countResources(runId);
-      String manifestHash = manifestChecksum(runId);
-      jdbc.update("""
-        update qa_test_run set state='INSTALLED',planned_resource_count=?,
-          created_resource_count=?,cleaned_resource_count=0,manifest_sha256=?,fixture_summary=?::jsonb,
-          installed_at=now(),updated_at=now(),error_code=null,error_summary=null
-        where run_id=?
-        """, resourceCount, resourceCount, manifestHash, json(fixtureResult.get("fixtureSummary")), runId);
-      addEvent(runId, "INSTALL_SUCCEEDED", "INSTALLING", "INSTALLED", actorStaffId,
-          Map.of("createdResourceCount", resourceCount, "manifestSha256", manifestHash));
+      InstallOutcome outcome = transaction.execute(status -> {
+        Map<String,Object> fixtureResult = seedTenantLearnerPack(runId, actorStaffId);
+        int resourceCount = countResources(runId);
+        String manifestHash = manifestChecksum(runId);
+        jdbc.update("""
+          update qa_test_run set state='INSTALLED',planned_resource_count=?,
+            created_resource_count=?,cleaned_resource_count=0,manifest_sha256=?,fixture_summary=?::jsonb,
+            installed_at=now(),updated_at=now(),error_code=null,error_summary=null
+          where run_id=? and state='INSTALLING'
+          """, resourceCount, resourceCount, manifestHash, json(fixtureResult.get("fixtureSummary")), runId);
+        addEvent(runId, "INSTALL_SUCCEEDED", "INSTALLING", "INSTALLED", actorStaffId,
+            Map.of("createdResourceCount", resourceCount, "manifestSha256", manifestHash));
+        return new InstallOutcome(fixtureResult, resourceCount, manifestHash);
+      });
+      if (outcome == null) throw new IllegalStateException("Install transaction did not return an outcome.");
       Map<String,Object> result = getRun(runId);
       result.put("replayed", false);
       result.put("credentialsIncluded", true);
-      result.put("oneTimeSyntheticCredentials", fixtureResult.get("credentials"));
+      result.put("oneTimeSyntheticCredentials", outcome.fixtureResult().get("credentials"));
       result.put("credentialHandling", "Plaintext credentials are returned only by this install response; they are not stored in the run manifest.");
       return result;
     } catch (Exception ex) {
@@ -984,5 +987,6 @@ public class QaTestPackService {
 
   private record Gate(String databaseName, boolean databaseApproved, boolean productionProfile,
       boolean allowed, String reason, boolean fixtureCredentialsConfigured) {}
+  private record InstallOutcome(Map<String,Object> fixtureResult, int resourceCount, String manifestHash) {}
   private record DeleteSpec(String deleteSql, String ownerSql) {}
 }
