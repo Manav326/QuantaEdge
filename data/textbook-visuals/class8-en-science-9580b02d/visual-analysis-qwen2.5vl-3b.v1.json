@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 434,
+    "assets_selected": 437,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 432,
-    "assets_remaining": 1859,
-    "assets_completion_percent": 18.9,
+    "assets_analyzed": 435,
+    "assets_remaining": 1856,
+    "assets_completion_percent": 19.0,
     "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 429,
+    "assets_skipped_from_checkpoint": 432,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:37:50Z"
+      "checkpointed_at": "2026-10-18T06:44:25Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:38:37Z"
+      "checkpointed_at": "2026-10-18T06:45:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -12910,6 +12910,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T06:43:16Z"
+    },
+    {
+      "asset_id": "471cd7373d965e673ecbea8b",
+      "asset_sha256": "e8a70ca331152ec37aee16ca9f9190d8d131d66cefab4957a5dbbc85a8a35136",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e8a70ca331152ec37aee16ca9f9190d8d131d66cefab4957a5dbbc85a8a35136.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to yellow, possibly representing a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "header or footer",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:46:39Z"
+    },
+    {
+      "asset_id": "4e9a00a85e7d3aca49db6001",
+      "asset_sha256": "da6f959e401a226bd135f5cba5e65c4cf675a04b22e79d7182dfc559dde08f25",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/da6f959e401a226bd135f5cba5e65c4cf675a04b22e79d7182dfc559dde08f25.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange to brown.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:48:08Z"
+    },
+    {
+      "asset_id": "9203b3676e4df1d7ef6beeaf",
+      "asset_sha256": "22bda06e612e2eac8c36ba3dac28ef77f4f979347ed2f27785288c6cd1ccf717",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/22bda06e612e2eac8c36ba3dac28ef77f4f979347ed2f27785288c6cd1ccf717.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a header or footer in a document.",
+        "limitations": [
+          "The image does not contain any specific text or data that can be analyzed for educational content editing. It is a simple gradient bar with no additional elements or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:49:50Z"
     }
   ]
 }
