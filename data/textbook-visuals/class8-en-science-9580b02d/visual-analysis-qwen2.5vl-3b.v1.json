@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 521,
+    "assets_selected": 524,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 519,
-    "assets_remaining": 1772,
-    "assets_completion_percent": 22.7,
+    "assets_analyzed": 522,
+    "assets_remaining": 1769,
+    "assets_completion_percent": 22.8,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 516,
+    "assets_skipped_from_checkpoint": 519,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T13:51:52Z"
+      "checkpointed_at": "2026-10-18T13:58:31Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T13:53:12Z"
+      "checkpointed_at": "2026-10-18T13:59:52Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -15368,6 +15368,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T13:56:49Z"
+    },
+    {
+      "asset_id": "7fad84c1d430f1081fdb4a1d",
+      "asset_sha256": "cef35c790bb24ba8b355008bf07e0b79b2b6f2bcaabfa151c0975220767ace6f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cef35c790bb24ba8b355008bf07e0b79b2b6f2bcaabfa151c0975220767ace6f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light yellow to a darker shade of yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T14:01:02Z"
+    },
+    {
+      "asset_id": "fd812df82e9f3b4578b8bc44",
+      "asset_sha256": "d38d20c02efd3dbe42d344ed091cd09b1090d2110d85e6572dcd75b2f186b72b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d38d20c02efd3dbe42d344ed091cd09b1090d2110d85e6572dcd75b2f186b72b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a mix of yellow, white, and beige colors.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T14:02:15Z"
+    },
+    {
+      "asset_id": "82900e0d23dd2e7fd37030a6",
+      "asset_sha256": "5810a8785621d7d08df7719fd6a835ff2588b3620b2b1f484b5ca34f6fbb6825",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/5810a8785621d7d08df7719fd6a835ff2588b3620b2b1f484b5ca34f6fbb6825.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, earthy tone.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T14:03:28Z"
     }
   ]
 }
