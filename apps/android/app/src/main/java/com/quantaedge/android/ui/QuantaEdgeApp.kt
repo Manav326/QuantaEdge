@@ -232,6 +232,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var pendingInstitutionJoinCode by rememberSaveable {
         mutableStateOf(InstitutionBrandingRepository.joinCodeFromIntent(launchIntent).orEmpty())
     }
+    var institutionJoinFailure by rememberSaveable { mutableStateOf(false) }
+    var institutionEnrollmentMessage by rememberSaveable { mutableStateOf("") }
+    var institutionEnrollmentRetryable by rememberSaveable { mutableStateOf(false) }
+    var institutionJoinRetryVersion by remember { mutableStateOf(0) }
     val packagedTenantLogo = remember(configuredTenantCode) {
         if (BuildConfig.IS_TENANT_BRANDED && configuredTenantCode != null)
             runCatching { BitmapFactory.decodeResource(context.resources, R.drawable.qe_launcher_icon) }.getOrNull()
@@ -269,6 +273,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             return@LaunchedEffect
         }
         val incomingCode = linkedCode ?: configuredTenantCode
+        if (incomingCode != null || incomingJoinCode != null) {
+            institutionJoinFailure = false
+            institutionEnrollmentMessage = ""
+            institutionEnrollmentRetryable = false
+        }
         if (incomingCode != null) {
             val previousCode = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
             if (previousCode != incomingCode) {
@@ -296,8 +305,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val stateOwnerKey = auth.textAny("user_id", "userId", "id", "account_id", "mobile_e164")
         .ifBlank { auth.textAny("role", "displayName", "display_name").ifBlank { "anonymous" } }
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
-    LaunchedEffect(activeTenantCode, pendingInstitutionJoinCode, stateOwnerKey) {
+    LaunchedEffect(activeTenantCode, pendingInstitutionJoinCode, stateOwnerKey, institutionJoinRetryVersion) {
         val role = auth.optString("role").uppercase()
+        var joinFailedThisRun = false
+        if (institutionJoinFailure && launchTenantCode == null && pendingInstitutionJoinCode.isBlank()) {
+            institutionBrandIdentity = null
+            themeController.clearInstitutionTheme()
+            activeTenantCode = ""
+            preferences.edit().remove("institutionCode").apply()
+            institutionBrandResolutionPending = false
+            return@LaunchedEffect
+        }
         // Do not revive a previous signed-in user's persisted tenant palette on an unqualified launch.
         // An explicit institution deep link may still brand the pre-login entry screen.
         if (stateOwnerKey == "anonymous" && launchTenantCode == null) {
@@ -314,15 +332,55 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ?: configuredTenantCode
         try {
             if (pendingInstitutionJoinCode.isNotBlank() && role == "STUDENT" && stateOwnerKey != "anonymous") {
-                val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode, code)
-                pendingInstitutionJoinCode = ""
-                code = InstitutionBrandingRepository.normalizeCode(joined.optString("institutionCode")) ?: code
-                if (code != null) {
-                    activeTenantCode = code
-                    preferences.edit().putString("institutionCode", code).apply()
+                try {
+                    val joined = InstitutionBrandingRepository.join(pendingInstitutionJoinCode, code)
+                    pendingInstitutionJoinCode = ""
+                    code = InstitutionBrandingRepository.normalizeCode(joined.optString("institutionCode")) ?: code
+                    institutionJoinFailure = false
+                    institutionEnrollmentMessage = ""
+                    institutionEnrollmentRetryable = false
+                    if (code != null) {
+                        activeTenantCode = code
+                        preferences.edit().putString("institutionCode", code).apply()
+                    }
+                } catch (problem: Exception) {
+                    joinFailedThisRun = true
+                    institutionJoinFailure = true
+                    val httpStatus = (problem as? com.quantaedge.android.data.ApiFailure)?.statusCode ?: 0
+                    when (httpStatus) {
+                        400, 404, 410, 422 -> {
+                            pendingInstitutionJoinCode = ""
+                            institutionEnrollmentRetryable = false
+                            institutionEnrollmentMessage = if (language == "hi")
+                                "विद्यालय का आमंत्रण अमान्य या समाप्त हो गया है। अपने विद्यालय से नया learning link लें। नामांकन की पुष्टि नहीं हुई।"
+                            else
+                                "This school invitation is invalid or expired. Ask your school for a new learning link. Enrollment is not confirmed."
+                        }
+                        429 -> {
+                            institutionEnrollmentRetryable = true
+                            institutionEnrollmentMessage = if (language == "hi")
+                                "इस आमंत्रण पर बहुत अधिक प्रयास हुए हैं। कुछ देर रुककर फिर कोशिश करें।"
+                            else
+                                "There have been too many attempts. Wait a little before retrying this school invitation."
+                        }
+                        401, 403 -> {
+                            institutionEnrollmentRetryable = false
+                            institutionEnrollmentMessage = if (language == "hi")
+                                "आपका साइन-इन सत्यापित नहीं हो सका। फिर से साइन इन करके विद्यालय का लिंक खोलें।"
+                            else
+                                "Your sign-in could not be verified. Sign in again, then reopen your school link."
+                        }
+                        else -> {
+                            institutionEnrollmentRetryable = true
+                            institutionEnrollmentMessage = if (language == "hi")
+                                "विद्यालय में नामांकन की पुष्टि नहीं हो सकी। नेटवर्क जाँचें और फिर कोशिश करें; विद्यालय का लिंक सुरक्षित है।"
+                            else
+                                "School enrollment could not be confirmed. Check your connection and retry; your school link is retained."
+                        }
+                    }
                 }
             }
-            if (role == "STUDENT" && stateOwnerKey != "anonymous" && launchTenantCode == null) {
+            if (role == "STUDENT" && stateOwnerKey != "anonymous" && launchTenantCode == null && !joinFailedThisRun && !institutionJoinFailure) {
                 val rememberedSchoolIsCurrent = code != null &&
                     InstitutionBrandingRepository.hasActiveMembership(code)
                 if (!rememberedSchoolIsCurrent) {
@@ -3387,6 +3445,38 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.secondary
                     )
+                }
+            }
+            if (institutionEnrollmentMessage.isNotBlank()) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(text = institutionEnrollmentMessage, style = MaterialTheme.typography.bodyMedium)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (institutionEnrollmentRetryable) {
+                                TextButton(onClick = {
+                                    institutionEnrollmentMessage = ""
+                                    institutionJoinRetryVersion += 1
+                                }, enabled = !busy) {
+                                    Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
+                                }
+                            }
+                            TextButton(onClick = { institutionEnrollmentMessage = "" }, enabled = !busy) {
+                                Text(if (language == "hi") "बंद करें" else "Dismiss")
+                            }
+                        }
+                    }
                 }
             }
             if (error.isNotBlank()) {
