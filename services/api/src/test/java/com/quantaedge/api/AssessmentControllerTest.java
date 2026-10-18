@@ -69,7 +69,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of());
 
-    controller.studentAssessmentCatalog(null, "hi", 24, 0, student);
+    controller.studentAssessmentCatalog(null, "hi", 24, 0, student, TEST_TENANT);
 
     verify(jdbc).queryForList(contains("tp.status='COMPLETED'"), any(Object[].class));
     verify(jdbc).queryForList(contains("required_lesson.chapter_id=ch.id"), any(Object[].class));
@@ -81,7 +81,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
         .thenReturn(List.of());
 
-    controller.studentAssessmentCatalog(null, "hi", 24, 0, student);
+    controller.studentAssessmentCatalog(null, "hi", 24, 0, student, TEST_TENANT);
 
     verify(jdbc).queryForList(contains("resumable.student_id=st.id"), any(Object[].class));
     verify(jdbc).queryForList(contains("resumable.status='IN_PROGRESS'"), any(Object[].class));
@@ -102,7 +102,7 @@ class AssessmentControllerTest {
         eq(7L), eq(19L))).thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.startOrResumeAttempt(19L, "hi", student));
+        () -> controller.startOrResumeAttempt(19L, "hi", student, TEST_TENANT));
 
     assertEquals(409, error.getStatusCode().value());
   }
