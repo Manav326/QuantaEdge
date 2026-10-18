@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 448,
-    "successful_visual_analyses": 446,
-    "missing_visual_analyses": 1843,
+    "raw_analysis_result_rows": 451,
+    "successful_visual_analyses": 449,
+    "missing_visual_analyses": 1840,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1845,
+    "unresolved_count": 1842,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -20343,9 +20343,18 @@
       "asset_path": "assets/071f771df2bd18ed9e29344adb8ebdfb7891d427948498893290b577fe880618.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20361,9 +20370,19 @@
       "asset_path": "assets/32d434b384e4e72df663034a493b05c268c90517bb3ae0d0e420b35d765c3bce.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal bar chart with a gradient background transitioning from white to orange.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a bar chart, likely used for data comparison or analysis.",
+        "limitations": [
+          "The image does not contain any specific data points or labels.",
+          "The gradient background may affect the readability of the chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20379,9 +20398,18 @@
       "asset_path": "assets/46dbd2f5e9e9b47d44ac288bc8cc73f65345c2b4455fe3b7747fed716f6930d9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
