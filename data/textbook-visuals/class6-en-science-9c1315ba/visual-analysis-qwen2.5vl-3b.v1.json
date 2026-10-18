@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 802,
+    "assets_selected": 804,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 799,
-    "assets_remaining": 1279,
+    "assets_analyzed": 801,
+    "assets_remaining": 1277,
     "assets_completion_percent": 38.5,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 797,
+    "assets_skipped_from_checkpoint": 799,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:23:43Z"
+      "checkpointed_at": "2026-10-18T19:30:43Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:24:37Z"
+      "checkpointed_at": "2026-10-18T19:31:36Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:25:48Z"
+      "checkpointed_at": "2026-10-18T19:32:45Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -24817,6 +24817,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T19:29:40Z"
+    },
+    {
+      "asset_id": "4ef5bdf4dd48ebe92de204a0",
+      "asset_sha256": "d0e719aa03c2276f4b78b482868627f0e8729cec7bdf8c12d3d18069c3a5c871",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/d0e719aa03c2276f4b78b482868627f0e8729cec7bdf8c12d3d18069c3a5c871.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bd9d0fadac7535a591cbe9e3a7c18e658582efe3780e4223edefca93e61e0d1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A goat with white fur and brown patches on its face and legs.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about the Silent Valley Movement.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:33:51Z"
+    },
+    {
+      "asset_id": "64bbfb95d4153359892e1bf4",
+      "asset_sha256": "640baecd69e7d86068febd3bc7f5a240b2ca72d69443a4fe066407bb1b68a0ba",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/640baecd69e7d86068febd3bc7f5a240b2ca72d69443a4fe066407bb1b68a0ba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bd9d0fadac7535a591cbe9e3a7c18e658582efe3780e4223edefca93e61e0d1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up image of a fish, possibly a carp, with a vibrant yellow and orange coloration on its body.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about the Silent Valley Movement in Kerala.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:34:56Z"
     }
   ]
 }
