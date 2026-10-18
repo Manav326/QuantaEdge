@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "eb1cb0d1bd90db3b4e07da090da4a796261b34c5bee6a0a2a82a2a0d5427dd6c",
+  "raw_analysis_sha256": "a0607e0b6329d3d38abecabb61d372efa90b8207074f4ba766d08971d49e0e1b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T13:20:29Z",
+      "checkpointed_at": "2026-10-18T13:26:56Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -30428,6 +30428,204 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "826e75d948e96da8ecbeb47c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:27:10Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "68d2ad12fd2655a46298c3d9",
+      "asset_sha256": "da09fd8b0ee6605112d35f926280628ec6fff5a5fe21743b580776cb322c552e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "page-0021.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustrations of a caterpillar, a plant, and a cow with a calf.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Of course, to grow, we need food to eat, and especially in\na large and diverse country like India, food is so fascinating.\nAcross the country, we have different cuisines with their many\ntasty dishes. What are they made of? How do we find out?",
+          "What will we\nexplore with\nthe help of this\nbook?"
+        ],
+        "concepts": [
+          "daily lives",
+          "discovery",
+          "realisation",
+          "ideas",
+          "planet Earth",
+          "life on Earth",
+          "survival",
+          "thriving",
+          "regions",
+          "seed",
+          "plant",
+          "caterpillar",
+          "beautiful butterfly",
+          "cows",
+          "calf",
+          "food",
+          "cuisines",
+          "tasty dishes"
+        ],
+        "context_relation": "The text is discussing the growth of plants and animals, and the variety of food available in India.",
+        "limitations": [
+          "The text does not provide specific details about the types of food or cuisines."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:31:18Z",
+      "effective_analysis": {
+        "visual_summary": "Illustrations of a caterpillar, a plant, and a cow with a calf.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Of course, to grow, we need food to eat, and especially in\na large and diverse country like India, food is so fascinating.\nAcross the country, we have different cuisines with their many\ntasty dishes. What are they made of? How do we find out?",
+          "What will we\nexplore with\nthe help of this\nbook?"
+        ],
+        "concepts": [
+          "daily lives",
+          "discovery",
+          "realisation",
+          "ideas",
+          "planet Earth",
+          "life on Earth",
+          "survival",
+          "thriving",
+          "regions",
+          "seed",
+          "plant",
+          "caterpillar",
+          "beautiful butterfly",
+          "cows",
+          "calf",
+          "food",
+          "cuisines",
+          "tasty dishes"
+        ],
+        "context_relation": "The text is discussing the growth of plants and animals, and the variety of food available in India.",
+        "limitations": [
+          "The text does not provide specific details about the types of food or cuisines."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c1fc9d1b24570a7b63f2a99e",
+      "asset_sha256": "d6062c6bd2eed2b995b028a59814c77fa55536e9f66d653f0fc6c05283f7732c",
+      "page_text_context_sha256": "11784553b1e002bf03775695ae11bcbb6f56344fa6daa832841416078dde2a14",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/d6062c6bd2eed2b995b028a59814c77fa55536e9f66d653f0fc6c05283f7732c.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ace6109e6825fc700546bdb6",
+      "asset_sha256": "472757a6863c030ebc3ec98cbff61e7543de99432b71dc0fddece69aafc886ba",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/472757a6863c030ebc3ec98cbff61e7543de99432b71dc0fddece69aafc886ba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11784553b1e002bf03775695ae11bcbb6f56344fa6daa832841416078dde2a14",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of people, including children and an adult, are standing in a field under a starry night sky, with one person pointing at the stars.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "night sky",
+          "stars",
+          "people",
+          "field",
+          "pointing",
+          "stargazing"
+        ],
+        "context_relation": "The image likely represents a scene from a story or educational content about stargazing or the night sky.",
+        "limitations": [
+          "The image does not provide specific details about the characters or their actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:35:56Z",
+      "effective_analysis": {
+        "visual_summary": "A group of people, including children and an adult, are standing in a field under a starry night sky, with one person pointing at the stars.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "night sky",
+          "stars",
+          "people",
+          "field",
+          "pointing",
+          "stargazing"
+        ],
+        "context_relation": "The image likely represents a scene from a story or educational content about stargazing or the night sky.",
+        "limitations": [
+          "The image does not provide specific details about the characters or their actions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
