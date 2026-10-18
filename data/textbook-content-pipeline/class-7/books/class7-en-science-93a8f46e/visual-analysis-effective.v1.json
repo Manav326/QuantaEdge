@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fe9b12590664b4df15a8bbf9586084d2fc1cb8877d8cee1669b42055ab657c87",
+  "raw_analysis_sha256": "9ab8136f9e58418b22dd6950c1deb2faed019d4a08531a901d4743b5e54e838f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:15:54Z",
+      "checkpointed_at": "2026-10-18T19:17:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:16:16Z",
+      "checkpointed_at": "2026-10-18T19:18:15Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -58019,6 +58019,162 @@
         "limitations": [
           "The question does not provide specific details about the solutions or the indicator to be used."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "37412f2493f0d483b584bd19",
+      "asset_sha256": "a83566a8a453ca0901f63508628d09f015b93697a5af05e95ceef80554021db7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/a83566a8a453ca0901f63508628d09f015b93697a5af05e95ceef80554021db7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about testing solutions for acidity or basicity using an indicator.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "21",
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for neutral writing on the white sheet of paper (given at Neutral)",
+          "Neutral"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basicity",
+          "Indicator",
+          "Writing materials"
+        ],
+        "context_relation": "Question about testing solutions for acidity or basicity using an indicator.",
+        "limitations": [
+          "The image does not show the solutions or the indicator being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:18:56Z",
+      "effective_analysis": {
+        "visual_summary": "A question about testing solutions for acidity or basicity using an indicator.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "21",
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for neutral writing on the white sheet of paper (given at Neutral)",
+          "Neutral"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basicity",
+          "Indicator",
+          "Writing materials"
+        ],
+        "context_relation": "Question about testing solutions for acidity or basicity using an indicator.",
+        "limitations": [
+          "The image does not show the solutions or the indicator being used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6d3408f52245baeb4c62b52f",
+      "asset_sha256": "3383d254342b81ee020405f3d74e97d89d4efb105afa1ad0b1006011c3e49c30",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/3383d254342b81ee020405f3d74e97d89d4efb105afa1ad0b1006011c3e49c30.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a question about testing solutions for acidity or basicity using an indicator.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "21",
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for writing the message on the white sheet of paper (given at Neutral)"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basicity",
+          "Indicator",
+          "Writing materials"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not show the solutions or the indicator being used.",
+          "The image does not show the writing materials being suggested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:19:38Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a question about testing solutions for acidity or basicity using an indicator.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "21",
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for writing the message on the white sheet of paper (given at Neutral)"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basicity",
+          "Indicator",
+          "Writing materials"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not show the solutions or the indicator being used.",
+          "The image does not show the writing materials being suggested."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "99e22ed7b81c317fb31e21fd",
+      "asset_sha256": "8401e8a529de413d95da34e28e22fd74ad249f450d99998a37a3bf814db0ee6e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/8401e8a529de413d95da34e28e22fd74ad249f450d99998a37a3bf814db0ee6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope ladder with three rungs.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:20:13Z",
+      "effective_analysis": {
+        "visual_summary": "A rope ladder with three rungs.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
