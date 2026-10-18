@@ -236,33 +236,29 @@ public class QaTestPackService {
           Map.of("packKey", packKey, "packVersion", PACK_VERSION));
     }
 
+    InstallOutcome outcome;
     try {
-      InstallOutcome outcome = transaction.execute(status -> {
+      outcome = transaction.execute(status -> {
         Map<String,Object> fixtureResult = seedTenantLearnerPack(runId, actorStaffId);
         int resourceCount = countResources(runId);
         String manifestHash = manifestChecksum(runId);
-        jdbc.update("""
+        int finalized = jdbc.update("""
           update qa_test_run set state='INSTALLED',planned_resource_count=?,
             created_resource_count=?,cleaned_resource_count=0,manifest_sha256=?,fixture_summary=?::jsonb,
             installed_at=now(),updated_at=now(),error_code=null,error_summary=null
           where run_id=? and state='INSTALLING'
           """, resourceCount, resourceCount, manifestHash, json(fixtureResult.get("fixtureSummary")), runId);
+        if (finalized != 1) throw new IllegalStateException("QA run state changed while installation was in progress.");
         addEvent(runId, "INSTALL_SUCCEEDED", "INSTALLING", "INSTALLED", actorStaffId,
             Map.of("createdResourceCount", resourceCount, "manifestSha256", manifestHash));
         return new InstallOutcome(fixtureResult, resourceCount, manifestHash);
       });
       if (outcome == null) throw new IllegalStateException("Install transaction did not return an outcome.");
-      Map<String,Object> result = getRun(runId);
-      result.put("replayed", false);
-      result.put("credentialsIncluded", true);
-      result.put("oneTimeSyntheticCredentials", outcome.fixtureResult().get("credentials"));
-      result.put("credentialHandling", "Plaintext credentials are returned only by this install response; they are not stored in the run manifest.");
-      return result;
     } catch (Exception ex) {
       String summary = safeInstallError(ex);
       jdbc.update("""
         update qa_test_run set state='INSTALL_FAILED',error_code=?,error_summary=?,updated_at=now()
-        where run_id=?
+        where run_id=? and state='INSTALLING'
         """, errorCode(ex), summary, runId);
       addEvent(runId, "INSTALL_FAILED", "INSTALLING", "INSTALL_FAILED", actorStaffId,
           Map.of("errorCode", errorCode(ex), "summary", summary));
@@ -272,6 +268,12 @@ public class QaTestPackService {
       result.put("message", "Installation transaction rolled back. Correct the blocker and retry with the same idempotency key.");
       return result;
     }
+    Map<String,Object> result = getRun(runId);
+    result.put("replayed", false);
+    result.put("credentialsIncluded", true);
+    result.put("oneTimeSyntheticCredentials", outcome.fixtureResult().get("credentials"));
+    result.put("credentialHandling", "Plaintext credentials are returned only by this install response; they are not stored in the run manifest.");
+    return result;
   }
 
   public Map<String,Object> uninstall(UUID runId, String confirmRunId, Long actorStaffId) {
