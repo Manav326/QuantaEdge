@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "68fde2573b94ecbe1bd8da21c848d2d427e0e32633f3e279fc24294d2f94c449",
+  "raw_analysis_sha256": "c58f0f0df976069b8c3d12b266d5ebe65af1e0cc1b35df9fe63fa581e45e5e70",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:06:43Z",
+      "checkpointed_at": "2026-10-18T20:14:02Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:07:37Z",
+      "checkpointed_at": "2026-10-18T20:14:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:08:46Z",
+      "checkpointed_at": "2026-10-18T20:16:05Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37527,6 +37527,98 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b2465068177193067cfb122d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the hump structure of camels in different desert environments.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
+          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
+          "Camels found in the cold desert have two humps each.",
+          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
+          "Moreover, they grow long hair from head to neck, which help them survive."
+        ],
+        "concepts": [
+          "deserts",
+          "camels",
+          "humps",
+          "food storage",
+          "cold desert",
+          "hot desert",
+          "winter",
+          "long hair"
+        ],
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "limitations": [
+          "The text does not provide visual aids or diagrams to support the information.",
+          "The text does not include any specific questions or exercises related to the information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:16:47Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the hump structure of camels in different desert environments.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
+          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
+          "Camels found in the cold desert have two humps each.",
+          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
+          "Moreover, they grow long hair from head to neck, which help them survive."
+        ],
+        "concepts": [
+          "deserts",
+          "camels",
+          "humps",
+          "food storage",
+          "cold desert",
+          "hot desert",
+          "winter",
+          "long hair"
+        ],
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "limitations": [
+          "The text does not provide visual aids or diagrams to support the information.",
+          "The text does not include any specific questions or exercises related to the information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1b6dd2be916d0f2957d56770",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
