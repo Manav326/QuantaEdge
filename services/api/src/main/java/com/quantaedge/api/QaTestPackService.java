@@ -46,6 +46,7 @@ public class QaTestPackService {
   private final boolean qaEnabled;
   private final boolean environmentApproved;
   private final String environmentLabel;
+  private final String targetDatabaseName;
   private final String fixturePassword;
   private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
@@ -65,6 +66,7 @@ public class QaTestPackService {
     this.qaEnabled = qaEnabled;
     this.environmentApproved = environmentApproved;
     this.environmentLabel = environmentLabel == null ? "" : environmentLabel.trim();
+    this.targetDatabaseName = targetDatabaseName == null ? "" : targetDatabaseName.trim();
     this.fixturePassword = fixturePassword == null ? "" : fixturePassword;
   }
 
@@ -76,6 +78,7 @@ public class QaTestPackService {
     result.put("fixtureCredentialsConfigured", fixturePassword.length() >= 10 && fixturePassword.chars().noneMatch(Character::isISOControl));
     result.put("environmentLabel", environmentLabel.isBlank() ? null : environmentLabel);
     result.put("currentDatabase", gate.databaseName);
+    result.put("configuredTargetDatabase", targetDatabaseName.isBlank() ? null : targetDatabaseName);
     result.put("databaseApproved", gate.databaseApproved);
     result.put("productionProfileDetected", gate.productionProfile);
     result.put("writeAllowed", gate.allowed);
@@ -955,8 +958,12 @@ public class QaTestPackService {
     String database = null;
     try { database = jdbc.queryForObject("select current_database()", String.class); }
     catch (Exception ignored) { /* A failed DB check must disable writes, not bypass the gate. */ }
-    boolean safeDb = database != null && QA_DATABASE.matcher(database).matches()
+    boolean safeDatabaseName = database != null && QA_DATABASE.matcher(database).matches()
         && !database.toLowerCase(Locale.ROOT).contains("prod");
+    boolean exactConfiguredTarget = !targetDatabaseName.isBlank() && database != null
+        && database.equalsIgnoreCase(targetDatabaseName)
+        && QA_DATABASE.matcher(targetDatabaseName).matches()
+        && !targetDatabaseName.toLowerCase(Locale.ROOT).contains("prod");
     String appEnvironment = springEnvironment.getProperty("app.environment", "local").trim().toLowerCase(Locale.ROOT);
     boolean prodProfile = Arrays.stream(springEnvironment.getActiveProfiles())
         .map(profile -> profile.trim().toLowerCase(Locale.ROOT))
@@ -974,13 +981,15 @@ public class QaTestPackService {
     else if (!environmentApproved) reason = "APP_QA_ENVIRONMENT_APPROVED is false; explicit environment approval is required.";
     else if (prodProfile) reason = "QA operations are forbidden in a production/live environment or profile.";
     else if (!labelValid) reason = "APP_QA_ENVIRONMENT_LABEL must be an explicit non-production label.";
-    else if (!safeDb) reason = "Current database name is not on the allow-list. Use an isolated database ending in _qa, _test, _ci or _integration.";
+    else if (!safeDatabaseName) reason = "Current database name is not on the allow-list. Use an isolated database ending in _qa, _test, _ci or _integration.";
+    else if (targetDatabaseName.isBlank()) reason = "APP_QA_TARGET_DATABASE must explicitly name the isolated QA database.";
+    else if (!exactConfiguredTarget) reason = "Connected database does not exactly match the server-configured APP_QA_TARGET_DATABASE.";
     else if (!fixtureReady) reason = "APP_QA_FIXTURE_PASSWORD must be explicitly configured with at least 10 non-control characters.";
     else {
       allowed = true;
-      reason = "Approved isolated QA database; run-scoped operations are enabled.";
+      reason = "Connected database exactly matches the server-approved isolated QA target.";
     }
-    return new Gate(database, safeDb, prodProfile, allowed, reason, fixtureReady);
+    return new Gate(database, exactConfiguredTarget, prodProfile, allowed, reason, fixtureReady);
   }
 
   private void requireWritableEnvironment(Gate gate) {
