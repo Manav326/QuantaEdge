@@ -53,6 +53,10 @@ Counts describe documentation inventory, not feature pass rates or functional co
 
 A source file, successful compilation, static contract check or older tracker entry is not equivalent to an end-to-end pass. Verification must be tied to a commit SHA and execution evidence. In the per-screen checklist, `NOT_REVIEWED` means the state must still be examined; use `NOT_APPLICABLE` only after source/runtime review records a reason, never to hide an untested state.
 
+## Register consistency guard
+
+The CI `changes` job runs `scripts/validate_qa_registers.test.mjs` and `scripts/validate_qa_registers.mjs --root .`. These checks verify CSV structure, unique screen/API/scenario IDs, valid scenario references, one runtime-log row per scenario, and evidence metadata before a result can be marked passed. **They validate documentation integrity only**; they do not claim that a UI/API workflow executed or passed.
+
 ## Audit rules
 
 1. Inventory every route and meaningful in-screen workflow, including tabs, dialogs, menu actions, validation, loading/empty/error/success states and destructive actions.
