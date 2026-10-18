@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1a655b907aa99c1e90303edebfa9497b6eb7404828224cfb20b8ef57a9d8128e",
+  "raw_analysis_sha256": "568e1089d7eb5b07da86802f87818120b544badb96567a61ddb748bd613aef61",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:00:14Z",
+      "checkpointed_at": "2026-10-18T02:03:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -17739,6 +17739,162 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c9248773db4a52e4e221994e",
+      "asset_sha256": "543b5f0d6859602599d882820d7eeff55feecf8ebf1ef46328d4f7936053ea4e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/543b5f0d6859602599d882820d7eeff55feecf8ebf1ef46328d4f7936053ea4e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:03:36Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0d5a1af3ced9cacb7a2828d7",
+      "asset_sha256": "60a62a19afeab3f9d1679b3925af5715ca3c02bde58e570f07e9aa02c8a43528",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/60a62a19afeab3f9d1679b3925af5715ca3c02bde58e570f07e9aa02c8a43528.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:04:08Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5d00d70f5011dc4a0e8a6ad9",
+      "asset_sha256": "c9a405df1fd92c25c371173dc5f3d3e36ed3dfb31e1b397863afb5ce7de2fae6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/c9a405df1fd92c25c371173dc5f3d3e36ed3dfb31e1b397863afb5ce7de2fae6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a blue and white background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:04:40Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a blue and white background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "47724f81b49ecb5ea9e4b683",
+      "asset_sha256": "11905975daaaaf367dc0393bcb1fcf086e23f6a7650f738d2273843314ceb377",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/11905975daaaaf367dc0393bcb1fcf086e23f6a7650f738d2273843314ceb377.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pendulum clock with a wooden case and a brass pendulum bob.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pendulum clock",
+          "wooden case",
+          "brass pendulum bob"
+        ],
+        "context_relation": "The image is a visual representation of a pendulum clock, which is a type of clock that uses a swinging pendulum to keep time.",
+        "limitations": [
+          "The image does not provide any information about the clock's functionality or how it works."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:05:15Z",
+      "effective_analysis": {
+        "visual_summary": "A pendulum clock with a wooden case and a brass pendulum bob.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pendulum clock",
+          "wooden case",
+          "brass pendulum bob"
+        ],
+        "context_relation": "The image is a visual representation of a pendulum clock, which is a type of clock that uses a swinging pendulum to keep time.",
+        "limitations": [
+          "The image does not provide any information about the clock's functionality or how it works."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
