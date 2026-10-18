@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 702,
+    "assets_selected": 704,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 699,
-    "assets_remaining": 1592,
-    "assets_completion_percent": 30.5,
+    "assets_analyzed": 701,
+    "assets_remaining": 1590,
+    "assets_completion_percent": 30.6,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 697,
+    "assets_skipped_from_checkpoint": 699,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:25:31Z"
+      "checkpointed_at": "2026-10-18T22:31:17Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:26:19Z"
+      "checkpointed_at": "2026-10-18T22:32:06Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:26:57Z"
+      "checkpointed_at": "2026-10-18T22:32:45Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -21042,6 +21042,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T22:30:08Z"
+    },
+    {
+      "asset_id": "6dfaa12e5271b3244ccc8a44",
+      "asset_sha256": "5057ec92fc327cd0d84618048e625e4dee08a2a884da7cbe05b182c192f95560",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/5057ec92fc327cd0d84618048e625e4dee08a2a884da7cbe05b182c192f95560.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a057e2c6018e124e5fd244c6af8ed543e2ec528481d9333e8332571fcc239c46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person catching a ball in mid-air.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Exploring the Investigative World of Science",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:34:21Z"
+    },
+    {
+      "asset_id": "8c6de3116516f801de437629",
+      "asset_sha256": "42301451ed0e4277c685a542abbaaaaa1b7657c5c1096a01549d90b20e564509",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/42301451ed0e4277c685a542abbaaaaa1b7657c5c1096a01549d90b20e564509.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a057e2c6018e124e5fd244c6af8ed543e2ec528481d9333e8332571fcc239c46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a healthcare professional administering a vaccine to a child.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "vaccination",
+          "healthcare",
+          "child",
+          "health professional",
+          "vaccine administration"
+        ],
+        "context_relation": "The image is related to the chapter on exploring the investigative world of science, focusing on the importance of vaccinations and healthcare.",
+        "limitations": [
+          "The image does not provide specific details about the type of vaccine being administered or the healthcare professional's role."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:35:56Z"
     }
   ]
 }
