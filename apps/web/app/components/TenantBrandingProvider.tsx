@@ -149,6 +149,24 @@ function codeFromCurrentUrl(): string | null {
 }
 
 function readSessionCode(): string | null {
+  // Prefer the current route's path-scoped metadata cookie. It is the server-visible
+  // identity handoff and remains available when sessionStorage is blocked or stale.
+  const path = window.location.pathname;
+  const matchingCookie = SERVER_BRANDING_COOKIES.find(cookie =>
+    path === cookie.path || path.startsWith(cookie.path + '/'));
+  if (matchingCookie) {
+    const raw = document.cookie.split(';').map(part => part.trim())
+      .find(part => part.startsWith(matchingCookie.name + '='))
+      ?.slice(matchingCookie.name.length + 1);
+    if (raw) {
+      try {
+        const cookieCode = normalizedCode(decodeURIComponent(raw));
+        if (cookieCode) return cookieCode;
+      } catch {
+        // Invalid cookie content is ignored; branding is never an authorization decision.
+      }
+    }
+  }
   try { return normalizedCode(window.sessionStorage.getItem(BRAND_SESSION_KEY)); }
   catch { return null; }
 }
