@@ -334,7 +334,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           setEnrollmentIssue('temporary');
           return null;
         }
-      }
+      };
 
       if (candidate) {
         setIsResolving(true);
