@@ -108,17 +108,18 @@ Add interruption tests for failure after each ownership-producing step, partial 
 
 ## 8. Current implementation ledger
 
-- QA route inventory, 72 workflow scenarios, 93 UI/state inventory rows, 435 source-derived API mapping rows and role/data cleanup documentation exist. Most scenarios remain unexecuted; endpoint mappings are not yet fully reviewed.
-- QA-001 through QA-007 currently remain NOT_IMPLEMENTED until the end-to-end lifecycle operations and their acceptance evidence exist.
-- The previous local-preview seed had a broad deletion of other LOCAL_PREVIEW students and preview login selected the first matching row. A candidate fix and regression tests are in [PR #78](https://github.com/Manav326/QuantaEdge/pull/78); its API CI job failed because the broader suite currently has institution-context/mocking failures. The candidate has not been represented as passing or merged.
-- The current-main CI audit recorded a failed API run [#39151812977](https://github.com/Manav326/QuantaEdge/actions/runs/39151812977). Keep that baseline regression separate from new QA feature results.
+- QA route inventory, 72 workflow scenarios, 94 UI/state inventory rows, 443 source-derived API mapping rows and role/data cleanup documentation exist. Endpoints remain source-derived and not fully reviewed.
+- The feature branch now implements a tenant/learner starter pack, run/resource/event/check manifest, default-off database/environment/credential gates, starter data invariants, manifest-based uninstall, and an HRMS QA Center UI/API. It does not yet implement the full HRMS/payroll/media/provider pack or browser/device scenario runner.
+- QA-001, QA-002, QA-004, QA-005 and QA-007 have starter-slice code but remain NOT_EXECUTED; QA-003 scenario runner/coverage report and QA-006 external-provider sandbox isolation remain NOT_IMPLEMENTED.
+- The local-preview isolation fix with regression tests is included on this feature branch. Draft PR #78 still exists separately and had a failing API run because of broader institution-context/mocking failures; do not describe either candidate as merged or passing without exact-head CI evidence.
+- The current-main API run [#39151812977](https://github.com/Manav326/QuantaEdge/actions/runs/39151812977) failed before this feature branch. Keep that baseline regression separate from the new branch's results.
 - No production database, real payment, live message, or external provider was used in the work documented here.
 
 ## 9. Next implementation sequence
 
-1. Fix local-preview ownership collision and establish clean focused regression evidence.
-2. Add a default-off, production-rejecting QA environment gate and persistent run/resource manifest schema.
-3. Implement the server-side allow-listed pack builder and dependency-aware uninstall/rollback engine; never accept SQL or paths from the browser.
-4. Expose protected HRMS/platform-owner APIs and QA Center UI with dry-run confirmation and run report.
-5. Add disposable-PostgreSQL lifecycle tests; expand the pack through identity, tenant, learning, and HRMS relationships only where the exact schema and cleanup adapter are verified.
-6. Wire the browser/device automated flows, publish traces/reports, and close QA-001–QA-007 only against exact-SHA evidence.
+1. Verify preview isolation and the new manifest/check schema through exact-head CI; fix the pre-existing institution-context API test failures rather than masking them.
+2. Prove starter-pack install rollback, same-key retry/concurrency, data invariant checks and manifest reconciliation against a disposable migrated PostgreSQL database.
+3. Install run A and run B, uninstall A, and prove B and protected baseline rows remain unchanged; test interrupted cleanup and retry.
+4. Implement QA-003 scenario execution/reporting and QA-006 fake/sandbox provider adapters before claiming complete lifecycle coverage.
+5. Expand typed builders into HRMS/payroll, commerce, certificates, live classes/media and storage only after the relevant schema and external cleanup semantics are proven.
+6. Add Web E2E and Android emulator flows, publish exact-SHA reports and only mark each scenario complete when its install/verify/uninstall and preservation assertions pass.
