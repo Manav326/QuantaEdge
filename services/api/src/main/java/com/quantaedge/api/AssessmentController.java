@@ -1006,7 +1006,9 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id
+        and ste.institution_id=(select institution_id from tenant_scope)
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
         and ((s.program_id is null and st.class_code=c.code)
@@ -1017,7 +1019,7 @@ public class AssessmentController {
               and spe.program_id=s.program_id and spe.status='ACTIVE'
           )))
         and a.status='PUBLISHED' and
-      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, context.studentId(), assessmentId);
+      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, institutionId,context.studentId(), assessmentId);
     if (eligibleForNewAttempt.isEmpty()) {
       throw conflict("Complete the required published lesson content before starting this test.");
     }
@@ -1114,9 +1116,11 @@ public class AssessmentController {
   @GetMapping("/learning/assessment-attempts/{attemptId}")
   public Map<String, Object> studentAttempt(
       @PathVariable long attemptId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    return attemptDetails(attemptId, context, false);
+    return attemptDetails(attemptId, context, false,requireInstitution(tenant));
   }
 
   @PutMapping("/learning/assessment-attempts/{attemptId}/answers/{attemptQuestionId}")
@@ -1125,14 +1129,17 @@ public class AssessmentController {
       @PathVariable long attemptId,
       @PathVariable long attemptQuestionId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select att.id,att.status,att.deadline_at,att.student_id,att.offline_mode,
              att.offline_sync_expires_at,att.offline_package_token_hash
       from student_assessment_attempt att join student_assessment_attempt_question aq on aq.attempt_id=att.id
-      where att.id=? and aq.id=? for update of att
-      """, attemptId, attemptQuestionId);
+      where att.id=? and att.institution_id=? and aq.id=? for update of att
+      """, attemptId,institutionId,attemptQuestionId);
     if (rows.isEmpty() || ((Number) rows.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment answer", attemptQuestionId);
     }
@@ -1164,12 +1171,15 @@ public class AssessmentController {
   public Map<String, Object> saveAnswers(
       @PathVariable long attemptId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select id,status,deadline_at,student_id,offline_mode,offline_sync_expires_at,offline_package_token_hash
-      from student_assessment_attempt where id=? for update
-      """, attemptId);
+      from student_assessment_attempt where id=? and institution_id=? for update
+      """, attemptId,institutionId);
     if (attempts.isEmpty()
         || ((Number) attempts.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment attempt", attemptId);
@@ -1214,12 +1224,15 @@ public class AssessmentController {
   @Transactional
   public Map<String,Object> refreshOfflinePackageToken(
       @PathVariable long attemptId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,assessment_id,student_id,status,offline_mode,offline_sync_expires_at
-      from student_assessment_attempt where id=? for update
-      """,attemptId);
+      from student_assessment_attempt where id=? and institution_id=? for update
+      """,attemptId,institutionId);
     if(rows.isEmpty() || ((Number)rows.getFirst().get("student_id")).longValue()!=context.studentId()) {
       throw notFound("Assessment attempt",attemptId);
     }
@@ -1250,21 +1263,24 @@ public class AssessmentController {
   public Map<String, Object> submitAttempt(
       @PathVariable long attemptId,
       @RequestBody(required=false) Map<String,Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return submitAttemptInternal(attemptId,body,context);
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    return submitAttemptInternal(attemptId,body,context,requireInstitution(tenant));
   }
 
   Map<String,Object> submitAttempt(long attemptId,AuthContext context) {
-    return submitAttemptInternal(attemptId,null,context);
+    throw missingInstitutionContext();
   }
 
-  private Map<String,Object> submitAttemptInternal(long attemptId,Map<String,Object> body,AuthContext context) {
+  private Map<String,Object> submitAttemptInternal(long attemptId,Map<String,Object> body,
+      AuthContext context,long institutionId) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> attemptRows = jdbc.queryForList("""
       select id,assessment_id,student_id,status,auto_score,max_score,offline_mode,
              offline_sync_expires_at,offline_package_token_hash
-      from student_assessment_attempt where id=? for update
-      """, attemptId);
+      from student_assessment_attempt where id=? and institution_id=? for update
+      """, attemptId,institutionId);
     if (attemptRows.isEmpty() || ((Number) attemptRows.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment attempt", attemptId);
     }
@@ -1272,7 +1288,7 @@ public class AssessmentController {
     boolean offlineAttempt=Boolean.TRUE.equals(attempt.get("offline_mode"));
     if(offlineAttempt) requireOfflineSyncAuthorization(attempt,body==null?null:body.get("offlinePackageToken"));
     String oldStatus = String.valueOf(attempt.get("status"));
-    if ("RELEASED".equals(oldStatus)) return attemptDetails(attemptId, context, false);
+    if ("RELEASED".equals(oldStatus)) return attemptDetails(attemptId, context, false,institutionId);
     if (!"IN_PROGRESS".equals(oldStatus)) throw conflict("This test attempt has already been submitted.");
     long assessmentId = ((Number) attempt.get("assessment_id")).longValue();
 
@@ -1340,7 +1356,7 @@ public class AssessmentController {
       audit(assessmentId, attemptId, null, context.studentId(), "STUDENT", "RESULT_AUTO_RELEASED",
           "IN_PROGRESS", "RELEASED", "Objective result released after automatic grading.");
     }
-    return attemptDetails(attemptId, context, false);
+    return attemptDetails(attemptId, context, false,institutionId);
   }
 
   @GetMapping("/learning/assessment-results")
@@ -1349,8 +1365,11 @@ public class AssessmentController {
       @RequestParam(required = false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
     if(courseId!=null) {
       Long active=jdbc.queryForObject("""
