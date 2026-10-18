@@ -178,7 +178,7 @@ public class InstitutionTenantController {
     String etag = "\"" + digest + "\"";
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.parseMediaType(contentType));
-    headers.setCacheControl("public, max-age=300, stale-while-revalidate=60");
+    headers.setCacheControl("public, max-age=60, must-revalidate");
     headers.setETag(etag);
     headers.set("X-Content-Type-Options", "nosniff");
     headers.setContentLength(bytes.length);
