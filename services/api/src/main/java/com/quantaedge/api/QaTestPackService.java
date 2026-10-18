@@ -925,9 +925,10 @@ public class QaTestPackService {
 
   private String testMobile(UUID runId, int offset) {
     BigInteger seed = new BigInteger(runId.toString().replace("-", ""), 16);
-    BigInteger mod = BigInteger.valueOf(9_000_000_000L);
-    long number = seed.add(BigInteger.valueOf(offset * 97L)).mod(mod).longValue() + 1_000_000_000L;
-    return "+91" + String.format(Locale.ROOT, "%010d", number);
+    int leadingDigit = 6 + seed.add(BigInteger.valueOf(offset)).mod(BigInteger.valueOf(4)).intValue();
+    long suffix = seed.add(BigInteger.valueOf(offset * 97L))
+        .mod(BigInteger.valueOf(1_000_000_000L)).longValue();
+    return "+91" + leadingDigit + String.format(Locale.ROOT, "%09d", suffix);
   }
 
   private String sourceCommitSha() {
