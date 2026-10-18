@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 770,
-    "successful_visual_analyses": 762,
-    "missing_visual_analyses": 6718,
+    "raw_analysis_result_rows": 774,
+    "successful_visual_analyses": 766,
+    "missing_visual_analyses": 6714,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6726,
+    "unresolved_count": 6722,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39337,9 +39337,18 @@
       "asset_path": "assets/4af643d9efce74ad59043b74fbd2494b8016d6aa30defcb877aa59df7e1399de.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a black vertical line on the right side.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39355,9 +39364,33 @@
       "asset_path": "assets/d77cc8699b836c08032c3eb72bb2b92e23d0fd5c99ddf348072cda2f1cd7e505.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Vegetables, fruits, and flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The page discusses the use of various natural substances as indicators for testing the acidity or alkalinity of substances.",
+        "limitations": [
+          "The page does not provide specific instructions or methods for preparing the extracts.",
+          "The page does not include any visual aids or diagrams to support the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39373,9 +39406,34 @@
       "asset_path": "assets/09b37371f80f644ade318b78009c91df11d839038ffe9f3a1aa3c46b84617572.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a full page from a textbook, likely discussing the use of vegetables, fruits, or flowers as acid-base indicators in a scientific experiment.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Scientific experiment",
+          "Vegetables, fruits, flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The image is a continuation of a previous discussion about the use of natural substances as indicators in a scientific experiment.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs.",
+          "The image does not contain any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39391,9 +39449,32 @@
       "asset_path": "assets/514a86f445af6ac5eb7700587e083286764d6af2121e5ebf53711b54f2acfc56.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Vegetables, fruits, and flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The page discusses the use of various natural substances as acid-base indicators.",
+        "limitations": [
+          "The page does not provide specific instructions on how to prepare the extracts or test the substances."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
