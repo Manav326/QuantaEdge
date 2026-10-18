@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 952,
-    "successful_visual_analyses": 946,
-    "missing_visual_analyses": 6536,
+    "raw_analysis_result_rows": 955,
+    "successful_visual_analyses": 949,
+    "missing_visual_analyses": 6533,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6542,
+    "unresolved_count": 6539,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -46105,9 +46105,19 @@
       "asset_path": "assets/57599759a8265e3b07416f35e935435c9dd5d7a6f6a88d2ad92287f08fc29c9a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a golden belt buckle with a person's legs in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or relation to the text.",
+        "limitations": [
+          "The image is a close-up and does not show the full context of the text.",
+          "The image does not provide any information about the text's content or the topic being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46123,9 +46133,28 @@
       "asset_path": "assets/f9f7ee6837526e1ae6fb6f9a0a2d4611322d4961e565785f15fdf333499e87f3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "acids",
+          "neutralisation",
+          "soil nutrients",
+          "plant health"
+        ],
+        "context_relation": "The text discusses the relationship between soil pH, organic matter, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46141,9 +46170,29 @@
       "asset_path": "assets/0ec04726e5d9bfd6f1a32510e1496c31f976fa0247388233a7c5401d79d3af7e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Soil pH and nutrient deficiency in plants",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil neutrality",
+          "Plant health",
+          "Nutrient deficiency"
+        ],
+        "context_relation": "Soil pH and nutrient deficiency in plants",
+        "limitations": [
+          "The text does not provide specific details about the types of organic matter or the exact process of neutralisation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

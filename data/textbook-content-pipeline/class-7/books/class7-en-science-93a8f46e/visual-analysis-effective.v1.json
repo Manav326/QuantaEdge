@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d1aa66a65c926ea619ac8f4c9b2d57c60fe140fe19562f7b35c3443381b3db0f",
+  "raw_analysis_sha256": "8b009b1ef2590ace400d2d710284a17991b41b23f024d7e57bca4c92488687bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:14:32Z",
+      "checkpointed_at": "2026-10-18T18:17:49Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:14:53Z",
+      "checkpointed_at": "2026-10-18T18:18:10Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -55058,6 +55058,170 @@
         "context_relation": "The image is related to the text discussing the effects of soil conditions on plant health.",
         "limitations": [
           "The image does not provide specific details about the soil conditions or the plants."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "28fe87e49d5422e011c39286",
+      "asset_sha256": "57599759a8265e3b07416f35e935435c9dd5d7a6f6a88d2ad92287f08fc29c9a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/57599759a8265e3b07416f35e935435c9dd5d7a6f6a88d2ad92287f08fc29c9a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a golden belt buckle with a person's legs in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or relation to the text.",
+        "limitations": [
+          "The image is a close-up and does not show the full context of the text.",
+          "The image does not provide any information about the text's content or the topic being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:18:48Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a golden belt buckle with a person's legs in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or relation to the text.",
+        "limitations": [
+          "The image is a close-up and does not show the full context of the text.",
+          "The image does not provide any information about the text's content or the topic being discussed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "10da3e514ab29a58e0441f96",
+      "asset_sha256": "f9f7ee6837526e1ae6fb6f9a0a2d4611322d4961e565785f15fdf333499e87f3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/f9f7ee6837526e1ae6fb6f9a0a2d4611322d4961e565785f15fdf333499e87f3.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "acids",
+          "neutralisation",
+          "soil nutrients",
+          "plant health"
+        ],
+        "context_relation": "The text discusses the relationship between soil pH, organic matter, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:19:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "acids",
+          "neutralisation",
+          "soil nutrients",
+          "plant health"
+        ],
+        "context_relation": "The text discusses the relationship between soil pH, organic matter, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "81649d8b80a6be4eb4ca53c4",
+      "asset_sha256": "0ec04726e5d9bfd6f1a32510e1496c31f976fa0247388233a7c5401d79d3af7e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/0ec04726e5d9bfd6f1a32510e1496c31f976fa0247388233a7c5401d79d3af7e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Soil pH and nutrient deficiency in plants",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil neutrality",
+          "Plant health",
+          "Nutrient deficiency"
+        ],
+        "context_relation": "Soil pH and nutrient deficiency in plants",
+        "limitations": [
+          "The text does not provide specific details about the types of organic matter or the exact process of neutralisation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:20:15Z",
+      "effective_analysis": {
+        "visual_summary": "Soil pH and nutrient deficiency in plants",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil neutrality",
+          "Plant health",
+          "Nutrient deficiency"
+        ],
+        "context_relation": "Soil pH and nutrient deficiency in plants",
+        "limitations": [
+          "The text does not provide specific details about the types of organic matter or the exact process of neutralisation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
