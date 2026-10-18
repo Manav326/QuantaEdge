@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8aa4691b3476a33ac9b3a1ae03bc824ecef254165b7c5c2d5636268e0c2f3b4b",
+  "raw_analysis_sha256": "c395bdb3e1e543aa082773ea5b8a081f8297a8f501e5c2b64104695ad8006116",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:45:46Z",
+      "checkpointed_at": "2026-10-18T16:54:01Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34108,7 +34108,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:46:51Z",
+      "checkpointed_at": "2026-10-18T16:55:06Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -35246,6 +35246,168 @@
         "context_relation": "Comparison between chickpea and maize seeds",
         "limitations": [
           "No specific questions or instructions are provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e35f2659ebd4f6a0f93168a",
+      "asset_sha256": "e3b5429e984b5fe7b753e1ebb1aa570a444038189075b53cb1e52a595fae8845",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/e3b5429e984b5fe7b753e1ebb1aa570a444038189075b53cb1e52a595fae8845.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bea1743f5b81d502422f0298e807d095bcd1c463eaa25de9937cfffcd32ae5c3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a split seed showing cotyledons and a green shoot.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cotyledons",
+          "seed",
+          "split seed",
+          "green shoot"
+        ],
+        "context_relation": "The image is related to the activity of observing and comparing seeds, specifically chickpea and maize seeds.",
+        "limitations": [
+          "The image does not provide specific details about the types of root and leaf venation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:56:43Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a split seed showing cotyledons and a green shoot.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cotyledons",
+          "seed",
+          "split seed",
+          "green shoot"
+        ],
+        "context_relation": "The image is related to the activity of observing and comparing seeds, specifically chickpea and maize seeds.",
+        "limitations": [
+          "The image does not provide specific details about the types of root and leaf venation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dd4cbcc509a820eb4b6d2e08",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bea1743f5b81d502422f0298e807d095bcd1c463eaa25de9937cfffcd32ae5c3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the structure of a dicot seed (chickpea) and a monocot seed (maize).",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cotyledons",
+          "(a) Dicot seed (chickpea)",
+          "(b) Monocot seed (maize)"
+        ],
+        "concepts": [
+          "Seed structure",
+          "Dicot and monocot seeds",
+          "Comparison of dicot and monocot seeds"
+        ],
+        "context_relation": "Comparison of dicot and monocot seeds",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:57:07Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the structure of a dicot seed (chickpea) and a monocot seed (maize).",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cotyledons",
+          "(a) Dicot seed (chickpea)",
+          "(b) Monocot seed (maize)"
+        ],
+        "concepts": [
+          "Seed structure",
+          "Dicot and monocot seeds",
+          "Comparison of dicot and monocot seeds"
+        ],
+        "context_relation": "Comparison of dicot and monocot seeds",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "34ae3fc487cc63cf2625e37c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bea1743f5b81d502422f0298e807d095bcd1c463eaa25de9937cfffcd32ae5c3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing a diagram of a chickpea seed and a maize seed, with labels for cotyledons.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cotyledons",
+          "(a) Dicot seed (chickpea)",
+          "(b) Monocot seed (maize)"
+        ],
+        "concepts": [
+          "Seed structure",
+          "Cotyledons",
+          "Dicot and Monocot seeds"
+        ],
+        "context_relation": "Comparison of chickpea and maize seeds",
+        "limitations": [
+          "No specific image is provided, only a diagram is visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:57:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing a diagram of a chickpea seed and a maize seed, with labels for cotyledons.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cotyledons",
+          "(a) Dicot seed (chickpea)",
+          "(b) Monocot seed (maize)"
+        ],
+        "concepts": [
+          "Seed structure",
+          "Cotyledons",
+          "Dicot and Monocot seeds"
+        ],
+        "context_relation": "Comparison of chickpea and maize seeds",
+        "limitations": [
+          "No specific image is provided, only a diagram is visible."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
