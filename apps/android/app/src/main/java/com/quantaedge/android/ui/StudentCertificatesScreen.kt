@@ -72,10 +72,10 @@ fun StudentCertificatesScreen(
     val context = LocalContext.current
     val institutionBrand = LocalInstitutionBrandIdentity.current
     val institutionBrandResolving = LocalInstitutionBrandResolutionPending.current
-    val certificateFileStem = remember(institutionBrand?.institutionCode, institutionBrand?.displayName) {
+    val certificateFileStem = remember(institutionBrand?.institutionCode, institutionBrand?.displayName, institutionBrandResolving) {
         val schoolName = institutionBrand?.displayName?.trim()
         if (schoolName.isNullOrBlank()) {
-            "quantaedge-certificate"
+            if (institutionBrandResolving) "school-certificate" else "quantaedge-certificate"
         } else {
             schoolName.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')
                 .take(72).ifBlank { "school" } + "-certificate"
@@ -441,7 +441,7 @@ fun StudentCertificatesScreen(
                 Text(if (language == "hi") "प्रमाणपत्र स्कैन करें" else "Scan a certificate",
                     style = MaterialTheme.typography.titleMedium)
                 Text(if (language == "hi") {
-                    if (institutionBrand != null) "प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
+                    if (institutionBrand != null || institutionBrandResolving) "प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
                     else "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
                 } else {
                     if (institutionBrand != null || institutionBrandResolving) "Scan the QR or linear barcode on a certificate. Its current status is checked with the server."
