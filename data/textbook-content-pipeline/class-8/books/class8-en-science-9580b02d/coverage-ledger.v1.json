@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 452,
-    "successful_visual_analyses": 452,
-    "missing_visual_analyses": 1839,
+    "raw_analysis_result_rows": 455,
+    "successful_visual_analyses": 455,
+    "missing_visual_analyses": 1836,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1839,
+    "unresolved_count": 1836,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8669,7 +8669,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -8683,15 +8683,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "safety precautions",
-          "ever heard of",
-          "step further",
-          "scientific principles"
+          "inclusive education",
+          "safety",
+          "peer interactions",
+          "understanding concepts",
+          "reflecting on ideas",
+          "analyzing concepts",
+          "sustaining interest",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
+          "fascinating facts",
+          "interesting observations",
+          "curiosity-driven questions",
+          "advanced concepts"
         ],
-        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "The text does not provide specific examples or activities from the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -9216,7 +9227,7 @@
           "Indian and international scientists",
           "NEP 2020",
           "Snapshots",
-          "Keywords",
+          "keywords",
           "scientific activities",
           "curiosity",
           "exercises",
@@ -9226,9 +9237,9 @@
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the content of the chapters."
+          "The page does not provide specific examples or details about the exercises or the exercises themselves."
         ]
       },
       "chapter_id": null,
@@ -20472,9 +20483,16 @@
       "asset_path": "assets/2bdd0845a81ed44f32e68a4b4b7305b9c65de97e21013dbf3b6daf7ad094e9a4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a tree with leaves and branches.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The illustration is likely related to a chapter or section on nature or environment in the textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20490,9 +20508,16 @@
       "asset_path": "assets/3d1ae723d6b8494a35feec4bcf0b10c3f2258ac723f9627acadbc65b3b8f9613.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm yellow, possibly used as a cover or header for educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The background is likely used as a backdrop for text or images related to educational content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20508,9 +20533,23 @@
       "asset_path": "assets/32716a693638dbf383a4e0567df478a4ebd24040843604b56a79721b55a4d3db.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "white to orange transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 452,
+    "assets_selected": 455,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 450,
-    "assets_remaining": 1841,
-    "assets_completion_percent": 19.6,
+    "assets_analyzed": 453,
+    "assets_remaining": 1838,
+    "assets_completion_percent": 19.8,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 447,
+    "assets_skipped_from_checkpoint": 450,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1181,7 +1181,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1195,15 +1195,26 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive nature",
-          "safety precautions",
-          "ever heard of",
-          "step further",
-          "scientific principles"
+          "inclusive education",
+          "safety",
+          "peer interactions",
+          "understanding concepts",
+          "reflecting on ideas",
+          "analyzing concepts",
+          "sustaining interest",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
+          "fascinating facts",
+          "interesting observations",
+          "curiosity-driven questions",
+          "advanced concepts"
         ],
-        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "The text does not provide specific examples or activities from the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1211,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T11:13:45Z"
+      "checkpointed_at": "2026-10-18T11:23:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1745,7 +1756,7 @@
           "Indian and international scientists",
           "NEP 2020",
           "Snapshots",
-          "Keywords",
+          "keywords",
           "scientific activities",
           "curiosity",
           "exercises",
@@ -1755,16 +1766,16 @@
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the content of the chapters."
+          "The page does not provide specific examples or details about the exercises or the exercises themselves."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T11:17:42Z"
+      "checkpointed_at": "2026-10-18T11:24:43Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -13392,6 +13403,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T11:21:41Z"
+    },
+    {
+      "asset_id": "71324d041fd4505829c3dab8",
+      "asset_sha256": "2bdd0845a81ed44f32e68a4b4b7305b9c65de97e21013dbf3b6daf7ad094e9a4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/2bdd0845a81ed44f32e68a4b4b7305b9c65de97e21013dbf3b6daf7ad094e9a4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a tree with leaves and branches.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The illustration is likely related to a chapter or section on nature or environment in the textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:25:52Z"
+    },
+    {
+      "asset_id": "604a691b8e1a1a6debd0a5db",
+      "asset_sha256": "3d1ae723d6b8494a35feec4bcf0b10c3f2258ac723f9627acadbc65b3b8f9613",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/3d1ae723d6b8494a35feec4bcf0b10c3f2258ac723f9627acadbc65b3b8f9613.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm yellow, possibly used as a cover or header for educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The background is likely used as a backdrop for text or images related to educational content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:27:08Z"
+    },
+    {
+      "asset_id": "0e01eb829bfb151f98ff332c",
+      "asset_sha256": "32716a693638dbf383a4e0567df478a4ebd24040843604b56a79721b55a4d3db",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/32716a693638dbf383a4e0567df478a4ebd24040843604b56a79721b55a4d3db.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "white to orange transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:28:22Z"
     }
   ]
 }
