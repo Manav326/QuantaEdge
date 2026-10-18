@@ -136,7 +136,7 @@ Every family must become one or more stable test-case IDs with preconditions, ex
 
 ## 7. API and persistence baseline
 
-The API source tree includes controllers/services for account identity and lifecycle; authentication/authorization; guardian access; platform/institution tenancy; course lifecycle/marketplace; curriculum and learning; assessments/practice; structured lessons; textbooks/documents/resources; tutor; messaging/live sessions; certificates; source ingestion/translations; and HRMS access, workforce, attendance, leave, holidays, assignments, approvals/reporting and payroll.
+The API source tree includes controllers/services for account identity and lifecycle; authentication/authorization; guardian access; platform/institution tenancy; course lifecycle/marketplace; curriculum and learning; assessments/practice; structured lessons; textbooks/documents/resources; tutor; messaging/live sessions; certificates; source ingestion/translations; and HRMS access, workforce, attendance, leave, holidays, assignments, approvals/reporting and payroll. The first guarded-controller pass is documented in [phase-1-api-permission-map.md](./phase-1-api-permission-map.md); it is representative, not yet a complete endpoint catalog.
 
 The migration folder at the inspected code snapshot included migrations through `V128__institution_isolate_learner_history.sql`. Important schema families include unified identity and course entitlements, tenant white-label/branding, class 6–8 course products/offers, institutional course releases, scoped learning history and HRMS. Before the seed-pack design, the audit must trace actual foreign keys, unique constraints, cascade/restrict behavior, external asset references and session/identity relationships in the current full schema.
 
@@ -190,6 +190,8 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Identify existing route inventory generator and static UI contract tools.
 - [x] Locate representative UI audit/design/tenant/HRMS docs, API test suites, Android unit test suite and main CI workflow.
 - [x] Identify current external integration families and the high-risk tenant/role boundaries.
+- [x] Scan the 59 web route-entry files for page-level handlers/direct API literals and map Android route enums through the Compose shell (partial; see source log).
+- [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
 - [x] Record the initial test-data marker search result and its limits.
 
 ### Still required before Phase 1 sign-off
