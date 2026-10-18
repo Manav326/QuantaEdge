@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f076de22ef8222fcc589bd25ded0c9842af81c8e65e413ebb0b01b9d20d47d70",
+  "raw_analysis_sha256": "72f04ef9094f78df5e943db5ad4b1b30e568d850b08911b0bc012df29d6fcb81",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1806,32 +1806,21 @@
           "teamwork",
           "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of boxes",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39013231656",
-      "checkpointed_at": "2026-10-17T19:20:25Z",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:35:45Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -1849,24 +1838,13 @@
           "teamwork",
           "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of boxes",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -2628,7 +2606,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2644,22 +2622,28 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "NEP 2020",
           "Keywords",
-          "scientific activities"
+          "NEP 2020",
+          "Indian texts",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "challenging and engaging experience",
+          "competencies",
+          "evaluation"
         ],
-        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
-      "checkpointed_at": "2026-10-17T05:32:24Z",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:40:13Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2675,13 +2659,19 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
-          "NEP 2020",
           "Keywords",
-          "scientific activities"
+          "NEP 2020",
+          "Indian texts",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "challenging and engaging experience",
+          "competencies",
+          "evaluation"
         ],
-        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -4792,6 +4782,7 @@
     {
       "asset_id": "03831de7bf623697fae50cbd",
       "asset_sha256": "e44c91c3cd496ae586c2da8a22401d78fb7a7a210fd371863903bc1e3fd6f5a9",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 10,
@@ -4799,12 +4790,11 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
+      "run_id": "39086204410",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
@@ -6190,6 +6180,7 @@
     {
       "asset_id": "addf4b5efb155dd4ef00e456",
       "asset_sha256": "dba5dc70d18c66cf3d7e4f8859591d577f6c1b0cf3346e1e41e95c4bc1e1f63f",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 10,
@@ -6197,12 +6188,11 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904509019",
+      "run_id": "39086204410",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
@@ -13156,6 +13146,56 @@
         "context_relation": "Background for educational content",
         "limitations": [
           "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "98e99b2dbab447c4e49ca75b",
+      "asset_sha256": "f10cb399c6dc611b076a6a95a06632239d9767697641c435ddf82612af7bee7b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/f10cb399c6dc611b076a6a95a06632239d9767697641c435ddf82612af7bee7b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and orange gradient background with a black border at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and orange gradient",
+          "black border"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:47:54Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow and orange gradient background with a black border at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and orange gradient",
+          "black border"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or information provided"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
