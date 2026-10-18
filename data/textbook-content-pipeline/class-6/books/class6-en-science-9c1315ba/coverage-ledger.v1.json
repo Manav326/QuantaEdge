@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 693,
-    "successful_visual_analyses": 684,
-    "missing_visual_analyses": 1385,
+    "raw_analysis_result_rows": 697,
+    "successful_visual_analyses": 688,
+    "missing_visual_analyses": 1381,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1394,
+    "unresolved_count": 1390,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27722,9 +27722,24 @@
       "asset_path": "assets/fcc4b485d693540576322ef0b49eba674d9412d5edf5d2f5686532d5bda4690b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A mother cow and her calf are standing in a grassy field with bushes in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mother cow",
+          "calf",
+          "grassy field",
+          "bushes",
+          "calf nursing from mother"
+        ],
+        "context_relation": "The image represents a natural scene with a mother cow and her calf, emphasizing the bond between them and the environment they are in.",
+        "limitations": [
+          "The image does not provide specific information about the species of the cow or the calf, nor does it indicate the time of day or season."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27740,9 +27755,22 @@
       "asset_path": "assets/69815503e964075134d3707fb677ace64ffb39f9cd7a66950fad83301e4b6df8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A caterpillar is eating a leaf.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "caterpillar",
+          "leaf",
+          "eating"
+        ],
+        "context_relation": "The image represents a part of the life cycle of a butterfly or moth, where the caterpillar is feeding on a leaf.",
+        "limitations": [
+          "The image does not provide information about the specific type of caterpillar or the plant it is eating."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27758,9 +27786,26 @@
       "asset_path": "assets/e39c19a11babc137f3b6244a5d031269444ee0e9ca49004e69a330f9acd2f6c2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A small plant sprouting from soil with a blue background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant growth",
+          "seedling",
+          "soil",
+          "environment",
+          "plant life",
+          "environmental protection"
+        ],
+        "context_relation": "The image represents a seedling growing from soil, which is a visual representation of the concept of plant growth and environmental protection.",
+        "limitations": [
+          "The image does not include any text or labels.",
+          "The image is a single illustration and does not provide a full narrative or educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27776,9 +27821,22 @@
       "asset_path": "assets/f2d190238a702ce2e6535db9ee0d6e1dec618f9d894fe070e0314499a8c2bb8c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a flatbread with onions and a bowl of green chutney.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "flatbread",
+          "onions",
+          "chutney"
+        ],
+        "context_relation": "The image represents a simple food item, likely from a South Asian cuisine, which is a common topic in educational content about food and culture.",
+        "limitations": [
+          "The image does not provide specific details about the ingredients or preparation methods of the food items."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

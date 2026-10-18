@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 684,
+    "assets_selected": 688,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 683,
-    "assets_remaining": 1395,
-    "assets_completion_percent": 32.9,
+    "assets_analyzed": 687,
+    "assets_remaining": 1391,
+    "assets_completion_percent": 33.1,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 679,
+    "assets_skipped_from_checkpoint": 683,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T13:05:06Z"
+      "checkpointed_at": "2026-10-18T13:12:49Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20574,6 +20574,140 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T13:11:35Z"
+    },
+    {
+      "asset_id": "05f13ec79d817e72620ea81c",
+      "asset_sha256": "fcc4b485d693540576322ef0b49eba674d9412d5edf5d2f5686532d5bda4690b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/fcc4b485d693540576322ef0b49eba674d9412d5edf5d2f5686532d5bda4690b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A mother cow and her calf are standing in a grassy field with bushes in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mother cow",
+          "calf",
+          "grassy field",
+          "bushes",
+          "calf nursing from mother"
+        ],
+        "context_relation": "The image represents a natural scene with a mother cow and her calf, emphasizing the bond between them and the environment they are in.",
+        "limitations": [
+          "The image does not provide specific information about the species of the cow or the calf, nor does it indicate the time of day or season."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:14:28Z"
+    },
+    {
+      "asset_id": "76c161acdee79adc7aedc3ff",
+      "asset_sha256": "69815503e964075134d3707fb677ace64ffb39f9cd7a66950fad83301e4b6df8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/69815503e964075134d3707fb677ace64ffb39f9cd7a66950fad83301e4b6df8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A caterpillar is eating a leaf.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "caterpillar",
+          "leaf",
+          "eating"
+        ],
+        "context_relation": "The image represents a part of the life cycle of a butterfly or moth, where the caterpillar is feeding on a leaf.",
+        "limitations": [
+          "The image does not provide information about the specific type of caterpillar or the plant it is eating."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:16:04Z"
+    },
+    {
+      "asset_id": "002a109691adb85b7cce96b1",
+      "asset_sha256": "e39c19a11babc137f3b6244a5d031269444ee0e9ca49004e69a330f9acd2f6c2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/e39c19a11babc137f3b6244a5d031269444ee0e9ca49004e69a330f9acd2f6c2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A small plant sprouting from soil with a blue background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant growth",
+          "seedling",
+          "soil",
+          "environment",
+          "plant life",
+          "environmental protection"
+        ],
+        "context_relation": "The image represents a seedling growing from soil, which is a visual representation of the concept of plant growth and environmental protection.",
+        "limitations": [
+          "The image does not include any text or labels.",
+          "The image is a single illustration and does not provide a full narrative or educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:17:42Z"
+    },
+    {
+      "asset_id": "9d2b14a73fe4041cb6c3d9e5",
+      "asset_sha256": "f2d190238a702ce2e6535db9ee0d6e1dec618f9d894fe070e0314499a8c2bb8c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/f2d190238a702ce2e6535db9ee0d6e1dec618f9d894fe070e0314499a8c2bb8c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a flatbread with onions and a bowl of green chutney.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "flatbread",
+          "onions",
+          "chutney"
+        ],
+        "context_relation": "The image represents a simple food item, likely from a South Asian cuisine, which is a common topic in educational content about food and culture.",
+        "limitations": [
+          "The image does not provide specific details about the ingredients or preparation methods of the food items."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:19:16Z"
     }
   ]
 }
