@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "869a1378dab44065c54603320ebf9209dab16bf58b50202cd01f579e15d8b932",
+  "raw_analysis_sha256": "d1a63b52450b5480c58cac243d5af64c593eddd831bc1de2ac5f3bb01edd7eb9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T11:22:51Z",
+      "checkpointed_at": "2026-10-18T11:37:38Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -27345,6 +27345,202 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 10,
       "asset_path": "page-0010.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aa3df89ef7c798c4fb9de373",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aaf2713edc237c93b4cf9b04c25d2147ed3694e6eb9d813c6b8d4f160d22274",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:39:16Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7b22e45d3fcc917fdf336b5",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aaf2713edc237c93b4cf9b04c25d2147ed3694e6eb9d813c6b8d4f160d22274",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text and a logo.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Chairperson, Curricular Area Group (Science)",
+          "Shekhar C. Mande, FNA, FASc, FNASc, Former Director General, CSIR, Distinguished Professor, Bioinformatics Centre, Savitribai Phule Pune University, Honorary Distinguished Scientist, National Centre for Cell Science, Pune.",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science Education, Tata Institute of Fundamental Research (TIFR), Mumbai, Professor, Department of Condensed Matter Physics and Material Science, TIFR, Mumbai (Chairperson, Physics Sub-group)",
+          "Ashish Kumar Srivastava, Assistant"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Chairperson",
+          "Curricular Area Group (Science)",
+          "Shekhar C. Mande",
+          "FNA, FASc, FNASc",
+          "Former Director General, CSIR",
+          "Distinguished Professor",
+          "Bioinformatics Centre",
+          "Savitribai Phule Pune University",
+          "Honorary Distinguished Scientist",
+          "National Centre for Cell Science",
+          "Pune",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Centre Director",
+          "Homi Bhabha Centre for Science Education",
+          "Tata Institute of Fundamental Research (TIFR)",
+          "Mumbai",
+          "Professor",
+          "Department of Condensed Matter Physics and Material Science"
+        ],
+        "context_relation": "The page is part of a textbook development team, listing the names and roles of the contributors.",
+        "limitations": [
+          "The image does not show any visual elements other than text and a logo."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:39:57Z",
+      "effective_analysis": {
+        "visual_summary": "Page with text and a logo.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Chairperson, Curricular Area Group (Science)",
+          "Shekhar C. Mande, FNA, FASc, FNASc, Former Director General, CSIR, Distinguished Professor, Bioinformatics Centre, Savitribai Phule Pune University, Honorary Distinguished Scientist, National Centre for Cell Science, Pune.",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science Education, Tata Institute of Fundamental Research (TIFR), Mumbai, Professor, Department of Condensed Matter Physics and Material Science, TIFR, Mumbai (Chairperson, Physics Sub-group)",
+          "Ashish Kumar Srivastava, Assistant"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Chairperson",
+          "Curricular Area Group (Science)",
+          "Shekhar C. Mande",
+          "FNA, FASc, FNASc",
+          "Former Director General, CSIR",
+          "Distinguished Professor",
+          "Bioinformatics Centre",
+          "Savitribai Phule Pune University",
+          "Honorary Distinguished Scientist",
+          "National Centre for Cell Science",
+          "Pune",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Centre Director",
+          "Homi Bhabha Centre for Science Education",
+          "Tata Institute of Fundamental Research (TIFR)",
+          "Mumbai",
+          "Professor",
+          "Department of Condensed Matter Physics and Material Science"
+        ],
+        "context_relation": "The page is part of a textbook development team, listing the names and roles of the contributors.",
+        "limitations": [
+          "The image does not show any visual elements other than text and a logo."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "11a9c718fc8bbcacc29688e4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aaf2713edc237c93b4cf9b04c25d2147ed3694e6eb9d813c6b8d4f160d22274",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:40:13Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1e97680eac800c667de90c6b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "7aaf2713edc237c93b4cf9b04c25d2147ed3694e6eb9d813c6b8d4f160d22274",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
