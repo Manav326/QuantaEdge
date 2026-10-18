@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 748,
+    "assets_selected": 751,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 746,
-    "assets_remaining": 1332,
-    "assets_completion_percent": 35.9,
+    "assets_analyzed": 750,
+    "assets_remaining": 1328,
+    "assets_completion_percent": 36.1,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 743,
+    "assets_skipped_from_checkpoint": 746,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T15:18:00Z"
+      "checkpointed_at": "2026-10-18T15:28:42Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -22707,6 +22707,181 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T15:27:28Z"
+    },
+    {
+      "asset_id": "98576056475b26b5f9890831",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "72b6e765be08a1446eeb20ecb3c2a17f3da72786a385baaab484e8a937e14f0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Examples of different types of plants including grass, tulsi, and hibiscus.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.1: Examples of different types of plants",
+          "(a) Grass",
+          "(b) Tulsi (Holy Basil)",
+          "(c) Hibiscus (Gudhal)"
+        ],
+        "concepts": [
+          "Plants",
+          "Observations",
+          "Scrapbook",
+          "Nature",
+          "Stems",
+          "Leaves",
+          "Flowers",
+          "Park",
+          "Plants and animals",
+          "Observations in Table 2.1",
+          "Features of stems, leaves, flowers",
+          "Table 2.1"
+        ],
+        "context_relation": "The image is a visual aid for educational content related to plants and nature, specifically for a lesson on observing and recording plant features.",
+        "limitations": [
+          "The image does not provide specific details about the plants or their features.",
+          "The image does not show any specific actions or behaviors of the plants or animals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:29:20Z"
+    },
+    {
+      "asset_id": "4faf7449251b634b983cb68b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "72b6e765be08a1446eeb20ecb3c2a17f3da72786a385baaab484e8a937e14f0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Examples of different types of plants including grass, tulsi, and hibiscus.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.1: Examples of different types of plants",
+          "(a) Grass",
+          "(b) Tulsi (Holy Basil)",
+          "(c) Hibiscus (Gudhal)"
+        ],
+        "concepts": [
+          "Plants",
+          "Observations",
+          "Scrapbook",
+          "Nature",
+          "Stems",
+          "Leaves",
+          "Flowers",
+          "Park",
+          "Plants and animals"
+        ],
+        "context_relation": "The image is related to the educational content about plants and nature, specifically focusing on the observation and recording of plant features.",
+        "limitations": [
+          "The image does not provide specific details about the features of the plants.",
+          "The image does not show the actual plants or their features."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:29:53Z"
+    },
+    {
+      "asset_id": "b211788aec1a86c243b382b4",
+      "asset_sha256": "641c12ae0e6a5ef5befaa9e260793928b65e358a5170ae8dd5288879f87933a2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 29,
+      "asset_path": "page-0029.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "72b6e765be08a1446eeb20ecb3c2a17f3da72786a385baaab484e8a937e14f0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Examples of different features of some plants, including grass, Tulsi, and Hibiscus, along with their local names, stem characteristics, leaf arrangements, and flower colors.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1: Observations of different plants around us",
+          "S. no.",
+          "Local name of plant",
+          "Stem",
+          "Leaves (shape/arrangement of leaves)",
+          "Flowers",
+          "Any other observations and features",
+          "1. Common grass",
+          "Soft and thin",
+          "A single leaf grows alternately from different points on the stem",
+          "Green leaves",
+          "2. Tulsi",
+          "Hard and thin",
+          "Arrangement of a pair of leaves in the opposite directions",
+          "Pinkish purple",
+          "3. Hibiscus",
+          "Hard",
+          "Leaves with smooth surface",
+          "4. Neem",
+          "Hard and thick",
+          "5. Any other"
+        ],
+        "concepts": [
+          "Observations of plants",
+          "Local names of plants",
+          "Stem characteristics",
+          "Leaf arrangements",
+          "Flower colors"
+        ],
+        "context_relation": "The table provides a structured format for recording observations about different plants, including their local names, stem characteristics, leaf arrangements, and flower colors.",
+        "limitations": [
+          "The table does not include specific details about the plants' habitats or ecological roles."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:33:58Z"
+    },
+    {
+      "asset_id": "5012d99fb6a6d7da515239cd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf1a0e01d86fefc810281a9c7f843839cdd7f282a4a0fcab1bf6214a3169caa4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation of plants and animals during a walk or experience.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:34:14Z"
     }
   ]
 }

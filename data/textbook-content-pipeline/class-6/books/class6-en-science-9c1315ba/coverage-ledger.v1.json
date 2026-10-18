@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 761,
-    "successful_visual_analyses": 747,
-    "missing_visual_analyses": 1317,
+    "raw_analysis_result_rows": 765,
+    "successful_visual_analyses": 751,
+    "missing_visual_analyses": 1313,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1331,
+    "unresolved_count": 1327,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29797,9 +29797,37 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Examples of different types of plants including grass, tulsi, and hibiscus.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.1: Examples of different types of plants",
+          "(a) Grass",
+          "(b) Tulsi (Holy Basil)",
+          "(c) Hibiscus (Gudhal)"
+        ],
+        "concepts": [
+          "Plants",
+          "Observations",
+          "Scrapbook",
+          "Nature",
+          "Stems",
+          "Leaves",
+          "Flowers",
+          "Park",
+          "Plants and animals",
+          "Observations in Table 2.1",
+          "Features of stems, leaves, flowers",
+          "Table 2.1"
+        ],
+        "context_relation": "The image is a visual aid for educational content related to plants and nature, specifically for a lesson on observing and recording plant features.",
+        "limitations": [
+          "The image does not provide specific details about the plants or their features.",
+          "The image does not show any specific actions or behaviors of the plants or animals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29815,9 +29843,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Examples of different types of plants including grass, tulsi, and hibiscus.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.1: Examples of different types of plants",
+          "(a) Grass",
+          "(b) Tulsi (Holy Basil)",
+          "(c) Hibiscus (Gudhal)"
+        ],
+        "concepts": [
+          "Plants",
+          "Observations",
+          "Scrapbook",
+          "Nature",
+          "Stems",
+          "Leaves",
+          "Flowers",
+          "Park",
+          "Plants and animals"
+        ],
+        "context_relation": "The image is related to the educational content about plants and nature, specifically focusing on the observation and recording of plant features.",
+        "limitations": [
+          "The image does not provide specific details about the features of the plants.",
+          "The image does not show the actual plants or their features."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29833,9 +29886,46 @@
       "asset_path": "page-0029.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Examples of different features of some plants, including grass, Tulsi, and Hibiscus, along with their local names, stem characteristics, leaf arrangements, and flower colors.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1: Observations of different plants around us",
+          "S. no.",
+          "Local name of plant",
+          "Stem",
+          "Leaves (shape/arrangement of leaves)",
+          "Flowers",
+          "Any other observations and features",
+          "1. Common grass",
+          "Soft and thin",
+          "A single leaf grows alternately from different points on the stem",
+          "Green leaves",
+          "2. Tulsi",
+          "Hard and thin",
+          "Arrangement of a pair of leaves in the opposite directions",
+          "Pinkish purple",
+          "3. Hibiscus",
+          "Hard",
+          "Leaves with smooth surface",
+          "4. Neem",
+          "Hard and thick",
+          "5. Any other"
+        ],
+        "concepts": [
+          "Observations of plants",
+          "Local names of plants",
+          "Stem characteristics",
+          "Leaf arrangements",
+          "Flower colors"
+        ],
+        "context_relation": "The table provides a structured format for recording observations about different plants, including their local names, stem characteristics, leaf arrangements, and flower colors.",
+        "limitations": [
+          "The table does not include specific details about the plants' habitats or ecological roles."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29851,9 +29941,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation of plants and animals during a walk or experience.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
