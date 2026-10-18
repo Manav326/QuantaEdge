@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 627,
+    "assets_selected": 630,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 625,
-    "assets_remaining": 6863,
-    "assets_completion_percent": 8.3,
+    "assets_analyzed": 628,
+    "assets_remaining": 6860,
+    "assets_completion_percent": 8.4,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 622,
+    "assets_skipped_from_checkpoint": 625,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:56:31Z"
+      "checkpointed_at": "2026-10-18T05:59:31Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:56:50Z"
+      "checkpointed_at": "2026-10-18T05:59:51Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -23159,6 +23159,133 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T05:58:53Z"
+    },
+    {
+      "asset_id": "449b0a1c83c56b654d5432a9",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No.",
+          "Name of the sample",
+          "Neutral",
+          "Blue litmus paper",
+          "Red litmus paper"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Blue and red litmus papers",
+          "Color change",
+          "Adding drops of sample"
+        ],
+        "context_relation": "The table compares the color change of blue and red litmus papers after adding drops of different samples to test their nature.",
+        "limitations": [
+          "The table does not specify the samples tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:00:30Z"
+    },
+    {
+      "asset_id": "239208b8d4d2930af7041d2c",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Blue and red litmus papers",
+          "Color change",
+          "Neutral samples"
+        ],
+        "context_relation": "The table is used to compare the color change of blue and red litmus papers after adding drops of different samples.",
+        "limitations": [
+          "The table does not specify the samples or their colors."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:00:40Z"
+    },
+    {
+      "asset_id": "cc8f74da4bc5133283371c1e",
+      "asset_sha256": "9c825c71ddf1fa09a2ebd566d83fada64746fff89395c19e3c9f09b353c1d295",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/9c825c71ddf1fa09a2ebd566d83fada64746fff89395c19e3c9f09b353c1d295.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "Blue litmus paper",
+          "Red litmus paper"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Blue and red litmus papers",
+          "Color change",
+          "Neutral samples"
+        ],
+        "context_relation": "The table is used to compare the color change of blue and red litmus papers after adding drops of different samples.",
+        "limitations": [
+          "The table does not specify the samples being tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:01:21Z"
     }
   ]
 }
