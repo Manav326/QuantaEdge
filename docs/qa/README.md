@@ -13,6 +13,7 @@
 - [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 70 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
 - [Existing Test Evidence](./phase-1-existing-test-evidence.md): links current API/Android test sources to scenario domains and separates tests-present from runtime-verified evidence.
 - [Android Composition Map](./phase-1-android-composition-map.md): maps all 34 native routes to their actual shell/component renderers and documents BackHandler return contracts.
+- [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 93 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
 
 ## Evidence and status rules
 
@@ -27,7 +28,7 @@
 | `BLOCKED` | A reason prevents execution; this is not a pass. |
 | `NOT_APPLICABLE` | A reviewer records why the particular check does not apply. |
 
-A source file, successful compilation, static contract check or older tracker entry is not equivalent to an end-to-end pass. Verification must be tied to a commit SHA and execution evidence.
+A source file, successful compilation, static contract check or older tracker entry is not equivalent to an end-to-end pass. Verification must be tied to a commit SHA and execution evidence. In the per-screen checklist, `NOT_REVIEWED` means the state must still be examined; use `NOT_APPLICABLE` only after source/runtime review records a reason, never to hide an untested state.
 
 ## Audit rules
 
