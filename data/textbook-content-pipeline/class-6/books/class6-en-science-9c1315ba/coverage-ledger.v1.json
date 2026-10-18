@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 628,
-    "successful_visual_analyses": 628,
-    "missing_visual_analyses": 1450,
+    "raw_analysis_result_rows": 631,
+    "successful_visual_analyses": 631,
+    "missing_visual_analyses": 1447,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1450,
+    "unresolved_count": 1447,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -25696,9 +25696,23 @@
       "asset_path": "assets/f9452cd5a44ffc5baf9dab84210431678fd5c02f0aed2d1c421b794f7c19c4af.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal bar chart with a gradient background.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal bar chart",
+          "gradient background"
+        ],
+        "context_relation": "The visible text is related to the chart's title.",
+        "limitations": [
+          "The chart's data is not visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25714,9 +25728,18 @@
       "asset_path": "assets/9e64f45cd352c1ac5b846e7cfbfdcc2e7ef58f373ca4a0a13bc074432eb08d0c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25732,9 +25755,19 @@
       "asset_path": "assets/4378c53549021ada62ef5f5f02c067fac6b8b1708f8b53a3e5f07ae0b54f0ebc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a golden hue.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover image for a textbook",
+        "limitations": [
+          "Unclear content or subject matter",
+          "No specific text or labels visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
