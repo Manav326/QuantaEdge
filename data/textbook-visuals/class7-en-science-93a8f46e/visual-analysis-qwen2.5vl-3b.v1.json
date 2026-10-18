@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 352,
+    "assets_selected": 356,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 351,
-    "assets_remaining": 7137,
+    "assets_analyzed": 355,
+    "assets_remaining": 7133,
     "assets_completion_percent": 4.7,
     "assets_failed": 4,
-    "assets_skipped_from_checkpoint": 347,
+    "assets_skipped_from_checkpoint": 351,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T01:51:40Z"
+      "checkpointed_at": "2026-10-18T01:54:38Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -11492,6 +11492,118 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T01:54:00Z"
+    },
+    {
+      "asset_id": "80d7e73424a6a1dc6fdacf8e",
+      "asset_sha256": "35175241ad572cc797be0e149b456d0195ea34d57ccb71674988bc536dd9e139",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/35175241ad572cc797be0e149b456d0195ea34d57ccb71674988bc536dd9e139.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a white background with a thin black line running diagonally from the bottom left to the top right.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:55:10Z"
+    },
+    {
+      "asset_id": "9b6243592d8c125913f23317",
+      "asset_sha256": "a41ebdfdc93d5e7c8d13387df165721618e9696becbd8f8e058eee8e5dc4cdcb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/a41ebdfdc93d5e7c8d13387df165721618e9696becbd8f8e058eee8e5dc4cdcb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue container with a green object inside, possibly a plant or a seedling.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a close-up of a container with a green object inside, possibly a plant or a seedling. The text in the image is not visible.",
+        "limitations": [
+          "The text in the image is not visible.",
+          "The image does not provide any additional context or information about the container or the green object inside."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:55:45Z"
+    },
+    {
+      "asset_id": "0230c8487e840973d45c5205",
+      "asset_sha256": "e876eca169fd65d5e17038029134d17f19e1fa2b15d4ca17483b2b9c538eb24c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/e876eca169fd65d5e17038029134d17f19e1fa2b15d4ca17483b2b9c538eb24c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a green object against a white background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible partial visibility"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:56:18Z"
+    },
+    {
+      "asset_id": "f0977460d51f881f28e98b1d",
+      "asset_sha256": "2048259899b99304c6699412f561a7f23ee1bb693ad0197b6ad1ffaaf9df0195",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/2048259899b99304c6699412f561a7f23ee1bb693ad0197b6ad1ffaaf9df0195.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A vertical green pole in a white background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:56:49Z"
     }
   ]
 }
