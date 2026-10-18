@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,32 +50,20 @@ class StudentProgramControllerTest {
     assertEquals("NAVODAYA_BATCH", rows.getFirst().get("code"));
     assertEquals(true, rows.getFirst().get("is_enrolled"));
     assertEquals(2L, ((List<Map<String,Object>>) rows.getFirst().get("subjects")).getFirst().get("chapters"));
+
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(sql.capture(), any(Object[].class));
+    assertTrue(sql.getValue().contains("offer.institution_id=?"));
+    assertTrue(sql.getValue().contains("purchase.institution_id=?"));
+    assertTrue(sql.getValue().contains("legacy_grant.institution_id=?"));
+    assertTrue(sql.getValue().contains("spe.institution_id=?"));
+    assertTrue(!sql.getValue().contains("not exists(select 1 from institution_membership"));
   }
 
   @Test
   void courseCatalogueRequiresAnExplicitTenantContext() {
     assertThrows(InstitutionTenantContextService.InvalidInstitutionContextException.class,
         () -> controller.programs(student, null));
-  }
-
-  @Test
-  void catalogueQueryUsesOnlyTheSelectedInstitutionsPublishedOffersAndTenantBoundHistory() {
-    String sql = sourceForCatalogueQuery();
-    assertTrue(sql.contains("offer.institution_id=?"));
-    assertTrue(sql.contains("purchase.institution_id=?"));
-    assertTrue(sql.contains("legacy_grant.institution_id=?"));
-    assertTrue(sql.contains("spe.institution_id=?"));
-    assertTrue(!sql.contains("not exists(select 1 from institution_membership"));
-  }
-
-  private static String sourceForCatalogueQuery() {
-    return """
-      from institution_marketplace_offer offer
-      where offer.institution_id=? and offer.status='PUBLISHED'
-      and purchase.institution_id=?
-      and legacy_grant.institution_id=?
-      and spe.institution_id=?
-      """;
   }
 
   @Test
