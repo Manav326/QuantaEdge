@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 749,
-    "successful_visual_analyses": 736,
-    "missing_visual_analyses": 1329,
+    "raw_analysis_result_rows": 753,
+    "successful_visual_analyses": 740,
+    "missing_visual_analyses": 1325,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1342,
+    "unresolved_count": 1338,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29425,9 +29425,18 @@
       "asset_path": "assets/b21fb8d8693cf0564f57be9601ec82659d7189c8ef044f25bb59a2917d22f9e6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "QR code with the text '0677CH02' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH02"
+        ],
+        "concepts": [],
+        "context_relation": "text",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29443,9 +29452,19 @@
       "asset_path": "assets/9a19415ba6293aecefde69cfdddac36039226babbde55568f72be886be8b57e0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of old, yellowed paper with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or placeholder for text.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The image is a static, non-interactive element."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29461,9 +29480,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing diversity in the living world, with a quote about trees giving shade and fruits to others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter Diversity in the Living World 2",
+          "छायामनयसय कुर्वन्ति तितिष्ठन्ति स्वयमातपे ।",
+          "फलान्यपि परार्थाय वृक्षाः सतपुरुषा इव ॥",
+          "सुभाषित",
+          "Trees stand in the Sun and give shade to others. Their fruits are also for others. Likewise, good people bear all hardships and bring welfare to others. They give to others whatever they have earned.",
+          "Wise saying",
+          "It is a pleasant morning after yesterday’s refreshing rain.",
+          "Dr Raghu and"
+        ],
+        "concepts": [
+          "Diversity in the Living World",
+          "Trees giving shade and fruits",
+          "Good people bearing hardships and bringing welfare",
+          "Wise saying about trees and people"
+        ],
+        "context_relation": "The quote is a metaphor for the concepts discussed in the chapter.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or illustrations.",
+          "The visible text is in English and Hindi, indicating a bilingual approach to the content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29479,9 +29522,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

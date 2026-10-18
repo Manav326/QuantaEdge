@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0063ade620217df636c98c01cea4360544c5d1ee13bcaf10f6ddef7a7810c0c8",
+  "raw_analysis_sha256": "341e4e6c6739e6f36f0df1c6e1cad57160207e6828b733316eeeb3d82c404daf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:56:07Z",
+      "checkpointed_at": "2026-10-18T15:04:46Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -32658,6 +32658,198 @@
         "context_relation": "The image depicts a natural educational setting where children and adults are learning about nature and wildlife.",
         "limitations": [
           "The image does not provide specific details about the activities or the guide."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bf1d337fa45e0fcc880c990f",
+      "asset_sha256": "b21fb8d8693cf0564f57be9601ec82659d7189c8ef044f25bb59a2917d22f9e6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/b21fb8d8693cf0564f57be9601ec82659d7189c8ef044f25bb59a2917d22f9e6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "QR code with the text '0677CH02' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH02"
+        ],
+        "concepts": [],
+        "context_relation": "text",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:06:22Z",
+      "effective_analysis": {
+        "visual_summary": "QR code with the text '0677CH02' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH02"
+        ],
+        "concepts": [],
+        "context_relation": "text",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6ac8fce161b3805612d2d3f3",
+      "asset_sha256": "9a19415ba6293aecefde69cfdddac36039226babbde55568f72be886be8b57e0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/9a19415ba6293aecefde69cfdddac36039226babbde55568f72be886be8b57e0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of old, yellowed paper with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or placeholder for text.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The image is a static, non-interactive element."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:07:58Z",
+      "effective_analysis": {
+        "visual_summary": "A piece of old, yellowed paper with a torn edge.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or placeholder for text.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The image is a static, non-interactive element."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ced368102d79b558fbd9d2a2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing diversity in the living world, with a quote about trees giving shade and fruits to others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter Diversity in the Living World 2",
+          "छायामनयसय कुर्वन्ति तितिष्ठन्ति स्वयमातपे ।",
+          "फलान्यपि परार्थाय वृक्षाः सतपुरुषा इव ॥",
+          "सुभाषित",
+          "Trees stand in the Sun and give shade to others. Their fruits are also for others. Likewise, good people bear all hardships and bring welfare to others. They give to others whatever they have earned.",
+          "Wise saying",
+          "It is a pleasant morning after yesterday’s refreshing rain.",
+          "Dr Raghu and"
+        ],
+        "concepts": [
+          "Diversity in the Living World",
+          "Trees giving shade and fruits",
+          "Good people bearing hardships and bringing welfare",
+          "Wise saying about trees and people"
+        ],
+        "context_relation": "The quote is a metaphor for the concepts discussed in the chapter.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or illustrations.",
+          "The visible text is in English and Hindi, indicating a bilingual approach to the content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:08:48Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing diversity in the living world, with a quote about trees giving shade and fruits to others.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter Diversity in the Living World 2",
+          "छायामनयसय कुर्वन्ति तितिष्ठन्ति स्वयमातपे ।",
+          "फलान्यपि परार्थाय वृक्षाः सतपुरुषा इव ॥",
+          "सुभाषित",
+          "Trees stand in the Sun and give shade to others. Their fruits are also for others. Likewise, good people bear all hardships and bring welfare to others. They give to others whatever they have earned.",
+          "Wise saying",
+          "It is a pleasant morning after yesterday’s refreshing rain.",
+          "Dr Raghu and"
+        ],
+        "concepts": [
+          "Diversity in the Living World",
+          "Trees giving shade and fruits",
+          "Good people bearing hardships and bringing welfare",
+          "Wise saying about trees and people"
+        ],
+        "context_relation": "The quote is a metaphor for the concepts discussed in the chapter.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or illustrations.",
+          "The visible text is in English and Hindi, indicating a bilingual approach to the content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "001a70dec74fa153e66cb3ff",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:09:07Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
