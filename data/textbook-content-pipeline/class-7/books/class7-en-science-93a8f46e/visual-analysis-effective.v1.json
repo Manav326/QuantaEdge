@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "66544a075124581347aa12c69ff6de4d782b7ad149a7bec6bbed17ae87cff238",
+  "raw_analysis_sha256": "7567022626aa31b6b8dbbec632eec1b2c45f836b37ba48b369d461403c66a4a3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T20:03:05Z",
+      "checkpointed_at": "2026-10-18T20:05:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T20:03:26Z",
+      "checkpointed_at": "2026-10-18T20:05:59Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -60330,6 +60330,218 @@
         "context_relation": "unclear",
         "limitations": [
           "No visible content on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c534936b12ba92d08f518b81",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:06:05Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "096255e7bf6d438fcb2c3bad",
+      "asset_sha256": "4d8e4f40f8b95ca1d676f4da0ebe612e65092a3d87dcb961640beb580c2865dc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "page-0042.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a question about vinegar and bubbles, followed by exploratory projects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER",
+          "Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling. He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared. Why did bubbles occur with vinegar but not with soap solution?",
+          "Exploratory Projects",
+          "Create rangoli using acidic or basic substances and natural indicators.",
+          "You may discuss in your class the acidic, basic, or neutral nature of water obtained from various sources. You may like to test the water samples available from sources such as rain, taps, rivers, etc.",
+          "Collect a soil sample of your area and find out whether it is acidic, basic, or neutral in nature."
+        ],
+        "concepts": [
+          "Acidic",
+          "Basic",
+          "Neutral",
+          "Water",
+          "Rain",
+          "Taps",
+          "Rivers",
+          "Soil",
+          "Acidic",
+          "Basic",
+          "Neutral",
+          "Nature",
+          "Substances",
+          "Indicators",
+          "Exploratory Projects"
+        ],
+        "context_relation": "The page is a continuation of a question about vinegar and bubbles, followed by exploratory projects related to the topic.",
+        "limitations": [
+          "The page does not provide specific answers to the question about vinegar and bubbles."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:07:44Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a question about vinegar and bubbles, followed by exploratory projects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER",
+          "Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling. He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared. Why did bubbles occur with vinegar but not with soap solution?",
+          "Exploratory Projects",
+          "Create rangoli using acidic or basic substances and natural indicators.",
+          "You may discuss in your class the acidic, basic, or neutral nature of water obtained from various sources. You may like to test the water samples available from sources such as rain, taps, rivers, etc.",
+          "Collect a soil sample of your area and find out whether it is acidic, basic, or neutral in nature."
+        ],
+        "concepts": [
+          "Acidic",
+          "Basic",
+          "Neutral",
+          "Water",
+          "Rain",
+          "Taps",
+          "Rivers",
+          "Soil",
+          "Acidic",
+          "Basic",
+          "Neutral",
+          "Nature",
+          "Substances",
+          "Indicators",
+          "Exploratory Projects"
+        ],
+        "context_relation": "The page is a continuation of a question about vinegar and bubbles, followed by exploratory projects related to the topic.",
+        "limitations": [
+          "The page does not provide specific answers to the question about vinegar and bubbles."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ac741cabddcf025fc3f22e5",
+      "asset_sha256": "b3e58cf0dcf940f21045333dafa57dad5989929dc7e577ef4bd5d8965eaa3081",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/b3e58cf0dcf940f21045333dafa57dad5989929dc7e577ef4bd5d8965eaa3081.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a dam with a waterfall and lush greenery surrounding it.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity generation",
+          "dam",
+          "waterfall",
+          "electricity uses",
+          "school trip",
+          "hydroelectric power house",
+          "electricity presentation",
+          "electricity circuits",
+          "electricity components"
+        ],
+        "context_relation": "The image is a visual representation of the Bhakra Nangal Dam, which is used to generate electricity.",
+        "limitations": [
+          "The image does not show the actual dam or the train ride.",
+          "The image is a cartoon illustration, not a photograph."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:09:47Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a dam with a waterfall and lush greenery surrounding it.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity generation",
+          "dam",
+          "waterfall",
+          "electricity uses",
+          "school trip",
+          "hydroelectric power house",
+          "electricity presentation",
+          "electricity circuits",
+          "electricity components"
+        ],
+        "context_relation": "The image is a visual representation of the Bhakra Nangal Dam, which is used to generate electricity.",
+        "limitations": [
+          "The image does not show the actual dam or the train ride.",
+          "The image is a cartoon illustration, not a photograph."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
