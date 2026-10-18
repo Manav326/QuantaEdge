@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ab1ab431c013f5acaa24da4f0269da8ec6a8656af0d0841b715b007a56f6ab11",
+  "raw_analysis_sha256": "980d7df170ac592541cd3d18306d975c5a650e8f94c112b8c9df97f15b584d4a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:46:38Z",
+      "checkpointed_at": "2026-10-18T19:51:23Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:47:31Z",
+      "checkpointed_at": "2026-10-18T19:52:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:48:41Z",
+      "checkpointed_at": "2026-10-18T19:53:27Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37034,6 +37034,124 @@
         "context_relation": "The image is a visual representation of an educational activity involving the creation and analysis of a table about animals and plants found in different environments.",
         "limitations": [
           "The table is incomplete, with only partial text visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a376f21044067953d9865ac8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7c4f33cef2841fb93187de28e302dcd297c37d00ead7d94bf3fb081ecf71a5d7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Comparison and analysis of animals and plants in different environments",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:53:39Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Comparison and analysis of animals and plants in different environments",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e28b49222e0c0b8785e1a1e7",
+      "asset_sha256": "810b3c5b19318286450b40db2363247db6f4afda6b3b8f4f53b96072769cfc85",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 42,
+      "asset_path": "page-0042.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7c4f33cef2841fb93187de28e302dcd297c37d00ead7d94bf3fb081ecf71a5d7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table comparing animals and plants in different regions.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.6: Animals and plants found in different surroundings",
+          "S. no.",
+          "1. Camel",
+          "2. Any other",
+          "3.",
+          "In the desert",
+          "Deodar tree",
+          "Fish",
+          "Lion",
+          "In the mountains",
+          "Any other region",
+          "In the ocean",
+          "In the forest",
+          "Any other region"
+        ],
+        "concepts": [
+          "Animals and plants",
+          "Different regions",
+          "Observations"
+        ],
+        "context_relation": "Comparison of animals and plants in different regions",
+        "limitations": [
+          "No specific images or illustrations provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:56:23Z",
+      "effective_analysis": {
+        "visual_summary": "Table comparing animals and plants in different regions.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.6: Animals and plants found in different surroundings",
+          "S. no.",
+          "1. Camel",
+          "2. Any other",
+          "3.",
+          "In the desert",
+          "Deodar tree",
+          "Fish",
+          "Lion",
+          "In the mountains",
+          "Any other region",
+          "In the ocean",
+          "In the forest",
+          "Any other region"
+        ],
+        "concepts": [
+          "Animals and plants",
+          "Different regions",
+          "Observations"
+        ],
+        "context_relation": "Comparison of animals and plants in different regions",
+        "limitations": [
+          "No specific images or illustrations provided"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

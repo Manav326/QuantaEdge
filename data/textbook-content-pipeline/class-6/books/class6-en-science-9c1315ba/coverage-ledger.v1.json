@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 820,
-    "successful_visual_analyses": 810,
-    "missing_visual_analyses": 1258,
+    "raw_analysis_result_rows": 822,
+    "successful_visual_analyses": 812,
+    "missing_visual_analyses": 1256,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1268,
+    "unresolved_count": 1266,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -32107,9 +32107,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Comparison and analysis of animals and plants in different environments",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32125,9 +32134,37 @@
       "asset_path": "page-0042.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table comparing animals and plants in different regions.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.6: Animals and plants found in different surroundings",
+          "S. no.",
+          "1. Camel",
+          "2. Any other",
+          "3.",
+          "In the desert",
+          "Deodar tree",
+          "Fish",
+          "Lion",
+          "In the mountains",
+          "Any other region",
+          "In the ocean",
+          "In the forest",
+          "Any other region"
+        ],
+        "concepts": [
+          "Animals and plants",
+          "Different regions",
+          "Observations"
+        ],
+        "context_relation": "Comparison of animals and plants in different regions",
+        "limitations": [
+          "No specific images or illustrations provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
