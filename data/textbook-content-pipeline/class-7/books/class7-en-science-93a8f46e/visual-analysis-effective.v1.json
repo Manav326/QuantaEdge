@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5b5df31640a599d733318a031c6ab1d56471b17022b28ff63aecf71e9b91a9ea",
+  "raw_analysis_sha256": "6a7807b8a75766ca0928efada5960cf51c1e5e6e7201b833618eadd1ea6c90f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T13:41:46Z",
+      "checkpointed_at": "2026-10-18T13:47:35Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -45769,6 +45769,250 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1968f4ff86e2b69836109cd7",
+      "asset_sha256": "afd4affe1703ac0665f307204bbacc312a03e5e99607a25fa9cddcf29c55c735",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 35,
+      "asset_path": "assets/afd4affe1703ac0665f307204bbacc312a03e5e99607a25fa9cddcf29c55c735.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c396e3307b41acf1bece86c90767f56cdb51f307226c64352e0c2b0a42338a0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper tests.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Nature of samples",
+          "Turmeric paper tests"
+        ],
+        "context_relation": "The table is used to record the results of turmeric paper tests performed in Activity 2.1.",
+        "limitations": [
+          "The table is incomplete, missing the actual observations and sample names."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:48:47Z",
+      "effective_analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper tests.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Nature of samples",
+          "Turmeric paper tests"
+        ],
+        "context_relation": "The table is used to record the results of turmeric paper tests performed in Activity 2.1.",
+        "limitations": [
+          "The table is incomplete, missing the actual observations and sample names."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a6cecc2bee7e288029167b27",
+      "asset_sha256": "1bab6ccb1552d413951570ef1f29520588cd0449dccd518dccff4bf286e9a976",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 35,
+      "asset_path": "assets/1bab6ccb1552d413951570ef1f29520588cd0449dccd518dccff4bf286e9a976.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c396e3307b41acf1bece86c90767f56cdb51f307226c64352e0c2b0a42338a0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions for an activity involving turmeric paper and samples.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "15",
+          "Using a dropper, put a drop of each of the samples used in",
+          "Activity 2.1, one by one, on separate pieces of turmeric paper.",
+          "Record your observations in Table 2.4.",
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "and",
+          "The colour of the turmeric paper",
+          "S.No.   Name of the sample"
+        ],
+        "concepts": [
+          "Activity 2.1",
+          "turmeric paper",
+          "Observations",
+          "Table 2.4",
+          "Nature of samples"
+        ],
+        "context_relation": "The page provides instructions for an activity that involves testing the nature of samples using turmeric paper.",
+        "limitations": [
+          "The page does not provide specific details about the samples or the nature of the samples being tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:50:11Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for an activity involving turmeric paper and samples.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "15",
+          "Using a dropper, put a drop of each of the samples used in",
+          "Activity 2.1, one by one, on separate pieces of turmeric paper.",
+          "Record your observations in Table 2.4.",
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "and",
+          "The colour of the turmeric paper",
+          "S.No.   Name of the sample"
+        ],
+        "concepts": [
+          "Activity 2.1",
+          "turmeric paper",
+          "Observations",
+          "Table 2.4",
+          "Nature of samples"
+        ],
+        "context_relation": "The page provides instructions for an activity that involves testing the nature of samples using turmeric paper.",
+        "limitations": [
+          "The page does not provide specific details about the samples or the nature of the samples being tested."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f43174b96db2b6ff615875b",
+      "asset_sha256": "bc214c2bbb97712f2ea9df3bc7d5ae4181c1da58db347114801269c82ba70e34",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 35,
+      "asset_path": "assets/bc214c2bbb97712f2ea9df3bc7d5ae4181c1da58db347114801269c82ba70e34.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c396e3307b41acf1bece86c90767f56cdb51f307226c64352e0c2b0a42338a0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank table for recording observations.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Nature of samples",
+          "Turmeric paper"
+        ],
+        "context_relation": "The table is for recording observations made during an activity involving turmeric paper.",
+        "limitations": [
+          "The table is blank and requires specific information to be filled in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:51:22Z",
+      "effective_analysis": {
+        "visual_summary": "A blank table for recording observations.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Nature of samples",
+          "Turmeric paper"
+        ],
+        "context_relation": "The table is for recording observations made during an activity involving turmeric paper.",
+        "limitations": [
+          "The table is blank and requires specific information to be filled in."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "17ed4fa46c7b12288c6f5aa9",
+      "asset_sha256": "cc8671305eecd3035779b3d68d76a780ea523419e0548088d97a6fe2fd4f1c52",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 35,
+      "asset_path": "assets/cc8671305eecd3035779b3d68d76a780ea523419e0548088d97a6fe2fd4f1c52.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c396e3307b41acf1bece86c90767f56cdb51f307226c64352e0c2b0a42338a0d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper testing.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Turmeric paper",
+          "Nature of samples"
+        ],
+        "context_relation": "The table is used to record the color changes observed when different samples are tested with turmeric paper.",
+        "limitations": [
+          "The table is incomplete, missing specific sample names and observations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:52:35Z",
+      "effective_analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper testing.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Turmeric paper",
+          "Nature of samples"
+        ],
+        "context_relation": "The table is used to record the color changes observed when different samples are tested with turmeric paper.",
+        "limitations": [
+          "The table is incomplete, missing specific sample names and observations."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
