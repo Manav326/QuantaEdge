@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 878,
-    "successful_visual_analyses": 870,
-    "missing_visual_analyses": 6610,
+    "raw_analysis_result_rows": 882,
+    "successful_visual_analyses": 874,
+    "missing_visual_analyses": 6606,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6618,
+    "unresolved_count": 6614,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43400,9 +43400,19 @@
       "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43418,9 +43428,34 @@
       "asset_path": "assets/af0d73ff0b66dedb0d116297ae9e918d3da8caf568c3da15bf926d96b569c6f6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a dark background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The image is not related to the text.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the object.",
+          "The text is partially visible and incomplete."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43436,9 +43471,34 @@
       "asset_path": "assets/52571a40918c8ec491459cdfb194ddc0e61cbcb90929e14d873040ebf628c3d7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a white background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The image is not related to the text.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the object.",
+          "The text is partially visible and incomplete."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43454,9 +43514,33 @@
       "asset_path": "assets/babf545c85e4fb572b6146424f266a2a6b9ae1ce000df411290bc008c3e3c81e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not provide specific details about his contributions or achievements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 870,
+    "assets_selected": 874,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 869,
-    "assets_remaining": 6619,
-    "assets_completion_percent": 11.6,
+    "assets_analyzed": 873,
+    "assets_remaining": 6615,
+    "assets_completion_percent": 11.7,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 865,
+    "assets_skipped_from_checkpoint": 869,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T15:31:50Z"
+      "checkpointed_at": "2026-10-18T15:34:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -32373,6 +32373,166 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T15:33:25Z"
+    },
+    {
+      "asset_id": "ae1ee4a77d427df339744c48",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:34:29Z"
+    },
+    {
+      "asset_id": "c53e96b5b13a357d36deee15",
+      "asset_sha256": "af0d73ff0b66dedb0d116297ae9e918d3da8caf568c3da15bf926d96b569c6f6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/af0d73ff0b66dedb0d116297ae9e918d3da8caf568c3da15bf926d96b569c6f6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a dark background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The image is not related to the text.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the object.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:35:43Z"
+    },
+    {
+      "asset_id": "50c300c1b5945de292781cd8",
+      "asset_sha256": "52571a40918c8ec491459cdfb194ddc0e61cbcb90929e14d873040ebf628c3d7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/52571a40918c8ec491459cdfb194ddc0e61cbcb90929e14d873040ebf628c3d7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a yellowish object with a white background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The image is not related to the text.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify the object.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:36:57Z"
+    },
+    {
+      "asset_id": "1280a90d830a6abf5d251089",
+      "asset_sha256": "babf545c85e4fb572b6146424f266a2a6b9ae1ce000df411290bc008c3e3c81e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/babf545c85e4fb572b6146424f266a2a6b9ae1ce000df411290bc008c3e3c81e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The page discusses Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The page does not provide specific details about his contributions or achievements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:38:14Z"
     }
   ]
 }
