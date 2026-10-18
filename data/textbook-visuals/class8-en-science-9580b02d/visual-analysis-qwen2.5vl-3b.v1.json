@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 323,
+    "assets_selected": 326,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 321,
-    "assets_remaining": 1970,
-    "assets_completion_percent": 14.0,
+    "assets_analyzed": 324,
+    "assets_remaining": 1967,
+    "assets_completion_percent": 14.1,
     "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 318,
+    "assets_skipped_from_checkpoint": 321,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:36:11Z"
+      "checkpointed_at": "2026-10-18T02:42:42Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:37:02Z"
+      "checkpointed_at": "2026-10-18T02:43:33Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -9709,6 +9709,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T02:41:29Z"
+    },
+    {
+      "asset_id": "ea3cbb6230af8bf40fd343b6",
+      "asset_sha256": "df7fdc1282971f2d8e0cb241e3b7db64a10b6c7346c48f85b1108705aeb35857",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/df7fdc1282971f2d8e0cb241e3b7db64a10b6c7346c48f85b1108705aeb35857.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid-colored rectangular shape with a gradient effect transitioning from yellow to a darker shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a solid-colored illustration, possibly representing a title or heading.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:45:06Z"
+    },
+    {
+      "asset_id": "405db2c356e6c93af1a216e1",
+      "asset_sha256": "2b251cb29b322112f85ec3b4baa2b16d7d09b82ea0b86b4b86edf2c67624b65d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/2b251cb29b322112f85ec3b4baa2b16d7d09b82ea0b86b4b86edf2c67624b65d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a blend of white, beige, and orange colors.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:46:38Z"
+    },
+    {
+      "asset_id": "de0bec4e36e486722d93e5c6",
+      "asset_sha256": "569682c872bf96a1a7bc105627b9a3d7caea24af71ffcf7b6c65c5898f8bb153",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/569682c872bf96a1a7bc105627b9a3d7caea24af71ffcf7b6c65c5898f8bb153.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a solid yellow background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:48:02Z"
     }
   ]
 }
