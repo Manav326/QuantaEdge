@@ -3,7 +3,7 @@
 **Review style:** static source scan  
 **Files examined:** Web/Admin/People page entry files; Android navigation contract and shared Compose route switch; selected standalone Android screens  
 **Baseline:** repository `main`; route-page source was read after documentation commit `837b587d1260360abad3a24020f269c8bdd60cb2`.  
-**Result:** **partial source review only**. This pass identified page-level actions, handler/function names, representative API paths and visible state-handling signals. It did not exhaustively trace every imported child component, permission assertion, request/response contract, database write or rendered UI state. All entries remain runtime-unverified.
+**Result:** **partial source review only**. The 59 Web/Admin/People route-entry files were scanned for top-level handlers, representative API paths and state/error signals. Follow-up source checks resolved the thin Web route entries into their actual client components and identified Admin `/legacy-content` as an explicit redirect to `/content`. Several key client components were then scanned, but imported subcomponents, permission assertions, request/response contracts, database writes and all rendered states are not fully traced. All entries remain runtime-unverified.
 
 ## 1. Web: student/parent app
 
@@ -26,18 +26,18 @@
 | `/student` | Student record, programs, recommendations, live classes and learning documents; refresh action | `/api/v1/students/me`, recommendations, programs, live-classes and learning-documents routes | Verify dashboard empty/loading/failure, class/course scope, normal vs minor and parent role |
 | `/student/account-lifecycle` | Adult verification, transition OTP, parent-eligibility request and conversion actions | account lifecycle, adult-verification, learner-transition OTP/verify, parent-eligibility and transition routes | Verify eligibility, forbidden minor changes, audit trail and session/profile consistency |
 | `/student/certificates` | Load records/previews, choose PDF/PNG, issue certificate, select language/track/achievement | `/api/v1/students/me/certificates/`, `/api/v1/students/me/certificates/issue` | Test eligibility, ownership, issue/revoke/revision, errors, actual file contents and QR |
-| `/student/classes` | 136-character route entry; component behavior not embedded in the entry | None observed in route file | Trace destination/import and test actual class/list/player implementation |
+| `/student/classes` | Route entry mounts `ClassesClient`; the client has live/recorded tabs, subject filter, join/rejoin/leave, playback open/close and playback-progress handlers | Client: learning live-class/recorded-class list and action routes | Finish action-to-API response mapping; test join windows, attendance, playback persistence and failures |
 | `/student/courses` | Load enrolled course list and activate course | `/api/v1/students/me/programs`, student/program activation routes | Verify course listing is separate from dashboard, availability and access after activation |
 | `/student/diagnostic` | Loads diagnostic/attempt, answer and next-step actions | `/api/v1/diagnostic`, `/api/v1/diagnostic/attempts/` | Test answer persistence, completion, interrupted attempts and score calculation |
-| `/student/learn` | 309-character route entry; no direct API calls in entry | None observed in route file | Follow wrapper/redirect to the rendered learning component and test full path |
+| `/student/learn` | Route entry wraps `LearnClient` in `Suspense`; client includes lesson loading, question answer submission, resource handling, lesson/track position, tutor opening and previous/next navigation | Client: learning questions/lessons, student profile, recommendations, learning sessions and documents | Trace tutor/resource child components and all mutations; test lesson progression, error recovery and scoped context |
 | `/student/marketplace` | Offers, free enrollment, parent purchase request, paid checkout and payment verification | `/api/v1/marketplace/courses`, order routes and student program activation | Confirm publication/entitlement gate and no live charge in test |
 | `/student/practice` | 333-character route entry; no direct API calls in entry | None observed in route file | Follow actual rendered practice flow and connect attempts/feedback to API/data |
 | `/student/profile` | Profile load/save, photo preparation, lifecycle/adult/parent transitions | student profile/profile-photo and account lifecycle/transition routes | Verify verified-vs-editable fields, cooldown, minor constraints and save failures |
 | `/student/progress` | Progress/attempt reporting and assessment-result certificate issue action | student record, certificate and assessment-eligibility endpoints | Check aggregate accuracy against source attempts and certificate eligibility |
-| `/student/structured-lessons` | 156-character entry; no direct API calls in entry | None observed in route file | Follow wrapper to catalogue renderer; test filters, published access and unavailable state |
-| `/student/structured-lessons/[artifactId]` | 330-character dynamic entry; no direct API calls in entry | None observed in route file | Follow wrapper to artifact renderer; verify invalid/stale artifact and entitlement |
-| `/student/tests` | 296-character entry; no direct API calls in entry | None observed in route file | Follow wrapper to test client; map attempt lifecycle, previous/next/clear/save/submit/review |
-| `/student/textbooks` | 328-character entry; no direct API calls in entry | None observed in route file | Follow wrapper to book/library component; verify protected pages and online/offline errors |
+| `/student/structured-lessons` | Route entry mounts `StructuredLessonsClient`; client loads a published lesson catalogue and links into detail | `/api/v1/learning/structured-lessons?language=` | Validate filters, language, access denial and empty/API-failure states |
+| `/student/structured-lessons/[artifactId]` | Dynamic entry reads `artifactId` with `useParams` and passes it to `StructuredLessonDetailClient` | Client: `/api/v1/learning/structured-lessons/` | Verify invalid/stale artifact, unpublished content, question submission and activity save |
+| `/student/tests` | Route entry wraps `TestsClient` in `Suspense`; client has tests/results tabs, start/resume test, result/review, leaderboard and certificate issuance entry points | learning assessments/results/attempts; certificate assessment eligibility and issue | Test attempt lifecycle end to end: answer/save/submit/reopen, result consistency, unauthorized attempt and certificate eligibility |
+| `/student/textbooks` | Route entry wraps `TextbooksClient` in `Suspense`; client includes library filters, document open/return, pagination, zoom, fit-to-page/width, fullscreen and thumbnails | learning document list and individual document routes | Verify protected document authorization, page bounds, network/offline/cache behavior, keyboard and responsive reader states |
 
 ### Student/parent pass-1 observations
 
@@ -60,7 +60,7 @@
 | `/content` | Large Content Studio including rich text, learner-block ordering, visual source and structure checks | admin content programs/chapters/lessons/questions and review-summary routes | Inspect the full author/review/publish workflow, validation, revision history and student read path |
 | `/employees` | Staff directory/edit/create, role-permission drafting, audit tab | admin staff, permissions and staff-audit routes | Verify least privilege, grant/revoke, suspend/reactivate and stale sessions |
 | `/learning-resources` | Resource CRUD/upload/status, targets, assignments and ordering | admin learning-resources, targets and assignments routes | Test file validation, access scope, multiple placements and cleanup |
-| `/legacy-content` | 121-character route whose component is named `LegacyContentRedirect` | No direct API in entry | Confirm final redirect target and decide whether route is alias/deprecated |
+| `/legacy-content` | Explicit Next.js server redirect to `/content`; not a separate content feature | None in redirect entry | Verify runtime redirect and ensure only `/content` is counted as the functional screen |
 | `/marketplace` | Course offer edit/save and catalogue load | admin marketplace course routes | Verify offer visibility, price, publish controls and student-facing entitlement |
 | `/parents` | Parent list/search, expand children, parent/student status, child track updates | admin parents and student/track status routes | Verify scope, guardian links, consent and suspended account behavior |
 | `/questions` | Queue/search/status filter/history; approve/reject actions | admin question review queue/summary, lesson and question routes | Verify review permissions, question correctness/provenance and published visibility |
@@ -106,6 +106,23 @@ Standalone components scanned in this pass include identity settings, account li
 The native shell contains role-aware student/parent navigation and custom back behavior. The test plan must explicitly verify destination changes after login/logout/role transitions; restore/back behavior; deep links; split/landscape navigation; lost network; Android picker/camera/QR access where used; and account-scoped offline resource storage.
 
 Android screen/API dependencies are partly passed as lambdas from the shell. Endpoint absence in an individual composable must not be interpreted as absence of a backend dependency.
+
+## 4A. Thin route and primary client follow-up
+
+Source inspection has now resolved these route relationships (this corrects the earlier “destination unclear” wording for the thin entries):
+
+| Route | Primary client component | Key behavior discovered | Representative API paths observed in client |
+|---|---|---|---|
+| `/student/classes` | `ClassesClient.tsx` | Live/recorded tab switch, subject filter, join/rejoin/leave, open/close recording, playback progress | `/api/v1/learning/live-classes`, `/api/v1/learning/recorded-classes` |
+| `/student/learn` | `LearnClient.tsx` | Load lesson, submit practice-in-lesson answers, navigate lessons/track, load recommendations/resources, open lesson-scoped tutor | `/api/v1/learning/questions`, `/api/v1/learning/lessons`, `/api/v1/learning/sessions`, student/program/docs endpoints |
+| `/student/practice` | `PracticeClient.tsx` | Answer, retry, next, order input, match input, reset and submit | `/api/v1/learning/practice/sessions`, `/api/v1/learning/questions`, lesson endpoints |
+| `/student/structured-lessons` | `StructuredLessonsClient.tsx` | Load catalogue and navigate to a lesson artifact | `/api/v1/learning/structured-lessons?language=` |
+| `/student/structured-lessons/[artifactId]` | `StructuredLessonDetailClient.tsx` | Load artifact, submit question, save activity | `/api/v1/learning/structured-lessons/` |
+| `/student/tests` | `TestsClient.tsx` | Tests/results tabs, start/resume attempts, leaderboard/result views and certificate issue action | learning assessments, attempts/results, certificate eligibility/issue endpoints |
+| `/student/textbooks` | `TextbooksClient.tsx` | Document list/filters, open/return, page navigation, zoom/fit/fullscreen/thumbnails | `/api/v1/learning/documents` and document-specific routes |
+| Admin `/legacy-content` | Redirects to `/content` | Route alias, not an independent content workflow | No endpoint in redirect entry |
+
+This is improved source evidence, but still not a completed UI audit: callbacks must be traced to exact request/response contracts and server authorization; every error/empty/validation state must be tested; no browser/device execution has been performed.
 
 ## 5. Gaps revealed by pass 1
 
