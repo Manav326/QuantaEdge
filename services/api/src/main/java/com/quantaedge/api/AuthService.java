@@ -158,9 +158,19 @@ public class AuthService {
   }
 
   public String requestOtp(String mobile,String purpose) {
+    return requestOtp(mobile,purpose,null);
+  }
+
+  /** New account creation must bind the OTP to the institution selected at signup. */
+  public String requestOtp(String mobile,String purpose,Long institutionId) {
     if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)
         && !"PASSWORD_RESET".equals(purpose) && !"ACCOUNT_SIGNUP".equals(purpose))
       throw new IllegalArgumentException("Invalid OTP purpose");
+    if(("SIGNUP".equals(purpose) || "ACCOUNT_SIGNUP".equals(purpose))
+        && (institutionId==null || institutionId.longValue()<1)) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before requesting signup verification.");
+    }
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
 
@@ -200,11 +210,15 @@ public class AuthService {
       }
     }
 
-    return deliverOtp(normalized,purpose,null);
+    return deliverOtp(normalized,purpose,null,institutionId);
   }
 
   /** OTP delivery shared by public sign-in and authenticated learner account conversion. */
   private String deliverOtp(String normalized,String purpose,Long studentId) {
+    return deliverOtp(normalized,purpose,studentId,null);
+  }
+
+  private String deliverOtp(String normalized,String purpose,Long studentId,Long institutionId) {
     if (!(demoSeed && allowRepeatedDemoOtp)) {
       long recent=jdbc.queryForObject(
           "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
@@ -233,16 +247,15 @@ public class AuthService {
       } catch(Exception ex) { throw new IllegalStateException("Unable to deliver OTP"); }
     }
     if(studentId==null) {
-      // Preserve the existing SQL contract for parent/staff OTP flows.
       jdbc.update("""
-        insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at)
-        values (?,?,?,now()+interval '5 minutes')
-        """,normalized,purpose,hash(otp));
+        insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at,institution_id)
+        values (?,?,?,now()+interval '5 minutes',?)
+        """,normalized,purpose,hash(otp),institutionId);
     } else {
       jdbc.update("""
-        insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at,student_id)
-        values (?,?,?,now()+interval '5 minutes',?)
-        """,normalized,purpose,hash(otp),studentId);
+        insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at,student_id,institution_id)
+        values (?,?,?,now()+interval '5 minutes',?,?)
+        """,normalized,purpose,hash(otp),studentId,institutionId);
     }
     return demoSeed ? otp : null;
   }
@@ -279,6 +292,12 @@ public class AuthService {
 
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess,String newPassword) {
+    return verifyOtp(mobile,otp,purpose,displayName,firstAccess,newPassword,null);
+  }
+
+  @Transactional
+  public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess,
+      String newPassword,Long institutionId) {
     String normalized=normalizeMobile(mobile);
     if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)
         && !"PASSWORD_RESET".equals(purpose) && !"LEARNER_TRANSITION".equals(purpose) && !"ACCOUNT_SIGNUP".equals(purpose))
@@ -290,7 +309,7 @@ public class AuthService {
       validatePassword(newPassword, 8, "Password");
 
     var rows=jdbc.queryForList("""
-      select id,code_hash,attempts,expires_at,purpose,student_id
+      select id,code_hash,attempts,expires_at,purpose,student_id,institution_id
       from otp_challenge
       where mobile_e164=? and purpose=? and consumed_at is null
       order by requested_at desc limit 1
@@ -299,6 +318,13 @@ public class AuthService {
     var row=rows.getFirst();
     if(!purpose.equals(String.valueOf(row.get("purpose"))))
       throw new IllegalArgumentException("OTP purpose mismatch");
+    if("SIGNUP".equals(purpose) || "ACCOUNT_SIGNUP".equals(purpose)) {
+      Object recordedInstitution=row.get("institution_id");
+      if(institutionId==null || !(recordedInstitution instanceof Number recorded)
+          || recorded.longValue()!=institutionId.longValue()) {
+        throw new SecurityException("The signup verification belongs to a different institution. Request a new code from this institution.");
+      }
+    }
     if(((Number)row.get("attempts")).intValue()>=5) throw new IllegalStateException("Too many OTP attempts");
     jdbc.update("update otp_challenge set attempts=attempts+1 where id=?",row.get("id"));
     Object expiresAt = row.get("expires_at");
