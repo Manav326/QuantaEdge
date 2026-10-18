@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 662,
-    "successful_visual_analyses": 653,
-    "missing_visual_analyses": 6826,
+    "raw_analysis_result_rows": 665,
+    "successful_visual_analyses": 656,
+    "missing_visual_analyses": 6823,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6835,
+    "unresolved_count": 6832,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35366,9 +35366,31 @@
       "asset_path": "assets/ad4933ccc765cc3b15f57f214050e55d5abe0ea30ce16db6a3f717f72929a6bb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of blue and red litmus paper strips, showing their texture and color change.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "Litmus",
+          "Color change",
+          "Lichens"
+        ],
+        "context_relation": "The image is related to the text discussing the properties and uses of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the samples that change the color of the litmus paper strips."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35384,9 +35406,19 @@
       "asset_path": "assets/e7af8f9560bedc3abdb921f06afdd009ff69958cc11e02c860c2698bfc569271.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair and a blue shirt, holding her chin in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of litmus paper and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the properties of litmus paper.",
+          "The image does not show the process of changing color of litmus paper when exposed to different samples."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35402,9 +35434,44 @@
       "asset_path": "assets/23d3f6e7768ce55d4a1d61ec6bb38b28f309a120679570a0377809b726a70dc7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Red and blue litmus paper strips, with a question about their composition and color change.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus is a natural substance obtained from lichens. It is",
+          "available both as a solid and a solution.",
+          "It is used to test the acidity or alkalinity of a solution.",
+          "When litmus is added to an acidic solution, it turns red.",
+          "When litmus is added to an alkaline solution, it turns blue.",
+          "The color change is due to the interaction between the litmus and the ions in the solution.",
+          "The color change is used to determine the pH of a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Acidity",
+          "Alkalinity",
+          "Color change",
+          "Polarity",
+          "Solution",
+          "Interaction",
+          "Ions",
+          "pH"
+        ],
+        "context_relation": "The image is a diagram that explains the composition and color change of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the composition of the litmus paper strips.",
+          "The image does not provide specific details about the interaction between the litmus and the ions in the solution.",
+          "The image does not provide specific details about the color change of the litmus paper strips."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 653,
+    "assets_selected": 656,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 651,
-    "assets_remaining": 6837,
+    "assets_analyzed": 654,
+    "assets_remaining": 6834,
     "assets_completion_percent": 8.7,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 648,
+    "assets_skipped_from_checkpoint": 651,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:21:12Z"
+      "checkpointed_at": "2026-10-18T06:24:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:21:32Z"
+      "checkpointed_at": "2026-10-18T06:24:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -24121,6 +24121,130 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T06:23:30Z"
+    },
+    {
+      "asset_id": "7bf202dc3086f63424011241",
+      "asset_sha256": "ad4933ccc765cc3b15f57f214050e55d5abe0ea30ce16db6a3f717f72929a6bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/ad4933ccc765cc3b15f57f214050e55d5abe0ea30ce16db6a3f717f72929a6bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of blue and red litmus paper strips, showing their texture and color change.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "Litmus",
+          "Color change",
+          "Lichens"
+        ],
+        "context_relation": "The image is related to the text discussing the properties and uses of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the samples that change the color of the litmus paper strips."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:25:08Z"
+    },
+    {
+      "asset_id": "42e5b5650a04508c05e98a8b",
+      "asset_sha256": "e7af8f9560bedc3abdb921f06afdd009ff69958cc11e02c860c2698bfc569271",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/e7af8f9560bedc3abdb921f06afdd009ff69958cc11e02c860c2698bfc569271.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair and a blue shirt, holding her chin in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of litmus paper and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the properties of litmus paper.",
+          "The image does not show the process of changing color of litmus paper when exposed to different samples."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:25:43Z"
+    },
+    {
+      "asset_id": "7f59087131db01905c6b0007",
+      "asset_sha256": "23d3f6e7768ce55d4a1d61ec6bb38b28f309a120679570a0377809b726a70dc7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/23d3f6e7768ce55d4a1d61ec6bb38b28f309a120679570a0377809b726a70dc7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red and blue litmus paper strips, with a question about their composition and color change.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus is a natural substance obtained from lichens. It is",
+          "available both as a solid and a solution.",
+          "It is used to test the acidity or alkalinity of a solution.",
+          "When litmus is added to an acidic solution, it turns red.",
+          "When litmus is added to an alkaline solution, it turns blue.",
+          "The color change is due to the interaction between the litmus and the ions in the solution.",
+          "The color change is used to determine the pH of a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Acidity",
+          "Alkalinity",
+          "Color change",
+          "Polarity",
+          "Solution",
+          "Interaction",
+          "Ions",
+          "pH"
+        ],
+        "context_relation": "The image is a diagram that explains the composition and color change of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the composition of the litmus paper strips.",
+          "The image does not provide specific details about the interaction between the litmus and the ions in the solution.",
+          "The image does not provide specific details about the color change of the litmus paper strips."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:26:30Z"
     }
   ]
 }
