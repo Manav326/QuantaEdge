@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 909,
+    "assets_selected": 913,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 908,
-    "assets_remaining": 6580,
-    "assets_completion_percent": 12.1,
+    "assets_analyzed": 912,
+    "assets_remaining": 6576,
+    "assets_completion_percent": 12.2,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 904,
+    "assets_skipped_from_checkpoint": 908,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T16:24:40Z"
+      "checkpointed_at": "2026-10-18T16:30:36Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -33830,6 +33830,145 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T16:29:42Z"
+    },
+    {
+      "asset_id": "9f22cf6c4635266d8cc324bc",
+      "asset_sha256": "7fcba8aa1b3a9d4c72217174951034f8d377db707aaf62f96c00af6e20f760a9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/7fcba8aa1b3a9d4c72217174951034f8d377db707aaf62f96c00af6e20f760a9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base",
+          "the pH of the solution changes."
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "pH",
+          "Litmus test"
+        ],
+        "context_relation": "The image shows a visual representation of the neutralization process between an acid and a base.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:31:54Z"
+    },
+    {
+      "asset_id": "0069f1a8f6f002a90d190a1e",
+      "asset_sha256": "cdb718a5c50c0cb5a0ecf491ef195af374944345b2033ab5bb43df4fb52fee34",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/cdb718a5c50c0cb5a0ecf491ef195af374944345b2033ab5bb43df4fb52fee34.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus test",
+          "Neutralization"
+        ],
+        "context_relation": "The image shows a chemical reaction between an acid and a base, demonstrating the concept of neutralization.",
+        "limitations": [
+          "The image does not show the actual chemical reaction or the products formed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:33:11Z"
+    },
+    {
+      "asset_id": "8c347c973e7ae0b1c9fabbc0",
+      "asset_sha256": "3eb1eca148d3737a8022fad517b6ecd4a23f7ec209ce4e1667ae189a6439d8c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/3eb1eca148d3737a8022fad517b6ecd4a23f7ec209ce4e1667ae189a6439d8c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with alternating colors.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:34:09Z"
+    },
+    {
+      "asset_id": "be27b2ae761d0daecc80d618",
+      "asset_sha256": "3116942d764ba3feb925af0d1c4f4b3e7c43642aabec39915540f1caba63b340",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/3116942d764ba3feb925af0d1c4f4b3e7c43642aabec39915540f1caba63b340.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A test tube with a blue litmus solution turning red when lemon juice is added, then changing to blue when lime water is added, indicating the solution is no longer acidic.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised",
+          "the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid",
+          "Base",
+          "Litmus",
+          "Neutralisation"
+        ],
+        "context_relation": "The image illustrates the neutralisation process between an acid and a base using litmus tests.",
+        "limitations": [
+          "The image does not show the actual chemical reaction occurring in the test tube."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:35:31Z"
     }
   ]
 }
