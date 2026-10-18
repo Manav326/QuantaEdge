@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3002cff244c42ccda4b403e9f5836c439cc30de42a518985827535c2174a3f46",
+  "raw_analysis_sha256": "112aa4f131b89f58843b316f367713bc65980206c142b8c1416187d7906b3e7c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:38:09Z",
+      "checkpointed_at": "2026-10-18T22:42:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:38:31Z",
+      "checkpointed_at": "2026-10-18T22:42:49Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -70752,6 +70752,142 @@
         "limitations": [
           "No specific text or labels are provided in the image.",
           "The image does not contain any numerical data or formulas."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac955e3d63f359f4f948d52f",
+      "asset_sha256": "33eefb1c6e544ec52ef0f022b5d9a5cc1f8c49352c32a046b956993b0900021b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/33eefb1c6e544ec52ef0f022b5d9a5cc1f8c49352c32a046b956993b0900021b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope or cable, which is not directly related to the educational content about electricity generation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:43:27Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a rope or cable, which is not directly related to the educational content about electricity generation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8b1fd73aa259f25d60460a7c",
+      "asset_sha256": "617921bb759a5f4ba4e03ee348283edc01416d6db4d62ebab208ba3e591c17bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/617921bb759a5f4ba4e03ee348283edc01416d6db4d62ebab208ba3e591c17bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long scroll with a blank white surface, possibly representing a blank page or a scroll of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about electricity and its uses.",
+        "limitations": [
+          "The image does not provide any specific information or data.",
+          "The image is a visual representation and does not contain any text or data.",
+          "The image is a blank illustration and does not represent any specific concept or topic."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:44:06Z",
+      "effective_analysis": {
+        "visual_summary": "A long scroll with a blank white surface, possibly representing a blank page or a scroll of paper.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about electricity and its uses.",
+        "limitations": [
+          "The image does not provide any specific information or data.",
+          "The image is a visual representation and does not contain any text or data.",
+          "The image is a blank illustration and does not represent any specific concept or topic."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8789974999b02b158d49963f",
+      "asset_sha256": "263a5c69a09b93dd78fccb49a85228a9081da0542e3ac7c700b37582a889abd7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/263a5c69a09b93dd78fccb49a85228a9081da0542e3ac7c700b37582a889abd7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red triangle with a lightning bolt inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "danger",
+          "warning"
+        ],
+        "context_relation": "Educational content about electricity and its dangers",
+        "limitations": [
+          "No specific question or instruction is provided in the image.",
+          "The image does not contain any text or labels that can be used to infer additional information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:44:45Z",
+      "effective_analysis": {
+        "visual_summary": "A red triangle with a lightning bolt inside it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "danger",
+          "warning"
+        ],
+        "context_relation": "Educational content about electricity and its dangers",
+        "limitations": [
+          "No specific question or instruction is provided in the image.",
+          "The image does not contain any text or labels that can be used to infer additional information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
