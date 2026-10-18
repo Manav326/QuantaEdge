@@ -39,9 +39,11 @@ require(configuredInstitutionDisplayName.none { it.code < 32 || it.code == 127 }
 val configuredInstitutionIconPath = providers.gradleProperty("quantaedgeInstitutionIconPath")
     .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_ICON_PATH"))
     .orNull?.trim()?.takeIf { it.isNotBlank() }
-val tenantPackageSlug = configuredInstitutionCode.lowercase()
+// Every generated segment must begin with a letter. Institution codes may start
+// with digits or contain only punctuation after normalization, so always prefix the slug.
+val tenantPackageSlug = "school" + configuredInstitutionCode.lowercase()
     .filter { it in 'a'..'z' || it in '0'..'9' }
-    .take(24).ifBlank { "school" }
+    .take(20).ifBlank { "tenant" }
 val tenantPackageHash = if (configuredInstitutionCode.isBlank()) "" else
     MessageDigest.getInstance("SHA-256")
         .digest(configuredInstitutionCode.toByteArray(Charsets.UTF_8))
@@ -53,6 +55,7 @@ val configuredInstitutionApplicationId = providers.gradleProperty("quantaedgeIns
     .orNull?.trim()?.takeIf { it.isNotBlank() }
     ?: if (configuredInstitutionCode.isBlank()) "com.quantaedge.android"
        else "com.quantaedge.android.tenant." + tenantPackageSlug + tenantPackageHash
+val institutionAutoVerify = configuredInstitutionCode.isNotBlank().toString()
 val institutionLinkPath = if (configuredInstitutionCode.isBlank()) {
     "/__no_tenant_app_link_for_platform_build__/"
 } else {
@@ -107,6 +110,7 @@ android {
         manifestPlaceholders["applicationIcon"] = "@drawable/qe_launcher_icon"
         manifestPlaceholders["institutionLinkPath"] = institutionLinkPath
         manifestPlaceholders["institutionLinkScheme"] = institutionLinkScheme
+        manifestPlaceholders["institutionAutoVerify"] = institutionAutoVerify
         minSdk = 26
         targetSdk = 36
         versionCode = configuredVersionCode
