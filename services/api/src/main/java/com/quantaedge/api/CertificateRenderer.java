@@ -268,6 +268,7 @@ public class CertificateRenderer {
     CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null,null) : details;
     boolean institutionIssued = branding != null && branding.displayName() != null && !branding.displayName().isBlank();
     Color issuerPrimary = institutionIssued ? issuerColor(branding, "primary", NAVY) : NAVY;
+    Color issuerPrimaryText = institutionIssued ? issuerColor(branding, "primaryText", NAVY) : NAVY;
     Color issuerOrange = institutionIssued ? issuerColor(branding, "primary", ORANGE) : ORANGE;
     Color issuerAccent = institutionIssued ? issuerColor(branding, "accent", DEEP_ORANGE) : DEEP_ORANGE;
     Color issuerBorder = institutionIssued ? issuerColor(branding, "borderSubtle", GOLD) : GOLD;
@@ -279,7 +280,7 @@ public class CertificateRenderer {
       if (logo != null) {
         drawContainedImage(g, logo, 132, 95, 88, 88);
       } else {
-        g.setColor(issuerOrange);
+        g.setColor(issuerPrimary);
         g.fillRoundRect(132, 95, 88, 88, 18, 18);
         g.setColor(issuerOnPrimary);
         String initial = branding.displayName().trim().substring(0, 1).toUpperCase(Locale.ROOT);
@@ -318,16 +319,16 @@ public class CertificateRenderer {
     int headingY = hasExamId
         ? (lines.size() <= 1 ? 528 : 480 - (lines.size() - 2) * 60)
         : (lines.size() <= 1 ? 528 : 518 - (lines.size() - 2) * 31);
-    g.setColor(NAVY);
+    g.setColor(issuerPrimaryText);
     drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
         WIDTH / 2, headingY, WIDTH - 420);
-    g.setColor(MUTED);
+    g.setColor(issuerMuted);
     drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
         WIDTH / 2, headingY + 72, WIDTH - 520);
     int recipientY = headingY + 188;
     g.setColor(NAVY);
     drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, recipientY, WIDTH - 480);
-    g.setColor(ORANGE);
+    g.setColor(issuerOrange);
     g.setStroke(new BasicStroke(5));
     g.drawLine(WIDTH / 2 - 350, recipientY + 32, WIDTH / 2 + 350, recipientY + 32);
     g.setColor(MUTED);
@@ -375,7 +376,7 @@ public class CertificateRenderer {
       } else {
         int columnWidth = (WIDTH - 600) / Math.max(fields.size(), 1);
         for (int i = 0; i < fields.size(); i++) {
-          g.setColor(i % 2 == 0 ? NAVY : INK);
+          g.setColor(i % 2 == 0 ? issuerPrimaryText : issuerText);
           drawCentered(g, font(hindi, Font.BOLD, 23), fields.get(i),
               300 + i * columnWidth + columnWidth / 2, detailY, columnWidth - 30);
         }
@@ -401,7 +402,7 @@ public class CertificateRenderer {
     } else {
       g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 24), hindi ? "डिजिटल रूप से जारी" : "DIGITALLY ISSUED", 420, 1310, 540);
     }
-    g.setColor(DEEP_ORANGE); drawCentered(g, font(hindi, Font.BOLD, 19), hindi ? "प्रमाणपत्र विवरण" : "CERTIFICATE DETAILS", 1080, 1257, 560);
+    g.setColor(issuerAccent); drawCentered(g, font(hindi, Font.BOLD, 19), hindi ? "प्रमाणपत्र विवरण" : "CERTIFICATE DETAILS", 1080, 1257, 560);
     g.setColor(NAVY);
     drawCentered(g, font(hindi, Font.BOLD, 22),
         (hindi ? "प्रमाणपत्र संख्या: " : "Certificate No.: ") + (sample ? (hindi ? "नमूना — कोई ID नहीं" : "SAMPLE — NO CERTIFICATE ID") : number),
