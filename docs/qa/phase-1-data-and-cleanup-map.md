@@ -137,3 +137,16 @@ Representative schema protections observed:
 ---
 
 **Audit integrity:** This map reflects observed source and migration evidence, not a complete dump of every schema constraint. Do not implement cleanup SQL solely from this document.
+
+## 7. Centralized QA pack implementation status (2026-10-18)
+
+The run lifecycle and safety contract now has a dedicated source of truth at [qa-test-pack-lifecycle.md](./qa-test-pack-lifecycle.md). It defines the expected state machine, exact resource manifest, environment/permission gates, cleanup ordering, external-resource handling and QA-001–QA-007 acceptance matrix.
+
+The implementation is **not yet complete**. The engine must not be a generic SQL executor or use delete-by-marker logic. Database writes are restricted to allow-listed typed fixture builders; the manifest records actual identifiers; uninstall fails closed when a resource cannot be proven owned or cleaned safely.
+
+The local-preview hazard described above also has a code candidate in [PR #78](https://github.com/Manav326/QuantaEdge/pull/78). Its API verification run failed because existing learner/assessment/textbook tests are not aligned with the explicit institution-context contract on that revision. Therefore the preview fix is pending and is not described as verified or merged.
+
+Acceptance status:
+- QA-001 through QA-007: NOT_IMPLEMENTED until install, inspect, uninstall and protected-baseline assertions execute successfully on a named revision and disposable migrated database.
+- Schema cleanup map: still partial; a full FK/unique/check/delete-action catalog and write-path trace are required before adding fixture builders for every domain.
+- Production, live payments, real notification endpoints and provider resources are never test targets.
