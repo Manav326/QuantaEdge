@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 415,
-    "successful_visual_analyses": 415,
-    "missing_visual_analyses": 1663,
+    "raw_analysis_result_rows": 418,
+    "successful_visual_analyses": 418,
+    "missing_visual_analyses": 1660,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1663,
+    "unresolved_count": 1660,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -19804,9 +19804,27 @@
       "asset_path": "assets/e8a70ca331152ec37aee16ca9f9190d8d131d66cefab4957a5dbbc85a8a35136.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light beige to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "warm colors",
+          "transition",
+          "beige",
+          "orange"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19822,9 +19840,16 @@
       "asset_path": "assets/da6f959e401a226bd135f5cba5e65c4cf675a04b22e79d7182dfc559dde08f25.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a yellow to orange gradient.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19840,9 +19865,24 @@
       "asset_path": "assets/22bda06e612e2eac8c36ba3dac28ef77f4f979347ed2f27785288c6cd1ccf717.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal bar chart with a gradient background transitioning from white to gold.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal bar chart",
+          "gradient background",
+          "white to gold transition"
+        ],
+        "context_relation": "The text 'Reprint 2026-27' is likely a title or heading related to the chart.",
+        "limitations": [
+          "The chart is incomplete and lacks specific data points or labels."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

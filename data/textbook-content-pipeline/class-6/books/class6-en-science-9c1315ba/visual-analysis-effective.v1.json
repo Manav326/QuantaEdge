@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "36c4fe8006e7ff091cb51ab069dc03f3b110e7583332546ba1512fa2a71cb9cb",
+  "raw_analysis_sha256": "fa001ec6046c960edc312504a6f7e8e13a2bc91bd8b6e66dc4182aae574e1329",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T03:37:34Z",
+      "checkpointed_at": "2026-10-18T03:40:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T03:38:16Z",
+      "checkpointed_at": "2026-10-18T03:41:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -18118,6 +18118,152 @@
         "context_relation": "The text is likely a part of a larger document or page, possibly related to a publication or reprint date.",
         "limitations": [
           "The image does not provide specific details about the document or page it is part of."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "acadee747cd0015833789c92",
+      "asset_sha256": "e8a70ca331152ec37aee16ca9f9190d8d131d66cefab4957a5dbbc85a8a35136",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e8a70ca331152ec37aee16ca9f9190d8d131d66cefab4957a5dbbc85a8a35136.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light beige to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "warm colors",
+          "transition",
+          "beige",
+          "orange"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:42:08Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light beige to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "warm colors",
+          "transition",
+          "beige",
+          "orange"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "deb18b71d6d3da9dd35c513b",
+      "asset_sha256": "da6f959e401a226bd135f5cba5e65c4cf675a04b22e79d7182dfc559dde08f25",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/da6f959e401a226bd135f5cba5e65c4cf675a04b22e79d7182dfc559dde08f25.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a yellow to orange gradient.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:42:42Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a yellow to orange gradient.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b412a4778744524223c7c51a",
+      "asset_sha256": "22bda06e612e2eac8c36ba3dac28ef77f4f979347ed2f27785288c6cd1ccf717",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/22bda06e612e2eac8c36ba3dac28ef77f4f979347ed2f27785288c6cd1ccf717.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal bar chart with a gradient background transitioning from white to gold.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal bar chart",
+          "gradient background",
+          "white to gold transition"
+        ],
+        "context_relation": "The text 'Reprint 2026-27' is likely a title or heading related to the chart.",
+        "limitations": [
+          "The chart is incomplete and lacks specific data points or labels."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:43:24Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal bar chart with a gradient background transitioning from white to gold.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal bar chart",
+          "gradient background",
+          "white to gold transition"
+        ],
+        "context_relation": "The text 'Reprint 2026-27' is likely a title or heading related to the chart.",
+        "limitations": [
+          "The chart is incomplete and lacks specific data points or labels."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
