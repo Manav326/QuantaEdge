@@ -877,7 +877,9 @@ public class AuthService {
       """,userId,id,GUARDIAN_CONSENT_VERSION,userId);
     recordGuardianStudentEvent(userId,id,"CONSENT_ACCEPTED",GUARDIAN_CONSENT_VERSION,
         null,classCode,"{\"consent\":\"affirmative-checkbox\",\"source\":\"PARENT_PORTAL\"}");
-    applyStudentTracks(id,classCode,trackCodes);
+    // A guardian-created profile is a family identity, not an implicit school enrolment.
+    // Until an institution explicitly admits this child, do not create tenant-less track rows.
+    // Subject tracks can be selected after a verified institution join/enrolment.
     return contextForStudent(userId,id);
   }
 
@@ -923,14 +925,25 @@ public class AuthService {
       throw new IllegalArgumentException("This class is not currently available.");
 
     if(classChanged) {
-      List<String> activeTracks=jdbc.queryForList("""
-        select s.code from student_track_enrollment ste
-        join curriculum_subject s on s.id=ste.subject_id
-        where ste.student_id=? and ste.status='ACTIVE' order by s.sort_order
-        """,String.class,studentId);
-      if(activeTracks.isEmpty())
-        throw new IllegalStateException("Select at least one learning subject before promoting this profile.");
-      applyStudentTracks(studentId,nextClass,activeTracks);
+      // Class is part of the learner's shared identity, but subject-track enrolments are per
+      // institution. Preserve/validate tracks independently for each active institution; never
+      // create a new NULL-scoped track row as a side effect of a profile edit.
+      List<Long> institutionIds=jdbc.queryForList("""
+        select m.institution_id from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where m.student_id=? and m.status='ACTIVE' order by m.institution_id
+        """,Long.class,studentId);
+      for(Long institutionId:institutionIds) {
+        List<String> activeTracks=jdbc.queryForList("""
+          select s.code from student_track_enrollment ste
+          join curriculum_subject s on s.id=ste.subject_id
+          where ste.student_id=? and ste.institution_id=? and ste.status='ACTIVE'
+          order by s.sort_order
+          """,String.class,studentId,institutionId);
+        if(!activeTracks.isEmpty()) {
+          applyStudentTracks(studentId,nextClass,activeTracks,institutionId);
+        }
+      }
     }
     int changed=jdbc.update("""
       update student set display_name=?,class_code=?,board=?,language=?,profile_updated_at=now()
