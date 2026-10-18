@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 583,
+    "assets_selected": 586,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 581,
-    "assets_remaining": 1497,
-    "assets_completion_percent": 28.0,
+    "assets_analyzed": 584,
+    "assets_remaining": 1494,
+    "assets_completion_percent": 28.1,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 578,
+    "assets_skipped_from_checkpoint": 581,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T06:45:06Z"
+      "checkpointed_at": "2026-10-18T06:48:30Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T06:45:50Z"
+      "checkpointed_at": "2026-10-18T06:49:11Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -17157,6 +17157,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T06:47:42Z"
+    },
+    {
+      "asset_id": "7cae46499ef495fe714182ac",
+      "asset_sha256": "fbd213a49a7e1eac4a863ab10c69507ff7c3675b0ffcda81ceebade15df10858",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/fbd213a49a7e1eac4a863ab10c69507ff7c3675b0ffcda81ceebade15df10858.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a bird flying over a landscape with mountains and trees.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The illustration is likely related to nature or wildlife, possibly for educational purposes.",
+        "limitations": [
+          "The visible text is not readable.",
+          "The visible text is not readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T06:49:48Z"
+    },
+    {
+      "asset_id": "1ca5069a2365319588cdf24a",
+      "asset_sha256": "434368e38bfefbc0f8ad94d034b8d66e17b671482664dbac6603fd839b4b185b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/434368e38bfefbc0f8ad94d034b8d66e17b671482664dbac6603fd839b4b185b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light brown to beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The banner likely represents a title or heading for a document or page related to the year 2026-27.",
+        "limitations": [
+          "The banner does not provide specific details about the content or purpose of the document it is part of."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T06:50:27Z"
+    },
+    {
+      "asset_id": "66b8bc998cd0e22f87779c93",
+      "asset_sha256": "d360b57244c11fa2445516f197b90d2edb300aede48c6266d38e92135d4e9b3d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d360b57244c11fa2445516f197b90d2edb300aede48c6266d38e92135d4e9b3d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color palette transitioning from light to dark shades.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors",
+          "horizontal bar"
+        ],
+        "context_relation": "The image is a visual element used to represent a concept or theme related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific information about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T06:51:07Z"
     }
   ]
 }
