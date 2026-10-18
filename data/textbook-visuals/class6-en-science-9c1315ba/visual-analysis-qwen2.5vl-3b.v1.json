@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 637,
+    "assets_selected": 640,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 635,
-    "assets_remaining": 1443,
-    "assets_completion_percent": 30.6,
-    "assets_failed": 1,
-    "assets_skipped_from_checkpoint": 632,
+    "assets_analyzed": 637,
+    "assets_remaining": 1441,
+    "assets_completion_percent": 30.7,
+    "assets_failed": 3,
+    "assets_skipped_from_checkpoint": 635,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -437,14 +437,14 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T11:12:03Z"
+      "checkpointed_at": "2026-10-18T11:22:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -18730,6 +18730,94 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T11:21:34Z"
+    },
+    {
+      "asset_id": "cee8d582c6558dda78b4823b",
+      "asset_sha256": "1514dbcc792a86869f0b64c674fd45097d2e996f34e12c2cbb1cf3ddcdfa8e0d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1514dbcc792a86869f0b64c674fd45097d2e996f34e12c2cbb1cf3ddcdfa8e0d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, gradient background transitioning from light orange to a darker shade of the same color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or images",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:24:15Z"
+    },
+    {
+      "asset_id": "202dcac8e2ca2d68ff3a3e5e",
+      "asset_sha256": "10fcd0ed0f1b3ae1b7db65baf79e9bc9017aadfe505c8b60c672a95224827116",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/10fcd0ed0f1b3ae1b7db65baf79e9bc9017aadfe505c8b60c672a95224827116.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from a light beige to a darker beige color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:25:45Z"
+    },
+    {
+      "asset_id": "e111270d39df9de7e223528c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "81e77e74529418ae4f7bc496",
+      "asset_sha256": "dec4bb186226e6cddd736c932257657230d24f5f9b46ccaafe34efe245a4d42f",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "page-0010.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
