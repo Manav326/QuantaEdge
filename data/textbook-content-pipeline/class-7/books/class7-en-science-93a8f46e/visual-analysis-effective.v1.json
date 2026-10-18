@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ac2dbb42aec567669ff53c24490f37dba3cb037b566b67484e3fd9a95884f029",
+  "raw_analysis_sha256": "4fb01b4befa27032caf4a92bb24ec21f8ba0b63e3b13e4ac1d7f805ed7e64d78",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:15:47Z",
+      "checkpointed_at": "2026-10-18T07:18:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:16:07Z",
+      "checkpointed_at": "2026-10-18T07:18:40Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -41037,6 +41037,148 @@
         "limitations": [
           "The image does not show any visual representation of the activity or the petals."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "35da576d2101edcea96f69c3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0786e4c9bc62233f8dc0dac0730874a2e765743556809e96e2a93c2ac9660135",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:18:46Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4afb643814283ebe59e23e4c",
+      "asset_sha256": "5f388658b27210e98418398a7bbe2dc79b7e56805397f55269823ae2b379a813",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 32,
+      "asset_path": "page-0032.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0786e4c9bc62233f8dc0dac0730874a2e765743556809e96e2a93c2ac9660135",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for making a red rose indicator using petals and hot water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.6: Red rose petals immersed in hot water",
+          "Fig. 2.5: Red roses",
+          "Fig. 2.7: Test tube containing the red rose extract",
+          "Activity 2.4: Let us find out",
+          "Place 10-20 drops of the prepared red rose extract in each of two small transparent bottles or test tubes. Mark them A and B."
+        ],
+        "concepts": [
+          "Red rose as an indicator",
+          "Collecting petals",
+          "Crushing petals",
+          "Pouring hot water",
+          "Filtering the extract",
+          "Testing the extract"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:20:09Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for making a red rose indicator using petals and hot water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.6: Red rose petals immersed in hot water",
+          "Fig. 2.5: Red roses",
+          "Fig. 2.7: Test tube containing the red rose extract",
+          "Activity 2.4: Let us find out",
+          "Place 10-20 drops of the prepared red rose extract in each of two small transparent bottles or test tubes. Mark them A and B."
+        ],
+        "concepts": [
+          "Red rose as an indicator",
+          "Collecting petals",
+          "Crushing petals",
+          "Pouring hot water",
+          "Filtering the extract",
+          "Testing the extract"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8c24bebb9dada32aa0efcc98",
+      "asset_sha256": "454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red paper airplane with a trail of smoke or vapor coming out of its nose.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:20:14Z",
+      "effective_analysis": {
+        "visual_summary": "A red paper airplane with a trail of smoke or vapor coming out of its nose.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

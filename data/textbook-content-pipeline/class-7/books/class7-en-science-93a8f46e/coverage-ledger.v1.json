@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 722,
-    "successful_visual_analyses": 712,
-    "missing_visual_analyses": 6766,
+    "raw_analysis_result_rows": 725,
+    "successful_visual_analyses": 715,
+    "missing_visual_analyses": 6763,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6776,
+    "unresolved_count": 6773,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37488,9 +37488,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37506,9 +37515,31 @@
       "asset_path": "page-0032.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for making a red rose indicator using petals and hot water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.6: Red rose petals immersed in hot water",
+          "Fig. 2.5: Red roses",
+          "Fig. 2.7: Test tube containing the red rose extract",
+          "Activity 2.4: Let us find out",
+          "Place 10-20 drops of the prepared red rose extract in each of two small transparent bottles or test tubes. Mark them A and B."
+        ],
+        "concepts": [
+          "Red rose as an indicator",
+          "Collecting petals",
+          "Crushing petals",
+          "Pouring hot water",
+          "Filtering the extract",
+          "Testing the extract"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37524,9 +37555,16 @@
       "asset_path": "assets/454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red paper airplane with a trail of smoke or vapor coming out of its nose.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
