@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 384,
-    "successful_visual_analyses": 378,
-    "missing_visual_analyses": 7104,
+    "raw_analysis_result_rows": 388,
+    "successful_visual_analyses": 382,
+    "missing_visual_analyses": 7100,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7110,
+    "unresolved_count": 7106,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -23775,9 +23775,16 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a circle with a dashed line around it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23793,9 +23800,16 @@
       "asset_path": "assets/379964a94d44b3ebfa33ea3e6b2feab781ebd6d4fe433c44597ca14616be5c6b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23811,9 +23825,28 @@
       "asset_path": "assets/27043023e3f93dda7268138a46ee650753a8c650ff34db39ba7f75ce46333d9d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the concept of light and its relation to the universe and shadows.",
+        "limitations": [
+          "The page does not provide specific details about the concepts discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23829,9 +23862,29 @@
       "asset_path": "assets/931f13930f289d55ad0ad72f9e81a77773817bc0fb37668840f715e930de3317.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the concept of light and its role in understanding the universe.",
+        "limitations": [
+          "The page does not provide specific details or examples about how light and shadows have influenced our understanding of the universe."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

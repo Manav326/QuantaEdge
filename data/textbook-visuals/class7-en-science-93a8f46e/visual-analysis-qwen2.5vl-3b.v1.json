@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 379,
+    "assets_selected": 382,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 377,
-    "assets_remaining": 7111,
-    "assets_completion_percent": 5.0,
+    "assets_analyzed": 381,
+    "assets_remaining": 7107,
+    "assets_completion_percent": 5.1,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 374,
+    "assets_skipped_from_checkpoint": 377,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:12:36Z"
+      "checkpointed_at": "2026-10-18T02:16:12Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12258,6 +12258,135 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T02:15:33Z"
+    },
+    {
+      "asset_id": "48db5c32e5162b4fc458771e",
+      "asset_sha256": "1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a circle with a dashed line around it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:16:43Z"
+    },
+    {
+      "asset_id": "dd3c2559e0d4ffd519ee3bb0",
+      "asset_sha256": "379964a94d44b3ebfa33ea3e6b2feab781ebd6d4fe433c44597ca14616be5c6b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/379964a94d44b3ebfa33ea3e6b2feab781ebd6d4fe433c44597ca14616be5c6b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:17:15Z"
+    },
+    {
+      "asset_id": "9359198b22ef33870980ac2c",
+      "asset_sha256": "27043023e3f93dda7268138a46ee650753a8c650ff34db39ba7f75ce46333d9d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/27043023e3f93dda7268138a46ee650753a8c650ff34db39ba7f75ce46333d9d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the concept of light and its relation to the universe and shadows.",
+        "limitations": [
+          "The page does not provide specific details about the concepts discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:17:52Z"
+    },
+    {
+      "asset_id": "2c5353a476d097df9f8c0afc",
+      "asset_sha256": "931f13930f289d55ad0ad72f9e81a77773817bc0fb37668840f715e930de3317",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/931f13930f289d55ad0ad72f9e81a77773817bc0fb37668840f715e930de3317.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the concept of light and its role in understanding the universe.",
+        "limitations": [
+          "The page does not provide specific details or examples about how light and shadows have influenced our understanding of the universe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:18:29Z"
     }
   ]
 }
