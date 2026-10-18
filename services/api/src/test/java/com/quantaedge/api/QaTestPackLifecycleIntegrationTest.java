@@ -47,7 +47,7 @@ class QaTestPackLifecycleIntegrationTest {
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "qa");
     QaTestPackService qa = new QaTestPackService(
         jdbc, environment, new DataSourceTransactionManager(dataSource), new ObjectMapper(),
-        true, true, "ci-qa", "QAfixture!2026");
+        true, true, "ci-qa", "quantaedge_qa", "QAfixture!2026");
 
     Map<String,Object> gate = qa.environmentStatus();
     assertTrue(Boolean.TRUE.equals(gate.get("writeAllowed")), () -> "QA safety gate rejected isolated database: " + gate);
