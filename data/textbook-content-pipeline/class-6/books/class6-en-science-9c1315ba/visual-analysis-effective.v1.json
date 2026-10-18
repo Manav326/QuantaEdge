@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d254828688d781b6376142156243bd9540f3bd24427c1cdf67c5a52bdb6c95bc",
+  "raw_analysis_sha256": "8711d951d54dba604118018877ebcdf1903be8b05073c81120a4212018738bdd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:14:25Z",
+      "checkpointed_at": "2026-10-18T19:19:53Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:15:21Z",
+      "checkpointed_at": "2026-10-18T19:20:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:16:33Z",
+      "checkpointed_at": "2026-10-18T19:21:58Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -36407,6 +36407,122 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the content of Table 2.5 in the text.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "49bb5d9c9c90a78e0a522733",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1b6f3b8f9fa644e0e745fb5d5550f48be0bc8dc27f747cdbd803d6b1531da3d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing different animals and their movement types along with the body parts used for movement.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.5: Movements in animals and their body parts involved",
+          "S. no.    Name of the       Type of      Body parts used",
+          "animal       movement      for movement",
+          "1.    Ant                                Legs",
+          "2.    Goat            Walks and jumps  Legs",
+          "3.    Pigeon           Walks and flies    Legs and wings",
+          "4.    Housefly         Walks and flies    Legs and wings",
+          "5.     Fish"
+        ],
+        "concepts": [
+          "Animals",
+          "Movement",
+          "Body parts",
+          "Legs",
+          "Wings",
+          "Walks",
+          "Jumps",
+          "Flies"
+        ],
+        "context_relation": "The table provides a comparative analysis of different animals and their movement types, focusing on the body parts involved.",
+        "limitations": [
+          "The table does not include all possible animals or their movement types."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:22:28Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing different animals and their movement types along with the body parts used for movement.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.5: Movements in animals and their body parts involved",
+          "S. no.    Name of the       Type of      Body parts used",
+          "animal       movement      for movement",
+          "1.    Ant                                Legs",
+          "2.    Goat            Walks and jumps  Legs",
+          "3.    Pigeon           Walks and flies    Legs and wings",
+          "4.    Housefly         Walks and flies    Legs and wings",
+          "5.     Fish"
+        ],
+        "concepts": [
+          "Animals",
+          "Movement",
+          "Body parts",
+          "Legs",
+          "Wings",
+          "Walks",
+          "Jumps",
+          "Flies"
+        ],
+        "context_relation": "The table provides a comparative analysis of different animals and their movement types, focusing on the body parts involved.",
+        "limitations": [
+          "The table does not include all possible animals or their movement types."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5675d9bfb068e43855c5c2c1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1b6f3b8f9fa644e0e745fb5d5550f48be0bc8dc27f747cdbd803d6b1531da3d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, and no visible text or images are present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:22:40Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, and no visible text or images are present."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
