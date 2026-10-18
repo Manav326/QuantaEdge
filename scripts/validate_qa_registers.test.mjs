@@ -61,7 +61,7 @@ test("register validator rejects a dangling scenario ID", () => {
     runtimeLog: [["scenario_id", "result_status", "tested_commit_sha", "environment_name", "steps_executed", "expected_result", "actual_result", "tester", "executed_at_utc", "screenshot_log_evidence_url"], ["CASE-1", "NOT_EXECUTED", "", "", "", "", "", "", "", ""]],
     uiStates: [["screen_key", "scenario_ids", "runtime_verification"], ["UI-1", "CASE-1", "NOT_EXECUTED"]]
   };
-  assert.throws(() => validateTables(tables), /unknown/empty scenario ID "MISSING"/);
+  assert.throws(() => validateTables(tables), /unknown.*scenario ID "MISSING"/);
 });
 
 test("register validator requires evidence fields before a scenario can be marked passed", () => {
