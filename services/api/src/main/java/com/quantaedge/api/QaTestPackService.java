@@ -569,12 +569,18 @@ public class QaTestPackService {
     Long questionId = number(content.get("question_id"));
     String correct = String.valueOf(content.get("correct_option"));
     String wrong = String.valueOf(content.get("wrong_option"));
-    insertProgress(runId, "child-a-progress", childA, tenantA, lessonId, "student-child-a");
-    insertProgress(runId, "child-b-progress", childB, tenantB, lessonId, "student-child-b");
-    insertProgress(runId, "adult-progress", adultStudent, tenantA, lessonId, "student-adult-student");
-    insertQuestionAttempt(runId, "child-a-correct-attempt", childA, tenantA, questionId, correct, true, "student-child-a");
-    insertQuestionAttempt(runId, "child-b-wrong-attempt", childB, tenantB, questionId, wrong, false, "student-child-b");
-    insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantA, questionId, correct, true, "student-adult-student");
+    insertProgress(runId, "child-a-progress", childA, tenantA, lessonId,
+        "student-child-a", "institution-QAT" + slug + "A");
+    insertProgress(runId, "child-b-progress", childB, tenantB, lessonId,
+        "student-child-b", "institution-QAT" + slug + "B");
+    insertProgress(runId, "adult-progress", adultStudent, tenantA, lessonId,
+        "student-adult-student", "institution-QAT" + slug + "A");
+    insertQuestionAttempt(runId, "child-a-correct-attempt", childA, tenantA, questionId, correct, true,
+        "student-child-a", "institution-QAT" + slug + "A");
+    insertQuestionAttempt(runId, "child-b-wrong-attempt", childB, tenantB, questionId, wrong, false,
+        "student-child-b", "institution-QAT" + slug + "B");
+    insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantA, questionId, correct, true,
+        "student-adult-student", "institution-QAT" + slug + "A");
 
     Map<String,Object> credentials = new LinkedHashMap<>();
     credentials.put("parentA", Map.of("institutionCode", "QAT" + slug + "A", "mobile", parentAMobile, "username", parentAUsername, "password", fixturePassword));
@@ -715,23 +721,27 @@ public class QaTestPackService {
     return rows.getFirst();
   }
 
-  private void insertProgress(UUID runId, String key, Long studentId, Long institutionId, Long lessonId, String studentResourceKey) {
+  private void insertProgress(UUID runId, String key, Long studentId, Long institutionId, Long lessonId,
+      String studentResourceKey, String institutionResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_lesson_progress(
         student_id,institution_id,lesson_id,status,progress_percent,started_at,completed_at,last_opened_at,qa_test_run_id
       ) values (?,?,?,'IN_PROGRESS',35,now(),null,now(),?) returning id
       """, Long.class, studentId, institutionId, lessonId, runId);
-    addResource(runId, key, "STUDENT_LESSON_PROGRESS", id, 20, List.of(studentResourceKey), "student_lesson_progress");
+    addResource(runId, key, "STUDENT_LESSON_PROGRESS", id, 20,
+        List.of(studentResourceKey, institutionResourceKey), "student_lesson_progress");
   }
 
   private void insertQuestionAttempt(UUID runId, String key, Long studentId, Long institutionId,
-      Long questionId, String optionKey, boolean correct, String studentResourceKey) {
+      Long questionId, String optionKey, boolean correct, String studentResourceKey,
+      String institutionResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_question_attempt(
         student_id,institution_id,question_id,selected_option,correct,answered_at,qa_test_run_id
       ) values (?,?,?,?,?,now(),?) returning id
       """, Long.class, studentId, institutionId, questionId, optionKey, correct, runId);
-    addResource(runId, key, "STUDENT_QUESTION_ATTEMPT", id, 10, List.of(studentResourceKey), "student_question_attempt");
+    addResource(runId, key, "STUDENT_QUESTION_ATTEMPT", id, 10,
+        List.of(studentResourceKey, institutionResourceKey), "student_question_attempt");
   }
 
   private void addResource(UUID runId, String key, String kind, Long resourceId, int cleanupOrder,
