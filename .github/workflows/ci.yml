@@ -158,12 +158,12 @@ jobs:
         run: node scripts/check-android-ui-localization.mjs
       - name: Run Android unit tests and build debug APK
         env:
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           QUANTAEDGE_API_BASE_URL: https://qe.thinkwithsujeet.in/
         run: |
           set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
-            test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to this build. Check the production GitHub Actions environment secret."; exit 1; }
+            test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to this build. Configure it as an Actions secret or variable visible to the production environment."; exit 1; }
           fi
           test -n "$QUANTAEDGE_API_BASE_URL" || { echo "::error::Android API base URL is not configured."; exit 1; }
           gradle -p apps/android testDebugUnitTest assembleDebug
@@ -277,7 +277,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            APP_AUTH_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+            APP_AUTH_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           cache-from: type=gha,scope=api
           cache-to: type=gha,mode=max,scope=api
 
@@ -320,7 +320,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
 

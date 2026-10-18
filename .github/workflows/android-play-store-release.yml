@@ -81,7 +81,7 @@ jobs:
       - name: Build signed, optimized Play Store bundle
         env:
           QUANTAEDGE_API_BASE_URL: ${{ inputs.api_base_url }}
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           QUANTAEDGE_VERSION_CODE: ${{ inputs.version_code }}
           QUANTAEDGE_VERSION_NAME: ${{ inputs.version_name }}
         shell: bash
