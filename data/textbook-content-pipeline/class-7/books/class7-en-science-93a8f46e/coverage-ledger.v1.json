@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 838,
-    "successful_visual_analyses": 830,
-    "missing_visual_analyses": 6650,
+    "raw_analysis_result_rows": 842,
+    "successful_visual_analyses": 834,
+    "missing_visual_analyses": 6646,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6658,
+    "unresolved_count": 6654,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41872,9 +41872,30 @@
       "asset_path": "assets/77dd534fa26320fb71176f343b7cf822dca3104f21f1f481bd6d4f21e3c0d3d7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle and a piece of paper with writing on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Writing"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual writing or the solution used for writing.",
+          "The image does not show the drying process of the turmeric paste on the paper."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41890,9 +41911,35 @@
       "asset_path": "assets/71b89f5ab58ba7b2c5184b315b3d5887840179ea9aa5404ea43385a715269b88.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin to express gratitude to his teacher on Guru Purnima. The card features a message written in the teacher's mother tongue (Odia) using a solution.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Drying paper",
+          "Mother tongue",
+          "Odia language",
+          "Solution"
+        ],
+        "context_relation": "The image shows the process of making a greeting card for Guru Purnima, which is a significant day in India for honoring teachers.",
+        "limitations": [
+          "The image does not show the final product of the greeting card.",
+          "The image does not show the teacher's reaction to the card."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41908,9 +41955,16 @@
       "asset_path": "assets/fef0bd8294af9b377c654a132f0fff6ac586c4457ab40fb26289e5deff4bcd2a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll of paper with a wooden handle, possibly used for writing or drawing.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41926,9 +41980,33 @@
       "asset_path": "assets/d8fda45c0bc52e0affb97e0e56dd26059acbaf76ab10126bd6888f6233dd0bed.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin to express gratitude to his teacher on Guru Purnima.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Drying paper",
+          "Mother tongue",
+          "Odia language",
+          "Solution"
+        ],
+        "context_relation": "The image shows the process of making a greeting card for Guru Purnima, which is a significant event in India.",
+        "limitations": [
+          "The image does not show the final product of the greeting card.",
+          "The image does not show the teacher or the teacher's mother tongue."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
