@@ -31,6 +31,12 @@ function requireInteractionBaseline(source, app) {
 const branding = read('docs/branding.md');
 const brandComponent = read('apps/web/app/components/QuantaEdgeBrand.tsx');
 const tenantBrandingProvider = read('apps/web/app/components/TenantBrandingProvider.tsx');
+const tenantMetadata = read('apps/web/app/tenantMetadata.ts');
+const studentMetadataLayout = read('apps/web/app/student/layout.tsx');
+const studentLoginMetadataLayout = read('apps/web/app/login/student/layout.tsx');
+const signupMetadataLayout = read('apps/web/app/signup/layout.tsx');
+const sessionMetadataLayout = read('apps/web/app/session/layout.tsx');
+const learnerMarketplace = read('apps/web/app/student/marketplace/page.tsx');
 const schoolEntryPage = read('apps/web/app/school/[institutionCode]/page.tsx');
 const schoolEntryLayout = read('apps/web/app/school/[institutionCode]/layout.tsx');
 const androidTutorScreen = read('apps/android/app/src/main/java/com/quantaedge/android/ui/TutorScreen.kt');
@@ -77,6 +83,12 @@ assert(adminBrandComponent === peopleBrandComponent, 'Admin and People Operation
 assert(brandComponent.includes('useTenantBranding') && brandComponent.includes('brand.displayName'), 'Learner web brand lockup must consume resolved tenant branding.');
 assert(tenantBrandingProvider.includes('/api/v1/institution/public/branding/') && tenantBrandingProvider.includes('institution/memberships/me'), 'Tenant branding provider must resolve trusted institution codes and a single learner membership.');
 assert(!/\.style\.setProperty\(['"]--qe-(?:brand-orange|color-)/.test(tenantBrandingProvider), 'Tenant identity resolution must not write palette variables outside the shared theme system.');
+assert(tenantBrandingProvider.includes('SERVER_BRANDING_COOKIES') && tenantBrandingProvider.includes('saveTenantMetadataCookies') && tenantBrandingProvider.includes('qe-tenant-session'), 'Verified school context must be retained in path-scoped server-visible metadata cookies.');
+assert(tenantMetadata.includes('await cookies()') && tenantMetadata.includes('neutralSchoolMetadata') && tenantMetadata.includes('/api/v1/institution/public/branding/'), 'Learner metadata must resolve the public school identity server-side and avoid platform-brand leakage on invalid tenant metadata.');
+assert(studentMetadataLayout.includes("learnerMetadataForTenantCookie('qe-tenant-student')") && studentLoginMetadataLayout.includes("learnerMetadataForTenantCookie('qe-tenant-login-student')") && signupMetadataLayout.includes("learnerMetadataForTenantCookie('qe-tenant-signup')") && sessionMetadataLayout.includes("learnerMetadataForTenantCookie('qe-tenant-session')"), 'Learner workspace, sign-in, signup and session routes must carry server-rendered school metadata.');
+assert(learnerMarketplace.includes('name: brand?.displayName || \'QuantaEdge\'') && learnerMarketplace.includes('institutionContextRequested && (!brand || isResolving)'), 'Learner checkout must use the validated school display name and must fail closed if school identity is unresolved.');
+assert(tenantBrandingProvider.includes("setEnrollmentIssue('invalid')") && tenantBrandingProvider.includes("setEnrollmentIssue('rate-limited')") && tenantBrandingProvider.includes("setEnrollmentIssue('temporary')") && workspaceLayout.includes('qe-enrollment-issue'), 'Failed learner invitations must produce accessible, actionable enrollment feedback.');
+assert(certificateController.includes('More than one school can issue this certificate') && certificateController.includes('issuers.size() > 1'), 'Certificate issuer selection must reject ambiguous multi-school attribution instead of silently switching to the platform issuer.');
 assert(!workspaceLayout.includes('/student/institutions') && !workspaceLayout.includes('mySchool'), 'Learner navigation must not expose a school/institution selector; school identity is implicit in the branded app.');
 assert(androidTenantBrand.includes('LocalInstitutionBrandIdentity') && androidTenantBrand.includes('institution.displayName'), 'Android shared brand lockup must render a resolved institution name.');
 assert(androidTenantRepository.includes('/api/v1/institution/public/branding/') && androidTenantRepository.includes('/api/v1/institution/join'), 'Android must resolve public school branding and use the membership join API.');
