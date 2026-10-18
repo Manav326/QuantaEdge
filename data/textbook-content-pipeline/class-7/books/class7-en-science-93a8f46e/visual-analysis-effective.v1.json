@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8bd53cc7b0dd5106a50e0badab3331bc4be9decf0f006915de7badb16cc60283",
+  "raw_analysis_sha256": "95a43208932d6ff26dd5854f81bca490029f2e8adfe5c7014d77579a31697be0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:59:31Z",
+      "checkpointed_at": "2026-10-18T06:01:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:59:51Z",
+      "checkpointed_at": "2026-10-18T06:02:19Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -36346,6 +36346,128 @@
         "context_relation": "The table is used to compare the color change of blue and red litmus papers after adding drops of different samples.",
         "limitations": [
           "The table does not specify the samples being tested."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "27132a87250585c95313ff0f",
+      "asset_sha256": "d94e0ebd18948c6b3de2f7489b99b4f1b13689dfa9f577441ee7d87908bf8371",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/d94e0ebd18948c6b3de2f7489b99b4f1b13689dfa9f577441ee7d87908bf8371.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9dcc404db3e0ca6cfb585068",
+      "asset_sha256": "8bf37d5dfc40667c7e356041af9e6066d79de35792307a250c3c304c8bd1417b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/8bf37d5dfc40667c7e356041af9e6066d79de35792307a250c3c304c8bd1417b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen with a metallic cap.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a pen illustration, possibly for a writing or drawing activity.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:04:12Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen with a metallic cap.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a pen illustration, possibly for a writing or drawing activity.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d396136f45a39da5ae2c7a78",
+      "asset_sha256": "1716bf1f9cbc28627a6be0cfb56868054a28c515b0e8c985c856842d0615fcbb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/1716bf1f9cbc28627a6be0cfb56868054a28c515b0e8c985c856842d0615fcbb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "Blue litmus paper after putting a drop of sample",
+          "Red litmus paper after putting a drop of sample"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Testing nature of samples"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table does not specify the samples tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:04:51Z",
+      "effective_analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "Blue litmus paper after putting a drop of sample",
+          "Red litmus paper after putting a drop of sample"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Testing nature of samples"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table does not specify the samples tested."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

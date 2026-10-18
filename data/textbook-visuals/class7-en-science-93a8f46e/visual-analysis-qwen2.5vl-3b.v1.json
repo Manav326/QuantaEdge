@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 630,
+    "assets_selected": 633,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 628,
-    "assets_remaining": 6860,
+    "assets_analyzed": 630,
+    "assets_remaining": 6858,
     "assets_completion_percent": 8.4,
-    "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 625,
+    "assets_failed": 9,
+    "assets_skipped_from_checkpoint": 628,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:59:31Z"
+      "checkpointed_at": "2026-10-18T06:01:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:59:51Z"
+      "checkpointed_at": "2026-10-18T06:02:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -23286,6 +23286,90 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T06:01:21Z"
+    },
+    {
+      "asset_id": "27132a87250585c95313ff0f",
+      "asset_sha256": "d94e0ebd18948c6b3de2f7489b99b4f1b13689dfa9f577441ee7d87908bf8371",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/d94e0ebd18948c6b3de2f7489b99b4f1b13689dfa9f577441ee7d87908bf8371.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "9dcc404db3e0ca6cfb585068",
+      "asset_sha256": "8bf37d5dfc40667c7e356041af9e6066d79de35792307a250c3c304c8bd1417b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/8bf37d5dfc40667c7e356041af9e6066d79de35792307a250c3c304c8bd1417b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen with a metallic cap.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a pen illustration, possibly for a writing or drawing activity.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:04:12Z"
+    },
+    {
+      "asset_id": "d396136f45a39da5ae2c7a78",
+      "asset_sha256": "1716bf1f9cbc28627a6be0cfb56868054a28c515b0e8c985c856842d0615fcbb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/1716bf1f9cbc28627a6be0cfb56868054a28c515b0e8c985c856842d0615fcbb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "Blue litmus paper after putting a drop of sample",
+          "Red litmus paper after putting a drop of sample"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Testing nature of samples"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table does not specify the samples tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:04:51Z"
     }
   ]
 }
