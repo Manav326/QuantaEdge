@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0fa71496676430aaa0fd31bd0c53b986484d845ba894b35e43bf32359126ac85",
+  "raw_analysis_sha256": "6b137b841ffdb7e3a7378b3403b9526968e993b4b862ef9b441df5380b9f89f7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:10:08Z",
+      "checkpointed_at": "2026-10-18T04:13:29Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:10:48Z",
+      "checkpointed_at": "2026-10-18T04:14:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -19392,6 +19392,124 @@
         "context_relation": "background",
         "limitations": [
           "no specific content or details visible"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f3bbecd021bf9cdd0cfcdb61",
+      "asset_sha256": "4ddd01a85e7227cc22596b930ea9b5494c6071505913f0d1d8608cfc914c64d6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/4ddd01a85e7227cc22596b930ea9b5494c6071505913f0d1d8608cfc914c64d6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:14:44Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7a83e8f5c0bf1e8601c87be3",
+      "asset_sha256": "1897ef4a9e2cf5b75672502788d1d018adf99263d5e218be059472cf79ef9371",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1897ef4a9e2cf5b75672502788d1d018adf99263d5e218be059472cf79ef9371.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:15:19Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f59d1705d71061bd728a5447",
+      "asset_sha256": "8a4e99e941a3652ab29cc269b2dc00bcd140c78400009bc48a78e15e97e4113f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8a4e99e941a3652ab29cc269b2dc00bcd140c78400009bc48a78e15e97e4113f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of warm colors.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or labels"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:15:56Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of warm colors.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or labels"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
