@@ -113,6 +113,9 @@ public class QaTestPackService {
     Map<String,Object> run = findRun(runId);
     if (run == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "QA run not found.");
     Map<String,Object> result = new LinkedHashMap<>(run);
+    result.put("protected_baseline", readJsonMap(run.get("protected_baseline")));
+    result.put("fixture_summary", readJsonMap(run.get("fixture_summary")));
+    result.put("cleanup_report", readJsonMap(run.get("cleanup_report")));
     result.put("fixtureSummary", readJsonMap(run.get("fixture_summary")));
     result.put("resources", jdbc.queryForList("""
       select resource_key,resource_kind,resource_id,resource_ref,dependency_keys,
@@ -189,25 +192,46 @@ public class QaTestPackService {
       if (!"INSTALL_FAILED".equals(priorState)) {
         throw new ResponseStatusException(HttpStatus.CONFLICT, "This QA run cannot be retried from its current state.");
       }
-      jdbc.update("""
+      int claimed = jdbc.update("""
         update qa_test_run set state='INSTALLING',error_code=null,error_summary=null,
           environment_label=?,target_database_label=?,updated_at=now()
-        where run_id=?
+        where run_id=? and state='INSTALL_FAILED'
         """, environmentLabel, gate.databaseName, runId);
+      if (claimed != 1) {
+        Map<String,Object> current = findIdempotentRun(packKey, PACK_VERSION, idempotencyKey);
+        if (current != null && "INSTALLED".equals(String.valueOf(current.get("state")))) {
+          Map<String,Object> replay = getRun(UUID.fromString(String.valueOf(current.get("run_id"))));
+          replay.put("replayed", true);
+          replay.put("credentialsIncluded", false);
+          return replay;
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Another request is already retrying this QA run.");
+      }
       addEvent(runId, "INSTALL_RETRY_STARTED", priorState, "INSTALLING", actorStaffId,
           Map.of("reason", "same idempotency key resumes the failed pack run"));
     } else {
       runId = UUID.randomUUID();
       Map<String,Object> baseline = baselineSnapshot();
-      jdbc.update("""
+      int inserted = jdbc.update("""
         insert into qa_test_run(
           run_id,pack_key,pack_version,idempotency_key,state,environment_label,
           target_database_label,source_commit_sha,pack_definition_sha256,created_by_staff_id,
           protected_baseline
         ) values (?,?,?,?,'INSTALLING',?,?,?,?,?,?::jsonb)
+        on conflict(pack_key,pack_version,idempotency_key) do nothing
         """,
         runId, packKey, PACK_VERSION, idempotencyKey, environmentLabel, gate.databaseName,
         sourceCommitSha(), sha256(PACK_DEFINITION), actorStaffId, json(baseline));
+      if (inserted != 1) {
+        Map<String,Object> concurrent = findIdempotentRun(packKey, PACK_VERSION, idempotencyKey);
+        if (concurrent != null && "INSTALLED".equals(String.valueOf(concurrent.get("state")))) {
+          Map<String,Object> replay = getRun(UUID.fromString(String.valueOf(concurrent.get("run_id"))));
+          replay.put("replayed", true);
+          replay.put("credentialsIncluded", false);
+          return replay;
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "An install with this idempotency key is already in progress or has failed. Refresh the run list and retry the same key only after reviewing its state.");
+      }
       addEvent(runId, "INSTALL_STARTED", null, "INSTALLING", actorStaffId,
           Map.of("packKey", packKey, "packVersion", PACK_VERSION));
     }
@@ -717,6 +741,18 @@ public class QaTestPackService {
   }
 
   private void cleanResource(UUID runId, Map<String,Object> resource, long manifestId) {
+    List<Map<String,Object>> lockedRows = jdbc.queryForList("""
+      select state from qa_test_run_resource
+      where id=? and run_id=? for update
+      """, manifestId, runId);
+    if (lockedRows.isEmpty()) {
+      throw new IllegalStateException("Manifest entry disappeared or no longer belongs to this run.");
+    }
+    String currentState = String.valueOf(lockedRows.getFirst().get("state"));
+    if ("CLEANED".equals(currentState)) return;
+    if (!"OWNED".equals(currentState) && !"CLEANUP_PENDING".equals(currentState) && !"FAILED".equals(currentState)) {
+      throw new IllegalStateException("Manifest resource has an unexpected cleanup state: " + currentState);
+    }
     String kind = String.valueOf(resource.get("resource_kind"));
     long resourceId = number(resource.get("resource_id"));
     DeleteSpec spec = deleteSpec(kind);
