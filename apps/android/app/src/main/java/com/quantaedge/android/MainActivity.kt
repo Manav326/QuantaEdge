@@ -33,15 +33,24 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener, Razorpa
         }
         try {
             val checkout = Checkout().apply { setKeyID(keyId) }
+            val identityPreferences = applicationContext.getSharedPreferences("qe_preferences", 0)
+            val resolvedTenantName = identityPreferences.getString("institutionDisplayName", null)
+                ?.takeIf {
+                    !identityPreferences.getString("institutionCode", null).isNullOrBlank() &&
+                    identityPreferences.getLong("institutionBrandingVersion", 0L) > 0L &&
+                    it.isNotBlank()
+                }
+            val checkoutName = if (BuildConfig.IS_TENANT_BRANDED) {
+                BuildConfig.INSTITUTION_DISPLAY_NAME
+            } else {
+                resolvedTenantName ?: "QuantaEdge"
+            }
             val options = JSONObject().apply {
                 put("key", keyId)
                 put("order_id", orderId)
                 put("currency", currency)
                 put("amount", amount)
-                put("name", applicationContext.getSharedPreferences("qe_preferences", 0)
-                    .getString("institutionDisplayName", null)
-                    ?.takeIf { it.isNotBlank() }
-                    ?: BuildConfig.INSTITUTION_DISPLAY_NAME)
+                put("name", checkoutName)
                 put("description", order.optString("description", "Course access"))
                 put("theme", JSONObject().put("color", themeController.checkoutAccentColor()))
             }
