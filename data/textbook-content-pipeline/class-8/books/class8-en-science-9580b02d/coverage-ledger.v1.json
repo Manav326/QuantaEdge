@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 548,
-    "successful_visual_analyses": 548,
-    "missing_visual_analyses": 1743,
+    "raw_analysis_result_rows": 551,
+    "successful_visual_analyses": 551,
+    "missing_visual_analyses": 1740,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1743,
+    "unresolved_count": 1740,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -23104,9 +23104,18 @@
       "asset_path": "assets/1251fa38e253f1557bb7af631c3d744f3fcb24a54e6f9b4625f2cd2f5d5e28c5.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23122,9 +23131,23 @@
       "asset_path": "assets/5fa53c7e7a9285a1f4990e40b588f7ba16b87255ac731fb5bd51d27b0429b9b2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "beige to brown transition"
+        ],
+        "context_relation": "The background of the page.",
+        "limitations": [
+          "No specific content or objects are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23140,9 +23163,23 @@
       "asset_path": "assets/9bd47f7a607abfec221558bc6bc015b95e8e411068e48ea7001d6edd02dea6ee.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The banner likely represents a reprint or edition date for a book or document.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the reprint."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
