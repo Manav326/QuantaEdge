@@ -46,7 +46,7 @@ Observed behavior:
 
 ## 3. Endpoint family to guard map
 
-This is a **representative method-level map based on controller source inspection**. It is not yet a complete OpenAPI/permission catalog; all actions and permission keys must still be extracted before Phase 1 sign-off.
+This is a **representative method-level map based on controller source inspection**. The [API route inventory](./phase-1-api-route-inventory.csv) now lists 435 Spring request/STOMP mapping entries from 48 Java source files and links each to candidate workflow scenario IDs. Those scenario mappings and guard hints are static signals, not a complete OpenAPI/permission catalog; shared filters, helper authorization, tenant/resource predicates, DB effects and runtime behavior must still be reviewed per operation before Phase 1 sign-off.
 
 | Domain/controller | Observed route family / authorization pattern | Important negative/edge tests |
 |---|---|---|
@@ -79,9 +79,9 @@ This is a **representative method-level map based on controller source inspectio
 
 ## 5. Phase 1 follow-up
 
-- [ ] Enumerate every controller route including HTTP method, parameters, workspace headers, authentication and exact permission key.
+- [x] Create a static source-derived route inventory (435 mapping rows; source method, HTTP/channel, path, line and guard hints). [ ] Reconcile against the application’s effective Spring mapping table and review exact per-route permission, workspace, tenant and resource-ownership rules.
 - [ ] Trace helper-built routes from every screen into the endpoint map.
 - [ ] Link each endpoint to database table/entities, unique constraints, audit rows and external side effects.
 - [ ] Build paired allow/deny test cases for every sensitive permission and tenant predicate.
-- [ ] Cross-check controller guards against existing API tests and add coverage gaps to the Phase 1 findings table.
+- [ ] Cross-check the 435 route entries and controller guards against existing API tests; record per-route allow/deny assertion coverage in the [consolidated coverage gap plan](./phase-1-coverage-gaps.md).
 - [ ] Record tested commit SHA and CI results; source review is not runtime certification.
