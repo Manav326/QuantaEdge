@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 649,
-    "successful_visual_analyses": 644,
-    "missing_visual_analyses": 1429,
-    "failed_visual_analyses": 5,
+    "raw_analysis_result_rows": 653,
+    "successful_visual_analyses": 647,
+    "missing_visual_analyses": 1425,
+    "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1434,
+    "unresolved_count": 1431,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26232,9 +26232,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26250,7 +26259,7 @@
       "asset_path": "page-0012.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -26268,9 +26277,35 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational and scientific institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Education"
+        ],
+        "concepts": [
+          "educational institutions",
+          "scientific institutions",
+          "professors",
+          "head",
+          "chairperson",
+          "associate professor",
+          "teacher developer",
+          "former teacher"
+        ],
+        "context_relation": "The page is a part of an educational content editor's work, listing names of individuals associated with various educational and scientific institutions.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams.",
+          "The page does not provide any specific information about the content or the context of the listed individuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26286,9 +26321,34 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with text and names of individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Educat"
+        ],
+        "concepts": [
+          "Biology",
+          "Chemistry",
+          "Education",
+          "Science and Mathematics",
+          "Indian Institute of Science",
+          "Royal Society of Chemistry",
+          "Kendriya Vidyalaya Sangathan"
+        ],
+        "context_relation": "The page is likely a part of an educational textbook discussing the roles and contributions of various individuals in the fields of science and education.",
+        "limitations": [
+          "The image does not contain any visual elements such as diagrams, charts, or illustrations.",
+          "The text is a list of names and their respective roles, without any visual representation of the subjects or topics they are associated with."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

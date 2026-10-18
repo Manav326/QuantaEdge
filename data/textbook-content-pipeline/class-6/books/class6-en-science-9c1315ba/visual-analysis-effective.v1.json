@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1d04a2b060bf65e4fcb9ec5b200843b5f72e9245a6ee5ecb5db218bcc677fe42",
+  "raw_analysis_sha256": "e5930f630d6b4817a9e96c611bdcc1e69fdf23c11b43099df6f4dacb57240a2c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T11:48:14Z",
+      "checkpointed_at": "2026-10-18T11:55:11Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -27688,6 +27688,212 @@
         "context_relation": "The page appears to be blank or contains no visible content.",
         "limitations": [
           "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "407760ad86da11da039f1ac9",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7879cad772d53e7e6e3070810f309a496b61677403b00e384f5910eb28ff139f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:55:29Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "58441955063e4b516982cc6c",
+      "asset_sha256": "ea7f35a0e9441cb18dcd94c66520bdcef22af11d3ce6a4cd89d4e4fdabcb6f60",
+      "page_text_context_sha256": "7879cad772d53e7e6e3070810f309a496b61677403b00e384f5910eb28ff139f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "020cf73b84cdea5b7fc4cd32",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1ddcbe35cf86bec7184d10bcc50c1ad29c4575871636e88386eeb0cad80cc0a3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational and scientific institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Education"
+        ],
+        "concepts": [
+          "educational institutions",
+          "scientific institutions",
+          "professors",
+          "head",
+          "chairperson",
+          "associate professor",
+          "teacher developer",
+          "former teacher"
+        ],
+        "context_relation": "The page is a part of an educational content editor's work, listing names of individuals associated with various educational and scientific institutions.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams.",
+          "The page does not provide any specific information about the content or the context of the listed individuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:01:03Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational and scientific institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Education"
+        ],
+        "concepts": [
+          "educational institutions",
+          "scientific institutions",
+          "professors",
+          "head",
+          "chairperson",
+          "associate professor",
+          "teacher developer",
+          "former teacher"
+        ],
+        "context_relation": "The page is a part of an educational content editor's work, listing names of individuals associated with various educational and scientific institutions.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams.",
+          "The page does not provide any specific information about the content or the context of the listed individuals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2311ee6d9469e7996af767cc",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1ddcbe35cf86bec7184d10bcc50c1ad29c4575871636e88386eeb0cad80cc0a3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with text and names of individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Educat"
+        ],
+        "concepts": [
+          "Biology",
+          "Chemistry",
+          "Education",
+          "Science and Mathematics",
+          "Indian Institute of Science",
+          "Royal Society of Chemistry",
+          "Kendriya Vidyalaya Sangathan"
+        ],
+        "context_relation": "The page is likely a part of an educational textbook discussing the roles and contributions of various individuals in the fields of science and education.",
+        "limitations": [
+          "The image does not contain any visual elements such as diagrams, charts, or illustrations.",
+          "The text is a list of names and their respective roles, without any visual representation of the subjects or topics they are associated with."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:01:32Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with text and names of individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Educat"
+        ],
+        "concepts": [
+          "Biology",
+          "Chemistry",
+          "Education",
+          "Science and Mathematics",
+          "Indian Institute of Science",
+          "Royal Society of Chemistry",
+          "Kendriya Vidyalaya Sangathan"
+        ],
+        "context_relation": "The page is likely a part of an educational textbook discussing the roles and contributions of various individuals in the fields of science and education.",
+        "limitations": [
+          "The image does not contain any visual elements such as diagrams, charts, or illustrations.",
+          "The text is a list of names and their respective roles, without any visual representation of the subjects or topics they are associated with."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
