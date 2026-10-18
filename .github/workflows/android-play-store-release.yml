@@ -31,6 +31,7 @@ jobs:
     name: Test and build signed Android App Bundle
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    environment: production
     env:
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}

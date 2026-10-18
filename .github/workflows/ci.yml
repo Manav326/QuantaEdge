@@ -132,6 +132,8 @@ jobs:
   build-android-apk:
     name: Build Android APK
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'ci' || 'production' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -160,7 +162,9 @@ jobs:
           QUANTAEDGE_API_BASE_URL: https://qe.thinkwithsujeet.in/
         run: |
           set -euo pipefail
-          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::Missing repository Actions secret GOOGLE_WEB_CLIENT_ID; Android Google sign-in cannot be configured."; exit 1; }
+          if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
+            test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to this build. Check the production GitHub Actions environment secret."; exit 1; }
+          fi
           test -n "$QUANTAEDGE_API_BASE_URL" || { echo "::error::Android API base URL is not configured."; exit 1; }
           gradle -p apps/android testDebugUnitTest assembleDebug
       - name: Upload installable APK
@@ -240,6 +244,8 @@ jobs:
   build-api:
     name: Build API image
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'ci' || 'production' }}
     needs: [changes, validate-api]
     if: needs.changes.outputs.api == 'true'
     steps:
@@ -278,6 +284,8 @@ jobs:
   build-web:
     name: Build web image
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'ci' || 'production' }}
     needs: changes
     if: needs.changes.outputs.web == 'true'
     steps:
