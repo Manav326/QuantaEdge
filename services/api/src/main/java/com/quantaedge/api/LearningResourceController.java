@@ -548,7 +548,7 @@ public class LearningResourceController {
       if(lessons.isEmpty()||!Boolean.TRUE.equals(lessons.getFirst().get("active"))||!"PUBLISHED".equals(String.valueOf(lessons.getFirst().get("status")))
           ||((Number)lessons.getFirst().get("chapter_id")).longValue()!=chapterId)throw notFound("Published learning resource target",assignmentId);
     }
-    Map<String,Object> chapter=chapterRow(chapterId);ensureChapterPublished(chapter);ensureStudentCanAccessChapter(studentId,chapter);
+    Map<String,Object> chapter=chapterRow(chapterId);ensureChapterPublished(chapter);ensureStudentCanAccessChapter(studentId,chapter,institutionId);
     if("STRUCTURED_ARTIFACT".equals(row.get("target_kind")))verifyArtifactChapter(artifacts.requirePublished(String.valueOf(row.get("artifact_id"))),chapterId);
     if("PRIVATE_UPLOAD".equals(row.get("source_kind"))) {
       Path path=resourceStorage.resolve(String.valueOf(row.get("storage_key")));
