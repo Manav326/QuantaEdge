@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "47093f00ae0c640c542d28e3ee551e628942b8aa47ccb551886dda4283f8b877",
+  "raw_analysis_sha256": "e9e3ac49535750f5cc95821003e9f78d06dc69ed3e2f267bc53bebd60a03a2e4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T11:42:47Z",
+      "checkpointed_at": "2026-10-18T11:52:38Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -41386,6 +41386,222 @@
         "context_relation": "Experimental procedure",
         "limitations": [
           "No specific limitations mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0edd1fa8097fdcfb7850fb95",
+      "asset_sha256": "eb3793f2b472f634798581f537b4024ae5c171b561d2873412ac36305ff432c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/eb3793f2b472f634798581f537b4024ae5c171b561d2873412ac36305ff432c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green liquid in a test tube, with a wooden surface in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "test tubes",
+          "lemon juice",
+          "soap solution",
+          "colour changes",
+          "Table 2.3"
+        ],
+        "context_relation": "The image is related to an experiment involving the interaction of lemon juice and soap solution.",
+        "limitations": [
+          "The image does not provide specific details about the experiment's outcome or results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:54:01Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green liquid in a test tube, with a wooden surface in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "test tubes",
+          "lemon juice",
+          "soap solution",
+          "colour changes",
+          "Table 2.3"
+        ],
+        "context_relation": "The image is related to an experiment involving the interaction of lemon juice and soap solution.",
+        "limitations": [
+          "The image does not provide specific details about the experiment's outcome or results."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fb40869956c1c91ad1b69aaf",
+      "asset_sha256": "4c718897a3621106e8fa3dba48c15e1a579edcff5f1412f666f4cb45f4d23317",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/4c718897a3621106e8fa3dba48c15e1a579edcff5f1412f666f4cb45f4d23317.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with droppers for adding drops.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20–30 drops of lemon juice in test tube A and 20–30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Observation",
+          "Recording observations",
+          "Color changes",
+          "Test tubes",
+          "Droppers"
+        ],
+        "context_relation": "Experimental setup for observing color changes in chemical reactions",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:55:23Z",
+      "effective_analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with droppers for adding drops.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20–30 drops of lemon juice in test tube A and 20–30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Observation",
+          "Recording observations",
+          "Color changes",
+          "Test tubes",
+          "Droppers"
+        ],
+        "context_relation": "Experimental setup for observing color changes in chemical reactions",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e50408a6326cb03e3805fae8",
+      "asset_sha256": "fd5c53aa635dfc1fcbf5556501cd559be164822b3dd50e64a88d0403103c6f82",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/fd5c53aa635dfc1fcbf5556501cd559be164822b3dd50e64a88d0403103c6f82.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a pen with a metallic tip.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:56:20Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of a pen with a metallic tip.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7e33dcee3c51ccc99b02e6cf",
+      "asset_sha256": "6bd6a6cce36d4c584354909660a88545578234f16b19b3a4aeb7080062d283da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/6bd6a6cce36d4c584354909660a88545578234f16b19b3a4aeb7080062d283da.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to add drops and observe color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Observation",
+          "Color change",
+          "Experimental procedure"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:57:37Z",
+      "effective_analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to add drops and observe color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Observation",
+          "Color change",
+          "Experimental procedure"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific image provided, only text description."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
