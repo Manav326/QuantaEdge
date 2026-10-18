@@ -50,7 +50,7 @@ The current HRMS upload path is PNG/JPEG only, capped at 2 MiB, with server-side
 
 ### Current exact-main verification
 
-The prior Actions API test failure was corrected and run [#3772](https://github.com/Manav326/QuantaEdge/actions/runs/39095464683) passed all eight jobs. Run [#3773](https://github.com/Manav326/QuantaEdge/actions/runs/39096141800) also passed, but it predates the product-mapping implementation. The class-product/mapping changes require a fresh successful Actions run for their exact commit before the implementation slice can be called verified.
+The previous Actions test failure was corrected in commit [6c86243](https://github.com/Manav326/QuantaEdge/commit/6c86243ade08d6a3b2f632d2f06100a1b3233a01), and run [#3772](https://github.com/Manav326/QuantaEdge/actions/runs/39095464683) passed all eight jobs. The Class 6–8 catalogue implementation landed in commit [d5bd7da](https://github.com/Manav326/QuantaEdge/commit/d5bd7da6b914be026398e26acf3bb6fa538f6fcf). Its Actions run [#3774](https://github.com/Manav326/QuantaEdge/actions/runs/39096985979) has passed Android APK build, affected-component detection, Admin image, web image, People Operations image, content-import safeguards and **API verification (including the new migration-backed smoke test)**. **Build API image is still in progress** at this checkpoint; do not call the entire run green until the workflow reports its final conclusion.
 
 ## Status
 
