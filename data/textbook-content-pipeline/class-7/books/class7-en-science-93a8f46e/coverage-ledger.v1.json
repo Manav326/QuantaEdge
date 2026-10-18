@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 692,
-    "successful_visual_analyses": 682,
-    "missing_visual_analyses": 6796,
+    "raw_analysis_result_rows": 695,
+    "successful_visual_analyses": 685,
+    "missing_visual_analyses": 6793,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6806,
+    "unresolved_count": 6803,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36411,9 +36411,19 @@
       "asset_path": "assets/90af85fa1dbd45f2f09e767ef39253a6be7f369c92830e34d4e42d92109109ab.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl with pigtails wearing a blue shirt and blue skirt, holding her chin in her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about substances in Group A of Table 2.2 and their taste.",
+        "limitations": [
+          "The image does not provide specific details about the substances in Group A or their taste.",
+          "The image is a cartoon and may not represent real-life situations or scientific concepts accurately."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36429,9 +36439,32 @@
       "asset_path": "assets/eb44a92fa25bbcc50389c7a4f2b789ac995c2f8960f88c0ae2b6e60f0b397a8d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A partially opened book with a red border and a yellow page inside.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Edible substances",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The image is related to the text discussing the taste of substances in Group A of Table 2.2 and their relation to acids.",
+        "limitations": [
+          "The image does not provide specific details about the substances or their taste.",
+          "The image does not show the full page or the entire text.",
+          "The image does not include any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36447,9 +36480,33 @@
       "asset_path": "assets/7b6ec246b0f3f20935efa64d2ffcd0413cfc080588d0ab4d57fe2e5b97bbdd2a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2, specifically mentioning that all substances in this group taste sour.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are",
+          "Neutral"
+        ],
+        "concepts": [
+          "Taste",
+          "Substances",
+          "Group A",
+          "Table 2.2",
+          "Edible substances",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2, specifically mentioning that all substances in this group taste sour.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
