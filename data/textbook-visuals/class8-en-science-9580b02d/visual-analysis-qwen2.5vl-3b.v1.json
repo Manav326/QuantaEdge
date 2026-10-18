@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 539,
+    "assets_selected": 542,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 537,
-    "assets_remaining": 1754,
-    "assets_completion_percent": 23.4,
+    "assets_analyzed": 540,
+    "assets_remaining": 1751,
+    "assets_completion_percent": 23.6,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 534,
+    "assets_skipped_from_checkpoint": 537,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T14:32:37Z"
+      "checkpointed_at": "2026-10-18T14:39:11Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T14:33:58Z"
+      "checkpointed_at": "2026-10-18T14:40:31Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -15873,6 +15873,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T14:37:30Z"
+    },
+    {
+      "asset_id": "1310da45f7c0bb406d0b953e",
+      "asset_sha256": "07324d20256250cf4c802f5858aa4929c9ad364246222d5cc8067656b2e7146d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/07324d20256250cf4c802f5858aa4929c9ad364246222d5cc8067656b2e7146d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with shades of orange and white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is blurred and lacks clear details.",
+          "The text 'Reprint 2026-27' is not part of the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T14:41:44Z"
+    },
+    {
+      "asset_id": "a4e0f695fe0acd8ada5ef52b",
+      "asset_sha256": "d25235d8c2f83ececa96ade1e347cc12973ea59078de39b2e40db07cfe539973",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d25235d8c2f83ececa96ade1e347cc12973ea59078de39b2e40db07cfe539973.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a white and beige color scheme.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "background",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T14:42:58Z"
+    },
+    {
+      "asset_id": "682acbb5bffb2521a2fb287b",
+      "asset_sha256": "178821b5f4111ec5fb9e91ad1a992f282084dd04b52e8535832a1301e2162bbe",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/178821b5f4111ec5fb9e91ad1a992f282084dd04b52e8535832a1301e2162bbe.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid orange background with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T14:44:05Z"
     }
   ]
 }
