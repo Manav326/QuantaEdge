@@ -81,7 +81,7 @@ public class LearningController {
           join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
             and s.code=? and s.active=true
           where st.id=? and st.active=true
-          """,normalizedSubject,context.studentId(),institutionId);
+          """,institutionId,normalizedSubject,context.studentId());
         if(mappedCourse.size()!=1)
           throw new SecurityException("Active enrolment in your class course is required.");
         programId=((Number)mappedCourse.getFirst().get("id")).longValue();
@@ -479,22 +479,40 @@ public class LearningController {
       """,institutionId,studentId,language,lessonId);
   }
 
-  // Source-compatible overloads retain the original Java call signatures used by tests and services.
-  // HTTP handlers continue to use the language-aware methods above.
+  // Legacy Java-only wrappers are retained for binary/source compatibility but fail closed:
+  // they do not receive the validated institution context available to the public HTTP handlers.
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,AuthContext context) {
-    return lessons(classCode,subjectCode,"hi",context);
+    throw missingInstitutionContext();
   }
 
   public Map<String,Object> lesson(long lessonId,AuthContext context) {
-    return lesson(lessonId,"hi",context);
+    throw missingInstitutionContext();
+  }
+
+  public Map<String,Object> lesson(long lessonId,String language,AuthContext context) {
+    throw missingInstitutionContext();
   }
 
   public List<Map<String,Object>> questions(long lessonId,AuthContext context) {
-    return questions(lessonId,"hi",context);
+    throw missingInstitutionContext();
+  }
+
+  public List<Map<String,Object>> questions(long lessonId,String language,AuthContext context) {
+    throw missingInstitutionContext();
   }
 
   public Map<String,Object> answer(long questionId,Map<String,Object> body,AuthContext context) {
-    return answer(questionId,"hi",body,context);
+    throw missingInstitutionContext();
+  }
+
+  public Map<String,Object> answer(long questionId,String language,Map<String,Object> body,AuthContext context) {
+    throw missingInstitutionContext();
+  }
+
+  private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext() {
+    return new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400, "INSTITUTION_CONTEXT_REQUIRED",
+        "Legacy learning calls must supply an explicit institution through the authenticated HTTP boundary.");
   }
 
   private long requireInstitution(InstitutionTenantContext tenant) {
