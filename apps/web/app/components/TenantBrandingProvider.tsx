@@ -275,7 +275,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     setInstitutionContextRequested(false);
     setStoredEnrollmentIssue(null);
     applyTenantIdentity(null);
-  }, []);
+  }, [setStoredEnrollmentIssue]);
 
   const clearEnrollmentIssue = useCallback(() => setStoredEnrollmentIssue(null), [setStoredEnrollmentIssue]);
   const retryEnrollment = useCallback(() => setEnrollmentRetryVersion(version => version + 1), []);
@@ -288,8 +288,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const urlCode = codeFromCurrentUrl();
       const hasUrlJoin = urlHasJoinParam();
       const urlJoin = joinCodeFromCurrentUrl();
+      if (hasUrlJoin || (urlCode && urlCode !== readSessionCode())) setStoredEnrollmentIssue(null);
       if (hasUrlJoin) {
-        setStoredEnrollmentIssue(null);
         savePendingJoinCode(urlJoin, urlCode);
         // Invite secrets live in the URL fragment for transport; once safely stored in
         // session storage, remove them from the address bar/history before authentication.
