@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 988,
+    "assets_selected": 990,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 985,
-    "assets_remaining": 6503,
+    "assets_analyzed": 988,
+    "assets_remaining": 6500,
     "assets_completion_percent": 13.2,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 983,
+    "assets_skipped_from_checkpoint": 985,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:56:43Z"
+      "checkpointed_at": "2026-10-18T19:00:41Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:57:05Z"
+      "checkpointed_at": "2026-10-18T19:01:04Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -36552,6 +36552,128 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T18:59:57Z"
+    },
+    {
+      "asset_id": "c19b6097cb0a15d677151695",
+      "asset_sha256": "05e3e57648fb882ce7703b9bfa35d5365c6ce26d0181ab41985ecc13dbbf8e8e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/05e3e57648fb882ce7703b9bfa35d5365c6ce26d0181ab41985ecc13dbbf8e8e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "Educational",
+        "limitations": [
+          "No diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals is present.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:01:52Z"
+    },
+    {
+      "asset_id": "2d3a74004bcbb7b06401c1f8",
+      "asset_sha256": "8b127bc5a3e8b489f625abc2816b58acbcf0668aff737164f1782ea618e48bc8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/8b127bc5a3e8b489f625abc2816b58acbcf0668aff737164f1782ea618e48bc8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "equation",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing a change"
+        ],
+        "context_relation": "The image is a question from a textbook, specifically from the NCERT English course.",
+        "limitations": [
+          "The image does not provide a diagram, chart, graph, table, map, cartoon, or page with multiple visuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:02:38Z"
+    },
+    {
+      "asset_id": "d991d0da5f61ba15eda85eb3",
+      "asset_sha256": "cbaf917d9b0ab0a06a4ae1c7f020cc9927e848bdf916ae9c0e3e66760bb8d6c4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/cbaf917d9b0ab0a06a4ae1c7f020cc9927e848bdf916ae9c0e3e66760bb8d6c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Acids and bases",
+          "Litmus paper"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The question is incomplete, as it only mentions the first part of the question and does not provide the full question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:03:20Z"
     }
   ]
 }
