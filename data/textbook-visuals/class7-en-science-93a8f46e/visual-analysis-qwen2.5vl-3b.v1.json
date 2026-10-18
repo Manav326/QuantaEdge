@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 606,
+    "assets_selected": 609,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 604,
-    "assets_remaining": 6884,
+    "assets_analyzed": 607,
+    "assets_remaining": 6881,
     "assets_completion_percent": 8.1,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 601,
+    "assets_skipped_from_checkpoint": 604,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:36:02Z"
+      "checkpointed_at": "2026-10-18T05:39:07Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:36:22Z"
+      "checkpointed_at": "2026-10-18T05:39:26Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -22316,6 +22316,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T05:38:28Z"
+    },
+    {
+      "asset_id": "9299d96d40622e27184a84d6",
+      "asset_sha256": "0b2f4472cd5ca49c22527002d021b60190f1852b7383b40355864536b47f6ace",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/0b2f4472cd5ca49c22527002d021b60190f1852b7383b40355864536b47f6ace.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d16f8ffbb64a78be155246d91cf4a063b755e639322ffaa13ab5f8ac706ebc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with a red bow in her hair, wearing a blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:39:58Z"
+    },
+    {
+      "asset_id": "11aa85c1d44777264f856b57",
+      "asset_sha256": "da66edf2102ba5c1f8b8370edaaa40720ffae5a54d190b840775e3708487f759",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/da66edf2102ba5c1f8b8370edaaa40720ffae5a54d190b840775e3708487f759.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d16f8ffbb64a78be155246d91cf4a063b755e639322ffaa13ab5f8ac706ebc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of substances to be tested with litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances to be tested with litmus paper"
+        ],
+        "context_relation": "Instructional content for a science activity",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:40:38Z"
+    },
+    {
+      "asset_id": "1e912f00351b80f67c60271f",
+      "asset_sha256": "7d35825bc2737f16c47d227c6a9fc7c17e3a67b70482b2833a6267c47620b360",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/7d35825bc2737f16c47d227c6a9fc7c17e3a67b70482b2833a6267c47620b360.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d16f8ffbb64a78be155246d91cf4a063b755e639322ffaa13ab5f8ac706ebc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is using a knife to cut a strip of blue litmus paper into small pieces.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "litmus paper",
+          "indicator",
+          "activity",
+          "science laboratory",
+          "samples",
+          "lemon juice",
+          "soap solution",
+          "amla juice",
+          "tamarind water",
+          "vinegar",
+          "baking soda solution",
+          "lime water",
+          "tap water",
+          "washing powder solution",
+          "sugar solution",
+          "salt solution"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text, showing the preparation of litmus paper strips for the experiment.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the litmus paper test."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:41:21Z"
     }
   ]
 }
