@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2fdbc7618b1521d7e6dca96d10371f59dc95cd844996101d689a21d0e8353a1f",
+  "raw_analysis_sha256": "6b036f8bd136b1878fe2f55cf4e4a93f0b8cf5c1b5d7faf4e631ff5bc7a51e99",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T15:26:48Z",
+      "checkpointed_at": "2026-10-18T15:31:50Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -50504,6 +50504,182 @@
         "context_relation": "Unclear",
         "limitations": [
           "Unclear if the image is a full page or a cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8f1339214ed7926f63bd594d",
+      "asset_sha256": "91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A rope with a blue loop at one end."
+        ],
+        "concepts": [
+          "rope",
+          "blue loop"
+        ],
+        "context_relation": "The image is not directly related to the text about Acharya Prafulla Chandra Ray.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the rope and loop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:32:04Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A rope with a blue loop at one end."
+        ],
+        "concepts": [
+          "rope",
+          "blue loop"
+        ],
+        "context_relation": "The image is not directly related to the text about Acharya Prafulla Chandra Ray.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the rope and loop."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1ba663a316f19353240ed55c",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is incomplete and does not provide a clear relation to the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:33:04Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is incomplete and does not provide a clear relation to the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d00a91aa8f8b6ced39e0196d",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:33:14Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b4a1ca8e67759f933f10b826",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:33:25Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

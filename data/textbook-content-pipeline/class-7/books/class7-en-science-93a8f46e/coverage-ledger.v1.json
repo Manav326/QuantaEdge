@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 874,
-    "successful_visual_analyses": 866,
-    "missing_visual_analyses": 6614,
+    "raw_analysis_result_rows": 878,
+    "successful_visual_analyses": 870,
+    "missing_visual_analyses": 6610,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6622,
+    "unresolved_count": 6618,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -43284,9 +43284,23 @@
       "asset_path": "assets/91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A rope with a blue loop at one end."
+        ],
+        "concepts": [
+          "rope",
+          "blue loop"
+        ],
+        "context_relation": "The image is not directly related to the text about Acharya Prafulla Chandra Ray.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the rope and loop."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43302,9 +43316,19 @@
       "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is incomplete and does not provide a clear relation to the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43320,9 +43344,19 @@
       "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43338,9 +43372,19 @@
       "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 866,
+    "assets_selected": 870,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 865,
-    "assets_remaining": 6623,
+    "assets_analyzed": 869,
+    "assets_remaining": 6619,
     "assets_completion_percent": 11.6,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 861,
+    "assets_skipped_from_checkpoint": 865,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T15:26:48Z"
+      "checkpointed_at": "2026-10-18T15:31:50Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -32253,6 +32253,126 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T15:30:56Z"
+    },
+    {
+      "asset_id": "8f1339214ed7926f63bd594d",
+      "asset_sha256": "91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A rope with a blue loop at one end."
+        ],
+        "concepts": [
+          "rope",
+          "blue loop"
+        ],
+        "context_relation": "The image is not directly related to the text about Acharya Prafulla Chandra Ray.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the rope and loop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:32:04Z"
+    },
+    {
+      "asset_id": "1ba663a316f19353240ed55c",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is incomplete and does not provide a clear relation to the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:33:04Z"
+    },
+    {
+      "asset_id": "d00a91aa8f8b6ced39e0196d",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:33:14Z"
+    },
+    {
+      "asset_id": "b4a1ca8e67759f933f10b826",
+      "asset_sha256": "a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/a636ef58b4878aa58bc200d086688e899e888a9db333f6824307861f4100dc3e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is a close-up and does not provide context for the text.",
+          "The text is not related to the image content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:33:25Z"
     }
   ]
 }
