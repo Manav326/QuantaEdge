@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 632,
-    "successful_visual_analyses": 624,
-    "missing_visual_analyses": 6856,
+    "raw_analysis_result_rows": 635,
+    "successful_visual_analyses": 627,
+    "missing_visual_analyses": 6853,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6864,
+    "unresolved_count": 6861,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -34306,9 +34306,31 @@
       "asset_path": "assets/8c3401abca37be6c8862e8deb762e8ab762d54011c58883c182b8a758c055744.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the color change of blue and red litmus papers after adding a drop of sample.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "Blue litmus paper",
+          "Red litmus paper"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Blue and red litmus papers",
+          "Color change",
+          "Adding a drop of sample"
+        ],
+        "context_relation": "The table is used to test the nature of samples using blue and red litmus papers.",
+        "limitations": [
+          "The table is incomplete, missing the actual data or results of the test."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34324,9 +34346,34 @@
       "asset_path": "assets/cb44949dc5c25dd9659225531bf0bc25de38119f39a0c3f260fa07a4f4c0babe.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "1. Sample A",
+          "2. Sample B",
+          "3. Sample C",
+          "4. Sample D",
+          "5. Sample E"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Testing nature of samples"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table does not specify the exact nature of the samples tested."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34342,9 +34389,31 @@
       "asset_path": "assets/274c4038a404622bd5489f2ee0a7d969f12a872273b97bafcd4c0b744f4f0839.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "Blue litmus paper",
+          "Red litmus paper"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Blue and red litmus papers",
+          "Color change",
+          "Neutral samples"
+        ],
+        "context_relation": "The table is used to compare the color change of blue and red litmus papers after adding drops of different samples.",
+        "limitations": [
+          "The table does not specify the samples being tested."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
