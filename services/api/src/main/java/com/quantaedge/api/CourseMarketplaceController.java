@@ -67,8 +67,11 @@ public class CourseMarketplaceController {
           coalesce(nullif(o.title_override,''),p.display_name) as title,
           p.display_name as course_name, p.curriculum_version,
           o.description, o.price_paise, o.currency, o.status as offer_status,
-          exists(select 1 from student_program_enrollment e
-            where e.student_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')) as has_access,
+          (exists(select 1 from student_program_enrollment e
+            where e.student_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
+            or exists(select 1 from student_course_access_grant legacy_grant
+              where legacy_grant.student_id=? and legacy_grant.course_id=p.id
+                and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')) as has_access,
           exists(select 1 from course_purchase cp
             where cp.student_id=? and cp.course_id=p.id) as purchased,
           exists(select 1 from student_login_credential c
@@ -76,8 +79,27 @@ public class CourseMarketplaceController {
         from course_marketplace_offer o
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where o.status='PUBLISHED'
+          and (
+            not exists(select 1 from institution_membership m
+              where m.student_id=? and m.status='ACTIVE')
+            or exists(
+              select 1 from institution_membership m
+              join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+              join institution_course_entitlement entitlement on entitlement.institution_id=m.institution_id
+                and entitlement.program_id=p.id and entitlement.status='ACTIVE'
+                and entitlement.valid_from<=now()
+                and (entitlement.valid_until is null or entitlement.valid_until>now())
+              where m.student_id=? and m.status='ACTIVE'
+            )
+            or exists(select 1 from course_purchase cp
+              where cp.student_id=? and cp.course_id=p.id)
+            or exists(select 1 from student_course_access_grant legacy_grant
+              where legacy_grant.student_id=? and legacy_grant.course_id=p.id
+                and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+          )
         order by p.display_name,p.id
-        """, context.studentId(), context.studentId(), context.studentId());
+        """, context.studentId(), context.studentId(), context.studentId(), context.studentId(),
+        context.studentId(), context.studentId(), context.studentId(), context.studentId());
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -450,7 +472,23 @@ public class CourseMarketplaceController {
         join curriculum_program p on p.id=o.course_id
         where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
           and o.status='PUBLISHED' and o.price_paise>0
-        """, courseId);
+          and (
+            not exists(select 1 from institution_membership m
+              where m.student_id=? and m.status='ACTIVE')
+            or exists(
+              select 1 from institution_membership m
+              join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+              join institution_course_entitlement entitlement on entitlement.institution_id=m.institution_id
+                and entitlement.program_id=p.id and entitlement.status='ACTIVE'
+                and entitlement.valid_from<=now()
+                and (entitlement.valid_until is null or entitlement.valid_until>now())
+              where m.student_id=? and m.status='ACTIVE'
+            )
+            or exists(select 1 from student_course_access_grant legacy_grant
+              where legacy_grant.student_id=? and legacy_grant.course_id=p.id
+                and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+          )
+        """, courseId, targetStudentId, targetStudentId, targetStudentId);
     if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available.");
     if (hasAccess(targetStudentId, courseId)) {
       throw new IllegalArgumentException("The selected learner already has access to this course.");
@@ -828,8 +866,11 @@ public class CourseMarketplaceController {
           where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
           union all
           select 1 from course_purchase p where p.student_id=? and p.course_id=?
+          union all
+          select 1 from student_course_access_grant g
+          where g.student_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT'
         )
-        """, Boolean.class, studentId, courseId, studentId, courseId);
+        """, Boolean.class, studentId, courseId, studentId, courseId, studentId, courseId);
     return Boolean.TRUE.equals(value);
   }
 
