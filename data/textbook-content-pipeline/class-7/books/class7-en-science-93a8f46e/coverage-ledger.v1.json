@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1000,
-    "successful_visual_analyses": 990,
-    "missing_visual_analyses": 6488,
+    "raw_analysis_result_rows": 1003,
+    "successful_visual_analyses": 993,
+    "missing_visual_analyses": 6485,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6498,
+    "unresolved_count": 6495,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47583,9 +47583,19 @@
       "asset_path": "assets/2bffc60d9111851dec78306839da4590fef36cb04bf0fd81e670f51497a89ddc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A spiral or helix-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure",
+          "unclear if the image is a diagram, chart, or other type of visual"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47601,9 +47611,16 @@
       "asset_path": "assets/68af004440a060b3b834ae1bb334b60661cf23f3d1ce7f22e7cebf2801b83e1a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with alternating yellow and green colors.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47619,9 +47636,30 @@
       "asset_path": "assets/555a901503fe0fd73fac87686cb1fd75dc7c5c7cb4cd56b72751fd183df9bbf4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "blue",
+          "reverse change"
+        ],
+        "context_relation": "The question is about identifying the solution that would reverse the change in litmus paper from blue to red.",
+        "limitations": [
+          "The question is incomplete, as it only mentions the first part of the question."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

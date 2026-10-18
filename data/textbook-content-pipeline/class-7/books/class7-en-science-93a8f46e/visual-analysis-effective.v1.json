@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a5facb4e21447fa7deb4ab6f83b364e8e90d66af6e67d3771032287e42261b45",
+  "raw_analysis_sha256": "bead9c90f65dd7642240bf23e8026e8dbf3fccae2e1e86387fee97c027a513e7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:00:41Z",
+      "checkpointed_at": "2026-10-18T19:04:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:01:04Z",
+      "checkpointed_at": "2026-10-18T19:04:29Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -57334,6 +57334,148 @@
         "context_relation": "Educational content",
         "limitations": [
           "The question is incomplete, as it only mentions the first part of the question and does not provide the full question."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "23c1ae8e5bbf3292b4de7df6",
+      "asset_sha256": "2bffc60d9111851dec78306839da4590fef36cb04bf0fd81e670f51497a89ddc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/2bffc60d9111851dec78306839da4590fef36cb04bf0fd81e670f51497a89ddc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spiral or helix-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure",
+          "unclear if the image is a diagram, chart, or other type of visual"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:05:06Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helix-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure",
+          "unclear if the image is a diagram, chart, or other type of visual"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6608dc03a87218b5e089af58",
+      "asset_sha256": "68af004440a060b3b834ae1bb334b60661cf23f3d1ce7f22e7cebf2801b83e1a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/68af004440a060b3b834ae1bb334b60661cf23f3d1ce7f22e7cebf2801b83e1a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with alternating yellow and green colors.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:05:40Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with alternating yellow and green colors.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e55520893e29a84c09357e16",
+      "asset_sha256": "555a901503fe0fd73fac87686cb1fd75dc7c5c7cb4cd56b72751fd183df9bbf4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/555a901503fe0fd73fac87686cb1fd75dc7c5c7cb4cd56b72751fd183df9bbf4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "blue",
+          "reverse change"
+        ],
+        "context_relation": "The question is about identifying the solution that would reverse the change in litmus paper from blue to red.",
+        "limitations": [
+          "The question is incomplete, as it only mentions the first part of the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:06:24Z",
+      "effective_analysis": {
+        "visual_summary": "A solution turns the red litmus paper to blue. Excess addition of which of the following solution would reverse the change?",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "blue",
+          "reverse change"
+        ],
+        "context_relation": "The question is about identifying the solution that would reverse the change in litmus paper from blue to red.",
+        "limitations": [
+          "The question is incomplete, as it only mentions the first part of the question."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
