@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "97172f55999f9ef6a7b4e6a61c7ea164bf394663d93b33db92ba69f299337206",
+  "raw_analysis_sha256": "35a14778f78803b876e30a2c02fdca3d04afb6523ca6638eccad697142f7fad7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T19:22:51Z",
+      "checkpointed_at": "2026-10-18T19:29:35Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T19:23:45Z",
+      "checkpointed_at": "2026-10-18T19:30:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -27575,6 +27575,132 @@
         "concepts": [],
         "context_relation": "Background for text or image",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7733aa3726456c60f5e73e3",
+      "asset_sha256": "9b6768101367bc023b830af975dd483e1d500b500cde361b90619ded0ed613a1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/9b6768101367bc023b830af975dd483e1d500b500cde361b90619ded0ed613a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a yellow and orange color scheme.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T19:31:58Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a yellow and orange color scheme.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "784f183c7fc86df194c0b3e4",
+      "asset_sha256": "a2c47276a1d662fa1b13930838bfaa58eccd8f35c6bcf6ad79273bd07f2f66ee",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/a2c47276a1d662fa1b13930838bfaa58eccd8f35c6bcf6ad79273bd07f2f66ee.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T19:33:27Z",
+      "effective_analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e5465fc6bd4b177e5c62c07d",
+      "asset_sha256": "f9452cd5a44ffc5baf9dab84210431678fd5c02f0aed2d1c421b794f7c19c4af",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/f9452cd5a44ffc5baf9dab84210431678fd5c02f0aed2d1c421b794f7c19c4af.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal banner"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The banner does not provide specific information about the content or purpose of the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T19:35:08Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal banner"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The banner does not provide specific information about the content or purpose of the page."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

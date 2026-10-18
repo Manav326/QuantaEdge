@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 647,
+    "assets_selected": 650,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 645,
-    "assets_remaining": 1646,
-    "assets_completion_percent": 28.2,
+    "assets_analyzed": 648,
+    "assets_remaining": 1643,
+    "assets_completion_percent": 28.3,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 642,
+    "assets_skipped_from_checkpoint": 645,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T19:22:51Z"
+      "checkpointed_at": "2026-10-18T19:29:35Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T19:23:45Z"
+      "checkpointed_at": "2026-10-18T19:30:26Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -18980,6 +18980,93 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T19:28:21Z"
+    },
+    {
+      "asset_id": "d7733aa3726456c60f5e73e3",
+      "asset_sha256": "9b6768101367bc023b830af975dd483e1d500b500cde361b90619ded0ed613a1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/9b6768101367bc023b830af975dd483e1d500b500cde361b90619ded0ed613a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a yellow and orange color scheme.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T19:31:58Z"
+    },
+    {
+      "asset_id": "784f183c7fc86df194c0b3e4",
+      "asset_sha256": "a2c47276a1d662fa1b13930838bfaa58eccd8f35c6bcf6ad79273bd07f2f66ee",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/a2c47276a1d662fa1b13930838bfaa58eccd8f35c6bcf6ad79273bd07f2f66ee.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T19:33:27Z"
+    },
+    {
+      "asset_id": "e5465fc6bd4b177e5c62c07d",
+      "asset_sha256": "f9452cd5a44ffc5baf9dab84210431678fd5c02f0aed2d1c421b794f7c19c4af",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/f9452cd5a44ffc5baf9dab84210431678fd5c02f0aed2d1c421b794f7c19c4af.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "horizontal banner"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The banner does not provide specific information about the content or purpose of the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T19:35:08Z"
     }
   ]
 }
