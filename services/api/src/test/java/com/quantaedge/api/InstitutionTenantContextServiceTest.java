@@ -25,6 +25,17 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void legacyLearnerRoutesRequireInstitutionContext() {
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic/attempts/12/submit"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/recommendations/next"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/learning/sessions/start"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/learning/assessments"));
+  }
+
+  @Test
   void publicBrandingAndIdentityRoutesDoNotRequireAnInstitutionContext() {
     assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
         "/api/v1/institution/public/branding/SCHOOL-A"));
