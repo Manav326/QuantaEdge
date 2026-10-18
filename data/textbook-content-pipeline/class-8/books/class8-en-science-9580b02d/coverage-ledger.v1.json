@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 677,
-    "successful_visual_analyses": 672,
-    "missing_visual_analyses": 1614,
-    "failed_visual_analyses": 5,
+    "raw_analysis_result_rows": 680,
+    "successful_visual_analyses": 674,
+    "missing_visual_analyses": 1611,
+    "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1619,
+    "unresolved_count": 1617,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26721,9 +26721,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The National Council of Educational Research and Training (NCERT)",
+          "acknowledges the guidance and support of the esteemed Chairperson",
+          "and members of the National Curriculum Framework Oversight",
+          "Committee for their invaluable contributions in overseeing the",
+          "translation of NCF-SE 2023 perspectives into the textbook. NCERT is",
+          "also deeply grateful to the Chairperson, Co-Chairperson, and members",
+          "of the National Syllabus and Teaching Learning Material Committee",
+          "for their continuous guidance and thorough review of the textbook.",
+          "Furthermore, NCERT extends its heartfelt thanks"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching Learning Material Committee"
+        ],
+        "context_relation": "acknowledgment",
+        "limitations": [
+          "No specific image is provided, only the text of the page is visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26739,9 +26762,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26757,7 +26789,7 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

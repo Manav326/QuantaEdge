@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 672,
+    "assets_selected": 675,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 670,
-    "assets_remaining": 1621,
-    "assets_completion_percent": 29.2,
-    "assets_failed": 5,
-    "assets_skipped_from_checkpoint": 667,
+    "assets_analyzed": 672,
+    "assets_remaining": 1619,
+    "assets_completion_percent": 29.3,
+    "assets_failed": 6,
+    "assets_skipped_from_checkpoint": 670,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T20:45:03Z"
+      "checkpointed_at": "2026-10-18T20:51:52Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T20:45:52Z"
+      "checkpointed_at": "2026-10-18T20:52:40Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -19856,6 +19856,93 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T20:50:42Z"
+    },
+    {
+      "asset_id": "13a4bebf20ead55294960525",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c340a9979d60c87ebb6b3cd733150792530db9db2dfa6050d6d1f8a32b7d1410",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgements page from a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The National Council of Educational Research and Training (NCERT)",
+          "acknowledges the guidance and support of the esteemed Chairperson",
+          "and members of the National Curriculum Framework Oversight",
+          "Committee for their invaluable contributions in overseeing the",
+          "translation of NCF-SE 2023 perspectives into the textbook. NCERT is",
+          "also deeply grateful to the Chairperson, Co-Chairperson, and members",
+          "of the National Syllabus and Teaching Learning Material Committee",
+          "for their continuous guidance and thorough review of the textbook.",
+          "Furthermore, NCERT extends its heartfelt thanks"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching Learning Material Committee"
+        ],
+        "context_relation": "acknowledgment",
+        "limitations": [
+          "No specific image is provided, only the text of the page is visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T20:53:15Z"
+    },
+    {
+      "asset_id": "2182c33d74bf4dbd5364aad4",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c340a9979d60c87ebb6b3cd733150792530db9db2dfa6050d6d1f8a32b7d1410",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Acknowledgements section of a textbook",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T20:53:30Z"
+    },
+    {
+      "asset_id": "026d35fc07cd60641679f85e",
+      "asset_sha256": "9349700228f8ad774a120c69126d236903f970f355cd328734aff9b0881c4aa5",
+      "page_text_context_sha256": "c340a9979d60c87ebb6b3cd733150792530db9db2dfa6050d6d1f8a32b7d1410",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 16,
+      "asset_path": "page-0016.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
