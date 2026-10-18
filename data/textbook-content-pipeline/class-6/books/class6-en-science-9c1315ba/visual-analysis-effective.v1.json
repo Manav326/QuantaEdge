@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c8fc013754d4e6d9f8f42a4452d0f33188c3c896f88b6c7a7916195deb988883",
+  "raw_analysis_sha256": "eb1cb0d1bd90db3b4e07da090da4a796261b34c5bee6a0a2a82a2a0d5427dd6c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T13:12:49Z",
+      "checkpointed_at": "2026-10-18T13:20:29Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -30248,6 +30248,186 @@
         "context_relation": "The image represents a simple food item, likely from a South Asian cuisine, which is a common topic in educational content about food and culture.",
         "limitations": [
           "The image does not provide specific details about the ingredients or preparation methods of the food items."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c6105033202ee9aaa962672",
+      "asset_sha256": "4918987bbf72d4352a7cffe05aaeb2f976b1ee680fc29b72e3bce19598b8d393",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/4918987bbf72d4352a7cffe05aaeb2f976b1ee680fc29b72e3bce19598b8d393.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plate with various food items, including vegetables and nuts.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "food",
+          "plate",
+          "vegetables",
+          "nuts"
+        ],
+        "context_relation": "The image represents a plate of food, possibly used to illustrate a lesson about nutrition or healthy eating.",
+        "limitations": [
+          "The image does not provide specific details about the types of vegetables or nuts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:22:09Z",
+      "effective_analysis": {
+        "visual_summary": "A plate with various food items, including vegetables and nuts.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "food",
+          "plate",
+          "vegetables",
+          "nuts"
+        ],
+        "context_relation": "The image represents a plate of food, possibly used to illustrate a lesson about nutrition or healthy eating.",
+        "limitations": [
+          "The image does not provide specific details about the types of vegetables or nuts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "52417aa4346f183bc749df71",
+      "asset_sha256": "98a3b7c11a186f521072323574ca7759acd0405498bcfc1df97dcd94cd0a248d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/98a3b7c11a186f521072323574ca7759acd0405498bcfc1df97dcd94cd0a248d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a traditional food item wrapped in a green leaf, accompanied by a small bowl of sauce and a red fruit.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "traditional food",
+          "green leaf",
+          "sauce",
+          "red fruit"
+        ],
+        "context_relation": "The image represents a traditional food item, possibly from a specific culture or region, which is wrapped in a green leaf and accompanied by a small bowl of sauce and a red fruit.",
+        "limitations": [
+          "The image does not provide specific details about the type of food or its cultural significance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:23:51Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a traditional food item wrapped in a green leaf, accompanied by a small bowl of sauce and a red fruit.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "traditional food",
+          "green leaf",
+          "sauce",
+          "red fruit"
+        ],
+        "context_relation": "The image represents a traditional food item, possibly from a specific culture or region, which is wrapped in a green leaf and accompanied by a small bowl of sauce and a red fruit.",
+        "limitations": [
+          "The image does not provide specific details about the type of food or its cultural significance."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "611e1cc3e259c6f9e6fe525f",
+      "asset_sha256": "259fe5b6c09a4d52919574a104708e6597132fba882b4b0741731e66b531fad5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/259fe5b6c09a4d52919574a104708e6597132fba882b4b0741731e66b531fad5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plate with various food items, including rice, vegetables, and fruits.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a meal, possibly used to illustrate a lesson about healthy eating or nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the types of food or their nutritional value."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:25:28Z",
+      "effective_analysis": {
+        "visual_summary": "A plate with various food items, including rice, vegetables, and fruits.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a meal, possibly used to illustrate a lesson about healthy eating or nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the types of food or their nutritional value."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "88f0537e0416db9817101581",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6c3c698578eddd0f9d81a670b05af0c8b1113432638f2517862d9d2db2c5df81",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:25:43Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

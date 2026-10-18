@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 697,
-    "successful_visual_analyses": 688,
-    "missing_visual_analyses": 1381,
+    "raw_analysis_result_rows": 701,
+    "successful_visual_analyses": 692,
+    "missing_visual_analyses": 1377,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1390,
+    "unresolved_count": 1386,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27852,9 +27852,23 @@
       "asset_path": "assets/4918987bbf72d4352a7cffe05aaeb2f976b1ee680fc29b72e3bce19598b8d393.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A plate with various food items, including vegetables and nuts.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "food",
+          "plate",
+          "vegetables",
+          "nuts"
+        ],
+        "context_relation": "The image represents a plate of food, possibly used to illustrate a lesson about nutrition or healthy eating.",
+        "limitations": [
+          "The image does not provide specific details about the types of vegetables or nuts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27870,9 +27884,23 @@
       "asset_path": "assets/98a3b7c11a186f521072323574ca7759acd0405498bcfc1df97dcd94cd0a248d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a traditional food item wrapped in a green leaf, accompanied by a small bowl of sauce and a red fruit.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "traditional food",
+          "green leaf",
+          "sauce",
+          "red fruit"
+        ],
+        "context_relation": "The image represents a traditional food item, possibly from a specific culture or region, which is wrapped in a green leaf and accompanied by a small bowl of sauce and a red fruit.",
+        "limitations": [
+          "The image does not provide specific details about the type of food or its cultural significance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27888,9 +27916,18 @@
       "asset_path": "assets/259fe5b6c09a4d52919574a104708e6597132fba882b4b0741731e66b531fad5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A plate with various food items, including rice, vegetables, and fruits.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a meal, possibly used to illustrate a lesson about healthy eating or nutrition.",
+        "limitations": [
+          "The image does not provide specific details about the types of food or their nutritional value."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27906,9 +27943,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
