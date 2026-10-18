@@ -665,7 +665,10 @@ public class CertificateController {
       }
       return null;
     }
-    if (requestedCode.isEmpty() && issuers.size()!=1) return null;
+    if (requestedCode.isEmpty() && issuers.size() > 1) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "More than one school can issue this certificate. Reopen your school learning link and retry.");
+    }
     Map<String,Object> issuer=issuers.getFirst();
     long institutionId=number(issuer.get("institution_id"));
     String displayName=clean(issuer.get("issuer_display_name"));
