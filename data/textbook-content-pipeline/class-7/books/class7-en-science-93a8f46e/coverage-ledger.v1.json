@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 629,
-    "successful_visual_analyses": 621,
-    "missing_visual_analyses": 6859,
+    "raw_analysis_result_rows": 632,
+    "successful_visual_analyses": 624,
+    "missing_visual_analyses": 6856,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6867,
+    "unresolved_count": 6864,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -34204,9 +34204,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34222,9 +34231,39 @@
       "asset_path": "page-0028.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for an experiment involving litmus paper and various solutions.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces.",
+          "Spread these pieces on a clean and dry white tile.",
+          "Using a dropper, put one drop of each of the samples, one-by-one, on these litmus paper pieces, as shown in Fig. 2.2a.",
+          "Do you observe any change in the colour of the blue litmus pieces?",
+          "Record your observations in Table 2.1.",
+          "Repeat the same activity with pieces of red litmus paper as shown in Fig. 2.2b and record your observations in Table 2.1.",
+          "How to prepare lime water?",
+          "Do not confuse lime water with the word lime, which is a fruit similar to lemon.",
+          "Lime water (solution of calcium hydroxide in water) can be easily prepared by mixing lime (chuna, i.e. calcium oxide) in water and leaving it undisturbed for some time, say an hour. Filter the liquid into another container and use it as lime water."
+        ],
+        "concepts": [
+          "litmus paper",
+          "indicator",
+          "color change",
+          "lime water",
+          "calcium hydroxide"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34240,9 +34279,18 @@
       "asset_path": "assets/454727a4ede06bd33fe4721c16eb1ec68498a01560051d3e541f7d6af4a396f3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red paper airplane with a trail of smoke or vapor coming out of its rear end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a simple illustration of a paper airplane, possibly used as a visual aid in an educational context.",
+        "limitations": [
+          "The image does not provide any specific information or data that can be used for analysis or comparison."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
