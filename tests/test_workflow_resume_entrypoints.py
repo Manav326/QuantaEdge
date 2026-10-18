@@ -68,6 +68,12 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
 
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
+        restore = workflow[workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories"):workflow.index("- name: Restore or build immutable per-book candidate checkpoints")]
+        self.assertIn("from scripts.prepare_visual_candidate_batch import extract_archive, missing_artifact, validate_layer1_bundle", restore)
+        self.assertIn('wrapper=f"{slug}-layer1"', restore)
+        self.assertIn("validate_layer1_bundle(layer1_root,source,work,fingerprint)", restore)
+        self.assertIn("tag_fingerprint", restore)
+        self.assertIn("inventory bundle mixes wrapped and root-level paths", restore)
         preflight = workflow.index("- name: Preflight and restore matching Layer 4 checkpoints before loading the vision model")
         inventory = workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories")
         self.assertLess(preflight, inventory, "Do not rebuild missing Layer 1 inventory before validating saved Layer 4 checkpoints.")
