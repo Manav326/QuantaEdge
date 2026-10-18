@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6d8195604435b4dbbd24bfa83f3e0af52ad4ca063ffd96999d6a4b381a1888f1",
+  "raw_analysis_sha256": "87f82fd156d2cc7bc44905b52f0909758ae443e1946a615b734f9bf211c73eae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:35:27Z",
+      "checkpointed_at": "2026-10-18T18:38:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:35:49Z",
+      "checkpointed_at": "2026-10-18T18:38:23Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -56139,6 +56139,242 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2da84e5f04a1805be02c7bbb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health, specifically focusing on the role of organic matter in neutralizing basic soil.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutralization",
+          "plant health",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The text discusses the relationship between soil pH, organic matter, and plant health, emphasizing the importance of neutralizing basic soil and addressing nutrient deficiencies.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:38:42Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of soil pH on plant health, specifically focusing on the role of organic matter in neutralizing basic soil.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutralization",
+          "plant health",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The text discusses the relationship between soil pH, organic matter, and plant health, emphasizing the importance of neutralizing basic soil and addressing nutrient deficiencies.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ba2c8f4d0f762f66945f63b5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:38:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cb392217b0d46f03c3e55c3b",
+      "asset_sha256": "e908e7589015aeb508a01e94e8028acbf0a51751a64920fd7d178c9a554c86bd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "page-0039.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing soil neutrality and the effects of adding organic matter and composted leaves to soil.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "19",
+          "If the soil is basic, organic matter like manure and composted",
+          "leaves are added to it. Organic matter releases acids that",
+          "neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in",
+          "it may still show poor health, which can be due to the deficiency",
+          "of nutrients in the soil.",
+          "Situation 3: Ashwin’s friend Gurbir stays near an industrial area.",
+          "He shared with him that the fish population in his neighbourhood",
+          "lake was declining day by day! What do you think might be the",
+          "causes for this? It may be due to factory waste being released",
+          "into the lake.",
+          "If the factory waste is acidic in nature, what could be done to",
+          "save the fish in the lake?",
+          "The factory waste can be neutralised by adding basic",
+          "substances before releasing into the lake.",
+          "Let us wrap up!",
+          "Now, can you explain why the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on Ashwin and Keerthi’s paper sheets",
+          "when the liquid was sprayed on them?",
+          "Do you think that one possibility could be using a turmeric",
+          "solution for the spraying liquid and a soap solution for writing",
+          "on the paper?",
+          "In a Nutshell",
+          "Substances around us may be classified as acidic, basic, and",
+          "neutral in nature.",
+          "Extracts of lichen, red rose, red hibiscus, purple cabbage,",
+          "turmeric, etc., can be used to indicate the nature of substances.",
+          "Substances that show different colours in acidic and basic",
+          "solutions are called acid-base indicators."
+        ],
+        "concepts": [
+          "Soil neutrality",
+          "Organic matter",
+          "Composted leaves",
+          "Acids",
+          "Neutralisation",
+          "Factory waste",
+          "Acidic substances",
+          "Basic substances",
+          "Acid-base indicators",
+          "Acids",
+          "Bases",
+          "Acidic solutions",
+          "Basic solutions",
+          "Neutralisation",
+          "Industrial waste",
+          "Day-to-day problems"
+        ],
+        "context_relation": "The page discusses the effects of adding organic matter and composted leaves to soil, and the neutralisation of acids and bases.",
+        "limitations": [
+          "The page does not provide specific examples or solutions for the problems mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:40:59Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing soil neutrality and the effects of adding organic matter and composted leaves to soil.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "19",
+          "If the soil is basic, organic matter like manure and composted",
+          "leaves are added to it. Organic matter releases acids that",
+          "neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in",
+          "it may still show poor health, which can be due to the deficiency",
+          "of nutrients in the soil.",
+          "Situation 3: Ashwin’s friend Gurbir stays near an industrial area.",
+          "He shared with him that the fish population in his neighbourhood",
+          "lake was declining day by day! What do you think might be the",
+          "causes for this? It may be due to factory waste being released",
+          "into the lake.",
+          "If the factory waste is acidic in nature, what could be done to",
+          "save the fish in the lake?",
+          "The factory waste can be neutralised by adding basic",
+          "substances before releasing into the lake.",
+          "Let us wrap up!",
+          "Now, can you explain why the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on Ashwin and Keerthi’s paper sheets",
+          "when the liquid was sprayed on them?",
+          "Do you think that one possibility could be using a turmeric",
+          "solution for the spraying liquid and a soap solution for writing",
+          "on the paper?",
+          "In a Nutshell",
+          "Substances around us may be classified as acidic, basic, and",
+          "neutral in nature.",
+          "Extracts of lichen, red rose, red hibiscus, purple cabbage,",
+          "turmeric, etc., can be used to indicate the nature of substances.",
+          "Substances that show different colours in acidic and basic",
+          "solutions are called acid-base indicators."
+        ],
+        "concepts": [
+          "Soil neutrality",
+          "Organic matter",
+          "Composted leaves",
+          "Acids",
+          "Neutralisation",
+          "Factory waste",
+          "Acidic substances",
+          "Basic substances",
+          "Acid-base indicators",
+          "Acids",
+          "Bases",
+          "Acidic solutions",
+          "Basic solutions",
+          "Neutralisation",
+          "Industrial waste",
+          "Day-to-day problems"
+        ],
+        "context_relation": "The page discusses the effects of adding organic matter and composted leaves to soil, and the neutralisation of acids and bases.",
+        "limitations": [
+          "The page does not provide specific examples or solutions for the problems mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
