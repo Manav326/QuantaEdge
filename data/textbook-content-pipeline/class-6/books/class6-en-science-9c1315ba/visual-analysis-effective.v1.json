@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5fb34b5b30112f3bc7e9e0f553074e1b087249a0a7d0eba85ae069e5a56b251a",
+  "raw_analysis_sha256": "fdffbbd0577d48d241e028d1f156ed5e8be33d7f4b4132259eb877f7342904ca",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:37:00Z",
+      "checkpointed_at": "2026-10-18T20:41:07Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:37:55Z",
+      "checkpointed_at": "2026-10-18T20:42:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:39:06Z",
+      "checkpointed_at": "2026-10-18T20:43:11Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37546,56 +37546,48 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
-          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
-          "Camels found in the cold desert have two humps each.",
-          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
-          "Moreover, they grow long hair from head to neck, which help them survive."
+          "Camels store food in their humps."
         ],
         "concepts": [
           "deserts",
-          "camels",
-          "humps",
-          "food storage",
+          "food availability",
+          "hump structure",
           "cold desert",
           "hot desert",
-          "winter",
+          "hump shrinkage",
+          "food storage",
           "long hair"
         ],
-        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, focusing on how they adapt to their surroundings.",
         "limitations": [
-          "The text does not provide visual aids or diagrams to support the information.",
-          "The text does not include any specific questions or exercises related to the information."
+          "The text does not include any visual aids or diagrams to support the information."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:39:47Z",
+      "checkpointed_at": "2026-10-18T20:43:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the hump structure of camels in different desert environments.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
-          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
-          "Camels found in the cold desert have two humps each.",
-          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
-          "Moreover, they grow long hair from head to neck, which help them survive."
+          "Camels store food in their humps."
         ],
         "concepts": [
           "deserts",
-          "camels",
-          "humps",
-          "food storage",
+          "food availability",
+          "hump structure",
           "cold desert",
           "hot desert",
-          "winter",
+          "hump shrinkage",
+          "food storage",
           "long hair"
         ],
-        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, focusing on how they adapt to their surroundings.",
         "limitations": [
-          "The text does not provide visual aids or diagrams to support the information.",
-          "The text does not include any specific questions or exercises related to the information."
+          "The text does not include any visual aids or diagrams to support the information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -37896,6 +37888,84 @@
         "context_relation": "The text discusses adaptations and habitats of plants and animals, focusing on specific examples.",
         "limitations": [
           "No visible text or images are present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a7f554b915941422e606c302",
+      "asset_sha256": "4e5ecec41810a06abcc88e82c136fae0d4601413d79d39d18a58fb8c4b54e8ad",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 45,
+      "asset_path": "page-0045.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a3a00fecd350aeb38ef19b978db10d9bbd49dda082596bc1f12632ef5a7343ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
+          "Salim Ali (1896–1987) travelled across India\n    to observe diversity in birds. He prepared a list\n    of birds and documented their travel routes\n    and habitats. He recorded the regions with\n    high diversity of birds and took measures to\n    conserve these regions. Keoladeo National Park\n    in",
+          "What are the different ways in which you can group\n    plants and animals based on their habitats? One way is to\n    group them into those 'that live on land' and those 'that live\n    in water'.\n    The plants and animals that live on land are said to live in\n    terrestrial habitats. Some examples "
+        ],
+        "concepts": [
+          "adaptations",
+          "habitat",
+          "biodiversity",
+          "Salim Ali",
+          "Keoladeo National Park",
+          "Ranganathittu Bird Sanctuary",
+          "Padma Vibhushan",
+          "terrestrial habitats",
+          "terrestrial",
+          "forest",
+          "desert",
+          "grassland",
+          "mountain"
+        ],
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
+        "limitations": [
+          "The page does not provide specific examples of adaptations for each region or habitat.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:47:01Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
+          "Salim Ali (1896–1987) travelled across India\n    to observe diversity in birds. He prepared a list\n    of birds and documented their travel routes\n    and habitats. He recorded the regions with\n    high diversity of birds and took measures to\n    conserve these regions. Keoladeo National Park\n    in",
+          "What are the different ways in which you can group\n    plants and animals based on their habitats? One way is to\n    group them into those 'that live on land' and those 'that live\n    in water'.\n    The plants and animals that live on land are said to live in\n    terrestrial habitats. Some examples "
+        ],
+        "concepts": [
+          "adaptations",
+          "habitat",
+          "biodiversity",
+          "Salim Ali",
+          "Keoladeo National Park",
+          "Ranganathittu Bird Sanctuary",
+          "Padma Vibhushan",
+          "terrestrial habitats",
+          "terrestrial",
+          "forest",
+          "desert",
+          "grassland",
+          "mountain"
+        ],
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
+        "limitations": [
+          "The page does not provide specific examples of adaptations for each region or habitat.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

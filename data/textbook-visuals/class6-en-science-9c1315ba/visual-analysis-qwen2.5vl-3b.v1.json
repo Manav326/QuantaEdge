@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 824,
+    "assets_selected": 825,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
     "assets_analyzed": 820,
     "assets_remaining": 1258,
     "assets_completion_percent": 39.5,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 819,
+    "assets_skipped_from_checkpoint": 820,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:37:00Z"
+      "checkpointed_at": "2026-10-18T20:41:07Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:37:55Z"
+      "checkpointed_at": "2026-10-18T20:42:01Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:39:06Z"
+      "checkpointed_at": "2026-10-18T20:43:11Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25411,32 +25411,28 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
-          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
-          "Camels found in the cold desert have two humps each.",
-          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
-          "Moreover, they grow long hair from head to neck, which help them survive."
+          "Camels store food in their humps."
         ],
         "concepts": [
           "deserts",
-          "camels",
-          "humps",
-          "food storage",
+          "food availability",
+          "hump structure",
           "cold desert",
           "hot desert",
-          "winter",
+          "hump shrinkage",
+          "food storage",
           "long hair"
         ],
-        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, focusing on how they adapt to their surroundings.",
         "limitations": [
-          "The text does not provide visual aids or diagrams to support the information.",
-          "The text does not include any specific questions or exercises related to the information."
+          "The text does not include any visual aids or diagrams to support the information."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:39:47Z"
+      "checkpointed_at": "2026-10-18T20:43:38Z"
     },
     {
       "asset_id": "1b6dd2be916d0f2957d56770",
@@ -25634,6 +25630,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T20:40:04Z"
+    },
+    {
+      "asset_id": "a7f554b915941422e606c302",
+      "asset_sha256": "4e5ecec41810a06abcc88e82c136fae0d4601413d79d39d18a58fb8c4b54e8ad",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 45,
+      "asset_path": "page-0045.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a3a00fecd350aeb38ef19b978db10d9bbd49dda082596bc1f12632ef5a7343ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
+          "Salim Ali (1896–1987) travelled across India\n    to observe diversity in birds. He prepared a list\n    of birds and documented their travel routes\n    and habitats. He recorded the regions with\n    high diversity of birds and took measures to\n    conserve these regions. Keoladeo National Park\n    in",
+          "What are the different ways in which you can group\n    plants and animals based on their habitats? One way is to\n    group them into those 'that live on land' and those 'that live\n    in water'.\n    The plants and animals that live on land are said to live in\n    terrestrial habitats. Some examples "
+        ],
+        "concepts": [
+          "adaptations",
+          "habitat",
+          "biodiversity",
+          "Salim Ali",
+          "Keoladeo National Park",
+          "Ranganathittu Bird Sanctuary",
+          "Padma Vibhushan",
+          "terrestrial habitats",
+          "terrestrial",
+          "forest",
+          "desert",
+          "grassland",
+          "mountain"
+        ],
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
+        "limitations": [
+          "The page does not provide specific examples of adaptations for each region or habitat.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:47:01Z"
     }
   ]
 }
