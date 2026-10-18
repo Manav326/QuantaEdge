@@ -20,7 +20,7 @@ internal fun launcherSlotForInstitution(institutionCode: String?, configuredSlot
         if (separator <= 0 || separator == raw.lastIndex) return@mapNotNull null
         val key = raw.substring(0, separator).trim().uppercase()
         val slot = raw.substring(separator + 1).trim().toIntOrNull()
-        if (!institutionLauncherCodePattern.matches(key) || slot !in 1..50) return@mapNotNull null
+        if (!institutionLauncherCodePattern.matches(key) || slot == null || slot !in 1..50) return@mapNotNull null
         key to slot
     }
     if (mappings.size != configuredSlots.split(';').size ||
