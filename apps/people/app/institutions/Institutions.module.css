@@ -113,3 +113,58 @@
 .brandAssetPreview{flex-wrap:wrap;min-width:0}
 .brandAssetPreview img{max-width:min(180px,100%);max-height:84px;min-width:0}
 @media(max-width:650px){.brandAssetActions{width:100%;justify-content:flex-start}.brandAssetActions button{min-height:40px}}
+
+
+/* Card-level view/edit states: saved values are shown first; edits are opt-in and scoped to one card. */
+.cardActions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.panelHeading>div:first-child{min-width:0}
+.readOnlyGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.readOnlyItem{display:grid;align-content:start;gap:7px;min-width:0;padding:13px;border:1px solid #e8ebf1;border-radius:11px;background:#fbfcfe}
+.readOnlyItem>span{font-size:9px;color:#788196;text-transform:uppercase;letter-spacing:.07em;font-weight:850}
+.readOnlyItem>strong{font-size:12px;line-height:1.5;overflow-wrap:anywhere;color:#152038}
+.readOnlyItem>small{font-size:10px;color:#7c8598}
+.wrapValue{overflow-wrap:anywhere;word-break:break-word}
+.readOnlySummary{display:grid;gap:12px;margin-top:8px}
+.readOnlyMetric{display:flex;align-items:baseline;gap:9px;padding:12px 14px;border-radius:10px;background:#f8f9fc;border:1px solid #e7eaf1}
+.readOnlyMetric strong{font-size:22px;letter-spacing:-.5px}
+.readOnlyMetric span{font-size:10px;color:#788196}
+.readOnlyValues{display:flex;gap:7px;flex-wrap:wrap}
+.valueChip{display:inline-flex;align-items:center;max-width:100%;padding:7px 10px;border:1px solid #e0e5ed;border-radius:999px;background:#fbfcfe;color:#344054;font-size:10px;font-weight:750;overflow-wrap:anywhere}
+.emptyValue{font-size:10px;color:#858da0;font-weight:500}
+.brandSwatches{display:grid;gap:8px}
+.brandSwatches>span{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:10px;color:#596579}
+.brandSwatches i{display:inline-block;width:16px;height:16px;border:1px solid #d0d5dd;border-radius:5px;flex:0 0 16px}
+.readOnlyLogo{max-width:100%;width:auto;max-height:88px;justify-self:start;object-fit:contain;padding:6px;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
+.readOnlyIcon{width:62px;height:62px;object-fit:contain;justify-self:start;padding:5px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+.assetEditorRow{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px;border:1px solid #e5e8ee;border-radius:11px;background:#fbfcfe}
+.assetEditorRow>div{display:grid;gap:5px;min-width:0}
+.assetEditorRow strong{font-size:11px;color:#344054}
+.assetEditorRow small{max-width:580px;font-size:10px;line-height:1.5;color:#788196}
+.fileButton{position:relative;display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;min-height:38px;padding:9px 12px;border:1px solid #fdba74;border-radius:9px;background:#fff7ed;color:#9a3412!important;font-size:10px!important;font-weight:850!important;cursor:pointer}
+.fileButton input{position:absolute!important;inset:0;width:100%!important;height:100%!important;min-height:0!important;opacity:0;cursor:pointer}
+.fileButton:focus-within{outline:2px solid #f97316;outline-offset:3px}
+.brandAssetPreview{grid-column:1/-1}
+.form>.panelHeading{grid-column:1/-1;margin-bottom:0}
+
+/* Crop-and-normalize dialog: keep the source editable until the cropped raster is confirmed. */
+.cropModalBackdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(15,23,42,.62);overflow:auto}
+.cropModal{width:min(720px,100%);max-height:min(94vh,900px);overflow:auto;padding:clamp(16px,3vw,24px);border:1px solid #d8dee8;border-radius:18px;background:#fff;color:#152038;box-shadow:0 24px 90px rgba(0,0,0,.28);display:grid;gap:16px}
+.cropModalHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.cropModalHeader h2{margin:4px 0 5px;font-size:21px;letter-spacing:-.5px}
+.cropModalHeader p{margin:0;color:#68738a;font-size:11px;line-height:1.6}
+.cropStage{position:relative;width:100%;height:clamp(230px,45vh,360px);overflow:hidden;border:1px solid #d5dbe5;border-radius:12px;background:linear-gradient(45deg,#f3f5f8 25%,transparent 25%),linear-gradient(-45deg,#f3f5f8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#f3f5f8 75%),linear-gradient(-45deg,transparent 75%,#f3f5f8 75%);background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0;touch-action:none;user-select:none;cursor:grab}
+.cropStage:active{cursor:grabbing}
+.cropSourceImage{position:absolute;z-index:1;max-width:none;max-height:none;object-fit:fill;pointer-events:none;user-select:none}
+.cropFrame{position:absolute;z-index:2;border:2px solid #fff;outline:1px solid rgba(15,23,42,.55);pointer-events:none;box-sizing:border-box}
+.cropControls{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.65fr);gap:14px;align-items:center}
+.cropRatioControls{display:flex;gap:6px;flex-wrap:wrap}
+.cropRatioButton{min-height:36px;padding:8px 10px;border:1px solid #dfe3eb;border-radius:9px;background:#fff;color:#344054;font-size:10px;font-weight:800}
+.cropRatioButtonActive{border-color:#fdba74;background:#fff7ed;color:#9a3412}
+.cropZoom{display:grid;gap:7px;min-width:0}
+.cropZoomLabel{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#596579;font-size:10px;font-weight:800}
+.cropZoom input{width:100%;accent-color:#f97316}
+.cropHelp{margin:0;color:#68738a;font-size:10px;line-height:1.6}
+.cropError{padding:10px 12px;border:1px solid #f2c6c0;border-radius:9px;background:#fff1f0;color:#a1261d;font-size:11px;line-height:1.5}
+.cropModalFooter{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #edf0f4;padding-top:13px}
+.cropModalFooter>span{font-size:10px;color:#788196;line-height:1.5}
+@media(max-width:650px){.readOnlyGrid{grid-template-columns:1fr}.assetEditorRow{align-items:stretch;flex-direction:column}.fileButton{width:100%;min-height:42px}.cropModalBackdrop{align-items:flex-start;padding:8px}.cropModal{max-height:calc(100dvh - 16px);border-radius:14px}.cropControls{grid-template-columns:1fr}.cropStage{height:290px}.cropModalFooter{align-items:stretch;flex-direction:column-reverse}.cropModalFooter button{width:100%;min-height:42px}.cropRatioControls>*{flex:1}.panelHeading{align-items:flex-start}.cardActions{justify-content:flex-start}}
