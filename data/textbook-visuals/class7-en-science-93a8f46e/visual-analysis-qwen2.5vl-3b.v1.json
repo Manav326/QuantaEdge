@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 372,
+    "assets_selected": 376,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 371,
-    "assets_remaining": 7117,
+    "assets_analyzed": 374,
+    "assets_remaining": 7114,
     "assets_completion_percent": 5.0,
-    "assets_failed": 4,
-    "assets_skipped_from_checkpoint": 367,
+    "assets_failed": 5,
+    "assets_skipped_from_checkpoint": 371,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:05:54Z"
+      "checkpointed_at": "2026-10-18T02:08:54Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12056,6 +12056,105 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T02:08:16Z"
+    },
+    {
+      "asset_id": "63f0d8f1e268496a00e42c68",
+      "asset_sha256": "28e8203d643babb0bf20911678c9187325aa3549dbd645fd5ce3f8a369051a6a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/28e8203d643babb0bf20911678c9187325aa3549dbd645fd5ce3f8a369051a6a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue sky with a green bush at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background for the text about changes in bodies and life processes.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:09:26Z"
+    },
+    {
+      "asset_id": "dfde25277ddde43bca752898",
+      "asset_sha256": "1cebb30b5e1a1617f11d0f90e1e717abd86a6aaf10443dd18c304b35ddf90864",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/1cebb30b5e1a1617f11d0f90e1e717abd86a6aaf10443dd18c304b35ddf90864.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two people running in a park, one in a purple tank top and the other in a green tank top, with a clear blue sky in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not show any specific educational content related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:10:00Z"
+    },
+    {
+      "asset_id": "c6902657928713e6a6b15b47",
+      "asset_sha256": "d9e9e97cc2e3915ca92bdd66e1377f4f2d6318992937274e07d65d09de613b47",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/d9e9e97cc2e3915ca92bdd66e1377f4f2d6318992937274e07d65d09de613b47.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "c9ffb7d80ff73c3fe39f52fa",
+      "asset_sha256": "38f66b689dd059c725fb53522c72fcb300f8bbc6b27fbe4c63451dab7a963429",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/38f66b689dd059c725fb53522c72fcb300f8bbc6b27fbe4c63451dab7a963429.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two individuals running, one in a pink shirt and the other in a white tank top with the number 5 on it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts two individuals running, possibly in a race or exercise setting.",
+        "limitations": [
+          "The image does not provide specific details about the individuals or their activities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:11:57Z"
     }
   ]
 }
