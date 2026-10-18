@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5904ab0c4709c2ab97a46a6630b3f3b9d0af35209a893d72db22a43aeb87bdab",
+  "raw_analysis_sha256": "040fb8c4d00024cf139ed72c08b93d7a38cad3aa1c6dfbf86e0c256ab6e88198",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T20:10:26Z",
+      "checkpointed_at": "2026-10-18T20:22:56Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T20:11:16Z",
+      "checkpointed_at": "2026-10-18T20:23:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -28231,6 +28231,180 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "75d4a907749c9e3ac08a5058",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "39e5a774d0ba18d5e0d346c2233b9d4852a9503d3947638aadc1530cfd5f18b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T20:24:02Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6f9e284642d9fbd4fd9e1542",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "39e5a774d0ba18d5e0d346c2233b9d4852a9503d3947638aadc1530cfd5f18b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T20:24:18Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f1e82a063f21d75ac87210f9",
+      "asset_sha256": "b1bc783394201445aa5a156ae727524a3073674b3a531fd67d280d1dd6d3f187",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "39e5a774d0ba18d5e0d346c2233b9d4852a9503d3947638aadc1530cfd5f18b3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Gauri  Roy, PGT  (Physics),  Demonstration  Multipurpose  School,\nRegional Institute of Education, Mysuru",
+          "Indrani Das Sen, Scientific Officer, Homi Bhabha Centre for Science\nEducation, TIFR, Mumbai",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry,\nBengaluru",
+          "Karthick Balasubramanian, Scientist E, Agharkar Research Institute,\nPune",
+          "Lalminthang Kipgen, Assistant Professor, Division of Educational Kits,\nNCERT, New Delhi",
+          "Linto  Alappat,  Assistant  Professor,  Christ  College Autonomous,\nIrinjalakuda, Thrissur, Kerala",
+          "L.K. Tiwary, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "Manasi Goswami, Professor, Regional Institute of Education, NCERT,\nBhubaneswar",
+          "Manjushree Chaudhuri, Former PGT (Physics), St. Columba’s School,\nNew Delhi and La Grande Boissière Campus of International School of\nGeneva, Switzerland",
+          "Mayuri Rege, Reader, Homi Bhabha Centre for Science Education,\nTIFR, Mumbai",
+          "Meher  Wan, Scientist, CSIR-National Institute of Science\nCommunication and Policy Research, New Delhi",
+          "Munindra Ruwali, Associate Professor, Department of Education in\nScience and Mathematics, NCERT, New Delhi",
+          "Neeraja Dashaputre, Principal Technical Officer (Education), Indian\nInstitute of Science Education and Research, Pune",
+          "Nicole Ann Fae Sequeira, Assistant Professor, Goa University, Goa",
+          "Poonam  Katyal, Former TGT, Zeenat Mahal Sarvodaya Kanya\nVidyalaya, Jafrabad, Delhi",
+          "Pramila Tanwar, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "Praveen Pathak, Scientific Officer, Homi Bhabha Centre for Science\nEducation, TIFR, Mumbai",
+          "Preeti  Khanna, Rehabilitation Professional (Visual Impairment),\nNational Association for the Blind, New Delhi",
+          "Puneet Sharma, Assistant Professor, Division of Educational Kits,\nNCERT, New Delhi",
+          "Pushp Lata Verma, Associate Professor, Department of Education in\nScience and Mathematics, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Roles in education",
+          "Institutions in India"
+        ],
+        "context_relation": "List of educational professionals and their roles",
+        "limitations": [
+          "No specific visual elements present",
+          "Text is a list of names and their roles"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T20:29:02Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Gauri  Roy, PGT  (Physics),  Demonstration  Multipurpose  School,\nRegional Institute of Education, Mysuru",
+          "Indrani Das Sen, Scientific Officer, Homi Bhabha Centre for Science\nEducation, TIFR, Mumbai",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry,\nBengaluru",
+          "Karthick Balasubramanian, Scientist E, Agharkar Research Institute,\nPune",
+          "Lalminthang Kipgen, Assistant Professor, Division of Educational Kits,\nNCERT, New Delhi",
+          "Linto  Alappat,  Assistant  Professor,  Christ  College Autonomous,\nIrinjalakuda, Thrissur, Kerala",
+          "L.K. Tiwary, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "Manasi Goswami, Professor, Regional Institute of Education, NCERT,\nBhubaneswar",
+          "Manjushree Chaudhuri, Former PGT (Physics), St. Columba’s School,\nNew Delhi and La Grande Boissière Campus of International School of\nGeneva, Switzerland",
+          "Mayuri Rege, Reader, Homi Bhabha Centre for Science Education,\nTIFR, Mumbai",
+          "Meher  Wan, Scientist, CSIR-National Institute of Science\nCommunication and Policy Research, New Delhi",
+          "Munindra Ruwali, Associate Professor, Department of Education in\nScience and Mathematics, NCERT, New Delhi",
+          "Neeraja Dashaputre, Principal Technical Officer (Education), Indian\nInstitute of Science Education and Research, Pune",
+          "Nicole Ann Fae Sequeira, Assistant Professor, Goa University, Goa",
+          "Poonam  Katyal, Former TGT, Zeenat Mahal Sarvodaya Kanya\nVidyalaya, Jafrabad, Delhi",
+          "Pramila Tanwar, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "Praveen Pathak, Scientific Officer, Homi Bhabha Centre for Science\nEducation, TIFR, Mumbai",
+          "Preeti  Khanna, Rehabilitation Professional (Visual Impairment),\nNational Association for the Blind, New Delhi",
+          "Puneet Sharma, Assistant Professor, Division of Educational Kits,\nNCERT, New Delhi",
+          "Pushp Lata Verma, Associate Professor, Department of Education in\nScience and Mathematics, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Roles in education",
+          "Institutions in India"
+        ],
+        "context_relation": "List of educational professionals and their roles",
+        "limitations": [
+          "No specific visual elements present",
+          "Text is a list of names and their roles"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
