@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 653,
-    "successful_visual_analyses": 647,
-    "missing_visual_analyses": 1425,
+    "raw_analysis_result_rows": 657,
+    "successful_visual_analyses": 651,
+    "missing_visual_analyses": 1421,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1431,
+    "unresolved_count": 1427,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26364,9 +26364,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26382,9 +26391,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26400,9 +26418,47 @@
       "asset_path": "page-0013.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Chairperson, Chemistry Sub-group)",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Padma Prabhu, Former TGT, Kendriya Vidyalaya Sangathan and Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Pramila Tanwar, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravindra Kumar Parashar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravijot Sandhu, PGT (Chemistry), Navyug School, Laxmibai Nagar, New Delhi",
+          "Ruchi Verma, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Sandhiya Lakshmanan, Scientist, CSIR-National Institute of Science Communication and Policy Research, New Delhi",
+          "Sekar Venkatraman, Head of Department, Isha Home School, Coimbatore",
+          "Sunita Malhotra, Professor, Indira Gandhi National Open University, New Delhi",
+          "Tarun Choubisa, Director, Pedagogy and Innovation (Science), Seed2Sapling Education Foundation, Bengaluru",
+          "Vijay Pal Singh, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Adithi Muralidhar, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Ankush Gupta, Associate Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Anurag Behar, CEO, Azim Premji Foundation, Member, National Curriculum Framework Oversight Committee"
+        ],
+        "concepts": [
+          "Professor",
+          "Head",
+          "Honorary Professor",
+          "Associate Professor",
+          "Teacher Developer",
+          "TGT",
+          "Chairperson",
+          "Scientific Officer",
+          "CEO",
+          "Member"
+        ],
+        "context_relation": "List of educational professionals and their roles in various institutions.",
+        "limitations": [
+          "The list does not include specific details about the institutions or the roles of the individuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26418,9 +26474,36 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page with names and titles of individuals associated with educational institutions and research organizations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "B. K. Sharma, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Gajanan Londhe, Director, Samvit Research Foundation, Bengaluru",
+          "K. K. Arora, Former Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "Manjul Bhargava, Professor, Princeton University & Co-Chairperson, NSTC",
+          "Manjushree Chaudhuri, Former PGT (Physics), Delhi Public School, R.K. Puram, New Delhi, La Grande Boissière Campus of International School, Geneva",
+          "Mridula Arora, Principal, Navyug School, Sarojini Nagar, New Delhi",
+          "Pushpa Tyagi, Former Head of Department (Physics), Sanskriti Sc"
+        ],
+        "concepts": [
+          "educational institutions",
+          "research organizations",
+          "professors",
+          "directors",
+          "university",
+          "research foundation",
+          "physics",
+          "NSTC"
+        ],
+        "context_relation": "The page lists the names and titles of individuals associated with educational institutions and research organizations.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the individuals' roles or responsibilities."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
