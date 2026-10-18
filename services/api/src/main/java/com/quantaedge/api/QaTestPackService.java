@@ -58,7 +58,8 @@ public class QaTestPackService {
       @Value("${app.qa.enabled:false}") boolean qaEnabled,
       @Value("${app.qa.environment-approved:false}") boolean environmentApproved,
       @Value("${app.qa.environment-label:}") String environmentLabel,
-      @Value("${app.qa.fixture-password:QaTest!2026}") String fixturePassword) {
+      @Value("${app.qa.target-database:}") String targetDatabaseName,
+      @Value("${app.qa.fixture-password:}") String fixturePassword) {
     this.jdbc = jdbc;
     this.springEnvironment = springEnvironment;
     this.transaction = new TransactionTemplate(transactionManager);
