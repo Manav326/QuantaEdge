@@ -165,6 +165,7 @@ public class InstitutionTenantContextService {
     // remain protected below. An institution selector must not be used to grant the child a
     // membership as a side effect of profile creation or editing.
     if (requestPath.equals("/api/v1/students/preview")
+        || requestPath.matches("^/api/v1/students/me/(?:profile|profile-photo|language)$")
         || requestPath.equals("/api/v1/guardians/children")
         || requestPath.equals("/api/v1/guardians/children/archived")
         || requestPath.matches("^/api/v1/guardians/children/[0-9]+(?:/(?:restore|profile|credentials))?$")) {
