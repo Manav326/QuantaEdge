@@ -634,3 +634,12 @@ html[data-qe-appearance] .tutor-composer textarea,
 html[data-qe-appearance] .qe-language-switcher--menu-setting select {
   border-color: var(--qe-color-border);
 }
+
+/* School enrollment issue feedback uses existing semantic colours from ColorThemeProvider. */
+.qe-enrollment-issue{display:flex;align-items:flex-start;gap:14px;margin:14px 20px;padding:14px 16px;border:1px solid var(--qe-color-error);border-radius:14px;background:var(--qe-color-error-container);color:var(--qe-color-on-error-container);box-shadow:0 1px 2px rgb(0 0 0 / .04)}
+.qe-enrollment-issue-copy{min-width:0;flex:1}
+.qe-enrollment-issue-copy strong{display:block;font-size:13px;line-height:1.5}
+.qe-enrollment-issue-copy p{font-size:12px;line-height:1.6;margin:4px 0 0}
+.qe-enrollment-issue-dismiss{flex:0 0 auto;border:0;background:transparent;color:inherit;font-size:22px;line-height:1;padding:0 4px;cursor:pointer}
+.qe-enrollment-issue-dismiss:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:4px}
+@media(max-width:600px){.qe-enrollment-issue{margin:10px 12px;padding:12px;gap:8px}}
