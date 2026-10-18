@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "95a43208932d6ff26dd5854f81bca490029f2e8adfe5c7014d77579a31697be0",
+  "raw_analysis_sha256": "3509ff28e707179cf48684ca4b910a20df12e4b51ed542e882b6579770aaaca2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:01:59Z",
+      "checkpointed_at": "2026-10-18T06:05:29Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:02:19Z",
+      "checkpointed_at": "2026-10-18T06:05:48Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -36468,6 +36468,184 @@
         "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
         "limitations": [
           "The table does not specify the samples tested."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "798ddea229c3ca87760fe97b",
+      "asset_sha256": "1be5cbdd6d0378ab9c85a562574e632d89ca6c4056d5757d90f2cdd6e8d8c061",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/1be5cbdd6d0378ab9c85a562574e632d89ca6c4056d5757d90f2cdd6e8d8c061.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "1. Sample A",
+          "2. Sample B",
+          "3. Sample C",
+          "4. Sample D",
+          "5. Sample E"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Testing nature of samples"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table only shows the color change for neutral samples.",
+          "The table does not provide information on the pH of the samples."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:06:29Z",
+      "effective_analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No. Name of the sample",
+          "Neutral",
+          "1. Sample A",
+          "2. Sample B",
+          "3. Sample C",
+          "4. Sample D",
+          "5. Sample E"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Testing nature of samples"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table only shows the color change for neutral samples.",
+          "The table does not provide information on the pH of the samples."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c87b1f2d8b81e90c202489fe",
+      "asset_sha256": "668684faf62ad993445a450901556457326f6e09b25bf6c09a251298f8f554d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/668684faf62ad993445a450901556457326f6e09b25bf6c09a251298f8f554d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:07:00Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9b03c123bd174ebb4fd61da7",
+      "asset_sha256": "19b3091852b9efd2b858f5936ee23e0acfe2dac2c5a880b18825c8dac0eeb842",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 29,
+      "asset_path": "assets/19b3091852b9efd2b858f5936ee23e0acfe2dac2c5a880b18825c8dac0eeb842.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c525181efc99d3672edf4fd0a364582fe012100a1ad64f4321c12748f68e450",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No.",
+          "Name of the sample",
+          "Neutral",
+          "Blue litmus paper",
+          "Red litmus paper"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Sample testing"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table does not specify the types of samples tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:07:40Z",
+      "effective_analysis": {
+        "visual_summary": "A table comparing the color change of blue and red litmus papers after adding drops of different samples.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.1:2.1: Testing the nature of samples with blue and red litmus papers",
+          "Colour of blue litmus paper after putting a drop of sample",
+          "Colour of red litmus paper after putting a drop of sample",
+          "S.No.",
+          "Name of the sample",
+          "Neutral",
+          "Blue litmus paper",
+          "Red litmus paper"
+        ],
+        "concepts": [
+          "Litmus papers",
+          "Color change",
+          "Neutral",
+          "Sample testing"
+        ],
+        "context_relation": "The table is used to test the nature of different samples using blue and red litmus papers.",
+        "limitations": [
+          "The table does not specify the types of samples tested."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
