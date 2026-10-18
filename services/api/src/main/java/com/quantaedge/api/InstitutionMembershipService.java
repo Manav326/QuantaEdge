@@ -107,6 +107,7 @@ public class InstitutionMembershipService {
       """,institutionId,membershipId,userId,actorUserId,normalSource(source));
   }
 
+  @Transactional
   public void requireExistingMembership(AuthContext context,InstitutionTenantContext tenant) {
     if(context==null || tenant==null) throw missingInstitution();
     if(context.isStudent()) {
@@ -116,8 +117,29 @@ public class InstitutionMembershipService {
           join student st on st.id=m.student_id and st.active=true
           where m.institution_id=? and m.student_id=? and m.status='ACTIVE')
         """,Boolean.class,tenant.institutionId(),context.studentId());
-      if(!Boolean.TRUE.equals(member)) throw missingMembership();
-      return;
+      if(Boolean.TRUE.equals(member)) return;
+
+      // A legacy account may already have an audited institution-user membership while its
+      // learner profile was created or repaired later. Mirror only that same institution
+      // relationship; never infer membership from another tenant or from the login selector.
+      List<Map<String,Object>> profile=jdbc.queryForList("""
+        select user_account_id from student
+        where id=? and active=true and environment='PRODUCTION'
+        """,context.studentId());
+      if(!profile.isEmpty() && profile.getFirst().get("user_account_id") instanceof Number userId) {
+        Boolean accountAlreadyMember=jdbc.queryForObject("""
+          select exists(select 1 from institution_user_membership um
+            join institution_tenant t on t.id=um.institution_id and t.status='ACTIVE'
+            join user_account u on u.id=um.user_id and u.active=true
+            where um.institution_id=? and um.user_id=? and um.status='ACTIVE')
+          """,Boolean.class,tenant.institutionId(),userId.longValue());
+        if(Boolean.TRUE.equals(accountAlreadyMember)) {
+          ensureStudentMembership(context.studentId(),tenant.institutionId(),
+              "EXISTING_ACCOUNT_PROFILE_RECONCILIATION",userId.longValue());
+          return;
+        }
+      }
+      throw missingMembership();
     }
     if(context.isParent()) {
       Boolean member=jdbc.queryForObject("""
