@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 651,
+    "assets_selected": 655,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 650,
-    "assets_remaining": 1428,
-    "assets_completion_percent": 31.3,
-    "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 646,
+    "assets_analyzed": 653,
+    "assets_remaining": 1425,
+    "assets_completion_percent": 31.4,
+    "assets_failed": 7,
+    "assets_skipped_from_checkpoint": 650,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:02:46Z"
+      "checkpointed_at": "2026-10-18T12:09:48Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -19341,6 +19341,126 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T12:08:35Z"
+    },
+    {
+      "asset_id": "d516fb572681b32ff90a6bef",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d57acd814bf0b0819c3fda2e09f1bc42b5638e39a618169ad6d84ab8bdfbe86a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with names and titles of individuals associated with educational institutions and research organizations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "B. K. Sharma, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Gajanan Londhe, Director, Samvit Research Foundation, Bengaluru",
+          "K. K. Arora, Former Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "Manjul Bhargava, Professor, Princeton University & Co-Chairperson, NSTC",
+          "Manjushree Chaudhuri, Former PGT (Physics), Delhi Public School, R.K. Puram, New Delhi, La Grande Boissière Campus of International School, Geneva",
+          "Mridula Arora, Principal, Navyug School, Sarojini Nagar, New Delhi",
+          "Pushpa Tyagi, Former Head of Department (Physics), Sanskriti Sc"
+        ],
+        "concepts": [
+          "educational institutions",
+          "research organizations",
+          "professors",
+          "directors",
+          "university",
+          "research foundation",
+          "physics",
+          "NSTC",
+          "International School"
+        ],
+        "context_relation": "The page lists the names and titles of individuals associated with educational institutions and research organizations.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the content or purpose of the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:10:17Z"
+    },
+    {
+      "asset_id": "6ba3c501c765fd63fb0f8383",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d57acd814bf0b0819c3fda2e09f1bc42b5638e39a618169ad6d84ab8bdfbe86a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:10:35Z"
+    },
+    {
+      "asset_id": "54031e442096e7dca3ca762c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d57acd814bf0b0819c3fda2e09f1bc42b5638e39a618169ad6d84ab8bdfbe86a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:10:50Z"
+    },
+    {
+      "asset_id": "d270cae70eb379681c073013",
+      "asset_sha256": "8804d7ef6ac14af330a05600ba142d995e5f266e744b4049dc5e0f6d7e9fd1f0",
+      "page_text_context_sha256": "d57acd814bf0b0819c3fda2e09f1bc42b5638e39a618169ad6d84ab8bdfbe86a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
