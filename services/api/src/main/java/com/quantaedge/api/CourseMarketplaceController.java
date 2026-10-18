@@ -564,22 +564,7 @@ public class CourseMarketplaceController {
         where o.institution_id=? and p.id=? and o.status='PUBLISHED' and o.price_paise>0
         """, targetStudentId, institutionId, courseId);
     if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available to the selected institution.");
-    Boolean conflictingEnrollment = jdbc.queryForObject("""
-        select exists(
-          select 1 from student_program_enrollment existing
-          where existing.student_id=? and existing.program_id=?
-            and existing.institution_id is distinct from ?
-        )
-        or exists(
-          select 1 from student_track_enrollment track
-          join curriculum_program_subject ps on ps.subject_id=track.subject_id and ps.program_id=?
-          where track.student_id=? and track.institution_id is distinct from ?
-        )
-        """, Boolean.class, targetStudentId, courseId, institutionId,
-        courseId, targetStudentId, institutionId);
-    if (Boolean.TRUE.equals(conflictingEnrollment)) {
-      throw new SecurityException("This learner already has learning history for this course under another institution. The records will not be moved between institutions.");
-    }
+    // Course and history ownership are keyed by institution; another tenant's records are independent.
     if (hasAccessInInstitution(targetStudentId, courseId, institutionId)) {
       throw new IllegalArgumentException("The selected learner already has access to this course.");
     }

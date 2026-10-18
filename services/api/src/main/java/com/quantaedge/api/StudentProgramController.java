@@ -177,7 +177,7 @@ public class StudentProgramController {
     }
     Map<String,Object> course = matches.getFirst();
 
-    Boolean hasAuthorisedEnrolment = jdbc.queryForObject    Boolean hasAuthorisedEnrolment = jdbc.queryForObject("""
+    Boolean hasAuthorisedEnrolment = jdbc.queryForObject("""
       select
         exists(select 1 from student_program_enrollment e
           where e.student_id=? and e.program_id=? and e.institution_id=?

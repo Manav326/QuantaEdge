@@ -249,7 +249,7 @@ public class LearningStateService {
           and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
           and q.question_type='MCQ'
       """,Long.class,studentId,lessonId);
-      String marker="[{""sourceLessonId"":"+lessonId+"}]";
+      String marker = "[{\"sourceLessonId\":" + lessonId + "}]";
       completedPractice=jdbc.queryForObject("""
         select count(*) from student_practice_session
         where student_id=? and status='COMPLETED' and topic_selections @> ?::jsonb
@@ -263,7 +263,7 @@ public class LearningStateService {
           and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
           and q.question_type='MCQ'
       """,Long.class,studentId,institutionId,lessonId);
-      String marker="[{""sourceLessonId"":"+lessonId+"}]";
+      String marker = "[{\"sourceLessonId\":" + lessonId + "}]";
       completedPractice=jdbc.queryForObject("""
         select count(*) from student_practice_session
         where student_id=? and institution_id=? and status='COMPLETED' and topic_selections @> ?::jsonb
