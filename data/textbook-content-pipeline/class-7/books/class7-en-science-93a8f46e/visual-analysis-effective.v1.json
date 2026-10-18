@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "aa87309ae9d7101a0d5532324474bd478af387ec6552496a983c38f44b084c8b",
+  "raw_analysis_sha256": "a5f3b4b116831d2643879028bf5bc7af5ec4fb0505b97b26b6fc8387911bfa6b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T16:30:36Z",
+      "checkpointed_at": "2026-10-18T16:36:27Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -53170,6 +53170,260 @@
         "context_relation": "The image illustrates the neutralisation process between an acid and a base using litmus tests.",
         "limitations": [
           "The image does not show the actual chemical reaction occurring in the test tube."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dba62c7f0f0d995a2314042f",
+      "asset_sha256": "c7e9e92ed18f316c8bf4c177fbdd2676217790dea8654832d7c436a5fc45ef63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/c7e9e92ed18f316c8bf4c177fbdd2676217790dea8654832d7c436a5fc45ef63.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a drop of blue litmus solution turning red when added to a lemon juice solution, and the solution turning blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus test",
+          "Neutralization"
+        ],
+        "context_relation": "The image illustrates the neutralization process between an acid and a base, as described in the textbook.",
+        "limitations": [
+          "The image does not show the actual reaction between the acid and base, only the visual representation of the litmus test results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:37:49Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a drop of blue litmus solution turning red when added to a lemon juice solution, and the solution turning blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus test",
+          "Neutralization"
+        ],
+        "context_relation": "The image illustrates the neutralization process between an acid and a base, as described in the textbook.",
+        "limitations": [
+          "The image does not show the actual reaction between the acid and base, only the visual representation of the litmus test results."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a24b005fca71d0300a8cad66",
+      "asset_sha256": "deb5ac3ba7eafeb2bace5af98b8d9ea2fa7bcb9578e632bffaef2fa435d14c35",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/deb5ac3ba7eafeb2bace5af98b8d9ea2fa7bcb9578e632bffaef2fa435d14c35.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A test tube with a red solution, which turns blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised",
+          "the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lemon juice",
+          "Lime water"
+        ],
+        "context_relation": "The image shows a chemical reaction where an acid (lemon juice) is neutralized by a base (lime water).",
+        "limitations": [
+          "The image does not show the actual chemical reaction taking place."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:39:12Z",
+      "effective_analysis": {
+        "visual_summary": "A test tube with a red solution, which turns blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised",
+          "the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lemon juice",
+          "Lime water"
+        ],
+        "context_relation": "The image shows a chemical reaction where an acid (lemon juice) is neutralized by a base (lime water).",
+        "limitations": [
+          "The image does not show the actual chemical reaction taking place."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "11ee6a5e1456a5939d09be00",
+      "asset_sha256": "243858c9bddd761d24380c7cb1029d84a003cc002c3d630bac8f463a238feef1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/243858c9bddd761d24380c7cb1029d84a003cc002c3d630bac8f463a238feef1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a focus on the color change of litmus solution.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised",
+          "the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus solution",
+          "Color change",
+          "Neutralization"
+        ],
+        "context_relation": "The image illustrates the neutralization process between an acid and a base, as described in the text.",
+        "limitations": [
+          "The image does not show the actual reaction process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:40:33Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a focus on the color change of litmus solution.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised",
+          "the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus solution",
+          "Color change",
+          "Neutralization"
+        ],
+        "context_relation": "The image illustrates the neutralization process between an acid and a base, as described in the text.",
+        "limitations": [
+          "The image does not show the actual reaction process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8d448eaf1182dbd0d4d7a1f",
+      "asset_sha256": "aab289addc2691cef64e12e5c270944d2e661ffbe263bb95a0e46d775a31244a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/aab289addc2691cef64e12e5c270944d2e661ffbe263bb95a0e46d775a31244a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ef65e37f459fd843b00e18e03e435102b25a02da80bbbc1a5ffa252748540bfb",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A chemical reaction involving the neutralization of an acid by a base.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red.",
+          "When lime water is added to this test tube, the colour of the solution eventually changes from red to blue.",
+          "This shows that the solution in the test tube is no longer acidic.",
+          "Lime water has neutralised the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lime water",
+          "Acidic solution",
+          "Neutral solution"
+        ],
+        "context_relation": "The image illustrates a chemical reaction where an acid (lemon juice) is neutralized by a base (lime water).",
+        "limitations": [
+          "The image does not show the actual chemical reaction taking place."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T16:41:49Z",
+      "effective_analysis": {
+        "visual_summary": "A chemical reaction involving the neutralization of an acid by a base.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red.",
+          "When lime water is added to this test tube, the colour of the solution eventually changes from red to blue.",
+          "This shows that the solution in the test tube is no longer acidic.",
+          "Lime water has neutralised the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lime water",
+          "Acidic solution",
+          "Neutral solution"
+        ],
+        "context_relation": "The image illustrates a chemical reaction where an acid (lemon juice) is neutralized by a base (lime water).",
+        "limitations": [
+          "The image does not show the actual chemical reaction taking place."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
