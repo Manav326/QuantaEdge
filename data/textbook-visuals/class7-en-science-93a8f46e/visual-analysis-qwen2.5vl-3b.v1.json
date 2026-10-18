@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1010,
+    "assets_selected": 1013,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1008,
-    "assets_remaining": 6480,
+    "assets_analyzed": 1011,
+    "assets_remaining": 6477,
     "assets_completion_percent": 13.5,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1005,
+    "assets_skipped_from_checkpoint": 1008,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:20:56Z"
+      "checkpointed_at": "2026-10-18T19:23:54Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:21:18Z"
+      "checkpointed_at": "2026-10-18T19:24:18Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -37318,6 +37318,123 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T19:23:08Z"
+    },
+    {
+      "asset_id": "e0dc8646f500af3bd44d1ce5",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:24:26Z"
+    },
+    {
+      "asset_id": "2562e5e29d1a9518325ff0d6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:24:32Z"
+    },
+    {
+      "asset_id": "d13303ed8dd2b6d9ca30b82a",
+      "asset_sha256": "42f23e93f97244046edf306bf1b872f73f385d6be212032384ca2fa60d5f51af",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "page-0041.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a question about testing solutions for acidity or basicity using indicators.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "5. Manya is blindfolded. She is given two unknown solutions to test and determine whether they are acidic or basic. Which indicator should Manya use to test the solutions and why?",
+          "6. Could you suggest various materials which can be used for writing the message on the white sheet of paper (given at the beginning of the chapter) and what could be in the spray bottle? Make a table of various possible combinations and the colour of the writing obtained.",
+          "7. Grape juice was mixed with red rose extract; the mixture got a tint of red colour. What will happen if baking soda is added to this mixture? Justify your answer.",
+          "8. Keerthi wrote a secret message to her grandmother on her birthday using orange juice. Can you assist her grandmother in revealing the message? Which indicator would you use to make it visible?",
+          "9. How can natural indicators be prepared? Explain by giving an example.",
+          "10. Three liquids are given to you. One is vinegar, another is a baking soda solution, and the third is a sugar solution. Can you identify them only using turmeric paper? Explain.",
+          "11. The extract of red rose turns the liquid X to green. What will the nature of liquid X be? What will happen when excess of amla juice is added to liquid X?",
+          "12. Observe and analyse the information given in the following flowchart. Complete the missing information.",
+          "Imagine a garden with plants showing signs of poor health.",
+          "The soil can be _____ in nature.",
+          "The soil can be _____ in nature.",
+          "Which indicator can be used to test the nature of the soil?",
+          "The acidic soil can be treated with _____",
+          "The basic soil can be treated with _____"
+        ],
+        "concepts": [
+          "Acidity",
+          "Basis",
+          "Indicator",
+          "Grape juice",
+          "Red rose extract",
+          "Baking soda",
+          "Orange juice",
+          "Turmeric paper",
+          "Vinegar",
+          "Baking soda solution",
+          "Sugar solution",
+          "Amla juice",
+          "Soil",
+          "Acidic soil",
+          "Basic soil"
+        ],
+        "context_relation": "Acidic and Basic Substances",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:26:27Z"
     }
   ]
 }
