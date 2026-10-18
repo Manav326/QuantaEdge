@@ -69,7 +69,7 @@ export default function InstitutionBrandAssetEditor({ assetType, file, onCancel,
   }, [stageSize, ratio]);
 
   const fitScale = naturalSize.width && naturalSize.height ? Math.min(stageSize.width / naturalSize.width, stageSize.height / naturalSize.height) : 1;
-  const minZoom = naturalSize.width && naturalSize.height && frame.width && frame.height ? Math.max(1, frame.width / (naturalSize.width * fitScale), frame.height / (naturalSize.height * fitScale)) : 1;
+  const minZoom = naturalSize.width && naturalSize.height && frame.width && frame.height ? Math.max(frame.width / (naturalSize.width * fitScale), frame.height / (naturalSize.height * fitScale)) : 1;
   const effectiveZoom = Math.max(zoom, minZoom);
   const displayScale = fitScale * effectiveZoom;
   const imageWidth = naturalSize.width * displayScale;
@@ -83,6 +83,12 @@ export default function InstitutionBrandAssetEditor({ assetType, file, onCancel,
   const imageLeft = (stageSize.width - imageWidth) / 2 + offsetX;
   const imageTop = (stageSize.height - imageHeight) / 2 + offsetY;
   const maxZoom = Math.max(minZoom + 1.6, minZoom * 3);
+
+  useEffect(() => {
+    if (!naturalSize.width || !naturalSize.height) return;
+    setZoom(minZoom);
+    setOffset({ x: 0, y: 0 });
+  }, [naturalSize.width, naturalSize.height, minZoom, aspect]);
 
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (!naturalSize.width || exporting) return;
