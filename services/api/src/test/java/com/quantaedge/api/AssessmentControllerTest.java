@@ -368,7 +368,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForObject(contains("count(distinct att.assessment_id)"), eq(Long.class), eq(7L)))
         .thenReturn(1L);
 
-    Map<String, Object> result = controller.studentResults("hi", 25, 0, student);
+    Map<String, Object> result = controller.studentResults("hi", 25, 0, student, TEST_TENANT);
 
     assertEquals(1L, result.get("total"));
     @SuppressWarnings("unchecked")
