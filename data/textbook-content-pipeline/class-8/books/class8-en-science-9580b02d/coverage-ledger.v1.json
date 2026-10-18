@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 602,
-    "successful_visual_analyses": 602,
-    "missing_visual_analyses": 1689,
+    "raw_analysis_result_rows": 605,
+    "successful_visual_analyses": 605,
+    "missing_visual_analyses": 1686,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1689,
+    "unresolved_count": 1686,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8669,7 +8669,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -8683,26 +8683,15 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
-          "peer interactions",
-          "understanding concepts",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -9207,7 +9196,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -9219,27 +9208,23 @@
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
-          "keywords",
-          "scientific activities",
-          "curiosity",
-          "exercises",
+          "Keep the curiosity alive",
+          "Keywords",
+          "NEP 2020",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "chapter_id": null,
@@ -24586,9 +24571,23 @@
       "asset_path": "assets/1afcafa433f622e047adc893e2fc0b69c7e91d3a7a019b89659531493848ba70.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from orange to yellow to beige.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors"
+        ],
+        "context_relation": "The image is likely a decorative element or a background for text.",
+        "limitations": [
+          "No specific content or information is provided within the image itself."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24604,9 +24603,18 @@
       "asset_path": "assets/048d95e1fb7a9da981c5e34f4be0ed58c5ad0928ddcde79ecc25d99f2598f26b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from light yellow to dark orange.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or header for educational content.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24622,9 +24630,24 @@
       "asset_path": "assets/fbd213a49a7e1eac4a863ab10c69507ff7c3675b0ffcda81ceebade15df10858.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a person holding a book and a globe, with a background of a cityscape.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Education",
+          "Global perspective",
+          "Book"
+        ],
+        "context_relation": "The illustration likely represents the theme of global education or the importance of reading.",
+        "limitations": [
+          "The image does not provide specific details about the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7e67178f98e341535a5321e9bb3350056be8964df6c6e27acf5b9489253188b0",
+  "raw_analysis_sha256": "7e0ba8d20aeff31bea8d8dd40a916d145793500bef973bb7d83ca16ff484ec62",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1804,36 +1804,25 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
-          "peer interactions",
-          "understanding concepts",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T16:54:08Z",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T17:42:46Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1847,26 +1836,15 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
-          "peer interactions",
-          "understanding concepts",
-          "reflecting on ideas",
-          "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -2628,7 +2606,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2640,36 +2618,32 @@
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
-          "keywords",
-          "scientific activities",
-          "curiosity",
-          "exercises",
+          "Keep the curiosity alive",
+          "Keywords",
+          "NEP 2020",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T16:55:29Z",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T17:47:18Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The page discusses the scientific heritage and encourages readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -2681,27 +2655,23 @@
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
-          "keywords",
-          "scientific activities",
-          "curiosity",
-          "exercises",
+          "Keep the curiosity alive",
+          "Keywords",
+          "NEP 2020",
+          "Indian texts",
           "pictorial questions",
           "puzzles",
           "multiple choice questions",
+          "challenging and engaging experience",
           "competencies",
           "evaluation"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on encouraging scientific thinking and understanding.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific examples or exercises for the exercises mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -25646,6 +25616,148 @@
         "context_relation": "The background serves as a backdrop for the text.",
         "limitations": [
           "No specific content or details are visible beyond the text and background."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7fc3b4c7cc90ac34fd45d9b3",
+      "asset_sha256": "1afcafa433f622e047adc893e2fc0b69c7e91d3a7a019b89659531493848ba70",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1afcafa433f622e047adc893e2fc0b69c7e91d3a7a019b89659531493848ba70.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from orange to yellow to beige.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors"
+        ],
+        "context_relation": "The image is likely a decorative element or a background for text.",
+        "limitations": [
+          "No specific content or information is provided within the image itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T17:49:00Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from orange to yellow to beige.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "warm colors"
+        ],
+        "context_relation": "The image is likely a decorative element or a background for text.",
+        "limitations": [
+          "No specific content or information is provided within the image itself."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b5cd6bbb34a22dd4bb887ccc",
+      "asset_sha256": "048d95e1fb7a9da981c5e34f4be0ed58c5ad0928ddcde79ecc25d99f2598f26b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/048d95e1fb7a9da981c5e34f4be0ed58c5ad0928ddcde79ecc25d99f2598f26b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from light yellow to dark orange.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or header for educational content.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T17:50:40Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a warm color scheme transitioning from light yellow to dark orange.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or header for educational content.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "10226b07a42bc7b4892164de",
+      "asset_sha256": "fbd213a49a7e1eac4a863ab10c69507ff7c3675b0ffcda81ceebade15df10858",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/fbd213a49a7e1eac4a863ab10c69507ff7c3675b0ffcda81ceebade15df10858.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a person holding a book and a globe, with a background of a cityscape.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Education",
+          "Global perspective",
+          "Book"
+        ],
+        "context_relation": "The illustration likely represents the theme of global education or the importance of reading.",
+        "limitations": [
+          "The image does not provide specific details about the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T17:52:17Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a person holding a book and a globe, with a background of a cityscape.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Education",
+          "Global perspective",
+          "Book"
+        ],
+        "context_relation": "The illustration likely represents the theme of global education or the importance of reading.",
+        "limitations": [
+          "The image does not provide specific details about the educational content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
