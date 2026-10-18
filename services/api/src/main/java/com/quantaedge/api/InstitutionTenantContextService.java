@@ -213,15 +213,12 @@ public class InstitutionTenantContextService {
       member = jdbc.queryForObject("""
           select exists(
             select 1
-            from guardian_student gs
-            join student st on st.id=gs.student_id and st.active=true
-            join institution_membership m on m.student_id=st.id
-              and m.institution_id=? and m.status='ACTIVE'
+            from institution_user_membership m
+            join user_account u on u.id=m.user_id and u.active=true
             join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-            where gs.guardian_user_id=? and gs.active=true
-              and gs.consent_status='CONSENTED'
+            where m.institution_id=? and m.user_id=? and m.status='ACTIVE'
           )
-          """, Boolean.class, tenant.institutionId(), caller.userId());
+          """,Boolean.class,tenant.institutionId(),caller.userId());
     } else {
       member = false;
     }
