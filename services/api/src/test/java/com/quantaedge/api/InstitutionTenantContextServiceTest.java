@@ -80,11 +80,14 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
-  void parentChildCollectionPathAlsoRequiresTenantContext() {
-    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext(
-        "/api/v1/guardians/children"));
-    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext(
-        "/api/v1/guardians/children/42/certificates"));
+  void everyChildLifecycleRouteIsInstitutionScoped() {
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children/archived"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children/42"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children/42/restore"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children/42/profile"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children/42/credentials"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/guardians/children/42/certificates"));
   }
 
   @Test
