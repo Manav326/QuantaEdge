@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 344,
+    "assets_selected": 347,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 342,
-    "assets_remaining": 1949,
-    "assets_completion_percent": 14.9,
+    "assets_analyzed": 345,
+    "assets_remaining": 1946,
+    "assets_completion_percent": 15.1,
     "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 339,
+    "assets_skipped_from_checkpoint": 342,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T03:22:39Z"
+      "checkpointed_at": "2026-10-18T03:29:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T03:23:28Z"
+      "checkpointed_at": "2026-10-18T03:29:55Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -10302,6 +10302,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T03:27:57Z"
+    },
+    {
+      "asset_id": "d838dde6782f2d985c4d6ab2",
+      "asset_sha256": "8e11e4ba5967272ca469cfe70ab74c1308aca8e5573a5df23632f7a43dedd5bb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/8e11e4ba5967272ca469cfe70ab74c1308aca8e5573a5df23632f7a43dedd5bb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T03:31:24Z"
+    },
+    {
+      "asset_id": "acbff50e6c9c21bb7269c501",
+      "asset_sha256": "76ffd8bd7be705e0bd4f12edde7f9e38dfaf5ed70de574ccb6ba51586c7fc11c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/76ffd8bd7be705e0bd4f12edde7f9e38dfaf5ed70de574ccb6ba51586c7fc11c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurred nature",
+          "No specific text or labels visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T03:32:54Z"
+    },
+    {
+      "asset_id": "de79f5437022e069c346ac39",
+      "asset_sha256": "749ae8f0463d9376224d812a86fbdda72cedd4df66e2cc98da5b3e3764fa9160",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/749ae8f0463d9376224d812a86fbdda72cedd4df66e2cc98da5b3e3764fa9160.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T03:34:22Z"
     }
   ]
 }
