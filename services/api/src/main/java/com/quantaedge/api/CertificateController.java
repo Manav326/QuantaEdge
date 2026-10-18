@@ -236,8 +236,11 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
@@ -260,11 +263,11 @@ public class CertificateController {
         LEFT JOIN LATERAL (
           SELECT cert.id,cert.certificate_number,cert.status
           FROM student_certificate cert
-          WHERE cert.student_id=att.student_id AND cert.assessment_attempt_id=att.id
+          WHERE cert.student_id=att.student_id AND cert.institution_id=att.institution_id AND cert.assessment_attempt_id=att.id
             AND cert.achievement_type='ASSESSMENT_PASS'
           ORDER BY cert.issued_at DESC,cert.id DESC LIMIT 1
         ) existing ON true
-        WHERE att.student_id=?
+        WHERE att.student_id=? AND att.institution_id=?
           AND (
             existing.id IS NOT NULL
             OR (
@@ -276,22 +279,22 @@ public class CertificateController {
               AND ((s.program_id is null and st.class_code=cc.code
                 and (cc.code not in ('6','7','8') or (p.id is not null and exists(
                   SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.program_id=p.id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=att.institution_id AND spe.program_id=p.id AND spe.status='ACTIVE'
                 ))))
                 or (s.program_id is not null and exists(
                   SELECT 1 FROM student_program_enrollment spe
                   JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
-                  WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=att.institution_id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
                 )))
               AND EXISTS (
                 SELECT 1 FROM student_track_enrollment ste
-                WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                WHERE ste.student_id=st.id AND ste.institution_id=att.institution_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
               )
             )
           )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
-        """, context.studentId(), minimumPassPercent);
+        """, context.studentId(),institutionId,minimumPassPercent);
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
@@ -306,8 +309,11 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/assessment-eligibility")
   public Map<String, Object> assessmentCertificateEligibility(
       @RequestParam String attemptIds,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     Set<Long> uniqueIds = new LinkedHashSet<>();
     for (String raw : attemptIds.split(",")) {
       String value = raw.trim();
@@ -328,6 +334,7 @@ public class CertificateController {
     String placeholders = String.join(",", java.util.Collections.nCopies(uniqueIds.size(), "?"));
     List<Object> args = new ArrayList<>();
     args.add(context.studentId());
+    args.add(institutionId);
     args.addAll(uniqueIds);
     String sql = """
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
@@ -340,7 +347,7 @@ public class CertificateController {
                  JOIN student active_st ON active_st.id=ste.student_id AND active_st.active=true
                  JOIN curriculum_subject active_s ON active_s.id=ste.subject_id AND active_s.active=true
                  JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id AND active_cc.active=true
-                 WHERE ste.student_id=att.student_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                 WHERE ste.student_id=att.student_id AND ste.institution_id=att.institution_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
                    AND active_st.id=att.student_id AND active_s.id=s.id
                    AND ((active_s.program_id is null and active_cc.code=active_st.class_code
                        and (active_cc.code not in ('6','7','8') or exists(
@@ -348,14 +355,14 @@ public class CertificateController {
                          join curriculum_program_subject active_map on active_map.program_id=active_course.id
                            and active_map.class_id=active_s.class_id and active_map.subject_id=active_s.id
                          join student_program_enrollment active_spe on active_spe.program_id=active_course.id
-                           and active_spe.student_id=active_st.id and active_spe.status='ACTIVE'
+                           and active_spe.student_id=active_st.id and active_spe.institution_id=att.institution_id and active_spe.status='ACTIVE'
                          where active_course.class_id=active_cc.id and active_course.code='CLASS_' || active_cc.code
                            and active_course.curriculum_version='CURRENT' and active_course.status='ACTIVE'
                        )))
                      or (active_s.program_id is not null and exists(
                        select 1 from student_program_enrollment active_spe
                        join curriculum_program active_p on active_p.id=active_spe.program_id and active_p.status='ACTIVE'
-                       where active_spe.student_id=active_st.id and active_spe.program_id=active_s.program_id and active_spe.status='ACTIVE'
+                       where active_spe.student_id=active_st.id and active_spe.institution_id=att.institution_id and active_spe.program_id=active_s.program_id and active_spe.status='ACTIVE'
                      )))
                ) AS active_subject_track,
                COALESCE(progress.total_lessons,0) AS published_lessons,
@@ -377,20 +384,20 @@ public class CertificateController {
                  COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
           FROM curriculum_chapter ch
           JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-          LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.lesson_id=l.id
+          LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.institution_id=att.institution_id AND p.lesson_id=l.id
           WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         ) progress ON true
         LEFT JOIN LATERAL (
           SELECT stored.id,stored.certificate_number,stored.status
           FROM student_certificate stored
-          WHERE stored.student_id=att.student_id AND stored.assessment_attempt_id=att.id
+          WHERE stored.student_id=att.student_id AND stored.institution_id=att.institution_id AND stored.assessment_attempt_id=att.id
             AND stored.achievement_type='ASSESSMENT_PASS'
           ORDER BY stored.issued_at DESC,stored.id DESC LIMIT 1
         ) cert ON true
         WHERE att.student_id=?
         ORDER BY att.released_at DESC NULLS LAST,att.id DESC
         """;
-    sql = sql.replace("WHERE att.student_id=?", "WHERE att.student_id=? AND att.id IN (" + placeholders + ")");
+    sql = sql.replace("WHERE att.student_id=?", "WHERE att.student_id=? AND att.institution_id=? AND att.id IN (" + placeholders + ")");
     List<Map<String, Object>> rows = jdbc.queryForList(sql, args.toArray());
     List<Map<String, Object>> items = new ArrayList<>();
     for (Map<String, Object> row : rows) {
