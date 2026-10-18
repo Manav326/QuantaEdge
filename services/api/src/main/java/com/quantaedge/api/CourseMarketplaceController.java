@@ -973,7 +973,11 @@ public class CourseMarketplaceController {
       select id,status from institution_membership
       where institution_id=? and student_id=? for update
       """,institutionId,studentId);
-    boolean wasActive=!previous.isEmpty() && "ACTIVE".equals(String.valueOf(previous.getFirst().get("status")));
+    String previousStatus=previous.isEmpty()?"":String.valueOf(previous.getFirst().get("status"));
+    if("SUSPENDED".equals(previousStatus)) {
+      throw new SecurityException("Membership in the selected institution is suspended. Contact the institution administrator before purchasing or enrolling.");
+    }
+    boolean wasActive="ACTIVE".equals(previousStatus);
     Long membershipId=jdbc.queryForObject("""
       insert into institution_membership(
         institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at
