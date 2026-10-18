@@ -70,7 +70,9 @@ SELECT student_id, course_id,
 FROM legacy_learners
 ON CONFLICT (student_id, program_id) DO NOTHING;
 
--- Restore only missing active track links; existing statuses and history are left alone.
+-- Active course enrollment must have active subject tracks, as in the normal
+-- course activation API. This restores old track states only for learners whose matching
+-- course is actively selected; paused learners remain untouched.
 INSERT INTO student_track_enrollment(student_id, subject_id, status)
 SELECT spe.student_id, s.id, 'ACTIVE'
 FROM student_program_enrollment spe
@@ -78,7 +80,9 @@ JOIN curriculum_program p ON p.id = spe.program_id AND p.code IN ('CLASS_6','CLA
 JOIN curriculum_program_subject ps ON ps.program_id = p.id
 JOIN curriculum_subject s ON s.id = ps.subject_id AND s.program_id = p.id AND s.active = true
 WHERE spe.status = 'ACTIVE'
-ON CONFLICT (student_id, subject_id) DO NOTHING;
+ON CONFLICT (student_id, subject_id) DO UPDATE
+SET status = 'ACTIVE', updated_at = now()
+WHERE student_track_enrollment.status <> 'ACTIVE';
 
 INSERT INTO app_metadata(key, value)
 VALUES ('schema', 'class-6-8-course-catalogue-and-content-scope-v122')
