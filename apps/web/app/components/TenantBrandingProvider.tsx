@@ -22,10 +22,14 @@ export type TenantBrand = {
   themeTokens?: Record<string, unknown>;
 };
 
+export type EnrollmentIssueKind = 'invalid' | 'rate-limited' | 'temporary' | 'mismatch';
+
 type TenantBrandingValue = {
   brand: TenantBrand | null;
   isResolving: boolean;
   institutionContextRequested: boolean;
+  enrollmentIssue: EnrollmentIssueKind | null;
+  clearEnrollmentIssue: () => void;
   resolveInstitutionCode: (code: string) => Promise<boolean>;
   clearTenantBrand: () => void;
 };
@@ -34,6 +38,8 @@ const TenantBrandingContext = createContext<TenantBrandingValue>({
   brand: null,
   isResolving: false,
   institutionContextRequested: false,
+  enrollmentIssue: null,
+  clearEnrollmentIssue: () => undefined,
   resolveInstitutionCode: async () => false,
   clearTenantBrand: () => undefined,
 });
@@ -134,13 +140,32 @@ function readSessionCode(): string | null {
   catch { return null; }
 }
 
+const SERVER_BRANDING_COOKIES = [
+  { name: 'qe-tenant-student', path: '/student' },
+  { name: 'qe-tenant-login-student', path: '/login/student' },
+  { name: 'qe-tenant-signup', path: '/signup' },
+] as const;
+
+function saveTenantMetadataCookies(code: string | null) {
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  for (const cookie of SERVER_BRANDING_COOKIES) {
+    if (code) {
+      document.cookie = cookie.name + '=' + encodeURIComponent(code) +
+        '; Path=' + cookie.path + '; SameSite=Lax' + secure;
+    } else {
+      document.cookie = cookie.name + '=; Max-Age=0; Path=' + cookie.path + '; SameSite=Lax' + secure;
+    }
+  }
+}
+
 function saveSessionCode(code: string | null) {
   try {
     if (code) window.sessionStorage.setItem(BRAND_SESSION_KEY, code);
     else window.sessionStorage.removeItem(BRAND_SESSION_KEY);
   } catch {
-    // Branding is not an authentication control; storage denial falls back to the current page.
+    // session storage can be disabled; server-visible metadata cookies are independent.
   }
+  saveTenantMetadataCookies(code);
 }
 
 function hasControlCharacters(value: string): boolean {
@@ -194,6 +219,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const [brand, setBrand] = useState<TenantBrand | null>(null);
   const [isResolving, setIsResolving] = useState(true);
   const [institutionContextRequested, setInstitutionContextRequested] = useState(false);
+  const [enrollmentIssue, setEnrollmentIssue] = useState<EnrollmentIssueKind | null>(null);
 
   const resolveInstitutionCode = useCallback(async (input: string): Promise<boolean> => {
     const code = normalizedCode(input);
@@ -219,10 +245,14 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
 
   const clearTenantBrand = useCallback(() => {
     saveSessionCode(null);
+    savePendingJoinCode(null);
     setBrand(null);
     setInstitutionContextRequested(false);
+    setEnrollmentIssue(null);
     applyTenantIdentity(null);
   }, []);
+
+  const clearEnrollmentIssue = useCallback(() => setEnrollmentIssue(null), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -233,20 +263,19 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const hasUrlJoin = urlHasJoinParam();
       const urlJoin = joinCodeFromCurrentUrl();
       if (hasUrlJoin) {
+        setEnrollmentIssue(null);
         savePendingJoinCode(urlJoin, urlCode);
         // Invite secrets live in the URL fragment for transport; once safely stored in
         // session storage, remove them from the address bar/history before authentication.
-        if (urlJoin && readPendingJoinCode() === urlJoin) {
-          // Remove invite secrets from both the query string and fragment after session storage succeeds.
-          const cleanQuery = new URLSearchParams(window.location.search);
-          for (const key of ['joinCode', 'join_code', 'join']) cleanQuery.delete(key);
-          const safeSearch = cleanQuery.toString();
-          window.history.replaceState(
-            window.history.state,
-            '',
-            window.location.pathname + (safeSearch ? '?' + safeSearch : '')
-          );
-        }
+        // Invitation secrets must never remain in the address bar/history, including malformed values.
+        const cleanQuery = new URLSearchParams(window.location.search);
+        for (const key of ['joinCode', 'join_code', 'join']) cleanQuery.delete(key);
+        const safeSearch = cleanQuery.toString();
+        window.history.replaceState(
+          window.history.state,
+          '',
+          window.location.pathname + (safeSearch ? '?' + safeSearch : '')
+        );
       } else if (urlCode && readPendingJoinCode() && readPendingJoinTenantCode() !== urlCode) {
         savePendingJoinCode(null);
       }
@@ -262,6 +291,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
         if (!pathname.startsWith('/student')) return null;
         const joinCode = readPendingJoinCode();
         if (!joinCode) return null;
+        setEnrollmentIssue(null);
         try {
           const response = await fetch('/api/v1/institution/join', {
             method: 'POST',
@@ -271,24 +301,38 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
             body: JSON.stringify({ code: joinCode, institutionCode: expectedInstitutionCode || '' }),
           });
           if (!response.ok) {
-            // Keep the invite while unauthenticated so it can be redeemed after sign-in.
-            if (response.status !== 401 && response.status !== 403 && response.status < 500) {
+            if (response.status === 401 || response.status === 403) {
+              // Preserve the invitation while auth/workspace recovery redirects the learner to sign in.
+              return null;
+            }
+            if ([400, 404, 410, 422].includes(response.status)) {
               savePendingJoinCode(null);
+              setEnrollmentIssue('invalid');
+            } else if (response.status === 429) {
+              setEnrollmentIssue('rate-limited');
+            } else {
+              // Server/network failures are retryable; keep this tab's invitation for a safe retry.
+              setEnrollmentIssue('temporary');
             }
             return null;
           }
           const joined = await response.json() as { institutionCode?: string };
           const joinedCode = normalizedCode(joined.institutionCode);
-          if (expectedInstitutionCode && joinedCode !== expectedInstitutionCode) {
+          if (!joinedCode || (expectedInstitutionCode && joinedCode !== expectedInstitutionCode)) {
             savePendingJoinCode(null);
+            setEnrollmentIssue('mismatch');
             return null;
           }
           savePendingJoinCode(null);
+          setEnrollmentIssue(null);
           return joinedCode;
         } catch {
+          // The server may have committed membership before the connection failed.
+          // Repeating redemption is safe because the API is idempotent for active memberships.
+          setEnrollmentIssue('temporary');
           return null;
         }
-      };
+      }
 
       if (candidate) {
         setIsResolving(true);
@@ -312,7 +356,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           // A remembered school may belong to the previous account on this browser.
           // After learner authentication, validate it against this account before retaining it.
           if (pathname.startsWith('/student') && !joinedCode && !urlCode && !hasUrlJoin &&
-              !storedJoinTenant && !readPendingJoinCode()) {
+              !storedJoinTenant && !readPendingJoinCode() && !enrollmentIssue) {
             const membershipResponse = await fetch(
               '/api/v1/institution/memberships/me?institutionCode=' + encodeURIComponent(candidate),
               { credentials: 'same-origin', cache: 'no-store',
@@ -370,7 +414,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       }
 
       // Learner invitation links may redeem a school membership after an existing account signs in.
-      const joinedCode = await redeemPendingJoin(readPendingJoinTenantCode());
+      const expectedJoinTenant = readPendingJoinTenantCode();
+      const joinedCode = await redeemPendingJoin(expectedJoinTenant);
       if (joinedCode) {
         try {
           const joinedBrand = await fetchTenantBrand(joinedCode);
@@ -382,8 +427,16 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           if (!cancelled) setIsResolving(false);
           return;
         } catch {
-          // Do not block the learner workspace if brand assets are temporarily unavailable.
+          // Membership exists; a transient branding read must not block learner access.
         }
+      }
+      if (hasUrlJoin || pendingJoinCodeAtStart || enrollmentIssue) {
+        // Never substitute another previously used school when an invitation has no resolvable tenant.
+        setBrand(null);
+        setInstitutionContextRequested(true);
+        applyTenantIdentity(null, true);
+        if (!cancelled) setIsResolving(false);
+        return;
       }
 
       // Existing learners can inherit the school's brand only when membership is unambiguous.
@@ -430,8 +483,10 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     return () => { cancelled = true; };
   }, [pathname]);
 
-  const value = useMemo(() => ({ brand, isResolving, institutionContextRequested, resolveInstitutionCode, clearTenantBrand }),
-    [brand, isResolving, institutionContextRequested, resolveInstitutionCode, clearTenantBrand]);
+  const value = useMemo(() => ({
+    brand, isResolving, institutionContextRequested, enrollmentIssue,
+    clearEnrollmentIssue, resolveInstitutionCode, clearTenantBrand,
+  }), [brand, isResolving, institutionContextRequested, enrollmentIssue, clearEnrollmentIssue, resolveInstitutionCode, clearTenantBrand]);
   return <TenantBrandingContext.Provider value={value}>{children}</TenantBrandingContext.Provider>;
 }
 
