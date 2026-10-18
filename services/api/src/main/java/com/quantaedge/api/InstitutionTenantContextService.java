@@ -91,8 +91,18 @@ public class InstitutionTenantContextService {
    * In either mode the returned code still has to resolve to an active institution and pass
    * membership/course/offer checks; this method never grants access.
    */
+  private static String normalizeRequestedCode(String requestedCode) {
+    if (requestedCode == null || requestedCode.isBlank()) return null;
+    String normalized = requestedCode.trim().toUpperCase(Locale.ROOT);
+    if (!TENANT_CODE.matcher(normalized).matches()) {
+      throw new InvalidInstitutionContextException(
+          400, "INVALID_INSTITUTION_CODE", "The selected institution code is invalid.");
+    }
+    return normalized;
+  }
+
   public String selectTenantCode(String requestedCode) {
-    String requested = normalizeOptionalCode(requestedCode, "requested institution code");
+    String requested = normalizeRequestedCode(requestedCode);
     if ("FIXED".equals(contextMode)) {
       if (requested != null && !requested.equals(defaultInstitutionCode)) {
         throw new InvalidInstitutionContextException(
