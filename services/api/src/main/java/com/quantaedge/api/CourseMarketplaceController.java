@@ -121,42 +121,68 @@ public class CourseMarketplaceController {
   /** Published offers for the parent workspace; these are not inferred from curriculum rows. */
   @GetMapping("/family/courses")
   public List<Map<String,Object>> familyCourses(
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE, required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
+    long institutionId = requireTenant(tenant).institutionId();
     long parentId = context.userId();
     List<Map<String,Object>> offers = jdbc.queryForList("""
+      with selected_tenant as (select ?::bigint as institution_id)
       select p.id as course_id,p.public_id,p.code as course_code,
         coalesce(nullif(o.title_override,''),p.display_name) as title,
         p.display_name as course_name,p.curriculum_version,o.description,
         o.price_paise,o.currency,o.status as offer_status,
         (exists(select 1 from course_entitlement ce
-          where ce.course_id=p.id and ce.holder_user_id=?)
-         or exists(select 1 from student st join student_program_enrollment e on e.student_id=st.id
-          where st.user_account_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))) as owned_by_parent,
+          where ce.institution_id=(select institution_id from selected_tenant)
+            and ce.course_id=p.id and ce.holder_user_id=?)
+         or exists(select 1 from student st
+          join institution_membership m on m.student_id=st.id
+            and m.institution_id=(select institution_id from selected_tenant) and m.status='ACTIVE'
+          join student_program_enrollment e on e.student_id=st.id and e.institution_id=m.institution_id
+            and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
+          where st.user_account_id=?)) as owned_by_parent,
         exists(select 1 from course_entitlement ce
-          where ce.course_id=p.id and ce.holder_user_id=? and ce.transfer_count=0) as transferable_by_parent,
+          where ce.institution_id=(select institution_id from selected_tenant)
+            and ce.course_id=p.id and ce.holder_user_id=? and ce.transfer_count=0) as transferable_by_parent,
         (exists(select 1 from course_entitlement ce
           join guardian_student gs on gs.student_id=ce.holder_student_id
-          where ce.course_id=p.id and gs.guardian_user_id=?
+          join institution_membership m on m.student_id=gs.student_id
+            and m.institution_id=ce.institution_id and m.status='ACTIVE'
+          where ce.institution_id=(select institution_id from selected_tenant)
+            and ce.course_id=p.id and gs.guardian_user_id=?
             and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')
          or exists(select 1 from guardian_student gs
+          join institution_membership m on m.student_id=gs.student_id
+            and m.institution_id=(select institution_id from selected_tenant) and m.status='ACTIVE'
           join student_program_enrollment e on e.student_id=gs.student_id
-          where gs.guardian_user_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
-            and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')) as owned_by_child,
+            and e.institution_id=m.institution_id and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
+          where gs.guardian_user_id=? and gs.active=true
+            and gs.consent_status='CONSENTED' and gs.access_level='FULL')) as owned_by_child,
         (select coalesce(string_agg(distinct gs.student_id::text, ','), '')
          from guardian_student gs
+         join institution_membership m on m.student_id=gs.student_id
+           and m.institution_id=(select institution_id from selected_tenant) and m.status='ACTIVE'
          where gs.guardian_user_id=? and gs.active=true
            and gs.consent_status='CONSENTED' and gs.access_level='FULL'
            and (exists(select 1 from course_entitlement ce
-                 where ce.course_id=p.id and ce.holder_student_id=gs.student_id)
+                 where ce.institution_id=m.institution_id and ce.course_id=p.id
+                   and ce.holder_student_id=gs.student_id)
              or exists(select 1 from student_program_enrollment e
-                 where e.student_id=gs.student_id and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
+                 where e.student_id=gs.student_id and e.institution_id=m.institution_id
+                   and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
            )) as owned_child_ids
-      from course_marketplace_offer o
+      from institution_marketplace_offer o
+      join institution_course_assignment assignment
+        on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release
+        on release.id=o.course_release_id and release.program_id=o.course_id
+      join institution_tenant tenant_scope on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
-      where o.status='PUBLISHED'
+      where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
       order by p.display_name,p.id
-      """, parentId, parentId, parentId, parentId, parentId, parentId);
+      """, institutionId, parentId, parentId, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -177,14 +203,16 @@ public class CourseMarketplaceController {
     return offers;
   }
 
-  /** Add a published free course to the parent's own or linked child's learning profile. */
   @PostMapping("/family/courses/{courseId}/enroll-free")
   @Transactional
   public Map<String,Object> enrollFreeFamilyCourse(
       @PathVariable long courseId,
       @RequestBody(required=false) FamilyCourseOrderRequest request,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE, required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
+    long institutionId = requireTenant(tenant).institutionId();
     String recipient = request == null || request.recipientType() == null
         ? "" : request.recipientType().trim().toUpperCase(Locale.ROOT);
     long studentId;
@@ -200,65 +228,87 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
     }
 
+    Boolean member = jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student st on st.id=m.student_id and st.active=true
+        where m.institution_id=? and m.student_id=? and m.status='ACTIVE'
+      )
+      """, Boolean.class, institutionId, studentId);
+    if (!Boolean.TRUE.equals(member)) {
+      throw new SecurityException("The selected learner is not an active member of this institution.");
+    }
+
     Boolean freeAndPublished = jdbc.queryForObject("""
       select exists(
-        select 1 from course_marketplace_offer o
+        select 1 from institution_marketplace_offer o
+        join institution_course_assignment a
+          on a.id=o.assignment_id and a.institution_id=o.institution_id and a.status='ASSIGNED'
+        join institution_course_release r on r.id=o.course_release_id and r.program_id=o.course_id
+        join institution_tenant t on t.id=o.institution_id and t.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where o.course_id=? and o.status='PUBLISHED' and o.price_paise=0 and o.currency='INR'
+        where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
+          and o.price_paise=0 and o.currency='INR'
       )
-      """, Boolean.class, courseId);
+      """, Boolean.class, institutionId, courseId);
     if (!Boolean.TRUE.equals(freeAndPublished)) {
-      throw new IllegalArgumentException("This course is not currently available as a free offer.");
+      throw new IllegalArgumentException("This course is not currently available as a free offer in this institution.");
     }
-    if (hasAccess(studentId, courseId)) throw new IllegalArgumentException("The selected learner already has access to this course.");
+    if (hasAccessInInstitution(studentId, courseId, institutionId)) {
+      throw new IllegalArgumentException("The selected learner already has access to this course in this institution.");
+    }
 
     List<Map<String,Object>> subjects = jdbc.queryForList("""
       select s.id from curriculum_program_subject ps
       join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
       where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
       """, courseId);
     if (subjects.isEmpty()) throw new IllegalStateException("This course has no active subject tracks yet.");
 
     jdbc.update("""
       update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and status='ACTIVE' and program_id<>?
-      """, studentId, courseId);
+      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
+      """, studentId, institutionId, courseId);
     jdbc.update("""
-      insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
-      values(?,?,'ACTIVE',now(),null,now(),now())
-      on conflict(student_id,program_id) do update set
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
+      ) values(?,?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(institution_id,student_id,program_id) do update set
         status='ACTIVE',enrolled_at=case when student_program_enrollment.status='ACTIVE'
           then student_program_enrollment.enrolled_at else now() end,
         ended_at=null,updated_at=now()
-      """, studentId, courseId);
+      """, studentId, courseId, institutionId);
     jdbc.update("""
-      insert into student_track_enrollment(student_id,subject_id,status)
-      select ?,s.id,'ACTIVE'
+      insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+      select ?,s.id,?,'ACTIVE'
       from curriculum_program_subject ps
       join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
       where ps.program_id=?
-      on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
-      """, studentId, courseId);
+      on conflict(institution_id,student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+      """, studentId, institutionId, courseId);
     if ("CHILD".equals(recipient)) {
       jdbc.update("""
         update parent_course_purchase_request
         set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
-        where guardian_user_id=? and student_id=? and course_id=? and status='PENDING'
-        """, context.userId(), context.userId(), studentId, courseId);
+        where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
+        """, context.userId(), context.userId(), studentId, institutionId, courseId);
     }
     return Map.of("enrolled", true, "studentId", studentId, "courseId", courseId,
-        "recipientType", recipient, "free", true);
+        "institutionId", institutionId, "recipientType", recipient, "free", true);
   }
 
-  /** Only a parent's own, not-yet-transferred purchases are eligible for assignment to a child. */
   @GetMapping("/family/entitlements")
   public List<Map<String,Object>> familyEntitlements(
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE, required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
+    long institutionId = requireTenant(tenant).institutionId();
     return jdbc.queryForList("""
       select ce.id as entitlement_id,ce.course_id,ce.source_purchase_id,
         ce.holder_student_id,st.display_name as current_learner_name,
@@ -266,40 +316,60 @@ public class CourseMarketplaceController {
         coalesce(nullif(o.title_override,''),p.display_name) as course_name
       from course_entitlement ce
       join curriculum_program p on p.id=ce.course_id
-      left join course_marketplace_offer o on o.course_id=p.id
+      left join institution_marketplace_offer o on o.institution_id=ce.institution_id
+        and o.course_id=p.id and o.status='PUBLISHED'
       left join student st on st.id=ce.holder_student_id
-      where ce.holder_user_id=? and ce.transfer_count=0
+      join institution_tenant t on t.id=ce.institution_id and t.status='ACTIVE'
+      where ce.holder_user_id=? and ce.institution_id=? and ce.transfer_count=0
         and p.status='ACTIVE' and p.code<>'GENERAL'
+        and exists(select 1 from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id and r.program_id=ce.course_id
+          where a.institution_id=ce.institution_id and a.status='ASSIGNED')
       order by ce.created_at desc,ce.id desc
-      """, context.userId());
+      """, context.userId(), institutionId);
   }
 
-  /** One-way transfer. The parent's owner reference is removed permanently; the child becomes the sole holder. */
   @PostMapping("/family/entitlements/{entitlementId}/transfer")
   @Transactional
   public Map<String,Object> transferEntitlement(
       @PathVariable long entitlementId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+      @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE, required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    Object raw = body.get("studentId");
+    long institutionId = requireTenant(tenant).institutionId();
+    Object raw = body == null ? null : body.get("studentId");
     if (!(raw instanceof Number number) || number.longValue() <= 0) {
       throw new IllegalArgumentException("Choose a linked child to receive this course.");
     }
     long targetStudentId = number.longValue();
     long parentId = context.userId();
     requireFullGuardianChildAccess(parentId, targetStudentId);
+    Boolean targetMember = jdbc.queryForObject("""
+      select exists(select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student st on st.id=m.student_id and st.active=true
+        where m.institution_id=? and m.student_id=? and m.status='ACTIVE')
+      """, Boolean.class, institutionId, targetStudentId);
+    if (!Boolean.TRUE.equals(targetMember)) {
+      throw new SecurityException("The receiving learner is not an active member of this institution.");
+    }
 
     List<Map<String,Object>> rows = jdbc.queryForList("""
       select ce.id,ce.course_id,ce.source_purchase_id,ce.holder_student_id,
         ce.transfer_count,p.display_name as course_name
       from course_entitlement ce
       join curriculum_program p on p.id=ce.course_id and p.status='ACTIVE'
-      where ce.id=? and ce.holder_user_id=? and ce.transfer_count=0
+      join institution_tenant t on t.id=ce.institution_id and t.status='ACTIVE'
+      where ce.id=? and ce.institution_id=? and ce.holder_user_id=? and ce.transfer_count=0
+        and exists(select 1 from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id and r.program_id=ce.course_id
+          where a.institution_id=ce.institution_id and a.status='ASSIGNED')
       for update of ce
-      """, entitlementId, parentId);
+      """, entitlementId, institutionId, parentId);
     if (rows.isEmpty()) {
-      throw new IllegalArgumentException("This course is not owned by your account or has already been transferred.");
+      throw new IllegalArgumentException("This institution-scoped course is not owned by your account or has already been transferred.");
     }
     Map<String,Object> entitlement = rows.getFirst();
     if (entitlement.get("source_purchase_id") == null) {
@@ -307,68 +377,75 @@ public class CourseMarketplaceController {
     }
     long courseId = ((Number) entitlement.get("course_id")).longValue();
     long purchaseId = ((Number) entitlement.get("source_purchase_id")).longValue();
-    long currentStudentId = ((Number) entitlement.get("holder_student_id")).longValue();
-    if (currentStudentId == targetStudentId) {
+    Long currentStudentId = entitlement.get("holder_student_id") instanceof Number n ? n.longValue() : null;
+    if (currentStudentId != null && currentStudentId == targetStudentId) {
       throw new IllegalArgumentException("This course is already assigned to that learner.");
     }
-    if (hasAccess(targetStudentId, courseId)) {
-      throw new IllegalArgumentException("That learner already has access to this course. No transfer was made.");
+    if (hasAccessInInstitution(targetStudentId, courseId, institutionId)) {
+      throw new IllegalArgumentException("That learner already has access to this course in this institution. No transfer was made.");
     }
 
     try {
-      jdbc.update("""
+      int purchaseChanged = jdbc.update("""
         update course_purchase set student_id=?
-        where id=? and student_id=? and course_id=?
-        """, targetStudentId, purchaseId, currentStudentId, courseId);
-    } catch (DuplicateKeyException ex) {
-      throw new IllegalArgumentException("That child already has a purchase for this course. No transfer was made.", ex);
+        where id=? and institution_id=? and course_id=?
+          and (student_id=? or student_id is null)
+        """, targetStudentId, purchaseId, institutionId, courseId, currentStudentId);
+      if (purchaseChanged != 1) {
+        throw new IllegalStateException("The purchase ledger no longer matches this institution-scoped entitlement.");
+      }
+    } catch (org.springframework.dao.DuplicateKeyException ex) {
+      throw new IllegalArgumentException("That child already has a purchase for this course in this institution. No transfer was made.", ex);
     }
     int changed = jdbc.update("""
       update course_entitlement
       set holder_user_id=null,holder_student_id=?,transfer_count=1,
           transferred_at=now(),updated_at=now()
-      where id=? and holder_user_id=? and transfer_count=0
-      """, targetStudentId, entitlementId, parentId);
+      where id=? and institution_id=? and holder_user_id=? and transfer_count=0
+      """, targetStudentId, entitlementId, institutionId, parentId);
     if (changed != 1) throw new IllegalStateException("The entitlement changed while transferring. Reload and try again.");
 
-    jdbc.update("""
-      update student_program_enrollment
-      set status='ENDED',ended_at=now(),updated_at=now()
-      where student_id=? and program_id=? and status in ('ACTIVE','PAUSED')
-      """, currentStudentId, courseId);
+    if (currentStudentId != null) {
+      jdbc.update("""
+        update student_program_enrollment
+        set status='ENDED',ended_at=now(),updated_at=now()
+        where student_id=? and institution_id=? and program_id=? and status in ('ACTIVE','PAUSED')
+        """, currentStudentId, institutionId, courseId);
+    }
     jdbc.update("""
       update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and status='ACTIVE' and program_id<>?
-      """, targetStudentId, courseId);
+      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
+      """, targetStudentId, institutionId, courseId);
     jdbc.update("""
-      insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
-      values(?,?,'ACTIVE',now(),null,now(),now())
-      on conflict(student_id,program_id) do update set
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
+      ) values(?,?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(institution_id,student_id,program_id) do update set
         status='ACTIVE',enrolled_at=case when student_program_enrollment.status='ACTIVE'
           then student_program_enrollment.enrolled_at else now() end,
         ended_at=null,updated_at=now()
-      """, targetStudentId, courseId);
+      """, targetStudentId, courseId, institutionId);
     jdbc.update("""
-      insert into student_track_enrollment(student_id,subject_id,status)
-      select ?,s.id,'ACTIVE'
+      insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+      select ?,s.id,?,'ACTIVE'
       from curriculum_program_subject ps
       join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
       where ps.program_id=?
-      on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
-      """, targetStudentId, courseId);
+      on conflict(institution_id,student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+      """, targetStudentId, institutionId, courseId);
     jdbc.update("""
       insert into course_entitlement_transfer_audit(
-        entitlement_id,course_id,from_user_id,to_student_id,transfer_number
-      ) values(?,?,?,?,1)
-      """, entitlementId, courseId, parentId, targetStudentId);
+        institution_id,entitlement_id,course_id,from_user_id,to_student_id,transfer_number
+      ) values(?,?,?,?,?,1)
+      """, institutionId, entitlementId, courseId, parentId, targetStudentId);
 
     return Map.of("transferred", true, "permanent", true, "revocable", false,
-        "entitlementId", entitlementId, "courseId", courseId, "studentId", targetStudentId);
+        "entitlementId", entitlementId, "courseId", courseId, "institutionId", institutionId,
+        "studentId", targetStudentId);
   }
 
-  /** Create an order for an already authenticated learner. Amount and recipient always come from server records. */
   @PostMapping("/courses/{courseId}/orders")
   public Map<String, Object> createOrder(
       @PathVariable long courseId,
