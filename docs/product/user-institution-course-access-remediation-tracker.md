@@ -11,6 +11,16 @@ For every protected learner operation, derive one validated institution context,
 
 **Consumer policy must remain explicit:** do not auto-assign new users to `QUANTA-EDGE` to hide missing access. Preserve approved direct-consumer access through an intentional, tested path. Legacy data is reconciled only by reviewed provenance.
 
+## Locked platform and institutional operating model
+
+- **HRMS is the central platform owner.** HRMS provisions institutions, controls the institution network, and centrally manages integration credentials, provider configuration, allowed web origins/redirect URIs, payment setup, and operational readiness.
+- **QuantaEdge is a normal institution in that network.** It is also the destination institution for pre-tenancy/global legacy users and their preserved learning/payment history, so accounts and records are not orphaned.
+- **New signup is institution-scoped at creation.** Signup on the QuantaEdge platform entry point creates a QuantaEdge institution membership; signup through an institution-branded route/domain creates membership in that institution. Existing sign-in never silently creates or changes membership.
+- **OAuth/payment credentials are HRMS-managed platform configuration, not per-school onboarding prerequisites.** Institutions do not need to supply their own Google client secrets, Razorpay credentials, or other integration secrets. HRMS operates centrally configured OAuth and payment integrations; application records, offers, orders, webhooks, receipts, and entitlements remain bound to the exact institution.
+- **No global learner bucket and no tenant secret burden.** Every new user/account/learner profile must have the resolved institution relationship before the signup transaction commits. A child inherits the selected institution only through parent membership or validated institution join flow.
+- **Routing must be trustworthy and usable.** Root QuantaEdge web/Android entry points resolve to `QUANTA-EDGE`; school routes/tenant-branded builds resolve to their configured institution. Unknown or conflicting tenant context fails clearly instead of assigning the user to the wrong school.
+- **Migration intent is affirmative, not a fallback for new users.** Reviewed legacy/global rows are mapped to QuantaEdge to preserve access and history. This one-time mapping must never be repeated as request-time auto-enrollment.
+
 ## Tracklist
 
 ### 0 — Baseline, route inventory and contract
@@ -51,6 +61,15 @@ For every protected learner operation, derive one validated institution context,
 - [ ] 4.4 Prove progress, answers, mastery, practice, diagnostics, tutor, assessment attempts/results and certificates cannot leak or resume across institutions.
 - [ ] 4.5 Prove missing/unknown/inactive/forged context fails closed without breaking intended auth/join/branding or admin workspaces.
 - [ ] 4.6 Prove every new tenant-owned history insert writes the exact institution ID; known legacy null rows remain inert until approved reconciliation.
+
+### 6 — HRMS-managed signup and integration onboarding
+- [ ] 6.1 Bind Google signup, phone OTP signup, legacy parent signup, and every other account-creation route to the resolved institution in the creation transaction.
+- [ ] 6.2 Bind OTP challenges to the signup institution; reject cross-institution verification and make existing-account login verify membership without auto-enrolling.
+- [ ] 6.3 Ensure root QuantaEdge URL and the general Android app resolve to `QUANTA-EDGE`; test white-label route/domain resolution and reject unknown/conflicting tenant context.
+- [ ] 6.4 Provision Google OAuth client configuration centrally through HRMS-managed deployment secrets/configuration, with every supported tenant origin/redirect registered by the platform operator; no tenant-supplied OAuth secrets.
+- [ ] 6.5 Keep Razorpay credentials centrally managed by HRMS. Prove each order, signature verification, webhook, purchase, receipt/branding, refund path and entitlement uses the order's persisted institution ID, not the caller's header.
+- [ ] 6.6 Provide an auditable HRMS onboarding/readiness checklist for OAuth, payment provider, domains/origins, branding, course offer, and test transaction before activating a new institution.
+- [ ] 6.7 Run signup/login and payment regression tests for QuantaEdge + at least two tenant institutions, including cross-tenant account reuse, cancelled/failed checkout, webhook retry and missing central configuration.
 
 ### 5 — Build, CI and release acceptance
 - [ ] 5.1 Focused API tests pass, followed by complete API verification.
