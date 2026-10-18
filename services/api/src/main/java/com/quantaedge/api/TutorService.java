@@ -72,7 +72,7 @@ public class TutorService {
         Long.class,sessionId,context.studentId(),institutionId);
     ensureLessonAccess(context.studentId(),sessionLessonId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?30:limit,100));
-    String beforeFilter=beforeId==null?"":" and id < ?";
+    String beforeFilter=beforeId==null?"":" and tm.id < ?";
     List<Object> args=new ArrayList<>();
     args.add(sessionId);args.add(context.studentId());args.add(institutionId);
     if(beforeId!=null)args.add(beforeId);
