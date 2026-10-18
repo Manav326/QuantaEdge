@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e5f7438af1c1d9751e80db1beaf8528140e732661f23d8d69b560988ce9a4c2a",
+  "raw_analysis_sha256": "56b42b1de4009e75b5edeef666f9d460d67349492eaa798859c9e3de718673f5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -9502,17 +9502,65 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
       "asset_path": "assets/7c6ebeb48cc652ad83dc3c8ad727a84d76c5169b69543211fdfc186a70265b86.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39013231656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to question and explore further.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the textbook."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:40:09Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to question and explore further.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -9522,17 +9570,63 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
       "asset_path": "assets/7c6ebeb48cc652ad83dc3c8ad727a84d76c5169b69543211fdfc186a70265b86.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39013231656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page of a textbook with a title and some text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to a new chapter or section in a textbook",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:40:19Z",
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a title and some text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to a new chapter or section in a textbook",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -10740,17 +10834,67 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 21,
       "asset_path": "assets/80d0b2c3f9033453d879da2b3c7e1d7e67b46347bf58e624ddf2b2709d49c08c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39013231656",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a small image of a globe and a text that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "world of science",
+          "invitation to question"
+        ],
+        "context_relation": "The image is a part of the textbook cover, providing an introduction to the subject matter and encouraging further exploration.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the subject matter."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "6fb7c6a782a2d58dce8fabaeb65bd4f03da41d990c906e1830ae006b2407c1d9",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:41:05Z",
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a small image of a globe and a text that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "world of science",
+          "invitation to question"
+        ],
+        "context_relation": "The image is a part of the textbook cover, providing an introduction to the subject matter and encouraging further exploration.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the subject matter."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -14622,7 +14766,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its approach to learning.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -14635,36 +14779,34 @@
           "curiosity",
           "questions",
           "unknown",
+          "process",
           "environment",
           "society",
           "human activities",
           "environmental challenges",
-          "sustainable world",
-          "science as a process",
-          "discovery",
-          "responsibility",
-          "interconnected",
+          "sustainability",
           "properties of materials",
+          "discovery",
+          "interconnected",
           "scientific ideas",
           "discoveries",
           "questions",
-          "fields of science",
-          "physics"
+          "environment",
+          "society",
+          "human activities"
         ],
-        "context_relation": "exploration and understanding of science",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "limited to Grade 7",
-          "focus on deeper questions and patterns in nature",
-          "emphasis on responsibility and environmental impact"
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39013231656",
-      "checkpointed_at": "2026-10-17T13:19:39Z",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:42:52Z",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its approach to learning.",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -14677,27 +14819,25 @@
           "curiosity",
           "questions",
           "unknown",
+          "process",
           "environment",
           "society",
           "human activities",
           "environmental challenges",
-          "sustainable world",
-          "science as a process",
-          "discovery",
-          "responsibility",
-          "interconnected",
+          "sustainability",
           "properties of materials",
+          "discovery",
+          "interconnected",
           "scientific ideas",
           "discoveries",
           "questions",
-          "fields of science",
-          "physics"
+          "environment",
+          "society",
+          "human activities"
         ],
-        "context_relation": "exploration and understanding of science",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "limited to Grade 7",
-          "focus on deeper questions and patterns in nature",
-          "emphasis on responsibility and environmental impact"
+          "The text does not provide specific examples or illustrations to support the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -16210,17 +16350,37 @@
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 23,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38904464438",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "page_text_context_sha256": "44ffb7d5b7cabcb13a9b51230a627a29e3315ab520d1b7724c34e302caf54120",
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:45:18Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
