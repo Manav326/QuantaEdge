@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -25,6 +27,17 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void legacyLearnerRoutesRequireInstitutionContext() {
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic/attempts/12/submit"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/recommendations/next"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/learning/sessions/start"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/learning/assessments"));
+  }
+
+  @Test
   void publicBrandingAndIdentityRoutesDoNotRequireAnInstitutionContext() {
     assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
         "/api/v1/institution/public/branding/SCHOOL-A"));
@@ -32,6 +45,32 @@ class InstitutionTenantContextServiceTest {
         "/api/v1/auth/me"));
     assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
         "/api/v1/hrms/platform/institutions"));
+  }
+
+  @Test
+  void parentCannotUseChildMembershipFromAnotherInstitution() {
+    JdbcTemplate jdbc=org.mockito.Mockito.mock(JdbcTemplate.class);
+    when(jdbc.queryForObject(anyString(),eq(Boolean.class),eq(17L),eq(99L),eq(42L)))
+        .thenReturn(false);
+    InstitutionTenantContextService service=new InstitutionTenantContextService(jdbc);
+    AuthContext parent=new AuthContext(99L,null,"PARENT","Guardian");
+    InstitutionTenantContext schoolA=new InstitutionTenantContext(17L,"SCHOOL-A","School A");
+
+    InstitutionTenantContextService.InvalidInstitutionContextException error=assertThrows(
+        InstitutionTenantContextService.InvalidInstitutionContextException.class,
+        ()->service.assertGuardianChildMembership(parent,schoolA,42L));
+
+    assertEquals(403,error.statusCode());
+    assertEquals("GUARDIAN_CHILD_INSTITUTION_MISMATCH",error.errorCode());
+    verify(jdbc).queryForObject(anyString(),eq(Boolean.class),eq(17L),eq(99L),eq(42L));
+  }
+
+  @Test
+  void parentChildCollectionPathAlsoRequiresTenantContext() {
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/guardians/children"));
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/guardians/children/42/certificates"));
   }
 
   @Test
