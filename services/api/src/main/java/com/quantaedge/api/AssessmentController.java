@@ -896,30 +896,35 @@ public class AssessmentController {
       @PathVariable long assessmentId,
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(defaultValue = "false") boolean offlineMode,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return startOrResumeAttemptInternal(assessmentId,language,offlineMode,context);
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    return startOrResumeAttemptInternal(assessmentId,language,offlineMode,context,requireInstitution(tenant));
   }
 
   Map<String,Object> startOrResumeAttempt(long assessmentId,String language,AuthContext context) {
-    return startOrResumeAttemptInternal(assessmentId,language,false,context);
+    throw missingInstitutionContext();
   }
 
   private Map<String,Object> startOrResumeAttemptInternal(
-      long assessmentId,String language,boolean offlineMode,AuthContext context) {
+      long assessmentId,String language,boolean offlineMode,AuthContext context,long institutionId) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
     List<Map<String, Object>> assessmentLock = jdbc.queryForList("""
+      with tenant_scope as (select ?::bigint as institution_id)
       select a.id from assessment a
       where a.id=? and (
         a.status='PUBLISHED'
         or exists(select 1 from student_assessment_attempt resumable
                   where resumable.assessment_id=a.id and resumable.student_id=?
+                    and resumable.institution_id=(select institution_id from tenant_scope)
                     and resumable.status='IN_PROGRESS')
       )
       for update
-      """, assessmentId, context.studentId());
+      """, institutionId,assessmentId,context.studentId());
     if (assessmentLock.isEmpty()) throw notFound("Available assessment", assessmentId);
     List<Map<String, Object>> assessmentRows = jdbc.queryForList("""
+      with tenant_scope as (select ?::bigint as institution_id)
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
              a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,
@@ -929,7 +934,8 @@ public class AssessmentController {
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -955,24 +961,26 @@ public class AssessmentController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
+              and spe.program_id=s.program_id and spe.status='ACTIVE'
           )))
         and (
           a.status='PUBLISHED'
           or exists(select 1 from student_assessment_attempt resumable
                     where resumable.assessment_id=a.id and resumable.student_id=st.id
+                      and resumable.institution_id=(select institution_id from tenant_scope)
                       and resumable.status='IN_PROGRESS')
         )
       group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
-      """, context.studentId(), language, language, language, assessmentId);
+      """, institutionId,context.studentId(), language, language, language, assessmentId);
     if (assessmentRows.isEmpty()) throw notFound("Available assessment", assessmentId);
     Map<String, Object> assessment = assessmentRows.getFirst();
 
     List<Map<String, Object>> existing = jdbc.queryForList("""
       select id,offline_mode from student_assessment_attempt
-      where assessment_id=? and student_id=? and status='IN_PROGRESS'
+      where assessment_id=? and student_id=? and institution_id=? and status='IN_PROGRESS'
       order by started_at desc limit 1 for update
-      """, assessmentId, context.studentId());
+      """, assessmentId, context.studentId(),institutionId);
     if (!existing.isEmpty()) {
       long existingId=((Number)existing.getFirst().get("id")).longValue();
       boolean existingOffline=Boolean.TRUE.equals(existing.getFirst().get("offline_mode"));
@@ -981,9 +989,9 @@ public class AssessmentController {
       }
       if(existingOffline) {
         // Normal resume does not rotate the package token; an active worker may be uploading answers.
-        return attemptDetails(existingId,context,false);
+        return attemptDetails(existingId,context,false,institutionId);
       }
-      return attemptDetails(existingId, context, false);
+      return attemptDetails(existingId, context, false,institutionId);
     }
     if(offlineMode && !Boolean.TRUE.equals(assessment.get("offline_enabled"))) {
       throw conflict("This test is online-only. Offline attempts must be explicitly enabled by QuantaEdge content staff.");
@@ -992,6 +1000,7 @@ public class AssessmentController {
     // Enforce the same completion, publication and generated-version policy as the catalogue.
     // This runs only after resume has been handled, so saved attempts remain finishable.
     List<Map<String, Object>> eligibleForNewAttempt = jdbc.queryForList("""
+      with tenant_scope as (select ?::bigint as institution_id)
       select a.id
       from assessment a
       join curriculum_subject s on s.id=a.subject_id and s.active=true
@@ -1004,7 +1013,8 @@ public class AssessmentController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
+              and spe.program_id=s.program_id and spe.status='ACTIVE'
           )))
         and a.status='PUBLISHED' and
       """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, context.studentId(), assessmentId);
@@ -1014,8 +1024,8 @@ public class AssessmentController {
 
     Integer used = jdbc.queryForObject("""
       select count(*) from student_assessment_attempt
-      where assessment_id=? and student_id=? and status<>'ABANDONED'
-      """, Integer.class, assessmentId, context.studentId());
+      where assessment_id=? and student_id=? and institution_id=? and status<>'ABANDONED'
+      """, Integer.class, assessmentId, context.studentId(),institutionId);
     int maxAttempts = ((Number) assessment.get("max_attempts")).intValue();
     if (used != null && used >= maxAttempts) throw conflict("You have used all attempts allowed for this test.");
     Long questionCount = ((Number) assessment.get("question_count")).longValue();
@@ -1038,12 +1048,12 @@ public class AssessmentController {
     String offlineToken=offlineMode?newOfflinePackageToken():null;
     Long attemptId = jdbc.queryForObject("""
       insert into student_assessment_attempt(
-        assessment_id,student_id,attempt_number,status,assessment_snapshot,
+        assessment_id,student_id,institution_id,attempt_number,status,assessment_snapshot,
         started_at,deadline_at,max_score,offline_mode,offline_sync_expires_at,offline_package_token_hash
-      ) values(?,?,?,'IN_PROGRESS',?::jsonb,now(),now()+(? * interval '1 minute'),?,
+      ) values(?,?,?,?,'IN_PROGRESS',?::jsonb,now(),now()+(? * interval '1 minute'),?,
         ?,case when ? then now()+(? * interval '1 minute') + interval '72 hours' else null end,?)
       returning id
-      """, Long.class, assessmentId, context.studentId(), attemptNumber, json(assessmentSnapshot),
+      """, Long.class, assessmentId, context.studentId(),institutionId,attemptNumber, json(assessmentSnapshot),
         assessment.get("duration_minutes"), assessment.get("max_score"),
         offlineMode,offlineMode,assessment.get("duration_minutes"),
         offlineToken==null?null:offlinePackageTokenHash(offlineToken));
@@ -1096,7 +1106,7 @@ public class AssessmentController {
       """, attemptId);
     audit(assessmentId, attemptId, null, context.studentId(), "STUDENT", "ATTEMPT_STARTED",
         null, "IN_PROGRESS", "Student started test attempt " + attemptNumber + ".");
-    Map<String,Object> started=new LinkedHashMap<>(attemptDetails(attemptId, context, false));
+    Map<String,Object> started=new LinkedHashMap<>(attemptDetails(attemptId, context, false,institutionId));
     if(offlineToken!=null) started.put("offlinePackageToken",offlineToken);
     return started;
   }
