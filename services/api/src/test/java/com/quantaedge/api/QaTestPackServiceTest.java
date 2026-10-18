@@ -59,6 +59,18 @@ class QaTestPackServiceTest {
   }
 
   @Test
+  void similarlyNamedQaDatabaseIsRejectedWhenItIsNotTheExplicitTarget() {
+    MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "local");
+    when(jdbc.queryForObject("select current_database()", String.class)).thenReturn("quantaedge_other_test");
+
+    var status = service(true, true, "ci-qa", "quantaedge_qa", "QAfixture!2026", environment).environmentStatus();
+
+    assertFalse(Boolean.TRUE.equals(status.get("writeAllowed")));
+    assertFalse(Boolean.TRUE.equals(status.get("databaseApproved")));
+    assertTrue(String.valueOf(status.get("reason")).contains("does not exactly match"));
+  }
+
+  @Test
   void fixturePasswordMustBeExplicitlyConfiguredBeforeWritesAreAllowed() {
     MockEnvironment environment = new MockEnvironment().withProperty("app.environment", "local");
     when(jdbc.queryForObject("select current_database()", String.class)).thenReturn("quantaedge_qa");
