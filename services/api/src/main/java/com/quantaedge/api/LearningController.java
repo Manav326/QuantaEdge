@@ -62,6 +62,28 @@ public class LearningController {
       String enrolledClass=jdbc.queryForObject("select class_code from student where id=? and active=true",String.class,context.studentId());
       if(classCode==null || classCode.isBlank()) classCode=enrolledClass;
       else if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
+
+      // Class 6-8 legacy subject rows are mapped into normal CLASS_6/7/8 course products.
+      // Resolve legacy-compatible URLs through that mapping and require course ownership.
+      if("6".equals(enrolledClass) || "7".equals(enrolledClass) || "8".equals(enrolledClass)) {
+        List<Map<String,Object>> mappedCourse=jdbc.queryForList("""
+          select p.id
+          from student st
+          join curriculum_class c on c.code=st.class_code and c.active=true
+          join curriculum_program p on p.class_id=c.id and p.code='CLASS_' || c.code
+            and p.curriculum_version='CURRENT' and p.status='ACTIVE'
+          join student_program_enrollment spe on spe.student_id=st.id
+            and spe.program_id=p.id and spe.status='ACTIVE'
+          join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+            and s.code=? and s.active=true
+          where st.id=? and st.active=true
+          """,normalizedSubject,context.studentId());
+        if(mappedCourse.size()!=1)
+          throw new SecurityException("Active enrolment in your class course is required.");
+        programId=((Number)mappedCourse.getFirst().get("id")).longValue();
+        assertInstitutionCourseEntitlement(context.studentId(),programId);
+      }
     }
     return lessonsForScope(classCode,normalizedSubject,language,programId,context);
   }
@@ -466,7 +488,19 @@ public class LearningController {
         and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true
         and (
-          (s.program_id is null and c.code=st.class_code)
+          (s.program_id is null and c.code=st.class_code
+            and (c.code not in ('6','7','8') or exists(
+              select 1
+              from curriculum_program class_course
+              join student_program_enrollment spe on spe.program_id=class_course.id
+                and spe.student_id=st.id and spe.status='ACTIVE'
+              join curriculum_program_subject cps on cps.program_id=class_course.id
+                and cps.class_id=c.id and cps.subject_id=s.id
+              where class_course.class_id=c.id
+                and class_course.code='CLASS_' || c.code
+                and class_course.curriculum_version='CURRENT'
+                and class_course.status='ACTIVE'
+            )))
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
@@ -476,9 +510,20 @@ public class LearningController {
       """,Long.class,studentId,lessonId);
     if(count==null||count==0) throw new SecurityException("Lesson access denied");
     Long programId=jdbc.queryForObject("""
-      select s.program_id from lesson l
+      select coalesce(s.program_id,(
+        select class_course.id
+        from curriculum_program class_course
+        where class_course.class_id=c.id
+          and class_course.code='CLASS_' || c.code
+          and class_course.curriculum_version='CURRENT'
+          and class_course.status='ACTIVE'
+          and c.code in ('6','7','8')
+        limit 1
+      ))
+      from lesson l
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
       where l.id=?
       """,Long.class,lessonId);
     if(programId!=null) assertInstitutionCourseEntitlement(studentId,programId);
