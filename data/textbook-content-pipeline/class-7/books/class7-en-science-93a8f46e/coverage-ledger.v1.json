@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 698,
-    "successful_visual_analyses": 688,
-    "missing_visual_analyses": 6790,
+    "raw_analysis_result_rows": 701,
+    "successful_visual_analyses": 691,
+    "missing_visual_analyses": 6787,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6800,
+    "unresolved_count": 6797,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36644,9 +36644,16 @@
       "asset_path": "assets/e4c72207c77c4e4d55e450e1d6313ce14f4912c564ac11408bb78b4f030b6827.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a red border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "neutral",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36662,9 +36669,31 @@
       "asset_path": "assets/d23f9263215c4b660d8f52c05865c9f020af3d97e4e0ce714234ad23b73d72a9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Taste",
+          "Edible substances",
+          "Group A of Table 2.2",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and how they relate to the presence of acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36680,9 +36709,31 @@
       "asset_path": "assets/e85b2b5216d9b012ad6e6fdce67813d90f84f670175ad7f5015edd20c586ca17.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and how substances that taste sour tend to contain acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
