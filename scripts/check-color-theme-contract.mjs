@@ -29,6 +29,7 @@ const webCss = read('apps/web/app/globals.css');
 const androidController = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeThemeController.kt');
 const androidTheme = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeTheme.kt');
 const androidApp = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidFloatingTutorDock = read('apps/android/app/src/main/java/com/quantaedge/android/ui/FloatingTutorDock.kt');
 const androidRepository = read('apps/android/app/src/main/java/com/quantaedge/android/data/InstitutionBrandingRepository.kt');
 const androidSettings = read('apps/android/app/src/main/java/com/quantaedge/android/ui/ColorThemeSettingsCard.kt');
 const androidStudentProfile = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentProfileScreen.kt');
@@ -113,7 +114,7 @@ assert(androidScanner.includes('scanPrimary = MaterialTheme.colorScheme.primary'
 assert(androidRepository.includes('val themeTokensJson: String') && androidRepository.includes('optJSONObject("themeTokens")'), 'Android tenant API response must carry theme JSON.');
 assert(androidApp.includes('themeController.applyInstitutionTheme(code, identity.themeTokensJson)'), 'Resolved Android tenant must activate its server palette.');
 assert(androidApp.includes('themeController.clearInstitutionTheme()'), 'Android must clear the palette when tenant context is absent/invalid.');
-assert(androidApp.includes('containerColor = MaterialTheme.colorScheme.primary') && androidApp.includes('contentColor = MaterialTheme.colorScheme.onPrimary') && !androidApp.includes('containerColor = Color(0xFF172033)'), 'The floating tutor restore action must use tenant theme roles rather than a fixed navy palette.');
+assert(androidFloatingTutorDock.includes('color = MaterialTheme.colorScheme.primary') && androidFloatingTutorDock.includes('contentColor = MaterialTheme.colorScheme.onPrimary') && !androidFloatingTutorDock.includes('Color(0xFF172033)'), 'The single floating tutor launcher/restore bubble must use tenant theme roles rather than a fixed navy palette.');
 assert(docs.includes('Contract version') && docs.toLowerCase().includes('acceptance'), 'Contract and acceptance criteria must be documented.');
 
 if (failures.length) {
