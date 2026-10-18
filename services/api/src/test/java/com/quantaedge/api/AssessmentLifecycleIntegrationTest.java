@@ -34,7 +34,7 @@ class AssessmentLifecycleIntegrationTest {
     Fixture fixture = fixture("IN_PROGRESS");
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.startOrResumeAttempt(fixture.assessmentId(), "hi", fixture.student()));
+        () -> controller.startOrResumeAttempt(fixture.assessmentId(), "hi", false, fixture.student(), TEST_TENANT));
 
     assertEquals(409, error.getStatusCode().value());
     assertEquals(0L, jdbc.queryForObject(
@@ -47,8 +47,7 @@ class AssessmentLifecycleIntegrationTest {
   void completedStudentCanStartSaveArchiveResumeSubmitAndFetchReleasedResult() {
     Fixture fixture = fixture("COMPLETED");
 
-    Map<String,Object> started = controller.startOrResumeAttempt(
-        fixture.assessmentId(), "hi", fixture.student());
+    Map<String,Object> started = controller.startOrResumeAttempt(fixture.assessmentId(), "hi", false, fixture.student(), TEST_TENANT);
     long attemptId = ((Number) started.get("attempt_id")).longValue();
     List<Map<String,Object>> activeQuestions=(List<Map<String,Object>>)started.get("questions");
     assertFalse(activeQuestions.getFirst().containsKey("explanation"),
@@ -76,12 +75,11 @@ class AssessmentLifecycleIntegrationTest {
     assertTrue(visible.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()));
 
-    Map<String,Object> resumed = controller.startOrResumeAttempt(
-        fixture.assessmentId(), "hi", fixture.student());
+    Map<String,Object> resumed = controller.startOrResumeAttempt(fixture.assessmentId(), "hi", false, fixture.student(), TEST_TENANT);
     assertEquals(attemptId, ((Number) resumed.get("attempt_id")).longValue());
     assertEquals("IN_PROGRESS", resumed.get("status"));
 
-    Map<String,Object> submitted = controller.submitAttempt(attemptId, fixture.student());
+    Map<String,Object> submitted = controller.submitAttempt(attemptId, Map.of(), fixture.student(), TEST_TENANT);
     assertEquals("RELEASED", submitted.get("status"));
     assertEquals(true, submitted.get("resultReleased"));
     List<Map<String,Object>> releasedQuestions=(List<Map<String,Object>>)submitted.get("questions");
