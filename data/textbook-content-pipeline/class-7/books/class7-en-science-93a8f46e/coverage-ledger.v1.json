@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 955,
-    "successful_visual_analyses": 949,
-    "missing_visual_analyses": 6533,
+    "raw_analysis_result_rows": 958,
+    "successful_visual_analyses": 952,
+    "missing_visual_analyses": 6530,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6539,
+    "unresolved_count": 6536,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -46208,9 +46208,28 @@
       "asset_path": "assets/751529dbec68170f706ec3677c3321b6386d0c5065f1e978792716a53568b680.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Soil pH and organic matter impact soil health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil health",
+          "Nutrients"
+        ],
+        "context_relation": "Soil pH and organic matter impact soil health.",
+        "limitations": [
+          "The image does not show any visual representation of soil pH or organic matter."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46226,9 +46245,28 @@
       "asset_path": "assets/751529dbec68170f706ec3677c3321b6386d0c5065f1e978792716a53568b680.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Soil pH and organic matter impact soil health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Neutral soil",
+          "Plants",
+          "Nutrients",
+          "Soil health"
+        ],
+        "context_relation": "Soil pH and organic matter impact soil health.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46244,9 +46282,27 @@
       "asset_path": "assets/960b1b4973ed28f7ce7de2db75c7a5b741fc5952bc78dd7b7ed0718227ac4c31.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of organic matter on soil pH and plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutral soil",
+          "plant health",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The text discusses the relationship between organic matter, soil pH, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

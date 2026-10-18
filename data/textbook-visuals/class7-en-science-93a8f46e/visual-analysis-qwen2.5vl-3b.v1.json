@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 949,
+    "assets_selected": 952,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 947,
-    "assets_remaining": 6541,
-    "assets_completion_percent": 12.6,
+    "assets_analyzed": 950,
+    "assets_remaining": 6538,
+    "assets_completion_percent": 12.7,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 944,
+    "assets_skipped_from_checkpoint": 947,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:17:49Z"
+      "checkpointed_at": "2026-10-18T18:20:57Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:18:10Z"
+      "checkpointed_at": "2026-10-18T18:21:19Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -35262,6 +35262,119 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T18:20:15Z"
+    },
+    {
+      "asset_id": "20e2f7bb4684b1d0882446ee",
+      "asset_sha256": "751529dbec68170f706ec3677c3321b6386d0c5065f1e978792716a53568b680",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/751529dbec68170f706ec3677c3321b6386d0c5065f1e978792716a53568b680.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Soil pH and organic matter impact soil health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil health",
+          "Nutrients"
+        ],
+        "context_relation": "Soil pH and organic matter impact soil health.",
+        "limitations": [
+          "The image does not show any visual representation of soil pH or organic matter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:22:01Z"
+    },
+    {
+      "asset_id": "2b0eaa8fc1947f20e70947fe",
+      "asset_sha256": "751529dbec68170f706ec3677c3321b6386d0c5065f1e978792716a53568b680",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/751529dbec68170f706ec3677c3321b6386d0c5065f1e978792716a53568b680.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Soil pH and organic matter impact soil health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Neutral soil",
+          "Plants",
+          "Nutrients",
+          "Soil health"
+        ],
+        "context_relation": "Soil pH and organic matter impact soil health.",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:22:11Z"
+    },
+    {
+      "asset_id": "23262ca5a9468c9ca3416bc8",
+      "asset_sha256": "960b1b4973ed28f7ce7de2db75c7a5b741fc5952bc78dd7b7ed0718227ac4c31",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/960b1b4973ed28f7ce7de2db75c7a5b741fc5952bc78dd7b7ed0718227ac4c31.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of organic matter on soil pH and plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutral soil",
+          "plant health",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The text discusses the relationship between organic matter, soil pH, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:22:56Z"
     }
   ]
 }
