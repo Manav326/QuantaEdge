@@ -18,6 +18,11 @@
 - [Role/Workspace Permission Matrix](./phase-1-role-workspace-matrix.md): source-derived Education Admin, HRMS, platform-owner, institution-admin and learner/guardian permission boundaries.
 - [Runtime Execution Log](./phase-1-runtime-execution-log.csv): one execution row per scenario, ready to capture the exact commit/environment/persona/device, actual result, evidence, defect and cleanup verification.
 - [Consolidated Coverage Gaps](./phase-1-coverage-gaps.md): prioritized open findings and the required closure sequence before Phase 2 test-data installation.
+- [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md): required install/uninstall state machine, immutable resource ownership manifest, production safety gates, automated acceptance matrix and implementation ledger.
+
+## Current test-pack lifecycle work
+
+The install/uninstall requirements and acceptance matrix are tracked in [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md). This is **implementation work in progress**, not a claim that the QA Center/fixture pack is finished. QA-001–QA-007 remain `NOT_IMPLEMENTED` until the full lifecycle tests pass. A register validator validates CSV/document consistency only; it does not prove runtime execution.
 
 ## Current audit snapshot
 
