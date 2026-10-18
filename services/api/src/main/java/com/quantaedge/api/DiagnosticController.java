@@ -32,18 +32,22 @@ public class DiagnosticController {
   /** A refresh resumes the existing frozen attempt; only explicit submit marks it complete. */
   @GetMapping
   @Transactional
-  public Map<String,Object> get(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> get(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     long studentId=context.studentId();
     List<Map<String,Object>> active=jdbc.queryForList("""
       select id,status,question_count,started_at from student_diagnostic_attempt
-      where student_id=? and status='IN_PROGRESS'
+      where student_id=? and institution_id=? and status='IN_PROGRESS'
       order by started_at desc,id desc limit 1 for update
-      """,studentId);
+      """,studentId,institutionId);
     if(active.isEmpty()) {
       Long submitted=jdbc.queryForObject(
-          "select count(*) from student_diagnostic_attempt where student_id=? and status='SUBMITTED'",
-          Long.class,studentId);
+          "select count(*) from student_diagnostic_attempt where student_id=? and institution_id=? and status='SUBMITTED'",
+          Long.class,studentId,institutionId);
       if(submitted!=null&&submitted>0) return Map.of("completed",true,"available",true,"questions",List.of());
       List<Map<String,Object>> candidates=jdbc.queryForList("""
         select q.id
@@ -52,7 +56,8 @@ public class DiagnosticController {
         join curriculum_chapter ch on ch.id=l.chapter_id
         join curriculum_subject s on s.id=ch.subject_id
         join curriculum_class c on c.id=s.class_id
-        join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
+        join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id
+          and ste.institution_id=? and ste.status='ACTIVE'
         where q.active=true and q.review_status in ('APPROVED','PUBLISHED')
           and l.active=true and l.status='PUBLISHED'
           and ch.active=true and ch.content_status='PUBLISHED'
@@ -61,13 +66,13 @@ public class DiagnosticController {
           and q.question_type in ('MCQ','TRUE_FALSE')
         order by s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id
         limit 10
-        """,studentId,studentId);
+        """,studentId,institutionId,studentId);
       List<Long> ids=candidates.stream().map(row->number(row.get("id"))).toList();
       if(ids.isEmpty()) return Map.of("completed",false,"available",false,"questions",List.of());
       Long attemptId=jdbc.queryForObject("""
-        insert into student_diagnostic_attempt(student_id,status,question_count)
-        values(?,'IN_PROGRESS',?) returning id
-        """,Long.class,studentId,ids.size());
+        insert into student_diagnostic_attempt(student_id,institution_id,status,question_count)
+        values(?,?,'IN_PROGRESS',?) returning id
+        """,Long.class,studentId,institutionId,ids.size());
       if(attemptId==null) throw new IllegalStateException("Diagnostic attempt could not be created.");
       int sequence=1;
       for(Long questionId:ids) {
@@ -81,8 +86,9 @@ public class DiagnosticController {
       }
       jdbc.update("update student_diagnostic_attempt set question_count=? where id=?",sequence-1,attemptId);
       active=jdbc.queryForList("""
-        select id,status,question_count,started_at from student_diagnostic_attempt where id=? and student_id=?
-        """,attemptId,studentId);
+        select id,status,question_count,started_at from student_diagnostic_attempt
+        where id=? and student_id=? and institution_id=?
+        """,attemptId,studentId,institutionId);
     }
     Map<String,Object> attempt=active.getFirst();
     long attemptId=number(attempt.get("id"));
@@ -110,15 +116,19 @@ public class DiagnosticController {
   @Transactional
   public Map<String,Object> answer(@PathVariable long attemptId,@PathVariable long questionId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select daq.lesson_id,daq.question_snapshot::text as question_snapshot,daq.answered_at
       from student_diagnostic_attempt_question daq
       join student_diagnostic_attempt da on da.id=daq.diagnostic_attempt_id
-      where da.id=? and da.student_id=? and da.status='IN_PROGRESS' and daq.question_id=?
+      where da.id=? and da.student_id=? and da.institution_id=?
+        and da.status='IN_PROGRESS' and daq.question_id=?
       for update of daq,da
-      """,attemptId,context.studentId(),questionId);
+      """,attemptId,context.studentId(),institutionId,questionId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Diagnostic question was not found in this active attempt.");
     if(rows.getFirst().get("answered_at")!=null)
       throw new ResponseStatusException(HttpStatus.CONFLICT,"This diagnostic question has already been answered.");
@@ -137,7 +147,7 @@ public class DiagnosticController {
       where diagnostic_attempt_id=? and question_id=?
       """,serialized,evaluation.correct(),attemptId,questionId);
     learningState.recordAttempt(context.studentId(),questionId,number(rows.getFirst().get("lesson_id")),
-        String.valueOf(submitted),evaluation.autoGraded(),evaluation.correct(),null,"DIAGNOSTIC");
+        String.valueOf(submitted),evaluation.autoGraded(),evaluation.correct(),null,"DIAGNOSTIC",institutionId);
     Map<String,Object> response=new LinkedHashMap<>();
     response.put("questionId",questionId);response.put("correct",evaluation.correct());
     response.put("graded",evaluation.autoGraded());
@@ -150,12 +160,15 @@ public class DiagnosticController {
   @PostMapping("/attempts/{attemptId}/submit")
   @Transactional
   public Map<String,Object> submit(@PathVariable long attemptId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,question_count,status from student_diagnostic_attempt
-      where id=? and student_id=? for update
-      """,attemptId,context.studentId());
+      where id=? and student_id=? and institution_id=? for update
+      """,attemptId,context.studentId(),institutionId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Diagnostic attempt not found.");
     String status=String.valueOf(rows.getFirst().get("status"));
     if("SUBMITTED".equals(status)) return Map.of("submitted",true,"attemptId",attemptId,"status",status);
@@ -169,9 +182,18 @@ public class DiagnosticController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Answer all diagnostic questions before submitting.");
     jdbc.update("""
       update student_diagnostic_attempt set status='SUBMITTED',submitted_at=now(),updated_at=now()
-      where id=? and student_id=? and status='IN_PROGRESS'
-      """,attemptId,context.studentId());
+      where id=? and student_id=? and institution_id=? and status='IN_PROGRESS'
+      """,attemptId,context.studentId(),institutionId);
     return Map.of("submitted",true,"attemptId",attemptId,"status","SUBMITTED","answeredCount",answered);
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() < 1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED",
+          "Select the institution before starting or accessing a diagnostic attempt.");
+    }
+    return tenant.institutionId();
   }
 
   private Map<String,Object> publicQuestion(Map<String,Object> snapshot) {
