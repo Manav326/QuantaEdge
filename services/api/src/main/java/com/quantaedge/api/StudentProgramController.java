@@ -162,6 +162,18 @@ public class StudentProgramController {
           select 1 from course_marketplace_offer o
           where o.course_id=? and o.status='PUBLISHED'
             and o.price_paise=0 and o.currency='INR'
+            and (
+              not exists(select 1 from institution_membership m
+                where m.student_id=? and m.status='ACTIVE')
+              or exists(
+                select 1 from institution_membership m
+                join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+                join institution_course_entitlement ent on ent.institution_id=m.institution_id
+                  and ent.program_id=o.course_id and ent.status='ACTIVE'
+                  and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
+                where m.student_id=? and m.status='ACTIVE'
+              )
+            )
         )
         or exists(
           select 1
@@ -173,7 +185,7 @@ public class StudentProgramController {
           where im.student_id=? and im.status='ACTIVE'
         )
       """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId,
-        context.studentId(), courseId, courseId, courseId, context.studentId());
+        context.studentId(), courseId, context.studentId(), context.studentId(), courseId, courseId, context.studentId());
     if (!Boolean.TRUE.equals(hasAuthorisedEnrolment)) {
       throw new SecurityException("This course is not available for self-enrolment. Choose a published free course or purchase its paid offer.");
     }
