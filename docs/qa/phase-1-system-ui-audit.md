@@ -146,7 +146,11 @@ A repository code search for `is_test_data` returned no matches in this pass. Se
 
 Required design principle for the later implementation: a unique installation/run ID must own a manifest of every row and asset it creates. Explicit test markers may be useful, but uninstall must use run-level ownership and resource-specific cleanup adapters. **Never delete all rows with a test flag, never delete pre-existing records reused as references, and never treat test-flagged production data as disposable by default.**
 
-## 8. Existing automated quality evidence
+## 8. Workflow scenario mapping
+
+A 70-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) now defines stable IDs, personas, preconditions, steps, expected UI/data behavior, negative/security cases, synthetic-fixture safety, cleanup constraints and test method for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and future QA-pack lifecycle behavior. The 7 `QA-00x` installer scenarios are explicitly `NOT_IMPLEMENTED`; the remaining 63 scenarios are `NOT_EXECUTED`. None is marked passed. The screen inventory has a `scenario_ids` column so screen entries map into those workflows; screen-level control decomposition still needs further review.
+
+## 9. Existing automated quality evidence
 
 Named test files found in these locations at the inspected snapshot:
 
@@ -166,7 +170,7 @@ The most recent successful main push run discovered in the queried history was [
 
 No browser E2E framework was positively identified in the inspected package manifests/route scripts. That is a preliminary inventory result, not proof that no browser automation exists anywhere in the repository; conduct a full configuration/script scan before deciding the gap.
 
-## 9. Findings and required closure evidence
+## 10. Findings and required closure evidence
 
 | ID | Priority | Finding | Closure evidence |
 |---|---|---|---|
@@ -180,8 +184,9 @@ No browser E2E framework was positively identified in the inspected package mani
 | QA1-08 | P2 | Source trace now resolves thin student routes to client components and Admin `/legacy-content` to a redirect to `/content`; component-level and runtime verification remain open. | Full action/API/permission trace for the client components plus runtime redirect/navigation evidence; no alias double-counting. |
 | QA1-09 | P2 | Historical UI/UX and localization tracker statuses are tied to old source revisions; older “done” labels may not be current verification. | Revalidate against current SHA; distinguish historical source change from current browser/assistive-tech certification. |
 | QA1-10 | P1 | Data-pack install/uninstall requires more than seeding rows due to foreign keys, uploaded files/media, sessions, provider resources, and existing identity conflicts. Existing compose default sets `APP_DEMO_SEED=true`; migration V125 owns the `QUANTA-EDGE` tenant and historical membership backfill. | Entity dependency graph, immutable run ownership manifest, rollback/retry design, collision tests, provider/file cleanup and proof that unrelated/demo data remains unchanged. See [data and cleanup map](./phase-1-data-and-cleanup-map.md). |
+| QA1-11 | P1 | The 70-case workflow register exists, but none of its runtime scenarios has been executed in this audit; 7 QA install/uninstall cases describe future functionality. | Execute cases on isolated test environment/device, attach run SHA and evidence, split multi-step cases when a failure needs a reproducible defect case. |
 
-## 10. Phase 1 work register
+## 11. Phase 1 work register
 
 ### Complete at source-inventory level
 
@@ -192,6 +197,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Identify current external integration families and the high-risk tenant/role boundaries.
 - [x] Scan the 59 web route-entry files for page-level handlers/direct API literals and map Android route enums through the Compose shell (partial; see source log).
 - [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
+- [x] Add 70 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
 - [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
 - [x] Record the initial test-data marker search result and its limits.
 
@@ -211,7 +217,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [ ] Verify required CI checks on the exact current main SHA.
 - [ ] Review and sign off the findings before test-data schema or installation functionality is designed.
 
-## 11. Phase 1 definition of done
+## 12. Phase 1 definition of done
 
 Phase 1 may be signed off only when:
 
@@ -222,7 +228,7 @@ Phase 1 may be signed off only when:
 5. Runtime evidence and automated evidence identify the exact tested revision. Blocked and untested cases remain visibly unpassed.
 6. A reviewer can follow the documentation and reproduce the baseline without inventing users, credentials, records or expected outcomes.
 
-## 12. Immediate next pass
+## 13. Immediate next pass
 
 1. Reconcile route-generation output with the 93-row starter inventory (59 web page entries plus 34 Android destinations).
 2. Complete source-level action/endpoint/permission mapping, then use it to drive controlled runtime walkthroughs.
