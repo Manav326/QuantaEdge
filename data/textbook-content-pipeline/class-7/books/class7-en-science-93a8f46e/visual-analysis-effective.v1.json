@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9ab8136f9e58418b22dd6950c1deb2faed019d4a08531a901d4743b5e54e838f",
+  "raw_analysis_sha256": "8af776f25df17c26bc3f3886fb6bde557026f5bb535858be7bcbaf9122225d69",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:17:53Z",
+      "checkpointed_at": "2026-10-18T19:20:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:18:15Z",
+      "checkpointed_at": "2026-10-18T19:21:18Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -58171,6 +58171,120 @@
       "effective_analysis": {
         "visual_summary": "A rope ladder with three rungs.",
         "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f8021f2870e2748cd527d2e",
+      "asset_sha256": "969719bd6fa8d782cf4d49efb201010bbf981df4d43f3c21449f82fa833ce066",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/969719bd6fa8d782cf4d49efb201010bbf981df4d43f3c21449f82fa833ce066.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:21:54Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "47ef16fbdd8aa151dad36f03",
+      "asset_sha256": "7048e5d94c8de5347303ea4bf53fa0a7cab7f032def5f468f5890b275d9c2e90",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/7048e5d94c8de5347303ea4bf53fa0a7cab7f032def5f468f5890b275d9c2e90.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a rope ladder, which is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the question it is associated with.",
+          "The image is a cartoon and may not be suitable for educational content that requires precise information or detailed explanations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:22:33Z",
+      "effective_analysis": {
+        "visual_summary": "A person is climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a rope ladder, which is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the question it is associated with.",
+          "The image is a cartoon and may not be suitable for educational content that requires precise information or detailed explanations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cfb8e1669e1175c3912e8a83",
+      "asset_sha256": "d828f5801aa427486dbc9e6b5835337af57886df665d626009d5b26b234e2e1b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 41,
+      "asset_path": "assets/d828f5801aa427486dbc9e6b5835337af57886df665d626009d5b26b234e2e1b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f93fb25eb8f462db6099d29ef0db8e93275e242758ba3f6b79b84347c9ad6055",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two vertical ropes with blue rings at the top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:23:08Z",
+      "effective_analysis": {
+        "visual_summary": "Two vertical ropes with blue rings at the top.",
+        "visual_type": "illustration",
         "visible_text": [],
         "concepts": [],
         "context_relation": "uncertain",
