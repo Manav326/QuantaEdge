@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 758,
+    "assets_selected": 761,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 756,
-    "assets_remaining": 1322,
-    "assets_completion_percent": 36.4,
+    "assets_analyzed": 760,
+    "assets_remaining": 1318,
+    "assets_completion_percent": 36.6,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 753,
+    "assets_skipped_from_checkpoint": 756,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T15:43:32Z"
+      "checkpointed_at": "2026-10-18T15:51:09Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23089,6 +23089,147 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T15:49:54Z"
+    },
+    {
+      "asset_id": "fea609e26dc1d5a7c07f8a79",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "232889d78a732c98934e6cc102f309bf4d2e72415a482c9629d0f656ee02645f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:51:25Z"
+    },
+    {
+      "asset_id": "16fe10aadecbfd315b8abde7",
+      "asset_sha256": "4865cd1f9836d654949843092cfcd1a11e5f28d4066298ea780c942a47471ac1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 32,
+      "asset_path": "page-0032.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "232889d78a732c98934e6cc102f309bf4d2e72415a482c9629d0f656ee02645f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "instructions for grouping plants and animals",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Each member in the biodiversity of a region has a different role to play. For example, trees provide food and shelter to some birds and other animals, animals help in spreading seeds after eating fruits, and so on. Can you think of more such examples? This shows that plants and animals are dependent",
+          "2.2 How to Group Plants and Animals?",
+          "How would you arrange your books and notebooks in groups? Would arranging them in groups help you better organise your school bag?",
+          "Now, let us look at the world around us. We are surrounded by a variety of plants and animals with different features about which you have learnt in section 2.1. We can group them based on similarities and differences among them.",
+          "Activity 2.3: Let us group",
+          "Collect pictures of various other plants and animals. Cut their pictures from old magazines, newspapers, charts and other sources. Paste each of these pictures on a different card.",
+          "Divide your class in groups of 5-6 students each.",
+          "Pool the cards prepared by the students in your group.",
+          "Observe various features of plants and animals shown on the cards.",
+          "Recall the features of plants and animals that you have listed in Tables 2.1 and 2.2.",
+          "Group them on the basis of common features.",
+          "Share and discuss the basis of grouping you have made with other groups in your class."
+        ],
+        "concepts": [
+          "biodiversity",
+          "plants",
+          "animals",
+          "grouping",
+          "features",
+          "common features",
+          "class",
+          "cards",
+          "magazines",
+          "newspapers",
+          "charts",
+          "features of plants and animals",
+          "tables",
+          "grouping of plants"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:55:42Z"
+    },
+    {
+      "asset_id": "894d5febe2092c8b4ee5b464",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b637955df486be0115118331535f4ebc63585e8e5c5576adee630374bb73244",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:55:59Z"
+    },
+    {
+      "asset_id": "76bef7f8c2a74c08ef2d5333",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b637955df486be0115118331535f4ebc63585e8e5c5576adee630374bb73244",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:56:16Z"
     }
   ]
 }
