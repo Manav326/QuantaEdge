@@ -24,6 +24,8 @@ import org.springframework.web.server.ResponseStatusException;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
 class AssessmentLifecycleIntegrationTest {
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   @Autowired private JdbcTemplate jdbc;
   @Autowired private AssessmentController controller;
 
@@ -60,7 +62,7 @@ class AssessmentLifecycleIntegrationTest {
         "Public question options must accept legacy text labels without exposing correctness flags.");
 
     Map<String,Object> saved = controller.saveAnswer(
-        attemptId, attemptQuestionId, Map.of("answer", "B"), fixture.student());
+        attemptId, attemptQuestionId, Map.of("answer", "B"), fixture.student(), TEST_TENANT);
     assertEquals(true, saved.get("saved"));
 
     // A governance archive removes the old paper from new starts, but must not strand this
@@ -116,7 +118,7 @@ class AssessmentLifecycleIntegrationTest {
   void explicitlyEnabledOfflineAttemptStoresNoAnswerKeyAndCanSyncAfterItsTimerWithinGrace() {
     Fixture fixture=fixture("COMPLETED");
     jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",fixture.assessmentId());
-    Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student());
+    Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student(), TEST_TENANT);
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String packageToken=String.valueOf(started.get("offlinePackageToken"));
     assertFalse(packageToken.isBlank());
@@ -128,10 +130,10 @@ class AssessmentLifecycleIntegrationTest {
     jdbc.update("update student_assessment_attempt set deadline_at=now()-interval '1 hour' where id=?",attemptId);
     long attemptQuestionId=((Number)firstQuestion.get("attemptQuestionId")).longValue();
     Map<String,Object> saved=controller.saveAnswer(attemptId,attemptQuestionId,
-        Map.of("answer","B","offlinePackageToken",packageToken),fixture.student());
+        Map.of("answer","B","offlinePackageToken",packageToken),fixture.student(), TEST_TENANT);
     assertEquals(true,saved.get("saved"));
     Map<String,Object> submitted=controller.submitAttempt(attemptId,
-        Map.of("offlinePackageToken",packageToken),fixture.student());
+        Map.of("offlinePackageToken",packageToken),fixture.student(), TEST_TENANT);
     assertEquals("RELEASED",submitted.get("status"));
     assertEquals(true,submitted.get("resultReleased"));
   }
@@ -140,7 +142,7 @@ class AssessmentLifecycleIntegrationTest {
   void offlineAttemptCannotStartUnlessEditorExplicitlyEnabledIt() {
     Fixture fixture=fixture("COMPLETED");
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
-        ()->controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student()));
+        ()->controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student(), TEST_TENANT));
     assertEquals(409,error.getStatusCode().value());
     assertEquals(0L,jdbc.queryForObject(
         "select count(*) from student_assessment_attempt where assessment_id=? and student_id=?",
@@ -155,7 +157,7 @@ class AssessmentLifecycleIntegrationTest {
         fixture.assessmentId());
 
     Map<String,Object> started=controller.startOrResumeAttempt(
-        fixture.assessmentId(),"hi",true,fixture.student());
+        fixture.assessmentId(),"hi",true,fixture.student(), TEST_TENANT);
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String originalToken=String.valueOf(started.get("offlinePackageToken"));
     String originalHash=jdbc.queryForObject(
@@ -163,14 +165,14 @@ class AssessmentLifecycleIntegrationTest {
         String.class,attemptId);
 
     Map<String,Object> resumed=controller.startOrResumeAttempt(
-        fixture.assessmentId(),"hi",true,fixture.student());
+        fixture.assessmentId(),"hi",true,fixture.student(), TEST_TENANT);
     assertEquals(attemptId,((Number)resumed.get("attempt_id")).longValue());
     assertEquals(originalHash,jdbc.queryForObject(
         "select offline_package_token_hash from student_assessment_attempt where id=?",
         String.class,attemptId));
 
     String refreshedToken=String.valueOf(
-        controller.refreshOfflinePackageToken(attemptId,fixture.student()).get("offlinePackageToken"));
+        controller.refreshOfflinePackageToken(attemptId,fixture.student(), TEST_TENANT).get("offlinePackageToken"));
     assertFalse(refreshedToken.isBlank());
     assertFalse(originalToken.equals(refreshedToken));
     long attemptQuestionId=((Number)((List<Map<String,Object>>)started.get("questions")).getFirst()
@@ -178,11 +180,11 @@ class AssessmentLifecycleIntegrationTest {
 
     ResponseStatusException rejected=assertThrows(ResponseStatusException.class,
         ()->controller.saveAnswer(attemptId,attemptQuestionId,
-            Map.of("answer","B","offlinePackageToken",originalToken),fixture.student()));
+            Map.of("answer","B","offlinePackageToken",originalToken),fixture.student(), TEST_TENANT));
     assertEquals(403,rejected.getStatusCode().value());
 
     Map<String,Object> saved=controller.saveAnswer(attemptId,attemptQuestionId,
-        Map.of("answer","B","offlinePackageToken",refreshedToken),fixture.student());
+        Map.of("answer","B","offlinePackageToken",refreshedToken),fixture.student(), TEST_TENANT);
     assertEquals(true,saved.get("saved"));
   }
 
