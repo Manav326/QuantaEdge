@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 806,
+    "assets_selected": 810,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 805,
-    "assets_remaining": 6683,
+    "assets_analyzed": 809,
+    "assets_remaining": 6679,
     "assets_completion_percent": 10.8,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 801,
+    "assets_skipped_from_checkpoint": 805,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T14:05:34Z"
+      "checkpointed_at": "2026-10-18T14:11:29Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -29892,6 +29892,139 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T14:10:33Z"
+    },
+    {
+      "asset_id": "673237e7ba7269270dc77b33",
+      "asset_sha256": "18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, curved line with a small circle at the end, possibly representing a sound wave or a musical note.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:11:40Z"
+    },
+    {
+      "asset_id": "e2af17c1fbf1fa3f32c5b3e9",
+      "asset_sha256": "6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red butterfly with a dotted tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:11:49Z"
+    },
+    {
+      "asset_id": "46f81c350a8bb49f309198c7",
+      "asset_sha256": "3af8bc3fa0d49725fac393553fa98518b2dc9c61fdd47fcf9f37b46e5755bdff",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/3af8bc3fa0d49725fac393553fa98518b2dc9c61fdd47fcf9f37b46e5755bdff.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a red ribbon and a red flower on the corners.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote his wishes in the teacher's",
+          "mother tongue (Odia) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image is a visual representation of the educational content about creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual card being created."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:13:03Z"
+    },
+    {
+      "asset_id": "53da2c7b598dec4056d3e0a5",
+      "asset_sha256": "924b4ad6a94bd64896de958310464a93f8b5417e9266d3d95165e5800bb1e786",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/924b4ad6a94bd64896de958310464a93f8b5417e9266d3d95165e5800bb1e786.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a red ribbon and a hibiscus flower on the bottom right corner.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:14:21Z"
     }
   ]
 }
