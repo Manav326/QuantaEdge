@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1187,
+    "assets_selected": 1190,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1185,
-    "assets_remaining": 6303,
-    "assets_completion_percent": 15.8,
+    "assets_analyzed": 1188,
+    "assets_remaining": 6300,
+    "assets_completion_percent": 15.9,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1182,
+    "assets_skipped_from_checkpoint": 1185,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:45:31Z"
+      "checkpointed_at": "2026-10-18T22:48:35Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:45:53Z"
+      "checkpointed_at": "2026-10-18T22:48:58Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -45128,6 +45128,95 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T22:47:49Z"
+    },
+    {
+      "asset_id": "e8b00c52d80075e365c0251d",
+      "asset_sha256": "1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/1520623059a26c438949b39ed1ba0694391b6a93a513d8dd57e73ab85c902852.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a fish swimming in water with a leaf-like appendage.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fish",
+          "swimming",
+          "water",
+          "leaf-like appendage"
+        ],
+        "context_relation": "The image is related to the topic of electricity generation and its uses.",
+        "limitations": [
+          "The image does not provide specific details about the uses of electricity or the generation methods of electricity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:49:38Z"
+    },
+    {
+      "asset_id": "81a4dd435b760c3072dc99f2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None of the visible text is related to the image.",
+        "limitations": [
+          "No visible text or images are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:49:46Z"
+    },
+    {
+      "asset_id": "b6abc5681bf6d4656fad527f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of an educational content editor's analysis of a textbook page.",
+        "limitations": [
+          "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:49:55Z"
     }
   ]
 }
