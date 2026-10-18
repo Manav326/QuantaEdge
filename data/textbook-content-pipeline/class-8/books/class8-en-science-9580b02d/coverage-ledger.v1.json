@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 626,
-    "successful_visual_analyses": 626,
-    "missing_visual_analyses": 1665,
+    "raw_analysis_result_rows": 629,
+    "successful_visual_analyses": 629,
+    "missing_visual_analyses": 1662,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1665,
+    "unresolved_count": 1662,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -25277,9 +25277,23 @@
       "asset_path": "assets/a2c8e1738d5b301d02253ee2dd3f1e8aa5fa14d43585e3914cd688438d11de0d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from light brown to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Reprint",
+          "2026-27"
+        ],
+        "context_relation": "The banner likely represents a title or heading for a document or page related to the year 2026-27.",
+        "limitations": [
+          "The banner does not provide specific details about the content or purpose of the document."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25295,9 +25309,18 @@
       "asset_path": "assets/29460f9eb982f926fd78bf11bb59e03139f4bd0cf347cae53996ba9549bb8be2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a gradient transitioning from white to yellow.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a header or footer in a document.",
+        "limitations": [
+          "The image does not contain any text or data that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25313,9 +25336,16 @@
       "asset_path": "assets/c75516557a08ab5f8a08d367227f3834e6474b7371685c43cb4fd142b8e1b67f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, gradient background transitioning from light brown to a darker shade, possibly representing a page or cover of a book.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents the cover or a page of a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
