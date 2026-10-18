@@ -360,13 +360,16 @@ public class PlatformInstitutionController {
         select display_name,logo_asset_key,app_icon_asset_key,store_listing_url,theme_tokens::text as theme_tokens
         from institution_branding where institution_id=?
         """,institutionId);
+    if (body != null && (body.containsKey("logoAssetKey") || body.containsKey("appIconAssetKey"))) {
+      throw new IllegalArgumentException("Use the validated branding asset upload or remove endpoint to change logos and app icons.");
+    }
     String displayName = body!=null && body.containsKey("displayName")
         ? value(body,"displayName") : String.valueOf(existing.get("display_name"));
     requireText(displayName,2,180,"Branded display name");
-    String logo = body!=null && body.containsKey("logoAssetKey")
-        ? ownedBrandAssetKey(institutionId, "LOGO", value(body,"logoAssetKey")) : nullableString(existing.get("logo_asset_key"));
-    String icon = body!=null && body.containsKey("appIconAssetKey")
-        ? ownedBrandAssetKey(institutionId, "APP_ICON", value(body,"appIconAssetKey")) : nullableString(existing.get("app_icon_asset_key"));
+    // Asset references are write-protected here. Only the validated upload/remove lifecycle
+    // may change these keys, mark old binaries inactive, bump versions and audit the action.
+    String logo = nullableString(existing.get("logo_asset_key"));
+    String icon = nullableString(existing.get("app_icon_asset_key"));
     String storeListing = body!=null && body.containsKey("storeListingUrl")
         ? safeStoreListing(value(body,"storeListingUrl")) : nullableString(existing.get("store_listing_url"));
     String tokens = body!=null && body.containsKey("themeTokens")
@@ -760,26 +763,6 @@ public class PlatformInstitutionController {
   private String publicAssetUrl(String tenantCode,String assetType,long version,Object assetKey) {
     if(assetKey==null || String.valueOf(assetKey).isBlank()) return "";
     return "/api/v1/institution/public/branding/"+tenantCode+"/assets/"+assetType+"?v="+version;
-  }
-
-  private String ownedBrandAssetKey(long institutionId,String assetType,String raw) {
-    if(raw==null || raw.isBlank()) return null;
-    String key=raw.trim();
-    Boolean owned=jdbc.queryForObject("""
-        select exists(select 1 from institution_branding_asset
-          where institution_id=? and asset_type=? and asset_id=? and active=true)
-        """,Boolean.class,institutionId,assetType,key);
-    if(!Boolean.TRUE.equals(owned)) throw new IllegalArgumentException("Select an image uploaded to this institution.");
-    return key;
-  }
-
-  private String safeAssetKey(String raw) {
-    if(raw==null || raw.isBlank()) return null;
-    if(raw.length()>500 || raw.startsWith("/") || raw.contains("..") || raw.contains("\\")
-        || raw.contains("://") || raw.chars().anyMatch(Character::isISOControl)) {
-      throw new IllegalArgumentException("Asset keys must be safe relative storage keys; arbitrary URLs are not accepted.");
-    }
-    return raw;
   }
 
   private String safeStoreListing(String raw) {
