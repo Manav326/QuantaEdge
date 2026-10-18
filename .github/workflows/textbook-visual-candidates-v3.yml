@@ -84,7 +84,8 @@ permissions:
 
 concurrency:
   group: textbook-visual-candidates-v3-${{ inputs.class_no || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && 'class-6-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && 'class-7-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && 'class-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && 'classes-7-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && 'classes-6-8-resume') || 'validation-only' }}
-  cancel-in-progress: false
+  # A dedicated Class 6 resume push replaces only the stale Class 6 runner; the other classes remain untouched.
+  cancel-in-progress: ${{ github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') }}
 
 jobs:
   validate:
