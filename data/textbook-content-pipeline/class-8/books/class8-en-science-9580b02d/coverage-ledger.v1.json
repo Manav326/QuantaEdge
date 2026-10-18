@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 424,
-    "successful_visual_analyses": 422,
-    "missing_visual_analyses": 1867,
+    "raw_analysis_result_rows": 427,
+    "successful_visual_analyses": 425,
+    "missing_visual_analyses": 1864,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1869,
+    "unresolved_count": 1866,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -19660,9 +19660,18 @@
       "asset_path": "assets/ceb7f4fe5abdad804dafdf477340af86338f05f386ed40a5f74fe1b4d229843a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to a light brown color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19678,9 +19687,23 @@
       "asset_path": "assets/0817e150733215324d29ce6b94bc393e1e5e637cb4b287691c1fc5bde2c5570b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "yellow to orange transition"
+        ],
+        "context_relation": "The background of the page.",
+        "limitations": [
+          "No specific content or text is visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19696,9 +19719,18 @@
       "asset_path": "assets/5f1e5f3e16ce0a5a229b8b0c8c89251ad89fb2f43937631146688502a7503fc1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or content that can be analyzed for concepts or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
