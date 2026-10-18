@@ -251,6 +251,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Verify Google sign-in configuration before publishing the API image
+        if: github.event_name != 'pull_request'
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to the production API image build. Configure an Actions secret or variable."; exit 1; }
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log in to GHCR
@@ -291,6 +297,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Verify Google sign-in configuration before publishing the web image
+        if: github.event_name != 'pull_request'
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to the production web image build. Configure an Actions secret or variable."; exit 1; }
       - name: Verify structured lesson UI contract
         run: node scripts/check-structured-lesson-ui-contract.mjs
       - name: Verify student navigation contract
