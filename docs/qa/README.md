@@ -22,19 +22,19 @@
 
 ## Current test-pack lifecycle work
 
-The install/uninstall requirements and acceptance matrix are tracked in [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md). This is **implementation work in progress**, not a claim that the QA Center/fixture pack is finished. QA-001–QA-007 remain `NOT_IMPLEMENTED` until the full lifecycle tests pass. A register validator validates CSV/document consistency only; it does not prove runtime execution.
+The install/uninstall requirements and acceptance matrix are tracked in [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md). The first tenant/learner starter-pack slice is implemented on a feature branch; it is **not merged or runtime-verified**. QA-001, QA-002, QA-004, QA-005 and QA-007 remain `NOT_EXECUTED`; QA-003 (scenario runner/report coverage) and QA-006 (external-provider sandbox isolation) remain `NOT_IMPLEMENTED`. A register validator validates CSV/document consistency only; it does not prove runtime execution.
 
 ## Current audit snapshot
 
 | Measure | Current count/status |
 |---|---:|
-| UI route/destination entries | 93 (29 Web, 19 Admin, 11 HRMS, 34 Android) |
-| API mapped handler entries | 435 request/STOMP mapping rows across 48 source files; all 435 linked to existing scenario IDs, static extraction only |
-| Screen entries linked to scenario IDs | 93; references validated against the scenario register |
-| Workflow scenarios | 72 total: 65 `NOT_EXECUTED`, 7 `NOT_IMPLEMENTED` (future QA installer lifecycle) |
+| UI route/destination entries | 94 (29 Web, 19 Admin, 12 HRMS, 34 Android) |
+| API mapped handler entries | 443 request/STOMP mapping rows across 49 source files; all 443 linked to existing scenario IDs, including 8 QA test-center handlers, static extraction only |
+| Screen entries linked to scenario IDs | 94; references validated against the scenario register |
+| Workflow scenarios | 72 total: 70 `NOT_EXECUTED`, 2 `NOT_IMPLEMENTED` (QA scenario runner/report and external-provider safety) |
 | Browser/Android runtime-verified screens | 0 in this audit pass; deployed URL was inaccessible via available browser tool, so this does not establish site outage |
-| Per-screen state coverage | 93 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
-| Test-data ownership/uninstall implementation | Not started; schema and cleanup requirements documented only |
+| Per-screen state coverage | 94 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
+| Test-data ownership/uninstall implementation | Initial run manifest/schema, default-off environment gate, tenant/learner starter pack, HRMS QA Center API/UI and recorded starter-pack checks are present on the feature branch; CI/runtime verification pending |
 
 Counts describe documentation inventory, not feature pass rates or functional coverage percentages.
 
