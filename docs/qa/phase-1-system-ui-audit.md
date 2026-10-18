@@ -136,7 +136,7 @@ Every family must become one or more stable test-case IDs with preconditions, ex
 
 ## 7. API and persistence baseline
 
-The API source tree includes controllers/services for account identity and lifecycle; authentication/authorization; guardian access; platform/institution tenancy; course lifecycle/marketplace; curriculum and learning; assessments/practice; structured lessons; textbooks/documents/resources; tutor; messaging/live sessions; certificates; source ingestion/translations; and HRMS access, workforce, attendance, leave, holidays, assignments, approvals/reporting and payroll. The first guarded-controller pass is documented in [phase-1-api-permission-map.md](./phase-1-api-permission-map.md); it is representative, not yet a complete endpoint catalog.
+The API source tree includes controllers/services for account identity and lifecycle; authentication/authorization; guardian access; platform/institution tenancy; course lifecycle/marketplace; curriculum and learning; assessments/practice; structured lessons; textbooks/documents/resources; tutor; messaging/live sessions; certificates; source ingestion/translations; and HRMS access, workforce, attendance, leave, holidays, assignments, approvals/reporting and payroll. The [phase-1-api-route-inventory.csv](./phase-1-api-route-inventory.csv) contains 435 static mapping rows across 48 source files; the [API permission map](./phase-1-api-permission-map.md) explains selected guards and workspace rules. Effective handler bindings, route-specific permissions, tenant/resource predicates and DB/provider side effects remain open for manual validation.
 
 The migration folder at the inspected code snapshot included migrations through `V128__institution_isolate_learner_history.sql`. Important schema families include unified identity and course entitlements, tenant white-label/branding, class 6–8 course products/offers, institutional course releases, scoped learning history and HRMS. Before the seed-pack design, the audit must trace actual foreign keys, unique constraints, cascade/restrict behavior, external asset references and session/identity relationships in the current full schema.
 
@@ -148,7 +148,7 @@ Required design principle for the later implementation: a unique installation/ru
 
 ## 8. Workflow scenario mapping
 
-A 72-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) now defines stable IDs, personas, preconditions, steps, expected UI/data behavior, negative/security cases, synthetic-fixture safety, cleanup constraints and test method for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and future QA-pack lifecycle behavior. The 7 `QA-00x` installer scenarios are explicitly `NOT_IMPLEMENTED`; the remaining 65 scenarios (including operational health and fresh-database migration checks) are `NOT_EXECUTED`. None is marked passed. All 93 UI inventory rows are now marked `SCENARIO_MAPPED` and reference only existing scenario IDs; the independent check found no broken references. The 435-row API route inventory is also linked to scenario IDs with no blank or unknown references. This is traceability, not execution: screen-level control decomposition, exact endpoint assertions and runtime verification remain open.
+A 72-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) now defines stable IDs, personas, preconditions, steps, expected UI/data behavior, negative/security cases, synthetic-fixture safety, cleanup constraints and test method for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and future QA-pack lifecycle behavior. The 7 `QA-00x` installer scenarios are explicitly `NOT_IMPLEMENTED`; the remaining 65 scenarios (including operational health and fresh-database migration checks) are `NOT_EXECUTED`. None is marked passed. All 93 UI inventory rows are now marked `SCENARIO_MAPPED` and reference only existing scenario IDs; the independent check found no broken references. The 435-row API route inventory is also linked to candidate scenario IDs with no blank or unknown references. This is traceability only: links are controller-family heuristics, not endpoint-specific coverage proof. Screen-level control decomposition, effective-handler confirmation, exact endpoint assertions and runtime verification remain open.
 
 ## 9. Per-screen state coverage checklist
 
@@ -246,7 +246,7 @@ Phase 1 may be signed off only when:
 1. Execute route-generator tests and current route artifact on the exact main SHA; reconcile it with the 93-row starter inventory (59 web page entries plus 34 Android destinations).
 2. Continue screen-specific control/API/permission mapping, then use the 72-case register to drive controlled runtime walkthroughs.
 3. Verify current-main CI and record its exact SHA/results.
-4. Close high-priority tenant, role, test-data ownership and external-side-effect design questions before any central data installer is implemented.
+4. Close high-priority tenant, role, test-data ownership and external-side-effect design questions; use the [consolidated coverage gap plan](./phase-1-coverage-gaps.md) as the Phase 1 gate before any central data installer is implemented.
 
 ---
 
