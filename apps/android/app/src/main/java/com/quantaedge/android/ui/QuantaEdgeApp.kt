@@ -6393,7 +6393,7 @@ private fun ResourcesScreen(
     var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
     var subjectFilter by rememberSaveable { mutableStateOf(subject.ifBlank { "ALL" }) }
     var expandedSubject by rememberSaveable { mutableStateOf(subject.takeUnless { it.isBlank() || it == "ALL" } ?: "") }
-    var chapterPageSize by rememberSaveable { mutableIntStateOf(10) }
+    var chapterPageSize by rememberSaveable { mutableStateOf(10) }
     val chapterPages = remember { mutableStateMapOf<String, Int>() }
 
     LaunchedEffect(subject, documents) {
