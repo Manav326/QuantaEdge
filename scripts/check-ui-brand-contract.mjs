@@ -49,6 +49,11 @@ const androidAppManifest = read('apps/android/app/src/main/AndroidManifest.xml')
 const androidTenantMigration = read('services/api/src/main/resources/db/migration/V121__institution_branding_asset_storage.sql');
 const institutionTenantController = read('services/api/src/main/java/com/quantaedge/api/InstitutionTenantController.java');
 const institutionPlatformController = read('services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java');
+const institutionBrandAssetValidator = read('services/api/src/main/java/com/quantaedge/api/InstitutionBrandingAssetValidator.java');
+const institutionBrandAssetValidatorTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionBrandingAssetValidatorTest.java');
+const institutionBrandAssetControlTests = read('services/api/src/test/java/com/quantaedge/api/InstitutionBrandingAssetControlTest.java');
+const authFilter = read('services/api/src/main/java/com/quantaedge/api/AuthFilter.java');
+const authFilterTests = read('services/api/src/test/java/com/quantaedge/api/AuthFilterTest.java');
 const institutionAuthService = read('services/api/src/main/java/com/quantaedge/api/InstitutionAuthService.java');
 const certificateController = read('services/api/src/main/java/com/quantaedge/api/CertificateController.java');
 const certificateRenderer = read('services/api/src/main/java/com/quantaedge/api/CertificateRenderer.java');
@@ -129,6 +134,14 @@ assert(androidBuildConfig.includes('configuredInstitutionApplicationId') && andr
 assert(androidTenantMigration.includes('CREATE TABLE institution_branding_asset') && androidTenantMigration.includes('image_bytes'), 'Institution branding image storage must be tenant-scoped and bounded.');
 assert(institutionTenantController.includes('/assets/{assetType}') && institutionTenantController.includes('assetUrl(normalized'), 'The API must serve verified logo and app-icon assets only through the resolved tenant.');
 assert(institutionPlatformController.includes('ownedBrandAssetKey') && institutionPlatformController.includes('uploadBrandingAsset'), 'Only uploaded, tenant-owned branding assets may be selected from HRMS.');
+assert(institutionBrandAssetValidator.includes('MAX_BYTES = 2 * 1024 * 1024') && institutionBrandAssetValidator.includes('ImageIO.getImageReaders'), 'Branding uploads must enforce size, raster-format and decoder validation on the server.');
+assert(institutionBrandAssetValidatorTests.includes('rejectsOversizedUploadsBeforeImageDecoding') && institutionBrandAssetValidatorTests.includes('rejectsImagePixelDimensionsAboveSafetyLimit'), 'Asset validator tests must cover byte and pixel safety limits.');
+assert(institutionPlatformController.includes('@DeleteMapping("/{institutionId}/branding/assets/{assetType}")') && institutionPlatformController.includes('BRANDING_ASSET_REMOVED'), 'The platform owner must be able to remove a currently selected logo or app icon with an audit record.');
+assert(institutionTenantController.includes('b.version=?') && institutionTenantController.includes('matchesEntityTag') && institutionTenantController.includes('IF_NONE_MATCH'), 'Public tenant assets must require the current branding version and support conditional cache revalidation.');
+assert(institutionBrandAssetControlTests.includes('ownerCanRemoveAnAsset') && institutionBrandAssetControlTests.includes('assetRemovalRejectsNonOwner') && institutionBrandAssetControlTests.includes('staleVersionDoesNotResolve'), 'Asset control tests must cover owner access, removal and stale URL rejection.');
+assert(authFilter.includes('MAX_BRANDING_ASSET_REQUEST_BYTES') && authFilter.includes('authorization.hasPermission(context, "QE_PLATFORM_OWNER")'), 'The API filter must cap multipart branding uploads before parsing and require owner permission.');
+assert(authFilterTests.includes('oversizedBrandingUploadIsRejectedBeforeMultipartParsing') && authFilterTests.includes('anonymousBrandingUploadIsRejectedBeforeMultipartParsing'), 'Upload guard tests must cover oversized and anonymous requests before multipart parsing.');
+assert(hrmsInstitutionPage.includes("removeBrandAsset(assetType:'logo'|'app-icon')") && hrmsInstitutionPage.includes("{method:'DELETE'}"), 'The HRMS owner UI must expose working remove controls for both branding assets.');
 assert(adminSidebar.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin sidebar must use the canonical shared brand component.');
 assert(adminWorkspaceLayout.includes("import QuantaEdgeBrand from './QuantaEdgeBrand'"), 'Admin mobile workspace header must use the shared brand component.');
 assert(adminWorkspaceLayout.includes('className="qe-admin-global-brand"'), 'Admin mobile workspace header must render the canonical brand lockup.');
