@@ -9,6 +9,7 @@
 - [UI Screen Inventory](./ui-screen-inventory.csv): machine-readable register of web routes and Android navigation destinations.
 - [Phase 1 Source Review Log](./phase-1-source-review-log.md): first-pass actions/API observations by route and Android shell mappings.
 - [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md): inspected authorization/workspace guards and sensitive controller families.
+- [Data Relationship and Cleanup Map](./phase-1-data-and-cleanup-map.md): identity/tenant/course/learning/HRMS dependencies, protected baseline data and safe-uninstall requirements.
 
 ## Evidence and status rules
 
