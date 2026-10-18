@@ -212,6 +212,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Document Education Admin base-role defaults, HRMS additional-role templates and distinct platform-owner/institution-admin authority.
 - [x] Trace all 34 declared Android routes through the destination switch and document component branches plus the custom back/return contract (device verification remains open).
 - [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
+- [x] Add a reusable Node validator, unit tests and CI step to check CSV structure, scenario-reference integrity, one execution-log row per scenario and required evidence fields for reported results. CI execution on the final head still must be confirmed.
 - [x] Record the initial test-data marker search result and its limits.
 
 ### Still required before Phase 1 sign-off
@@ -219,10 +220,10 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Recompute current route normalization against the inventory-generator rules and reconcile all 59 page-file paths against the CSV; no missing or non-existent page paths were found.
 - [ ] Execute the actual Node route-inventory test and generator on the exact current main SHA; retain the generated artifact and update the historical localization tracker.
 - [ ] Inspect every route file and referenced component: controls, dialogs, tabs, handlers, client-side validation, loading/empty/error/success states, visible role conditions and API calls.
-- [ ] Trace all 34 Android destinations through Compose navigation and component composition; document lifecycle/back behavior and web parity.
-- [ ] Build route action → API method/path → authentication/permission → request/response → persistence model mapping.
+- [x] Trace all 34 Android destinations through Compose navigation and component composition; document route-specific renderer branches and back/return contracts. [ ] Complete device/emulator lifecycle/back testing and web parity (see Android composition map).
+- [ ] Complete the route action → API method/path → authentication/permission → request/response → persistence model mapping. The 435-row source-derived API route inventory and 72-case scenario/log crosswalk exist, but its guard hints and controller-family scenario links still require endpoint-by-endpoint review.
 - [ ] Complete schema-wide extraction of foreign keys, unique/check constraints, delete actions and migration history for all tables that will appear in a test pack (initial partial map: [data and cleanup map](./phase-1-data-and-cleanup-map.md)).
-- [ ] Produce a complete role-to-permission matrix from actual server checks (not labels or nav visibility).
+- [ ] Verify the source-derived [role/workspace permission matrix](./phase-1-role-workspace-matrix.md) against the effective migrated database grants and route-by-route API allow/deny behavior (not labels or nav visibility).
 - [ ] Conduct browser walkthroughs at approximately 320, 375/390, 430, 768, 1280 and 1440 CSS pixels; retain screenshots and console/network findings.
 - [ ] Conduct Android emulator/device walkthroughs for common and compact display sizes, including back navigation, keyboard/IME, network interruption and account/session changes.
 - [ ] Exercise primary, validation, permission-denied, empty, loading, failure, retry and destructive-confirmation states.
@@ -243,8 +244,8 @@ Phase 1 may be signed off only when:
 
 ## 14. Immediate next pass
 
-1. Execute route-generator tests and current route artifact on the exact main SHA; reconcile it with the 93-row starter inventory (59 web page entries plus 34 Android destinations).
-2. Continue screen-specific control/API/permission mapping, then use the 72-case register to drive controlled runtime walkthroughs.
+1. Execute the route-generator test and current route artifact on the exact main SHA; also confirm the new QA-register validator tests in CI. Reconcile generated routes with the 93-row starter inventory (59 web page entries plus 34 Android destinations).
+2. Continue screen-specific control/API/permission mapping using the 93-row state checklist and 435-row API register, then use the 72-case execution log to drive controlled runtime walkthroughs.
 3. Verify current-main CI and record its exact SHA/results.
 4. Close high-priority tenant, role, test-data ownership and external-side-effect design questions; use the [consolidated coverage gap plan](./phase-1-coverage-gaps.md) as the Phase 1 gate before any central data installer is implemented.
 
