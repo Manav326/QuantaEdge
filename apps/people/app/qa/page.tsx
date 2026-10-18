@@ -24,6 +24,14 @@ type Pack = {
   personas?: string[];
   coverageLimit?: string;
 };
+type CheckResult = {
+  check_key?: string;
+  status?: string;
+  expected?: string;
+  actual?: string;
+  details?: unknown;
+  executed_at?: string;
+};
 type Run = {
   run_id?: string;
   runId?: string;
@@ -45,6 +53,9 @@ type Run = {
   events?: JsonMap[];
   protected_baseline?: unknown;
   cleanup_report?: unknown;
+  checks?: CheckResult[];
+  fixtureSummary?: Record<string, unknown>;
+  verification?: { overallStatus?: string; passedChecks?: number; failedChecks?: number };
   oneTimeSyntheticCredentials?: unknown;
   credentialsIncluded?: boolean;
   uninstallPlan?: JsonMap;
@@ -165,6 +176,33 @@ export default function QaCenterPage() {
         setError(String(result.error_summary ?? result.error_code ?? t('people.qa.installBlocked')));
       }
       await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t('people.qa.actionError'));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function verifyRun() {
+    if (!activeRunId || busy) return;
+    setBusy(true);
+    setError('');
+    setNotice('');
+    try {
+      const result = await api<Run>(
+        '/api/v1/hrms/platform/qa/runs/' + encodeURIComponent(activeRunId) + '/verify',
+        { method: 'POST', body: JSON.stringify({}) },
+      );
+      setSelectedRun(result);
+      const verification = result.verification;
+      if (verification?.overallStatus === 'PASS') {
+        setNotice(String(verification.passedChecks ?? 0) + ' checks passed. ' + t('people.qa.overallPass'));
+      } else {
+        setError(String(verification?.failedChecks ?? 0) + ' ' + t('people.qa.checksFailed'));
+      }
+      await refresh();
+      const detail = await api<Run>('/api/v1/hrms/platform/qa/runs/' + encodeURIComponent(activeRunId));
+      setSelectedRun({ ...detail, verification });
     } catch (e) {
       setError(e instanceof Error ? e.message : t('people.qa.actionError'));
     } finally {
@@ -336,8 +374,33 @@ export default function QaCenterPage() {
           </dl>
           <div className={styles.detailActions}>
             <button className="secondary" type="button" onClick={() => void inspectRun(activeRunId)} disabled={busy}>{t('people.qa.refresh')}</button>
+            <button className="primary" type="button" onClick={() => void verifyRun()} disabled={busy || selectedRun.state !== 'INSTALLED' || !gate?.writeAllowed}>{t('people.qa.runChecks')}</button>
             <button className="secondary" type="button" onClick={() => void previewUninstall()} disabled={busy || !canUninstall || !gate?.writeAllowed}>{t('people.qa.uninstallPlan')}</button>
           </div>
+          {selectedRun.fixtureSummary && Object.keys(selectedRun.fixtureSummary).length > 0 ? (
+            <details className={styles.details}>
+              <summary>{t('people.qa.fixtureSummary')}</summary>
+              <pre className={styles.json}>{pretty(selectedRun.fixtureSummary)}</pre>
+            </details>
+          ) : null}
+          {selectedRun.checks && selectedRun.checks.length > 0 ? (
+            <details className={styles.details} open>
+              <summary>{t('people.qa.checks')} ({selectedRun.checks.length})</summary>
+              <div className={styles.checkList}>
+                {selectedRun.checks.map((check, index) => (
+                  <div className={styles.checkRow} key={String(check.check_key ?? index)}>
+                    <div className={styles.checkHead}>
+                      <strong>{String(check.check_key ?? 'check')}</strong>
+                      <PeopleStatusBadge status={String(check.status ?? 'UNKNOWN')} />
+                    </div>
+                    <p><span>{t('people.qa.expected')}: </span>{String(check.expected ?? '—')}</p>
+                    <p><span>{t('people.qa.actual')}: </span>{String(check.actual ?? '—')}</p>
+                    <span className="small">{formatTime(check.executed_at)}</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+          ) : null}
           <details className={styles.details}>
             <summary>{t('people.qa.manifest')} ({resourceRows.length})</summary>
             {resourceRows.length === 0 ? <p className="small">—</p> : (
