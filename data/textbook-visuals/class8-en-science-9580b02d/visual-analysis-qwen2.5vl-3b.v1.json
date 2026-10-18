@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 401,
+    "assets_selected": 404,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 399,
-    "assets_remaining": 1892,
-    "assets_completion_percent": 17.4,
+    "assets_analyzed": 402,
+    "assets_remaining": 1889,
+    "assets_completion_percent": 17.5,
     "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 396,
+    "assets_skipped_from_checkpoint": 399,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:25:51Z"
+      "checkpointed_at": "2026-10-18T05:32:19Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:26:38Z"
+      "checkpointed_at": "2026-10-18T05:33:06Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -11924,6 +11924,93 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T05:31:11Z"
+    },
+    {
+      "asset_id": "c0e8e09f5020051f5233a2ce",
+      "asset_sha256": "b77e3bee47a3497284b98171ba41da8481a425dc3ca085019971feeee12677b4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/b77e3bee47a3497284b98171ba41da8481a425dc3ca085019971feeee12677b4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with a golden and white color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:34:35Z"
+    },
+    {
+      "asset_id": "4c5d20257aef65f7783d3f60",
+      "asset_sha256": "9fddb8a5e70499f544dcdf8427e5a23889b0a9cf5f08225e3b0c675c916101df",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/9fddb8a5e70499f544dcdf8427e5a23889b0a9cf5f08225e3b0c675c916101df.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [],
+        "context_relation": "background",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:36:07Z"
+    },
+    {
+      "asset_id": "78f9cb4181caf56d34bc9011",
+      "asset_sha256": "46c17c7e18148b687dd5230ff1cdc49bc995414aade67d8353be132bd1043e9c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/46c17c7e18148b687dd5230ff1cdc49bc995414aade67d8353be132bd1043e9c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and brown gradient background with a black line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and brown gradient",
+          "black line at the bottom"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:37:38Z"
     }
   ]
 }
