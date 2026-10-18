@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bde6e18a34691bb1093d2c38d82f327e2a9f026e50b80c424cfda9e50b3f2b84",
+  "raw_analysis_sha256": "ab1ab431c013f5acaa24da4f0269da8ec6a8656af0d0841b715b007a56f6ab11",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:39:27Z",
+      "checkpointed_at": "2026-10-18T19:46:38Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:40:21Z",
+      "checkpointed_at": "2026-10-18T19:47:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:41:30Z",
+      "checkpointed_at": "2026-10-18T19:48:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -36919,6 +36919,122 @@
         ],
         "context_relation": "desert",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "054e6911cbbbcd03732a8bed",
+      "asset_sha256": "28d67cdfb80264eac6d7d3ad7becb491bb133d852e9f15f240f6d1559ded2eeb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/28d67cdfb80264eac6d7d3ad7becb491bb133d852e9f15f240f6d1559ded2eeb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7c4f33cef2841fb93187de28e302dcd297c37d00ead7d94bf3fb081ecf71a5d7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A tall evergreen tree in a forested area with mountains in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "evergreen tree",
+          "forest",
+          "mountains",
+          "background"
+        ],
+        "context_relation": "The image shows a natural landscape, possibly used for educational purposes to discuss the environment or ecology.",
+        "limitations": [
+          "The image does not provide specific details about the types of plants or animals present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:49:49Z",
+      "effective_analysis": {
+        "visual_summary": "A tall evergreen tree in a forested area with mountains in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "evergreen tree",
+          "forest",
+          "mountains",
+          "background"
+        ],
+        "context_relation": "The image shows a natural landscape, possibly used for educational purposes to discuss the environment or ecology.",
+        "limitations": [
+          "The image does not provide specific details about the types of plants or animals present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "58a72aac17ce7154f1fc1ed2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7c4f33cef2841fb93187de28e302dcd297c37d00ead7d94bf3fb081ecf71a5d7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blackboard with a table titled 'Animals and plants found in different surroundings' partially filled with text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 2.10: Let us compare and analyse",
+          "Look at Table 2.6. Recreate a similar table on the blackboard.",
+          "List the names of plants and animals you or your classmates have observed in the regions given in the table or already know about. A few examples are given.",
+          "Table 2.6: Animals and plants found in different surroundings",
+          "S. no. In the desert In the mountains In the",
+          "no. desert mountains",
+          "Any other"
+        ],
+        "concepts": [
+          "Animals and plants",
+          "Different surroundings",
+          "Comparison and analysis",
+          "Table structure"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving the creation and analysis of a table about animals and plants found in different environments.",
+        "limitations": [
+          "The table is incomplete, with only partial text visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:50:18Z",
+      "effective_analysis": {
+        "visual_summary": "A blackboard with a table titled 'Animals and plants found in different surroundings' partially filled with text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 2.10: Let us compare and analyse",
+          "Look at Table 2.6. Recreate a similar table on the blackboard.",
+          "List the names of plants and animals you or your classmates have observed in the regions given in the table or already know about. A few examples are given.",
+          "Table 2.6: Animals and plants found in different surroundings",
+          "S. no. In the desert In the mountains In the",
+          "no. desert mountains",
+          "Any other"
+        ],
+        "concepts": [
+          "Animals and plants",
+          "Different surroundings",
+          "Comparison and analysis",
+          "Table structure"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity involving the creation and analysis of a table about animals and plants found in different environments.",
+        "limitations": [
+          "The table is incomplete, with only partial text visible."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
