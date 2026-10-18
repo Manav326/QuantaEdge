@@ -73,6 +73,7 @@ public class QaTestPackService {
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("featureEnabled", qaEnabled);
     result.put("environmentApproved", environmentApproved);
+    result.put("fixtureCredentialsConfigured", fixturePassword.length() >= 10 && fixturePassword.chars().noneMatch(Character::isISOControl));
     result.put("environmentLabel", environmentLabel.isBlank() ? null : environmentLabel);
     result.put("currentDatabase", gate.databaseName);
     result.put("databaseApproved", gate.databaseApproved);
@@ -761,6 +762,8 @@ public class QaTestPackService {
     boolean labelValid = ENVIRONMENT_LABEL.matcher(environmentLabel).matches()
         && !environmentLabel.toLowerCase(Locale.ROOT).contains("prod")
         && !environmentLabel.toLowerCase(Locale.ROOT).contains("live");
+    boolean fixtureReady = fixturePassword.length() >= 10
+        && fixturePassword.chars().noneMatch(Character::isISOControl);
     String reason = "QA writes are disabled.";
     boolean allowed = false;
     if (!qaEnabled) reason = "APP_QA_ENABLED is false; QA mutations are disabled by default.";
@@ -768,11 +771,12 @@ public class QaTestPackService {
     else if (prodProfile) reason = "QA operations are forbidden in a production/live environment or profile.";
     else if (!labelValid) reason = "APP_QA_ENVIRONMENT_LABEL must be an explicit non-production label.";
     else if (!safeDb) reason = "Current database name is not on the allow-list. Use an isolated database ending in _qa, _test, _ci or _integration.";
+    else if (!fixtureReady) reason = "APP_QA_FIXTURE_PASSWORD must be explicitly configured with at least 10 non-control characters.";
     else {
       allowed = true;
       reason = "Approved isolated QA database; run-scoped operations are enabled.";
     }
-    return new Gate(database, safeDb, prodProfile, allowed, reason);
+    return new Gate(database, safeDb, prodProfile, allowed, reason, fixtureReady);
   }
 
   private void requireWritableEnvironment(Gate gate) {
@@ -780,6 +784,6 @@ public class QaTestPackService {
   }
 
   private record Gate(String databaseName, boolean databaseApproved, boolean productionProfile,
-      boolean allowed, String reason) {}
+      boolean allowed, String reason, boolean fixtureCredentialsConfigured) {}
   private record DeleteSpec(String deleteSql, String ownerSql) {}
 }
