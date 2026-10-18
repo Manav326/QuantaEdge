@@ -179,7 +179,7 @@ No browser E2E framework was positively identified in the inspected package mani
 | QA1-07 | P1 | External providers may cause real-world effects. | Sandbox/test-mode configuration, safe test doubles, signed webhook tests and explicit no-real-payment/no-real-message safety barriers. |
 | QA1-08 | P2 | Source trace now resolves thin student routes to client components and Admin `/legacy-content` to a redirect to `/content`; component-level and runtime verification remain open. | Full action/API/permission trace for the client components plus runtime redirect/navigation evidence; no alias double-counting. |
 | QA1-09 | P2 | Historical UI/UX and localization tracker statuses are tied to old source revisions; older “done” labels may not be current verification. | Revalidate against current SHA; distinguish historical source change from current browser/assistive-tech certification. |
-| QA1-10 | P1 | Data-pack install/uninstall requires more than seeding rows due to foreign keys, uploaded files/media, sessions, provider resources, and existing identity conflicts. | Entity dependency graph, ownership manifest, rollback/retry design, collision tests, asset cleanup and proof that unrelated data remains unchanged. |
+| QA1-10 | P1 | Data-pack install/uninstall requires more than seeding rows due to foreign keys, uploaded files/media, sessions, provider resources, and existing identity conflicts. Existing compose default sets `APP_DEMO_SEED=true`; migration V125 owns the `QUANTA-EDGE` tenant and historical membership backfill. | Entity dependency graph, immutable run ownership manifest, rollback/retry design, collision tests, provider/file cleanup and proof that unrelated/demo data remains unchanged. See [data and cleanup map](./phase-1-data-and-cleanup-map.md). |
 
 ## 10. Phase 1 work register
 
@@ -191,6 +191,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Locate representative UI audit/design/tenant/HRMS docs, API test suites, Android unit test suite and main CI workflow.
 - [x] Identify current external integration families and the high-risk tenant/role boundaries.
 - [x] Scan the 59 web route-entry files for page-level handlers/direct API literals and map Android route enums through the Compose shell (partial; see source log).
+- [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
 - [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
 - [x] Record the initial test-data marker search result and its limits.
 
@@ -201,7 +202,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [ ] Inspect every route file and referenced component: controls, dialogs, tabs, handlers, client-side validation, loading/empty/error/success states, visible role conditions and API calls.
 - [ ] Trace all 34 Android destinations through Compose navigation and component composition; document lifecycle/back behavior and web parity.
 - [ ] Build route action → API method/path → authentication/permission → request/response → persistence model mapping.
-- [ ] Trace schemas, foreign keys, unique constraints, destructive actions, asset storage and delete/restrict cascades for all entities likely to appear in a test pack.
+- [ ] Complete schema-wide extraction of foreign keys, unique/check constraints, delete actions and migration history for all tables that will appear in a test pack (initial partial map: [data and cleanup map](./phase-1-data-and-cleanup-map.md)).
 - [ ] Produce a complete role-to-permission matrix from actual server checks (not labels or nav visibility).
 - [ ] Conduct browser walkthroughs at approximately 320, 375/390, 430, 768, 1280 and 1440 CSS pixels; retain screenshots and console/network findings.
 - [ ] Conduct Android emulator/device walkthroughs for common and compact display sizes, including back navigation, keyboard/IME, network interruption and account/session changes.
