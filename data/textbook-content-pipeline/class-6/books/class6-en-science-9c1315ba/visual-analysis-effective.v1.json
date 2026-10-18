@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "671e3b595b498b012c2be7813c8d2e329fb6457b11a27ba57b01077bb2e8fb76",
+  "raw_analysis_sha256": "68fde2573b94ecbe1bd8da21c848d2d427e0e32633f3e279fc24294d2f94c449",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:02:54Z",
+      "checkpointed_at": "2026-10-18T20:06:43Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:03:47Z",
+      "checkpointed_at": "2026-10-18T20:07:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:04:57Z",
+      "checkpointed_at": "2026-10-18T20:08:46Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37382,6 +37382,148 @@
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
           "No visible text or images to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1c7d74ec31119a7187c25e4f",
+      "asset_sha256": "5a757ded3198967dc77cd0eafac3415cf318186d57398773d391330cbd56ccb7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 43,
+      "asset_path": "page-0043.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "27044e01ee718413dc2d25e5be05bc77a17a050f0417efa461b05742d928472c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two camels, one in a hot desert and one in a cold desert, with labels indicating hooves.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.11: A camel living in the hot desert of Rajasthan",
+          "Fig. 2.12: A camel living in the cold desert of Ladakh",
+          "The camel of the hot desert has long legs with wide hooves. Alex shares that his grandmother told him that the long legs and wide hooves help these camels to walk on the sandy desert without sinking into the sand. On the other hand, the height and legs of camels of a cold desert are comparatively sh"
+        ],
+        "concepts": [
+          "biodiversity",
+          "deserts",
+          "camels",
+          "snowfall",
+          "mountains",
+          "cold",
+          "hot",
+          "fleshy stems",
+          "water storage",
+          "snow slide",
+          "conical shape",
+          "sloping branches",
+          "deodar trees",
+          "biodiversity variation",
+          "camel differences",
+          "hooves",
+          "camel living in hot desert",
+          "camel living in cold desert",
+          "camel long legs",
+          "camel wide hooves"
+        ],
+        "context_relation": "The image is a visual representation of the differences in camels living in hot and cold deserts, highlighting their adaptations to their respective environments.",
+        "limitations": [
+          "The image does not provide information about the specific species of camels depicted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:11:47Z",
+      "effective_analysis": {
+        "visual_summary": "Two camels, one in a hot desert and one in a cold desert, with labels indicating hooves.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.11: A camel living in the hot desert of Rajasthan",
+          "Fig. 2.12: A camel living in the cold desert of Ladakh",
+          "The camel of the hot desert has long legs with wide hooves. Alex shares that his grandmother told him that the long legs and wide hooves help these camels to walk on the sandy desert without sinking into the sand. On the other hand, the height and legs of camels of a cold desert are comparatively sh"
+        ],
+        "concepts": [
+          "biodiversity",
+          "deserts",
+          "camels",
+          "snowfall",
+          "mountains",
+          "cold",
+          "hot",
+          "fleshy stems",
+          "water storage",
+          "snow slide",
+          "conical shape",
+          "sloping branches",
+          "deodar trees",
+          "biodiversity variation",
+          "camel differences",
+          "hooves",
+          "camel living in hot desert",
+          "camel living in cold desert",
+          "camel long legs",
+          "camel wide hooves"
+        ],
+        "context_relation": "The image is a visual representation of the differences in camels living in hot and cold deserts, highlighting their adaptations to their respective environments.",
+        "limitations": [
+          "The image does not provide information about the specific species of camels depicted."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6691c4b7f74941d6371ae52b",
+      "asset_sha256": "65f3fd3d20bd4af97fd091837e88802793a75140dc38c1e527d372ead6c2031c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/65f3fd3d20bd4af97fd091837e88802793a75140dc38c1e527d372ead6c2031c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A tree with vibrant pink flowers in a foggy, misty landscape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "flowers",
+          "fog",
+          "mist",
+          "landscape"
+        ],
+        "context_relation": "The image does not provide any direct information related to the content of the textbook.",
+        "limitations": [
+          "The image does not show any text or labels that could be related to the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:12:59Z",
+      "effective_analysis": {
+        "visual_summary": "A tree with vibrant pink flowers in a foggy, misty landscape.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "flowers",
+          "fog",
+          "mist",
+          "landscape"
+        ],
+        "context_relation": "The image does not provide any direct information related to the content of the textbook.",
+        "limitations": [
+          "The image does not show any text or labels that could be related to the content of the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
