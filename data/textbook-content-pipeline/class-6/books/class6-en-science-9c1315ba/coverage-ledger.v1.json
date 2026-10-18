@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 681,
-    "successful_visual_analyses": 672,
-    "missing_visual_analyses": 1397,
+    "raw_analysis_result_rows": 685,
+    "successful_visual_analyses": 676,
+    "missing_visual_analyses": 1393,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1406,
+    "unresolved_count": 1402,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27295,9 +27295,20 @@
       "asset_path": "assets/1b59fbd513b7f9dca1a3dcd9fb2f8e8aac995869dfb1fb96c6aa647ca84c13a1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH01' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH01"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a link to additional resources or information.",
+        "limitations": [
+          "The QR code's content is not visible in the image provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27313,9 +27324,23 @@
       "asset_path": "assets/4f1bbfe0c4a738995fa490914de65dbad75936385c2beb3a4a1644bac8f3309e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a mountainous landscape with green grass, trees, and a blue sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mountains",
+          "grass",
+          "trees",
+          "sky"
+        ],
+        "context_relation": "The image represents a natural landscape, possibly used to illustrate a topic related to nature or geography in the context of the book.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the content of the book."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27331,9 +27356,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An introductory page to a science textbook, welcoming students to the world of science and encouraging them to explore and understand the world around them.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter The Wonderful World of Science 1",
+          "As human beings, we have always been curious about our surroundings. We start exploring our surroundings and asking questions right from our childhood. Did you enjoy discovering and exploring the world around you in the Preparatory Stage of school? As you enter the Middle Stage, we will continue thi",
+          "Science is a way of thinking, observing and doing things."
+        ],
+        "concepts": [
+          "Science",
+          "Exploring the world",
+          "Understanding the world",
+          "Thinking",
+          "Observing",
+          "Doing things"
+        ],
+        "context_relation": "Introduction to the subject of Science",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27349,9 +27394,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "introduction to the subject of science",
+        "limitations": [
+          "no visible text or images on the page"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

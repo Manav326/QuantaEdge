@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 672,
+    "assets_selected": 676,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 671,
-    "assets_remaining": 1407,
-    "assets_completion_percent": 32.3,
+    "assets_analyzed": 675,
+    "assets_remaining": 1403,
+    "assets_completion_percent": 32.5,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 667,
+    "assets_skipped_from_checkpoint": 671,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:41:51Z"
+      "checkpointed_at": "2026-10-18T12:49:07Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20135,6 +20135,136 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T12:47:54Z"
+    },
+    {
+      "asset_id": "7a2114199da63862d4174b2d",
+      "asset_sha256": "1b59fbd513b7f9dca1a3dcd9fb2f8e8aac995869dfb1fb96c6aa647ca84c13a1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/1b59fbd513b7f9dca1a3dcd9fb2f8e8aac995869dfb1fb96c6aa647ca84c13a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a981137472f56312bfb161596b9eff592a8866ec9a6bd852ba0166a91f3e65da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH01' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH01"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a link to additional resources or information.",
+        "limitations": [
+          "The QR code's content is not visible in the image provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:50:46Z"
+    },
+    {
+      "asset_id": "098fc30ec2d67c224af3fc98",
+      "asset_sha256": "4f1bbfe0c4a738995fa490914de65dbad75936385c2beb3a4a1644bac8f3309e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/4f1bbfe0c4a738995fa490914de65dbad75936385c2beb3a4a1644bac8f3309e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a981137472f56312bfb161596b9eff592a8866ec9a6bd852ba0166a91f3e65da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a mountainous landscape with green grass, trees, and a blue sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "mountains",
+          "grass",
+          "trees",
+          "sky"
+        ],
+        "context_relation": "The image represents a natural landscape, possibly used to illustrate a topic related to nature or geography in the context of the book.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the content of the book."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:52:20Z"
+    },
+    {
+      "asset_id": "17c90cf6051e6cea0d48ea5a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a981137472f56312bfb161596b9eff592a8866ec9a6bd852ba0166a91f3e65da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An introductory page to a science textbook, welcoming students to the world of science and encouraging them to explore and understand the world around them.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter The Wonderful World of Science 1",
+          "As human beings, we have always been curious about our surroundings. We start exploring our surroundings and asking questions right from our childhood. Did you enjoy discovering and exploring the world around you in the Preparatory Stage of school? As you enter the Middle Stage, we will continue thi",
+          "Science is a way of thinking, observing and doing things."
+        ],
+        "concepts": [
+          "Science",
+          "Exploring the world",
+          "Understanding the world",
+          "Thinking",
+          "Observing",
+          "Doing things"
+        ],
+        "context_relation": "Introduction to the subject of Science",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:52:55Z"
+    },
+    {
+      "asset_id": "bb7bca5bc9719b5703e98da6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a981137472f56312bfb161596b9eff592a8866ec9a6bd852ba0166a91f3e65da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "introduction to the subject of science",
+        "limitations": [
+          "no visible text or images on the page"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:53:11Z"
     }
   ]
 }
