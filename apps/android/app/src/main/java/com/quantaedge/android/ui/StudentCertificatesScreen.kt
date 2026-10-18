@@ -71,6 +71,7 @@ fun StudentCertificatesScreen(
 ) {
     val context = LocalContext.current
     val institutionBrand = LocalInstitutionBrandIdentity.current
+    val institutionBrandResolving = LocalInstitutionBrandResolutionPending.current
     val certificateFileStem = remember(institutionBrand?.institutionCode, institutionBrand?.displayName) {
         val schoolName = institutionBrand?.displayName?.trim()
         if (schoolName.isNullOrBlank()) {
@@ -406,10 +407,10 @@ fun StudentCertificatesScreen(
                 if (code == null) {
                     verifyingQr = false
                     error = if (language == "hi") {
-                        if (institutionBrand != null) "यह मान्य प्रमाणपत्र QR या बारकोड नहीं है।"
+                        if (institutionBrand != null || institutionBrandResolving) "यह मान्य प्रमाणपत्र QR या बारकोड नहीं है।"
                         else "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
                     } else {
-                        if (institutionBrand != null) "This is not a valid certificate QR or barcode."
+                        if (institutionBrand != null || institutionBrandResolving) "This is not a valid certificate QR or barcode."
                         else "This is not a valid QuantaEdge certificate QR or barcode."
                     }
                     notice = ""
@@ -443,7 +444,7 @@ fun StudentCertificatesScreen(
                     if (institutionBrand != null) "प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
                     else "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
                 } else {
-                    if (institutionBrand != null) "Scan the QR or linear barcode on a certificate. Its current status is checked with the server."
+                    if (institutionBrand != null || institutionBrandResolving) "Scan the QR or linear barcode on a certificate. Its current status is checked with the server."
                     else "Scan the QR or linear barcode on a QuantaEdge certificate. Its current status is checked with the server."
                 },
                     style = MaterialTheme.typography.bodyMedium)
@@ -683,7 +684,7 @@ fun StudentCertificatesScreen(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(certificate.optString("achievement_title", certificate.optString("achievementTitle",
-                        if (institutionBrand != null) "Achievement certificate" else "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
+                        if (institutionBrand != null || institutionBrandResolving) "Achievement certificate" else "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
                     val certificateClass = certificate.optString("class_code")
                     val subject = localizedCertificateSubject(
                         certificate.optString("subject_code"), certificate.optString("subject_name"), language)
