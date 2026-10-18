@@ -479,7 +479,7 @@ class AuthServiceTest {
     when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(mobile))).thenReturn(0L);
 
     assertEquals("123456", auth.requestOtp("7070107483", "PASSWORD_RESET"));
-    verify(jdbc).update(contains("insert into otp_challenge"), eq(mobile), eq("PASSWORD_RESET"), anyString());
+    verify(jdbc).update(contains("insert into otp_challenge"), eq(mobile), eq("PASSWORD_RESET"), anyString(), org.mockito.ArgumentMatchers.isNull());
   }
 
   @Test
