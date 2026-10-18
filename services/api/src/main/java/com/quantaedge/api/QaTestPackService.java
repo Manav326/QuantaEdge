@@ -319,7 +319,7 @@ public class QaTestPackService {
 
       Map<String,Object> baselineBefore = readJsonMap(run.get("protected_baseline"));
       Map<String,Object> baselineAfter = baselineSnapshot();
-      boolean baselineMatches = mapper.valueToTree(baselineBefore).equals(mapper.valueToTree(baselineAfter));
+      boolean baselineMatches = baselineSnapshotsMatch(baselineBefore, baselineAfter);
       Map<String,Object> cleanup = new LinkedHashMap<>();
       cleanup.put("baselineCheckPassed", baselineMatches);
       cleanup.put("baselineBefore", baselineBefore);
@@ -450,7 +450,7 @@ public class QaTestPackService {
 
     Map<String,Object> baselineBefore = readJsonMap(run.get("protected_baseline"));
     Map<String,Object> baselineAfter = baselineSnapshot();
-    boolean baselineMatches = mapper.valueToTree(baselineBefore).equals(mapper.valueToTree(baselineAfter));
+    boolean baselineMatches = baselineSnapshotsMatch(baselineBefore, baselineAfter);
     addCheck(runId, checks, "PROTECTED_BASELINE_UNCHANGED", baselineMatches,
         "Protected non-QA institution/account/student fingerprints match the captured baseline",
         baselineMatches ? "baseline matches" : "protected counts or row fingerprints changed",
@@ -846,6 +846,20 @@ public class QaTestPackService {
       insert into qa_test_run_event(run_id,event_type,from_state,to_state,actor_staff_id,details)
       values (?,?,?,?,?,?::jsonb)
       """, runId, type, from, to, actor, json(details));
+  }
+
+  private boolean baselineSnapshotsMatch(Map<String,Object> before, Map<String,Object> after) {
+    List<String> protectedTables = List.of("institution_tenant", "user_account", "student");
+    if (before == null || after == null || before.size() != protectedTables.size()
+        || after.size() != protectedTables.size()) return false;
+    for (String table : protectedTables) {
+      Object beforeValue = before.get(table);
+      Object afterValue = after.get(table);
+      if (!(beforeValue instanceof Map<?,?> beforeRow) || !(afterValue instanceof Map<?,?> afterRow)) return false;
+      if (number(beforeRow.get("count")) != number(afterRow.get("count"))) return false;
+      if (!String.valueOf(beforeRow.get("fingerprint")).equals(String.valueOf(afterRow.get("fingerprint")))) return false;
+    }
+    return true;
   }
 
   private Map<String,Object> baselineSnapshot() {
