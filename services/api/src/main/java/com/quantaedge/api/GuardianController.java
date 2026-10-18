@@ -360,8 +360,13 @@ public class GuardianController {
   @PutMapping("/children/{studentId}/tracks")
   @Transactional
   public Map<String,Object> updateChildTracks(@PathVariable long studentId,
-      @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
+    requireChildInstitutionMembership(studentId,institutionId);
     Boolean allowed=jdbc.queryForObject("""
       select exists(select 1 from guardian_student gs join student st on st.id=gs.student_id
         where gs.guardian_user_id=? and gs.student_id=? and gs.active=true and gs.consent_status='CONSENTED'
@@ -370,7 +375,7 @@ public class GuardianController {
     if(!allowed) throw new SecurityException("Child access denied");
     List<String> tracks=body.get("trackCodes") instanceof List<?> values
         ? values.stream().map(String::valueOf).toList() : List.of();
-    List<String> activeTracks=auth.updateStudentTracks(studentId,tracks);
+    List<String> activeTracks=auth.updateStudentTracks(studentId,tracks,institutionId);
     auth.auditChildEvent(context.userId(),studentId,"TRACKS_UPDATED",
         "{\"trackCodes\":\""+String.join(",",activeTracks)+"\"}");
     return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
@@ -381,30 +386,54 @@ public class GuardianController {
   /** Independent courses are assigned to a child separately from class/subject selection. */
   @GetMapping("/children/{studentId}/programs")
   public List<Map<String,Object>> childPrograms(@PathVariable long studentId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
     requireFullGuardianChildAccess(context.userId(),studentId);
+    requireChildInstitutionMembership(studentId,institutionId);
     List<Map<String,Object>> programs=jdbc.queryForList("""
-      select p.id,p.public_id,p.code,p.display_name,p.curriculum_version,p.status,
+      select distinct p.id,p.public_id,p.code,p.display_name,p.curriculum_version,p.status,
         exists(select 1 from student_program_enrollment spe
-          where spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE') as enrolled
+          where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
+            and spe.status='ACTIVE') as enrolled
       from curriculum_program p
+      join institution_course_assignment assignment on assignment.institution_id=?
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=p.id
+      join institution_tenant t on t.id=assignment.institution_id and t.status='ACTIVE'
       where p.status='ACTIVE' and p.code<>'GENERAL'
+        and (
+          exists(select 1 from institution_marketplace_offer o
+            where o.institution_id=? and o.course_id=p.id and o.assignment_id=assignment.id
+              and o.status='PUBLISHED')
+          or exists(select 1 from student_program_enrollment e
+            where e.institution_id=? and e.student_id=? and e.program_id=p.id
+              and e.status in ('ACTIVE','PAUSED'))
+          or exists(select 1 from course_purchase cp
+            where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id)
+          or exists(select 1 from student_course_access_grant g
+            where g.institution_id=? and g.student_id=? and g.course_id=p.id)
+          or exists(select 1 from course_entitlement ce
+            where ce.institution_id=? and ce.course_id=p.id
+              and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
+        )
       order by p.display_name,p.id
-      """,studentId);
+      """, institutionId,studentId,institutionId,institutionId,institutionId,studentId,
+          institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
     for(Map<String,Object> program:programs) {
       long courseId=((Number)program.get("id")).longValue();
       program.put("subjects",jdbc.queryForList("""
         select s.id,s.code as subject_code,s.display_name as subject_name,
-          c.code as curriculum_class_code,
-          count(distinct ch.id) as chapters,count(distinct l.id) as lessons
+          c.code as curriculum_class_code,count(distinct ch.id) as chapters,count(distinct l.id) as lessons
         from curriculum_program_subject ps
         join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
         join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
           and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
         join curriculum_class c on c.id=s.class_id
-        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
-          and ch.content_status='PUBLISHED'
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where ps.program_id=?
         group by s.id,s.code,s.display_name,c.code,s.sort_order
@@ -414,51 +443,98 @@ public class GuardianController {
     return programs;
   }
 
-  /** Idempotent parent-to-child course assignment; the child's identity and history are untouched. */
+  /** Paid offers must use the server-authoritative checkout / parent request flow. */
   @PostMapping("/children/{studentId}/programs/{courseId}/enroll")
   @Transactional
   public Map<String,Object> enrollChildInProgram(@PathVariable long studentId,@PathVariable long courseId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
     requireFullGuardianChildAccess(context.userId(),studentId);
+    requireChildInstitutionMembership(studentId,institutionId);
     List<Map<String,Object>> courses=jdbc.queryForList("""
-      select id,public_id,code,display_name from curriculum_program
-      where id=? and status='ACTIVE' and code<>'GENERAL'
-      """,courseId);
-    if(courses.isEmpty())throw new IllegalArgumentException("This course is not available or active.");
+      select p.id,p.public_id,p.code,p.display_name
+      from curriculum_program p
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      join institution_tenant t on t.id=a.institution_id and t.status='ACTIVE'
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        and (exists(select 1 from institution_marketplace_offer o
+                    where o.institution_id=a.institution_id and o.assignment_id=a.id
+                      and o.course_id=p.id and o.status='PUBLISHED' and o.price_paise=0 and o.currency='INR')
+          or exists(select 1 from student_program_enrollment e
+                    where e.institution_id=a.institution_id and e.student_id=? and e.program_id=p.id
+                      and e.status in ('ACTIVE','PAUSED'))
+          or exists(select 1 from course_purchase cp
+                    where cp.institution_id=a.institution_id and cp.student_id=? and cp.course_id=p.id)
+          or exists(select 1 from student_course_access_grant g
+                    where g.institution_id=a.institution_id and g.student_id=? and g.course_id=p.id)
+          or exists(select 1 from course_entitlement ce
+                    where ce.institution_id=a.institution_id and ce.course_id=p.id
+                      and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))))
+      """,institutionId,courseId,studentId,studentId,studentId,studentId,studentId);
+    if(courses.isEmpty()) throw new SecurityException("This course has no published offer or existing entitlement in the selected institution.");
     List<Map<String,Object>> subjects=jdbc.queryForList("""
       select s.id,s.code
       from curriculum_program_subject ps
       join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
       where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
       """,courseId);
     if(subjects.isEmpty())throw new IllegalStateException("This course has no active subject tracks yet.");
     jdbc.update("""
-      insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
-      values(?,?,'ACTIVE',now(),null,now(),now())
-      on conflict(student_id,program_id) do update set
+      update student_program_enrollment set status='PAUSED',updated_at=now()
+      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
+      """,studentId,institutionId,courseId);
+    jdbc.update("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
+      ) values(?,?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(institution_id,student_id,program_id) do update set
         status='ACTIVE',enrolled_at=case when student_program_enrollment.status='ACTIVE'
           then student_program_enrollment.enrolled_at else now() end,
         ended_at=null,updated_at=now()
-      """,studentId,courseId);
+      """,studentId,courseId,institutionId);
     for(Map<String,Object> subject:subjects) {
       jdbc.update("""
-        insert into student_track_enrollment(student_id,subject_id,status)
-        values(?,?,'ACTIVE')
-        on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
-        """,studentId,((Number)subject.get("id")).longValue());
+        insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+        values(?,?,?,'ACTIVE')
+        on conflict(institution_id,student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+        """,studentId,((Number)subject.get("id")).longValue(),institutionId);
     }
     auth.auditChildEvent(context.userId(),studentId,"COURSE_ENROLLED",
-        "{\"courseId\":"+courseId+",\"subjectCount\":"+subjects.size()+"}");
+        "{\"courseId\":"+courseId+",\"institutionId\":"+institutionId+",\"subjectCount\":"+subjects.size()+"}");
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("enrolled",true);result.put("studentId",studentId);result.put("courseId",courseId);
+    result.put("institutionId",institutionId);
     result.put("publicId",courses.getFirst().get("public_id"));
     result.put("programCode",courses.getFirst().get("code"));
     result.put("programName",courses.getFirst().get("display_name"));
     result.put("subjectCount",subjects.size());
     return result;
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() <= 0) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before managing a child's courses.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireChildInstitutionMembership(long studentId,long institutionId) {
+    Boolean member=jdbc.queryForObject("""
+      select exists(select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student st on st.id=m.student_id and st.active=true
+        where m.institution_id=? and m.student_id=? and m.status='ACTIVE')
+      """,Boolean.class,institutionId,studentId);
+    if(!Boolean.TRUE.equals(member)) {
+      throw new SecurityException("The selected child is not an active member of this institution.");
+    }
   }
 
   private void requireFullGuardianChildAccess(long guardianUserId,long studentId) {

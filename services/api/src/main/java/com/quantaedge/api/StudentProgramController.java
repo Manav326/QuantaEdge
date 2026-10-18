@@ -177,21 +177,7 @@ public class StudentProgramController {
     }
     Map<String,Object> course = matches.getFirst();
 
-    // Never move a learner's globally-keyed legacy enrollment/track record into a second tenant.
-    // The follow-up history-key migration enables parallel tenant-specific records without reuse.
-    Boolean conflictingEnrollment = jdbc.queryForObject("""
-      select exists(
-        select 1 from student_program_enrollment existing
-        where existing.student_id=? and existing.program_id=?
-          and existing.institution_id is distinct from ?
-      )
-      """, Boolean.class, context.studentId(), courseId, institutionId);
-    if (Boolean.TRUE.equals(conflictingEnrollment)) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "This learner already has a separate institution's learning record for this course. The records will not be moved between institutions.");
-    }
-
-    Boolean hasAuthorisedEnrolment = jdbc.queryForObject("""
+    Boolean hasAuthorisedEnrolment = jdbc.queryForObject    Boolean hasAuthorisedEnrolment = jdbc.queryForObject("""
       select
         exists(select 1 from student_program_enrollment e
           where e.student_id=? and e.program_id=? and e.institution_id=?
@@ -255,7 +241,7 @@ public class StudentProgramController {
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
       ) values(?,?,?,'ACTIVE',now(),null,now(),now())
-      on conflict(student_id,program_id) do update
+      on conflict(institution_id,student_id,program_id) do update
         set status='ACTIVE',
             enrolled_at=case when student_program_enrollment.status='ACTIVE'
               then student_program_enrollment.enrolled_at else now() end,
@@ -266,7 +252,7 @@ public class StudentProgramController {
       jdbc.update("""
         insert into student_track_enrollment(student_id,subject_id,institution_id,status)
         values(?,?,?,'ACTIVE')
-        on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+        on conflict(institution_id,student_id,subject_id) do update set status='ACTIVE',updated_at=now()
         """, context.studentId(), subjectId, institutionId);
     }
 

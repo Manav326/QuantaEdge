@@ -966,16 +966,48 @@ public class AuthService {
 
   @Transactional
   public List<String> updateStudentTracks(long studentId,List<String> trackCodes) {
+    return updateStudentTracks(studentId,trackCodes,resolveSingleActiveInstitutionId(studentId));
+  }
+
+  @Transactional
+  public List<String> updateStudentTracks(long studentId,List<String> trackCodes,Long institutionId) {
     Map<String,Object> row;
     try {
       row=jdbc.queryForMap("select class_code from student where id=? and active=true and environment='PRODUCTION' for update",studentId);
     } catch(EmptyResultDataAccessException ex) {
       throw new IllegalArgumentException("Active production student not found");
     }
-    return applyStudentTracks(studentId,String.valueOf(row.get("class_code")),trackCodes);
+    if(institutionId!=null) assertStudentInstitutionMembership(studentId,institutionId);
+    return applyStudentTracks(studentId,String.valueOf(row.get("class_code")),trackCodes,institutionId);
+  }
+
+  private Long resolveSingleActiveInstitutionId(long studentId) {
+    List<Long> ids=jdbc.queryForList("""
+      select m.institution_id from institution_membership m
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      where m.student_id=? and m.status='ACTIVE' order by m.institution_id
+      """,Long.class,studentId);
+    if(ids.size()>1) throw new IllegalArgumentException(
+        "This learner belongs to more than one institution; the institution context is required to change subjects.");
+    return ids.isEmpty()?null:ids.getFirst();
+  }
+
+  private void assertStudentInstitutionMembership(long studentId,long institutionId) {
+    Boolean member=jdbc.queryForObject("""
+      select exists(select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student st on st.id=m.student_id and st.active=true
+        where m.student_id=? and m.institution_id=? and m.status='ACTIVE')
+      """,Boolean.class,studentId,institutionId);
+    if(!Boolean.TRUE.equals(member)) throw new SecurityException(
+        "The learner is not an active member of the selected institution.");
   }
 
   private List<String> applyStudentTracks(long studentId,String classCode,List<String> requested) {
+    return applyStudentTracks(studentId,classCode,requested,resolveSingleActiveInstitutionId(studentId));
+  }
+
+  private List<String> applyStudentTracks(long studentId,String classCode,List<String> requested,Long institutionId) {
     List<String> selected=requested==null
         ? List.of("maths","science")
         : requested.stream().map(v->v==null?"":v.trim().toLowerCase(java.util.Locale.ROOT)).distinct().toList();
@@ -983,18 +1015,40 @@ public class AuthService {
       throw new IllegalArgumentException("Choose one or two valid subjects: Maths and/or Science");
     Long classExists=jdbc.queryForObject("select count(*) from curriculum_class where code=? and active=true",Long.class,classCode);
     if(classExists==null || classExists==0) throw new IllegalArgumentException("Invalid class selection");
-    jdbc.update("update student_track_enrollment set status='ENDED',updated_at=now() where student_id=? and status='ACTIVE'",studentId);
+    jdbc.update("""
+      update student_track_enrollment set status='ENDED',updated_at=now()
+      where student_id=? and institution_id is not distinct from ? and status='ACTIVE'
+      """,studentId,institutionId);
     for(String code:selected) {
       List<Long> subjects=jdbc.queryForList("""
         select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
         where c.code=? and c.active=true and s.code=? and s.active=true
         """,Long.class,classCode,code);
       if(subjects.isEmpty()) throw new IllegalArgumentException("The "+code+" track is not available for class "+classCode);
-      jdbc.update("""
-        insert into student_track_enrollment(student_id,subject_id,status)
-        values (?,?,'ACTIVE')
-        on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
-        """,studentId,subjects.getFirst());
+      long subjectId=subjects.getFirst();
+      if(institutionId!=null) {
+        jdbc.update("""
+          insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+          values (?,?,?,'ACTIVE')
+          on conflict(institution_id,student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+          """,studentId,subjectId,institutionId);
+      } else {
+        Boolean exists=jdbc.queryForObject("""
+          select exists(select 1 from student_track_enrollment
+            where student_id=? and subject_id=? and institution_id is null)
+          """,Boolean.class,studentId,subjectId);
+        if(Boolean.TRUE.equals(exists)) {
+          jdbc.update("""
+            update student_track_enrollment set status='ACTIVE',updated_at=now()
+            where student_id=? and subject_id=? and institution_id is null
+            """,studentId,subjectId);
+        } else {
+          jdbc.update("""
+            insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+            values(?,?,null,'ACTIVE')
+            """,studentId,subjectId);
+        }
+      }
     }
     return selected;
   }

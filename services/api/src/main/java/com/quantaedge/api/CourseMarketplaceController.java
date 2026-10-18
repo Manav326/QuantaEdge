@@ -877,7 +877,7 @@ public class CourseMarketplaceController {
     jdbc.update("""
         insert into student_program_enrollment(student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at)
         values(?,?,?,'ACTIVE',now(),null,now(),now())
-        on conflict(student_id,program_id) do update
+        on conflict(institution_id,student_id,program_id) do update
           set status='ACTIVE',
             enrolled_at=case when student_program_enrollment.status='ACTIVE'
               then student_program_enrollment.enrolled_at else now() end,
@@ -891,7 +891,7 @@ public class CourseMarketplaceController {
         join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
           and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
         where ps.program_id=?
-        on conflict(student_id,subject_id) do update
+        on conflict(institution_id,student_id,subject_id) do update
           set status='ACTIVE',updated_at=now()
         """, targetStudentId, institutionId, courseId);
 
