@@ -284,6 +284,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 institutionBrandIdentity = null
                 themeController.clearInstitutionTheme()
                 institutionBrandResolutionPending = true
+                preferences.edit().remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
             }
             activeTenantCode = incomingCode
             preferences.edit().putString("institutionCode", incomingCode).apply()
@@ -297,7 +298,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             themeController.clearInstitutionTheme()
             institutionBrandResolutionPending = true
             activeTenantCode = ""
-            preferences.edit().remove("institutionCode").apply()
+            preferences.edit().remove("institutionCode").remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
         }
         if (incomingJoinCode != null) pendingInstitutionJoinCode = incomingJoinCode
     }
@@ -312,7 +313,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             institutionBrandIdentity = null
             themeController.clearInstitutionTheme()
             activeTenantCode = ""
-            preferences.edit().remove("institutionCode").apply()
+            preferences.edit().remove("institutionCode").remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
             institutionBrandResolutionPending = false
             return@LaunchedEffect
         }
@@ -322,7 +323,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             institutionBrandIdentity = null
             themeController.clearInstitutionTheme()
             activeTenantCode = ""
-            preferences.edit().remove("institutionCode").apply()
+            preferences.edit().remove("institutionCode").remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
             institutionBrandResolutionPending = pendingInstitutionJoinCode.isNotBlank()
             return@LaunchedEffect
         }
@@ -391,7 +392,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     preferences.edit().putString("institutionCode", code).apply()
                 } else {
                     activeTenantCode = ""
-                    preferences.edit().remove("institutionCode").apply()
+                    preferences.edit().remove("institutionCode").remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
                 }
             }
             // For existing accounts, show a neutral/current-school mark only after membership resolution.
@@ -2692,6 +2693,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.postObject("/api/v1/account/me/transition-to-parent",
                 JSONObject().put("confirmParentTransition", true))
             ApiClient.clearSession()
+            preferences.edit().remove("institutionCode")
+                .remove("institutionDisplayName")
+                .remove("institutionBrandingVersion")
+                .apply()
+            institutionBrandIdentity = null
+            themeController.clearInstitutionTheme()
+            institutionBrandResolutionPending = launchTenantCode != null
             AppRoute.values().forEach { savedRoute ->
                 saveableStateHolder.removeState(stateOwnerKey + ":" + savedRoute.name)
                 saveableStateHolder.removeState("anonymous:" + savedRoute.name)
