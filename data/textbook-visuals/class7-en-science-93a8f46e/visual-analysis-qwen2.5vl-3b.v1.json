@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 993,
+    "assets_selected": 996,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 991,
-    "assets_remaining": 6497,
-    "assets_completion_percent": 13.2,
+    "assets_analyzed": 994,
+    "assets_remaining": 6494,
+    "assets_completion_percent": 13.3,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 988,
+    "assets_skipped_from_checkpoint": 991,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:04:06Z"
+      "checkpointed_at": "2026-10-18T19:07:07Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:04:29Z"
+      "checkpointed_at": "2026-10-18T19:07:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -36769,6 +36769,101 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T19:06:24Z"
+    },
+    {
+      "asset_id": "96f8fb408f7568bd4c5a88ae",
+      "asset_sha256": "a4b7fc884fe4fc65818281b7d1f7a37bab63b132406391a5aa5bdec73e25220d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/a4b7fc884fe4fc65818281b7d1f7a37bab63b132406391a5aa5bdec73e25220d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:08:03Z"
+    },
+    {
+      "asset_id": "42e0bd0855811b9b87a80aa8",
+      "asset_sha256": "0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/0a020bce6d0bcedbe357b067363eb042881dfb8514b65a8d39dac54a94805a52.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "blue",
+          "reverse change"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No diagram, chart, graph, table, map, cartoon, photo, illustration, equation, page with multiple visuals, or other visual elements are present.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:08:48Z"
+    },
+    {
+      "asset_id": "59fe19be5f73b7083f50011f",
+      "asset_sha256": "7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/7c8a8215f72358b9c6078427514788149096ea6455df97bcd75bad0a50cc7e1e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellowish color.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:09:23Z"
     }
   ]
 }
