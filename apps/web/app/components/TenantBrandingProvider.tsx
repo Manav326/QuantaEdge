@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 const BRAND_SESSION_KEY = 'qe.institution.brand-code.v1';
 const JOIN_SESSION_KEY = 'qe.institution.pending-join-code.v1';
 const JOIN_TENANT_SESSION_KEY = 'qe.institution.pending-join-tenant-code.v1';
+const ENROLLMENT_ISSUE_SESSION_KEY = 'qe.institution.enrollment-issue.v1';
 const CODE_PATTERN = /^[A-Z0-9][A-Z0-9_-]{2,31}$/;
 const DEFAULT_TITLE = 'QuantaEdge | Smarter Decisions. Greater Growth.';
 const DEFAULT_DESCRIPTION = 'AI-powered learning for Hindi-medium students, starting with Bihar Board Classes 6–8.';
@@ -30,6 +31,7 @@ type TenantBrandingValue = {
   institutionContextRequested: boolean;
   enrollmentIssue: EnrollmentIssueKind | null;
   clearEnrollmentIssue: () => void;
+  retryEnrollment: () => void;
   resolveInstitutionCode: (code: string) => Promise<boolean>;
   clearTenantBrand: () => void;
 };
@@ -40,9 +42,19 @@ const TenantBrandingContext = createContext<TenantBrandingValue>({
   institutionContextRequested: false,
   enrollmentIssue: null,
   clearEnrollmentIssue: () => undefined,
+  retryEnrollment: () => undefined,
   resolveInstitutionCode: async () => false,
   clearTenantBrand: () => undefined,
 });
+
+function storedEnrollmentIssue(): EnrollmentIssueKind | null {
+  try {
+    const value = window.sessionStorage.getItem(ENROLLMENT_ISSUE_SESSION_KEY);
+    return value === 'invalid' || value === 'rate-limited' || value === 'temporary' || value === 'mismatch'
+      ? value
+      : null;
+  } catch { return null; }
+}
 
 function normalizedCode(input: unknown): string | null {
   const value = String(input ?? '').trim().toUpperCase();
@@ -221,7 +233,8 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const [brand, setBrand] = useState<TenantBrand | null>(null);
   const [isResolving, setIsResolving] = useState(true);
   const [institutionContextRequested, setInstitutionContextRequested] = useState(false);
-  const [enrollmentIssue, setEnrollmentIssue] = useState<EnrollmentIssueKind | null>(null);
+  const [enrollmentIssue, setEnrollmentIssue] = useState<EnrollmentIssueKind | null>(() => storedEnrollmentIssue());
+  const [enrollmentRetryVersion, setEnrollmentRetryVersion] = useState(0);
 
   const resolveInstitutionCode = useCallback(async (input: string): Promise<boolean> => {
     const code = normalizedCode(input);
@@ -250,11 +263,22 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     savePendingJoinCode(null);
     setBrand(null);
     setInstitutionContextRequested(false);
-    setEnrollmentIssue(null);
+    setStoredEnrollmentIssue(null);
     applyTenantIdentity(null);
   }, []);
 
-  const clearEnrollmentIssue = useCallback(() => setEnrollmentIssue(null), []);
+  const setStoredEnrollmentIssue = useCallback((issue: EnrollmentIssueKind | null) => {
+    setEnrollmentIssue(issue);
+    try {
+      if (issue) window.sessionStorage.setItem(ENROLLMENT_ISSUE_SESSION_KEY, issue);
+      else window.sessionStorage.removeItem(ENROLLMENT_ISSUE_SESSION_KEY);
+    } catch {
+      // A status message should not prevent access if storage is blocked.
+    }
+  }, []);
+
+  const clearEnrollmentIssue = useCallback(() => setStoredEnrollmentIssue(null), [setStoredEnrollmentIssue]);
+  const retryEnrollment = useCallback(() => setEnrollmentRetryVersion(version => version + 1), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -309,12 +333,12 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
             }
             if ([400, 404, 410, 422].includes(response.status)) {
               savePendingJoinCode(null);
-              setEnrollmentIssue('invalid');
+              setStoredEnrollmentIssue('invalid');
             } else if (response.status === 429) {
-              setEnrollmentIssue('rate-limited');
+              setStoredEnrollmentIssue('rate-limited');
             } else {
               // Server/network failures are retryable; keep this tab's invitation for a safe retry.
-              setEnrollmentIssue('temporary');
+              setStoredEnrollmentIssue('temporary');
             }
             return null;
           }
@@ -322,7 +346,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
           const joinedCode = normalizedCode(joined.institutionCode);
           if (!joinedCode || (expectedInstitutionCode && joinedCode !== expectedInstitutionCode)) {
             savePendingJoinCode(null);
-            setEnrollmentIssue('mismatch');
+            setStoredEnrollmentIssue('mismatch');
             return null;
           }
           savePendingJoinCode(null);
@@ -483,12 +507,12 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     };
     void run();
     return () => { cancelled = true; };
-  }, [pathname]);
+  }, [pathname, enrollmentRetryVersion]);
 
   const value = useMemo(() => ({
     brand, isResolving, institutionContextRequested, enrollmentIssue,
-    clearEnrollmentIssue, resolveInstitutionCode, clearTenantBrand,
-  }), [brand, isResolving, institutionContextRequested, enrollmentIssue, clearEnrollmentIssue, resolveInstitutionCode, clearTenantBrand]);
+    clearEnrollmentIssue, retryEnrollment, resolveInstitutionCode, clearTenantBrand,
+  }), [brand, isResolving, institutionContextRequested, enrollmentIssue, clearEnrollmentIssue, retryEnrollment, resolveInstitutionCode, clearTenantBrand]);
   return <TenantBrandingContext.Provider value={value}>{children}</TenantBrandingContext.Provider>;
 }
 
