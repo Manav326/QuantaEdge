@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1210,
-    "successful_visual_analyses": 1195,
-    "missing_visual_analyses": 6278,
+    "raw_analysis_result_rows": 1213,
+    "successful_visual_analyses": 1198,
+    "missing_visual_analyses": 6275,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6293,
+    "unresolved_count": 6290,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -56132,9 +56132,30 @@
       "asset_path": "assets/63fbfb471584bdbca5c085e309b8c3e5e7245ac3f0be3af254ca4e17ffbb7541.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, focusing on the electrical circuit and its components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit and its components.",
+        "limitations": [
+          "The page does not provide detailed information about the components or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56150,9 +56171,31 @@
       "asset_path": "assets/fb8f632cad06d15bdb6b9c152fce999d6f44af654ce6f6bbb556136c49684261.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the components of a torch, focusing on the electrical circuit and the role of an electric cell.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a torch",
+          "electrical circuit"
+        ],
+        "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit and the role of an electric cell.",
+        "limitations": [
+          "The image does not show any diagrams or illustrations.",
+          "The text is in English and does not include any visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56168,9 +56211,31 @@
       "asset_path": "assets/24eeffc31e37f46fb4b5a73a0e2e3317c6bf7829bcd3e17e17d2f0a767dd0d24.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly used as an illustration for an electrical circuit component.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A simple electrical circuit",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us first find out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "components",
+          "electric cell"
+        ],
+        "context_relation": "illustration for an electrical circuit component",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
