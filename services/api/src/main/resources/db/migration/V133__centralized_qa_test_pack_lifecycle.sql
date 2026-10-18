@@ -40,7 +40,7 @@ CREATE TABLE qa_test_run_resource (
   )),
   resource_id varchar(160) NOT NULL,
   resource_ref jsonb NOT NULL DEFAULT '{}'::jsonb CHECK (jsonb_typeof(resource_ref)='object'),
-  dependency_keys text[] NOT NULL DEFAULT ARRAY[]::text[],
+  dependency_keys jsonb NOT NULL DEFAULT '[]'::jsonb CHECK (jsonb_typeof(dependency_keys)='array'),
   cleanup_order integer NOT NULL CHECK (cleanup_order >= 0),
   state varchar(20) NOT NULL DEFAULT 'OWNED'
     CHECK (state IN ('OWNED','CLEANUP_PENDING','CLEANED','FAILED')),
