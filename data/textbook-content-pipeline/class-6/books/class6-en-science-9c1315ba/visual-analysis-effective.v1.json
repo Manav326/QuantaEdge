@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "264f72d5fb4ad1bb9fd6d57e7b4899ed56af3f71036c51bd36d87fef949da84a",
+  "raw_analysis_sha256": "f1ea0ddb0cbcd1073a6a79b84861cb7d0863688541f84606c7a1606e988056b2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T15:51:09Z",
+      "checkpointed_at": "2026-10-18T15:57:30Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34040,6 +34040,268 @@
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
           "The page is completely black and no text or images are visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b90b1ccd2f380e4a35f9f791",
+      "asset_sha256": "61845e9a1476c26599a9ffcfa9a1ca2674846c3651e00a2ce0cf2ef05c327119",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 33,
+      "asset_path": "page-0033.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5b637955df486be0115118331535f4ebc63585e8e5c5576adee630374bb73244",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different criteria for grouping plants and animals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Presence/                     Hard/soft          Eating         Place they\nabse\nence of                    stem            habits              live\nflowers\nFig. 2.2: Some possible criteria of groupings of plants and animals",
+          "You may have grouped animals based on varied features,\nsuch as what they eat, where they live, what colour they are\nand how they move.",
+          "What is the importance of grouping? Grouping makes it\neasier to understand and study plants and animals on the\nbasis of their similarities and differences.",
+          "You will learn more about the importance of grouping in\nour daily lives in the chapter, 'Materials Around Us'.",
+          "2.2.1 How to group plants?",
+          "You must have noticed that plants show variation in the\nfeatures related to stems, leaves, flowers, and more. The\nstems of different plants vary in thickness, height, and\nhardness, while the leaves vary in shape, colour, size and\narrangement. You might have tried grouping the plants in\nActivity 2.3 ",
+          "You might have also learnt in earlier classes that plants\ncan be grouped into herbs, shrubs, and trees based on their\nheight and types of stem. Let us study the features of plants\nin more detail and group them on that basis.",
+          "Activity 2.4: Let us group",
+          "Let us go on a nature walk again for some more\ninteresting observations.",
+          "Look closely at the height of different plants. Are\nthese plants shorter than you, as tall as you, or taller\nthan you?",
+          "Is the stem brown or green? Touch and feel the stems\nand try to bend them gently. Can you bend the stem\neasily, or is it stiff? Take care that the stems do not break.",
+          "Also, observe from where the branches of the plants\nrise—whether they arise close to the ground or higher\nup on the stem. Fill in your observations in Table 2.3.\nA few examples are already given."
+        ],
+        "concepts": [
+          "grouping",
+          "plants",
+          "animals",
+          "features",
+          "stems",
+          "leaves",
+          "flowers",
+          "height",
+          "hardness",
+          "shape",
+          "colour",
+          "size",
+          "arrangement",
+          "herbs",
+          "shrubs",
+          "trees",
+          "height",
+          "types of stem",
+          "features of plants",
+          "nature walk"
+        ],
+        "context_relation": "exploring the criteria for grouping plants and animals",
+        "limitations": [
+          "The text does not provide specific examples or criteria for grouping plants and animals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:02:10Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing different criteria for grouping plants and animals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Presence/                     Hard/soft          Eating         Place they\nabse\nence of                    stem            habits              live\nflowers\nFig. 2.2: Some possible criteria of groupings of plants and animals",
+          "You may have grouped animals based on varied features,\nsuch as what they eat, where they live, what colour they are\nand how they move.",
+          "What is the importance of grouping? Grouping makes it\neasier to understand and study plants and animals on the\nbasis of their similarities and differences.",
+          "You will learn more about the importance of grouping in\nour daily lives in the chapter, 'Materials Around Us'.",
+          "2.2.1 How to group plants?",
+          "You must have noticed that plants show variation in the\nfeatures related to stems, leaves, flowers, and more. The\nstems of different plants vary in thickness, height, and\nhardness, while the leaves vary in shape, colour, size and\narrangement. You might have tried grouping the plants in\nActivity 2.3 ",
+          "You might have also learnt in earlier classes that plants\ncan be grouped into herbs, shrubs, and trees based on their\nheight and types of stem. Let us study the features of plants\nin more detail and group them on that basis.",
+          "Activity 2.4: Let us group",
+          "Let us go on a nature walk again for some more\ninteresting observations.",
+          "Look closely at the height of different plants. Are\nthese plants shorter than you, as tall as you, or taller\nthan you?",
+          "Is the stem brown or green? Touch and feel the stems\nand try to bend them gently. Can you bend the stem\neasily, or is it stiff? Take care that the stems do not break.",
+          "Also, observe from where the branches of the plants\nrise—whether they arise close to the ground or higher\nup on the stem. Fill in your observations in Table 2.3.\nA few examples are already given."
+        ],
+        "concepts": [
+          "grouping",
+          "plants",
+          "animals",
+          "features",
+          "stems",
+          "leaves",
+          "flowers",
+          "height",
+          "hardness",
+          "shape",
+          "colour",
+          "size",
+          "arrangement",
+          "herbs",
+          "shrubs",
+          "trees",
+          "height",
+          "types of stem",
+          "features of plants",
+          "nature walk"
+        ],
+        "context_relation": "exploring the criteria for grouping plants and animals",
+        "limitations": [
+          "The text does not provide specific examples or criteria for grouping plants and animals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e0851af998c4de66b11d196",
+      "asset_sha256": "96097fa1455a42607bc7cfc111bb0d9eb72f2c4b7989405829d9f2f046f5c7ce",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/96097fa1455a42607bc7cfc111bb0d9eb72f2c4b7989405829d9f2f046f5c7ce.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ff25ae5a9ac391f6387c03c047eeb7f86aef34bb013a88defb49fdaecf6026b7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a tree with green leaves and a thick trunk.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "leaves",
+          "trunk"
+        ],
+        "context_relation": "The image is an illustration of a tree, which is not related to the table about plant grouping.",
+        "limitations": [
+          "The image does not provide any information about the table's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:03:43Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a tree with green leaves and a thick trunk.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tree",
+          "leaves",
+          "trunk"
+        ],
+        "context_relation": "The image is an illustration of a tree, which is not related to the table about plant grouping.",
+        "limitations": [
+          "The image does not provide any information about the table's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ad60b1337bdedbda4d27c956",
+      "asset_sha256": "29fd8298f6e0895ff626d164effd1f26d8cc0fdacead816d58419be73899409d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/29fd8298f6e0895ff626d164effd1f26d8cc0fdacead816d58419be73899409d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ff25ae5a9ac391f6387c03c047eeb7f86aef34bb013a88defb49fdaecf6026b7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A small plant with white flowers and green leaves growing in a hole in the ground.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "flowers",
+          "leaves",
+          "hole",
+          "ground"
+        ],
+        "context_relation": "The image does not provide information related to the textbook content.",
+        "limitations": [
+          "The image does not show any text or labels.",
+          "The image does not depict any specific educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:05:17Z",
+      "effective_analysis": {
+        "visual_summary": "A small plant with white flowers and green leaves growing in a hole in the ground.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "flowers",
+          "leaves",
+          "hole",
+          "ground"
+        ],
+        "context_relation": "The image does not provide information related to the textbook content.",
+        "limitations": [
+          "The image does not show any text or labels.",
+          "The image does not depict any specific educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4b6105cabc1ed717c5af7bf3",
+      "asset_sha256": "93b953fb9acec0480537076f7acdfe4a9522c0e2bdf976b752c5baf5744f508f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/93b953fb9acec0480537076f7acdfe4a9522c0e2bdf976b752c5baf5744f508f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ff25ae5a9ac391f6387c03c047eeb7f86aef34bb013a88defb49fdaecf6026b7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A tomato plant with red tomatoes growing on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "tomato plant",
+          "red tomatoes",
+          "green leaves",
+          "growth",
+          "vegetation"
+        ],
+        "context_relation": "The image is unrelated to the text about plant grouping.",
+        "limitations": [
+          "No specific text or data is provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:06:49Z",
+      "effective_analysis": {
+        "visual_summary": "A tomato plant with red tomatoes growing on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "tomato plant",
+          "red tomatoes",
+          "green leaves",
+          "growth",
+          "vegetation"
+        ],
+        "context_relation": "The image is unrelated to the text about plant grouping.",
+        "limitations": [
+          "No specific text or data is provided in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
