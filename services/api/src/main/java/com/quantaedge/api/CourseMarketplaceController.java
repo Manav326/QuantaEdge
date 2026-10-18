@@ -373,10 +373,13 @@ public class CourseMarketplaceController {
   public Map<String, Object> createOrder(
       @PathVariable long courseId,
       @RequestHeader(value = "Idempotency-Key", required = false) String suppliedIdempotencyKey,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId = requireTenant(tenant).institutionId();
     String key = normalizeIdempotencyKey(suppliedIdempotencyKey);
-    return createOrderInternal(courseId, key, context.studentId(), null, null, "STUDENT");
+    return createOrderInternal(courseId, key, context.studentId(), null, null, "STUDENT", institutionId);
   }
 
   /** Parents can buy for their own learning profile or directly for a linked child. */
@@ -385,8 +388,11 @@ public class CourseMarketplaceController {
       @PathVariable long courseId,
       @RequestHeader(value = "Idempotency-Key", required = false) String suppliedIdempotencyKey,
       @RequestBody(required = false) FamilyCourseOrderRequest request,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
+    long institutionId = requireTenant(tenant).institutionId();
     String key = normalizeIdempotencyKey(suppliedIdempotencyKey);
     String recipient = request == null || request.recipientType() == null
         ? "" : request.recipientType().trim().toUpperCase(Locale.ROOT);
@@ -408,7 +414,7 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
     }
     return createOrderInternal(courseId, key, targetStudentId, context.userId(),
-        targetStudentId, orderRecipientType);
+        targetStudentId, orderRecipientType, institutionId);
   }
 
   private String normalizeIdempotencyKey(String supplied) {
@@ -460,41 +466,35 @@ public class CourseMarketplaceController {
 
   private Map<String, Object> createOrderInternal(
       long courseId, String idempotencyKey, long targetStudentId,
-      Long purchaserUserId, Long targetStudentForOrder, String recipientType) {
+      Long purchaserUserId, Long targetStudentForOrder, String recipientType, long institutionId) {
     requireConfigured();
     List<Map<String, Object>> rows = jdbc.queryForList("""
-        select p.id, coalesce(nullif(o.title_override,''),p.display_name) as title,
+        select p.id, o.id as institution_offer_id,
+          coalesce(nullif(o.title_override,''),p.display_name) as title,
           o.price_paise, o.currency, o.description
-        from course_marketplace_offer o
-        join curriculum_program p on p.id=o.course_id
-        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
-          and o.status='PUBLISHED' and o.price_paise>0
-          and (
-            not exists(select 1 from institution_membership m
-              where m.student_id=? and m.status='ACTIVE')
-            or exists(
-              select 1 from institution_membership m
-              join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-              join institution_course_entitlement entitlement on entitlement.institution_id=m.institution_id
-                and entitlement.program_id=p.id and entitlement.status='ACTIVE'
-                and entitlement.valid_from<=now()
-                and (entitlement.valid_until is null or entitlement.valid_until>now())
-              where m.student_id=? and m.status='ACTIVE'
-            )
-            or exists(select 1 from student_course_access_grant legacy_grant
-              where legacy_grant.student_id=? and legacy_grant.course_id=p.id
-                and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-          )
-        """, courseId, targetStudentId, targetStudentId, targetStudentId);
-    if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available.");
-    if (hasAccess(targetStudentId, courseId)) {
+        from institution_marketplace_offer o
+        join institution_course_assignment assignment
+          on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id
+          and assignment.status='ASSIGNED'
+        join institution_course_release release
+          on release.id=o.course_release_id and release.program_id=o.course_id
+        join institution_tenant tenant_scope
+          on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
+        join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_membership membership
+          on membership.institution_id=o.institution_id and membership.student_id=?
+          and membership.status='ACTIVE'
+        where o.institution_id=? and p.id=? and o.status='PUBLISHED' and o.price_paise>0
+        """, targetStudentId, institutionId, courseId);
+    if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available to the selected institution.");
+    if (hasAccessInInstitution(targetStudentId, courseId, institutionId)) {
       throw new IllegalArgumentException("The selected learner already has access to this course.");
     }
     if (purchaserUserId != null) {
       Boolean alreadyOwnedByParent = jdbc.queryForObject("""
         select exists(select 1 from course_entitlement
-          where holder_user_id=? and course_id=?)
-        """, Boolean.class, purchaserUserId, courseId);
+          where holder_user_id=? and institution_id=? and course_id=?)
+        """, Boolean.class, purchaserUserId, institutionId, courseId);
       if (Boolean.TRUE.equals(alreadyOwnedByParent)) {
         throw new IllegalArgumentException("You already own this course. Open your courses or transfer it to a linked child.");
       }
@@ -506,17 +506,17 @@ public class CourseMarketplaceController {
 
     jdbc.update("""
         update course_payment_order set status='EXPIRED',updated_at=now()
-        where student_id=? and course_id=? and purchaser_user_id is not distinct from ?
+        where student_id=? and institution_id=? and course_id=? and purchaser_user_id is not distinct from ?
           and status in ('CREATING','PENDING')
           and created_at < now() - (? * interval '1 minute')
-        """, targetStudentId, courseId, purchaserUserId, ORDER_EXPIRY_MINUTES);
+        """, targetStudentId, institutionId, courseId, purchaserUserId, ORDER_EXPIRY_MINUTES);
 
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
         select id,offer_price_paise,currency,provider_order_id,status
         from course_payment_order
-        where student_id=? and course_id=? and client_request_key=?
+        where student_id=? and institution_id=? and course_id=? and client_request_key=?
           and purchaser_user_id is not distinct from ?
-        """, targetStudentId, courseId, idempotencyKey, purchaserUserId);
+        """, targetStudentId, institutionId, courseId, idempotencyKey, purchaserUserId);
     if (!keyedOrders.isEmpty()) {
       Map<String, Object> previous = keyedOrders.getFirst();
       String previousStatus = String.valueOf(previous.get("status"));
@@ -527,7 +527,7 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("This checkout request has already ended. Start a new checkout from the marketplace.");
     }
 
-    List<Map<String, Object>> open = openOrders(targetStudentId, courseId, purchaserUserId);
+    List<Map<String, Object>> open = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
     if (!open.isEmpty()) {
       Map<String, Object> prior = open.getFirst();
       if ("PENDING".equals(String.valueOf(prior.get("status")))) {
@@ -542,14 +542,16 @@ public class CourseMarketplaceController {
       localOrderId = jdbc.queryForObject("""
           insert into course_payment_order(
             student_id,purchaser_user_id,target_student_id,recipient_type,
-            course_id,offer_price_paise,currency,receipt,client_request_key,status
-          ) values(?,?,?,?,?,?,?,?,?,'CREATING')
+            course_id,institution_id,institution_offer_id,offer_price_paise,currency,
+            receipt,client_request_key,status
+          ) values(?,?,?,?,?,?,?,?,?,?,?,'CREATING')
           returning id
           """, Long.class, targetStudentId, purchaserUserId,
           purchaserUserId == null ? null : targetStudentForOrder, recipientType,
-          courseId, amountPaise, currency, receipt, idempotencyKey);
+          courseId, institutionId, ((Number) offer.get("institution_offer_id")).longValue(),
+          amountPaise, currency, receipt, idempotencyKey);
     } catch (DuplicateKeyException conflict) {
-      List<Map<String, Object>> racedOrders = openOrders(targetStudentId, courseId, purchaserUserId);
+      List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
       if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
         return checkoutResponse(racedOrders.getFirst(), courseId, title);
       }
@@ -564,6 +566,8 @@ public class CourseMarketplaceController {
       notes.put("quantaedge_order_id", Long.toString(localOrderId));
       notes.put("quantaedge_student_id", Long.toString(targetStudentId));
       notes.put("quantaedge_course_id", Long.toString(courseId));
+      notes.put("quantaedge_institution_id", Long.toString(institutionId));
+      notes.put("quantaedge_institution_offer_id", String.valueOf(offer.get("institution_offer_id")));
       if (purchaserUserId != null) notes.put("quantaedge_purchaser_user_id", Long.toString(purchaserUserId));
       String requestJson = objectMapper.writeValueAsString(Map.of(
           "amount", amountPaise, "currency", currency, "receipt", receipt, "notes", notes));
@@ -577,8 +581,8 @@ public class CourseMarketplaceController {
       }
       int updated = jdbc.update("""
           update course_payment_order set provider_order_id=?,status='PENDING',updated_at=now()
-          where id=? and student_id=? and purchaser_user_id is not distinct from ? and status='CREATING'
-          """, providerOrderId, localOrderId, targetStudentId, purchaserUserId);
+          where id=? and student_id=? and institution_id=? and purchaser_user_id is not distinct from ? and status='CREATING'
+          """, providerOrderId, localOrderId, targetStudentId, institutionId, purchaserUserId);
       if (updated != 1) {
         throw new IllegalStateException("This checkout expired while it was being prepared. Please start checkout again.");
       }
@@ -593,16 +597,16 @@ public class CourseMarketplaceController {
     }
   }
 
-  private List<Map<String, Object>> openOrders(long studentId, long courseId, Long purchaserUserId) {
+  private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
     return jdbc.queryForList("""
         select id,offer_price_paise,currency,provider_order_id,status
         from course_payment_order
-        where student_id=? and course_id=?
+        where student_id=? and institution_id=? and course_id=?
           and purchaser_user_id is not distinct from ?
           and status in ('CREATING','PENDING')
         order by id desc
         limit 1
-        """, studentId, courseId, purchaserUserId);
+        """, studentId, institutionId, courseId, purchaserUserId);
   }
 
   private Map<String, Object> checkoutResponse(
@@ -654,9 +658,11 @@ public class CourseMarketplaceController {
   public Map<String, Object> verifyOrder(
       @PathVariable long localOrderId,
       @RequestBody VerifyCoursePaymentRequest request,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    return verifyOrderInternal(localOrderId, request, context.studentId(), null);
+    return verifyOrderInternal(localOrderId, request, context.studentId(), null, requireTenant(tenant).institutionId());
   }
 
   /** Parent checkout verification is bound to the purchaser identity, never to a client-supplied learner. */
@@ -665,13 +671,15 @@ public class CourseMarketplaceController {
   public Map<String, Object> verifyFamilyOrder(
       @PathVariable long localOrderId,
       @RequestBody VerifyCoursePaymentRequest request,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    return verifyOrderInternal(localOrderId, request, null, context.userId());
+    return verifyOrderInternal(localOrderId, request, null, context.userId(), requireTenant(tenant).institutionId());
   }
 
   private Map<String,Object> verifyOrderInternal(
-      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId) {
+      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId, long institutionId) {
     requireConfigured();
     String paymentId = request == null || request.paymentId() == null ? "" : request.paymentId().trim();
     String orderId = request == null || request.orderId() == null ? "" : request.orderId().trim();
@@ -681,11 +689,11 @@ public class CourseMarketplaceController {
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
-          offer_price_paise,currency,provider_order_id,provider_payment_id,status
+          institution_id,institution_offer_id,offer_price_paise,currency,provider_order_id,provider_payment_id,status
         from course_payment_order
-        where id=? and (student_id=? or purchaser_user_id=?)
+        where id=? and institution_id=? and (student_id=? or purchaser_user_id=?)
         for update
-        """, localOrderId, callerStudentId, callerUserId);
+        """, localOrderId, institutionId, callerStudentId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String, Object> order = rows.getFirst();
     String state = String.valueOf(order.get("status"));
@@ -696,6 +704,22 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("This order has already been verified against a different payment.");
     }
     if (!"PENDING".equals(state)) throw new IllegalArgumentException("This payment order is no longer payable.");
+    Boolean offerStillPublished = jdbc.queryForObject("""
+        select exists(
+          select 1 from institution_marketplace_offer offer
+          join institution_course_assignment assignment
+            on assignment.id=offer.assignment_id and assignment.institution_id=offer.institution_id
+            and assignment.status='ASSIGNED'
+          join institution_course_release release
+            on release.id=offer.course_release_id and release.program_id=offer.course_id
+          join institution_tenant tenant_scope on tenant_scope.id=offer.institution_id and tenant_scope.status='ACTIVE'
+          where offer.id=? and offer.institution_id=? and offer.course_id=? and offer.status='PUBLISHED'
+        )
+        """, Boolean.class, ((Number) order.get("institution_offer_id")).longValue(), institutionId,
+        ((Number) order.get("course_id")).longValue());
+    if (!Boolean.TRUE.equals(offerStillPublished)) {
+      throw new IllegalArgumentException("The institution's offer is no longer published. No course access was granted; contact the institution about the captured payment.");
+    }
     String expectedOrderId = String.valueOf(order.get("provider_order_id"));
     if (!expectedOrderId.equals(orderId)) {
       throw new IllegalArgumentException("The payment order does not match. Please reopen the course checkout.");
@@ -723,17 +747,19 @@ public class CourseMarketplaceController {
     try {
       purchaseId = jdbc.queryForObject("""
           insert into course_purchase(
-            student_id,course_id,order_id,provider_payment_id,amount_paise,currency,purchaser_user_id
-          ) values(?,?,?,?,?,?,?) returning id
+            student_id,course_id,order_id,provider_payment_id,amount_paise,currency,purchaser_user_id,
+            institution_id,institution_offer_id
+          ) values(?,?,?,?,?,?,?,?,?) returning id
           """, Long.class, targetStudentId, courseId, localOrderId,
-          paymentId, expectedAmount, expectedCurrency, purchaserUserId);
+          paymentId, expectedAmount, expectedCurrency, purchaserUserId, institutionId,
+          ((Number) order.get("institution_offer_id")).longValue());
     } catch (DuplicateKeyException ex) {
       // A concurrent payment or retry must never mint a second ownership record.
       List<Map<String,Object>> prior = jdbc.queryForList("""
         select id,provider_payment_id from course_purchase
-        where order_id=? or (student_id=? and course_id=?)
+        where institution_id=? and (order_id=? or (student_id=? and course_id=?))
         order by id limit 1
-        """, localOrderId, targetStudentId, courseId);
+        """, institutionId, localOrderId, targetStudentId, courseId);
       if (prior.isEmpty() || !paymentId.equals(String.valueOf(prior.getFirst().get("provider_payment_id")))) {
         throw new IllegalStateException("This learner already has a purchase for the course. Contact support before retrying.", ex);
       }
@@ -744,29 +770,29 @@ public class CourseMarketplaceController {
         ? purchaserUserId : null;
     jdbc.update("""
         insert into course_entitlement(
-          course_id,source_purchase_id,holder_user_id,holder_student_id,granted_by_user_id
-        ) values(?,?,?,?,?)
+          course_id,source_purchase_id,holder_user_id,holder_student_id,granted_by_user_id,institution_id
+        ) values(?,?,?,?,?,?)
         on conflict(source_purchase_id) do nothing
-        """, courseId, purchaseId, entitlementOwnerUser, targetStudentId, purchaserUserId);
+        """, courseId, purchaseId, entitlementOwnerUser, targetStudentId, purchaserUserId, institutionId);
 
     // Course membership is switched server-side. A parent's self-purchase stays owned
     // by that parent and is assigned to their personal learning profile until transferred.
     jdbc.update("""
         update student_program_enrollment set status='PAUSED',updated_at=now()
-        where student_id=? and status='ACTIVE' and program_id<>?
-        """, targetStudentId, courseId);
+        where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
+        """, targetStudentId, institutionId, courseId);
     jdbc.update("""
-        insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
-        values(?,?,'ACTIVE',now(),null,now(),now())
+        insert into student_program_enrollment(student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at)
+        values(?,?,?,'ACTIVE',now(),null,now(),now())
         on conflict(student_id,program_id) do update
           set status='ACTIVE',
             enrolled_at=case when student_program_enrollment.status='ACTIVE'
               then student_program_enrollment.enrolled_at else now() end,
             ended_at=null,updated_at=now()
-        """, targetStudentId, courseId);
+        """, targetStudentId, courseId, institutionId);
     jdbc.update("""
-        insert into student_track_enrollment(student_id,subject_id,status)
-        select ?,s.id,'ACTIVE'
+        insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+        select ?,s.id,?,'ACTIVE'
         from curriculum_program_subject ps
         join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
         join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -774,20 +800,20 @@ public class CourseMarketplaceController {
         where ps.program_id=?
         on conflict(student_id,subject_id) do update
           set status='ACTIVE',updated_at=now()
-        """, targetStudentId, courseId);
+        """, targetStudentId, institutionId, courseId);
 
     if (purchaserUserId != null && "CHILD".equals(recipientType)) {
       jdbc.update("""
         update parent_course_purchase_request
         set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
-        where guardian_user_id=? and student_id=? and course_id=? and status='PENDING'
-        """, purchaserUserId, purchaserUserId, targetStudentId, courseId);
+        where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
+        """, purchaserUserId, purchaserUserId, targetStudentId, institutionId, courseId);
     }
     jdbc.update("""
         update course_payment_order set status='VERIFIED',provider_payment_id=?,provider_signature=?,
           verified_at=now(),updated_at=now()
-        where id=? and status='PENDING'
-        """, paymentId, signature, localOrderId);
+        where id=? and institution_id=? and status='PENDING'
+        """, paymentId, signature, localOrderId, institutionId);
     Map<String,Object> result = new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
     result.put("purchasedFor", "CHILD".equals(recipientType) ? "CHILD"
         : purchaserUserId == null ? "LEARNER" : "PARENT");
@@ -854,6 +880,34 @@ public class CourseMarketplaceController {
         from course_marketplace_offer o join curriculum_program p on p.id=o.course_id
         where o.course_id=?
         """, courseId);
+  }
+
+  private InstitutionTenantContext requireTenant(InstitutionTenantContext tenant) {
+    if (tenant == null) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED", "Select the institution before using course commerce.");
+    }
+    return tenant;
+  }
+
+  private boolean hasAccessInInstitution(long studentId, long courseId, long institutionId) {
+    Boolean value = jdbc.queryForObject("""
+        select exists(
+          select 1 from student_program_enrollment e
+          where e.student_id=? and e.institution_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
+          union all
+          select 1 from course_purchase p
+          where p.student_id=? and p.institution_id=? and p.course_id=?
+          union all
+          select 1 from student_course_access_grant g
+          where g.student_id=? and g.institution_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT'
+          union all
+          select 1 from course_entitlement ce
+          where ce.institution_id=? and ce.course_id=? and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
+        )
+        """, studentId, institutionId, courseId, studentId, institutionId, courseId,
+        studentId, institutionId, courseId, institutionId, courseId, studentId, studentId);
+    return Boolean.TRUE.equals(value);
   }
 
   private boolean hasAccess(long studentId, long courseId) {
