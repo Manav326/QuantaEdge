@@ -57,7 +57,7 @@ The inspected workflow does not show a comprehensive browser E2E suite that sign
 
 1. Add/test a browser E2E harness for all three Web apps with isolated role/session fixtures and API/database reset strategy.
 2. Add Android emulator/Compose interaction tests for high-risk user journeys, back/session restoration, compact displays, document/photo/QR pickers and offline/error handling.
-3. Convert the 70-case scenario register into executable suites where possible; attach test IDs to reports and fail CI for critical authorization/tenant regressions.
+3. Convert the 72-case scenario register into executable suites where possible; attach test IDs to reports and fail CI for critical authorization/tenant regressions.
 4. Add specific data pack tests only after the installer/manifest is designed; test installation rollback, repeat install, cross-run isolation, interrupted uninstall and protected baseline preservation.
 5. Link actual current-SHA CI runs and artifacts; keep all tests unexecuted until evidence exists.
 6. For each scenario, link source test methods and mark coverage as direct, partial or missing after assertion review—not by class name alone.
