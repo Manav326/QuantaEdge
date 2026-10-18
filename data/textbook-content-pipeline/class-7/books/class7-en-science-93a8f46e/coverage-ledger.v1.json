@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 834,
-    "successful_visual_analyses": 826,
-    "missing_visual_analyses": 6654,
+    "raw_analysis_result_rows": 838,
+    "successful_visual_analyses": 830,
+    "missing_visual_analyses": 6650,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6662,
+    "unresolved_count": 6658,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41716,9 +41716,25 @@
       "asset_path": "assets/c708e4182d7d70b83db13ae43a74f24b3b8b23e216ea3b64dac4b9e32191331b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card with the word 'thanks' written in a cursive style, colored in green and red, against a yellow background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "thanks"
+        ],
+        "concepts": [
+          "greeting card",
+          "thanks",
+          "cursive writing",
+          "coloring"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not provide information about the specific details of the greeting card, such as the teacher's name or the teacher's mother tongue."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41734,9 +41750,31 @@
       "asset_path": "assets/f74941330a76876ed772613c931ac8685ed572fda640068b9d33ffe7c58bf7ae.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card with a red thread or string running horizontally across the middle.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image is a visual representation of the text describing Ashwin's creation of a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41752,9 +41790,34 @@
       "asset_path": "assets/6fe2d8f2f45a096566fdfbd8f2cd6f2af6f4fb86dec392fb4fcb76e335d1f37e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card with a yellow background and a red bow.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Drying paper",
+          "Mother tongue",
+          "Odia language",
+          "Solution"
+        ],
+        "context_relation": "The image is a visual representation of the text describing Ashwin's creation of a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual greeting card."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41770,9 +41833,30 @@
       "asset_path": "assets/eaff9fe90dae5e9ecb32f9a84a5e6dfee577ec44284d49a0606e4c19818ff14c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin to express gratitude to his teacher on Guru Purnima.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of making a greeting card for Guru Purnima, which is a significant event in India.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

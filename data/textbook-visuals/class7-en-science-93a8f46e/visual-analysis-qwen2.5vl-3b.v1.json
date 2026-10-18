@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 826,
+    "assets_selected": 830,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 825,
-    "assets_remaining": 6663,
-    "assets_completion_percent": 11.0,
+    "assets_analyzed": 829,
+    "assets_remaining": 6659,
+    "assets_completion_percent": 11.1,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 821,
+    "assets_skipped_from_checkpoint": 825,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T14:32:54Z"
+      "checkpointed_at": "2026-10-18T14:38:57Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -30645,6 +30645,166 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T14:38:01Z"
+    },
+    {
+      "asset_id": "14d7e247f1f4657d7585e03e",
+      "asset_sha256": "c708e4182d7d70b83db13ae43a74f24b3b8b23e216ea3b64dac4b9e32191331b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/c708e4182d7d70b83db13ae43a74f24b3b8b23e216ea3b64dac4b9e32191331b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with the word 'thanks' written in a cursive style, colored in green and red, against a yellow background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "thanks"
+        ],
+        "concepts": [
+          "greeting card",
+          "thanks",
+          "cursive writing",
+          "coloring"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not provide information about the specific details of the greeting card, such as the teacher's name or the teacher's mother tongue."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:40:03Z"
+    },
+    {
+      "asset_id": "b316c6bc1902c5b25fb4affd",
+      "asset_sha256": "f74941330a76876ed772613c931ac8685ed572fda640068b9d33ffe7c58bf7ae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/f74941330a76876ed772613c931ac8685ed572fda640068b9d33ffe7c58bf7ae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a red thread or string running horizontally across the middle.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image is a visual representation of the text describing Ashwin's creation of a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:41:18Z"
+    },
+    {
+      "asset_id": "2819776bc89d2a4e11fb4b95",
+      "asset_sha256": "6fe2d8f2f45a096566fdfbd8f2cd6f2af6f4fb86dec392fb4fcb76e335d1f37e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/6fe2d8f2f45a096566fdfbd8f2cd6f2af6f4fb86dec392fb4fcb76e335d1f37e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a yellow background and a red bow.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima. He applied turmeric paste on white",
+          "paper and dried it. He wrote",
+          "his wishes in the teacher's",
+          "mother tongue (Odia)",
+          "language) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Drying paper",
+          "Mother tongue",
+          "Odia language",
+          "Solution"
+        ],
+        "context_relation": "The image is a visual representation of the text describing Ashwin's creation of a greeting card for Guru Purnima.",
+        "limitations": [
+          "The image does not show the actual greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:42:33Z"
+    },
+    {
+      "asset_id": "8ec66ce0fdcc330343efb1d9",
+      "asset_sha256": "eaff9fe90dae5e9ecb32f9a84a5e6dfee577ec44284d49a0606e4c19818ff14c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/eaff9fe90dae5e9ecb32f9a84a5e6dfee577ec44284d49a0606e4c19818ff14c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card made by Ashwin to express gratitude to his teacher on Guru Purnima.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) on the dried paper",
+          "using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of making a greeting card for Guru Purnima, which is a significant event in India.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:43:48Z"
     }
   ]
 }
