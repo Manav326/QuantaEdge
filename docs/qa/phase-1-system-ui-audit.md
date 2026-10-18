@@ -198,6 +198,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Scan the 59 web route-entry files for page-level handlers/direct API literals and map Android route enums through the Compose shell (partial; see source log).
 - [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
 - [x] Add 70 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
+- [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
 - [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
 - [x] Record the initial test-data marker search result and its limits.
 
@@ -230,8 +231,8 @@ Phase 1 may be signed off only when:
 
 ## 13. Immediate next pass
 
-1. Reconcile route-generation output with the 93-row starter inventory (59 web page entries plus 34 Android destinations).
-2. Complete source-level action/endpoint/permission mapping, then use it to drive controlled runtime walkthroughs.
+1. Execute route-generator tests and current route artifact on the exact main SHA; reconcile it with the 93-row starter inventory (59 web page entries plus 34 Android destinations).
+2. Continue screen-specific control/API/permission mapping, then use the 70-case register to drive controlled runtime walkthroughs.
 3. Verify current-main CI and record its exact SHA/results.
 4. Close high-priority tenant, role, test-data ownership and external-side-effect design questions before any central data installer is implemented.
 
