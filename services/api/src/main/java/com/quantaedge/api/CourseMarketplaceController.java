@@ -228,18 +228,6 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("Choose whether this course is for you or a linked child.");
     }
 
-    Boolean member = jdbc.queryForObject("""
-      select exists(
-        select 1 from institution_membership m
-        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-        join student st on st.id=m.student_id and st.active=true
-        where m.institution_id=? and m.student_id=? and m.status='ACTIVE'
-      )
-      """, Boolean.class, institutionId, studentId);
-    if (!Boolean.TRUE.equals(member)) {
-      throw new SecurityException("The selected learner is not an active member of this institution.");
-    }
-
     Boolean freeAndPublished = jdbc.queryForObject("""
       select exists(
         select 1 from institution_marketplace_offer o
@@ -258,6 +246,8 @@ public class CourseMarketplaceController {
     if (hasAccessInInstitution(studentId, courseId, institutionId)) {
       throw new IllegalArgumentException("The selected learner already has access to this course in this institution.");
     }
+    ensureCourseMembership(studentId,institutionId,context.studentId(),context.userId(),
+        "FREE_COURSE_ENROLLMENT",courseId);
 
     List<Map<String,Object>> subjects = jdbc.queryForList("""
       select s.id from curriculum_program_subject ps
@@ -558,11 +548,10 @@ public class CourseMarketplaceController {
         join institution_tenant tenant_scope
           on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        join institution_membership membership
-          on membership.institution_id=o.institution_id and membership.student_id=?
-          and membership.status='ACTIVE'
+        join student target_student on target_student.id=? and target_student.active=true
+          and target_student.environment='PRODUCTION'
         where o.institution_id=? and p.id=? and o.status='PUBLISHED' and o.price_paise>0
-        """, targetStudentId, institutionId, courseId);
+        """, targetStudentId,institutionId,courseId);
     if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available to the selected institution.");
     // Course and history ownership are keyed by institution; another tenant's records are independent.
     if (hasAccessInInstitution(targetStudentId, courseId, institutionId)) {
@@ -821,6 +810,12 @@ public class CourseMarketplaceController {
     Long purchaserUserId = order.get("purchaser_user_id") == null
         ? null : ((Number) order.get("purchaser_user_id")).longValue();
     String recipientType = String.valueOf(order.get("recipient_type"));
+    if ("CHILD".equals(recipientType)) {
+      if (purchaserUserId == null) throw new SecurityException("The parent purchase identity is missing.");
+      requireFullGuardianChildAccess(purchaserUserId,targetStudentId);
+    }
+    ensureCourseMembership(targetStudentId,institutionId,callerStudentId,purchaserUserId,
+        "PAID_COURSE_PURCHASE",courseId);
     Long purchaseId;
     try {
       purchaseId = jdbc.queryForObject("""
@@ -966,6 +961,41 @@ public class CourseMarketplaceController {
           400, "INSTITUTION_CONTEXT_REQUIRED", "Select the institution before using course commerce.");
     }
     return tenant;
+  }
+
+  /**
+   * Membership is created only as the explicit result of a validated, published free enrolment
+   * or confirmed payment. Signup/authentication alone never enrolls a learner into any tenant.
+   */
+  private long ensureCourseMembership(long studentId,long institutionId,Long actorStudentId,
+      Long actorUserId,String source,long courseId) {
+    List<Map<String,Object>> previous=jdbc.queryForList("""
+      select id,status from institution_membership
+      where institution_id=? and student_id=? for update
+      """,institutionId,studentId);
+    boolean wasActive=!previous.isEmpty() && "ACTIVE".equals(String.valueOf(previous.getFirst().get("status")));
+    Long membershipId=jdbc.queryForObject("""
+      insert into institution_membership(
+        institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at
+      ) values(?,?,null,'ACTIVE',now(),null,now(),now())
+      on conflict(institution_id,student_id) do update set
+        status='ACTIVE',
+        joined_at=case when institution_membership.status='ACTIVE'
+          then institution_membership.joined_at else now() end,
+        left_at=null,updated_at=now()
+      returning id
+      """,Long.class,institutionId,studentId);
+    if(membershipId==null) throw new IllegalStateException("Institution membership could not be recorded.");
+    if(!wasActive) {
+      jdbc.update("""
+        insert into institution_membership_event(
+          institution_id,membership_id,student_id,join_code_id,event_type,actor_student_id,details
+        ) values(?,?,?,null,?,?,jsonb_build_object('source',?,'courseId',?,'actorUserId',?))
+        """,institutionId,membershipId,studentId,
+          previous.isEmpty()?"MEMBERSHIP_CREATED":"MEMBERSHIP_REACTIVATED",
+          actorStudentId,source,courseId,actorUserId);
+    }
+    return membershipId;
   }
 
   private boolean hasAccessInInstitution(long studentId, long courseId, long institutionId) {
