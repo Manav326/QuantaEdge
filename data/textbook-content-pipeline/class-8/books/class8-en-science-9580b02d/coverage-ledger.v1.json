@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 717,
-    "successful_visual_analyses": 710,
-    "missing_visual_analyses": 1574,
+    "raw_analysis_result_rows": 719,
+    "successful_visual_analyses": 712,
+    "missing_visual_analyses": 1572,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1581,
+    "unresolved_count": 1579,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28124,9 +28124,26 @@
       "asset_path": "assets/888f60535b51c45c5343fef68c84b76651096f6956cc4a023c0776c304d9bf0c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a beaker of water and a small object floating in a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water",
+          "A small object floating in a liquid"
+        ],
+        "concepts": [
+          "Water",
+          "Object",
+          "Floating",
+          "Liquid"
+        ],
+        "context_relation": "The image illustrates a scientific concept related to the behavior of particles in liquids and gases.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the particles or the forces involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28142,9 +28159,18 @@
       "asset_path": "assets/2492b5b6d337babfe8737ece6bde795a450eb16f0bb30a6e1bb52962e1c87b6f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow sphere with a small blue dot and two lines extending from it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a simple diagram or illustration, possibly used to explain a concept related to weather or atmospheric forces.",
+        "limitations": [
+          "The image does not provide specific details or labels that would allow for a precise interpretation of its content. The visible text is incomplete and does not provide additional context or information about the image's purpose or the topic it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

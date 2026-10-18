@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 710,
+    "assets_selected": 712,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 707,
-    "assets_remaining": 1584,
+    "assets_analyzed": 709,
+    "assets_remaining": 1582,
     "assets_completion_percent": 30.9,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 705,
+    "assets_skipped_from_checkpoint": 707,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:49:24Z"
+      "checkpointed_at": "2026-10-18T22:55:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:50:14Z"
+      "checkpointed_at": "2026-10-18T22:56:12Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:50:52Z"
+      "checkpointed_at": "2026-10-18T22:56:52Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -21295,6 +21295,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T22:54:07Z"
+    },
+    {
+      "asset_id": "240a9d99e152b8d09a4bef15",
+      "asset_sha256": "888f60535b51c45c5343fef68c84b76651096f6956cc4a023c0776c304d9bf0c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/888f60535b51c45c5343fef68c84b76651096f6956cc4a023c0776c304d9bf0c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a beaker of water and a small object floating in a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water",
+          "A small object floating in a liquid"
+        ],
+        "concepts": [
+          "Water",
+          "Object",
+          "Floating",
+          "Liquid"
+        ],
+        "context_relation": "The image illustrates a scientific concept related to the behavior of particles in liquids and gases.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the particles or the forces involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:58:30Z"
+    },
+    {
+      "asset_id": "443397c0b0d4136e46f5ed26",
+      "asset_sha256": "2492b5b6d337babfe8737ece6bde795a450eb16f0bb30a6e1bb52962e1c87b6f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/2492b5b6d337babfe8737ece6bde795a450eb16f0bb30a6e1bb52962e1c87b6f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow sphere with a small blue dot and two lines extending from it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a simple diagram or illustration, possibly used to explain a concept related to weather or atmospheric forces.",
+        "limitations": [
+          "The image does not provide specific details or labels that would allow for a precise interpretation of its content. The visible text is incomplete and does not provide additional context or information about the image's purpose or the topic it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:00:09Z"
     }
   ]
 }

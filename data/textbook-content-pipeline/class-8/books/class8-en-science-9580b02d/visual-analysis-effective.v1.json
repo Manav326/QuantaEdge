@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1a9d231060782d2a2eaa0e2b6705c241bdf79eb6ed849e41c5f16100a188aabb",
+  "raw_analysis_sha256": "df81a1053012b93d3ca47758459aa2ca695a7fb3ab6076ef5297598212d9c6d4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:49:24Z",
+      "checkpointed_at": "2026-10-18T22:55:21Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:50:14Z",
+      "checkpointed_at": "2026-10-18T22:56:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:50:52Z",
+      "checkpointed_at": "2026-10-18T22:56:52Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -31098,6 +31098,102 @@
         "limitations": [
           "The image does not include any text or labels that provide additional context or information.",
           "The image is a static representation and does not depict any dynamic processes or changes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "240a9d99e152b8d09a4bef15",
+      "asset_sha256": "888f60535b51c45c5343fef68c84b76651096f6956cc4a023c0776c304d9bf0c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/888f60535b51c45c5343fef68c84b76651096f6956cc4a023c0776c304d9bf0c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a beaker of water and a small object floating in a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water",
+          "A small object floating in a liquid"
+        ],
+        "concepts": [
+          "Water",
+          "Object",
+          "Floating",
+          "Liquid"
+        ],
+        "context_relation": "The image illustrates a scientific concept related to the behavior of particles in liquids and gases.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the particles or the forces involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:58:30Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a beaker of water and a small object floating in a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water",
+          "A small object floating in a liquid"
+        ],
+        "concepts": [
+          "Water",
+          "Object",
+          "Floating",
+          "Liquid"
+        ],
+        "context_relation": "The image illustrates a scientific concept related to the behavior of particles in liquids and gases.",
+        "limitations": [
+          "The image does not provide specific details about the properties of the particles or the forces involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "443397c0b0d4136e46f5ed26",
+      "asset_sha256": "2492b5b6d337babfe8737ece6bde795a450eb16f0bb30a6e1bb52962e1c87b6f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/2492b5b6d337babfe8737ece6bde795a450eb16f0bb30a6e1bb52962e1c87b6f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow sphere with a small blue dot and two lines extending from it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a simple diagram or illustration, possibly used to explain a concept related to weather or atmospheric forces.",
+        "limitations": [
+          "The image does not provide specific details or labels that would allow for a precise interpretation of its content. The visible text is incomplete and does not provide additional context or information about the image's purpose or the topic it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:00:09Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow sphere with a small blue dot and two lines extending from it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a simple diagram or illustration, possibly used to explain a concept related to weather or atmospheric forces.",
+        "limitations": [
+          "The image does not provide specific details or labels that would allow for a precise interpretation of its content. The visible text is incomplete and does not provide additional context or information about the image's purpose or the topic it is related to."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
