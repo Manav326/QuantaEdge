@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 783,
-    "successful_visual_analyses": 767,
-    "missing_visual_analyses": 1295,
+    "raw_analysis_result_rows": 786,
+    "successful_visual_analyses": 770,
+    "missing_visual_analyses": 1292,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1311,
+    "unresolved_count": 1308,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30601,9 +30601,26 @@
       "asset_path": "assets/5f3b80432d8f61a794f204998841f07a07e4df1c74414666227ae952af74a2a6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green leaf with a stem, possibly representing a plant.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "leaf",
+          "stem",
+          "shrub",
+          "herb",
+          "climber",
+          "creeper"
+        ],
+        "context_relation": "The image is likely used to illustrate the different types of plants mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the plant types."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30619,9 +30636,22 @@
       "asset_path": "assets/3f67ba3d9c577f6db6395b68707abc1c9d2b2c771e9edc4f46febe19a3f60729.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green leaf with a stem, possibly representing a banana leaf.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "leaf",
+          "stem",
+          "banana leaf"
+        ],
+        "context_relation": "The image is likely used to illustrate the concept of a banana leaf in the context of plant types.",
+        "limitations": [
+          "The image does not provide specific details about the plant type or its features."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30637,9 +30667,24 @@
       "asset_path": "assets/256cf07881732ecc545569ac8367fa30485ace5d97a9715be68891a967ceff29.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green, elongated, and pointed plant stem with a slightly curved tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant stem",
+          "pointed tip",
+          "slightly curved",
+          "green color"
+        ],
+        "context_relation": "The image is related to the description of plant stems in the text, specifically highlighting the features of a plant stem.",
+        "limitations": [
+          "No specific labels or measurements are provided.",
+          "The image does not show any other parts of the plant."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
