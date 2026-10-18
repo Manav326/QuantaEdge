@@ -37,6 +37,7 @@ Counts describe documentation inventory, not feature pass rates or functional co
 |---|---|
 | `SOURCE_INVENTORIED` | A page entry point or native navigation destination has been identified in source. |
 | `SOURCE_SCAN_PARTIAL` | The route entry and/or navigation mapping has been scanned for key actions, API paths and state-handling signals, but imported components, permissions or persistence contracts remain untraced. |
+| `SCENARIO_MAPPED` | The screen/API operation is linked to one or more existing scenario IDs; the mapping itself is not evidence that the scenario passed. |
 | `SOURCE_REVIEWED` | Relevant source behavior, event handlers, API calls and permissions have been inspected. |
 | `RUNTIME_NOT_VERIFIED` | No reproducible browser/device execution evidence is recorded for that item. |
 | `AUTOMATED_VERIFIED` | An identified automated test ran against a named revision and its assertions passed. |
