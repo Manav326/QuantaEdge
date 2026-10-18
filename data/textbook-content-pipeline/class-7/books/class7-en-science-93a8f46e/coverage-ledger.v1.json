@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 774,
-    "successful_visual_analyses": 766,
-    "missing_visual_analyses": 6714,
+    "raw_analysis_result_rows": 778,
+    "successful_visual_analyses": 770,
+    "missing_visual_analyses": 6710,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6722,
+    "unresolved_count": 6718,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39490,9 +39490,34 @@
       "asset_path": "assets/67f05502c88f9825b5cc218ee4821356112570542c8aab9211a349de2face3a7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Vegetables",
+          "Fruits",
+          "Flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The page discusses the use of various natural substances as acid-base indicators.",
+        "limitations": [
+          "The page does not provide specific instructions or methods for preparing the extracts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39508,9 +39533,32 @@
       "asset_path": "assets/a96a8fcd4d54024755cad1c3a432d8429c10e526b86d35489aa8973baed69743.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Vegetables, fruits, and flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The text discusses the use of various natural substances as acid-base indicators.",
+        "limitations": [
+          "The text does not provide specific instructions or methods for preparing extracts and testing substances."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39526,9 +39574,34 @@
       "asset_path": "assets/a96a8fcd4d54024755cad1c3a432d8429c10e526b86d35489aa8973baed69743.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a full-page text document with a focus on educational content about preparing and testing substances with vegetables, fruits, or flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Preparing and testing substances",
+          "Acid-base indicators",
+          "Vegetables, fruits, and flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The image provides educational content about preparing and testing substances with vegetables, fruits, or flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The image does not provide any visual representation of the substances or the process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39544,9 +39617,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
