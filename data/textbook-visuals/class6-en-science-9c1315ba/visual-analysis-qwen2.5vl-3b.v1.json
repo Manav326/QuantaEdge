@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 812,
+    "assets_selected": 814,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 809,
-    "assets_remaining": 1269,
-    "assets_completion_percent": 38.9,
+    "assets_analyzed": 811,
+    "assets_remaining": 1267,
+    "assets_completion_percent": 39.0,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 807,
+    "assets_skipped_from_checkpoint": 809,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:51:23Z"
+      "checkpointed_at": "2026-10-18T19:57:25Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:52:17Z"
+      "checkpointed_at": "2026-10-18T19:58:19Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:53:27Z"
+      "checkpointed_at": "2026-10-18T19:59:28Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25159,6 +25159,85 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T19:56:23Z"
+    },
+    {
+      "asset_id": "93e817a27c9371200555d40a",
+      "asset_sha256": "9b1bfac7051184ebed7ac746f5ecd9cee0f069a79394c1f082a50e5b92ce1d70",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/9b1bfac7051184ebed7ac746f5ecd9cee0f069a79394c1f082a50e5b92ce1d70.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "27044e01ee718413dc2d25e5be05bc77a17a050f0417efa461b05742d928472c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A camel walking in a desert landscape with sandy dunes and sparse vegetation in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "desert",
+          "camel",
+          "desert animals",
+          "desert plants",
+          "cold regions",
+          "snowfall",
+          "mountains",
+          "cold regions",
+          "frequent snowfall"
+        ],
+        "context_relation": "The image illustrates the adaptation of desert animals and plants to survive in harsh desert environments.",
+        "limitations": [
+          "The image does not provide specific details about the types of plants or animals in the desert."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:00:40Z"
+    },
+    {
+      "asset_id": "588c62f9bfd2864d5b34afcc",
+      "asset_sha256": "63dcbda9c48c1b0bc538f70adf9139de0a82827628fd31e9cfec2683d5c51e1d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/63dcbda9c48c1b0bc538f70adf9139de0a82827628fd31e9cfec2683d5c51e1d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "27044e01ee718413dc2d25e5be05bc77a17a050f0417efa461b05742d928472c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A camel standing in a snowy landscape with a blue sky in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "camel",
+          "snowy landscape",
+          "blue sky",
+          "cold",
+          "hot",
+          "desert",
+          "plants",
+          "animals",
+          "water storage",
+          "cold regions",
+          "snowfall",
+          "mountains"
+        ],
+        "context_relation": "The image illustrates the adaptation of animals to cold environments, specifically a camel in a snowy landscape.",
+        "limitations": [
+          "The image does not provide specific details about the camel's adaptation to cold conditions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:01:52Z"
     }
   ]
 }
