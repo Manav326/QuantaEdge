@@ -835,31 +835,35 @@ public class CertificateController {
   @Transactional
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
       @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return studentCertificateArtifact(certificateId, format, context, false);
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    return studentCertificateArtifact(certificateId,format,context,false,requireInstitution(tenant));
   }
 
   @GetMapping("/students/me/certificates/{certificateId}/view")
   @Transactional
   public ResponseEntity<byte[]> viewMyCertificate(@PathVariable long certificateId,
       @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return studentCertificateArtifact(certificateId, format, context, true);
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    return studentCertificateArtifact(certificateId,format,context,true,requireInstitution(tenant));
   }
 
-  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId, String format,
-      AuthContext context, boolean inline) {
-    context = authorization.requireStudent(context);
-    return certificateArtifact(certificateId, context.studentId(), format, inline);
+  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId,String format,
+      AuthContext context,boolean inline,long institutionId) {
+    context=authorization.requireStudent(context);
+    return certificateArtifact(certificateId,context.studentId(),format,inline,institutionId);
   }
 
-  private ResponseEntity<byte[]> certificateArtifact(long certificateId, long studentId,
-      String format, boolean inline) {
+  private ResponseEntity<byte[]> certificateArtifact(long certificateId,long studentId,
+      String format,boolean inline,long institutionId) {
     String normalizedFormat = format == null ? "pdf" : format.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
     }
-    Map<String, Object> certificate = loadCertificateArtifactRow(certificateId, studentId);
+    Map<String, Object> certificate = loadCertificateArtifactRow(certificateId,studentId,institutionId);
     if (certificate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     if ("REVOKED".equals(certificate.get("status"))) {
       throw new ResponseStatusException(HttpStatus.GONE, "This certificate has been revoked and is no longer downloadable as valid proof.");
@@ -890,7 +894,11 @@ public class CertificateController {
    * Prior artifacts are archived in the existing revision ledger; certificate ID and issue date
    * are deliberately preserved. This uses existing tables and adds no schema migration.
    */
-  private Map<String, Object> loadCertificateArtifactRow(long certificateId, Long studentId) {
+  private Map<String, Object> loadCertificateArtifactRow(long certificateId,Long studentId) {
+    return loadCertificateArtifactRow(certificateId,studentId,null);
+  }
+
+  private Map<String, Object> loadCertificateArtifactRow(long certificateId,Long studentId,Long institutionId) {
     String sql = """
         SELECT c.id,c.certificate_number,c.status,c.achievement_type,c.class_code,c.program_id,
                p.display_name AS course_name,c.subject_id,s.code AS subject_code,s.display_name AS subject_name,
@@ -903,14 +911,11 @@ public class CertificateController {
         LEFT JOIN curriculum_program p ON p.id=c.program_id
         WHERE c.id=?
         """;
-    Object[] args;
-    if (studentId != null) {
-      sql += " AND c.student_id=?";
-      args = new Object[]{certificateId, studentId};
-    } else {
-      args = new Object[]{certificateId};
-    }
-    return queryOptional(sql + " FOR UPDATE OF c", args);
+    List<Object> args=new ArrayList<>();
+    args.add(certificateId);
+    if(studentId!=null){sql+=" AND c.student_id=?";args.add(studentId);}
+    if(institutionId!=null){sql+=" AND c.institution_id=?";args.add(institutionId);}
+    return queryOptional(sql+" FOR UPDATE OF c",args.toArray());
   }
 
   private Map<String, Object> correctCertificateArtifact(Map<String, Object> certificate) {
@@ -1354,10 +1359,25 @@ public class CertificateController {
     return certificate;
   }
 
-  private Map<String, Object> publicCertificateById(long id, long studentId) {
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null || tenant.institutionId()<1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing certificates.");
+    }
+    return tenant.institutionId();
+  }
+
+  private Map<String, Object> publicCertificateById(long id,long studentId) {
     Map<String, Object> row = queryOptional("SELECT " + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN
-        + " WHERE c.id=? AND c.student_id=?", id, studentId);
-    if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
+        + " WHERE c.id=? AND c.student_id=?",id,studentId);
+    if(row==null)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Certificate not found.");
+    return row;
+  }
+
+  private Map<String, Object> publicCertificateById(long id,long studentId,long institutionId) {
+    Map<String,Object> row=queryOptional("SELECT "+CERTIFICATE_COLUMNS+" "+CERTIFICATE_JOIN
+        +" WHERE c.id=? AND c.student_id=? AND c.institution_id=?",id,studentId,institutionId);
+    if(row==null)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Certificate not found.");
     return row;
   }
 
