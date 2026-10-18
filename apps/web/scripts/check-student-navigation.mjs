@@ -330,8 +330,9 @@ assert.ok(androidFloatingTutorContract.includes('userResized') &&
   androidFloatingTutorContract.includes('coerceIn(minOf(260f, maxResizeWidth), maxResizeWidth)'),
   'The floating tutor must honour resize gestures and keep the panel within very small, split-screen and IME-reduced viewports.');
 assert.ok(androidFloatingTutorContract.includes('if (!opened || minimized)') &&
-  androidFloatingTutorContract.includes('if (opened) onRestore() else onOpen()'),
-  'The closed launcher and minimized tutor must share one bubble owner.');
+  androidFloatingTutorContract.includes('if (opened) onRestore() else onOpen()') &&
+  androidFloatingTutorContract.includes('val bubbleBottomInset = 84f'),
+  'The closed launcher and minimized tutor must share one bubble owner, positioned above the lesson action row by default.');
 
 
 

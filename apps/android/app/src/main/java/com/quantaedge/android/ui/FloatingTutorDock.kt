@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -103,7 +105,10 @@ fun FloatingTutorDock(
         if (!opened || minimized) {
             val bubbleSize = 58.dp
             val bubbleDefaultLeft = (viewportWidth - bubbleSize.value - 18f).coerceAtLeast(8f)
-            val bubbleDefaultTop = (viewportHeight - bubbleSize.value - 22f).coerceAtLeast(8f)
+            // The persistent lesson actions sit at the bottom of the lesson viewport.
+            // Keep the default bubble above them; users can still drag it anywhere.
+            val bubbleBottomInset = 84f
+            val bubbleDefaultTop = (viewportHeight - bubbleSize.value - bubbleBottomInset).coerceAtLeast(8f)
             val bubbleX = (bubbleLeft ?: bubbleDefaultLeft).coerceIn(8f, (viewportWidth - bubbleSize.value - 8f).coerceAtLeast(8f))
             val bubbleY = (bubbleTop ?: bubbleDefaultTop).coerceIn(8f, (viewportHeight - bubbleSize.value - 8f).coerceAtLeast(8f))
             Surface(
@@ -112,6 +117,12 @@ fun FloatingTutorDock(
                     .size(bubbleSize)
                     .clip(CircleShape)
                     .clickable(onClick = { if (opened) onRestore() else onOpen() })
+                    .semantics {
+                        contentDescription = when {
+                            !opened -> if (learningLanguage == "hi") "ट्यूटर खोलें" else "Open tutor"
+                            else -> if (learningLanguage == "hi") "ट्यूटर फिर खोलें" else "Restore tutor"
+                        }
+                    }
                     .pointerInput(viewportWidth, viewportHeight) {
                         detectDragGestures { change, dragAmount ->
                             change.consume()
