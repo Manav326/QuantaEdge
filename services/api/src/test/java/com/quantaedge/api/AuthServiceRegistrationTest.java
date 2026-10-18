@@ -71,7 +71,7 @@ class AuthServiceRegistrationTest {
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(true);
 
-    assertThrows(IllegalStateException.class, () -> auth.requestOtp(MOBILE, "SIGNUP"));
+    assertThrows(IllegalStateException.class, () -> auth.requestOtp(MOBILE, "SIGNUP", 1L));
     verify(jdbc, never()).update(contains("insert into otp_challenge"),
         org.mockito.ArgumentMatchers.<Object[]>any());
   }
