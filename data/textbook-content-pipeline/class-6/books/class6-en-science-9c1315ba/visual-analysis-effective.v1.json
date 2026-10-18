@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d1a63b52450b5480c58cac243d5af64c593eddd831bc1de2ac5f3bb01edd7eb9",
+  "raw_analysis_sha256": "1d04a2b060bf65e4fcb9ec5b200843b5f72e9245a6ee5ecb5db218bcc677fe42",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T11:37:38Z",
+      "checkpointed_at": "2026-10-18T11:48:14Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -27551,6 +27551,146 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "86a0d859752049967b88cef5",
+      "asset_sha256": "f749405b42e54a3893e7d95d9e013a5a59f39e91aa643d6601ea93cc72317a47",
+      "page_text_context_sha256": "7aaf2713edc237c93b4cf9b04c25d2147ed3694e6eb9d813c6b8d4f160d22274",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 11,
+      "asset_path": "page-0011.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a1c3e59a07819711449693c0",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7879cad772d53e7e6e3070810f309a496b61677403b00e384f5910eb28ff139f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:53:28Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aa4e5b85f3b848c67e8f1e0c",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7879cad772d53e7e6e3070810f309a496b61677403b00e384f5910eb28ff139f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:53:36Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4a86ea742aa523b90f169e4f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7879cad772d53e7e6e3070810f309a496b61677403b00e384f5910eb28ff139f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:53:54Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
