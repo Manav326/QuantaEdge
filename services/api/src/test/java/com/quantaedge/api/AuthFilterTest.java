@@ -1,15 +1,21 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import jakarta.servlet.http.Cookie;
 import java.util.List;
-import org.springframework.jdbc.core.JdbcTemplate;
-
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -96,7 +102,7 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(413, response.getStatus());
-    assertEquals(null, chain.getRequest());
+    assertNull(chain.getRequest());
     verifyNoInteractions(auth);
   }
 
@@ -117,10 +123,9 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(403, response.getStatus());
-    assertEquals(null, chain.getRequest());
+    assertNull(chain.getRequest());
     verifyNoInteractions(auth);
   }
-
 
   @Test
   void malformedInstitutionSelectorIsRejectedBeforeTheControllerRuns() throws Exception {
@@ -141,13 +146,27 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(400, response.getStatus());
-    assertEquals("INVALID_INSTITUTION_CODE", response.getContentAsString().contains("INVALID_INSTITUTION_CODE")
-        ? "INVALID_INSTITUTION_CODE" : "missing error code");
-    assertEquals(null, chain.getRequest());
+    assertTrue(response.getContentAsString().contains("INVALID_INSTITUTION_CODE"));
+    assertNull(chain.getRequest());
+    verifyNoInteractions(jdbc);
   }
 
   @Test
   void corsPreflightDoesNotRequireWorkspaceCookie() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest request = new MockHttpServletRequest("OPTIONS", "/api/v1/hrms/access-users");
+    request.addHeader("Origin", "http://localhost:3002");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    verifyNoInteractions(auth);
+    assertEquals(200, response.getStatus());
+    assertEquals(request, chain.getRequest());
+  }
 
   @Test
   void tenantScopedCourseCatalogueRejectsMissingInstitutionContext() throws Exception {
@@ -166,8 +185,8 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(400, response.getStatus());
-    assertEquals(true, response.getContentAsString().contains("INSTITUTION_CONTEXT_REQUIRED"));
-    assertEquals(null, chain.getRequest());
+    assertTrue(response.getContentAsString().contains("INSTITUTION_CONTEXT_REQUIRED"));
+    assertNull(chain.getRequest());
   }
 
   @Test
@@ -175,11 +194,9 @@ class AuthFilterTest {
     AuthService auth = mock(AuthService.class);
     StaffAuditService audit = mock(StaffAuditService.class);
     JdbcTemplate jdbc = mock(JdbcTemplate.class);
-    when(jdbc.queryForList(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.any(Object[].class)))
-        .thenReturn(java.util.List.of(java.util.Map.<String,Object>of(
-            "id", 91L, "tenant_code", "SCHOOL-A", "display_name", "School A")));
-    when(jdbc.queryForObject(org.mockito.ArgumentMatchers.contains("institution_membership"),
-        org.mockito.ArgumentMatchers.eq(Boolean.class), org.mockito.ArgumentMatchers.<Object[]>any()))
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
+        Map.<String,Object>of("id", 91L, "tenant_code", "SCHOOL-A", "display_name", "School A")));
+    when(jdbc.queryForObject(contains("institution_membership"), eq(Boolean.class), any(Object[].class)))
         .thenReturn(false);
     InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
     AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
@@ -195,20 +212,7 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(403, response.getStatus());
-    assertEquals(true, response.getContentAsString().contains("INSTITUTION_MEMBERSHIP_REQUIRED"));
-    assertEquals(null, chain.getRequest());
-  }
-
-    AuthService auth = mock(AuthService.class);
-    StaffAuditService audit = mock(StaffAuditService.class);
-    AuthFilter filter = new AuthFilter(auth, audit);
-    MockHttpServletRequest request = new MockHttpServletRequest("OPTIONS", "/api/v1/hrms/access-users");
-    request.addHeader("Origin", "http://localhost:3002");
-    MockHttpServletResponse response = new MockHttpServletResponse();
-
-    filter.doFilter(request, response, new MockFilterChain());
-
-    verifyNoInteractions(auth);
-    assertEquals(200, response.getStatus());
+    assertTrue(response.getContentAsString().contains("INSTITUTION_MEMBERSHIP_REQUIRED"));
+    assertNull(chain.getRequest());
   }
 }
