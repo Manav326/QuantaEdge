@@ -40,3 +40,9 @@
 @media(max-width:900px){.gateGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.manifestRow{grid-template-columns:minmax(0,1fr) auto}.manifestRow span{grid-column:1/-1;grid-row:2}.runRow{align-items:flex-start}}
 @media(max-width:620px){.gateGrid{grid-template-columns:1fr 1fr}.sectionHeading,.packHeading{flex-wrap:wrap}.installRow{grid-template-columns:1fr}.installRow button{width:100%}.runRow{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.runActions{justify-content:flex-start}.runActions button{flex:1}.planList>div{display:grid}.planList span{text-align:left}.detailActions>*{flex:1 1 140px}}
 @media(max-width:360px){.gateGrid{grid-template-columns:1fr}.page{gap:12px}}
+.checkList{display:grid;gap:9px;margin-top:12px}
+.checkRow{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;min-width:0}
+.checkHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.checkHead strong{font-size:13px;overflow-wrap:anywhere}
+.checkRow p{margin:7px 0;font-size:13px;overflow-wrap:anywhere}
+.checkRow p span{font-weight:700;color:var(--muted)}
