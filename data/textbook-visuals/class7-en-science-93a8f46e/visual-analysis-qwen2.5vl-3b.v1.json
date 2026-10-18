@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1184,
+    "assets_selected": 1187,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1182,
-    "assets_remaining": 6306,
+    "assets_analyzed": 1185,
+    "assets_remaining": 6303,
     "assets_completion_percent": 15.8,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1179,
+    "assets_skipped_from_checkpoint": 1182,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:42:26Z"
+      "checkpointed_at": "2026-10-18T22:45:31Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T22:42:49Z"
+      "checkpointed_at": "2026-10-18T22:45:53Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -45031,6 +45031,103 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T22:44:45Z"
+    },
+    {
+      "asset_id": "9a5babbe5e9fae2e4d6c2e7a",
+      "asset_sha256": "4a5fc76aec98c20383c658b8dc04e85d7c5dc7f293c88a39b5570e817b349db2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/4a5fc76aec98c20383c658b8dc04e85d7c5dc7f293c88a39b5570e817b349db2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green speech bubble with a tail, possibly representing a thought or message.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about electricity and its uses.",
+        "limitations": [
+          "The image does not provide specific details about the content of the discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:46:30Z"
+    },
+    {
+      "asset_id": "369ca5b877b6b4d92c01826f",
+      "asset_sha256": "5b68f1f7fa1e497cfa76ce7cbcec9da8f481b0e95378c957241107cd9bd4f919",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/5b68f1f7fa1e497cfa76ce7cbcec9da8f481b0e95378c957241107cd9bd4f919.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a blue beanie and a plaid shirt, with one hand on their chin, appearing to be in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "windmills",
+          "wind energy",
+          "solar panels",
+          "falling water",
+          "natural gas",
+          "coal",
+          "thoughtful pose"
+        ],
+        "context_relation": "The image is related to the educational content about electricity generation methods.",
+        "limitations": [
+          "The image does not provide specific details about the person's identity or the educational content being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:47:11Z"
+    },
+    {
+      "asset_id": "7f161d88a86ce3fe44fa2218",
+      "asset_sha256": "43f6175191773e8f572236b84594f9f3d4f47b684ee04e465b26f2358906a4bc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 44,
+      "asset_path": "assets/43f6175191773e8f572236b84594f9f3d4f47b684ee04e465b26f2358906a4bc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f2a341ba5150d369990feb86b2c66e96bf9adbb31f8671920f8fff274791b428",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red flashlight with a black strap.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "flashlight",
+          "red",
+          "black strap"
+        ],
+        "context_relation": "The image is a close-up of a flashlight, focusing on its design and color.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the flashlight itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T22:47:49Z"
     }
   ]
 }

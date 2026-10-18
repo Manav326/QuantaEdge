@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1198,
-    "successful_visual_analyses": 1184,
-    "missing_visual_analyses": 6290,
+    "raw_analysis_result_rows": 1201,
+    "successful_visual_analyses": 1187,
+    "missing_visual_analyses": 6287,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6304,
+    "unresolved_count": 6301,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55750,9 +55750,18 @@
       "asset_path": "assets/4a5fc76aec98c20383c658b8dc04e85d7c5dc7f293c88a39b5570e817b349db2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green speech bubble with a tail, possibly representing a thought or message.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about electricity and its uses.",
+        "limitations": [
+          "The image does not provide specific details about the content of the discussion."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55768,9 +55777,27 @@
       "asset_path": "assets/5b68f1f7fa1e497cfa76ce7cbcec9da8f481b0e95378c957241107cd9bd4f919.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a blue beanie and a plaid shirt, with one hand on their chin, appearing to be in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "electricity",
+          "windmills",
+          "wind energy",
+          "solar panels",
+          "falling water",
+          "natural gas",
+          "coal",
+          "thoughtful pose"
+        ],
+        "context_relation": "The image is related to the educational content about electricity generation methods.",
+        "limitations": [
+          "The image does not provide specific details about the person's identity or the educational content being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55786,9 +55813,22 @@
       "asset_path": "assets/43f6175191773e8f572236b84594f9f3d4f47b684ee04e465b26f2358906a4bc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red flashlight with a black strap.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "flashlight",
+          "red",
+          "black strap"
+        ],
+        "context_relation": "The image is a close-up of a flashlight, focusing on its design and color.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the flashlight itself."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
