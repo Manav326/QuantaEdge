@@ -396,6 +396,23 @@ public class CertificateController {
 
     Long courseId=request.courseId();
     if(courseId!=null && courseId<1)throw new IllegalArgumentException("Choose a valid course ID.");
+    // Legacy clients may omit courseId. For Classes 6-8, resolve it to the learner's
+    // actively enrolled matching CLASS_N product instead of issuing a class-only certificate.
+    if(courseId==null && List.of("6","7","8").contains(String.valueOf(student.get("class_code")))) {
+      String ownClass=String.valueOf(student.get("class_code"));
+      List<Long> activeClassCourses=jdbc.queryForList("""
+        select p.id
+        from curriculum_program p
+        join curriculum_class c on c.id=p.class_id and c.code=?
+        join student_program_enrollment spe on spe.program_id=p.id
+          and spe.student_id=? and spe.status='ACTIVE'
+        where p.code='CLASS_' || c.code and p.curriculum_version='CURRENT'
+          and p.status='ACTIVE'
+        """,Long.class,ownClass,studentId);
+      if(activeClassCourses.size()!=1)
+        throw new SecurityException("Active enrolment in your matching Class "+ownClass+" course is required for a course certificate.");
+      courseId=activeClassCourses.getFirst();
+    }
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
     String profileLanguage = clean(student.get("language"));
@@ -426,8 +443,9 @@ public class CertificateController {
     if (existing != null) return existingOrRejectRevoked(existing);
 
     String courseScope=courseId==null
-        ? "s.program_id is null and cc.code=st.class_code"
-        : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+        ? "s.program_id is null and cc.code=st.class_code and (cc.code not in ('6','7','8') or exists(\\n" +
+          "select 1 from curriculum_program mapped_course join curriculum_program_subject mapped_subject on mapped_subject.program_id=mapped_course.id and mapped_subject.class_id=s.class_id and mapped_subject.subject_id=s.id join student_program_enrollment mapped_enrollment on mapped_enrollment.program_id=mapped_course.id and mapped_enrollment.student_id=st.id and mapped_enrollment.status='ACTIVE' where mapped_course.code='CLASS_' || cc.code and mapped_course.curriculum_version='CURRENT' and mapped_course.status='ACTIVE'))"
+        : "exists(select 1 from curriculum_program scope_course join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id and scope_map.subject_id=s.id and scope_map.class_id=s.class_id join student_program_enrollment spe on spe.program_id=scope_course.id and spe.student_id=st.id and spe.status='ACTIVE' where scope_course.id=? and scope_course.status='ACTIVE' and scope_course.code<>'GENERAL' and (s.program_id=scope_course.id or s.program_id is null))";
     String sql="""
         SELECT st.display_name AS recipient_name,st.class_code,cc.code AS source_class_code,
                s.id AS subject_id,s.program_id,p.display_name AS course_name,
@@ -448,6 +466,11 @@ public class CertificateController {
     List<Object> args=new ArrayList<>(List.of(studentId,subjectCode));
     if(courseId!=null)args.add(courseId);
     Map<String, Object> achievement=queryOptional(sql,args.toArray());
+    if (achievement != null && courseId != null) {
+      achievement.put("course_name", jdbc.queryForObject(
+          "select display_name from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'",
+          String.class, courseId));
+    }
     if (achievement == null) {
       throw certificateConflict(language,
           courseId==null
