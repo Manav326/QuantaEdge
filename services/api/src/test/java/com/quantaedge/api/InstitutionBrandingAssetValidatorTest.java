@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.zip.CRC32;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
@@ -62,6 +63,16 @@ class InstitutionBrandingAssetValidatorTest {
   }
 
   @Test
+  void rejectsAnimatedPngControlChunksEvenThoughTheySharePngSignature() throws Exception {
+    byte[] apng = animatedPngBytes();
+    MultipartFile file = new MockMultipartFile("file", "animated.png", "image/png", apng);
+
+    IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+        () -> InstitutionBrandingAssetValidator.validate(file));
+    assertTrue(error.getMessage().contains("Animated PNG"));
+  }
+
+  @Test
   void rejectsOversizedUploadsBeforeImageDecoding() {
     byte[] oversize = new byte[InstitutionBrandingAssetValidator.MAX_BYTES + 1];
     MultipartFile file = new MockMultipartFile("file", "too-large.png", "image/png", oversize);
@@ -79,6 +90,36 @@ class InstitutionBrandingAssetValidatorTest {
     IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
         () -> InstitutionBrandingAssetValidator.validate(file));
     assertTrue(error.getMessage().contains("dimensions"));
+  }
+
+  private static byte[] animatedPngBytes() throws IOException {
+    byte[] png = imageBytes("png", 2, 2);
+    int ihdrOffset = 8;
+    int ihdrLength = ((png[ihdrOffset] & 0xff) << 24)
+        | ((png[ihdrOffset + 1] & 0xff) << 16)
+        | ((png[ihdrOffset + 2] & 0xff) << 8)
+        | (png[ihdrOffset + 3] & 0xff);
+    int insertAt = 8 + ihdrLength + 12;
+    byte[] animationControl = new byte[20];
+    animationControl[3] = 8; // Data length.
+    animationControl[4] = 'a';
+    animationControl[5] = 'c';
+    animationControl[6] = 'T';
+    animationControl[7] = 'L';
+    animationControl[11] = 1; // One frame.
+    animationControl[12] = 0; // Infinite plays.
+    CRC32 crc = new CRC32();
+    crc.update(animationControl, 4, 12);
+    long value = crc.getValue();
+    animationControl[16] = (byte) (value >>> 24);
+    animationControl[17] = (byte) (value >>> 16);
+    animationControl[18] = (byte) (value >>> 8);
+    animationControl[19] = (byte) value;
+    byte[] apng = new byte[png.length + animationControl.length];
+    System.arraycopy(png, 0, apng, 0, insertAt);
+    System.arraycopy(animationControl, 0, apng, insertAt, animationControl.length);
+    System.arraycopy(png, insertAt, apng, insertAt + animationControl.length, png.length - insertAt);
+    return apng;
   }
 
   private static byte[] imageBytes(String format, int width, int height) throws IOException {
