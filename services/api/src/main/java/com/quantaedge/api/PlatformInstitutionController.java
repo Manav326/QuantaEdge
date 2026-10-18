@@ -109,21 +109,25 @@ public class PlatformInstitutionController {
     return result;
   }
 
+  /** Shared catalogue: only origin-approved releases can be seen or assigned by HRMS. */
   @GetMapping("/catalog/courses")
   public List<Map<String,Object>> courseCatalog(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     AuthContext owner = requirePlatformOwner(context);
-    audit(owner,null,"COURSE_CATALOG_VIEWED","COURSE_CATALOG",null,Map.of());
+    audit(owner,null,"COURSE_CATALOG_VIEWED","COURSE_RELEASE_CATALOG",null,Map.of());
     return jdbc.queryForList("""
-        select p.id,p.code,p.display_name,
-          string_agg(distinct c.code, ', ' order by c.code) as class_code
-        from curriculum_program p
-        left join curriculum_program_subject ps on ps.program_id=p.id
-        left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and p.class_id=s.class_id and ps.class_id=s.class_id))
-        left join curriculum_class c on c.id=s.class_id and c.active=true
-        where p.status='ACTIVE' and p.code<>'GENERAL'
-        group by p.id,p.code,p.display_name
-        order by p.display_name,p.code
+        select r.id as release_id,p.id,p.id as course_id,p.public_id,p.code,p.display_name,p.curriculum_version,
+          r.release_version,r.status as release_status,r.origin_institution_id,
+          origin.tenant_code as origin_tenant_code,origin.display_name as origin_institution_name,
+          string_agg(distinct c.code, ', ' order by c.code) as class_code,
+          r.origin_approved_at as released_at
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_tenant origin on origin.id=r.origin_institution_id and origin.status='ACTIVE'
+        left join curriculum_class c on c.id=p.class_id and c.active=true
+        where r.status='SHAREABLE'
+        group by r.id,p.id,p.public_id,p.code,p.display_name,p.curriculum_version,
+          r.release_version,r.status,r.origin_institution_id,origin.tenant_code,origin.display_name,r.origin_approved_at
+        order by p.display_name,p.code,r.release_version desc
         """);
   }
 
@@ -392,6 +396,75 @@ public class PlatformInstitutionController {
         """,institutionId,owner.staffId(),programId,enabled);
     audit(owner,institutionId,"COURSE_ENTITLEMENT_CHANGED","COURSE",String.valueOf(programId),Map.of("enabled",enabled));
     return Map.of("institutionId",institutionId,"programId",programId,"enabled",enabled);
+  }
+
+  /** HRMS assigns a specific origin-approved release; this does not publish a destination offer. */
+  @PutMapping("/{institutionId}/course-releases/{releaseId}/assignment")
+  @Transactional
+  public Map<String,Object> updateCourseReleaseAssignment(
+      @PathVariable long institutionId,
+      @PathVariable long releaseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    Object raw=body==null?null:body.get("enabled");
+    if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
+    List<Map<String,Object>> releases=jdbc.queryForList("""
+        select r.id,r.program_id,r.origin_institution_id,r.release_version,r.status,p.code,p.display_name
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where r.id=?
+        """,releaseId);
+    if(releases.isEmpty()) throw new IllegalArgumentException("The course release is unavailable.");
+    Map<String,Object> release=releases.getFirst();
+    if(!"SHAREABLE".equals(String.valueOf(release.get("status")))) {
+      throw new IllegalArgumentException("Only an origin-approved shareable course release can be assigned.");
+    }
+    Long assignmentId=null;
+    if(enabled) {
+      assignmentId=jdbc.queryForObject("""
+          insert into institution_course_assignment(
+            institution_id,program_id,course_release_id,assignment_source,status,
+            assigned_by_staff_id,assigned_at,revoked_at,created_at,updated_at
+          ) values(?,?,?,'PLATFORM','ACTIVE',?,now(),null,now(),now())
+          on conflict(institution_id,course_release_id) where course_release_id is not null
+          do update set assignment_source='PLATFORM',status='ACTIVE',assigned_by_staff_id=excluded.assigned_by_staff_id,
+            assigned_at=now(),revoked_at=null,updated_at=now()
+          returning id
+          """,Long.class,institutionId,((Number)release.get("program_id")).longValue(),releaseId,owner.staffId());
+    } else {
+      List<Map<String,Object>> prior=jdbc.queryForList("""
+          select id from institution_course_assignment
+          where institution_id=? and course_release_id=? and assignment_source='PLATFORM'
+          for update
+          """,institutionId,releaseId);
+      if(!prior.isEmpty()) assignmentId=((Number)prior.getFirst().get("id")).longValue();
+      jdbc.update("""
+          update institution_course_assignment set status='REVOKED',revoked_at=now(),updated_at=now()
+          where institution_id=? and course_release_id=? and assignment_source='PLATFORM' and status='ACTIVE'
+          """,institutionId,releaseId);
+      jdbc.update("""
+          update institution_marketplace_offer set status='ARCHIVED',updated_at=now()
+          where institution_id=? and course_release_id=? and status<>'ARCHIVED'
+          """,institutionId,releaseId);
+    }
+    jdbc.update("""
+        insert into institution_course_lifecycle_event(
+          institution_id,course_release_id,assignment_id,event_type,actor_platform_staff_id,details
+        ) values(?,?,?, ?, ?, jsonb_build_object('enabled',?,'originInstitutionId',?))
+        """,institutionId,releaseId,assignmentId,enabled?"COURSE_ASSIGNED":"COURSE_UNASSIGNED",
+        owner.staffId(),enabled,release.get("origin_institution_id"));
+    audit(owner,institutionId,"COURSE_RELEASE_ASSIGNMENT_CHANGED","COURSE_RELEASE",
+        String.valueOf(releaseId),Map.of("enabled",enabled,"assignmentId",assignmentId==null?0L:assignmentId));
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("institutionId",institutionId);
+    result.put("releaseId",releaseId);
+    result.put("programId",release.get("program_id"));
+    result.put("assignmentId",assignmentId);
+    result.put("enabled",enabled);
+    result.put("offerPublished",false);
+    return result;
   }
 
   @PutMapping("/{institutionId}/branding")

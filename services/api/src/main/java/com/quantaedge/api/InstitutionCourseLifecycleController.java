@@ -1,686 +1,591 @@
 package com.quantaedge.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
- * Institution-first course lifecycle:
- * source course -> independent content quality review -> origin approval/shareability ->
- * HRMS assignment -> destination institution approval -> local publication.
+ * Institution-admin course origination, release approval and local offer lifecycle.
  *
- * Institution-admin scope always comes from institution_admin_session. The client tenant header
- * is not used as authentication or authorization by this controller.
+ * Institution scope always comes from the separate institution_admin_session cookie. A client
+ * tenant header is never used to determine which institution admin is allowed to manage.
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/institution")
 public class InstitutionCourseLifecycleController {
   private final JdbcTemplate jdbc;
   private final InstitutionAuthService institutionAuth;
-  private final AuthorizationService authorization;
+  private final ObjectMapper objectMapper;
 
   public InstitutionCourseLifecycleController(
-      JdbcTemplate jdbc, InstitutionAuthService institutionAuth, AuthorizationService authorization) {
+      JdbcTemplate jdbc, InstitutionAuthService institutionAuth, ObjectMapper objectMapper) {
     this.jdbc = jdbc;
     this.institutionAuth = institutionAuth;
-    this.authorization = authorization;
+    this.objectMapper = objectMapper;
   }
 
-  /** Create an institution-owned course master plus its first draft release. */
-  @PostMapping("/institution/courses")
+  @GetMapping("/courses")
+  public List<Map<String,Object>> courses(HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select a.id as assignment_id,a.assignment_source,a.status as assignment_status,
+          p.id as course_id,p.public_id,p.code as course_code,p.display_name,p.curriculum_version,
+          p.class_id,r.id as release_id,r.release_version,r.status as release_status,
+          r.quality_evidence::text as quality_evidence
+        from institution_course_assignment a
+        join curriculum_program p on p.id=a.program_id
+        left join institution_course_release r on r.id=a.course_release_id
+        where a.institution_id=? and a.status='ACTIVE'
+        order by p.display_name,p.id,r.release_version desc nulls last,a.id
+        """, principal.institutionId());
+    for (Map<String,Object> row : rows) {
+      long courseId = ((Number) row.get("course_id")).longValue();
+      row.put("subjects", jdbc.queryForList("""
+          select s.id,s.code as subject_code,s.display_name as subject_name,ps.is_required,ps.sort_order,
+            count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+          from curriculum_program_subject ps
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+          left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+          where ps.program_id=?
+          group by s.id,s.code,s.display_name,ps.is_required,ps.sort_order,s.sort_order
+          order by ps.sort_order,s.sort_order,s.id
+          """, courseId));
+    }
+    return rows;
+  }
+
+  /** Creates an institution-owned course shell with its own program-specific subject tracks. */
+  @PostMapping("/courses")
   @Transactional
   public Map<String,Object> createCourse(
       @RequestBody Map<String,Object> body, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    long classId = requiredPositiveLong(body, "classId");
-    String displayName = requiredText(body, "displayName", 2, 200);
-    List<Long> subjectIds = positiveLongList(body.get("subjectIds"), "subjectIds");
-    if (subjectIds.isEmpty()) throw new IllegalArgumentException("Choose at least one subject for this course.");
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    String classCode = requiredText(body, "classCode", 1, 20, "Class code");
+    String requestedCode = requiredText(body, "code", 2, 38, "Course code").toUpperCase(Locale.ROOT);
+    if (!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$")) {
+      throw new IllegalArgumentException("Course code must use 2–38 letters, digits, hyphens or underscores.");
+    }
+    String displayName = requiredText(body, "displayName", 2, 200, "Course name");
+    String curriculumVersion = optionalText(body.get("curriculumVersion"), "CURRENT", 1, 120, "Curriculum version");
+    String streamCode = optionalText(body.get("streamCode"), null, 0, 60, "Stream code");
+    Object rawSubjects = body.get("subjects");
+    if (!(rawSubjects instanceof List<?> suppliedSubjects) || suppliedSubjects.isEmpty() || suppliedSubjects.size() > 30) {
+      throw new IllegalArgumentException("Add between 1 and 30 subject tracks to this course.");
+    }
 
-    Long classCount = jdbc.queryForObject(
-        "select count(*) from curriculum_class where id=? and active=true", Long.class, classId);
-    if (classCount == null || classCount != 1) throw new IllegalArgumentException("Choose an active curriculum class.");
-
-    for (Long subjectId : subjectIds) {
-      Long validSubject = jdbc.queryForObject("""
-          select count(*) from curriculum_subject
-          where id=? and class_id=? and active=true
-          """, Long.class, subjectId, classId);
-      if (validSubject == null || validSubject != 1) {
-        throw new IllegalArgumentException("Every selected subject must be active and belong to the selected class.");
+    List<Map<String,String>> subjects = new ArrayList<>();
+    Set<String> seenCodes = new HashSet<>();
+    int sequence = 1;
+    for (Object raw : suppliedSubjects) {
+      if (!(raw instanceof Map<?,?> subject)) throw new IllegalArgumentException("Each subject must have a code and name.");
+      String code = requiredText(mapOf(subject), "code", 2, 40, "Subject code").toLowerCase(Locale.ROOT);
+      if (!code.matches("^[a-z0-9][a-z0-9_-]{1,39}$") || !seenCodes.add(code)) {
+        throw new IllegalArgumentException("Subject codes must be unique and use 2–40 lowercase letters, digits, hyphens or underscores.");
       }
+      String name = requiredText(mapOf(subject), "displayName", 2, 100, "Subject name");
+      subjects.add(Map.of("code",code,"displayName",name,"sortOrder",String.valueOf(sequence++)));
     }
 
-    String code = "INS_" + principal.institutionId() + "_"
-        + UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase(Locale.ROOT);
-    Long programId = jdbc.queryForObject("""
-        insert into curriculum_program(
-          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix
-        ) values(?,?,?,null,'CURRENT','ACTIVE',?, 'INS')
-        returning id
-        """, Long.class, classId, code, displayName,
-        "Institution-origin course. Source institution id=" + principal.institutionId());
-
-    int position = 0;
-    for (Long subjectId : subjectIds) {
+    List<Map<String,Object>> classes = jdbc.queryForList(
+        "select id,code from curriculum_class where code=? and active=true", classCode);
+    if (classes.isEmpty()) throw new IllegalArgumentException("Select an active curriculum class.");
+    long classId = ((Number) classes.getFirst().get("id")).longValue();
+    String internalCode = "I" + principal.institutionId() + "_" + requestedCode;
+    Long courseId;
+    String publicId;
+    try {
+      courseId = jdbc.queryForObject("""
+          insert into curriculum_program(
+            class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix
+          ) values(?,?,?,?,?,'ACTIVE',?,'INS') returning id
+          """, Long.class, classId, internalCode, displayName, streamCode, curriculumVersion,
+          "Institution-origin course for tenant " + principal.tenantCode());
+      publicId = jdbc.queryForObject("select public_id from curriculum_program where id=?", String.class, courseId);
+      for (Map<String,String> subject : subjects) {
+        int sortOrder = Integer.parseInt(subject.get("sortOrder"));
+        Long subjectId = jdbc.queryForObject("""
+            insert into curriculum_subject(class_id,code,display_name,sort_order,active,program_id)
+            values(?,?,?,?,true,?) returning id
+            """, Long.class, classId, subject.get("code"), subject.get("displayName"), sortOrder, courseId);
+        jdbc.update("""
+            insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
+            values(?,?,?,true,?)
+            """, courseId, classId, subjectId, sortOrder);
+      }
       jdbc.update("""
-          insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
-          values(?,?,?,true,?)
-          """, programId, classId, subjectId, position++);
+          insert into institution_course_assignment(
+            institution_id,program_id,course_release_id,assignment_source,status,
+            assigned_by_institution_admin_id,assigned_at,created_at,updated_at
+          ) values(?,?,NULL,'ORIGIN','ACTIVE',?,now(),now(),now())
+          """, principal.institutionId(), courseId, principal.adminId());
+    } catch (DuplicateKeyException ex) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "A course with that code and curriculum version already exists for this institution.", ex);
     }
-
-    String fingerprint = contentFingerprint(programId);
-    Long releaseId = jdbc.queryForObject("""
-        insert into institution_course_release(
-          source_institution_id,program_id,release_version,release_state,content_fingerprint
-        ) values(?,?,1,'DRAFT',?)
-        returning id
-        """, Long.class, principal.institutionId(), programId, fingerprint);
-    auditInstitution(principal, "INSTITUTION_COURSE_CREATED", "COURSE_RELEASE",
-        String.valueOf(releaseId), "{}");
-
+    recordEvent(principal.institutionId(), null, null, null, "COURSE_CREATED", principal.adminId(),
+        Map.of("courseId",courseId,"courseCode",internalCode,"publicId",publicId,"subjectCount",subjects.size()));
     Map<String,Object> result = new LinkedHashMap<>();
-    result.put("courseId", programId);
-    result.put("courseCode", code);
-    result.put("coursePublicId", jdbc.queryForObject(
-        "select public_id from curriculum_program where id=?", String.class, programId));
-    result.put("releaseId", releaseId);
-    result.put("releaseState", "DRAFT");
-    result.put("message", "Course created. Add and publish its learning content, then submit the release for quality review.");
+    result.put("created",true);
+    result.put("courseId",courseId);
+    result.put("publicId",publicId);
+    result.put("courseCode",internalCode);
+    result.put("displayName",displayName);
+    result.put("curriculumVersion",curriculumVersion);
+    result.put("subjectCount",subjects.size());
+    result.put("status","ACTIVE");
     return result;
   }
 
-  /** Register another version only when this institution is the already-recorded course owner. */
-  @PostMapping("/institution/courses/{courseId}/releases")
+  @GetMapping("/course-releases")
+  public List<Map<String,Object>> courseReleases(HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    return jdbc.queryForList("""
+        select r.id as release_id,r.program_id as course_id,p.public_id,p.code as course_code,
+          p.display_name,p.curriculum_version,r.release_version,r.status,r.quality_evidence::text as quality_evidence,
+          r.content_fingerprint,r.submitted_at,r.origin_approved_at,r.rejection_reason
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id
+        where r.origin_institution_id=?
+        order by r.program_id,r.release_version desc,r.id desc
+        """, principal.institutionId());
+  }
+
+  /** A release can be submitted only after the existing content-review workflow has published
+   * every mapped subject track. The evidence/fingerprint is captured and checked again on approval.
+   */
+  @PostMapping("/courses/{programId}/release-requests")
   @Transactional
-  public Map<String,Object> createRelease(
-      @PathVariable long courseId, @RequestBody(required=false) Map<String,Object> body,
-      HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> program = firstRow("""
-        select id,code,display_name,status from curriculum_program
-        where id=? and code<>'GENERAL' and status='ACTIVE'
-        """, courseId);
-    if (program.isEmpty()) throw new IllegalArgumentException("An active course was not found.");
-    Long foreignRelease = jdbc.queryForObject("""
-        select count(*) from institution_course_release
-        where program_id=? and source_institution_id<>?
-        """, Long.class, courseId, principal.institutionId());
-    if (foreignRelease != null && foreignRelease > 0) {
-      throw new SecurityException("This course belongs to another source institution. HRMS must assign its shareable release.");
+  public Map<String,Object> submitRelease(
+      @PathVariable long programId, HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    List<Map<String,Object>> courseRows = jdbc.queryForList("""
+        select p.id,p.code,p.display_name,p.status
+        from curriculum_program p
+        join institution_course_assignment owner_assignment on owner_assignment.program_id=p.id
+          and owner_assignment.institution_id=? and owner_assignment.course_release_id is null
+          and owner_assignment.assignment_source in ('ORIGIN','LEGACY_BOOTSTRAP')
+          and owner_assignment.status='ACTIVE'
+        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        for update of p
+        """, principal.institutionId(), programId);
+    if (courseRows.isEmpty()) throw new SecurityException("This active course is not owned by the current institution.");
+    List<Map<String,Object>> existing = jdbc.queryForList("""
+        select id,status from institution_course_release
+        where origin_institution_id=? and program_id=? and status in ('ORIGIN_REVIEW','SHAREABLE')
+        order by release_version desc limit 1
+        """, principal.institutionId(), programId);
+    if (!existing.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This course already has a release under origin review or approved for sharing.");
     }
 
-    Integer nextVersion = jdbc.queryForObject("""
-        select coalesce(max(release_version),0)+1 from institution_course_release
-        where source_institution_id=? and program_id=?
-        """, Integer.class, principal.institutionId(), courseId);
-    int version = nextVersion == null ? 1 : nextVersion;
-    String fingerprint = contentFingerprint(courseId);
+    Map<String,Object> evidence = jdbc.queryForMap("""
+        select count(distinct ps.subject_id) as subject_count,
+          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct ch.id) as published_chapters,
+          count(distinct l.id) as published_lessons
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+        where ps.program_id=?
+        """, programId);
+    long subjects = number(evidence.get("subject_count"));
+    long coveredSubjects = number(evidence.get("subjects_with_published_lessons"));
+    long chapters = number(evidence.get("published_chapters"));
+    long lessons = number(evidence.get("published_lessons"));
+    if (subjects == 0 || coveredSubjects != subjects || chapters == 0 || lessons == 0) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This course is not ready for institution approval. Every mapped active subject needs published, content-reviewed lesson content.");
+    }
+    evidence.put("capturedAt", java.time.Instant.now().toString());
+    String fingerprint = contentFingerprint(programId);
+    int version = jdbc.queryForObject("""
+        select coalesce(max(release_version),0)+1
+        from institution_course_release where origin_institution_id=? and program_id=?
+        """, Integer.class, principal.institutionId(), programId);
     Long releaseId = jdbc.queryForObject("""
         insert into institution_course_release(
-          source_institution_id,program_id,release_version,release_state,content_fingerprint
-        ) values(?,?,?,'DRAFT',?)
-        returning id
-        """, Long.class, principal.institutionId(), courseId, version, fingerprint);
-    auditInstitution(principal, "COURSE_RELEASE_CREATED", "COURSE_RELEASE",
-        String.valueOf(releaseId), "{\"courseId\":" + courseId + ",\"version\":" + version + "}");
-    return Map.of("releaseId", releaseId, "courseId", courseId, "releaseVersion", version, "releaseState", "DRAFT");
+          origin_institution_id,program_id,release_version,status,quality_evidence,content_fingerprint,
+          submitted_by_institution_admin_id,submitted_at,created_at,updated_at
+        ) values(?,?,?,'ORIGIN_REVIEW',?::jsonb,?,?,now(),now(),now()) returning id
+        """, Long.class, principal.institutionId(), programId, version, json(evidence), fingerprint, principal.adminId());
+    Long assignmentId = jdbc.queryForObject("""
+        insert into institution_course_assignment(
+          institution_id,program_id,course_release_id,assignment_source,status,
+          assigned_by_institution_admin_id,assigned_at,created_at,updated_at
+        ) values(?,?,?,'ORIGIN','ACTIVE',?,now(),now(),now()) returning id
+        """, Long.class, principal.institutionId(), programId, releaseId, principal.adminId());
+    recordEvent(principal.institutionId(), releaseId, assignmentId, null, "RELEASE_SUBMITTED",
+        principal.adminId(), Map.of("programId",programId,"releaseVersion",version,"contentFingerprint",fingerprint));
+    return Map.of("submitted",true,"releaseId",releaseId,"programId",programId,
+        "releaseVersion",version,"status","ORIGIN_REVIEW","qualityEvidence",evidence);
   }
 
-  @GetMapping("/institution/courses/releases")
-  public List<Map<String,Object>> originReleases(HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    return jdbc.queryForList("""
-        select r.id as release_id,r.public_id as release_public_id,r.program_id as course_id,
-          p.public_id as course_public_id,p.code as course_code,p.display_name as course_name,
-          p.status as course_status,r.release_version,r.release_state,r.content_fingerprint,
-          r.submitted_at,r.quality_reviewed_at,r.quality_review_notes,r.origin_approved_at,
-          r.shareable_at,r.created_at,r.updated_at,r.legacy_migration
+  @PostMapping("/course-releases/{releaseId}/approve")
+  @Transactional
+  public Map<String,Object> approveRelease(
+      @PathVariable long releaseId, HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select r.id,r.program_id,r.status,r.content_fingerprint,r.release_version
         from institution_course_release r
-        join curriculum_program p on p.id=r.program_id
-        where r.source_institution_id=?
-        order by r.updated_at desc,r.id desc
-        """, principal.institutionId());
-  }
-
-  /** Institution-origin submission is separate from content-quality review. */
-  @PostMapping("/institution/courses/releases/{releaseId}/submit")
-  @Transactional
-  public Map<String,Object> submitOriginRelease(
-      @PathVariable long releaseId, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> release = sourceRelease(principal, releaseId);
-    String state = String.valueOf(release.get("release_state"));
-    if (!Set.of("DRAFT","REJECTED").contains(state)) {
-      throw new IllegalArgumentException("Only a draft or rejected release can be submitted for quality review.");
+        where r.id=? and r.origin_institution_id=?
+        for update
+        """, releaseId, principal.institutionId());
+    if (rows.isEmpty()) throw new SecurityException("This course release is not owned by the current institution.");
+    Map<String,Object> row = rows.getFirst();
+    if (!"ORIGIN_REVIEW".equals(String.valueOf(row.get("status")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting origin approval can be approved.");
     }
-    String fingerprint = contentFingerprint(((Number)release.get("program_id")).longValue());
-    int updated = jdbc.update("""
-        update institution_course_release
-        set release_state='IN_QUALITY_REVIEW',content_fingerprint=?,submitted_by_institution_admin_id=?,
-          submitted_at=now(),quality_reviewed_by_staff_id=null,quality_reviewed_at=null,
-          quality_review_notes=null,origin_approved_by_admin_id=null,origin_approved_at=null,
-          shareable_at=null,updated_at=now()
-        where id=? and source_institution_id=? and release_state in ('DRAFT','REJECTED')
-        """, fingerprint, principal.adminId(), releaseId, principal.institutionId());
-    if (updated != 1) throw new IllegalArgumentException("The release changed concurrently. Refresh and retry.");
-    auditInstitution(principal, "COURSE_RELEASE_SUBMITTED_FOR_QUALITY_REVIEW", "COURSE_RELEASE",
-        String.valueOf(releaseId), "{}");
-    return Map.of("releaseId", releaseId, "releaseState", "IN_QUALITY_REVIEW");
-  }
-
-  /** Source institution gives final approval only after independent content-quality approval. */
-  @PostMapping("/institution/courses/releases/{releaseId}/share")
-  @Transactional
-  public Map<String,Object> approveShareableRelease(
-      @PathVariable long releaseId, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> release = sourceRelease(principal, releaseId);
-    if (!"QUALITY_APPROVED".equals(String.valueOf(release.get("release_state")))) {
-      throw new IllegalArgumentException("The existing content-quality reviewer must approve this release first.");
-    }
-    long courseId = ((Number)release.get("program_id")).longValue();
-    String actualFingerprint = contentFingerprint(courseId);
-    String reviewedFingerprint = String.valueOf(release.get("content_fingerprint"));
-    if (!actualFingerprint.equals(reviewedFingerprint)) {
-      throw new IllegalArgumentException("Course content changed after quality review. Submit a new review before sharing.");
+    long programId = ((Number)row.get("program_id")).longValue();
+    String expectedFingerprint = String.valueOf(row.get("content_fingerprint")).trim();
+    String currentFingerprint = contentFingerprint(programId);
+    if (!expectedFingerprint.equals(currentFingerprint)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "Course content changed after release submission. Submit a fresh release for review.");
     }
     int changed = jdbc.update("""
-        update institution_course_release
-        set release_state='SHAREABLE',origin_approved_by_admin_id=?,origin_approved_at=now(),
-          shareable_at=now(),updated_at=now()
-        where id=? and source_institution_id=? and release_state='QUALITY_APPROVED'
-          and content_fingerprint=?
-        """, principal.adminId(), releaseId, principal.institutionId(), actualFingerprint);
-    if (changed != 1) throw new IllegalArgumentException("The release changed concurrently. Refresh and retry.");
-    auditInstitution(principal, "COURSE_RELEASE_APPROVED_FOR_SHARING", "COURSE_RELEASE",
-        String.valueOf(releaseId), "{}");
-    return Map.of("releaseId", releaseId, "releaseState", "SHAREABLE",
-        "message", "HRMS can now assign this approved release to another institution.");
+        update institution_course_release set status='SHAREABLE',
+          origin_approved_by_institution_admin_id=?,origin_approved_at=now(),updated_at=now()
+        where id=? and origin_institution_id=? and status='ORIGIN_REVIEW'
+        """, principal.adminId(), releaseId, principal.institutionId());
+    if (changed != 1) throw new ResponseStatusException(HttpStatus.CONFLICT,"The release changed during approval.");
+    recordEvent(principal.institutionId(), releaseId, null, null, "RELEASE_APPROVED",
+        principal.adminId(), Map.of("programId",programId));
+    return Map.of("approved",true,"releaseId",releaseId,"programId",programId,"status","SHAREABLE");
   }
 
-  @GetMapping("/institution/courses/assignments")
-  public List<Map<String,Object>> destinationAssignments(HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    return jdbc.queryForList("""
-        select a.id as assignment_id,a.status as assignment_status,a.assigned_at,
-          r.id as release_id,r.public_id as release_public_id,r.release_version,r.release_state,
-          r.source_institution_id,source.tenant_code as source_tenant_code,
-          p.id as course_id,p.public_id as course_public_id,p.code as course_code,
-          p.display_name as course_name,offer.id as offer_id,offer.public_id as offer_public_id,
-          offer.status as offer_status,offer.price_paise,offer.currency,
-          offer.title_override,offer.description,offer.approved_at,offer.published_at
-        from institution_course_assignment a
-        join institution_course_release r on r.id=a.course_release_id
-        join institution_tenant source on source.id=r.source_institution_id
-        join curriculum_program p on p.id=r.program_id
-        left join institution_marketplace_offer offer
-          on offer.institution_id=a.institution_id and offer.assignment_id=a.id
-        where a.institution_id=?
-        order by a.assigned_at desc,a.id desc
-        """, principal.institutionId());
-  }
-
-  /** Saving a destination-local offer never submits, approves, or publishes it. */
-  @PutMapping("/institution/courses/assignments/{assignmentId}/offer")
+  @PostMapping("/course-releases/{releaseId}/reject")
   @Transactional
-  public Map<String,Object> saveLocalOffer(
-      @PathVariable long assignmentId, @RequestBody Map<String,Object> body,
-      HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> assignment = firstRow("""
-        select a.id,a.institution_id,a.status as assignment_status,r.id as release_id,
-          r.program_id as course_id,r.release_state,r.source_institution_id
-        from institution_course_assignment a
-        join institution_course_release r on r.id=a.course_release_id
-        where a.id=? and a.institution_id=?
-        """, assignmentId, principal.institutionId());
-    if (assignment.isEmpty()) throw new SecurityException("This course assignment does not belong to the signed-in institution.");
-    if (!"ASSIGNED".equals(String.valueOf(assignment.get("assignment_status")))) {
-      throw new IllegalArgumentException("This assignment is revoked and cannot have an active offer.");
+  public Map<String,Object> rejectRelease(
+      @PathVariable long releaseId, @RequestBody Map<String,Object> body, HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    String reason = requiredText(body,"reason",3,500,"Rejection reason");
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id,program_id,status from institution_course_release
+        where id=? and origin_institution_id=? for update
+        """, releaseId, principal.institutionId());
+    if (rows.isEmpty()) throw new SecurityException("This course release is not owned by the current institution.");
+    if (!"ORIGIN_REVIEW".equals(String.valueOf(rows.getFirst().get("status")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting origin approval can be rejected.");
     }
-    long courseId = ((Number)assignment.get("course_id")).longValue();
-    long releaseId = ((Number)assignment.get("release_id")).longValue();
-    long pricePaise = requiredNonNegativeLong(body, "pricePaise");
-    String title = optionalText(body.get("titleOverride"), 200);
-    String description = optionalText(body.get("description"), 10000);
-
-    Map<String,Object> existing = firstRow("""
-        select id,status from institution_marketplace_offer
-        where institution_id=? and assignment_id=?
-        """, principal.institutionId(), assignmentId);
-    if (!existing.isEmpty()) {
-      String existingStatus = String.valueOf(existing.get("status"));
-      if (!Set.of("DRAFT","REJECTED","ARCHIVED").contains(existingStatus)) {
-        throw new IllegalArgumentException("Only a draft, rejected, or archived offer can be edited. Resolve its review first.");
-      }
-    }
-
-    Long offerId = jdbc.queryForObject("""
-        insert into institution_marketplace_offer(
-          institution_id,assignment_id,course_release_id,course_id,title_override,description,
-          price_paise,currency,status,legacy_migration,legacy_migration_note
-        ) values(?,?,?,?,?,?,?,'INR','DRAFT',false,null)
-        on conflict(institution_id,assignment_id) do update set
-          title_override=excluded.title_override,description=excluded.description,
-          price_paise=excluded.price_paise,currency='INR',status='DRAFT',
-          submitted_by_admin_id=null,submitted_at=null,approved_by_admin_id=null,approved_at=null,
-          published_by_admin_id=null,published_at=null,rejected_by_admin_id=null,rejected_at=null,
-          rejection_reason=null,legacy_migration=false,legacy_migration_note=null,updated_at=now()
-        returning id
-        """, Long.class, principal.institutionId(), assignmentId, releaseId, courseId,
-        title, description, pricePaise);
-    auditInstitution(principal, "LOCAL_COURSE_OFFER_SAVED", "MARKETPLACE_OFFER",
-        String.valueOf(offerId), "{\"courseId\":" + courseId + ",\"pricePaise\":" + pricePaise + "}");
-    return Map.of("offerId", offerId, "courseId", courseId, "institutionId", principal.institutionId(),
-        "pricePaise", pricePaise, "currency", "INR", "status", "DRAFT");
-  }
-
-  @PostMapping("/institution/courses/offers/{offerId}/submit")
-  @Transactional
-  public Map<String,Object> submitLocalOffer(@PathVariable long offerId, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> offer = ownedOffer(principal, offerId);
-    requireAssignmentActive(offer, principal);
-    requireOfferReleaseEligibleForLocalInstitution(offer, principal);
-    String status = String.valueOf(offer.get("status"));
-    if (!Set.of("DRAFT","REJECTED").contains(status)) {
-      throw new IllegalArgumentException("Only a draft or rejected offer can be submitted for approval.");
-    }
-    int changed = jdbc.update("""
-        update institution_marketplace_offer
-        set status='IN_REVIEW',submitted_by_admin_id=?,submitted_at=now(),
-          approved_by_admin_id=null,approved_at=null,published_by_admin_id=null,published_at=null,
-          rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,updated_at=now()
-        where id=? and institution_id=? and status in ('DRAFT','REJECTED')
-        """, principal.adminId(), offerId, principal.institutionId());
-    if (changed != 1) throw new IllegalArgumentException("The offer changed concurrently. Refresh and retry.");
-    auditInstitution(principal, "LOCAL_COURSE_OFFER_SUBMITTED", "MARKETPLACE_OFFER", String.valueOf(offerId), "{}");
-    return Map.of("offerId", offerId, "status", "IN_REVIEW");
-  }
-
-  @PostMapping("/institution/courses/offers/{offerId}/approve")
-  @Transactional
-  public Map<String,Object> approveLocalOffer(@PathVariable long offerId, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> offer = ownedOffer(principal, offerId);
-    requireAssignmentActive(offer, principal);
-    requireOfferReleaseEligibleForLocalInstitution(offer, principal);
-    if (!"IN_REVIEW".equals(String.valueOf(offer.get("status")))) {
-      throw new IllegalArgumentException("Only an offer in review can be approved.");
-    }
-    int changed = jdbc.update("""
-        update institution_marketplace_offer
-        set status='APPROVED',approved_by_admin_id=?,approved_at=now(),updated_at=now()
-        where id=? and institution_id=? and status='IN_REVIEW'
-        """, principal.adminId(), offerId, principal.institutionId());
-    if (changed != 1) throw new IllegalArgumentException("The offer changed concurrently. Refresh and retry.");
-    auditInstitution(principal, "LOCAL_COURSE_OFFER_APPROVED", "MARKETPLACE_OFFER", String.valueOf(offerId), "{}");
-    return Map.of("offerId", offerId, "status", "APPROVED");
-  }
-
-  @PostMapping("/institution/courses/offers/{offerId}/publish")
-  @Transactional
-  public Map<String,Object> publishLocalOffer(@PathVariable long offerId, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> offer = ownedOffer(principal, offerId);
-    requireAssignmentActive(offer, principal);
-    requireOfferReleaseEligibleForLocalInstitution(offer, principal);
-    if (!"APPROVED".equals(String.valueOf(offer.get("status")))) {
-      throw new IllegalArgumentException("Only a locally approved offer can be published.");
-    }
-    int changed = jdbc.update("""
-        update institution_marketplace_offer
-        set status='PUBLISHED',published_by_admin_id=?,published_at=now(),updated_at=now()
-        where id=? and institution_id=? and status='APPROVED'
-          and exists (
-            select 1 from institution_course_assignment a
-            where a.id=institution_marketplace_offer.assignment_id
-              and a.institution_id=institution_marketplace_offer.institution_id and a.status='ASSIGNED'
-          )
-        """, principal.adminId(), offerId, principal.institutionId());
-    if (changed != 1) throw new IllegalArgumentException("The assignment or offer changed concurrently. Refresh and retry.");
-    auditInstitution(principal, "LOCAL_COURSE_OFFER_PUBLISHED", "MARKETPLACE_OFFER", String.valueOf(offerId), "{}");
-    return Map.of("offerId", offerId, "status", "PUBLISHED",
-        "message", "This offer is visible only in this institution's marketplace.");
-  }
-
-  @PostMapping("/institution/courses/offers/{offerId}/reject")
-  @Transactional
-  public Map<String,Object> rejectLocalOffer(
-      @PathVariable long offerId, @RequestBody Map<String,Object> body, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    Map<String,Object> offer = ownedOffer(principal, offerId);
-    String status = String.valueOf(offer.get("status"));
-    if (!Set.of("IN_REVIEW","APPROVED").contains(status)) {
-      throw new IllegalArgumentException("Only an offer in review or awaiting publication can be rejected.");
-    }
-    String reason = requiredText(body, "reason", 3, 1000);
     jdbc.update("""
-        update institution_marketplace_offer
-        set status='REJECTED',rejected_by_admin_id=?,rejected_at=now(),rejection_reason=?,updated_at=now()
-        where id=? and institution_id=? and status in ('IN_REVIEW','APPROVED')
-        """, principal.adminId(), reason, offerId, principal.institutionId());
-    auditInstitution(principal, "LOCAL_COURSE_OFFER_REJECTED", "MARKETPLACE_OFFER", String.valueOf(offerId), "{}");
-    return Map.of("offerId", offerId, "status", "REJECTED");
+        update institution_course_release set status='REJECTED',rejected_by_institution_admin_id=?,
+          rejected_at=now(),rejection_reason=?,updated_at=now() where id=?
+        """, principal.adminId(),reason,releaseId);
+    recordEvent(principal.institutionId(),releaseId,null,null,"RELEASE_REJECTED",principal.adminId(),Map.of("reason",reason));
+    return Map.of("rejected",true,"releaseId",releaseId,"status","REJECTED");
   }
 
-  @PostMapping("/institution/courses/offers/{offerId}/archive")
+  @PostMapping("/course-releases/{releaseId}/revoke")
   @Transactional
-  public Map<String,Object> archiveLocalOffer(@PathVariable long offerId, HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal = requireInstitutionAdmin(request);
-    ownedOffer(principal, offerId);
-    int changed = jdbc.update("""
+  public Map<String,Object> revokeRelease(@PathVariable long releaseId,HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal = requirePrincipal(request);
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id,program_id,status from institution_course_release
+        where id=? and origin_institution_id=? for update
+        """,releaseId,principal.institutionId());
+    if(rows.isEmpty()) throw new SecurityException("This course release is not owned by the current institution.");
+    if(!"SHAREABLE".equals(String.valueOf(rows.getFirst().get("status")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a shareable release can be revoked.");
+    }
+    List<Map<String,Object>> assignmentRows = jdbc.queryForList("""
+        select id,institution_id from institution_course_assignment
+        where course_release_id=? and status='ACTIVE' for update
+        """,releaseId);
+    jdbc.update("""
+        update institution_course_release set status='REVOKED',revoked_by_institution_admin_id=?,
+          revoked_at=now(),updated_at=now() where id=?
+        """,principal.adminId(),releaseId);
+    jdbc.update("""
         update institution_marketplace_offer set status='ARCHIVED',updated_at=now()
-        where id=? and institution_id=? and status<>'ARCHIVED'
-        """, offerId, principal.institutionId());
-    if (changed != 1) throw new IllegalArgumentException("The offer is already archived or no longer available.");
-    auditInstitution(principal, "LOCAL_COURSE_OFFER_ARCHIVED", "MARKETPLACE_OFFER", String.valueOf(offerId), "{}");
-    return Map.of("offerId", offerId, "status", "ARCHIVED");
-  }
-
-  /** Existing content QA permission is separate from institution-origin final approval. */
-  @PostMapping("/admin/institution-course-releases/{releaseId}/quality-review")
-  @Transactional
-  public Map<String,Object> qualityReviewRelease(
-      @PathVariable long releaseId, @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
-    AuthContext reviewer = authorization.requirePermission(context, "CONTENT_REVIEW");
-    Object rawApproved = body == null ? null : body.get("approved");
-    if (!(rawApproved instanceof Boolean approved)) throw new IllegalArgumentException("The approved field must be true or false.");
-    String notes = optionalText(body == null ? null : body.get("notes"), 5000);
-    Map<String,Object> release = firstRow("""
-        select r.id,r.program_id,r.source_institution_id,r.release_state,r.content_fingerprint
-        from institution_course_release r where r.id=?
-        """, releaseId);
-    if (release.isEmpty()) throw new IllegalArgumentException("Course release was not found.");
-    if (!"IN_QUALITY_REVIEW".equals(String.valueOf(release.get("release_state")))) {
-      throw new IllegalArgumentException("Only a release submitted for quality review can be reviewed.");
-    }
-    long courseId = ((Number)release.get("program_id")).longValue();
-    if (approved) assertCourseContentQualityReady(courseId);
-    String fingerprint = contentFingerprint(courseId);
-    int changed = jdbc.update("""
-        update institution_course_release
-        set release_state=?,content_fingerprint=?,quality_reviewed_by_staff_id=?,quality_reviewed_at=now(),
-          quality_review_notes=?,updated_at=now()
-        where id=? and release_state='IN_QUALITY_REVIEW'
-        """, approved ? "QUALITY_APPROVED" : "REJECTED", fingerprint, reviewer.staffId(),
-        notes, releaseId);
-    if (changed != 1) throw new IllegalArgumentException("The release changed concurrently. Refresh and retry.");
+        where course_release_id=? and status<>'ARCHIVED'
+        """,releaseId);
     jdbc.update("""
-        insert into institution_audit_log(institution_id,actor_platform_staff_id,action,target_type,target_id,details)
-        values(?,?,'COURSE_RELEASE_QUALITY_REVIEWED','COURSE_RELEASE',?,jsonb_build_object('approved',?,'notes',?))
-        """, ((Number)release.get("source_institution_id")).longValue(), reviewer.staffId(),
-        String.valueOf(releaseId), approved, notes == null ? "" : notes);
-    return Map.of("releaseId", releaseId, "releaseState", approved ? "QUALITY_APPROVED" : "REJECTED",
-        "reviewedByStaffId", reviewer.staffId());
+        update institution_course_assignment set status='REVOKED',revoked_at=now(),updated_at=now()
+        where course_release_id=? and status='ACTIVE'
+        """,releaseId);
+    for(Map<String,Object> assignment:assignmentRows) {
+      long tenantId=((Number)assignment.get("institution_id")).longValue();
+      Long actorAdminId=tenantId==principal.institutionId()?principal.adminId():null;
+      recordEvent(tenantId,releaseId,((Number)assignment.get("id")).longValue(),null,
+          "RELEASE_REVOKED",actorAdminId,Map.of("originInstitutionId",principal.institutionId()));
+    }
+    return Map.of("revoked",true,"releaseId",releaseId,"status","REVOKED","assignmentsRevoked",assignmentRows.size());
   }
 
-  @GetMapping("/hrms/platform/course-releases/shareable")
-  public List<Map<String,Object>> shareableReleaseCatalog(
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
-    authorization.requirePermission(context, "QE_PLATFORM_OWNER");
+  @GetMapping("/course-assignments")
+  public List<Map<String,Object>> courseAssignments(HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
     return jdbc.queryForList("""
-        select r.id as release_id,r.public_id as release_public_id,r.release_version,
-          r.source_institution_id,t.tenant_code as source_tenant_code,
-          coalesce(b.display_name,t.display_name) as source_institution_name,
-          r.program_id as course_id,p.public_id as course_public_id,p.code as course_code,
-          p.display_name as course_name,p.curriculum_version,r.content_fingerprint,
-          r.quality_reviewed_at,r.origin_approved_at,r.shareable_at
-        from institution_course_release r
-        join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
-        left join institution_branding b on b.institution_id=t.id
-        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where r.release_state='SHAREABLE'
-        order by r.shareable_at desc,r.id desc
-        """);
+        select a.id as assignment_id,a.assignment_source,a.status as assignment_status,
+          a.course_release_id as release_id,r.origin_institution_id,r.release_version,
+          p.id as course_id,p.public_id,p.code as course_code,p.display_name,p.curriculum_version,
+          o.id as offer_id,o.status as offer_status,o.price_paise,o.currency,o.title_override,o.description,
+          o.approved_at,o.published_at
+        from institution_course_assignment a
+        join institution_course_release r on r.id=a.course_release_id and r.status='SHAREABLE'
+        join curriculum_program p on p.id=a.program_id and p.status='ACTIVE'
+        left join institution_marketplace_offer o on o.assignment_id=a.id
+        where a.institution_id=? and a.status='ACTIVE'
+        order by p.display_name,p.id,r.release_version desc
+        """,principal.institutionId());
   }
 
-  /** HRMS assignment and destination publication are separate operations. */
-  @PutMapping("/hrms/platform/institutions/{institutionId}/course-releases/{releaseId}")
+  @PostMapping("/course-assignments/{assignmentId}/offers")
   @Transactional
-  public Map<String,Object> assignShareableRelease(
-      @PathVariable long institutionId, @PathVariable long releaseId,
-      @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
-    AuthContext owner = authorization.requirePermission(context, "QE_PLATFORM_OWNER");
-    Object rawEnabled = body == null ? null : body.get("enabled");
-    if (!(rawEnabled instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
-    Map<String,Object> target = firstRow("select id,tenant_code,status from institution_tenant where id=?", institutionId);
-    if (target.isEmpty() || !"ACTIVE".equals(String.valueOf(target.get("status")))) {
-      throw new IllegalArgumentException("The destination institution must exist and be active.");
-    }
-    Map<String,Object> release = firstRow("""
-        select id,program_id,source_institution_id,release_state
-        from institution_course_release where id=?
-        """, releaseId);
-    if (release.isEmpty()) throw new IllegalArgumentException("Course release was not found.");
-    long courseId = ((Number)release.get("program_id")).longValue();
-    if (enabled && !"SHAREABLE".equals(String.valueOf(release.get("release_state")))) {
-      throw new IllegalArgumentException("Only a source-approved shareable release can be assigned to another institution.");
-    }
-
-    if (enabled) {
-      jdbc.update("""
-          insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source,assigned_by_staff_id)
-          values(?,?,'ASSIGNED','HRMS',?)
-          on conflict(institution_id,course_release_id) do update set
-            status='ASSIGNED',assignment_source='HRMS',assigned_by_staff_id=excluded.assigned_by_staff_id,
-            assigned_at=now(),revoked_by_staff_id=null,revoked_at=null,updated_at=now()
-          """, institutionId, releaseId, owner.staffId());
-      jdbc.update("""
-          insert into institution_course_entitlement(institution_id,program_id,status,valid_from,granted_by_staff_id)
-          values(?,?,'ACTIVE',now(),?)
-          on conflict(institution_id,program_id) do update set
-            status='ACTIVE',valid_from=now(),valid_until=null,
-            granted_by_staff_id=excluded.granted_by_staff_id,revoked_by_staff_id=null,updated_at=now()
-          """, institutionId, courseId, owner.staffId());
-    } else {
-      jdbc.update("""
-          update institution_course_assignment
-          set status='REVOKED',revoked_by_staff_id=?,revoked_at=now(),updated_at=now()
-          where institution_id=? and course_release_id=? and status='ASSIGNED'
-          """, owner.staffId(), institutionId, releaseId);
-      jdbc.update("""
-          update institution_course_entitlement set status='REVOKED',revoked_by_staff_id=?,updated_at=now()
-          where institution_id=? and program_id=?
-          """, owner.staffId(), institutionId, courseId);
-    }
-    jdbc.update("""
-        insert into institution_membership_event(institution_id,event_type,actor_platform_staff_id,details)
-        values(?,'COURSE_ENTITLEMENT_CHANGED',?,jsonb_build_object('programId',?,'releaseId',?,'enabled',?))
-        """, institutionId, owner.staffId(), courseId, releaseId, enabled);
-    jdbc.update("""
-        insert into institution_audit_log(institution_id,actor_platform_staff_id,action,target_type,target_id,details)
-        values(?,?,'COURSE_RELEASE_ASSIGNMENT_CHANGED','COURSE_RELEASE',?,jsonb_build_object('courseId',?,'enabled',?))
-        """, institutionId, owner.staffId(), String.valueOf(releaseId), courseId, enabled);
-    return Map.of("institutionId", institutionId, "releaseId", releaseId, "courseId", courseId,
-        "enabled", enabled, "destinationOfferApprovalRequired", enabled);
-  }
-
-  @GetMapping("/hrms/platform/institutions/{institutionId}/course-assignments")
-  public List<Map<String,Object>> listInstitutionAssignments(
-      @PathVariable long institutionId,
-      @RequestAttribute(value="authContext", required=false) AuthContext context) {
-    authorization.requirePermission(context, "QE_PLATFORM_OWNER");
-    return jdbc.queryForList("""
-        select a.id as assignment_id,a.status as assignment_status,a.assigned_at,
-          r.id as release_id,r.release_version,r.release_state,r.source_institution_id,
-          p.id as course_id,p.code as course_code,p.display_name as course_name,
-          o.id as offer_id,o.status as offer_status,o.price_paise,o.currency,o.published_at
+  public Map<String,Object> configureOffer(
+      @PathVariable long assignmentId,@RequestBody Map<String,Object> body,HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
+    List<Map<String,Object>> assignments=jdbc.queryForList("""
+        select a.id,a.institution_id,a.program_id,a.course_release_id,a.status assignment_status,
+          r.status release_status,p.code,p.display_name
         from institution_course_assignment a
         join institution_course_release r on r.id=a.course_release_id
-        join curriculum_program p on p.id=r.program_id
-        left join institution_marketplace_offer o on o.institution_id=a.institution_id and o.assignment_id=a.id
-        where a.institution_id=?
-        order by a.assigned_at desc,a.id desc
-        """, institutionId);
+        join curriculum_program p on p.id=a.program_id
+        where a.id=? and a.institution_id=? for update of a
+        """,assignmentId,principal.institutionId());
+    if(assignments.isEmpty()) throw new SecurityException("This course assignment is not available to the current institution.");
+    Map<String,Object> assignment=assignments.getFirst();
+    if(!"ACTIVE".equals(String.valueOf(assignment.get("assignment_status")))
+        || !"SHAREABLE".equals(String.valueOf(assignment.get("release_status")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Only an active assignment of a shareable course release can have an offer.");
+    }
+    String courseCode=String.valueOf(assignment.get("code"));
+    long pricePaise;
+    if(Set.of("CLASS_6","CLASS_7","CLASS_8").contains(courseCode)) {
+      Object raw=body.get("pricePaise");
+      pricePaise=raw instanceof Number?number(raw):100000L;
+      if(pricePaise!=100000L) throw new IllegalArgumentException("Class 6, Class 7 and Class 8 offers must be priced at INR 1,000.");
+    } else {
+      if(!(body.get("pricePaise") instanceof Number)) throw new IllegalArgumentException("Price in paise is required.");
+      pricePaise=number(body.get("pricePaise"));
+      if(pricePaise<0) throw new IllegalArgumentException("Price cannot be negative.");
+    }
+    String title=optionalText(body.get("titleOverride"),null,0,200,"Offer title");
+    String description=optionalText(body.get("description"),null,0,5000,"Offer description");
+    if(title!=null && title.isBlank()) throw new IllegalArgumentException("Offer title cannot be blank.");
+    Long offerId;
+    try {
+      offerId=jdbc.queryForObject("""
+          insert into institution_marketplace_offer(
+            institution_id,assignment_id,course_release_id,program_id,title_override,description,
+            price_paise,currency,status,created_by_institution_admin_id,updated_by_institution_admin_id,
+            created_at,updated_at
+          ) values(?,?,?,?,?,?,?,'INR','DRAFT',?,?,now(),now())
+          on conflict(assignment_id) do update set title_override=excluded.title_override,
+            description=excluded.description,price_paise=excluded.price_paise,currency='INR',
+            status='DRAFT',rejection_reason=null,updated_by_institution_admin_id=excluded.updated_by_institution_admin_id,
+            approved_by_institution_admin_id=null,approved_at=null,published_by_institution_admin_id=null,
+            published_at=null,updated_at=now()
+          returning id
+          """,Long.class,principal.institutionId(),assignmentId,
+          ((Number)assignment.get("course_release_id")).longValue(),
+          ((Number)assignment.get("program_id")).longValue(),title,description,pricePaise,
+          principal.adminId(),principal.adminId());
+    } catch(DuplicateKeyException ex) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"An offer for this course assignment already exists.",ex);
+    }
+    recordEvent(principal.institutionId(),((Number)assignment.get("course_release_id")).longValue(),
+        assignmentId,offerId,"OFFER_DRAFTED",principal.adminId(),
+        Map.of("pricePaise",pricePaise,"currency","INR","status","DRAFT"));
+    return Map.of("saved",true,"offerId",offerId,"assignmentId",assignmentId,
+        "courseId",assignment.get("program_id"),"pricePaise",pricePaise,"currency","INR","status","DRAFT");
   }
 
-  private InstitutionAuthService.InstitutionPrincipal requireInstitutionAdmin(HttpServletRequest request) {
-    String token = cookieValue(request, AuthService.INSTITUTION_COOKIE);
-    InstitutionAuthService.InstitutionPrincipal principal = institutionAuth.current(token);
-    if (principal == null) throw new SecurityException("Institution authentication required.");
-    if (principal.mustChangePassword()) throw new SecurityException("Change the initial institution password before continuing.");
+  @PostMapping("/course-offers/{offerId}/submit")
+  @Transactional
+  public Map<String,Object> submitOffer(@PathVariable long offerId,HttpServletRequest request) {
+    return transitionOffer(offerId,"SUBMIT",null,request);
+  }
+
+  @PostMapping("/course-offers/{offerId}/approve")
+  @Transactional
+  public Map<String,Object> approveOffer(@PathVariable long offerId,HttpServletRequest request) {
+    return transitionOffer(offerId,"APPROVE",null,request);
+  }
+
+  @PostMapping("/course-offers/{offerId}/publish")
+  @Transactional
+  public Map<String,Object> publishOffer(@PathVariable long offerId,HttpServletRequest request) {
+    return transitionOffer(offerId,"PUBLISH",null,request);
+  }
+
+  @PostMapping("/course-offers/{offerId}/reject")
+  @Transactional
+  public Map<String,Object> rejectOffer(
+      @PathVariable long offerId,@RequestBody Map<String,Object> body,HttpServletRequest request) {
+    return transitionOffer(offerId,"REJECT",requiredText(body,"reason",3,500,"Rejection reason"),request);
+  }
+
+  private Map<String,Object> transitionOffer(
+      long offerId,String action,String reason,HttpServletRequest request) {
+    InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select o.id,o.status,o.program_id,o.assignment_id,o.course_release_id,o.price_paise,o.currency,
+          a.status as assignment_status,r.status as release_status
+        from institution_marketplace_offer o
+        join institution_course_assignment a on a.id=o.assignment_id and a.institution_id=o.institution_id
+        join institution_course_release r on r.id=o.course_release_id and r.program_id=o.program_id
+        where o.id=? and o.institution_id=?
+        for update of o,a,r
+        """,offerId,principal.institutionId());
+    if(rows.isEmpty()) throw new SecurityException("This Marketplace offer is not available to the current institution.");
+    Map<String,Object> row=rows.getFirst();
+    String state=String.valueOf(row.get("status"));
+    String next;
+    String sql;
+    switch(action) {
+      case "SUBMIT" -> {
+        if(!Set.of("DRAFT","REJECTED").contains(state)) throw conflict("Only a draft or rejected offer can be submitted for review.");
+        if(!"ACTIVE".equals(String.valueOf(row.get("assignment_status")))
+            || !"SHAREABLE".equals(String.valueOf(row.get("release_status")))) throw conflict("The assigned course release is not currently shareable.");
+        next="IN_REVIEW";
+        sql="update institution_marketplace_offer set status='IN_REVIEW',rejection_reason=null,updated_at=now() where id=?";
+      }
+      case "APPROVE" -> {
+        if(!"IN_REVIEW".equals(state)) throw conflict("Only an offer in review can be approved.");
+        if(!"ACTIVE".equals(String.valueOf(row.get("assignment_status")))
+            || !"SHAREABLE".equals(String.valueOf(row.get("release_status")))) throw conflict("The assigned course release is not currently shareable.");
+        next="APPROVED";
+        sql="update institution_marketplace_offer set status='APPROVED',approved_by_institution_admin_id=?,approved_at=now(),updated_at=now() where id=?";
+      }
+      case "PUBLISH" -> {
+        if(!"APPROVED".equals(state)) throw conflict("An offer must be approved before it can be published.");
+        if(!"ACTIVE".equals(String.valueOf(row.get("assignment_status")))
+            || !"SHAREABLE".equals(String.valueOf(row.get("release_status")))) throw conflict("The assigned course release is not currently shareable.");
+        next="PUBLISHED";
+        sql="update institution_marketplace_offer set status='PUBLISHED',published_by_institution_admin_id=?,published_at=now(),updated_at=now() where id=?";
+      }
+      case "REJECT" -> {
+        if(!"IN_REVIEW".equals(state)) throw conflict("Only an offer in review can be rejected.");
+        next="REJECTED";
+        sql="update institution_marketplace_offer set status='REJECTED',rejection_reason=?,updated_at=now() where id=?";
+      }
+      default -> throw new IllegalArgumentException("Unsupported offer transition.");
+    }
+    switch(action) {
+      case "APPROVE" -> jdbc.update(sql,principal.adminId(),offerId);
+      case "PUBLISH" -> jdbc.update(sql,principal.adminId(),offerId);
+      case "REJECT" -> jdbc.update(sql,reason,offerId);
+      default -> jdbc.update(sql,offerId);
+    }
+    long releaseId=((Number)row.get("course_release_id")).longValue();
+    long assignmentId=((Number)row.get("assignment_id")).longValue();
+    recordEvent(principal.institutionId(),releaseId,assignmentId,offerId,"OFFER_"+next,
+        principal.adminId(),Map.of("from",state,"to",next));
+    return Map.of("updated",true,"offerId",offerId,"status",next);
+  }
+
+  private String contentFingerprint(long programId) {
+    return jdbc.queryForObject("""
+        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,E'\n'
+            order by entity_type,entity_id),'')) as fingerprint
+        from (
+          select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
+          from curriculum_program p where p.id=?
+          union all
+          select 'subject',s.id,to_jsonb(ps)::text||to_jsonb(s)::text
+          from curriculum_program_subject ps
+          join curriculum_program p on p.id=ps.program_id
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+            and (s.program_id=ps.program_id or s.program_id is null)
+          where ps.program_id=?
+          union all
+          select 'chapter',ch.id,to_jsonb(ch)::text
+          from curriculum_program_subject ps
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+          join curriculum_chapter ch on ch.subject_id=s.id
+          where ps.program_id=?
+          union all
+          select 'lesson',l.id,to_jsonb(l)::text
+          from curriculum_program_subject ps
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+          join curriculum_chapter ch on ch.subject_id=s.id
+          join lesson l on l.chapter_id=ch.id
+          where ps.program_id=?
+        ) content_rows
+        """,String.class,programId,programId,programId,programId);
+  }
+
+  private InstitutionAuthService.InstitutionPrincipal requirePrincipal(HttpServletRequest request) {
+    String token=cookieValue(request,AuthService.INSTITUTION_COOKIE);
+    InstitutionAuthService.InstitutionPrincipal principal=institutionAuth.current(token);
+    if(principal==null) throw new SecurityException("Institution authentication required.");
+    if(principal.mustChangePassword()) throw new SecurityException("Change the initial institution password before continuing.");
     return principal;
   }
 
-  private static String cookieValue(HttpServletRequest request, String name) {
-    if (request.getCookies() == null) return null;
-    for (Cookie cookie : request.getCookies()) {
-      if (name.equals(cookie.getName()) && cookie.getValue() != null && !cookie.getValue().isBlank()) return cookie.getValue();
+  private static String cookieValue(HttpServletRequest request,String name) {
+    if(request.getCookies()==null) return null;
+    for(Cookie cookie:request.getCookies()) {
+      if(name.equals(cookie.getName())&&cookie.getValue()!=null&&!cookie.getValue().isBlank()) return cookie.getValue();
     }
     return null;
   }
 
-  private Map<String,Object> sourceRelease(InstitutionAuthService.InstitutionPrincipal principal, long releaseId) {
-    Map<String,Object> release = firstRow("""
-        select r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint
-        from institution_course_release r
-        where r.id=? and r.source_institution_id=?
-        """, releaseId, principal.institutionId());
-    if (release.isEmpty()) throw new SecurityException("This release does not belong to the signed-in source institution.");
-    return release;
-  }
-
-  private Map<String,Object> ownedOffer(InstitutionAuthService.InstitutionPrincipal principal, long offerId) {
-    Map<String,Object> offer = firstRow("""
-        select o.id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,o.status,
-          o.price_paise,o.currency,r.release_state,r.source_institution_id
-        from institution_marketplace_offer o
-        join institution_course_release r on r.id=o.course_release_id
-        where o.id=? and o.institution_id=?
-        """, offerId, principal.institutionId());
-    if (offer.isEmpty()) throw new SecurityException("This offer does not belong to the signed-in institution.");
-    return offer;
-  }
-
-  private void requireAssignmentActive(Map<String,Object> offer, InstitutionAuthService.InstitutionPrincipal principal) {
-    Boolean active = jdbc.queryForObject("""
-        select exists(select 1 from institution_course_assignment
-          where id=? and institution_id=? and status='ASSIGNED')
-        """, Boolean.class, ((Number)offer.get("assignment_id")).longValue(), principal.institutionId());
-    if (!Boolean.TRUE.equals(active)) throw new IllegalArgumentException("The assigned course has been revoked.");
-  }
-
-  private void requireOfferReleaseEligibleForLocalInstitution(
-      Map<String,Object> offer, InstitutionAuthService.InstitutionPrincipal principal) {
-    String releaseState = String.valueOf(offer.get("release_state"));
-    long sourceInstitutionId = ((Number)offer.get("source_institution_id")).longValue();
-    if ("SHAREABLE".equals(releaseState)) return;
-    if ("LEGACY_MIGRATED".equals(releaseState) && sourceInstitutionId == principal.institutionId()) return;
-    throw new IllegalArgumentException("The source institution has not approved this release for sharing.");
-  }
-
-  private void assertCourseContentQualityReady(long courseId) {
-    Long subjectCount = jdbc.queryForObject(
-        "select count(*) from curriculum_program_subject where program_id=?", Long.class, courseId);
-    if (subjectCount == null || subjectCount == 0) {
-      throw new IllegalArgumentException("The course must have at least one mapped subject before quality review.");
-    }
-    Long subjectWithoutPublishedLessons = jdbc.queryForObject("""
-        select count(*) from curriculum_program_subject ps
-        where ps.program_id=? and not exists (
-          select 1 from curriculum_chapter ch
-          join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-          where ch.subject_id=ps.subject_id and ch.active=true
-        )
-        """, Long.class, courseId);
-    if (subjectWithoutPublishedLessons != null && subjectWithoutPublishedLessons > 0) {
-      throw new IllegalArgumentException("Every mapped subject must have an active chapter with published lessons before release approval.");
-    }
-  }
-
-  private String contentFingerprint(long courseId) {
-    String fingerprint = jdbc.queryForObject("""
-        select md5(concat_ws('|',p.id::text,p.code,p.display_name,p.curriculum_version,
-          coalesce((select string_agg(
-            ps.subject_id::text || ':' || ps.is_required::text || ':' || ps.sort_order::text,
-            ',' order by ps.subject_id
-          ) from curriculum_program_subject ps where ps.program_id=p.id),''),
-          coalesce((select string_agg(
-            ch.id::text || ':' || ch.code || ':' || ch.active::text || ':' ||
-              coalesce(l.id::text,'0') || ':' || coalesce(l.status,'NONE') || ':' || coalesce(l.active::text,'false'),
-            ',' order by ch.id,l.id
-          )
-          from curriculum_program_subject ps
-          join curriculum_chapter ch on ch.subject_id=ps.subject_id
-          left join lesson l on l.chapter_id=ch.id
-          where ps.program_id=p.id),'')
-        ))
-        from curriculum_program p where p.id=?
-        """, String.class, courseId);
-    if (fingerprint == null || !fingerprint.matches("^[0-9a-f]{32}$")) {
-      throw new IllegalArgumentException("Course content could not be fingerprinted.");
-    }
-    return fingerprint;
-  }
-
-  private Map<String,Object> firstRow(String sql, Object... args) {
-    List<Map<String,Object>> rows = jdbc.queryForList(sql, args);
-    return rows.isEmpty() ? Map.of() : rows.getFirst();
-  }
-
-  private void auditInstitution(
-      InstitutionAuthService.InstitutionPrincipal principal, String action,
-      String targetType, String targetId, String detailsJson) {
+  private void recordEvent(long institutionId,Long releaseId,Long assignmentId,Long offerId,
+      String type,Long actorAdminId,Map<String,Object> details) {
     jdbc.update("""
-        insert into institution_audit_log(institution_id,actor_institution_admin_id,action,target_type,target_id,details)
-        values(?,?,?,?,?,?::jsonb)
-        """, principal.institutionId(), principal.adminId(), action, targetType, targetId,
-        detailsJson == null ? "{}" : detailsJson);
+        insert into institution_course_lifecycle_event(
+          institution_id,course_release_id,assignment_id,offer_id,event_type,actor_institution_admin_id,details
+        ) values(?,?,?,?,?,?,?::jsonb)
+        """,institutionId,releaseId,assignmentId,offerId,type,actorAdminId,json(details));
   }
 
-  private static long requiredPositiveLong(Map<String,Object> body, String field) {
-    Object raw = body == null ? null : body.get(field);
-    if (!(raw instanceof Number number) || number.longValue() <= 0) {
-      throw new IllegalArgumentException(field + " must be a positive integer.");
-    }
-    return number.longValue();
+  private String json(Object value) {
+    try { return objectMapper.writeValueAsString(value); }
+    catch(JsonProcessingException ex) { throw new IllegalArgumentException("Lifecycle details could not be serialized.",ex); }
   }
 
-  private static long requiredNonNegativeLong(Map<String,Object> body, String field) {
-    Object raw = body == null ? null : body.get(field);
-    if (!(raw instanceof Number number) || number.longValue() < 0) {
-      throw new IllegalArgumentException(field + " must be a non-negative integer in paise.");
-    }
-    return number.longValue();
+  private static Map<String,Object> mapOf(Map<?,?> raw) {
+    Map<String,Object> result=new LinkedHashMap<>();
+    raw.forEach((key,value)->result.put(String.valueOf(key),value));
+    return result;
   }
 
-  private static String requiredText(Map<String,Object> body, String field, int min, int max) {
-    String value = optionalText(body == null ? null : body.get(field), max);
-    if (value == null || value.length() < min) throw new IllegalArgumentException(field + " is required.");
+  private static String requiredText(Map<String,Object> body,String key,int min,int max,String label) {
+    String value=body==null||body.get(key)==null?"":String.valueOf(body.get(key)).trim();
+    if(value.length()<min||value.length()>max) throw new IllegalArgumentException(label+" must be "+min+"–"+max+" characters.");
     return value;
   }
 
-  private static String optionalText(Object raw, int max) {
-    if (raw == null) return null;
-    String value = raw.toString().trim();
-    if (value.isEmpty()) return null;
-    if (value.length() > max) throw new IllegalArgumentException("Text exceeds " + max + " characters.");
+  private static String optionalText(Object raw,String defaultValue,int min,int max,String label) {
+    if(raw==null) return defaultValue;
+    String value=String.valueOf(raw).trim();
+    if(value.isEmpty()&&min==0) return null;
+    if(value.length()<min||value.length()>max) throw new IllegalArgumentException(label+" must be "+min+"–"+max+" characters.");
     return value;
   }
 
-  private static List<Long> positiveLongList(Object raw, String field) {
-    if (!(raw instanceof List<?> values)) throw new IllegalArgumentException(field + " must be an array.");
-    Set<Long> ids = new LinkedHashSet<>();
-    for (Object item : values) {
-      if (!(item instanceof Number number) || number.longValue() <= 0) {
-        throw new IllegalArgumentException(field + " must contain positive integer IDs.");
-      }
-      ids.add(number.longValue());
-    }
-    return new ArrayList<>(ids);
+  private static long number(Object raw) {
+    if(raw instanceof Number n) return n.longValue();
+    try { return Long.parseLong(String.valueOf(raw)); }
+    catch(RuntimeException ex) { throw new IllegalArgumentException("A numeric value was expected."); }
+  }
+
+  private static ResponseStatusException conflict(String message) {
+    return new ResponseStatusException(HttpStatus.CONFLICT,message);
   }
 }
