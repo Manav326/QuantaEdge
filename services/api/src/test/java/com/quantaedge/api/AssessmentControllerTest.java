@@ -30,6 +30,8 @@ import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class AssessmentControllerTest {
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   @Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
   @Mock private QuestionHistoryService questionHistory;
@@ -156,7 +158,7 @@ class AssessmentControllerTest {
             "deadline_at", OffsetDateTime.now().plusMinutes(15), "student_id", 7L)));
 
     Map<String, Object> result = controller.saveAnswer(
-        5L, 25L, Map.of("answer", "My saved answer"), student);
+        5L, 25L, Map.of("answer", "My saved answer"), student, TEST_TENANT);
 
     assertEquals(true, result.get("saved"));
     verify(jdbc).update(contains("update student_assessment_answer set response_payload"),
@@ -172,7 +174,7 @@ class AssessmentControllerTest {
             "deadline_at", OffsetDateTime.now().plusMinutes(15), "student_id", 8L)));
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.saveAnswer(5L, 25L, Map.of("answer", "intrusion"), student));
+        () -> controller.saveAnswer(5L, 25L, Map.of("answer", "intrusion"), student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).update(contains("update student_assessment_answer set response_payload"),
@@ -255,7 +257,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), eq(5L)))
         .thenReturn(List.of(questionRow));
 
-    Map<String, Object> result = controller.studentAttempt(5L, student);
+    Map<String, Object> result = controller.studentAttempt(5L, student, TEST_TENANT);
     @SuppressWarnings("unchecked")
     Map<String, Object> question = ((List<Map<String, Object>>) result.get("questions")).getFirst();
     @SuppressWarnings("unchecked")
@@ -317,7 +319,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), eq(6L)))
         .thenReturn(List.of(questionRow));
 
-    Map<String, Object> result = controller.studentAttempt(6L, student);
+    Map<String, Object> result = controller.studentAttempt(6L, student, TEST_TENANT);
     @SuppressWarnings("unchecked")
     Map<String, Object> question = ((List<Map<String, Object>>) result.get("questions")).getFirst();
     @SuppressWarnings("unchecked")
@@ -417,7 +419,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("with released_attempts as"), eq(20L), eq(7L)))
         .thenReturn(rankingRows);
 
-    Map<String, Object> result = controller.assessmentLeaderboard(20L, "en", student);
+    Map<String, Object> result = controller.assessmentLeaderboard(20L, "en", student, TEST_TENANT);
 
     @SuppressWarnings("unchecked")
     List<Map<String, Object>> items = (List<Map<String, Object>>) result.get("items");
@@ -441,7 +443,7 @@ class AssessmentControllerTest {
         eq(7L), eq(999L))).thenReturn(0L);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.assessmentLeaderboard(999L, "en", student));
+        () -> controller.assessmentLeaderboard(999L, "en", student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).queryForList(contains("with released_attempts as"), any(Object[].class));
