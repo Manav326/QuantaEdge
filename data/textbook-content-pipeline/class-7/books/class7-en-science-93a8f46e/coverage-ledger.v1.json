@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 938,
-    "successful_visual_analyses": 930,
+    "successful_visual_analyses": 931,
     "missing_visual_analyses": 6550,
-    "failed_visual_analyses": 8,
+    "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6558,
+    "unresolved_count": 6557,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21401,7 +21401,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -21410,10 +21410,8 @@
         ],
         "concepts": [
           "science",
-          "exploration",
           "curiosity",
-          "questions",
-          "unknown",
+          "open-mindedness",
           "process",
           "environment",
           "society",
@@ -21422,17 +21420,11 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnected",
-          "scientific ideas",
-          "discoveries",
-          "questions",
-          "environment",
-          "society",
-          "human activities"
+          "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The page does not provide specific examples or activities for the reader to engage with."
         ]
       },
       "chapter_id": null,
@@ -24785,7 +24777,7 @@
           "scientific thinking",
           "hands-on experiments"
         ],
-        "context_relation": "Introduction to scientific inquiry and understanding of celestial phenomena",
+        "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
           "No specific limitations mentioned"
         ]
@@ -38884,9 +38876,21 @@
       "asset_path": "assets/4984935a1012a521b750eba8304804b8ba27c1ae8b2426a60f8bbcf290f36d58.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue flower with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a blue flower with green leaves in the background, which is related to the text about preparing extracts and testing substances with vegetables, fruits, or flowers.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content.",
+          "The image is a close-up of a flower, not a diagram or chart.",
+          "The image does not show any formulas or quantities.",
+          "The image does not depict any relationships between the text and the flower."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
