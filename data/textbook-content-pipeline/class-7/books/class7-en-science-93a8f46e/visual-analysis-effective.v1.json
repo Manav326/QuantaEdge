@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4acb572923340c33d426852331d228a5ddeb81febb419bb92740e94496d45939",
+  "raw_analysis_sha256": "d2ea30c5cb1c3a6c03888dcc4e3e1dc3a2981e88c2b233a01237d0caff98ed50",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T21:15:12Z",
+      "checkpointed_at": "2026-10-18T21:18:51Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T21:15:36Z",
+      "checkpointed_at": "2026-10-18T21:19:12Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -64908,6 +64908,256 @@
         "context_relation": "The page discusses the school trip to Bhakra Nangal Dam and the assignment to prepare a presentation on the uses of electricity.",
         "limitations": [
           "The page does not contain any images or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1f15195d17faf44a4553aff3",
+      "asset_sha256": "33c67ec30060edc2af0d69407d91af14a47baa09d9fb3821f340e604f213412a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/33c67ec30060edc2af0d69407d91af14a47baa09d9fb3821f340e604f213412a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "electricity uses",
+          "hydroelectric power house"
+        ],
+        "context_relation": "The page discusses the school trip to Bhakra Nangal Dam and the assignment to prepare a presentation on the uses of electricity.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T21:20:01Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "electricity uses",
+          "hydroelectric power house"
+        ],
+        "context_relation": "The page discusses the school trip to Bhakra Nangal Dam and the assignment to prepare a presentation on the uses of electricity.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "25df47b98d452d993a1d0dcf",
+      "asset_sha256": "3ae9fbf243c44d157dfca52315473299f35dd7b8eddb84645d856a2c27dffe67",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/3ae9fbf243c44d157dfca52315473299f35dd7b8eddb84645d856a2c27dffe67.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "electricity uses",
+          "hydroelectric power house"
+        ],
+        "context_relation": "The page discusses the school trip and the group assignment related to electricity and hydroelectric power.",
+        "limitations": [
+          "The page does not show any diagrams, charts, or illustrations.",
+          "The page does not provide specific details about the hydroelectric power process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T21:20:53Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "electricity uses",
+          "hydroelectric power house"
+        ],
+        "context_relation": "The page discusses the school trip and the group assignment related to electricity and hydroelectric power.",
+        "limitations": [
+          "The page does not show any diagrams, charts, or illustrations.",
+          "The page does not provide specific details about the hydroelectric power process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4836c071172c96de275ce2c9",
+      "asset_sha256": "748a801f3c236d4dd8904b7c5f87877f051b3e74a5767631f7aa4772d169d840",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/748a801f3c236d4dd8904b7c5f87877f051b3e74a5767631f7aa4772d169d840.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c4907f29050fdea5ba3e2b4e3edda1520cba0b5557c1d6eb5a7b0a6f7622d7d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "electricity uses",
+          "hydroelectric power house"
+        ],
+        "context_relation": "The page discusses the school trip to Bhakra Nangal Dam and the assignment to prepare a presentation on the uses of electricity.",
+        "limitations": [
+          "The page does not show any diagrams, charts, or illustrations.",
+          "The page does not provide any specific details about the hydroelectric power process or the train ride."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T21:21:43Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing electricity and circuits, with a focus on hydroelectric power and a school trip to Bhakra Nangal Dam.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Electricity:",
+          "Circuits and their 3",
+          "Components",
+          "Nihal and his classmates were excited for their school trip to the",
+          "Bhakra Nangal Dam. There they would visit the hydroelectric",
+          "power house where the force of falling water was used to generate",
+          "electricity. They also looked forward to the free 13 kilometre-",
+          "train ride from Nangal in Punjab to Bhakra in Himachal Pradesh",
+          "along the beautiful Sutlej river and through the Shivalik hills.",
+          "Prior to the trip, Nihal and his classmates were given a group",
+          "assignment to prepare a presentation on the uses of electricity.",
+          "They began b"
+        ],
+        "concepts": [
+          "hydroelectric power",
+          "electricity",
+          "circuits",
+          "school trip",
+          "Bhakra Nangal Dam",
+          "electricity uses",
+          "hydroelectric power house"
+        ],
+        "context_relation": "The page discusses the school trip to Bhakra Nangal Dam and the assignment to prepare a presentation on the uses of electricity.",
+        "limitations": [
+          "The page does not show any diagrams, charts, or illustrations.",
+          "The page does not provide any specific details about the hydroelectric power process or the train ride."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
