@@ -109,24 +109,23 @@ public class PlatformInstitutionController {
     return result;
   }
 
-  /** Shared catalogue: only origin-approved releases can be seen or assigned by HRMS. */
+  /** Shared catalogue exposes only releases that passed content quality and origin approval. */
   @GetMapping("/catalog/courses")
   public List<Map<String,Object>> courseCatalog(@RequestAttribute(value="authContext",required=false) AuthContext context) {
-    AuthContext owner = requirePlatformOwner(context);
+    AuthContext owner=requirePlatformOwner(context);
     audit(owner,null,"COURSE_CATALOG_VIEWED","COURSE_RELEASE_CATALOG",null,Map.of());
     return jdbc.queryForList("""
-        select r.id as release_id,p.id,p.id as course_id,p.public_id,p.code,p.display_name,p.curriculum_version,
-          r.release_version,r.status as release_status,r.origin_institution_id,
-          origin.tenant_code as origin_tenant_code,origin.display_name as origin_institution_name,
-          string_agg(distinct c.code, ', ' order by c.code) as class_code,
-          r.origin_approved_at as released_at
+        select r.id as release_id,p.id as course_id,p.public_id,p.code,p.display_name,p.curriculum_version,
+          r.release_version,r.release_state,r.source_institution_id,
+          origin.tenant_code as source_institution_code,
+          coalesce(branding.display_name,origin.display_name) as source_institution_name,
+          c.code as class_code,r.shareable_at as released_at
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        join institution_tenant origin on origin.id=r.origin_institution_id and origin.status='ACTIVE'
+        join institution_tenant origin on origin.id=r.source_institution_id and origin.status='ACTIVE'
+        left join institution_branding branding on branding.institution_id=origin.id
         left join curriculum_class c on c.id=p.class_id and c.active=true
-        where r.status='SHAREABLE'
-        group by r.id,p.id,p.public_id,p.code,p.display_name,p.curriculum_version,
-          r.release_version,r.status,r.origin_institution_id,origin.tenant_code,origin.display_name,r.origin_approved_at
+        where r.release_state='SHAREABLE'
         order by p.display_name,p.code,r.release_version desc
         """);
   }
@@ -358,47 +357,89 @@ public class PlatformInstitutionController {
     return Map.of("adminId",adminId,"active",active);
   }
 
+  /**
+   * Legacy course-wide entitlement writes bypass the release and local-offer lifecycle.
+   * Kept as a stable route for old clients, but intentionally no longer grants access.
+   */
   @PutMapping("/{institutionId}/courses/{programId}")
-  @Transactional
   public Map<String,Object> updateCourseEntitlement(
       @PathVariable long institutionId,
       @PathVariable long programId,
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    AuthContext owner = requirePlatformOwner(context);
+    AuthContext owner=requirePlatformOwner(context);
     assertInstitutionExists(institutionId);
-    Object raw = body==null?null:body.get("enabled");
-    if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
-    if(enabled) {
-      Boolean exists = jdbc.queryForObject("""
-          select exists(select 1 from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL')
-          """,Boolean.class,programId);
-      if(!Boolean.TRUE.equals(exists)) throw new IllegalArgumentException("Only an active, specifically identified course can be authorised.");
-      Instant validUntil = parseInstantOptional(value(body,"validUntil"),"validUntil");
-      if(validUntil!=null && !validUntil.isAfter(Instant.now())) throw new IllegalArgumentException("validUntil must be in the future.");
-      jdbc.update("""
-          insert into institution_course_entitlement(institution_id,program_id,status,valid_from,valid_until,granted_by_staff_id)
-          values (?,?,'ACTIVE',now(),?,?)
-          on conflict(institution_id,program_id) do update set status='ACTIVE',valid_from=now(),
-            valid_until=excluded.valid_until,granted_by_staff_id=excluded.granted_by_staff_id,
-            revoked_by_staff_id=null,updated_at=now()
-          """,institutionId,programId,validUntil==null?null:java.sql.Timestamp.from(validUntil),owner.staffId());
-    } else {
-      jdbc.update("""
-          update institution_course_entitlement
-          set status='REVOKED',revoked_by_staff_id=?,updated_at=now()
-          where institution_id=? and program_id=?
-          """,owner.staffId(),institutionId,programId);
-    }
-    jdbc.update("""
-        insert into institution_membership_event(institution_id,event_type,actor_platform_staff_id,details)
-        values (?,'COURSE_ENTITLEMENT_CHANGED',?,jsonb_build_object('programId',?,'enabled',?))
-        """,institutionId,owner.staffId(),programId,enabled);
-    audit(owner,institutionId,"COURSE_ENTITLEMENT_CHANGED","COURSE",String.valueOf(programId),Map.of("enabled",enabled));
-    return Map.of("institutionId",institutionId,"programId",programId,"enabled",enabled);
+    throw new ResponseStatusException(HttpStatus.CONFLICT,
+        "Course assignment now requires an origin-approved release. Use /{institutionId}/course-releases/{releaseId}/assignment.");
   }
 
-  /** HRMS assigns a specific origin-approved release; this does not publish a destination offer. */
+  /** HRMS assigns an origin-approved release to another institution; this never publishes an offer. */
+  @PutMapping("/{institutionId}/course-releases/{releaseId}/assignment")
+  @Transactional
+  public Map<String,Object> updateCourseReleaseAssignment(
+      @PathVariable long institutionId,
+      @PathVariable long releaseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    Object raw=body==null?null:body.get("enabled");
+    if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
+    List<Map<String,Object>> releases=jdbc.queryForList("""
+        select r.id,r.program_id,r.source_institution_id,r.release_version,r.release_state,p.code,p.display_name
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where r.id=?
+        """,releaseId);
+    if(releases.isEmpty()) throw new IllegalArgumentException("The course release is unavailable.");
+    Map<String,Object> release=releases.getFirst();
+    if(!"SHAREABLE".equals(String.valueOf(release.get("release_state"))))
+      throw new IllegalArgumentException("Only an origin-approved shareable course release can be assigned.");
+    long sourceInstitutionId=((Number)release.get("source_institution_id")).longValue();
+    if(sourceInstitutionId==institutionId)
+      throw new IllegalArgumentException("The origin institution already owns this course release; cross-institution assignment is for destination institutions.");
+    Long assignmentId=null;
+    if(enabled) {
+      assignmentId=jdbc.queryForObject("""
+          insert into institution_course_assignment(
+            institution_id,course_release_id,status,assignment_source,assigned_by_staff_id,assigned_at,
+            revoked_by_staff_id,revoked_at,created_at,updated_at
+          ) values(?,?,'ASSIGNED','HRMS',?,now(),null,null,now(),now())
+          on conflict(institution_id,course_release_id) do update set status='ASSIGNED',
+            assignment_source='HRMS',assigned_by_staff_id=excluded.assigned_by_staff_id,
+            assigned_at=now(),revoked_by_staff_id=null,revoked_at=null,updated_at=now()
+          returning id
+          """,Long.class,institutionId,releaseId,owner.staffId());
+    } else {
+      List<Map<String,Object>> prior=jdbc.queryForList("""
+          select id from institution_course_assignment
+          where institution_id=? and course_release_id=? and assignment_source='HRMS' for update
+          """,institutionId,releaseId);
+      if(!prior.isEmpty()) assignmentId=((Number)prior.getFirst().get("id")).longValue();
+      jdbc.update("""
+          update institution_course_assignment
+          set status='REVOKED',revoked_by_staff_id=?,revoked_at=now(),updated_at=now()
+          where institution_id=? and course_release_id=? and assignment_source='HRMS' and status='ASSIGNED'
+          """,owner.staffId(),institutionId,releaseId);
+      jdbc.update("""
+          update institution_marketplace_offer set status='ARCHIVED',updated_at=now()
+          where institution_id=? and course_release_id=? and status<>'ARCHIVED'
+          """,institutionId,releaseId);
+    }
+    jdbc.update("""
+        insert into institution_course_lifecycle_event(
+          institution_id,course_release_id,assignment_id,event_type,actor_platform_staff_id,details
+        ) values(?,?,?,?,?,jsonb_build_object('enabled',?,'sourceInstitutionId',?,'paymentReceiver','HRMS_PLATFORM_ACCOUNT'))
+        """,institutionId,releaseId,assignmentId,enabled?"COURSE_ASSIGNED":"COURSE_UNASSIGNED",
+        owner.staffId(),enabled,sourceInstitutionId);
+    audit(owner,institutionId,"COURSE_RELEASE_ASSIGNMENT_CHANGED","COURSE_RELEASE",
+        String.valueOf(releaseId),Map.of("enabled",enabled,"assignmentId",assignmentId==null?0L:assignmentId));
+    return Map.of("institutionId",institutionId,"releaseId",releaseId,"courseId",release.get("program_id"),
+        "assignmentId",assignmentId==null?0L:assignmentId,"enabled",enabled,"offerPublished",false,
+        "paymentReceiver","HRMS_PLATFORM_ACCOUNT");
+  }
+
+
   @PutMapping("/{institutionId}/course-releases/{releaseId}/assignment")
   @Transactional
   public Map<String,Object> updateCourseReleaseAssignment(
@@ -465,6 +506,119 @@ public class PlatformInstitutionController {
     result.put("enabled",enabled);
     result.put("offerPublished",false);
     return result;
+  }
+
+  @GetMapping("/course-releases/review-queue")
+  public List<Map<String,Object>> courseReleaseReviewQueue(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    audit(owner,null,"COURSE_RELEASE_REVIEW_QUEUE_VIEWED","COURSE_RELEASE",null,Map.of());
+    return jdbc.queryForList("""
+        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
+          r.content_fingerprint,r.submitted_at,p.public_id,p.code as course_code,p.display_name,
+          t.id as source_institution_id,t.tenant_code as source_institution_code,
+          coalesce(b.display_name,t.display_name) as source_institution_name,
+          count(distinct ps.subject_id) as active_subject_count,
+          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE'
+        join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
+        left join institution_branding b on b.institution_id=t.id
+        left join curriculum_program_subject ps on ps.program_id=p.id
+        left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+        where r.release_state='IN_QUALITY_REVIEW'
+        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
+          p.public_id,p.code,p.display_name,t.id,t.tenant_code,b.display_name,t.display_name
+        order by r.submitted_at,r.id
+        """);
+  }
+
+  @PostMapping("/course-releases/{releaseId}/quality-review")
+  @Transactional
+  public Map<String,Object> reviewCourseRelease(
+      @PathVariable long releaseId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext reviewer=requirePlatformOwner(context);
+    Object raw=body==null?null:body.get("approved");
+    if(!(raw instanceof Boolean approved)) throw new IllegalArgumentException("The approved field must be true or false.");
+    String notes=body.get("notes")==null?"":String.valueOf(body.get("notes")).trim();
+    if(notes.length()<3||notes.length()>1000) throw new IllegalArgumentException("Quality review notes must be 3–1,000 characters.");
+    List<Map<String,Object>> releases=jdbc.queryForList("""
+        select r.id,r.source_institution_id,r.program_id,r.release_state,r.content_fingerprint,
+          r.release_version,p.code,p.display_name
+        from institution_course_release r join curriculum_program p on p.id=r.program_id
+        where r.id=? for update of r
+        """,releaseId);
+    if(releases.isEmpty()) throw new IllegalArgumentException("The course release is unavailable.");
+    Map<String,Object> release=releases.getFirst();
+    if(!"IN_QUALITY_REVIEW".equals(String.valueOf(release.get("release_state"))))
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting content-quality review can be reviewed.");
+    long programId=((Number)release.get("program_id")).longValue();
+    String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
+    if(!savedFingerprint.equals(courseReleaseFingerprint(programId)))
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
+    Map<String,Object> readiness=jdbc.queryForMap("""
+        select count(distinct ps.subject_id) as subject_count,
+          count(distinct case when l.id is not null then ps.subject_id end) as subjects_with_published_lessons,
+          count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+        where ps.program_id=?
+        """,programId);
+    long subjects=number(readiness.get("subject_count"));
+    if(subjects==0||number(readiness.get("subjects_with_published_lessons"))!=subjects
+        ||number(readiness.get("published_chapters"))==0||number(readiness.get("published_lessons"))==0)
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Every mapped active subject must retain published content reviewed lessons.");
+    String next=approved?"QUALITY_APPROVED":"REJECTED";
+    int changed=jdbc.update("""
+        update institution_course_release set release_state=?,quality_reviewed_by_staff_id=?,
+          quality_reviewed_at=now(),quality_review_notes=?,updated_at=now()
+        where id=? and release_state='IN_QUALITY_REVIEW'
+        """,next,reviewer.staffId(),notes,releaseId);
+    if(changed!=1) throw new ResponseStatusException(HttpStatus.CONFLICT,"The release changed during quality review.");
+    long sourceInstitutionId=((Number)release.get("source_institution_id")).longValue();
+    jdbc.update("""
+        insert into institution_course_lifecycle_event(
+          institution_id,course_release_id,event_type,actor_platform_staff_id,details
+        ) values(?,?,?,?,jsonb_build_object('approved',?,'notes',?,'courseId',?))
+        """,sourceInstitutionId,releaseId,approved?"RELEASE_QUALITY_APPROVED":"RELEASE_QUALITY_REJECTED",
+        reviewer.staffId(),approved,notes,programId);
+    audit(reviewer,sourceInstitutionId,"COURSE_RELEASE_QUALITY_REVIEWED","COURSE_RELEASE",
+        String.valueOf(releaseId),Map.of("approved",approved,"courseId",programId));
+    return Map.of("updated",true,"releaseId",releaseId,"status",next,"qualityReviewNotes",notes);
+  }
+
+  private String courseReleaseFingerprint(long programId) {
+    String value=jdbc.queryForObject("""
+        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,E'\\n'
+            order by entity_type,entity_id),'')) as fingerprint
+        from (
+          select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
+          from curriculum_program p where p.id=?
+          union all
+          select 'subject',s.id,to_jsonb(ps)::text||to_jsonb(s)::text
+          from curriculum_program_subject ps
+          join curriculum_program p on p.id=ps.program_id
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+            and (s.program_id=ps.program_id or s.program_id is null)
+          where ps.program_id=?
+          union all
+          select 'chapter',ch.id,to_jsonb(ch)::text
+          from curriculum_program_subject ps join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+          join curriculum_chapter ch on ch.subject_id=s.id where ps.program_id=?
+          union all
+          select 'lesson',l.id,to_jsonb(l)::text
+          from curriculum_program_subject ps join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+          join curriculum_chapter ch on ch.subject_id=s.id join lesson l on l.chapter_id=ch.id
+          where ps.program_id=?
+        ) content_rows
+        """,String.class,programId,programId,programId,programId);
+    return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
   }
 
   @PutMapping("/{institutionId}/branding")
