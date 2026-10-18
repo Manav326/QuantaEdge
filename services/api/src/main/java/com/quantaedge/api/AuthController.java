@@ -74,13 +74,21 @@ public class AuthController {
   }
 
   @PostMapping("/google")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> googleSignIn(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     if (googleIdentity == null) throw new IllegalStateException("Google sign-in is not configured.");
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     GoogleIdentityService.GoogleSignIn verified = googleIdentity.authenticate(
         String.valueOf(body.getOrDefault("credential", "")));
     AuthContext context = verified.context();
+    if(verified.accountCreated()) {
+      requireMembershipService().establishForNewAccount(context,tenant,"GOOGLE_SIGNUP");
+    } else {
+      requireMembershipService().requireExistingMembership(context,tenant);
+    }
     String workspace = context.isParent() ? "PARENT" : "STUDENT";
     boolean androidClient = isAndroidClient(clientHeader);
     ResponseEntity<Map<String,Object>> session = withCookie(
