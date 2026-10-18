@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1228,
-    "successful_visual_analyses": 1213,
-    "missing_visual_analyses": 6260,
+    "raw_analysis_result_rows": 1231,
+    "successful_visual_analyses": 1216,
+    "missing_visual_analyses": 6257,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6275,
+    "unresolved_count": 6272,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -56805,9 +56805,30 @@
       "asset_path": "assets/304eccef400e584d49011825cb4e051b8d5b60f69184ef4f594c59e885aa3c5b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a simple electrical circuit, including a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us first ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "torch",
+          "components",
+          "electric cell"
+        ],
+        "context_relation": "The image is a visual representation of the components of a simple electrical circuit, specifically focusing on the torch.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56823,9 +56844,23 @@
       "asset_path": "assets/194b07b776c4e093c018336d821266b998358264f9213f51cdae25730b976a81.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A close-up of a twisted rope with a blue ring at one end."
+        ],
+        "concepts": [
+          "twisted rope",
+          "blue ring"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits, specifically focusing on the components of a torch.",
+        "limitations": [
+          "The image does not provide specific details about the components of a torch or the electrical circuit it uses."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56841,9 +56876,32 @@
       "asset_path": "assets/d4fd7b4011ce6649e4758c95c48a1c13a1b8d739d5a93e778f052078a006d1ae.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a torch, focusing on its components.",
+        "visual_type": "photo",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its",
+          "components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "torch components",
+          "electric cell",
+          "electrical circuit"
+        ],
+        "context_relation": "The image is a close-up of a torch, focusing on its components.",
+        "limitations": [
+          "The image does not show the entire torch or its components in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
