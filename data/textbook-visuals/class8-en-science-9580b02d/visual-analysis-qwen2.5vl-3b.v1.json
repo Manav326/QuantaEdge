@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 461,
+    "assets_selected": 464,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 459,
-    "assets_remaining": 1832,
-    "assets_completion_percent": 20.0,
+    "assets_analyzed": 462,
+    "assets_remaining": 1829,
+    "assets_completion_percent": 20.2,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 456,
+    "assets_skipped_from_checkpoint": 459,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T11:36:48Z"
+      "checkpointed_at": "2026-10-18T11:43:31Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T11:38:08Z"
+      "checkpointed_at": "2026-10-18T11:44:51Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -13665,6 +13665,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T11:41:51Z"
+    },
+    {
+      "asset_id": "2dda8550517fd5f190996658",
+      "asset_sha256": "48aca3854f727c4778d2d85d7925bd3ef2cd9fb39a33f689c0814d511a4276c2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/48aca3854f727c4778d2d85d7925bd3ef2cd9fb39a33f689c0814d511a4276c2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid-colored background with a gradient effect.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:46:03Z"
+    },
+    {
+      "asset_id": "28383a3ca0bac42f9de4d0ca",
+      "asset_sha256": "285abcc56c5174d79e4b771d0920381c792ffc0e9271b3caab1cf78b81c5fb6e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/285abcc56c5174d79e4b771d0920381c792ffc0e9271b3caab1cf78b81c5fb6e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a person in a yellow shirt, possibly a student, standing in front of a whiteboard with text on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "student",
+          "yellow shirt",
+          "whiteboard",
+          "text"
+        ],
+        "context_relation": "The image likely represents a student in a classroom setting, possibly during a lesson or presentation.",
+        "limitations": [
+          "The image is blurred and not clear enough to identify specific details or actions. The text on the whiteboard is not legible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:47:25Z"
+    },
+    {
+      "asset_id": "5813969fd3968ef5b8d79a72",
+      "asset_sha256": "3a35649ad0a644c7efff9620b56d43bf86a1f5cbd249488fa8d429996f68ab09",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/3a35649ad0a644c7efff9620b56d43bf86a1f5cbd249488fa8d429996f68ab09.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a gradient bar, likely used for thematic or decorative purposes.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:48:44Z"
     }
   ]
 }
