@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 862,
+    "assets_selected": 866,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 861,
-    "assets_remaining": 6627,
-    "assets_completion_percent": 11.5,
+    "assets_analyzed": 865,
+    "assets_remaining": 6623,
+    "assets_completion_percent": 11.6,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 857,
+    "assets_skipped_from_checkpoint": 861,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T15:22:50Z"
+      "checkpointed_at": "2026-10-18T15:26:48Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -32102,6 +32102,157 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T15:25:53Z"
+    },
+    {
+      "asset_id": "f6c7b3dfe54bb3ae188b0df1",
+      "asset_sha256": "5b2b975493cef7dc1c2c61303871abc878922d9c37a7001629b8caaba5abe175",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/5b2b975493cef7dc1c2c61303871abc878922d9c37a7001629b8caaba5abe175.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The text provides information about Acharya Prafulla Chandra Ray and his significance in the field of chemistry.",
+        "limitations": [
+          "The text is incomplete and does not provide details about his specific contributions or achievements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:28:12Z"
+    },
+    {
+      "asset_id": "27262e79ab27e41c766e03fe",
+      "asset_sha256": "5b2b975493cef7dc1c2c61303871abc878922d9c37a7001629b8caaba5abe175",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/5b2b975493cef7dc1c2c61303871abc878922d9c37a7001629b8caaba5abe175.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing Acharya Prafulla Chandra Ray and his contributions to modern Indian chemistry.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "17",
+          "KNOW A SCIENTIST",
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the",
+          "‘Father of Modern Indian Chemistry’. He earned a doctorate",
+          "in chemistry from the United Kingdom and returned to",
+          "India. He contributed towards advancing",
+          "science."
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Science"
+        ],
+        "context_relation": "The text provides information about Acharya Prafulla Chandra Ray's contributions to modern Indian chemistry.",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about his contributions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:28:41Z"
+    },
+    {
+      "asset_id": "4efbbe3d3ba01dcff9ce42d2",
+      "asset_sha256": "0a6885f35ff3c44d8d2b41aa0d73430375126127287417b5bed15027b8248ade",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/0a6885f35ff3c44d8d2b41aa0d73430375126127287417b5bed15027b8248ade.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A grayscale image of a person wearing a traditional outfit, possibly a kurta, with a dark background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Acharya Prafulla Chandra Ray (P.C. Ray) is known as the 'Father of Modern Indian Chemistry'. He earned a doctorate in chemistry from the United Kingdom and returned to India. He contributed towards advancing"
+        ],
+        "concepts": [
+          "Acharya Prafulla Chandra Ray",
+          "Father of Modern Indian Chemistry",
+          "Doctorate in Chemistry",
+          "United Kingdom",
+          "India",
+          "Chemistry"
+        ],
+        "context_relation": "The image is related to the text about Acharya Prafulla Chandra Ray and his contributions to chemistry.",
+        "limitations": [
+          "The image does not provide specific details about the person's appearance or the exact location where the photo was taken."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:29:55Z"
+    },
+    {
+      "asset_id": "0f5784f675aaf0eabbe8b50a",
+      "asset_sha256": "91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/91820d1dd0a6b7ff0278265d6b0aa1897e3bcdae247745edd2c656cc057ecdde.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1472f2a01c7a96a52a37966ff06bec7b4791bcf153b713457cb4e9b66adfeff8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T15:30:56Z"
     }
   ]
 }
