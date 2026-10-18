@@ -55,7 +55,7 @@ class StudentProgramControllerTest {
     when(jdbc.queryForList(contains("where p.id=? and p.status='ACTIVE'"), eq(7L), eq(91L)))
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
     when(jdbc.queryForObject(contains("course_marketplace_offer"), eq(Boolean.class),
-        eq(7L), eq(91L), eq(7L), eq(91L), eq(91L), eq(91L), eq(7L))).thenReturn(false);
+        eq(7L), eq(91L), eq(7L), eq(91L), eq(7L), eq(91L), eq(91L), eq(91L), eq(7L))).thenReturn(false);
 
     assertThrows(SecurityException.class, () -> controller.enrollById(91L, student));
   }
