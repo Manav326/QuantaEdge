@@ -522,7 +522,7 @@ public class QaTestPackService {
   }
 
   private Map<String,Object> seedTenantLearnerPack(UUID runId, Long actorStaffId) {
-    String slug = runId.toString().replace("-", "").substring(0, 8).toUpperCase(Locale.ROOT);
+    String slug = runId.toString().replace("-", "").substring(0, 12).toUpperCase(Locale.ROOT);
     String passwordHash = passwordEncoder.encode(fixturePassword);
     Long tenantA = insertTenant(runId, actorStaffId, "QAT" + slug + "A", "QA " + slug + " Institution A");
     Long tenantB = insertTenant(runId, actorStaffId, "QAT" + slug + "B", "QA " + slug + " Institution B");
