@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c7fc24d740318bef4d2ba632279f53f23896b10cc70eb4ecf19d542c8b17bc47",
+  "raw_analysis_sha256": "245aadc08842a177db3a613549cf595fa2daa69ee53ff5d780b10e70ca7b7f97",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:49:53Z",
+      "checkpointed_at": "2026-10-18T21:55:47Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:50:42Z",
+      "checkpointed_at": "2026-10-18T21:56:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:51:20Z",
+      "checkpointed_at": "2026-10-18T21:57:14Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -30137,6 +30137,78 @@
           "The image does not provide specific details about the questions or activities related to the chapter.",
           "The image does not show any specific scientific content or experiments."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2afaf964bfbe2f87254f490e",
+      "asset_sha256": "aff431fd6018a1e4677a6600924f5cd46ddc0bedd50687b53bf4ec9575feabf0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/aff431fd6018a1e4677a6600924f5cd46ddc0bedd50687b53bf4ec9575feabf0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a scientist wearing a lab coat and glasses, with one hand open and the other hand resting on the hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Introduction to the chapter on exploring the world of science",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:58:48Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a scientist wearing a lab coat and glasses, with one hand open and the other hand resting on the hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Introduction to the chapter on exploring the world of science",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6364f309feb9ca63803d4f1f",
+      "asset_sha256": "c204fa4f6b7b38b2ebe145e805af30d3cb7c62867eeca6a2051ae0d58b3a4a63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/c204fa4f6b7b38b2ebe145e805af30d3cb7c62867eeca6a2051ae0d58b3a4a63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a woman in a lab coat and saree, smiling and gesturing with her hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of science and investigation.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:00:22Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a woman in a lab coat and saree, smiling and gesturing with her hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of science and investigation.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

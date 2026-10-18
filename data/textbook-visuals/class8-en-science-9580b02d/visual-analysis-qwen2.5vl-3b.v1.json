@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 690,
+    "assets_selected": 692,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 687,
-    "assets_remaining": 1604,
-    "assets_completion_percent": 30.0,
+    "assets_analyzed": 689,
+    "assets_remaining": 1602,
+    "assets_completion_percent": 30.1,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 685,
+    "assets_skipped_from_checkpoint": 687,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:49:53Z"
+      "checkpointed_at": "2026-10-18T21:55:47Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:50:42Z"
+      "checkpointed_at": "2026-10-18T21:56:35Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:51:20Z"
+      "checkpointed_at": "2026-10-18T21:57:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20654,6 +20654,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T21:54:32Z"
+    },
+    {
+      "asset_id": "2afaf964bfbe2f87254f490e",
+      "asset_sha256": "aff431fd6018a1e4677a6600924f5cd46ddc0bedd50687b53bf4ec9575feabf0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/aff431fd6018a1e4677a6600924f5cd46ddc0bedd50687b53bf4ec9575feabf0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a scientist wearing a lab coat and glasses, with one hand open and the other hand resting on the hip.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Introduction to the chapter on exploring the world of science",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:58:48Z"
+    },
+    {
+      "asset_id": "6364f309feb9ca63803d4f1f",
+      "asset_sha256": "c204fa4f6b7b38b2ebe145e805af30d3cb7c62867eeca6a2051ae0d58b3a4a63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/c204fa4f6b7b38b2ebe145e805af30d3cb7c62867eeca6a2051ae0d58b3a4a63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a woman in a lab coat and saree, smiling and gesturing with her hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of science and investigation.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:00:22Z"
     }
   ]
 }
