@@ -76,7 +76,7 @@ class StudentProgramControllerTest {
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
     when(jdbc.queryForObject(contains("institution_id is distinct from"),
         eq(Boolean.class), any(Object[].class))).thenReturn(false);
-    when(jdbc.queryForObject(contains("select\n        exists(select 1 from student_program_enrollment e"),
+    when(jdbc.queryForObject(contains("exists(select 1 from student_program_enrollment e"),
         eq(Boolean.class), any(Object[].class))).thenReturn(false);
 
     assertThrows(SecurityException.class, () -> controller.enrollById(91L, student, tenant));

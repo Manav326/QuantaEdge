@@ -64,7 +64,17 @@ public class StudentProgramController {
           where assignment.institution_id=? and assignment.status='ASSIGNED'
         )
         and (
-          exists(select 1 from student_program_enrollment spe
+          exists(select 1 from institution_marketplace_offer offer
+            join institution_course_assignment published_assignment
+              on published_assignment.id=offer.assignment_id
+              and published_assignment.institution_id=offer.institution_id
+              and published_assignment.status='ASSIGNED'
+            join institution_course_release published_release
+              on published_release.id=offer.course_release_id
+              and published_release.program_id=offer.course_id
+            where offer.institution_id=? and offer.course_id=p.id
+              and offer.status='PUBLISHED')
+          or exists(select 1 from student_program_enrollment spe
             where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
               and spe.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase purchase
@@ -78,7 +88,7 @@ public class StudentProgramController {
         )
       order by p.display_name,p.id
       """, institutionId, institutionId, institutionId, institutionId, institutionId,
-          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId);
+          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId, institutionId);
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();
