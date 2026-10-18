@@ -403,3 +403,12 @@ This addendum supersedes the earlier “pending a new exact-main Actions run” 
 - Actionable next steps are recorded in the course/branding visibility audit and should be implemented against the actual shared brand component/CSS geometry rather than guessed dimensions. Retain tenant/version scoping, audit events, stale-asset rejection and existing security validation.
 
 Release status remains **NOT READY** until a fresh exact-main workflow is green and all required API, browser/device and school-specific build acceptance evidence exists.
+
+
+## HRMS institution logo crop/resize and view/edit cards — 2026-10-18
+
+- Added `InstitutionBrandAssetEditor.tsx` to the existing People Operations institution console. Selecting a logo or app-icon file now opens an in-place crop dialog with drag-to-reposition, zoom control, ratio presets (original, 3:1 wide, 2:1 landscape and square for logos; square for app icons), a visible crop mask and explicit confirm/cancel.
+- Confirming the crop draws to a canvas, emits a normalized PNG (up to 1024 px on the longest edge for logos or 512×512 for app icons), and downsamples as needed to stay below the current 2 MiB upload ceiling. The original file is never altered. The existing owner-only upload endpoint, asset-version updates, server signature/decode/dimension checks, tenant scoping and audit lifecycle remain authoritative.
+- Institution settings cards now default to read-only summaries. Courses, administrator management, white-label branding and enrollment billing require the card-level **Edit** action before changing fields or invoking card-specific edits. Course changes are drafted and saved explicitly; branding and contract metadata use **Save** and **Cancel** controls. Admin activation/provisioning remains an explicitly labelled audited action in the card edit state.
+- Corrected billing summary loading to use the saved contract effective-from date where available rather than always showing the current date.
+- Verification still required on the new branch: People Operations type-check/lint/build, UI-contract script, crop/resize on transparent and opaque PNG/JPEG at mobile and desktop sizes, upload/replace/remove and stale-version/cache checks, and a green exact-commit GitHub Actions run. Source edits alone are not a browser/device acceptance sign-off.
