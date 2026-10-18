@@ -385,6 +385,9 @@ assert.ok(courseScopeMigration.includes('UPDATE curriculum_subject s') && course
   'Existing canonical subjects and textbook source records must be re-scoped in place.');
 assert.ok(courseScopeMigration.includes('INSERT INTO student_program_enrollment') && courseScopeMigration.includes('has_other_active_course'),
   'Existing learner access must be preserved without silently stealing focus from an active independent course.');
+assert.ok(courseScopeMigration.includes('CREATE TRIGGER trg_default_class_course_enrollment') &&
+  courseScopeMigration.includes('AFTER INSERT OR UPDATE ON student'),
+  'New class 6–8 profiles and class promotions must receive their matching course, preserving the former class-code access contract.');
 assert.ok(marketplaceApi.includes('left join course_marketplace_offer o') && marketplaceApi.includes('as offer_available'),
   'Student and family marketplaces must list active courses even before offers are published.');
 assert.ok(studentProgramsApi.includes('as offer_available') && studentProgramsApi.includes('as has_access'),
