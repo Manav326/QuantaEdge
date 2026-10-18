@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Base64;
 import java.util.UUID;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.CacheControl;
@@ -18,10 +20,19 @@ import org.springframework.web.bind.annotation.*;
 public class GuardianController {
   private final JdbcTemplate jdbc; private final AuthorizationService authorization; private final AuthService auth;
   private final LearningMetricsService learningMetrics;
+  private final InstitutionAuthService institutionAuth;
   @Value("${app.auth.max-children-per-parent:3}") private int maxChildrenPerParent=3;
+  @Autowired
+  public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth,
+      LearningMetricsService learningMetrics,InstitutionAuthService institutionAuth){
+    this.jdbc=jdbc;this.authorization=authorization;this.auth=auth;this.learningMetrics=learningMetrics;
+    this.institutionAuth=institutionAuth;
+  }
+
+  /** Compatibility constructor for focused tests that do not exercise institution onboarding. */
   public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth,
       LearningMetricsService learningMetrics){
-    this.jdbc=jdbc;this.authorization=authorization;this.auth=auth;this.learningMetrics=learningMetrics;
+    this(jdbc,authorization,auth,learningMetrics,null);
   }
 
   @GetMapping("/account")
@@ -182,39 +193,43 @@ public class GuardianController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant){
     context=authorization.requireParent(context);
-    Long institutionId=tenant==null?null:tenant.institutionId();
+    long institutionId=requireInstitution(tenant);
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
              slc.username as login_username,gs.relationship,gs.consent_status,
              coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
                join curriculum_subject s on s.id=ste.subject_id
-               join institution_membership m on m.student_id=ste.student_id
-                 and m.institution_id=ste.institution_id and m.status='ACTIVE'
-               where ste.student_id=st.id and ste.institution_id=?
-                 and ste.status='ACTIVE'),'') as track_codes
+               where ste.student_id=st.id and ste.institution_id=? and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
       left join curriculum_class cc on cc.code=st.class_code
       left join student_login_credential slc on slc.guardian_user_id=gs.guardian_user_id
         and slc.student_id=st.id and slc.active=true
       where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
         and gs.access_level='FULL' and st.active=true and st.environment='PRODUCTION'
       order by st.created_at
-      """,institutionId,context.userId());
+      """,institutionId,institutionId,context.userId());
   }
 
   @GetMapping("/children/archived")
   public List<Map<String,Object>> archivedChildren(
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
              gs.relationship,gs.consent_status
       from guardian_student gs join student st on st.id=gs.student_id
+      join institution_membership m on m.student_id=st.id and m.institution_id=?
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
       left join curriculum_class cc on cc.code=st.class_code
       where gs.guardian_user_id=? and gs.active=false and gs.consent_status='REVOKED'
         and st.environment='PRODUCTION'
       order by gs.revoked_at desc nulls last,gs.id desc
-      """,context.userId());
+      """,institutionId,context.userId());
   }
 
   @PostMapping("/children/{studentId}/restore")
@@ -310,9 +325,13 @@ public class GuardianController {
 
   @PostMapping("/children")
   @Transactional
-  public Map<String,Object> createChild(@RequestAttribute(value="authContext",required=false) AuthContext context,
-      @RequestBody Map<String,Object> body){
+  public Map<String,Object> createChild(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant,
+      @RequestBody Map<String,Object> body,HttpServletRequest request){
     context=authorization.requireParent(context);
+    long institutionId=requireInstitution(tenant);
     UUID requestKey;
     String requestedKey=String.valueOf(body.getOrDefault("requestId","")).trim();
     try {
@@ -324,7 +343,7 @@ public class GuardianController {
         "select id from user_account where id=? and active=true and role in ('PARENT','ADMIN') for update",context.userId());
     if(parentRows.isEmpty()) throw new SecurityException("Active parent account required.");
     List<Map<String,Object>> prior=jdbc.queryForList("""
-      select st.id,gs.active,gs.consent_status
+      select st.id,gs.active,gs.consent_status,req.institution_id
       from guardian_child_creation_request req
       join student st on st.id=req.student_id
       join guardian_student gs on gs.guardian_user_id=req.guardian_user_id and gs.student_id=st.id
@@ -332,9 +351,26 @@ public class GuardianController {
       """,context.userId(),requestKey);
     if(!prior.isEmpty()) {
       Map<String,Object> priorRow=prior.getFirst();
+      long priorInstitution=((Number)priorRow.get("institution_id")).longValue();
+      if(priorInstitution!=institutionId)
+        throw new SecurityException("This profile-creation request belongs to a different institution.");
       if(!Boolean.TRUE.equals(priorRow.get("active")) || !"CONSENTED".equals(String.valueOf(priorRow.get("consent_status"))))
         throw new IllegalStateException("This creation request already succeeded but the profile was later archived. Reload your profiles before retrying.");
-      return childProfileResponse(((Number)priorRow.get("id")).longValue());
+      return childProfileResponse(((Number)priorRow.get("id")).longValue(),institutionId);
+    }
+    Boolean parentAlreadyInInstitution=jdbc.queryForObject("""
+      select exists(
+        select 1 from guardian_student gs
+        join institution_membership m on m.student_id=gs.student_id
+          and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+          and gs.access_level='FULL'
+      )
+      """,Boolean.class,institutionId,context.userId());
+    String joinCode=String.valueOf(body.getOrDefault("joinCode","")).trim();
+    if(!Boolean.TRUE.equals(parentAlreadyInInstitution) && joinCode.isBlank()) {
+      throw new SecurityException("To create a child in this institution, first join it with a valid institution code.");
     }
     boolean consentAccepted=Boolean.TRUE.equals(body.get("consentAccepted"));
     AuthContext child=auth.createChild(context.userId(),String.valueOf(body.getOrDefault("displayName","")),
@@ -342,18 +378,60 @@ public class GuardianController {
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")),
         consentAccepted,
         body.get("trackCodes") instanceof List<?> values ? values.stream().map(String::valueOf).toList() : List.of("maths","science"));
-    jdbc.update("insert into guardian_child_creation_request(guardian_user_id,request_key,student_id) values (?,?,?)",
-        context.userId(),requestKey,child.studentId());
-    return childProfileResponse(child.studentId());
+    if(Boolean.TRUE.equals(parentAlreadyInInstitution)) {
+      Long membershipId=jdbc.queryForObject("""
+        insert into institution_membership(
+          institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at
+        ) values(?,?,null,'ACTIVE',now(),null,now(),now())
+        on conflict(institution_id,student_id) do update set
+          status='ACTIVE',joined_at=case when institution_membership.status='ACTIVE'
+            then institution_membership.joined_at else now() end,
+          left_at=null,updated_at=now()
+        returning id
+        """,Long.class,institutionId,child.studentId());
+      jdbc.update("""
+        insert into institution_membership_event(
+          institution_id,membership_id,student_id,event_type,details
+        ) values(?,?,?,'MEMBERSHIP_CREATED',
+          jsonb_build_object('source','PARENT_CREATED_CHILD','guardianUserId',?))
+        """,institutionId,membershipId,child.studentId(),context.userId());
+    } else {
+      if(institutionAuth==null) throw new IllegalStateException("Institution onboarding service is not configured.");
+      String address=request.getRemoteAddr()==null?"unknown":request.getRemoteAddr();
+      institutionAuth.redeemJoinCode(joinCode,child.studentId(),
+          institutionAuth.hash("institution-join-source:"+address),tenant.tenantCode());
+    }
+    List<String> trackCodes=body.get("trackCodes") instanceof List<?> values
+        ? values.stream().map(String::valueOf).toList() : List.of("maths","science");
+    if(!trackCodes.isEmpty()) auth.updateStudentTracks(child.studentId(),trackCodes,institutionId);
+    jdbc.update("""
+      insert into guardian_child_creation_request(guardian_user_id,request_key,student_id,institution_id)
+      values (?,?,?,?)
+      """,context.userId(),requestKey,child.studentId(),institutionId);
+    return childProfileResponse(child.studentId(),institutionId);
   }
 
-  private Map<String,Object> childProfileResponse(long studentId) {
+  /** Kept for source-compatible tests; HTTP child creation must always pass its institution. */
+  public Map<String,Object> createChild(AuthContext context,Map<String,Object> body) {
+    throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400,"INSTITUTION_CONTEXT_REQUIRED","Select an institution before creating a child.");
+  }
+
+  private Map<String,Object> childProfileResponse(long studentId,long institutionId) {
     return jdbc.queryForMap("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
         coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
-          join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
-      from student st where st.id=?
-      """,studentId);
+          join curriculum_subject s on s.id=ste.subject_id
+          where ste.student_id=st.id and ste.institution_id=? and ste.status='ACTIVE'),'') as track_codes
+      from student st join institution_membership m on m.student_id=st.id
+        and m.institution_id=? and m.status='ACTIVE'
+      where st.id=?
+      """,institutionId,institutionId,studentId);
+  }
+
+  private Map<String,Object> childProfileResponse(long studentId) {
+    throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400,"INSTITUTION_CONTEXT_REQUIRED","Select an institution before reading a child profile.");
   }
 
   @PutMapping("/children/{studentId}/profile")
