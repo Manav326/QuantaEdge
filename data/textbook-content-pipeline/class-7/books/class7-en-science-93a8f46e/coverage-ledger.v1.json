@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1225,
-    "successful_visual_analyses": 1210,
-    "missing_visual_analyses": 6263,
+    "raw_analysis_result_rows": 1228,
+    "successful_visual_analyses": 1213,
+    "missing_visual_analyses": 6260,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6278,
+    "unresolved_count": 6275,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -56696,9 +56696,19 @@
       "asset_path": "assets/182e54332cb788ab8acb5d759b445492c4a6338de72eebfdbf5c067beba245c4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or structure of the page",
+          "no visible text or images"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56714,9 +56724,31 @@
       "asset_path": "assets/479da1c3f5c5dd0ac7b556aa015714ed15b7bb5584b6bddda7dfa77ab3b2a27a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly a part of an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep",
+          "Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electrical circuit",
+          "components",
+          "electric cell"
+        ],
+        "context_relation": "The image is related to the text discussing the components of a torch and an electrical circuit.",
+        "limitations": [
+          "The image is blurry and not clearly visible.",
+          "The text is partially obscured and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56732,9 +56764,32 @@
       "asset_path": "assets/ff4b66205b787c04bd4da7a4eae249017f20b91e4722814ae3f21017eaa8e121.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about the components of a torch, focusing on the electrical circuit and its components.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "25",
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us first ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components",
+          "electrical circuit",
+          "torch"
+        ],
+        "context_relation": "The page is providing educational content about the components of a torch, specifically focusing on the electrical circuit and its components.",
+        "limitations": [
+          "The page does not provide detailed information about the components or their functions.",
+          "The page does not include any visual aids or diagrams to support the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
