@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 820,
+    "assets_selected": 821,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 816,
-    "assets_remaining": 1262,
+    "assets_analyzed": 817,
+    "assets_remaining": 1261,
     "assets_completion_percent": 39.3,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 815,
+    "assets_skipped_from_checkpoint": 816,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:18:13Z"
+      "checkpointed_at": "2026-10-18T20:24:32Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:19:06Z"
+      "checkpointed_at": "2026-10-18T20:25:25Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:20:16Z"
+      "checkpointed_at": "2026-10-18T20:26:35Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25432,7 +25432,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:20:43Z"
+      "checkpointed_at": "2026-10-18T20:27:02Z"
     },
     {
       "asset_id": "1b6dd2be916d0f2957d56770",
@@ -25492,6 +25492,37 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T20:23:30Z"
+    },
+    {
+      "asset_id": "583380f14b5c5c066e9b8890",
+      "asset_sha256": "47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3a00fecd350aeb38ef19b978db10d9bbd49dda082596bc1f12632ef5a7343ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden plank with a natural wood grain pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wood",
+          "grain",
+          "natural",
+          "pattern"
+        ],
+        "context_relation": "The image is an illustration of a wooden plank.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:27:11Z"
     }
   ]
 }

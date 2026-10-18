@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2e372088ed3ff3f04dfc49222fdcf924af753db3140f43c44feef07afe2d493e",
+  "raw_analysis_sha256": "1187efdfe3529cb160d4d5a4916c4f4d831be3eea289545d1eb25dbb057ab776",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:18:13Z",
+      "checkpointed_at": "2026-10-18T20:24:32Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:19:06Z",
+      "checkpointed_at": "2026-10-18T20:25:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:20:16Z",
+      "checkpointed_at": "2026-10-18T20:26:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37567,7 +37567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:20:43Z",
+      "checkpointed_at": "2026-10-18T20:27:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the hump structure of camels in different desert environments.",
         "visual_type": "page_with_multiple_visuals",
@@ -37677,6 +37677,52 @@
         "limitations": [
           "The image does not provide information about the specific species of the tree or the location where it is found."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "583380f14b5c5c066e9b8890",
+      "asset_sha256": "47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3a00fecd350aeb38ef19b978db10d9bbd49dda082596bc1f12632ef5a7343ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden plank with a natural wood grain pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wood",
+          "grain",
+          "natural",
+          "pattern"
+        ],
+        "context_relation": "The image is an illustration of a wooden plank.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:27:11Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden plank with a natural wood grain pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wood",
+          "grain",
+          "natural",
+          "pattern"
+        ],
+        "context_relation": "The image is an illustration of a wooden plank.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
