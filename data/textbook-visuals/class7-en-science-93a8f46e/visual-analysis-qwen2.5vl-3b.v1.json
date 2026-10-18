@@ -11,10 +11,10 @@
     "assets_selected": 718,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 713,
-    "assets_remaining": 6775,
+    "assets_analyzed": 715,
+    "assets_remaining": 6773,
     "assets_completion_percent": 9.5,
-    "assets_failed": 10,
+    "assets_failed": 9,
     "assets_skipped_from_checkpoint": 713,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9807,49 +9807,19 @@
     {
       "asset_id": "89b40b364042ef1985b11a00",
       "asset_sha256": "6b97a9691a4ae69ec6fb289ae3cce00bbf6a91ed6c7ec437b7b8d455acaee82a",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 22,
       "asset_path": "page-0022.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
-        ],
-        "concepts": [
-          "science",
-          "exploration",
-          "curiosity",
-          "questions",
-          "process",
-          "environment",
-          "responsibility",
-          "human activities",
-          "environmental challenges",
-          "sustainable world",
-          "properties of materials",
-          "discoveries",
-          "interconnected ideas"
-        ],
-        "context_relation": "exploration and understanding of natural phenomena",
-        "limitations": [
-          "The text does not provide specific examples or activities for the reader to engage with.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T11:28:58Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -12116,19 +12086,30 @@
     {
       "asset_id": "c6902657928713e6a6b15b47",
       "asset_sha256": "d9e9e97cc2e3915ca92bdd66e1377f4f2d6318992937274e07d65d09de613b47",
-      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 24,
       "asset_path": "assets/d9e9e97cc2e3915ca92bdd66e1377f4f2d6318992937274e07d65d09de613b47.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three people standing in a row, possibly in a park or outdoor setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be analyzed for content or context."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:32:37Z"
     },
     {
       "asset_id": "c9ffb7d80ff73c3fe39f52fa",
@@ -12227,7 +12208,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
+      "run_id": "39121459903",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -13293,7 +13274,7 @@
           "Moon's orbit",
           "Day and night",
           "Science experiments",
-          "Questioning answers"
+          "Exploring and questioning"
         ],
         "context_relation": "Introduction to scientific concepts and experiments",
         "limitations": [
@@ -13303,8 +13284,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:18:40Z"
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:40:16Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -16017,19 +15998,53 @@
     {
       "asset_id": "4e63b6120b9cb53cc56ddf0f",
       "asset_sha256": "dba6a2c0093004645be6fa0872502d2f176706a3b050ca1fda0d4220e8becd4d",
-      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 27,
       "asset_path": "assets/dba6a2c0093004645be6fa0872502d2f176706a3b050ca1fda0d4220e8becd4d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it at a science fair.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science",
+          "Acidic",
+          "Basic",
+          "Neutral",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image shows a scene from a science fair where children received a white sheet with a message on it.",
+        "limitations": [
+          "The image does not show the actual message on the white sheet."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:41:50Z"
     },
     {
       "asset_id": "bdb74cc9d9150908ead7e34a",
