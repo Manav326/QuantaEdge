@@ -494,4 +494,20 @@ class AuthServiceTest {
     assertTrue(error.getMessage().contains("15 minutes"));
   }
 
+  @Test
+  void previewLoginSelectsOnlyTheCanonicalPreviewIdentity() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    String sql = "select id from student where public_id=? and environment=? and active=true";
+    when(jdbc.queryForObject(sql, Long.class, LocalPreviewIdentity.PUBLIC_ID,
+        LocalPreviewIdentity.ENVIRONMENT))
+        .thenThrow(new org.springframework.dao.EmptyResultDataAccessException(1));
+
+    assertThrows(org.springframework.dao.EmptyResultDataAccessException.class, auth::previewLogin);
+
+    verify(jdbc).queryForObject(sql, Long.class, LocalPreviewIdentity.PUBLIC_ID,
+        LocalPreviewIdentity.ENVIRONMENT);
+    verify(jdbc, never()).queryForObject(
+        contains("environment='LOCAL_PREVIEW' and active=true order by id limit 1"), eq(Long.class));
+  }
+
 }
