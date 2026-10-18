@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bc8624c2ce870236c3de76d007ee68192e99da48d3781c48f0ce04140ff51125",
+  "raw_analysis_sha256": "a440654718c9550e0f03fc86268c4a7c2a32b759ee7062f021cc59cc0d38f81b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T01:54:38Z",
+      "checkpointed_at": "2026-10-18T01:57:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -17418,6 +17418,160 @@
       "checkpointed_at": "2026-10-18T01:56:49Z",
       "effective_analysis": {
         "visual_summary": "A vertical green pole in a white background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0a43adf2d6c93eb955994b6a",
+      "asset_sha256": "849e77c32efbb49a3fc00227925b6b8223f66ef68766f13fe24c3665dcea61da",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/849e77c32efbb49a3fc00227925b6b8223f66ef68766f13fe24c3665dcea61da.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a grandfather clock.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human growth and changes in materials.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:58:00Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a grandfather clock.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about human growth and changes in materials.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "987caa086c2a87429cf86ba5",
+      "asset_sha256": "07f4e2ffcad760c2575af6114f15f8f6eb6018e1594964775c7bf0a7c9e00bf2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/07f4e2ffcad760c2575af6114f15f8f6eb6018e1594964775c7bf0a7c9e00bf2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue and white object, possibly a container or a dish, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:58:33Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue and white object, possibly a container or a dish, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3349f52e0d77389a217c0ec0",
+      "asset_sha256": "6e91d98a40546aaed321c6f247323254c00749341d9940d4eb98e3fb33be0c07",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/6e91d98a40546aaed321c6f247323254c00749341d9940d4eb98e3fb33be0c07.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thin, dark line on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:59:05Z",
+      "effective_analysis": {
+        "visual_summary": "A thin, dark line on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a84cb31b36d06ec294c44c70",
+      "asset_sha256": "b3f1fab267d242956c5e3d4e859e97b1a4c9357957e073bc1ebb4a0fe577baee",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/b3f1fab267d242956c5e3d4e859e97b1a4c9357957e073bc1ebb4a0fe577baee.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue circular object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T01:59:36Z",
+      "effective_analysis": {
+        "visual_summary": "A blue circular object with a blurred background.",
         "visual_type": "photo",
         "visible_text": [],
         "concepts": [],
