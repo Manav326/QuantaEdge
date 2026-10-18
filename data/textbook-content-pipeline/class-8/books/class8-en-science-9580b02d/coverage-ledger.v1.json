@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 430,
-    "successful_visual_analyses": 428,
-    "missing_visual_analyses": 1861,
+    "raw_analysis_result_rows": 433,
+    "successful_visual_analyses": 431,
+    "missing_visual_analyses": 1858,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1863,
+    "unresolved_count": 1860,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -19831,9 +19831,18 @@
       "asset_path": "assets/fac5dcadeb12cb457e27e382e89e65be460066912146ddae5a9443215d7a162b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow background with a black line running horizontally across the middle.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19849,9 +19858,19 @@
       "asset_path": "assets/4bc34f714f2164044fed2524efce3e55e83dde6aea70c1aeb73c6ff6b3d6e1bb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of warm colors.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or objects"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19867,9 +19886,18 @@
       "asset_path": "assets/243b634544b4d745d03cd2b74c674b7424df24373d1504ee8acb4ecef48297e1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from dark brown to light brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
