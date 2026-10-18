@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 979,
+    "assets_selected": 982,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 977,
-    "assets_remaining": 6511,
-    "assets_completion_percent": 13.0,
+    "assets_analyzed": 980,
+    "assets_remaining": 6508,
+    "assets_completion_percent": 13.1,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 974,
+    "assets_skipped_from_checkpoint": 977,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:47:47Z"
+      "checkpointed_at": "2026-10-18T18:50:50Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:48:11Z"
+      "checkpointed_at": "2026-10-18T18:51:11Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -36292,6 +36292,99 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T18:50:08Z"
+    },
+    {
+      "asset_id": "eb41e8912626c7862982d288",
+      "asset_sha256": "706688a7da6475aa77eb151696a7e32e76943125c2cedb6b45e54aa027157aed",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/706688a7da6475aa77eb151696a7e32e76943125c2cedb6b45e54aa027157aed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a pink object over a circular object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:51:45Z"
+    },
+    {
+      "asset_id": "615f411248d46b4a99623630",
+      "asset_sha256": "17f733df1bc5513dc1cb7e81a5b3c60aeea09c05c576ccbe95b63ec42bb92cf6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/17f733df1bc5513dc1cb7e81a5b3c60aeea09c05c576ccbe95b63ec42bb92cf6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A foot with a purple object near it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:52:18Z"
+    },
+    {
+      "asset_id": "2d207203bcecd8e164e28216",
+      "asset_sha256": "5ad427628fa61c8b64c3c5507fd9dc0e9bad4483f39704646bf840ee0c2e1cd8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/5ad427628fa61c8b64c3c5507fd9dc0e9bad4483f39704646bf840ee0c2e1cd8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solution turns red litmus paper to blue. Excess addition of which solution would reverse the change?",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "The image is a question from a textbook, specifically related to a chemistry topic.",
+        "limitations": [
+          "The image does not provide a diagram or visual representation of the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:53:00Z"
     }
   ]
 }
