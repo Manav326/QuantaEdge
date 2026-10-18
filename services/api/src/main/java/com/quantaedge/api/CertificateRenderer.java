@@ -64,7 +64,14 @@ public class CertificateRenderer {
 
   public record RenderedCertificate(byte[] pdf, byte[] png) {}
   /** Tenant issuer identity; null means the canonical QuantaEdge direct-consumer issuer. */
-  public record CertificateBranding(String displayName, byte[] logoPng) {}
+  public record CertificateBranding(String displayName, byte[] logoPng, Map<String, String> lightPalette) {
+    public CertificateBranding(String displayName, byte[] logoPng) {
+      this(displayName, logoPng, Map.of());
+    }
+    public CertificateBranding {
+      lightPalette = lightPalette == null ? Map.of() : Map.copyOf(lightPalette);
+    }
+  }
   public record CertificateDetails(String subjectName, String classCode, String score, String result,
       String assessmentDate, String signatoryName, String signatoryRole, String assessmentName, String examId) {}
   public record CertificateWording(String title, String introduction, String connector, String completion) {}
@@ -110,7 +117,7 @@ public class CertificateRenderer {
     Graphics2D g = image.createGraphics();
     try {
       configure(g);
-      drawClassic(g);
+      drawClassic(g, branding);
       drawContent(g, "CLASSIC", hindi, recipientName, achievementTitle, achievementSummary,
           certificateNumber, issuedAt, details, sample, branding);
       if (sample) drawSampleWatermark(g, hindi);
@@ -130,7 +137,7 @@ public class CertificateRenderer {
     BufferedImage image = new BufferedImage(WIDTH / 2, HEIGHT / 2, BufferedImage.TYPE_INT_RGB);
     Graphics2D g = image.createGraphics();
     try {
-      configure(g); g.scale(0.5, 0.5); drawClassic(g);
+      configure(g); g.scale(0.5, 0.5); drawClassic(g, null);
       drawContent(g, "CLASSIC", hindi, recipientName, achievementTitle, achievementSummary,
           certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null,null), true, null);
       drawSampleWatermark(g, hindi);
@@ -205,13 +212,32 @@ public class CertificateRenderer {
     g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
   }
 
-  private void drawClassic(Graphics2D g) {
-    g.setColor(PAPER); g.fillRect(0, 0, WIDTH, HEIGHT);
-    // Layered navy, gold, and fine inset rules create a restrained formal certificate frame.
-    g.setColor(NAVY); g.setStroke(new BasicStroke(16)); g.drawRect(34, 34, WIDTH - 68, HEIGHT - 68);
-    g.setColor(GOLD); g.setStroke(new BasicStroke(4)); g.drawRect(62, 62, WIDTH - 124, HEIGHT - 124);
-    g.setColor(new Color(0xD9E0E8)); g.setStroke(new BasicStroke(1.5f));
+  private void drawClassic(Graphics2D g, CertificateBranding branding) {
+    boolean institutionIssued = branding != null && branding.displayName() != null && !branding.displayName().isBlank();
+    Color background = institutionIssued ? issuerColor(branding, "background", PAPER) : PAPER;
+    Color frame = institutionIssued ? issuerColor(branding, "primary", NAVY) : NAVY;
+    Color accent = institutionIssued ? issuerColor(branding, "accent", GOLD) : GOLD;
+    Color inset = institutionIssued
+        ? issuerColor(branding, "borderSubtle", new Color(0xD9E0E8))
+        : new Color(0xD9E0E8);
+    g.setColor(background); g.fillRect(0, 0, WIDTH, HEIGHT);
+    // Institution certificates take the normalized light semantic palette; platform certificates retain
+    // the canonical navy/gold/orange design without going through tenant palette code.
+    g.setColor(frame); g.setStroke(new BasicStroke(16)); g.drawRect(34, 34, WIDTH - 68, HEIGHT - 68);
+    g.setColor(accent); g.setStroke(new BasicStroke(4)); g.drawRect(62, 62, WIDTH - 124, HEIGHT - 124);
+    g.setColor(inset); g.setStroke(new BasicStroke(1.5f));
     g.drawRect(82, 82, WIDTH - 164, HEIGHT - 164);
+  }
+
+  private static Color issuerColor(CertificateBranding branding, String role, Color fallback) {
+    if (branding == null || branding.lightPalette() == null) return fallback;
+    String raw = branding.lightPalette().get(role);
+    if (raw == null || !raw.matches("^#[0-9A-Fa-f]{6}$")) return fallback;
+    try {
+      return new Color(Integer.parseInt(raw.substring(1), 16));
+    } catch (NumberFormatException ex) {
+      return fallback;
+    }
   }
 
   private void drawModern(Graphics2D g) {
@@ -241,29 +267,36 @@ public class CertificateRenderer {
     if (recipient == null || recipient.isBlank()) throw new IllegalArgumentException("A real recipient name is required.");
     CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null,null) : details;
     boolean institutionIssued = branding != null && branding.displayName() != null && !branding.displayName().isBlank();
+    Color issuerPrimary = institutionIssued ? issuerColor(branding, "primary", NAVY) : NAVY;
+    Color issuerOrange = institutionIssued ? issuerColor(branding, "primary", ORANGE) : ORANGE;
+    Color issuerAccent = institutionIssued ? issuerColor(branding, "accent", DEEP_ORANGE) : DEEP_ORANGE;
+    Color issuerBorder = institutionIssued ? issuerColor(branding, "borderSubtle", GOLD) : GOLD;
+    Color issuerText = institutionIssued ? issuerColor(branding, "text", INK) : INK;
+    Color issuerMuted = institutionIssued ? issuerColor(branding, "textMuted", MUTED) : MUTED;
+    Color issuerOnPrimary = institutionIssued ? issuerColor(branding, "onPrimary", Color.WHITE) : Color.WHITE;
     if (institutionIssued) {
       BufferedImage logo = decodeIssuerLogo(branding.logoPng());
       if (logo != null) {
         drawContainedImage(g, logo, 132, 95, 88, 88);
       } else {
-        g.setColor(ORANGE);
+        g.setColor(issuerOrange);
         g.fillRoundRect(132, 95, 88, 88, 18, 18);
-        g.setColor(Color.WHITE);
+        g.setColor(issuerOnPrimary);
         String initial = branding.displayName().trim().substring(0, 1).toUpperCase(Locale.ROOT);
         drawCentered(g, font(hindi, Font.BOLD, 46), initial, 176, 154, 78);
       }
-      g.setColor(NAVY);
+      g.setColor(issuerPrimary);
       drawCentered(g, font(hindi, Font.BOLD, 42), branding.displayName().trim(), WIDTH - 470, 150, 760);
     } else {
       BufferedImage canonicalIcon = brandIcon();
       g.drawImage(canonicalIcon, 132, 95, 88, 88, null);
       int wordmarkCenterX = drawBrandWordmark(g, 2320, 150, 58);
-      g.setColor(MUTED);
+      g.setColor(issuerMuted);
       // Keep the canonical platform tagline under the canonical platform wordmark.
       drawCentered(g, font(false, Font.BOLD, 19), "Smarter Decisions. Greater Growth.",
           wordmarkCenterX, 192, 500);
     }
-    g.setColor(GOLD); g.setStroke(new BasicStroke(3)); g.drawLine(125, 260, WIDTH - 125, 260);
+    g.setColor(issuerBorder); g.setStroke(new BasicStroke(3)); g.drawLine(125, 260, WIDTH - 125, 260);
 
     CertificateWording wording = lockedWording(hindi ? "hi" : "en");
     String assessmentName = d.assessmentName() == null || d.assessmentName().isBlank() ? title : d.assessmentName();
@@ -316,7 +349,7 @@ public class CertificateRenderer {
           WIDTH / 2, examIdY, WIDTH - 600);
       completionY = Math.max(examIdY + 48, headingY + 458);
     }
-    g.setColor(INK);
+    g.setColor(issuerText);
     drawCentered(g, font(hindi, Font.PLAIN, 30), wording.completion(),
         WIDTH / 2, completionY, WIDTH - 560);
 
@@ -334,7 +367,7 @@ public class CertificateRenderer {
           int row = i / 2;
           int center = fields.size() % 2 == 1 && i == fields.size() - 1
               ? WIDTH / 2 : 300 + (i % 2) * columnWidth + columnWidth / 2;
-          g.setColor(i % 2 == 0 ? NAVY : INK);
+          g.setColor(i % 2 == 0 ? issuerPrimary : issuerText);
           drawCentered(g, font(hindi, Font.BOLD, 23), fields.get(i), center,
               detailY + row * 42, fields.size() % 2 == 1 && i == fields.size() - 1 ? WIDTH - 600 : columnWidth - 30);
           detailRows = Math.max(detailRows, row + 1);
@@ -357,8 +390,8 @@ public class CertificateRenderer {
           WIDTH / 2, dateY, WIDTH - 600);
     }
 
-    g.setColor(new Color(0xD9D0BC)); g.setStroke(new BasicStroke(2)); g.drawLine(125, 1210, WIDTH - 125, 1210);
-    g.setColor(DEEP_ORANGE); drawCentered(g, font(false, Font.BOLD, 19), hindi ? "अधिकृत हस्ताक्षर" : "AUTHORIZED BY", 420, 1257, 540);
+    g.setColor(issuerBorder); g.setStroke(new BasicStroke(2)); g.drawLine(125, 1210, WIDTH - 125, 1210);
+    g.setColor(issuerAccent); drawCentered(g, font(false, Font.BOLD, 19), hindi ? "अधिकृत हस्ताक्षर" : "AUTHORIZED BY", 420, 1257, 540);
     if (d.signatoryName() != null && !d.signatoryName().isBlank()) {
       g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 25), d.signatoryName(), 420, 1308, 540);
       if (d.signatoryRole() != null && !d.signatoryRole().isBlank()) {
