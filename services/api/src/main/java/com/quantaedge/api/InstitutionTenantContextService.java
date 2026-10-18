@@ -182,6 +182,27 @@ public class InstitutionTenantContextService {
         requestPath.equals(prefix) || requestPath.startsWith(prefix));
   }
 
+  /**
+   * Marketplace discovery and explicit checkout/enrolment routes may be used before the learner
+   * has a membership in the selected institution. These routes still require a valid selected
+   * tenant and must authorize the published offer, purchaser, guardian relationship and payment
+   * in the controller. Every other protected learner route requires active membership first.
+   */
+  public static boolean requiresActiveMembership(String method,String requestPath) {
+    if(!requiresInstitutionContext(requestPath) || method==null || requestPath==null) return false;
+    String verb=method.trim().toUpperCase(Locale.ROOT);
+    if("GET".equals(verb) && (
+        requestPath.equals("/api/v1/marketplace/courses")
+        || requestPath.equals("/api/v1/marketplace/family/courses"))) {
+      return false;
+    }
+    if("POST".equals(verb) && requestPath.matches(
+        "^/api/v1/marketplace/(?:courses/[0-9]+/orders|family/courses/[0-9]+/(?:orders|enroll-free)|orders/[0-9]+/verify|family/orders/[0-9]+/verify)$")) {
+      return false;
+    }
+    return true;
+  }
+
   public InstitutionTenantContext requireSelector(String requestedCode) {
     String selectedCode = selectTenantCode(requestedCode);
     if (selectedCode == null || selectedCode.isBlank()) {
