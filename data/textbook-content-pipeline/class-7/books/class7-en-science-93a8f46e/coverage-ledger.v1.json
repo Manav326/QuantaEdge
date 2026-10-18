@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 659,
-    "successful_visual_analyses": 650,
-    "missing_visual_analyses": 6829,
+    "raw_analysis_result_rows": 662,
+    "successful_visual_analyses": 653,
+    "missing_visual_analyses": 6826,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6838,
+    "unresolved_count": 6835,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35250,9 +35250,26 @@
       "asset_path": "assets/dd29ef82b4c636070b7f5b4261d93da68a8acb1aac836d0c198764db1e8145c0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a diagram of blue and red litmus paper strips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Lichens",
+          "Solid",
+          "Solution"
+        ],
+        "context_relation": "The image is related to the text discussing the properties of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions that occur when litmus paper strips change color."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35268,9 +35285,32 @@
       "asset_path": "assets/4933133e8cd311c83489e1741ff0450892fb286d7e3974d71c8c1aec7d7cf82d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a book with a pink cover and a green spine.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us ﬁnd out!",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance",
+          "lichens"
+        ],
+        "context_relation": "The image is related to the text about litmus paper and its properties.",
+        "limitations": [
+          "The image does not show the actual litmus paper or its color change."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35286,9 +35326,31 @@
       "asset_path": "assets/2f23baf8f36c6cbcb9e70de895796cc9a3f2756922042fa7abc265d8435eac46.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a bicycle wheel and tire, showing the tread pattern and the wheel's structure.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Let us find out!",
+          "Litmus is a natural substance obtained from lichens. It is",
+          "available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Bicycle",
+          "Tire",
+          "Tread pattern",
+          "Wheel",
+          "Lichens",
+          "Solid",
+          "Solution"
+        ],
+        "context_relation": "The image is not directly related to the text about litmus paper strips.",
+        "limitations": [
+          "The image does not provide information about the properties of litmus paper strips."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
