@@ -66,6 +66,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("for grade in (6,7,8)", coordinator)
         self.assertIn('p=root/f"class-{grade}.v1.json"', coordinator)
 
+    def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_class6_runner(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn('cancel-in-progress: ${{ github.event_name == \'push\' && contains(github.event.head_commit.message || \'\', \'[resume-visual-layers-4-5-class-6]\') }}', workflow)
+        self.assertIn("--request-timeout 300", workflow)
+        self.assertIn('q.add_argument("--request-timeout",type=int,default=300', pipeline)
+        self.assertIn('"--timeout",str(args.request_timeout)', pipeline)
+        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
+        self.assertIn("age >= 1800", coordinator)
+        self.assertIn("/actions/runs/$run_id/cancel", coordinator)
+        self.assertIn("stale runner cancellation requested", coordinator.lower())
+
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         restore = workflow[workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories"):workflow.index("- name: Restore or build immutable per-book candidate checkpoints")]
