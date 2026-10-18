@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 350,
-    "successful_visual_analyses": 344,
-    "missing_visual_analyses": 7138,
-    "failed_visual_analyses": 6,
+    "raw_analysis_result_rows": 352,
+    "successful_visual_analyses": 348,
+    "missing_visual_analyses": 7136,
+    "failed_visual_analyses": 4,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7144,
+    "unresolved_count": 7140,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21401,7 +21401,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
@@ -21410,10 +21410,8 @@
         ],
         "concepts": [
           "science",
-          "exploration",
           "curiosity",
-          "questions",
-          "unknown",
+          "open-mindedness",
           "process",
           "environment",
           "society",
@@ -21422,17 +21420,11 @@
           "sustainability",
           "properties of materials",
           "discovery",
-          "interconnected",
-          "scientific ideas",
-          "discoveries",
-          "questions",
-          "environment",
-          "society",
-          "human activities"
+          "interconnectedness"
         ],
-        "context_relation": "exploration and understanding of natural phenomena",
+        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
         "limitations": [
-          "The text does not provide specific examples or illustrations to support the concepts discussed."
+          "The page does not provide specific examples or activities for the reader to engage with."
         ]
       },
       "chapter_id": null,
@@ -22444,9 +22436,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational content, discussing properties of materials and classification.",
+        "limitations": [
+          "The page is completely black and no text or images are visible.",
+          "The page may contain text or images that are not visible in this description."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22462,9 +22464,28 @@
       "asset_path": "page-0023.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials and changes in nature.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We then move on and play with some\n\nelectric batteries, lamps and wires to try to\n\nﬁ nd other kinds of properties of materials.\n\nWhat kind of materials do we need to make a\nlamp glow? This will lead us to classifying\n\nmaterials based on their properties — and we\n\nwill enter the world of metals and n",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "properties of materials",
+          "classification of materials",
+          "changes in nature",
+          "heat flow",
+          "melting",
+          "evaporation"
+        ],
+        "context_relation": "exploration of material properties and natural changes",
+        "limitations": [
+          "no specific equations or formulas provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22845,9 +22866,16 @@
       "asset_path": "assets/2e6998c73948f875e3c1419025320f1afa2422d814834d426205bb5fc0212fc0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a green shadow at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -22863,9 +22891,18 @@
       "asset_path": "assets/0fcdb31f099e7e05526b912699f21df89a4260a22323775cd77082a5e326b2b7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
