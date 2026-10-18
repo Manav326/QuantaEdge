@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2def1f7fc6235d8701747d5d244df90bad91680615d9bdab94f2009400d9ae95",
+  "raw_analysis_sha256": "5596c76b71b65db69405d1960c97bbf1f7cff8032b121ec236059b65d318a3fc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:29:08Z",
+      "checkpointed_at": "2026-10-18T19:32:28Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:29:31Z",
+      "checkpointed_at": "2026-10-18T19:32:50Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -58755,6 +58755,102 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9f1bf28483aad60f57280732",
+      "asset_sha256": "490e593b77991a9e88fc1199b1ea6e354586d979de99da35cb621b1eca1ffded",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/490e593b77991a9e88fc1199b1ea6e354586d979de99da35cb621b1eca1ffded.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A partially visible image of a curved line or edge.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The image is not clear enough to identify the concept or its relation to the text. The visible text does not provide any specific information about the image. The image may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish visibl"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:33:34Z",
+      "effective_analysis": {
+        "visual_summary": "A partially visible image of a curved line or edge.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The image is not clear enough to identify the concept or its relation to the text. The visible text does not provide any specific information about the image. The image may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relationships. Distinguish visibl"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c6c005e3fe7bd2ce6b40f7ae",
+      "asset_sha256": "db2ec9a056d03b1956996e31b76e3a39da67bde1f52a855d857199bb470f7b69",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/db2ec9a056d03b1956996e31b76e3a39da67bde1f52a855d857199bb470f7b69.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A curved line with a light blue background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:34:09Z",
+      "effective_analysis": {
+        "visual_summary": "A curved line with a light blue background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c93f903c8a9ff4ddb3699875",
+      "asset_sha256": "d41c5a533cddae560a5b5f8c5f5131d5952eb89ebe1510b235ab91362f531b94",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/d41c5a533cddae560a5b5f8c5f5131d5952eb89ebe1510b235ab91362f531b94.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
