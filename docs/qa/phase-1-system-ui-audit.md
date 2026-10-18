@@ -46,7 +46,7 @@ The code components are present; complete end-to-end enforcement and negative cr
 
 The current filesystem route-source inventory inspected for the three Next.js apps contained **59 `page.*` entry files**: Web 29, Admin 19, People Operations 11. This is a source-entry count, not a count of unique user journeys or fully rendered screens. The Android navigation contract declares **34 destinations**. The route list and destinations are captured in [ui-screen-inventory.csv](./ui-screen-inventory.csv).
 
-A previous UI localization artifact documented **50 routes** from an earlier revision (Web 23, Admin 17, People Operations 10). That count must be regenerated and reconciled on the exact current SHA using `scripts/inventory_ui_routes.mjs`; differences may reflect revision and route-definition changes. Do not silently treat the older number as current coverage.
+A previous UI localization artifact documented **50 page routes** from commit `36b38fa34c1b602e4f7238d43300a48023b3e011` (Web 23, Admin 17, People Operations 10). I inspected `scripts/inventory_ui_routes.mjs` and independently recomputed its route-normalization rules against the complete, non-truncated recursive tree at audit revision `5c4560c510c04f6c777071a887ec52cfcc711c28`: current counts are **59 page entries / 59 primary pages / 0 route-handler files / 0 duplicate primary routes** (Web 29, Admin 19, People Operations 11). All 59 Next.js page paths in the CSV matched the corresponding files in that tree. This was a source-tree recomputation, **not** execution of the Node generator or a newly uploaded CI artifact; the exact-head generator/test output remains a Phase 1 closure task.
 
 ### 4.1 Student and Parent Web
 
@@ -170,7 +170,7 @@ No browser E2E framework was positively identified in the inspected package mani
 
 | ID | Priority | Finding | Closure evidence |
 |---|---|---|---|
-| QA1-01 | P1 | Older localization route artifact records 50 routes; current source-root scan counted 59 page entry files using a different revision/definition. | Regenerate inventory on exact SHA; reconcile page files vs normalized routes, aliases, wrappers, interceptors/route groups, route handlers and visible navigation. |
+| QA1-01 | P1 | Source-level count is now reconciled: the older 50-page artifact is from commit `36b38fa...`; current-tree route-generator logic yields 59 primary pages, 0 handlers and no duplicate primary routes. | Still run `node --test scripts/inventory_ui_routes.test.mjs` and `node scripts/inventory_ui_routes.mjs` against the exact current main SHA, retain the artifact, and reconcile the runtime navigation aliases/wrappers. |
 | QA1-02 | P1 | Current-main CI health has not been confirmed on the exact latest head. | Required workflow checks for exact audited SHA, with failures investigated and linked. |
 | QA1-03 | P1 | Source inventory is not yet per-control behavior documentation or browser/device certification. | Every screen has actions, expected results, validations, success/error/empty/loading states, API dependencies, permissions, responsive/a11y evidence and linked test IDs. |
 | QA1-04 | P1 | No global `is_test_data` marker was found by the initial text search; a payroll-specific `test_run_id` is unrelated to proving QA-pack ownership. | Complete schema/entity/migration search and approve a safe run-scoped ownership/cleanup model. |
@@ -196,7 +196,8 @@ No browser E2E framework was positively identified in the inspected package mani
 
 ### Still required before Phase 1 sign-off
 
-- [ ] Re-run route inventory on the exact current main SHA and reconcile against this CSV and the existing localization tracker.
+- [x] Recompute current route normalization against the inventory-generator rules and reconcile all 59 page-file paths against the CSV; no missing or non-existent page paths were found.
+- [ ] Execute the actual Node route-inventory test and generator on the exact current main SHA; retain the generated artifact and update the historical localization tracker.
 - [ ] Inspect every route file and referenced component: controls, dialogs, tabs, handlers, client-side validation, loading/empty/error/success states, visible role conditions and API calls.
 - [ ] Trace all 34 Android destinations through Compose navigation and component composition; document lifecycle/back behavior and web parity.
 - [ ] Build route action → API method/path → authentication/permission → request/response → persistence model mapping.
