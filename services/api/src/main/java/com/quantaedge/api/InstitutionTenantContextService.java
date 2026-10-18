@@ -34,7 +34,7 @@ public class InstitutionTenantContextService {
    */
   private static final List<String> TENANT_REQUIRED_PREFIXES = List.of(
       // Legacy and current learner routes must share the same fail-closed tenant boundary.
-      "/api/v1/students/me",
+      "/api/v1/students/",
       "/api/v1/diagnostic",
       "/api/v1/recommendations",
       "/api/v1/learning/sessions",
@@ -164,7 +164,8 @@ public class InstitutionTenantContextService {
     // update only the authenticated parent's own child links; tenant learning/report/course APIs
     // remain protected below. An institution selector must not be used to grant the child a
     // membership as a side effect of profile creation or editing.
-    if (requestPath.equals("/api/v1/guardians/children")
+    if (requestPath.equals("/api/v1/students/preview")
+        || requestPath.equals("/api/v1/guardians/children")
         || requestPath.equals("/api/v1/guardians/children/archived")
         || requestPath.matches("^/api/v1/guardians/children/[0-9]+(?:/(?:restore|profile|credentials))?$")) {
       return false;
