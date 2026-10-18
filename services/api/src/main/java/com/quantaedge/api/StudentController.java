@@ -25,34 +25,38 @@ public class StudentController {
   public Map<String,Object> me(
       @RequestParam(required=false) Long courseId,
       @RequestParam(required=false) String programCode,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     context=authorization.requireStudent(context);
-    if(courseId==null && (programCode==null || programCode.isBlank())) return statsFor(context.studentId());
+    long institutionId=requireInstitution(tenant);
+    if(courseId==null && (programCode==null || programCode.isBlank()))
+      return learningMetrics.statsFor(context.studentId(),null,institutionId);
     List<Map<String,Object>> enrolled;
     if(courseId!=null) {
       enrolled=jdbc.queryForList("""
         select p.id,p.code,p.display_name
         from curriculum_program p
         join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.status='ACTIVE'
+          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
         where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
-        """,context.studentId(),courseId);
+        """,context.studentId(),institutionId,courseId);
     } else {
       enrolled=jdbc.queryForList("""
         select p.id,p.code,p.display_name
         from curriculum_program p
         join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.status='ACTIVE'
+          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
         where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
         order by p.id
-        """,context.studentId(),programCode.trim());
+        """,context.studentId(),institutionId,programCode.trim());
     }
     if(enrolled.size()!=1) throw new SecurityException(enrolled.isEmpty()
         ? "Active enrolment in this course is required."
         : "This course code is ambiguous; request course metrics by numeric course ID.");
     Map<String,Object> course=enrolled.getFirst();
     long stableCourseId=((Number)course.get("id")).longValue();
-    Map<String,Object> result=learningMetrics.statsFor(context.studentId(),stableCourseId);
+    Map<String,Object> result=learningMetrics.statsFor(context.studentId(),stableCourseId,institutionId);
     result.put("courseId",stableCourseId);
     result.put("programId",stableCourseId);
     result.put("programCode",course.get("code"));
@@ -60,9 +64,11 @@ public class StudentController {
     return result;
   }
 
-  // Source-compatible overload for internal callers and controller tests.
+  // Source-compatible overload for internal callers and controller tests. This overload is not
+  // mapped as an HTTP route; public calls always carry a resolved institution context.
   public Map<String,Object> me(AuthContext context) {
-    return me(null,null,context);
+    context=authorization.requireStudent(context);
+    return learningMetrics.statsFor(context.studentId());
   }
 
 
@@ -235,8 +241,11 @@ public class StudentController {
 
   @GetMapping("/{studentId}/lessons")
   public List<Map<String,Object>> lessons(@PathVariable long studentId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     if(context.studentId()==null || !context.studentId().equals(studentId))
       throw new SecurityException("Student access denied");
     return jdbc.queryForList("""
@@ -245,13 +254,22 @@ public class StudentController {
              l.sort_order,coalesce(p.status,'NOT_STARTED') as progress_status,coalesce(p.progress_percent,0) as progress_percent
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? and p.institution_id=?
+      join student_track_enrollment ste on ste.student_id=? and ste.institution_id=?
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true and s.program_id is null
         and c.code=(select class_code from student where id=?)
       order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,studentId,studentId,studentId);
+      """,studentId,institutionId,studentId,institutionId,studentId);
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() < 1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED", "Select the institution for learner metrics.");
+    }
+    return tenant.institutionId();
   }
 
   private Map<String,Object> statsFor(long studentId){
