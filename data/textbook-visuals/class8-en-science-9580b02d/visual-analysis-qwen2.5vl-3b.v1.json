@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 698,
+    "assets_selected": 700,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 695,
-    "assets_remaining": 1596,
-    "assets_completion_percent": 30.3,
+    "assets_analyzed": 697,
+    "assets_remaining": 1594,
+    "assets_completion_percent": 30.4,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 693,
+    "assets_skipped_from_checkpoint": 695,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:13:14Z"
+      "checkpointed_at": "2026-10-18T22:16:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:14:02Z"
+      "checkpointed_at": "2026-10-18T22:17:09Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:14:40Z"
+      "checkpointed_at": "2026-10-18T22:17:47Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20899,6 +20899,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T22:15:11Z"
+    },
+    {
+      "asset_id": "bdbb295169dc9dfcea530270",
+      "asset_sha256": "4cd3002c129be85d0e21e6aba30f2dc002e2e71e0e61c6718bb6e03551de2405",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 22,
+      "asset_path": "page-0022.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ddc7edc56fbf4d45a447e0d1ce38f9d08a6f69f56e6fe6d3c89ca4c836343608",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a science textbook discussing the evolution of scientific inquiry and the role of curiosity in learning.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Our journey with Curiosity, into the world of science continues\nin Grade 8. We hope you bring along the spirit of adventure and\nexploration that has guided us so far. In Grade 6, we discovered\nhow science begins with wonder, with simple “Why?” and\n“How?” questions about the world around us.\n\nIn Grad",
+          "Curiosity — Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Science",
+          "Investigation",
+          "Observation",
+          "Experimentation",
+          "Foundation of Knowledge",
+          "Real-world Puzzles",
+          "Kite",
+          "Root",
+          "Creative Thinking",
+          "Hidden Scientific Thoughts"
+        ],
+        "context_relation": "Introduction to the Investigative World of Science",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:22:39Z"
+    },
+    {
+      "asset_id": "7949eea27ffeca883bc6e095",
+      "asset_sha256": "4549ade642cc7e4c05b70812a39cef2a78c639378f4f87f434f4f23a59b87c03",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/4549ade642cc7e4c05b70812a39cef2a78c639378f4f87f434f4f23a59b87c03.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a057e2c6018e124e5fd244c6af8ed543e2ec528481d9333e8332571fcc239c46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a stormy beach with people running away from lightning strikes.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "storm",
+          "beach",
+          "lightning",
+          "people",
+          "running",
+          "danger"
+        ],
+        "context_relation": "The image depicts a natural disaster scenario, emphasizing the importance of safety during such events.",
+        "limitations": [
+          "The image does not provide specific details about the types of people or their actions.",
+          "The image does not include any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:24:20Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 705,
-    "successful_visual_analyses": 698,
-    "missing_visual_analyses": 1586,
+    "raw_analysis_result_rows": 707,
+    "successful_visual_analyses": 700,
+    "missing_visual_analyses": 1584,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1593,
+    "unresolved_count": 1591,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27740,9 +27740,35 @@
       "asset_path": "page-0022.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a science textbook discussing the evolution of scientific inquiry and the role of curiosity in learning.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Our journey with Curiosity, into the world of science continues\nin Grade 8. We hope you bring along the spirit of adventure and\nexploration that has guided us so far. In Grade 6, we discovered\nhow science begins with wonder, with simple “Why?” and\n“How?” questions about the world around us.\n\nIn Grad",
+          "Curiosity — Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Science",
+          "Investigation",
+          "Observation",
+          "Experimentation",
+          "Foundation of Knowledge",
+          "Real-world Puzzles",
+          "Kite",
+          "Root",
+          "Creative Thinking",
+          "Hidden Scientific Thoughts"
+        ],
+        "context_relation": "Introduction to the Investigative World of Science",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27758,9 +27784,26 @@
       "asset_path": "assets/4549ade642cc7e4c05b70812a39cef2a78c639378f4f87f434f4f23a59b87c03.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a stormy beach with people running away from lightning strikes.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "storm",
+          "beach",
+          "lightning",
+          "people",
+          "running",
+          "danger"
+        ],
+        "context_relation": "The image depicts a natural disaster scenario, emphasizing the importance of safety during such events.",
+        "limitations": [
+          "The image does not provide specific details about the types of people or their actions.",
+          "The image does not include any text or labels that provide additional context or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
