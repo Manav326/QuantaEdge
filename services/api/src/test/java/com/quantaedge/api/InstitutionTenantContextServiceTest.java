@@ -31,6 +31,9 @@ class InstitutionTenantContextServiceTest {
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/42/lessons"));
     assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/preview"));
+    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile"));
+    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile-photo"));
+    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/language"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/students/me/profile"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic"));
     assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext("/api/v1/diagnostic/attempts/12/submit"));
