@@ -122,3 +122,7 @@ Resume preflight uses the shared `missing_artifact(message, expected_reference)`
 ### Coordinator regression-test correction (18 October 2026)
 
 The per-class continuation markers are generated from the fixed class set `(6, 7, 8)` using the same `class-{grade}.v1.json` naming pattern. The regression test checks that loop and naming pattern rather than requiring three duplicated string literals. Layer 4–5 remains resumable from the existing source-bound Git/GHCR checkpoints; this test adjustment does not alter any completion gate.
+
+### Class 6 checkpoint restore fix (18 October 2026)
+
+The Class 6 resume run exposed a format mismatch in the Layer 1 inventory restore step: current preparation bundles store files under a book-specific `slug-layer1/` directory and include `layer1-bundle-manifest.v1.json`, while the consumer assumed `inventory/` at archive root. The restore step now accepts the two known layouts, uses the canonical path-safe extractor for wrapped archives, checks the immutable GHCR tag against the embedded preparation fingerprint, validates the embedded per-file manifest against the current source manifest and page JSONL, and restores only verified inventory files. Unknown/mixed layouts, source/context mismatches, path traversal, or file-hash mismatches still fail safely.
