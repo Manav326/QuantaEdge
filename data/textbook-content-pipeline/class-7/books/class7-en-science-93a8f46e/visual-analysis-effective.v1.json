@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "281b335f4354785bdd317363aaa1c7a31ad5006d78e660f7b8717470a6764c09",
+  "raw_analysis_sha256": "c71b61294030b2f9518d83105098e402e4151ef28a0cdc320f248cabf85e31f8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:02:22Z",
+      "checkpointed_at": "2026-10-18T07:05:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:02:42Z",
+      "checkpointed_at": "2026-10-18T07:05:26Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -40138,6 +40138,178 @@
         "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and how they relate to the presence of acids.",
         "limitations": [
           "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8d9ce68ff1b48af382c3cf91",
+      "asset_sha256": "8b538ec7c57220024d0b707b0763aeb92c2d3a3f000ef3f41bf5560ac58df30d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/8b538ec7c57220024d0b707b0763aeb92c2d3a3f000ef3f41bf5560ac58df30d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2, specifically that they taste sour.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2, specifically that they taste sour.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:06:08Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2, specifically that they taste sour.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2, specifically that they taste sour.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1e949a545a2b86368852f1f3",
+      "asset_sha256": "cf2bdd2cef0c73a19debafaca8f8d6e88e646ed97124c995aac5676a4ace6864",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/cf2bdd2cef0c73a19debafaca8f8d6e88e646ed97124c995aac5676a4ace6864.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and red border with a neutral background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and their relation to acids.",
+        "limitations": [
+          "The image does not provide any visual information beyond the text and border.",
+          "The text is incomplete and does not provide a full understanding of the topic."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:06:47Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow and red border with a neutral background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and their relation to acids.",
+        "limitations": [
+          "The image does not provide any visual information beyond the text and border.",
+          "The text is incomplete and does not provide a full understanding of the topic."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e4a2788f6422039fa3ebd231",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:06:53Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 707,
-    "successful_visual_analyses": 697,
-    "missing_visual_analyses": 6781,
+    "raw_analysis_result_rows": 710,
+    "successful_visual_analyses": 700,
+    "missing_visual_analyses": 6778,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6791,
+    "unresolved_count": 6788,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36934,9 +36934,31 @@
       "asset_path": "assets/8b538ec7c57220024d0b707b0763aeb92c2d3a3f000ef3f41bf5560ac58df30d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2, specifically that they taste sour.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2, specifically that they taste sour.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36952,9 +36974,31 @@
       "asset_path": "assets/cf2bdd2cef0c73a19debafaca8f8d6e88e646ed97124c995aac5676a4ace6864.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and red border with a neutral background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "Group A",
+          "Taste",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and their relation to acids.",
+        "limitations": [
+          "The image does not provide any visual information beyond the text and border.",
+          "The text is incomplete and does not provide a full understanding of the topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36970,9 +37014,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
