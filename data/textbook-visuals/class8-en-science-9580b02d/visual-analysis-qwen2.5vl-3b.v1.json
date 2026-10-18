@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 700,
+    "assets_selected": 702,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 697,
-    "assets_remaining": 1594,
-    "assets_completion_percent": 30.4,
+    "assets_analyzed": 699,
+    "assets_remaining": 1592,
+    "assets_completion_percent": 30.5,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 695,
+    "assets_skipped_from_checkpoint": 697,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:16:21Z"
+      "checkpointed_at": "2026-10-18T22:25:31Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:17:09Z"
+      "checkpointed_at": "2026-10-18T22:26:19Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:17:47Z"
+      "checkpointed_at": "2026-10-18T22:26:57Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20980,6 +20980,68 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T22:24:20Z"
+    },
+    {
+      "asset_id": "53e18c26b8e2b1c5674a92cc",
+      "asset_sha256": "253bdf2e447e92f0484ca693eaef2d4e524ab97b2e1723e171043d8dfc84dbd8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/253bdf2e447e92f0484ca693eaef2d4e524ab97b2e1723e171043d8dfc84dbd8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a057e2c6018e124e5fd244c6af8ed543e2ec528481d9333e8332571fcc239c46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric heater with glowing heating elements.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "electric heater",
+          "heating elements",
+          "glowing",
+          "energy conversion"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "no specific question or answer is provided",
+          "the image does not contain any text or labels"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:28:34Z"
+    },
+    {
+      "asset_id": "d10a2f6369f855c4be14949a",
+      "asset_sha256": "5c086e8e88b18ebaf5934390a61035d66ee5af4d866fa71dd7832ad3505929bb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/5c086e8e88b18ebaf5934390a61035d66ee5af4d866fa71dd7832ad3505929bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a057e2c6018e124e5fd244c6af8ed543e2ec528481d9333e8332571fcc239c46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red and white electric iron with a black handle and a white cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of household appliances and their uses.",
+        "limitations": [
+          "The image does not provide specific details about the iron's brand or model."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:30:08Z"
     }
   ]
 }
