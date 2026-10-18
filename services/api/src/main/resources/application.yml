@@ -37,6 +37,10 @@ app:
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
   institution:
+    # Generic tenant context policy. Keep the default blank for a shared routed deployment.
+    # A deployment default is a selector fallback, not a membership or entitlement grant.
+    default-code: ${APP_DEFAULT_INSTITUTION_CODE:}
+    context-mode: ${APP_INSTITUTION_CONTEXT_MODE:ROUTED}
     code-encryption-key: ${APP_INSTITUTION_CODE_ENCRYPTION_KEY:}
   auth:
     google-client-id: ${APP_AUTH_GOOGLE_CLIENT_ID:}

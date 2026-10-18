@@ -57,6 +57,68 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void routedModeUsesConfiguredDefaultOnlyWhenNoExplicitTenantIsSelected() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+    InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, " school-a ", " routed ");
+
+    assertEquals("SCHOOL-A", service.selectTenantCode(null));
+    assertEquals("SCHOOL-A", service.selectTenantCode("school-a"));
+    assertEquals("SCHOOL-B", service.selectTenantCode("school-b"));
+    assertEquals("ROUTED", service.contextMode());
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void routedModeWithoutDefaultRequiresExplicitTenantForProtectedRoutes() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+    InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, "", "ROUTED");
+
+    assertNull(service.selectTenantCode(null));
+    InstitutionTenantContextService.InvalidInstitutionContextException error =
+        assertThrows(InstitutionTenantContextService.InvalidInstitutionContextException.class,
+            () -> service.requireSelector(null));
+    assertEquals("INSTITUTION_CONTEXT_REQUIRED", error.errorCode());
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void fixedModePinsDeploymentToItsConfiguredInstitution() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+    InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, " school-a ", "FIXED");
+
+    assertEquals("SCHOOL-A", service.selectTenantCode(null));
+    assertEquals("SCHOOL-A", service.selectTenantCode("school-a"));
+    InstitutionTenantContextService.InvalidInstitutionContextException error =
+        assertThrows(InstitutionTenantContextService.InvalidInstitutionContextException.class,
+            () -> service.selectTenantCode("SCHOOL-B"));
+    assertEquals(403, error.statusCode());
+    assertEquals("INSTITUTION_CONTEXT_MISMATCH", error.errorCode());
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void fixedModeCannotStartWithoutDefaultInstitution() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+
+    IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+        () -> new InstitutionTenantContextService(jdbc, "", "FIXED"));
+
+    org.junit.jupiter.api.Assertions.assertTrue(error.getMessage().contains("APP_DEFAULT_INSTITUTION_CODE"));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void rejectsUnknownContextModesAndMalformedConfiguredDefaults() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+
+    assertThrows(IllegalArgumentException.class,
+        () -> new InstitutionTenantContextService(jdbc, "SCHOOL-A", "MAGIC"));
+    assertThrows(IllegalArgumentException.class,
+        () -> new InstitutionTenantContextService(jdbc, "not a code", "ROUTED"));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
   void rejectsMalformedCodeBeforeConsultingTheDatabase() {
     JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
     InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc);

@@ -246,12 +246,13 @@ public class AuthFilter extends OncePerRequestFilter {
             && acceptsLearnerInstitutionSelector(uri, workspace)) {
           String requestedInstitutionCode = request.getHeader(InstitutionTenantContextService.HEADER_NAME);
           try {
+            String selectedInstitutionCode = institutionTenantContextService.selectTenantCode(requestedInstitutionCode);
             InstitutionTenantContext tenantContext;
             if (InstitutionTenantContextService.requiresInstitutionContext(uri)) {
-              tenantContext = institutionTenantContextService.requireSelector(requestedInstitutionCode);
+              tenantContext = institutionTenantContextService.requireSelector(selectedInstitutionCode);
               institutionTenantContextService.assertActiveMembership(context, tenantContext);
             } else {
-              tenantContext = institutionTenantContextService.resolve(requestedInstitutionCode);
+              tenantContext = institutionTenantContextService.resolve(selectedInstitutionCode);
             }
             if (tenantContext != null) {
               request.setAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE, tenantContext);

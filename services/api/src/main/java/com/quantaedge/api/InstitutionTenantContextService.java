@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +49,63 @@ public class InstitutionTenantContextService {
   );
 
   private final JdbcTemplate jdbc;
+  private final String defaultInstitutionCode;
+  private final String contextMode;
 
-  public InstitutionTenantContextService(JdbcTemplate jdbc) {
+  @Autowired
+  public InstitutionTenantContextService(
+      JdbcTemplate jdbc,
+      @Value("${app.institution.default-code:}") String configuredDefaultCode,
+      @Value("${app.institution.context-mode:ROUTED}") String configuredContextMode) {
     this.jdbc = jdbc;
+    String mode = configuredContextMode == null ? "ROUTED" : configuredContextMode.trim().toUpperCase(Locale.ROOT);
+    if (!mode.equals("ROUTED") && !mode.equals("FIXED")) {
+      throw new IllegalArgumentException("APP_INSTITUTION_CONTEXT_MODE must be ROUTED or FIXED.");
+    }
+    this.contextMode = mode;
+    this.defaultInstitutionCode = normalizeOptionalCode(configuredDefaultCode, "default institution code");
+    if ("FIXED".equals(this.contextMode) && this.defaultInstitutionCode == null) {
+      throw new IllegalArgumentException(
+          "APP_DEFAULT_INSTITUTION_CODE is required when APP_INSTITUTION_CONTEXT_MODE=FIXED.");
+    }
   }
+
+  /** Keeps existing focused unit tests source-compatible with a routed, no-default deployment. */
+  public InstitutionTenantContextService(JdbcTemplate jdbc) {
+    this(jdbc, "", "ROUTED");
+  }
+
+  private static String normalizeOptionalCode(String raw, String settingName) {
+    if (raw == null || raw.isBlank()) return null;
+    String normalized = raw.trim().toUpperCase(Locale.ROOT);
+    if (!TENANT_CODE.matcher(normalized).matches()) {
+      throw new IllegalArgumentException("Configured " + settingName + " is invalid.");
+    }
+    return normalized;
+  }
+
+  /**
+   * Chooses the tenant selector using generic deployment policy. ROUTED mode allows an explicit
+   * school route/build context and uses the configured default only as a compatibility fallback.
+   * FIXED mode pins this deployment to one institution and rejects attempts to select another.
+   * In either mode the returned code still has to resolve to an active institution and pass
+   * membership/course/offer checks; this method never grants access.
+   */
+  public String selectTenantCode(String requestedCode) {
+    String requested = normalizeOptionalCode(requestedCode, "requested institution code");
+    if ("FIXED".equals(contextMode)) {
+      if (requested != null && !requested.equals(defaultInstitutionCode)) {
+        throw new InvalidInstitutionContextException(
+            403, "INSTITUTION_CONTEXT_MISMATCH",
+            "This deployment is configured for a different institution.");
+      }
+      return defaultInstitutionCode;
+    }
+    return requested != null ? requested : defaultInstitutionCode;
+  }
+
+  public String contextMode() { return contextMode; }
+  public String defaultInstitutionCode() { return defaultInstitutionCode; }
 
   /** Returns null only when the request did not select a tenant; it never guesses a default. */
   public InstitutionTenantContext resolve(String requestedCode) {
@@ -99,12 +154,13 @@ public class InstitutionTenantContextService {
   }
 
   public InstitutionTenantContext requireSelector(String requestedCode) {
-    if (requestedCode == null || requestedCode.isBlank()) {
+    String selectedCode = selectTenantCode(requestedCode);
+    if (selectedCode == null || selectedCode.isBlank()) {
       throw new InvalidInstitutionContextException(
           400, "INSTITUTION_CONTEXT_REQUIRED",
-          "Select the institution link for this learning request. No default institution is assumed.");
+          "Select the institution link for this learning request. No default institution is configured.");
     }
-    InstitutionTenantContext tenant = resolve(requestedCode);
+    InstitutionTenantContext tenant = resolve(selectedCode);
     if (tenant == null) {
       throw new InvalidInstitutionContextException(
           400, "INSTITUTION_CONTEXT_REQUIRED", "An institution context is required.");
