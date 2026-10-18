@@ -644,7 +644,8 @@ jobs:
             --package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
             --run-id "$GITHUB_RUN_ID" \
             --model "$VISION_MODEL" \
-            --batch-size "$CHECKPOINT_BATCH_SIZE"
+            --batch-size "$CHECKPOINT_BATCH_SIZE" \
+            --request-timeout 300
 
       - name: Record this class completion with Layer 5 evidence for automatic resume
         if: success() && env.ANALYSIS_MODE == 'resume_layers_4_5'
