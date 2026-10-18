@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1027,
-    "successful_visual_analyses": 1016,
-    "missing_visual_analyses": 6461,
+    "raw_analysis_result_rows": 1030,
+    "successful_visual_analyses": 1019,
+    "missing_visual_analyses": 6458,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6472,
+    "unresolved_count": 6469,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48404,9 +48404,28 @@
       "asset_path": "assets/c4957e1b0169f17e35d7603653883e36b6ed58404b5b092a4d7a58ac9e14788c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The text is discussing an experiment where vinegar and soap solution are used on eggshells or marble to observe the formation of bubbles.",
+        "limitations": [
+          "The image does not show the experiment itself, only the text describing it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48422,9 +48441,16 @@
       "asset_path": "assets/52737a95deed18021ccafefd4f232e336aa89b03f55b94fad5d419d587c8cb8d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A curved line graph with a light blue background.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48440,9 +48466,28 @@
       "asset_path": "assets/fececb83cabdfdd1417b7e679792f5bbc9b6344283bc91033e6091b7b68abca2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER   Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The image is a page from a textbook that discusses an experiment involving vinegar and soap solution on eggshells or marble.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
