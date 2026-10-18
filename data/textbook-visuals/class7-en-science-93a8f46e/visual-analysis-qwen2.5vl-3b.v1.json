@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 943,
+    "assets_selected": 946,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 941,
-    "assets_remaining": 6547,
+    "assets_analyzed": 944,
+    "assets_remaining": 6544,
     "assets_completion_percent": 12.6,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 938,
+    "assets_skipped_from_checkpoint": 941,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:10:21Z"
+      "checkpointed_at": "2026-10-18T18:14:32Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:10:42Z"
+      "checkpointed_at": "2026-10-18T18:14:53Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -35027,6 +35027,135 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T18:13:50Z"
+    },
+    {
+      "asset_id": "b27e346b98dc220bc803ddb0",
+      "asset_sha256": "eda41e04a176a0afb9c96946a18d7016e52df1c4cfeb25593cd3757d614b7f47",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/eda41e04a176a0afb9c96946a18d7016e52df1c4cfeb25593cd3757d614b7f47.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Soil with organic matter and a plant growing in it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "19",
+          "If the soil is basic, organic matter like manure and composted",
+          "leaves are added to it. Organic matter releases acids that",
+          "neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in",
+          "it may still show poor health, which can be due to the deficiency",
+          "of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil",
+          "Organic matter",
+          "Manure",
+          "Composted leaves",
+          "Acids",
+          "Neutralisation",
+          "Soil pH",
+          "Plants",
+          "Nutrients",
+          "Soil health"
+        ],
+        "context_relation": "Soil health and nutrient deficiency",
+        "limitations": [
+          "The image does not show the actual soil or plants."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:15:39Z"
+    },
+    {
+      "asset_id": "cf6d6af776de15a9a2f984f6",
+      "asset_sha256": "ffdf84fdd606b38ee2143a086310711b38640b9f1c9e73361c8dc0383a6c3921",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/ffdf84fdd606b38ee2143a086310711b38640b9f1c9e73361c8dc0383a6c3921.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a rope or string, possibly made of a natural fiber.",
+        "visual_type": "photo",
+        "visible_text": [
+          "19",
+          "If the soil is basic, organic matter like manure and composted",
+          "leaves are added to it. Organic matter releases acids that",
+          "neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in",
+          "Neutralit may still show poor health, which can be due to the deﬁciency",
+          "of nutrients in the s"
+        ],
+        "concepts": [
+          "soil",
+          "organic matter",
+          "acids",
+          "neutral",
+          "plants",
+          "nutrients"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image is a close-up of a rope or string, not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:16:23Z"
+    },
+    {
+      "asset_id": "0327ada90e7457c17e57b037",
+      "asset_sha256": "fe18079c905099e8a0d0fc1cc676100052c68a47d4aa5f3816fb23270d6292f5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/fe18079c905099e8a0d0fc1cc676100052c68a47d4aa5f3816fb23270d6292f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a piece of paper and gesturing with his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Plants",
+          "Nutrients",
+          "Soil health"
+        ],
+        "context_relation": "The image is related to the text discussing the effects of soil conditions on plant health.",
+        "limitations": [
+          "The image does not provide specific details about the soil conditions or the plants."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:17:06Z"
     }
   ]
 }
