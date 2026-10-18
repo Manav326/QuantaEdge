@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "45da902031c6f5e53ff8034f422cd3d330e27ddf2f025c805de0c5ff7f43f3d7",
+  "raw_analysis_sha256": "d78a872f456c407e74e4a0ea28c3b42e14a178bd7c8ef8d44eb78ac817ce56d8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T13:48:34Z",
+      "checkpointed_at": "2026-10-18T13:56:10Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -30958,6 +30958,190 @@
         "context_relation": "The page is likely a blank page in the textbook.",
         "limitations": [
           "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6b140a042cf19dd99f2f814b",
+      "asset_sha256": "c2c0b3642c21af18e52d13eb1b20716e64392ca61612bf4f656ce5064f642be1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/c2c0b3642c21af18e52d13eb1b20716e64392ca61612bf4f656ce5064f642be1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:57:42Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "14eb45f3a66d67c508d6044a",
+      "asset_sha256": "fbed415b63307fed7b198df9ef93df3c05779ad5e67319899c5e2aafa3cee5aa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/fbed415b63307fed7b198df9ef93df3c05779ad5e67319899c5e2aafa3cee5aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No specific content or visual elements are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:59:15Z",
+      "effective_analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No specific content or visual elements are present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "99b1132a5d47ae4393032634",
+      "asset_sha256": "d8157e0bb03f787aeba90dc8c7c64db066ac658f94de90e74b14802c2c3d1709",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/d8157e0bb03f787aeba90dc8c7c64db066ac658f94de90e74b14802c2c3d1709.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in the textbook.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:00:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in the textbook.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5014a3b59b99233b931ccfe6",
+      "asset_sha256": "b20675ee398d4f803232ea659d4d93147de74e8e6fca5a310b9b1693873e5b14",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/b20675ee398d4f803232ea659d4d93147de74e8e6fca5a310b9b1693873e5b14.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page discussing questions about the Earth and beyond.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We will have an almost unending list of questions about everything on Earth as we further explore this book. But why limit our questions to the Earth alone? We can ask questions on things beyond—the Sun, the Moon, and the millions of stars that shine in the sky!",
+          "Whether you are learning about the structure of a leaf, discovering how things move, or separating the skin of a peanut seed, we hope each chapter of this book will ignite",
+          "to find answers"
+        ],
+        "concepts": [
+          "Questions about the Earth",
+          "Questions about the Sun",
+          "Questions about the Moon",
+          "Questions about stars",
+          "Learning about the structure of a leaf",
+          "Discovering how things move",
+          "Separating the skin of a peanut seed"
+        ],
+        "context_relation": "The page discusses the idea of exploring questions beyond the Earth, including celestial bodies and natural phenomena.",
+        "limitations": [
+          "The page does not provide specific examples or details about the questions or topics covered in the book."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:02:32Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page discussing questions about the Earth and beyond.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We will have an almost unending list of questions about everything on Earth as we further explore this book. But why limit our questions to the Earth alone? We can ask questions on things beyond—the Sun, the Moon, and the millions of stars that shine in the sky!",
+          "Whether you are learning about the structure of a leaf, discovering how things move, or separating the skin of a peanut seed, we hope each chapter of this book will ignite",
+          "to find answers"
+        ],
+        "concepts": [
+          "Questions about the Earth",
+          "Questions about the Sun",
+          "Questions about the Moon",
+          "Questions about stars",
+          "Learning about the structure of a leaf",
+          "Discovering how things move",
+          "Separating the skin of a peanut seed"
+        ],
+        "context_relation": "The page discusses the idea of exploring questions beyond the Earth, including celestial bodies and natural phenomena.",
+        "limitations": [
+          "The page does not provide specific examples or details about the questions or topics covered in the book."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
