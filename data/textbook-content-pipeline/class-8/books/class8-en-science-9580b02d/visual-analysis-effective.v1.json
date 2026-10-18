@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1b9175d2ac377439b54fcc4ba28885dd8ae07b4a4b934d69df79934aa474cecf",
+  "raw_analysis_sha256": "1f9b70ca1ca62b3c23a39bf823cb6b52bd527f77f8626238a0764f28a3d346a8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,12 +1790,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first",
           "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
@@ -1805,40 +1804,29 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive",
+          "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety first",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or details about the activities or questions."
+          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:10:50Z",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:13:45Z",
       "effective_analysis": {
-        "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first",
           "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
@@ -1848,26 +1836,16 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive",
+          "inclusive nature",
           "safety precautions",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety first",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts",
+          "ever heard of",
+          "step further",
           "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or details about the activities or questions."
+          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -2640,24 +2618,34 @@
         ],
         "concepts": [
           "scientific heritage",
+          "scientific temper",
+          "personality",
+          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Snapshots",
-          "Keep the curiosity alive",
+          "Indian and international scientists",
           "NEP 2020",
+          "Snapshots",
           "Keywords",
-          "scientific activities"
+          "scientific activities",
+          "curiosity",
+          "exercises",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "competencies",
+          "evaluation"
         ],
-        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
+          "The page does not provide specific examples or details about the exercises or the content of the chapters."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:11:37Z",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:17:42Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -2671,17 +2659,27 @@
         ],
         "concepts": [
           "scientific heritage",
+          "scientific temper",
+          "personality",
+          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Snapshots",
-          "Keep the curiosity alive",
+          "Indian and international scientists",
           "NEP 2020",
+          "Snapshots",
           "Keywords",
-          "scientific activities"
+          "scientific activities",
+          "curiosity",
+          "exercises",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "competencies",
+          "evaluation"
         ],
-        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
+          "The page does not provide specific examples or details about the exercises or the content of the chapters."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -4792,21 +4790,43 @@
     {
       "asset_id": "03831de7bf623697fae50cbd",
       "asset_sha256": "e44c91c3cd496ae586c2da8a22401d78fb7a7a210fd371863903bc1e3fd6f5a9",
-      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 10,
       "asset_path": "assets/e44c91c3cd496ae586c2da8a22401d78fb7a7a210fd371863903bc1e3fd6f5a9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and orange gradient background with no visible text or objects.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation to the image is provided.",
+        "limitations": [
+          "No visible text or objects are present in the image.",
+          "The background is a gradient with no specific content or objects."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:18:56Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow and orange gradient background with no visible text or objects.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation to the image is provided.",
+        "limitations": [
+          "No visible text or objects are present in the image.",
+          "The background is a gradient with no specific content or objects."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -6190,21 +6210,41 @@
     {
       "asset_id": "addf4b5efb155dd4ef00e456",
       "asset_sha256": "dba5dc70d18c66cf3d7e4f8859591d577f6c1b0cf3346e1e41e95c4bc1e1f63f",
-      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 10,
       "asset_path": "assets/dba5dc70d18c66cf3d7e4f8859591d577f6c1b0cf3346e1e41e95c4bc1e1f63f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or separator for the page, possibly used to create a clean and professional look.",
+        "limitations": [
+          "The image does not contain any specific content or information that can be analyzed for educational content editing. It is a simple background design."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:20:19Z",
+      "effective_analysis": {
+        "visual_summary": "A long horizontal line with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or separator for the page, possibly used to create a clean and professional look.",
+        "limitations": [
+          "The image does not contain any specific content or information that can be analyzed for educational content editing. It is a simple background design."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -19432,6 +19472,50 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f7d57fcf33f5000cb9950550",
+      "asset_sha256": "c089d31e05100fd121f775df6efcd3c6e8777332774cc1ff174ddfc09d8936b9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c089d31e05100fd121f775df6efcd3c6e8777332774cc1ff174ddfc09d8936b9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T11:21:41Z",
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook, possibly a page with a gradient background.",
         "limitations": [
           "The image does not contain any specific content or text that can be analyzed for educational content editing."
         ]
