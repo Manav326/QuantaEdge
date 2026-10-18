@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 372,
-    "successful_visual_analyses": 368,
-    "missing_visual_analyses": 7116,
+    "raw_analysis_result_rows": 376,
+    "successful_visual_analyses": 372,
+    "missing_visual_analyses": 7112,
     "failed_visual_analyses": 4,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7120,
+    "unresolved_count": 7116,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -23461,9 +23461,19 @@
       "asset_path": "assets/afe4991e0f2f81d254977c3172097b32469d18742bb8b99daec8589375aa257a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a faint blue and green gradient in the top left corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images.",
+          "The visible text is not readable or relevant to the content of the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23479,9 +23489,27 @@
       "asset_path": "assets/8536441a744c6f7b7ef0c6e276daae2ad478ae29fd7af3fcc1428d9d2891ae13.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing changes in human bodies during the middle-school years.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "However, it isn’t just changes in materials around us that we see, or the hidden changes in water that we do not see. As we are growing, our bodies are changing as well. Especially around the middle-school years, our bodies are changing rapidly! Why? Not just us humans, there are life processes that",
+          "The text discusses changes in human bodies during the middle-school years, emphasizing the rapid changes and the importance of life processes for all animals."
+        ],
+        "concepts": [
+          "Changes in human bodies",
+          "Middle-school years",
+          "Rapid changes",
+          "Life processes",
+          "Essential for all animals"
+        ],
+        "context_relation": "The text is discussing the changes in human bodies during the middle-school years, emphasizing the importance of life processes for all animals.",
+        "limitations": [
+          "The text does not provide specific details about the changes in human bodies or the life processes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23497,9 +23525,16 @@
       "asset_path": "assets/232c84c7e9d3e8c1ff04575ba11c81b8258c8bf52c1b095711c2fc90267ff24d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white page with a green corner, possibly a full page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The text discusses changes in materials, water, and human bodies.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23515,9 +23550,18 @@
       "asset_path": "assets/4036936c9abfa5a368613d663cb0ea42687bfab420f675c47a63030dee395d66.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A wooden clock with a golden clock face.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a clock, possibly used to illustrate a passage about changes in materials or life processes.",
+        "limitations": [
+          "The image does not provide specific details about the passage it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
