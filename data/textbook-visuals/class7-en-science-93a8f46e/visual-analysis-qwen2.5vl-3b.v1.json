@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 985,
+    "assets_selected": 988,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 983,
-    "assets_remaining": 6505,
-    "assets_completion_percent": 13.1,
-    "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 980,
+    "assets_analyzed": 985,
+    "assets_remaining": 6503,
+    "assets_completion_percent": 13.2,
+    "assets_failed": 10,
+    "assets_skipped_from_checkpoint": 983,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:53:44Z"
+      "checkpointed_at": "2026-10-18T18:56:43Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:54:05Z"
+      "checkpointed_at": "2026-10-18T18:57:05Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -36468,6 +36468,90 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T18:56:00Z"
+    },
+    {
+      "asset_id": "b26483c3678c994325fe69ea",
+      "asset_sha256": "62d9d68f1547601f1300645ae3b5581cbf2f8f7e17f134a744488a604a1132d9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/62d9d68f1547601f1300645ae3b5581cbf2f8f7e17f134a744488a604a1132d9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a rope and ice cubes.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:57:39Z"
+    },
+    {
+      "asset_id": "37f5d541e4d497b43fdda769",
+      "asset_sha256": "0fd9574ee8dad8f9eca900943802ce2ebf6f67fb2e37609cae6b99bb193511b9",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/0fd9574ee8dad8f9eca900943802ce2ebf6f67fb2e37609cae6b99bb193511b9.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "f94aba68b96b9c5bf1f4b4b5",
+      "asset_sha256": "1f261fcd1061602c1ea35593d9f2ab38f51e791bf556ba131f08a3e99ada5ec8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/1f261fcd1061602c1ea35593d9f2ab38f51e791bf556ba131f08a3e99ada5ec8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A multiple-choice question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "Educational",
+        "limitations": [
+          "No specific image provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:59:57Z"
     }
   ]
 }
