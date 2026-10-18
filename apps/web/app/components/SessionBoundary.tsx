@@ -90,9 +90,18 @@ function institutionCodeForRequest(): string | null {
     }
   }
   if (path.startsWith('/student') || path.startsWith('/parent') || path.startsWith('/session')) {
-    try { return normalizedInstitutionCode(window.sessionStorage.getItem('qe.institution.brand-code.v1')); }
-    catch { return null; }
+    try {
+      const stored = normalizedInstitutionCode(window.sessionStorage.getItem('qe.institution.brand-code.v1'));
+      if (stored) return stored;
+    } catch { /* The QuantaEdge entry point below remains available when storage is blocked. */ }
   }
+
+  // The platform's own public URL is the QuantaEdge institution, not a global-user area.
+  // Tenant-branded routes/cookies above take precedence. Unknown custom domains fail closed
+  // rather than being silently assigned to QuantaEdge.
+  const hostname = window.location.hostname.toLowerCase();
+  const quantaEdgePlatformHosts = new Set(['qe.thinkwithsujeet.in', 'localhost', '127.0.0.1']);
+  if (quantaEdgePlatformHosts.has(hostname)) return 'QUANTA-EDGE';
   return null;
 }
 
