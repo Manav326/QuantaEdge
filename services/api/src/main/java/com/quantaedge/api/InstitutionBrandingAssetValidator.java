@@ -46,6 +46,9 @@ public final class InstitutionBrandingAssetValidator {
     }
 
     String contentType = detectRasterType(bytes);
+    if ("image/png".equals(contentType) && containsAnimatedPngControlChunk(bytes)) {
+      throw new IllegalArgumentException("Animated PNG images are not accepted. Upload a static PNG or JPEG.");
+    }
     int width;
     int height;
     try (ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(bytes))) {
@@ -84,6 +87,25 @@ public final class InstitutionBrandingAssetValidator {
     if (fileName.isBlank()) fileName = "branding-image." + (contentType.equals("image/png") ? "png" : "jpg");
 
     return new ValidatedAsset(bytes, contentType, digest, fileName, width, height);
+  }
+
+  private static boolean containsAnimatedPngControlChunk(byte[] bytes) {
+    int offset = 8; // Skip the PNG signature.
+    while (offset <= bytes.length - 12) {
+      long chunkLength = ((bytes[offset] & 0xffL) << 24)
+          | ((bytes[offset + 1] & 0xffL) << 16)
+          | ((bytes[offset + 2] & 0xffL) << 8)
+          | (bytes[offset + 3] & 0xffL);
+      if (chunkLength > bytes.length - offset - 12L) return false; // Decoder reports malformed framing.
+      boolean animationControl = bytes[offset + 4] == 'a' && bytes[offset + 5] == 'c'
+          && bytes[offset + 6] == 'T' && bytes[offset + 7] == 'L';
+      if (animationControl) return true;
+      boolean imageEnd = bytes[offset + 4] == 'I' && bytes[offset + 5] == 'E'
+          && bytes[offset + 6] == 'N' && bytes[offset + 7] == 'D';
+      if (imageEnd) return false;
+      offset += (int) chunkLength + 12;
+    }
+    return false;
   }
 
   private static String detectRasterType(byte[] bytes) {
