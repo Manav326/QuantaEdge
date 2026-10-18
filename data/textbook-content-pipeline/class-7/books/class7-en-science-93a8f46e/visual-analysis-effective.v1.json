@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a5c2a5eaa432376fbf770bcaddadebe0e77d5febfa103757eb6de611ddd4290a",
+  "raw_analysis_sha256": "e68cd59fe89fdfa0679421829272538b5e7b3c75cec8fddb2d86a22330b22a37",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:50:50Z",
+      "checkpointed_at": "2026-10-18T18:53:44Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:51:11Z",
+      "checkpointed_at": "2026-10-18T18:54:05Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -56898,6 +56898,124 @@
         "context_relation": "The image is a question from a textbook, specifically related to a chemistry topic.",
         "limitations": [
           "The image does not provide a diagram or visual representation of the question."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1d8698c6fd328145f871f01e",
+      "asset_sha256": "45daf6f6c70ca53b6916017940c5f7efdac37c88035993ce9ea2f594ca4c5846",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/45daf6f6c70ca53b6916017940c5f7efdac37c88035993ce9ea2f594ca4c5846.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:54:40Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c176da72d1c5ca7d00a85c59",
+      "asset_sha256": "dd7865d9c9cf4767b429f6eee9b1d84259f90c2d77ae7cef97c8374e920c6baa",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/dd7865d9c9cf4767b429f6eee9b1d84259f90c2d77ae7cef97c8374e920c6baa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a rope and a tray.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any context or question related to the visible text.",
+        "limitations": [
+          "The image does not contain any text or question related to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:55:17Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a rope and a tray.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any context or question related to the visible text.",
+        "limitations": [
+          "The image does not contain any text or question related to the visible text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "348ad9d7de1ff1365524f7f3",
+      "asset_sha256": "845f44e5753328f15b8a6e89149eaf5b5763ff2ad79fadf09e0469d92e3d610c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/845f44e5753328f15b8a6e89149eaf5b5763ff2ad79fadf09e0469d92e3d610c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a person standing on a rope, with ice cubes arranged in a pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or question related to the visible elements.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context. The visible elements are a person standing on a rope and ice cubes arranged in a pattern. The image does not depict a question or answer related to the visible elements. The image does not provide any infor",
+          "The image does not contain any text or labels that provide additional information or context. The visible elements are a person standing on a rope and ice cubes arranged in a pattern. The image does not depict a question or answer related to the visible elements. The image does not provide any infor"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:56:00Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a person standing on a rope, with ice cubes arranged in a pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any direct context or question related to the visible elements.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context. The visible elements are a person standing on a rope and ice cubes arranged in a pattern. The image does not depict a question or answer related to the visible elements. The image does not provide any infor",
+          "The image does not contain any text or labels that provide additional information or context. The visible elements are a person standing on a rope and ice cubes arranged in a pattern. The image does not depict a question or answer related to the visible elements. The image does not provide any infor"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
