@@ -432,9 +432,11 @@ public class CertificateController {
         where p.code='CLASS_' || c.code and p.curriculum_version='CURRENT'
           and p.status='ACTIVE'
         """,Long.class,ownClass,studentId);
-      if(activeClassCourses.size()!=1)
-        throw new SecurityException("Active enrolment in your matching Class "+ownClass+" course is required for a course certificate.");
-      courseId=activeClassCourses.getFirst();
+      if(activeClassCourses.size()>1)
+        throw new SecurityException("Select the matching Class "+ownClass+" course before issuing a certificate.");
+      if(activeClassCourses.size()==1) courseId=activeClassCourses.getFirst();
+      // With no active course, continue so durable existing certificates can be returned.
+      // New Class 6-8 achievements are still rejected by their course-scoped eligibility query.
     }
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
