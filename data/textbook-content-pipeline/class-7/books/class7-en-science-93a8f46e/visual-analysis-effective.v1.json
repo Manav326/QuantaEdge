@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "636c2f4034e6987516a2ffcc0749f80644e54f09dd25d7c6e69ff77cf628d0f0",
+  "raw_analysis_sha256": "507878c9bdecbc6b210a3db3b47db3dad31a526b1f005eba7b4c03dd463e6f39",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T12:56:04Z",
+      "checkpointed_at": "2026-10-18T13:01:47Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -43776,6 +43776,296 @@
         "limitations": [
           "The image does not provide any specific information or context related to the text.",
           "The image is a standalone illustration and does not represent any specific data or information from the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a42080fb59b18e34990e9858",
+      "asset_sha256": "849f8758c0844aa16c26da4aaa0d64da11457e110e4084b6f249ab45beb99ef9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/849f8758c0844aa16c26da4aaa0d64da11457e110e4084b6f249ab45beb99ef9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Preparing extracts",
+          "Testing substances",
+          "Vegetables",
+          "Fruits",
+          "Flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The page discusses the use of various natural substances as indicators for testing acidity and basicity.",
+        "limitations": [
+          "The page does not provide specific instructions for preparing extracts or testing substances.",
+          "The page does not include any visual aids or diagrams to support the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:03:17Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Preparing extracts",
+          "Testing substances",
+          "Vegetables",
+          "Fruits",
+          "Flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The page discusses the use of various natural substances as indicators for testing acidity and basicity.",
+        "limitations": [
+          "The page does not provide specific instructions for preparing extracts or testing substances.",
+          "The page does not include any visual aids or diagrams to support the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e5a7b06501f810b25bfac2e8",
+      "asset_sha256": "1169ae894c8ec43faf1acf65bcf3216fdc6c5dfc36f405d9e35b5d370f965e9d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/1169ae894c8ec43faf1acf65bcf3216fdc6c5dfc36f405d9e35b5d370f965e9d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a magnifying glass, examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "magnifying glass",
+          "examine",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The image is related to the text discussing the use of various substances as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the substances being used or the process of preparing the extract and testing them."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:04:48Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a magnifying glass, examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "magnifying glass",
+          "examine",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The image is related to the text discussing the use of various substances as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the substances being used or the process of preparing the extract and testing them."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "24cee4b0fcb0f5261f7a6e77",
+      "asset_sha256": "7105858608f61c86431863981ea0f7771ef0738ea890750fa690e071c80ef327",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/7105858608f61c86431863981ea0f7771ef0738ea890750fa690e071c80ef327.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "acid-base indicators",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "substances",
+          "extracts",
+          "testing",
+          "cool climates",
+          "plant"
+        ],
+        "context_relation": "The text discusses the use of various natural substances as acid-base indicators, providing a fascinating fact about hydrangea.",
+        "limitations": [
+          "The text does not provide specific instructions for preparing extracts or testing substances.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:06:19Z",
+      "effective_analysis": {
+        "visual_summary": "Text discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "acid-base indicators",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "substances",
+          "extracts",
+          "testing",
+          "cool climates",
+          "plant"
+        ],
+        "context_relation": "The text discusses the use of various natural substances as acid-base indicators, providing a fascinating fact about hydrangea.",
+        "limitations": [
+          "The text does not provide specific instructions for preparing extracts or testing substances.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b9f35e8f33050fda6b9dfa29",
+      "asset_sha256": "de808447bf5cff024f43414c3aec20b2e58ebf6603fb6c0a43a77aad7aa3b27b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/de808447bf5cff024f43414c3aec20b2e58ebf6603fb6c0a43a77aad7aa3b27b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze.",
+          "The page is completely black, making it impossible to determine its content or purpose."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T13:07:19Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze.",
+          "The page is completely black, making it impossible to determine its content or purpose."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
