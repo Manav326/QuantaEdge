@@ -9,6 +9,7 @@ import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
 import { AppearanceModeButton } from './ColorThemeProvider';
+import { useTenantBranding } from './TenantBrandingProvider';
 
 type Item = { href: string; message: string; icon: string; match?: string };
 type StudentNavLink = { href: string; message: string; icon: string };
@@ -51,10 +52,34 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const { locale } = useLocale();
+  const { brand, enrollmentIssue, clearEnrollmentIssue } = useTenantBranding();
   const t = (key: string) => translateUi(locale, key);
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = parentItems;
   const itemLabel = (item: { message: string }) => t(item.message);
+  const enrollmentIssueText = enrollmentIssue === 'invalid'
+    ? locale === 'english'
+      ? 'This invitation is expired, revoked, or no longer valid. Ask your school for a new learning link. Your enrollment has not been confirmed by this invitation.'
+      : locale === 'hinglish'
+        ? 'School invitation ab valid nahi hai. Apne school se naya learning link lein. Is invitation se enrollment confirm nahi hua.'
+        : 'यह विद्यालय आमंत्रण समाप्त या अमान्य है। अपने विद्यालय से नया लिंक लें। इस आमंत्रण से नामांकन की पुष्टि नहीं हुई।'
+    : enrollmentIssue === 'rate-limited'
+      ? locale === 'english'
+        ? 'There have been too many attempts to use this invitation. Wait a little before trying again, or contact your school.'
+        : locale === 'hinglish'
+          ? 'Is invitation par bahut attempts hue hain. Thodi der baad dobara try karein ya school se sampark karein.'
+          : 'इस आमंत्रण पर बहुत अधिक प्रयास हुए हैं। कुछ देर बाद फिर कोशिश करें या विद्यालय से संपर्क करें।'
+      : enrollmentIssue === 'mismatch'
+        ? locale === 'english'
+          ? 'This invitation did not match the school shown here. Open the exact learning link sent by your school.'
+          : locale === 'hinglish'
+            ? 'Invitation is school se match nahi hua. School ka bheja hua exact learning link kholein.'
+            : 'यह आमंत्रण यहाँ दिखाए गए विद्यालय से मेल नहीं खाता। विद्यालय द्वारा भेजा गया सही लिंक खोलें।'
+        : locale === 'english'
+          ? 'We could not confirm school enrollment because the request did not finish reliably. Reopen the official school link or contact your school; retrying the same invitation is safe.'
+          : locale === 'hinglish'
+            ? 'School enrollment confirm nahi ho saka kyunki request poori tarah verify nahi hui. Official school link dobara kholein ya school se sampark karein.'
+            : 'अनुरोध पूरा होने की पुष्टि नहीं हो सकी, इसलिए विद्यालय में नामांकन की पुष्टि नहीं हुई। आधिकारिक विद्यालय लिंक फिर खोलें या विद्यालय से संपर्क करें।';
   const [collapsed, setCollapsed] = useState(false);
   const [profile, setProfile] = useState<WorkspaceProfile | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -253,6 +278,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             : <ParentAccountMenu displayName={profile?.display_name || t('web.workspace.parentFallbackName')} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
         </div>
       </header>
+      {role === 'student' && enrollmentIssue ? (
+        <section className="qe-enrollment-issue" role="alert" aria-live="assertive">
+          <div className="qe-enrollment-issue-copy">
+            <strong>{brand?.displayName
+              ? (locale === 'english' ? 'Enrollment with ' + brand.displayName + ' is not confirmed' : locale === 'hinglish' ? brand.displayName + ' ke saath enrollment confirm nahi hua' : brand.displayName + ' में नामांकन की पुष्टि नहीं हुई')
+              : (locale === 'english' ? 'School enrollment is not confirmed' : locale === 'hinglish' ? 'School enrollment confirm nahi hua' : 'विद्यालय में नामांकन की पुष्टि नहीं हुई')}</strong>
+            <p>{enrollmentIssueText}</p>
+          </div>
+          <button type="button" className="qe-enrollment-issue-dismiss" onClick={clearEnrollmentIssue}
+            aria-label={locale === 'english' ? 'Dismiss enrollment message' : locale === 'hinglish' ? 'Message band karein' : 'संदेश बंद करें'}>×</button>
+        </section>
+      ) : null}
       {children}
     </div>
     {role === 'student' ? (
