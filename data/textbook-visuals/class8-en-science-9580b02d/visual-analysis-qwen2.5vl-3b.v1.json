@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 686,
+    "assets_selected": 688,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 683,
-    "assets_remaining": 1608,
-    "assets_completion_percent": 29.8,
+    "assets_analyzed": 685,
+    "assets_remaining": 1606,
+    "assets_completion_percent": 29.9,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 681,
+    "assets_skipped_from_checkpoint": 683,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:35:26Z"
+      "checkpointed_at": "2026-10-18T21:43:19Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:36:16Z"
+      "checkpointed_at": "2026-10-18T21:44:08Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:36:54Z"
+      "checkpointed_at": "2026-10-18T21:44:47Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -20525,6 +20525,78 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T21:42:08Z"
+    },
+    {
+      "asset_id": "587145bccad7cc0f7d1de16c",
+      "asset_sha256": "3c7b73c0d4f20a053e1394cf6e022b945f64dfa5d697e47eb62818fc1032a638",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/3c7b73c0d4f20a053e1394cf6e022b945f64dfa5d697e47eb62818fc1032a638.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plant with roots, a magnifying glass, a thermometer, a scale, and a kite in the sky.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "1",
+          "Exploring the",
+          "Investigative",
+          "World of Science",
+          "Probe and ponder",
+          "Dear Young Scientists,\nWelcome back! On the first page of each chapter, you will find a set of questions.\nThese are not meant for any exam— they are unique invitations to spark your\ncuriosity to explore the world of science!",
+          "Why is one side of a puri thinner than the other?",
+          "Are there more grains of sand on all the beaches and deserts of the world, or more\nstars in our galaxy?"
+        ],
+        "concepts": [
+          "Investigative World of Science",
+          "Plant",
+          "Magnifying Glass",
+          "Thermometer",
+          "Scale",
+          "Kite",
+          "Investigative Questions"
+        ],
+        "context_relation": "The image is a visual representation of the investigative world of science, with a plant, magnifying glass, thermometer, scale, and kite.",
+        "limitations": [
+          "The image does not provide specific details about the investigative questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:47:08Z"
+    },
+    {
+      "asset_id": "546f38ee0075daef81e231ff",
+      "asset_sha256": "756c6156d5e9033de2ebc1e9071154ace249882ea07615c69577d3c939df6a20",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/756c6156d5e9033de2ebc1e9071154ace249882ea07615c69577d3c939df6a20.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl waving and holding a book.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Introduction to a chapter on exploring the investigative world of science.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:48:42Z"
     }
   ]
 }
