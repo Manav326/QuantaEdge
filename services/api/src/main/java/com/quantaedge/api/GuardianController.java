@@ -21,18 +21,20 @@ public class GuardianController {
   private final JdbcTemplate jdbc; private final AuthorizationService authorization; private final AuthService auth;
   private final LearningMetricsService learningMetrics;
   private final InstitutionAuthService institutionAuth;
+  private final InstitutionMembershipService memberships;
   @Value("${app.auth.max-children-per-parent:3}") private int maxChildrenPerParent=3;
   @Autowired
   public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth,
-      LearningMetricsService learningMetrics,InstitutionAuthService institutionAuth){
+      LearningMetricsService learningMetrics,InstitutionAuthService institutionAuth,
+      InstitutionMembershipService memberships){
     this.jdbc=jdbc;this.authorization=authorization;this.auth=auth;this.learningMetrics=learningMetrics;
-    this.institutionAuth=institutionAuth;
+    this.institutionAuth=institutionAuth;this.memberships=memberships;
   }
 
   /** Compatibility constructor for focused tests that do not exercise institution onboarding. */
   public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth,
       LearningMetricsService learningMetrics){
-    this(jdbc,authorization,auth,learningMetrics,null);
+    this(jdbc,authorization,auth,learningMetrics,null,null);
   }
 
   @GetMapping("/account")
@@ -360,12 +362,10 @@ public class GuardianController {
     }
     Boolean parentAlreadyInInstitution=jdbc.queryForObject("""
       select exists(
-        select 1 from guardian_student gs
-        join institution_membership m on m.student_id=gs.student_id
-          and m.institution_id=? and m.status='ACTIVE'
+        select 1 from institution_user_membership m
+        join user_account u on u.id=m.user_id and u.active=true and u.role='PARENT'
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-        where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
-          and gs.access_level='FULL'
+        where m.institution_id=? and m.user_id=? and m.status='ACTIVE'
       )
       """,Boolean.class,institutionId,context.userId());
     String joinCode=String.valueOf(body.getOrDefault("joinCode","")).trim();
@@ -379,27 +379,18 @@ public class GuardianController {
         consentAccepted,
         body.get("trackCodes") instanceof List<?> values ? values.stream().map(String::valueOf).toList() : List.of("maths","science"));
     if(Boolean.TRUE.equals(parentAlreadyInInstitution)) {
-      Long membershipId=jdbc.queryForObject("""
-        insert into institution_membership(
-          institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at
-        ) values(?,?,null,'ACTIVE',now(),null,now(),now())
-        on conflict(institution_id,student_id) do update set
-          status='ACTIVE',joined_at=case when institution_membership.status='ACTIVE'
-            then institution_membership.joined_at else now() end,
-          left_at=null,updated_at=now()
-        returning id
-        """,Long.class,institutionId,child.studentId());
-      jdbc.update("""
-        insert into institution_membership_event(
-          institution_id,membership_id,student_id,event_type,details
-        ) values(?,?,?,'MEMBERSHIP_CREATED',
-          jsonb_build_object('source','PARENT_CREATED_CHILD','guardianUserId',?))
-        """,institutionId,membershipId,child.studentId(),context.userId());
+      if(memberships==null) throw new IllegalStateException("Institution membership service is not configured.");
+      memberships.ensureStudentMembership(child.studentId(),institutionId,"PARENT_CREATED_CHILD",context.userId());
+      memberships.ensureUserMembership(context.userId(),institutionId,"PARENT_CREATED_CHILD",null);
     } else {
-      if(institutionAuth==null) throw new IllegalStateException("Institution onboarding service is not configured.");
+      if(institutionAuth==null || memberships==null)
+        throw new IllegalStateException("Institution onboarding services are not configured.");
       String address=request.getRemoteAddr()==null?"unknown":request.getRemoteAddr();
       institutionAuth.redeemJoinCode(joinCode,child.studentId(),
           institutionAuth.hash("institution-join-source:"+address),tenant.tenantCode());
+      // The child joins first by the code; the creating parent becomes an institution user as
+      // part of that same transaction, never as an unaffiliated/global account.
+      memberships.ensureUserMembership(context.userId(),institutionId,"PARENT_JOIN_CODE_FOR_CHILD",null);
     }
     List<String> trackCodes=body.get("trackCodes") instanceof List<?> values
         ? values.stream().map(String::valueOf).toList() : List.of("maths","science");
