@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 442,
+    "assets_selected": 445,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 440,
-    "assets_remaining": 1638,
-    "assets_completion_percent": 21.2,
+    "assets_analyzed": 443,
+    "assets_remaining": 1635,
+    "assets_completion_percent": 21.3,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 437,
+    "assets_skipped_from_checkpoint": 440,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:06:50Z"
+      "checkpointed_at": "2026-10-18T04:10:08Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:07:32Z"
+      "checkpointed_at": "2026-10-18T04:10:48Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -13184,6 +13184,95 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T04:09:20Z"
+    },
+    {
+      "asset_id": "789b1b1df0041e7ac28c20ff",
+      "asset_sha256": "3a35649ad0a644c7efff9620b56d43bf86a1f5cbd249488fa8d429996f68ab09",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/3a35649ad0a644c7efff9620b56d43bf86a1f5cbd249488fa8d429996f68ab09.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a gradient bar, likely used as a design element or background for text.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:11:27Z"
+    },
+    {
+      "asset_id": "16219733fa02abf5435f19e4",
+      "asset_sha256": "253d31bf6d346e87b6d21ed1b779769e3f0f8098e4cbc01174bd84a327cbe72f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/253d31bf6d346e87b6d21ed1b779769e3f0f8098e4cbc01174bd84a327cbe72f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:12:03Z"
+    },
+    {
+      "asset_id": "6502c127e90568444e4edaf1",
+      "asset_sha256": "a9b225d6881c8bd5c0351772752a0e093b1c5177e798ae6349f3631e08ddb2aa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/a9b225d6881c8bd5c0351772752a0e093b1c5177e798ae6349f3631e08ddb2aa.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and white gradient background with a black border at the top and bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and white gradient background",
+          "black border at the top and bottom"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "no specific content or details visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:12:42Z"
     }
   ]
 }
