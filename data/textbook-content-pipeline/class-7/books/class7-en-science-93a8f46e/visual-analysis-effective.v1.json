@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c85105bba58f1ffe37751b8574b46c8b47cae6c409e307781b63223cd1669de8",
+  "raw_analysis_sha256": "6d8195604435b4dbbd24bfa83f3e0af52ad4ca063ffd96999d6a4b381a1888f1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:32:48Z",
+      "checkpointed_at": "2026-10-18T18:35:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:33:10Z",
+      "checkpointed_at": "2026-10-18T18:35:49Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -55983,6 +55983,162 @@
           "The image does not show any diagrams, charts, or graphs.",
           "The image does not include any illustrations or cartoons."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b54edd55f1d6ab3268b39108",
+      "asset_sha256": "34e79e4fe7b466c3b60396ec3f8a5d81033454354ddf8a06857b4780aa746f14",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/34e79e4fe7b466c3b60396ec3f8a5d81033454354ddf8a06857b4780aa746f14.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of organic matter on soil pH and plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutral soil",
+          "plant health",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The text discusses the relationship between organic matter, soil pH, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:36:00Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of organic matter on soil pH and plant health.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "soil pH",
+          "organic matter",
+          "neutral soil",
+          "plant health",
+          "nutrient deficiency"
+        ],
+        "context_relation": "The text discusses the relationship between organic matter, soil pH, and plant health.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2360952c9bf9d70599115a11",
+      "asset_sha256": "4aa4bbd9181bc0924e3e13ad682562dfaf5aba2bc6a37ffadb0c0d6b3c553b47",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/4aa4bbd9181bc0924e3e13ad682562dfaf5aba2bc6a37ffadb0c0d6b3c553b47.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Soil pH and nutrient deficiency in plants.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil neutrality",
+          "Plants",
+          "Nutrient deficiency"
+        ],
+        "context_relation": "Soil pH and nutrient deficiency in plants",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:36:43Z",
+      "effective_analysis": {
+        "visual_summary": "Soil pH and nutrient deficiency in plants.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "If the soil is basic, organic matter like manure and composted leaves are added to it. Organic matter releases acids that neutralise the basic nature of the soil.",
+          "Sometimes, the soil may be neutral, but the plants growing in it may still show poor health, which can be due to the deficiency of nutrients in the soil."
+        ],
+        "concepts": [
+          "Soil pH",
+          "Organic matter",
+          "Acids",
+          "Neutralisation",
+          "Soil neutrality",
+          "Plants",
+          "Nutrient deficiency"
+        ],
+        "context_relation": "Soil pH and nutrient deficiency in plants",
+        "limitations": [
+          "The image does not show any diagrams, charts, or graphs."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cee22a372102b26028596199",
+      "asset_sha256": "55f8db55b7a70f87ff781f030cf681d7be4428248fe099201f768cef740172a5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/55f8db55b7a70f87ff781f030cf681d7be4428248fe099201f768cef740172a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:37:18Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
