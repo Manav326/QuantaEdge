@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 930,
-    "successful_visual_analyses": 921,
-    "missing_visual_analyses": 6558,
+    "raw_analysis_result_rows": 934,
+    "successful_visual_analyses": 925,
+    "missing_visual_analyses": 6554,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6567,
+    "unresolved_count": 6563,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45250,9 +45250,16 @@
       "asset_path": "assets/f265cd70e15f9eb7c40874e604a8d5b3d26b5b03defab98508e0b77bb74b1d9f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or string.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45268,9 +45275,28 @@
       "asset_path": "assets/893193215fd155543bfc3f026b025369aa87d1206a35b9a991549680e3953b14.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction between an acid and a base, with a drop of blue litmus solution turning red when added to a lemon juice solution, and the solution turning blue when lime water is added.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red.",
+          "When lime water is added to this test tube, the colour of the solution eventually changes from red to blue.",
+          "This shows that the solution in the test tube is no longer acidic.",
+          "Lime water has neutralised the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base reaction",
+          "Litmus test",
+          "Neutralisation"
+        ],
+        "context_relation": "The image illustrates the neutralisation process between an acid and a base, as described in the textbook.",
+        "limitations": [
+          "The image does not show the actual reaction process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45286,9 +45312,31 @@
       "asset_path": "assets/3fb98e1ac88963e1c978d3b6c49a679267611a6a9d6d75d770308aeca6a70a6b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A test tube with a blue litmus solution turning red when lemon juice is added, then changing to blue when lime water is added.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised the eﬀect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lemon juice",
+          "Lime water"
+        ],
+        "context_relation": "The image illustrates the neutralization process of an acid with a base using litmus test.",
+        "limitations": [
+          "The image does not show the actual neutralization process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45304,9 +45352,31 @@
       "asset_path": "assets/230badc6cae811e3dd65034bfbf0a4408eb112612d23cdf063d4466f2a539ac9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A test tube with a solution that changes color from red to blue when lime water is added, indicating the solution is no longer acidic.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised the eﬀect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lemon juice",
+          "Lime water"
+        ],
+        "context_relation": "The image illustrates the neutralization reaction between an acid and a base.",
+        "limitations": [
+          "The image does not show the actual chemical reaction."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
