@@ -74,6 +74,8 @@ class StudentProgramControllerTest {
   void unlistedOrPaidCourseCannotBeSelfEnrolledWithoutTenantEntitlement() {
     when(jdbc.queryForList(contains("where p.id=? and p.status='ACTIVE'"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
+    when(jdbc.queryForObject(contains("institution_id is distinct from"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(false);
     when(jdbc.queryForObject(contains("select\n        exists(select 1 from student_program_enrollment e"),
         eq(Boolean.class), any(Object[].class))).thenReturn(false);
 
