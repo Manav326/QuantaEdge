@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 735,
+    "assets_selected": 739,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 734,
-    "assets_remaining": 6754,
-    "assets_completion_percent": 9.8,
+    "assets_analyzed": 738,
+    "assets_remaining": 6750,
+    "assets_completion_percent": 9.9,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 730,
+    "assets_skipped_from_checkpoint": 734,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T12:09:56Z"
+      "checkpointed_at": "2026-10-18T12:25:18Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -27143,6 +27143,148 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T12:24:23Z"
+    },
+    {
+      "asset_id": "3136c56756532b62b1a4858d",
+      "asset_sha256": "18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and somewhat organic shape with a curved line and a circular form.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:26:16Z"
+    },
+    {
+      "asset_id": "26bbfe8a4242ac855eef9004",
+      "asset_sha256": "6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:27:13Z"
+    },
+    {
+      "asset_id": "a45e4ac1c4a5557426d7cab4",
+      "asset_sha256": "9286571f39bf1e1b7fa8e18579dd9a31b28ee7fecd6840d8c492e775fc2a4a2c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/9286571f39bf1e1b7fa8e18579dd9a31b28ee7fecd6840d8c492e775fc2a4a2c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a full-page text document with a list of vegetables, fruits, and flowers that can be used as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "acid-base indicators",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "substances",
+          "cool climates"
+        ],
+        "context_relation": "The text is providing information about the use of certain vegetables, fruits, and flowers as acid-base indicators.",
+        "limitations": [
+          "The text does not provide specific instructions on how to prepare the extracts or test the substances."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:28:41Z"
+    },
+    {
+      "asset_id": "fd9fc2add0639258d1756a03",
+      "asset_sha256": "9286571f39bf1e1b7fa8e18579dd9a31b28ee7fecd6840d8c492e775fc2a4a2c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/9286571f39bf1e1b7fa8e18579dd9a31b28ee7fecd6840d8c492e775fc2a4a2c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Preparing extracts",
+          "Testing substances",
+          "Vegetables, fruits, and flowers",
+          "Cooler climates"
+        ],
+        "context_relation": "The page discusses the use of various natural substances as acid-base indicators.",
+        "limitations": [
+          "The page does not provide specific instructions for preparing extracts or testing substances.",
+          "The page does not include any visual aids or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:29:18Z"
     }
   ]
 }
