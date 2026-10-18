@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fd8d5549ad0dace4dfb8db3db1691493fabe948126ef0d09dacba88946ad9efa",
+  "raw_analysis_sha256": "98701f07386640195c47baff056dda2a0a28677c1218b3dbf9ca52cff1ac06e4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:01:20Z",
+      "checkpointed_at": "2026-10-18T23:05:45Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:02:09Z",
+      "checkpointed_at": "2026-10-18T23:06:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:02:47Z",
+      "checkpointed_at": "2026-10-18T23:07:15Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -31301,6 +31301,116 @@
         ],
         "context_relation": "The illustrations are connected by lines, suggesting a sequence or process.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ca0d4abbb45b787ba469eb26",
+      "asset_sha256": "24eb64aeb063bac18bb47d8ffba1338aefe01d85d2050c1419347515b9eafb4b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/24eb64aeb063bac18bb47d8ffba1338aefe01d85d2050c1419347515b9eafb4b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A beaker of water with a small blue object floating in it, and a diagram showing the particles of water and air.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water with a small blue object floating in it, and a diagram showing the particles of water and air."
+        ],
+        "concepts": [
+          "water",
+          "air",
+          "particles",
+          "forces",
+          "weather events",
+          "storms",
+          "cyclones",
+          "pressure",
+          "temperature",
+          "materials",
+          "particles",
+          "movement"
+        ],
+        "context_relation": "The image is used to explain the relationship between particles and forces in water and air, which are connected to weather events.",
+        "limitations": [
+          "The image does not provide specific details about the particles or their movement."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:08:55Z",
+      "effective_analysis": {
+        "visual_summary": "A beaker of water with a small blue object floating in it, and a diagram showing the particles of water and air.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water with a small blue object floating in it, and a diagram showing the particles of water and air."
+        ],
+        "concepts": [
+          "water",
+          "air",
+          "particles",
+          "forces",
+          "weather events",
+          "storms",
+          "cyclones",
+          "pressure",
+          "temperature",
+          "materials",
+          "particles",
+          "movement"
+        ],
+        "context_relation": "The image is used to explain the relationship between particles and forces in water and air, which are connected to weather events.",
+        "limitations": [
+          "The image does not provide specific details about the particles or their movement."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9e57f338fcaadf2e791e79fb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a full page of a textbook, showing a black background with no visible text or illustrations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page of a textbook, showing a black background with no visible text or illustrations.",
+        "limitations": [
+          "The image is a full page of a textbook, showing a black background with no visible text or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:09:13Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a full page of a textbook, showing a black background with no visible text or illustrations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page of a textbook, showing a black background with no visible text or illustrations.",
+        "limitations": [
+          "The image is a full page of a textbook, showing a black background with no visible text or illustrations."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

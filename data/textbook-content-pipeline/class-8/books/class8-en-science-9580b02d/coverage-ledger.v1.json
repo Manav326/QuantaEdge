@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 721,
-    "successful_visual_analyses": 714,
-    "missing_visual_analyses": 1570,
+    "raw_analysis_result_rows": 723,
+    "successful_visual_analyses": 716,
+    "missing_visual_analyses": 1568,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1577,
+    "unresolved_count": 1575,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28253,9 +28253,33 @@
       "asset_path": "assets/24eb64aeb063bac18bb47d8ffba1338aefe01d85d2050c1419347515b9eafb4b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A beaker of water with a small blue object floating in it, and a diagram showing the particles of water and air.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A beaker of water with a small blue object floating in it, and a diagram showing the particles of water and air."
+        ],
+        "concepts": [
+          "water",
+          "air",
+          "particles",
+          "forces",
+          "weather events",
+          "storms",
+          "cyclones",
+          "pressure",
+          "temperature",
+          "materials",
+          "particles",
+          "movement"
+        ],
+        "context_relation": "The image is used to explain the relationship between particles and forces in water and air, which are connected to weather events.",
+        "limitations": [
+          "The image does not provide specific details about the particles or their movement."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28271,9 +28295,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a full page of a textbook, showing a black background with no visible text or illustrations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page of a textbook, showing a black background with no visible text or illustrations.",
+        "limitations": [
+          "The image is a full page of a textbook, showing a black background with no visible text or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
