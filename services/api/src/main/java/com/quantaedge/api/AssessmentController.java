@@ -51,7 +51,8 @@ public class AssessmentController {
         a.lesson_id is not null
         and exists(select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')
         and exists(select 1 from student_lesson_progress tp
-                   where tp.student_id=st.id and tp.lesson_id=a.lesson_id and tp.status='COMPLETED')
+                   where tp.student_id=st.id and tp.institution_id=(select institution_id from tenant_scope)
+                     and tp.lesson_id=a.lesson_id and tp.status='COMPLETED')
       ))
       and (a.assessment_type<>'CHAPTER_END' or (
         ch.id is not null
@@ -62,8 +63,8 @@ public class AssessmentController {
                        where required_lesson.chapter_id=ch.id
                          and required_lesson.active=true and required_lesson.status='PUBLISHED'
                          and not exists(select 1 from student_lesson_progress cp
-                                        where cp.student_id=st.id and cp.lesson_id=required_lesson.id
-                                          and cp.status='COMPLETED'))
+                                        where cp.student_id=st.id and cp.institution_id=(select institution_id from tenant_scope)
+                                          and cp.lesson_id=required_lesson.id and cp.status='COMPLETED'))
       ))
       and (not a.is_generated or a.is_current=true)
       """;
@@ -627,24 +628,28 @@ public class AssessmentController {
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(defaultValue="24") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
     String subjectFilter = safeText(subjectCode, 40);
     if(courseId!=null) {
       Long active=jdbc.queryForObject("""
         select count(*) from student_program_enrollment spe
         join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-        where spe.student_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
-        """,Long.class,context.studentId(),courseId);
+        where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
+        """,Long.class,context.studentId(),institutionId,courseId);
       if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
     }
     int rowLimit=Math.max(1,Math.min(limit==null?24:limit,60));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String courseScope=courseId==null
         ? "s.program_id is null and c.code=st.class_code"
-        : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+        : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope) and spe.program_id=s.program_id and spe.status='ACTIVE')";
     String sql= ("""
+      with tenant_scope as (select ?::bigint as institution_id)
       select a.id as assessment_id,a.public_id as test_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
              a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
@@ -653,21 +658,26 @@ public class AssessmentController {
              ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
              (select count(*) from student_assessment_attempt att
-              where att.assessment_id=a.id and att.student_id=st.id and att.status<>'ABANDONED') as attempts_used,
+              where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
+                and att.status<>'ABANDONED') as attempts_used,
              (select max(att.status) from student_assessment_attempt att
-              where att.assessment_id=a.id and att.student_id=st.id and att.status='IN_PROGRESS') as in_progress_status,
+              where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
+                and att.status='IN_PROGRESS') as in_progress_status,
              (select max(att.id) from student_assessment_attempt att
-              where att.assessment_id=a.id and att.student_id=st.id and att.status='IN_PROGRESS') as in_progress_attempt_id,
+              where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
+                and att.status='IN_PROGRESS') as in_progress_attempt_id,
              (select max(att.id) from student_assessment_attempt att
-              where att.assessment_id=a.id and att.student_id=st.id and att.status='RELEASED') as latest_result_attempt_id,
+              where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
+                and att.status='RELEASED') as latest_result_attempt_id,
              (select att.offline_mode from student_assessment_attempt att
-              where att.assessment_id=a.id and att.student_id=st.id and att.status='IN_PROGRESS'
-              order by att.started_at desc,att.id desc limit 1) as in_progress_offline_mode
+              where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
+                and att.status='IN_PROGRESS' order by att.started_at desc,att.id desc limit 1) as in_progress_offline_mode
       from assessment a join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       left join curriculum_program p on p.id=s.program_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -691,6 +701,7 @@ public class AssessmentController {
       where (a.status='PUBLISHED' or exists(
                select 1 from student_assessment_attempt resumable
                where resumable.assessment_id=a.id and resumable.student_id=st.id
+                 and resumable.institution_id=(select institution_id from tenant_scope)
                  and resumable.status='IN_PROGRESS'
              ))
         and (?='' or s.code=?)
@@ -698,6 +709,7 @@ public class AssessmentController {
         and (
           exists(select 1 from student_assessment_attempt resumable
                  where resumable.assessment_id=a.id and resumable.student_id=st.id
+                   and resumable.institution_id=(select institution_id from tenant_scope)
                    and resumable.status='IN_PROGRESS')
           or (
             """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
@@ -708,7 +720,7 @@ public class AssessmentController {
                coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
       limit ? offset ?
       """).replace("__COURSE_SCOPE__",courseScope);
-    List<Object> args=new ArrayList<>(List.of(context.studentId(),language,language,language,subjectFilter,subjectFilter));
+    List<Object> args=new ArrayList<>(List.of(institutionId,context.studentId(),language,language,language,subjectFilter,subjectFilter));
     if(courseId!=null)args.add(courseId);
     args.add(rowLimit+1);args.add(rowOffset);
     List<Map<String,Object>> items=jdbc.queryForList(sql,args.toArray());
@@ -718,7 +730,13 @@ public class AssessmentController {
   }
 
   public Map<String,Object> studentAssessmentCatalog(String subjectCode,String language,Integer limit,Integer offset,AuthContext context) {
-    return studentAssessmentCatalog(subjectCode,null,language,limit,offset,context);
+    throw missingInstitutionContext();
+  }
+
+  /** Legacy Java signature retained for source compatibility; public routes must provide tenant. */
+  public Map<String,Object> studentAssessmentCatalog(String subjectCode,Long courseId,String language,
+      Integer limit,Integer offset,AuthContext context) {
+    throw missingInstitutionContext();
   }
 
   @GetMapping("/learning/assessments/{assessmentId}/leaderboard")
