@@ -15,6 +15,19 @@
 - [Android Composition Map](./phase-1-android-composition-map.md): maps all 34 native routes to their actual shell/component renderers and documents BackHandler return contracts.
 - [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 93 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
 
+## Current audit snapshot
+
+| Measure | Current count/status |
+|---|---:|
+| UI route/destination entries | 93 (29 Web, 19 Admin, 11 HRMS, 34 Android) |
+| Screen entries linked to scenario IDs | 93; references validated against the scenario register |
+| Workflow scenarios | 70 total: 63 `NOT_EXECUTED`, 7 `NOT_IMPLEMENTED` (future QA installer lifecycle) |
+| Browser/Android runtime-verified screens | 0 in this audit pass |
+| Per-screen state coverage | 93 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
+| Test-data ownership/uninstall implementation | Not started; schema and cleanup requirements documented only |
+
+Counts describe documentation inventory, not feature pass rates or functional coverage percentages.
+
 ## Evidence and status rules
 
 | Status | Meaning |
@@ -27,6 +40,10 @@
 | `MANUAL_VERIFIED` | A named reviewer completed the steps and retained environment/device, revision, result and evidence. |
 | `BLOCKED` | A reason prevents execution; this is not a pass. |
 | `NOT_APPLICABLE` | A reviewer records why the particular check does not apply. |
+| `NOT_REVIEWED` | A screen state/control category has not yet been investigated. |
+| `IN_PROGRESS` | Source tracing or execution is underway; not a pass. |
+| `VERIFIED` | Reproducible execution/assertions passed with a named revision, environment and evidence reference. |
+| `BLOCKED` | A specific blocker and owner/next action are recorded; not a pass. |
 
 A source file, successful compilation, static contract check or older tracker entry is not equivalent to an end-to-end pass. Verification must be tied to a commit SHA and execution evidence. In the per-screen checklist, `NOT_REVIEWED` means the state must still be examined; use `NOT_APPLICABLE` only after source/runtime review records a reason, never to hide an untested state.
 
