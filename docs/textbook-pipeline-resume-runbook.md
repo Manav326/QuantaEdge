@@ -8,11 +8,11 @@ All generated pipeline data and savepoints belong under `data/`. Application cod
 
 ## Automatic continuation for Classes 6–8 Layer 4–5
 
-The joint recovery push marker `[resume-visual-layers-4-5-classes-6-8]` starts one class matrix with all three classes allowed to run in parallel. It uses `resume_layers_4_5`, the existing `qwen2.5vl:3b` Layer 4 checkpoint identity, and five-asset durable savepoints.
+The joint recovery push marker `[resume-visual-layers-4-5-classes-6-8]` starts all three class jobs in parallel and uses `resume_layers_4_5`, the existing `qwen2.5vl:3b` Layer 4 checkpoint identity, and five-asset durable savepoints.
 
-GitHub-hosted runners have a finite job-duration limit. A cancelled Layer 4–5 workflow now checks the tracked `data/textbook-content-pipeline/resume-control.v1.json` state and automatically launches another **resume** run while that control state remains active. Each new run must restore or validate the existing source-bound checkpoints; it does not switch to `analyze_all` or rebuild the candidate packs just because the prior runner ended. The control state is disabled only after the full Class 6–8 matrix succeeds, which means every selected whole-book ledger was reported `COMPLETE`.
+The separate `Resume Class 6–8 Layer 4–5 checkpoints` coordinator checks every 15 minutes. It will dispatch a resume for each class that lacks a durable completion marker only when no Layer 4–5 workflow is queued or running. This covers the finite GitHub-hosted job duration: after a runner is cancelled by the time limit, the coordinator dispatches the remaining classes from their saved checkpoints rather than rebuilding candidate packs.
 
-This automation intentionally does **not** weaken the Layer 5 completion gate or fabricate completion by changing `INCOMPLETE` to `COMPLETE`. Source/PDF/hash mismatches and unverifiable checkpoints still fail closed for diagnosis instead of triggering blind re-analysis. The status file is a continuation control, not a curriculum artifact; it stays under `data/`.
+A class completion marker is written only after every selected whole-book Layer 5 ledger in that class reports `COMPLETE`. The coordinator turns off the active state once all three markers exist. This automation does **not** weaken the Layer 5 gate, turn `INCOMPLETE` into `COMPLETE`, or bypass source/PDF/hash checks; unverified checkpoints still require diagnosis rather than blind re-analysis. The continuation control and completion markers remain under `data/`.
 
 ## One entrypoint per pipeline
 

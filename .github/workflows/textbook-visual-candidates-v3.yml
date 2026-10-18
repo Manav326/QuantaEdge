@@ -78,61 +78,15 @@ on:
         required: true
         type: string
 
-  # A cancelled 6-hour runner resumes from committed/GHCR checkpoints.
-  # The continuation gate checks the persisted control file before restarting.
-  workflow_run:
-    workflows: ["Prepare textbook visual candidates v3 (additive)"]
-    types: [completed]
-    branches: [main]
-
 permissions:
   contents: write
   packages: write
 
 concurrency:
-  group: textbook-visual-candidates-v3-${{ inputs.class_no || (github.event_name == 'workflow_run' && 'classes-6-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && 'class-6-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && 'class-7-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && 'class-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && 'classes-7-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && 'classes-6-8-resume') || 'validation-only' }}
+  group: textbook-visual-candidates-v3-${{ inputs.class_no || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && 'class-6-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && 'class-7-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && 'class-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && 'classes-7-8-resume') || (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && 'classes-6-8-resume') || 'validation-only' }}
   cancel-in-progress: false
 
 jobs:
-  continuation-gate:
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'cancelled'
-    name: Check whether an interrupted Layer 4–5 batch should resume
-    runs-on: ubuntu-latest
-    outputs:
-      resume_active: ${{ steps.state.outputs.resume_active }}
-      vision_model: ${{ steps.state.outputs.vision_model }}
-      checkpoint_batch_size: ${{ steps.state.outputs.checkpoint_batch_size }}
-    steps:
-      - name: Checkout current main resume state
-        uses: actions/checkout@v4
-        with:
-          ref: main
-      - name: Read explicit continuation state
-        id: state
-        shell: bash
-        run: |
-          python - <<'PY' >> "$GITHUB_OUTPUT"
-          import json
-          from pathlib import Path
-          path = Path("data/textbook-content-pipeline/resume-control.v1.json")
-          try:
-              state = json.loads(path.read_text(encoding="utf-8"))
-          except (OSError, json.JSONDecodeError):
-              state = {}
-          active = (
-              state.get("schema_version") == "quantaedge.textbook-layer45-resume-control.v1"
-              and state.get("active") is True
-              and state.get("classes") == [6, 7, 8]
-          )
-          model = state.get("vision_model") if isinstance(state.get("vision_model"), str) and state.get("vision_model") else "qwen2.5vl:3b"
-          batch = str(state.get("checkpoint_batch_size", "5"))
-          if batch not in {"1", "2", "5"}:
-              batch = "5"
-          print(f"resume_active={'true' if active else 'false'}")
-          print(f"vision_model={model}")
-          print(f"checkpoint_batch_size={batch}")
-          PY
-
   validate:
     if: github.event_name == 'push' && !(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]'))
     name: Validate additive v3 preparation scripts
@@ -166,41 +120,20 @@ jobs:
           python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
-    needs: continuation-gate
-    if: >-
-      always() &&
-      (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'workflow_call' ||
-        (
-          github.event_name == 'push' &&
-          (
-            contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') ||
-            contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') ||
-            contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') ||
-            contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') ||
-            contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')
-          )
-        ) ||
-        (
-          github.event_name == 'workflow_run' &&
-          github.event.workflow_run.conclusion == 'cancelled' &&
-          needs.continuation-gate.outputs.resume_active == 'true'
-        )
-      )
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')))
     name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set
     strategy:
       fail-fast: false
       max-parallel: 3
       matrix:
-        class_no: ${{ fromJSON(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '["6"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '["7"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '["8"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '["7","8"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && '["6","7","8"]' || (github.event_name == 'workflow_run' && needs.continuation-gate.outputs.resume_active == 'true' && '["6","7","8"]') || format('["{0}"]', inputs.class_no)) }}
+        class_no: ${{ fromJSON(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '["6"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '["7"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '["8"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '["7","8"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && '["6","7","8"]' || format('["{0}"]', inputs.class_no)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
-      ANALYSIS_MODE: ${{ inputs.analysis_mode || ((github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'cancelled' && needs.continuation-gate.outputs.resume_active == 'true')) && 'resume_layers_4_5') }}
-      VISION_MODEL: ${{ inputs.vision_model || needs.continuation-gate.outputs.vision_model || 'qwen2.5vl:3b' }}
-      CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || needs.continuation-gate.outputs.checkpoint_batch_size || '5' }}
+      ANALYSIS_MODE: ${{ inputs.analysis_mode || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) && 'resume_layers_4_5') }}
+      VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
+      CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '5' }}
     steps:
       - name: Checkout main with write permission for review metadata
         uses: actions/checkout@v4
@@ -701,53 +634,73 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   finalize-resume:
-    name: Mark Class 6–8 Layer 5 processing complete
-    needs: [continuation-gate, prepare]
+    name: Record completed class checkpoints
+    needs: prepare
     if: >-
       always() &&
       needs.prepare.result == 'success' &&
       (
         (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) ||
-        (github.event_name == 'workflow_run' && needs.continuation-gate.outputs.resume_active == 'true')
+        (github.event_name == 'workflow_dispatch' && inputs.analysis_mode == 'resume_layers_4_5')
       )
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      RESUME_SCOPE: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && 'all') || (github.event_name == 'workflow_dispatch' && inputs.analysis_mode == 'resume_layers_4_5' && inputs.class_no) || 'none' }}
     steps:
-      - name: Checkout main for final state update
+      - name: Checkout main for durable completion marker
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: true
-      - name: Disable automatic continuation only after every selected book has a COMPLETE ledger
+      - name: Record class completion only after every selected book has a COMPLETE ledger
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json
+          import json, os
           from datetime import datetime, timezone
           from pathlib import Path
-          path = Path("data/textbook-content-pipeline/resume-control.v1.json")
-          state = json.loads(path.read_text(encoding="utf-8"))
+          root = Path("data/textbook-content-pipeline")
+          control_path = root / "resume-control.v1.json"
+          state = json.loads(control_path.read_text(encoding="utf-8"))
           if state.get("schema_version") != "quantaedge.textbook-layer45-resume-control.v1":
-              raise SystemExit("Resume control schema mismatch; refusing to deactivate continuation.")
+              raise SystemExit("Resume control schema mismatch; refusing to write completion markers.")
           if state.get("active") is not True:
-              print("Continuation is already inactive.")
+              print("Automatic resume is inactive; not writing a completion marker.")
               raise SystemExit(0)
-          state["active"] = False
-          state["status"] = "COMPLETE"
-          state["completed_at"] = datetime.now(timezone.utc).isoformat()
-          path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          scope = os.environ.get("RESUME_SCOPE", "none")
+          grades = [6, 7, 8] if scope == "all" else [int(scope)] if scope in {"6", "7", "8"} else []
+          if not grades:
+              print("This workflow invocation does not own Class 6–8 resume completion state.")
+              raise SystemExit(0)
+          stamp = datetime.now(timezone.utc).isoformat()
+          for grade in grades:
+              marker = root / "resume-control" / "completed" / f"class-{grade}.v1.json"
+              marker.parent.mkdir(parents=True, exist_ok=True)
+              marker.write_text(json.dumps({
+                  "schema_version": "quantaedge.textbook-layer45-class-completion.v1",
+                  "class_no": grade,
+                  "status": "COMPLETE",
+                  "completed_at": stamp,
+                  "source_scope": "all selected NCERT whole-book sources for this class"
+              }, indent=2) + "\n", encoding="utf-8")
+          if scope == "all":
+              state["active"] = False
+              state["status"] = "COMPLETE"
+              state["completed_at"] = stamp
+              control_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/textbook-content-pipeline/resume-control.v1.json
+          git add data/textbook-content-pipeline/resume-control.v1.json data/textbook-content-pipeline/resume-control/completed/
           if git diff --cached --quiet; then
-            echo "Resume-control file already reflects completion."
+            echo "Class completion markers are already current."
             exit 0
           fi
-          git commit -m "status(content): complete Class 6-8 Layer 5 resume"
+          git commit -m "status(content): mark Layer 5 complete for resume scope $RESUME_SCOPE"
           git pull --rebase origin main
           git push origin HEAD:main
 

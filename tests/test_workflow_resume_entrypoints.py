@@ -28,10 +28,10 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("matrix:", workflow)
         self.assertIn("max-parallel: 3", workflow)
         self.assertIn("fromJSON(contains(github.event.head_commit.message", workflow)
-        self.assertIn("inputs.analysis_mode || ((github.event_name == 'push'", workflow)
-        self.assertIn("VISION_MODEL: ${{ inputs.vision_model || needs.continuation-gate.outputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
+        self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
+        self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
         self.assertNotIn("VISION_MODEL: ${{ inputs.vision_model }}", workflow)
-        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || needs.continuation-gate.outputs.checkpoint_batch_size || '5' }}", workflow)
+        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '5' }}", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("'classes-7-8-resume'", workflow)
 
@@ -52,15 +52,20 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("'class-8-resume'", workflow)
         self.assertIn("max-parallel: 3", workflow)
 
-    def test_cancelled_class6_to8_run_automatically_resumes_from_committed_state(self):
+    def test_cancelled_class6_to8_run_is_resumed_by_separate_coordinator(self):
         workflow = read("textbook-visual-candidates-v3.yml")
-        self.assertIn("workflow_run:", workflow)
-        self.assertIn('workflows: ["Prepare textbook visual candidates v3 (additive)"]', workflow)
-        self.assertIn("github.event.workflow_run.conclusion == 'cancelled'", workflow)
-        self.assertIn("needs.continuation-gate.outputs.resume_active == 'true'", workflow)
+        self.assertNotIn("workflow_run:", workflow)
         self.assertIn("data/textbook-content-pipeline/resume-control.v1.json", workflow)
-        self.assertIn("needs.prepare.result == 'success'", workflow)
-        self.assertIn("status(content): complete Class 6-8 Layer 5 resume", workflow)
+        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", workflow)
+        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
+        self.assertIn("schedule:", coordinator)
+        self.assertIn("*/15 * * * *", coordinator)
+        self.assertIn("actions: write", coordinator)
+        self.assertIn("/actions/workflows/textbook-visual-candidates-v3.yml/dispatches", coordinator)
+        self.assertIn("resume_layers_4_5", coordinator)
+        self.assertIn("class-6.v1.json", coordinator)
+        self.assertIn("class-7.v1.json", coordinator)
+        self.assertIn("class-8.v1.json", coordinator)
 
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
