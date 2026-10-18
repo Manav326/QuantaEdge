@@ -10,6 +10,7 @@
 - [Phase 1 Source Review Log](./phase-1-source-review-log.md): first-pass actions/API observations by route and Android shell mappings.
 - [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md): inspected authorization/workspace guards and sensitive controller families.
 - [Data Relationship and Cleanup Map](./phase-1-data-and-cleanup-map.md): identity/tenant/course/learning/HRMS dependencies, protected baseline data and safe-uninstall requirements.
+- [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 70 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
 
 ## Evidence and status rules
 
