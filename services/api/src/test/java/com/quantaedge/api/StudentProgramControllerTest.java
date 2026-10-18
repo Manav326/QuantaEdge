@@ -38,16 +38,42 @@ class StudentProgramControllerTest {
     program.put("code", "NAVODAYA_BATCH");
     program.put("display_name", "Navodaya Batch");
     program.put("enrolled", true);
-    when(jdbc.queryForList(contains("p.code<>'GENERAL'"), eq(7L))).thenReturn(List.of(program));
+    when(jdbc.queryForList(contains("institution_marketplace_offer"), any(Object[].class))).thenReturn(List.of(program));
     when(jdbc.queryForList(contains("count(distinct ch.id)"), any(Object[].class)))
         .thenReturn(List.of(Map.of("subject_code","maths","chapters",2L,"lessons",8L)));
 
-    List<Map<String,Object>> rows = controller.programs(student);
+    List<Map<String,Object>> rows = controller.programs(student, new InstitutionTenantContext(3L, "SCHOOL-A", "School A"));
 
     assertEquals(1, rows.size());
     assertEquals("NAVODAYA_BATCH", rows.getFirst().get("code"));
     assertEquals(true, rows.getFirst().get("is_enrolled"));
     assertEquals(2L, ((List<Map<String,Object>>) rows.getFirst().get("subjects")).getFirst().get("chapters"));
+  }
+
+  @Test
+  void courseCatalogueRequiresAnExplicitTenantContext() {
+    assertThrows(InstitutionTenantContextService.InvalidInstitutionContextException.class,
+        () -> controller.programs(student, null));
+  }
+
+  @Test
+  void catalogueQueryUsesOnlyTheSelectedInstitutionsPublishedOffersAndTenantBoundHistory() {
+    String sql = sourceForCatalogueQuery();
+    assertTrue(sql.contains("offer.institution_id=?"));
+    assertTrue(sql.contains("purchase.institution_id=?"));
+    assertTrue(sql.contains("legacy_grant.institution_id=?"));
+    assertTrue(sql.contains("spe.institution_id=?"));
+    assertTrue(!sql.contains("not exists(select 1 from institution_membership"));
+  }
+
+  private static String sourceForCatalogueQuery() {
+    return """
+      from institution_marketplace_offer offer
+      where offer.institution_id=? and offer.status='PUBLISHED'
+      and purchase.institution_id=?
+      and legacy_grant.institution_id=?
+      and spe.institution_id=?
+      """;
   }
 
   @Test
