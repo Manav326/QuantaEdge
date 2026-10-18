@@ -192,6 +192,22 @@ export default function InstitutionsAdminPage() {
     }catch(e){setError(e instanceof Error?e.message:'Branding image could not be uploaded.');}
     finally{setSaving(false);}
   }
+  async function removeBrandAsset(assetType:'logo'|'app-icon'){
+    if(!detail)return;
+    const label=assetType==='logo'?'school logo':'school app icon';
+    if(!window.confirm('Remove the current '+label+' from '+(detail.brand_display_name||detail.display_name)+'? It will no longer be served to learner apps.'))return;
+    setSaving(true);setError('');setNotice('');
+    try{
+      const result=await api<{removed:boolean;brandingVersion:number}>(
+        '/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,
+        {method:'DELETE'});
+      setNotice(result.removed
+        ? (assetType==='logo'?'School logo removed. Learner surfaces will use the school initial until another logo is uploaded.':'School app icon removed. Learner browser icons will use the school initial until another icon is uploaded.')
+        : 'There was no active '+label+' to remove.');
+      await loadDetail(detail.id);
+    }catch(e){setError(e instanceof Error?e.message:'The branding asset could not be removed.');}
+    finally{setSaving(false);}
+  }
   async function saveBilling(event:FormEvent){
     event.preventDefault();if(!detail)return;setSaving(true);setError('');
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/billing-contract',{method:'PUT',body:JSON.stringify(billing)});setNotice('Billing contract saved. New billable activations will be logged in the ledger.');await loadBase();await loadDetail(detail.id);}
@@ -298,9 +314,9 @@ export default function InstitutionsAdminPage() {
           <section className={styles.panel}><h3>White-label branding</h3><p>School identity shown in learner-facing web and in-app surfaces. Uploads accept PNG/JPEG images up to 2 MiB; assets are validated and scoped to this institution.</p><form className={styles.form} onSubmit={saveBranding}>
             <label>Branded display name *<input required minLength={2} maxLength={180} value={brand.displayName} onChange={e=>setBrand(v=>({...v,displayName:e.target.value}))}/></label>
             <label>School logo (PNG/JPEG, max 2 MiB)<input type="file" accept="image/png,image/jpeg" disabled={saving} onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void uploadBrandAsset('logo',file);}}/></label>
-            {detail.logo_url?<div className={styles.brandAssetPreview}><span>Current learner logo</span><img src={detail.logo_url} alt={detail.brand_display_name||detail.display_name+' logo'}/></div>:<p className={styles.disclaimer}>No school logo uploaded yet. A school initial will be used until a logo is provided.</p>}
+            {detail.logo_url?<div className={styles.brandAssetPreview}><span>Current learner logo</span><img src={detail.logo_url} alt={detail.brand_display_name||detail.display_name+' logo'}/><div className={styles.brandAssetActions}><button type="button" className={styles.danger} disabled={saving} onClick={()=>void removeBrandAsset('logo')}>Remove logo</button></div></div>:<p className={styles.disclaimer}>No school logo uploaded yet. A school initial will be used until a logo is provided.</p>}
             <label>App icon (PNG/JPEG, max 2 MiB)<input type="file" accept="image/png,image/jpeg" disabled={saving} onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void uploadBrandAsset('app-icon',file);}}/></label>
-            {detail.app_icon_url?<div className={styles.brandAssetPreview}><span>Current browser/app icon asset</span><img src={detail.app_icon_url} alt={detail.brand_display_name||detail.display_name+' app icon'}/></div>:null}
+            {detail.app_icon_url?<div className={styles.brandAssetPreview}><span>Current browser/app icon asset</span><img src={detail.app_icon_url} alt={detail.brand_display_name||detail.display_name+' app icon'}/><div className={styles.brandAssetActions}><button type="button" className={styles.danger} disabled={saving} onClick={()=>void removeBrandAsset('app-icon')}>Remove app icon</button></div></div>:<p className={styles.disclaimer}>No custom app icon uploaded. The school lettermark is used for browser tabs; a separate school-specific mobile app package is built from an approved app icon.</p>}
             <label>Google Play listing URL<input type="url" value={brand.storeListingUrl} onChange={e=>setBrand(v=>({...v,storeListingUrl:e.target.value}))} placeholder="https://play.google.com/store/apps/details?id=…"/></label>
             <div className={styles.themeSettingsGrid}>
               <label>Palette preset<select value={brand.presetId} onChange={e=>{const id=e.target.value;const preset=themePresets.find(item=>item.id===id);setBrand(v=>({...v,presetId:id,...(id!=='custom'&&preset?{primary:preset.primary,accent:preset.accent}:{})}));}}>
