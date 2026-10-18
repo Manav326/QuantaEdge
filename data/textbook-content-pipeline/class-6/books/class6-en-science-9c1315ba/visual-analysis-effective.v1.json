@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a634215f23cc28f85eceb172a97456aa7761fcf233ff7826c91b88dab0d36a6c",
+  "raw_analysis_sha256": "3d0596c021fba59038cd9aae4848d164441931ba776cb8d35ab5e7cd29477f07",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T21:41:21Z",
+      "checkpointed_at": "2026-10-18T21:45:46Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T21:42:14Z",
+      "checkpointed_at": "2026-10-18T21:46:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T21:43:25Z",
+      "checkpointed_at": "2026-10-18T21:47:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37567,7 +37567,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T21:43:52Z",
+      "checkpointed_at": "2026-10-18T21:48:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the hump structure of camels in different desert environments.",
         "visual_type": "page_with_multiple_visuals",
@@ -37932,7 +37932,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T21:44:44Z",
+      "checkpointed_at": "2026-10-18T21:49:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
