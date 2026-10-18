@@ -221,6 +221,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
+    var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
     val configuredTenantCode = remember { InstitutionBrandingRepository.normalizeCode(BuildConfig.INSTITUTION_CODE) }
     val launchTenantCode = remember(launchIntent, configuredTenantCode) {
         val linkedCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
@@ -438,7 +439,6 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var loginMode by rememberSaveable { mutableStateOf("STUDENT") }
     var lessonReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
-    var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
     var learningLanguage by rememberSaveable {
         mutableStateOf(preferences.getString("contentLanguage", "hi")?.takeIf { it == "hi" || it == "en" } ?: "hi")
     }
