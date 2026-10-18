@@ -32643,7 +32643,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
         "visible_text": [
           "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
@@ -32657,17 +32657,11 @@
           "Salim Ali",
           "Keoladeo National Park",
           "Ranganathittu Bird Sanctuary",
-          "Padma Vibhushan",
-          "terrestrial habitats",
-          "terrestrial",
-          "forest",
-          "desert",
-          "grassland",
-          "mountain"
+          "Padma Vibhushan"
         ],
-        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and their habitats, including the work of Salim Ali and the examples of terrestrial habitats.",
         "limitations": [
-          "The page does not provide specific examples of adaptations for each region or habitat.",
+          "The page does not provide specific examples of terrestrial habitats beyond forests, deserts, grasslands, and mountains.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
