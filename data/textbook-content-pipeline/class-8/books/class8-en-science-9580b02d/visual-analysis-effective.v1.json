@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4adc9dc2c6fd5981b70764d0d8a3332afed6b6748a89aa77441813332b95d64f",
+  "raw_analysis_sha256": "886f3027df06d826b6d131f6dc1413bb5ec565c61ef3c3c573db74675183e0be",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T16:20:43Z",
+      "checkpointed_at": "2026-10-18T16:27:23Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2667,7 +2667,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T16:22:04Z",
+      "checkpointed_at": "2026-10-18T16:28:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -25045,6 +25045,118 @@
         "limitations": [
           "No specific objects or figures are present."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d55bd67ca26f68d857471714",
+      "asset_sha256": "1a45c2af26934fd80ab42b8b09ab6beaf66f4154a7722f567554c42d5386d04f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1a45c2af26934fd80ab42b8b09ab6beaf66f4154a7722f567554c42d5386d04f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm orange shade.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T16:29:52Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm orange shade.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "de762a8d8def629da6684aa6",
+      "asset_sha256": "639421f156a9696331e6bf7289b93988ee70621c36f064fa7fa36885b9cec8e9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/639421f156a9696331e6bf7289b93988ee70621c36f064fa7fa36885b9cec8e9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T16:31:04Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2004296ee5e0231a71080d67",
+      "asset_sha256": "31d8c9178031b898936397e7c7913bd543b37622990d8cd37d5ecaf3e40d013e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/31d8c9178031b898936397e7c7913bd543b37622990d8cd37d5ecaf3e40d013e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T16:32:14Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
