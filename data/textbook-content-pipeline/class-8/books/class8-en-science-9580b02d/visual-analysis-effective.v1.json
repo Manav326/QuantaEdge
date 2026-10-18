@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7cf337ecf60197d563753d95020598719e6e62f041169b640e144266047383a9",
+  "raw_analysis_sha256": "1aa2b530012e421709123ac7fde61f558c4bb5b6400aba93873a9f73b5eb580f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:59:55Z",
+      "checkpointed_at": "2026-10-18T05:06:22Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:00:42Z",
+      "checkpointed_at": "2026-10-18T05:07:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -16862,6 +16862,136 @@
         "context_relation": "background",
         "limitations": [
           "no specific content or information provided"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8062df4341c86537a5c7185e",
+      "asset_sha256": "5c6461015558ea8ea9b206411c9bbd636c3284bbe17350f653822ef7153d67d0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/5c6461015558ea8ea9b206411c9bbd636c3284bbe17350f653822ef7153d67d0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and black striped background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or information is provided within the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:08:46Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow and black striped background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or information is provided within the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "240db6ac8ca5e261daa19d53",
+      "asset_sha256": "b33b43513d3b4bb2749952a9c13c793670f92e13c53bd31cb7de25e038ef7417",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/b33b43513d3b4bb2749952a9c13c793670f92e13c53bd31cb7de25e038ef7417.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a darker shade of the same color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:10:11Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a darker shade of the same color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3429e0e6bee4d066707c0a8a",
+      "asset_sha256": "44c22674ed008e6e6330dbac917437a77e5a8047910daf39fb79557921d5505d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/44c22674ed008e6e6330dbac917437a77e5a8047910daf39fb79557921d5505d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a textbook, likely used to illustrate a concept or serve as a decorative element.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:11:52Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a textbook, likely used to illustrate a concept or serve as a decorative element.",
+        "limitations": [
+          "The image does not contain any text or data points that can be analyzed for content or context."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
