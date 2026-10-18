@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 541,
+    "assets_selected": 544,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 539,
-    "assets_remaining": 6949,
+    "assets_analyzed": 542,
+    "assets_remaining": 6946,
     "assets_completion_percent": 7.2,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 536,
+    "assets_skipped_from_checkpoint": 539,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:37:09Z"
+      "checkpointed_at": "2026-10-18T04:39:50Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:37:28Z"
+      "checkpointed_at": "2026-10-18T04:40:09Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -19481,6 +19481,144 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T04:39:12Z"
+    },
+    {
+      "asset_id": "593a8c351c2199e64274c683",
+      "asset_sha256": "7d301168acc3c3217093cf3692dd720720aa52f5e490ee32390e9a0212203f17",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/7d301168acc3c3217093cf3692dd720720aa52f5e490ee32390e9a0212203f17.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words 'Welcome to the Wonderful",
+          "World of Science' appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image is a visual representation of a science fair event where a white sheet of paper with the words 'Welcome to the Wonderful World of Science' appears after being sprayed with a liquid.",
+        "limitations": [
+          "The image does not provide specific details about the liquid or the substance it sprayed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:40:25Z"
+    },
+    {
+      "asset_id": "868d8d1ff4c6a2b1e8e1ca53",
+      "asset_sha256": "7d301168acc3c3217093cf3692dd720720aa52f5e490ee32390e9a0212203f17",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/7d301168acc3c3217093cf3692dd720720aa52f5e490ee32390e9a0212203f17.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words 'Welcome to the Wonderful",
+          "World of Science' appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image is a visual representation of a science fair event where a white sheet of paper with the words 'Welcome to the Wonderful World of Science' appears after being sprayed with a liquid.",
+        "limitations": [
+          "The image does not provide specific details about the liquid or the substance it sprayed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:40:42Z"
+    },
+    {
+      "asset_id": "92587bfd6d4f4677558fd458",
+      "asset_sha256": "6513440f026bd51d7eaa781532f6027527a631a079888de96285d0801fad466b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/6513440f026bd51d7eaa781532f6027527a631a079888de96285d0801fad466b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words 'Welcome to the Wonderful",
+          "World of Science' appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Science fair entry gate",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome to the Wonderful World of Science",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image is a visual representation of a science fair event where a white sheet of paper with words appears after being sprayed with a liquid.",
+        "limitations": [
+          "The image does not provide specific details about the liquid or the substance it sprayed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:41:28Z"
     }
   ]
 }
