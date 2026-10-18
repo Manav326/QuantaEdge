@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "05b963f4cbf98b76e166a1a3e14dec0c7de7a3430667697d8e43a5731be5d103",
+  "raw_analysis_sha256": "1a9d231060782d2a2eaa0e2b6705c241bdf79eb6ed849e41c5f16100a188aabb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:40:26Z",
+      "checkpointed_at": "2026-10-18T22:49:24Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:41:17Z",
+      "checkpointed_at": "2026-10-18T22:50:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:41:56Z",
+      "checkpointed_at": "2026-10-18T22:50:52Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -31006,6 +31006,98 @@
         "context_relation": "The image is related to the topic of astronomy and the phases of the moon.",
         "limitations": [
           "The image does not provide specific details about the phases or their significance."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f915d083e64a35b98e819bea",
+      "asset_sha256": "f4e98a11836bb91b47d3b27cb4dc49421d4409df7ebe0daedb8d400ef5f13e5e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/f4e98a11836bb91b47d3b27cb4dc49421d4409df7ebe0daedb8d400ef5f13e5e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a dish with various vegetables and mushrooms.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about weather and materials.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:52:27Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a dish with various vegetables and mushrooms.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about weather and materials.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "67ae165fdf369f04a5848356",
+      "asset_sha256": "10d2f242582c76f4a1f58f961e2cea73355f14b84d55673b05011595a0648ae9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/10d2f242582c76f4a1f58f961e2cea73355f14b84d55673b05011595a0648ae9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a flashlight illuminating a prism and a mirror, creating a triangular light pattern on a white surface.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "prism",
+          "mirror",
+          "light pattern",
+          "triangle"
+        ],
+        "context_relation": "The image shows a physical demonstration of light behavior, specifically refraction and reflection, which is relevant to the discussion of weather and material properties in the text.",
+        "limitations": [
+          "The image does not include any text or labels that provide additional context or information.",
+          "The image is a static representation and does not depict any dynamic processes or changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:54:07Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a flashlight illuminating a prism and a mirror, creating a triangular light pattern on a white surface.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "prism",
+          "mirror",
+          "light pattern",
+          "triangle"
+        ],
+        "context_relation": "The image shows a physical demonstration of light behavior, specifically refraction and reflection, which is relevant to the discussion of weather and material properties in the text.",
+        "limitations": [
+          "The image does not include any text or labels that provide additional context or information.",
+          "The image is a static representation and does not depict any dynamic processes or changes."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

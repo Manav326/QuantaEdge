@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 715,
-    "successful_visual_analyses": 708,
-    "missing_visual_analyses": 1576,
+    "raw_analysis_result_rows": 717,
+    "successful_visual_analyses": 710,
+    "missing_visual_analyses": 1574,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1583,
+    "unresolved_count": 1581,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28064,9 +28064,18 @@
       "asset_path": "assets/f4e98a11836bb91b47d3b27cb4dc49421d4409df7ebe0daedb8d400ef5f13e5e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a dish with various vegetables and mushrooms.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about weather and materials.",
+        "limitations": [
+          "The image does not provide specific information about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28082,9 +28091,24 @@
       "asset_path": "assets/10d2f242582c76f4a1f58f961e2cea73355f14b84d55673b05011595a0648ae9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a flashlight illuminating a prism and a mirror, creating a triangular light pattern on a white surface.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "prism",
+          "mirror",
+          "light pattern",
+          "triangle"
+        ],
+        "context_relation": "The image shows a physical demonstration of light behavior, specifically refraction and reflection, which is relevant to the discussion of weather and material properties in the text.",
+        "limitations": [
+          "The image does not include any text or labels that provide additional context or information.",
+          "The image is a static representation and does not depict any dynamic processes or changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
