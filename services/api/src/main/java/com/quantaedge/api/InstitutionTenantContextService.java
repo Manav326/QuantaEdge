@@ -164,9 +164,7 @@ public class InstitutionTenantContextService {
     // update only the authenticated parent's own child links; tenant learning/report/course APIs
     // remain protected below. An institution selector must not be used to grant the child a
     // membership as a side effect of profile creation or editing.
-    if (requestPath.equals("/api/v1/students/preview")
-        || requestPath.matches("^/api/v1/students/me/(?:profile|profile-photo|language)$")
-        || requestPath.equals("/api/v1/guardians/children")
+    if (requestPath.equals("/api/v1/guardians/children")
         || requestPath.equals("/api/v1/guardians/children/archived")
         || requestPath.matches("^/api/v1/guardians/children/[0-9]+(?:/(?:restore|profile|credentials))?$")) {
       return false;
@@ -181,27 +179,6 @@ public class InstitutionTenantContextService {
         || requestPath.startsWith("/api/v1/admin/")) return false;
     return TENANT_REQUIRED_PREFIXES.stream().anyMatch(prefix ->
         requestPath.equals(prefix) || requestPath.startsWith(prefix));
-  }
-
-  /**
-   * Marketplace discovery and explicit checkout/enrolment routes may be used before the learner
-   * has a membership in the selected institution. These routes still require a valid selected
-   * tenant and must authorize the published offer, purchaser, guardian relationship and payment
-   * in the controller. Every other protected learner route requires active membership first.
-   */
-  public static boolean requiresActiveMembership(String method,String requestPath) {
-    if(!requiresInstitutionContext(requestPath) || method==null || requestPath==null) return false;
-    String verb=method.trim().toUpperCase(Locale.ROOT);
-    if("GET".equals(verb) && (
-        requestPath.equals("/api/v1/marketplace/courses")
-        || requestPath.equals("/api/v1/marketplace/family/courses"))) {
-      return false;
-    }
-    if("POST".equals(verb) && requestPath.matches(
-        "^/api/v1/marketplace/(?:courses/[0-9]+/orders|family/courses/[0-9]+/(?:orders|enroll-free)|orders/[0-9]+/verify|family/orders/[0-9]+/verify)$")) {
-      return false;
-    }
-    return true;
   }
 
   public InstitutionTenantContext requireSelector(String requestedCode) {
