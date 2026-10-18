@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1024,
+    "assets_selected": 1027,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1022,
-    "assets_remaining": 6466,
-    "assets_completion_percent": 13.6,
+    "assets_analyzed": 1025,
+    "assets_remaining": 6463,
+    "assets_completion_percent": 13.7,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1019,
+    "assets_skipped_from_checkpoint": 1022,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:36:28Z"
+      "checkpointed_at": "2026-10-18T19:39:49Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:36:51Z"
+      "checkpointed_at": "2026-10-18T19:40:12Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -37808,6 +37808,112 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T19:39:01Z"
+    },
+    {
+      "asset_id": "d44fc01c5d7db32e971c5555",
+      "asset_sha256": "d2181886d4968139a2c0e32402c8937d4573dea13544edbd684d62710a652cfd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/d2181886d4968139a2c0e32402c8937d4573dea13544edbd684d62710a652cfd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Bubbles",
+          "Vinegar",
+          "Soap solution",
+          "Eggshells or marble"
+        ],
+        "context_relation": "The text is a question about the observed phenomenon in the experiment described in the visible text.",
+        "limitations": [
+          "The image does not show the experiment or the results.",
+          "The text does not provide a solution or explanation for the observed phenomenon."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:40:57Z"
+    },
+    {
+      "asset_id": "934b1ce79b96716d8cbf12e6",
+      "asset_sha256": "5d8154b3b97dc2f4060a4f5267fd17cc5f60ab14ad7c9dc4c46e1a2bf9b5d4e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/5d8154b3b97dc2f4060a4f5267fd17cc5f60ab14ad7c9dc4c46e1a2bf9b5d4e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marbles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER   Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshells or marbles",
+          "Bubbles"
+        ],
+        "context_relation": "The image is a page from a textbook that discusses an experiment involving vinegar and soap solution on eggshells or marbles.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:41:40Z"
+    },
+    {
+      "asset_id": "719b1fbaf83427a60b385080",
+      "asset_sha256": "cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure",
+          "unclear if the image is a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, page with multiple visuals, or other"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:42:18Z"
     }
   ]
 }
