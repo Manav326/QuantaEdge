@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f962a858f86975d03a36c272642a044d82d3ea155cbe05c787b7d8ebcf00dbce",
+  "raw_analysis_sha256": "36cb1fd61923446a62d0d83c2cc1bf53235ab46c44e4697ed65279083a33765e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T18:21:13Z",
+      "checkpointed_at": "2026-10-18T18:26:37Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T18:22:06Z",
+      "checkpointed_at": "2026-10-18T18:27:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T18:23:16Z",
+      "checkpointed_at": "2026-10-18T18:28:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -32212,7 +32212,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39121458410",
+      "run_id": "39149728377",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -33728,21 +33728,83 @@
     {
       "asset_id": "d8ffdf13ed83586678af8d29",
       "asset_sha256": "9cec4a0b52488790f6b2ba26e52dc71424b0d4404b4f27e1eff45b88b26fade1",
-      "page_text_context_sha256": "2db557f5418225fa435f4637d0d73306d2235524de0ea91eef45ffd6dbacf54f",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 28,
       "asset_path": "page-0028.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2db557f5418225fa435f4637d0d73306d2235524de0ea91eef45ffd6dbacf54f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39121458410",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing a nature walk and the expertise of Dr Raghu and Maniram Chacha.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "facilitate an exciting nature walk. Dr Raghu is a scientist at\nthe nearby Research Laboratory and Maniram chacha is an\nelderly person from a nearby community. Maniram chacha\nis an expert in mimicking bird calls. He is also brilliant at\nidentifying a variety of plants and animals.",
+          "To prepare them for the nature walk, Dr Raghu informs\nthe students that the objective of this walk is to experience\nthe beauty and variety of plants and animals in the nature.\nThe students are excited to join them. They are curious\nto interact and learn from them. The teacher advises the\nstudents to",
+          "As they walk, they begin exploring the plants and animals\naround them. Dr Raghu advises the students to notice the\nvariety of smells in the park and emphasises respecting all\nliving creatures and observing them without disturbing.\nManiram chacha tells the students to not only observe different\nplant",
+          "The students can hear the chirping of birds. Dr Raghu\ninforms them that each bird has a unique chirp. This is an\nexample of diversity in nature. Dr Raghu requests Maniram\nchacha to mimic calls of some birds. Maniram chacha\nmimics different bird calls. The students enthusiastically\nstart copying him.",
+          "Have you ever observed different plants and animals\naround you? Share and discuss your observations with your\nfriends and teacher.",
+          "2.1 Diversity in Plants and Animals Around Us",
+          "Activity 2.1: Let us explore and record",
+          "Plan a nature walk with your teacher to a park or a\nnearby forest.",
+          "While on the nature walk, observe different plants,\ninsects, birds, and other animals. Also, note the weather\nconditions, whether it is hot, cold, windy and so on."
+        ],
+        "concepts": [
+          "Nature Walk",
+          "Dr Raghu",
+          "Maniram Chacha",
+          "Plants",
+          "Animals",
+          "Diversity",
+          "Observation",
+          "Mimicking",
+          "Weather Conditions"
+        ],
+        "context_relation": "The page discusses a nature walk and the expertise of Dr Raghu and Maniram Chacha.",
+        "limitations": [
+          "The page does not provide specific details about the nature walk or the students' observations.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T18:35:09Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing a nature walk and the expertise of Dr Raghu and Maniram Chacha.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "facilitate an exciting nature walk. Dr Raghu is a scientist at\nthe nearby Research Laboratory and Maniram chacha is an\nelderly person from a nearby community. Maniram chacha\nis an expert in mimicking bird calls. He is also brilliant at\nidentifying a variety of plants and animals.",
+          "To prepare them for the nature walk, Dr Raghu informs\nthe students that the objective of this walk is to experience\nthe beauty and variety of plants and animals in the nature.\nThe students are excited to join them. They are curious\nto interact and learn from them. The teacher advises the\nstudents to",
+          "As they walk, they begin exploring the plants and animals\naround them. Dr Raghu advises the students to notice the\nvariety of smells in the park and emphasises respecting all\nliving creatures and observing them without disturbing.\nManiram chacha tells the students to not only observe different\nplant",
+          "The students can hear the chirping of birds. Dr Raghu\ninforms them that each bird has a unique chirp. This is an\nexample of diversity in nature. Dr Raghu requests Maniram\nchacha to mimic calls of some birds. Maniram chacha\nmimics different bird calls. The students enthusiastically\nstart copying him.",
+          "Have you ever observed different plants and animals\naround you? Share and discuss your observations with your\nfriends and teacher.",
+          "2.1 Diversity in Plants and Animals Around Us",
+          "Activity 2.1: Let us explore and record",
+          "Plan a nature walk with your teacher to a park or a\nnearby forest.",
+          "While on the nature walk, observe different plants,\ninsects, birds, and other animals. Also, note the weather\nconditions, whether it is hot, cold, windy and so on."
+        ],
+        "concepts": [
+          "Nature Walk",
+          "Dr Raghu",
+          "Maniram Chacha",
+          "Plants",
+          "Animals",
+          "Diversity",
+          "Observation",
+          "Mimicking",
+          "Weather Conditions"
+        ],
+        "context_relation": "The page discusses a nature walk and the expertise of Dr Raghu and Maniram Chacha.",
+        "limitations": [
+          "The page does not provide specific details about the nature walk or the students' observations.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
