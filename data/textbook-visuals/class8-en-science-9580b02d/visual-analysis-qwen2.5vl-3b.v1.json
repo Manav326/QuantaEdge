@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 706,
+    "assets_selected": 708,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 703,
-    "assets_remaining": 1588,
-    "assets_completion_percent": 30.7,
+    "assets_analyzed": 705,
+    "assets_remaining": 1586,
+    "assets_completion_percent": 30.8,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 701,
+    "assets_skipped_from_checkpoint": 703,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:37:08Z"
+      "checkpointed_at": "2026-10-18T22:40:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:37:58Z"
+      "checkpointed_at": "2026-10-18T22:41:17Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T22:38:38Z"
+      "checkpointed_at": "2026-10-18T22:41:56Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -21158,6 +21158,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
       "checkpointed_at": "2026-10-18T22:39:12Z"
+    },
+    {
+      "asset_id": "4afd45322828057b69391418",
+      "asset_sha256": "caadbc7e639a6ac438104fbf83109622ff906adf770d9727ba1f57288251a85c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 23,
+      "asset_path": "page-0023.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a057e2c6018e124e5fd244c6af8ed543e2ec528481d9333e8332571fcc239c46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a page from a textbook about science, specifically focusing on the investigative nature of science and its applications in everyday life. It includes text and illustrations related to microorganisms, health, and the use of electricity in daily life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "This year, our investigative adventure will take us on a journey from the tiny microbes we can’t see to planet-wide challenges we can’t ignore.",
+          "We will start by examining something as small as a single drop of water, and uncover a hidden world of tiny organisms, unseen but deeply linked to us. Some of these are invisible helpers, that help us digest our food or produce medicines, while others can be harmful, causing infections.",
+          "But what does our body need to stay healthy? How do we fight these infections? We’ll find out how nutritious food, exercise, medicines, and vaccines help us stay healthy and fight infections. But that’s just the beginning. In today’s world, science does play a major role in improving our lives.",
+          "For example, we use electric current in many ways to help make our lives easier. We depend on the heating effect of electric current to keep us warm, while the magnetic effect helps motors run and machines function.",
+          "These phenomena depend on fundamental forces. So after watching electricity do work, we move on to study these forces themselves, starting with those that make objects speed up, slow down, or change direction.",
+          "Understanding forces helps explain why a ball thrown up in the air falls back to the ground, or why a car stops when the brakes are applied.",
+          "This also leads us to the idea of pressure—how the force is distributed over an object. The same concepts of force and pressure also decide how air moves. A small difference in pressure can result in a gentle breeze while a stronger pressure difference can lead to strong winds, and sometimes even cy"
+        ],
+        "concepts": [
+          "microorganisms",
+          "health",
+          "electricity",
+          "forces",
+          "pressure",
+          "cyclones"
+        ],
+        "context_relation": "The text and illustrations in the image are directly related to the concepts of microorganisms, health, and the use of electricity in daily life, as well as the study of forces and pressure.",
+        "limitations": [
+          "The image does not provide specific numerical data or formulas.",
+          "The illustrations are not detailed enough to provide specific information about the microorganisms or the effects of electricity and pressure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:46:34Z"
+    },
+    {
+      "asset_id": "40b1656d6cd8b9dbc69ea452",
+      "asset_sha256": "34e33701141b5e334fd310d68e7fdc241cede51bfe420e7bcff8f02f919361dc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/34e33701141b5e334fd310d68e7fdc241cede51bfe420e7bcff8f02f919361dc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "df735eb573cb53a4022a492872b9ec2ec578fc346f2551c73d6389aa308a1ab4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A sequence of images showing the phases of the moon.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "phases of the moon",
+          "astronomy"
+        ],
+        "context_relation": "The image is related to the topic of astronomy and the phases of the moon.",
+        "limitations": [
+          "The image does not provide specific details about the phases or their significance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T22:48:09Z"
     }
   ]
 }
