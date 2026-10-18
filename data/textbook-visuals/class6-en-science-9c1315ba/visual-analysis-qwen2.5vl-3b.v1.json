@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 448,
+    "assets_selected": 451,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 446,
-    "assets_remaining": 1632,
-    "assets_completion_percent": 21.5,
+    "assets_analyzed": 449,
+    "assets_remaining": 1629,
+    "assets_completion_percent": 21.6,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 443,
+    "assets_skipped_from_checkpoint": 446,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:13:29Z"
+      "checkpointed_at": "2026-10-18T04:16:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:14:11Z"
+      "checkpointed_at": "2026-10-18T04:17:37Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -13356,6 +13356,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T04:15:56Z"
+    },
+    {
+      "asset_id": "d0d75862499c5b291e50af71",
+      "asset_sha256": "9fd45116e0d4c898b57ddb62f351d09cc9255591bc6166885b87b775fba4f205",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/9fd45116e0d4c898b57ddb62f351d09cc9255591bc6166885b87b775fba4f205.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:18:10Z"
+    },
+    {
+      "asset_id": "42c63756ba2e830e8b4bffd7",
+      "asset_sha256": "4bf2a42f524932f45d4c98ad1fd0c0027fa63e7840626dac600be6f8981c2e4d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/4bf2a42f524932f45d4c98ad1fd0c0027fa63e7840626dac600be6f8981c2e4d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar with a white to orange gradient.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:18:49Z"
+    },
+    {
+      "asset_id": "a4713f652a92f6754780458e",
+      "asset_sha256": "54f989e76cbbb3c1cacef09d7c0d32dbc099aa88f315157db0dd26c83d0692a5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/54f989e76cbbb3c1cacef09d7c0d32dbc099aa88f315157db0dd26c83d0692a5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or images",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:19:23Z"
     }
   ]
 }
