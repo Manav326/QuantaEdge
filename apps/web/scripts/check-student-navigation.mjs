@@ -302,12 +302,14 @@ const androidMarketplaceContract = read('../../android/app/src/main/java/com/qua
 const androidFloatingTutorContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/FloatingTutorDock.kt');
 const studentMarketplaceContract = read('../app/student/marketplace/page.tsx');
 
-assert.ok(courseEnrollmentApiContract.includes("o.status='PUBLISHED'") &&
-  courseEnrollmentApiContract.includes("o.price_paise=0") &&
-  courseEnrollmentApiContract.includes("o.currency='INR'") &&
+assert.ok(courseEnrollmentApiContract.includes("offer.status='PUBLISHED'") &&
+  courseEnrollmentApiContract.includes("offer.price_paise=0") &&
+  courseEnrollmentApiContract.includes("offer.currency='INR'") &&
+  courseEnrollmentApiContract.includes('offer.institution_id=?') &&
+  courseEnrollmentApiContract.includes('institution_course_assignment assignment') &&
   courseEnrollmentApiContract.includes('course_purchase cp') &&
   courseEnrollmentApiContract.includes("e.status in ('ACTIVE','PAUSED')"),
-  'New self-enrolment must require an explicitly published free offer; existing enrollment/purchase may be resumed.');
+  'New self-enrolment must require an explicitly published free offer assigned to the selected institution; existing institution-scoped enrollment/purchase may be resumed.');
 assert.ok(courseMarketplaceApiContract.includes('@RequestHeader(value = "Idempotency-Key", required = false)') &&
   courseMarketplaceApiContract.includes("status in ('CREATING','PENDING')") &&
   courseMarketplaceApiContract.includes('client_request_key') &&
