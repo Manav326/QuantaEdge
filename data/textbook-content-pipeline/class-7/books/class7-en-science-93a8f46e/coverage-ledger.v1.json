@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 802,
-    "successful_visual_analyses": 794,
-    "missing_visual_analyses": 6686,
+    "raw_analysis_result_rows": 806,
+    "successful_visual_analyses": 798,
+    "missing_visual_analyses": 6682,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6694,
+    "unresolved_count": 6690,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40534,9 +40534,32 @@
       "asset_path": "assets/3506c4329dd09376e910e3107301229b996b08d242e5f1754d5da551007d673b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for an activity involving turmeric paper and samples.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "15",
+          "Using a dropper, put a drop of each of the samples used in",
+          "Activity 2.1, one by one, on separate pieces of turmeric paper.",
+          "Record your observations in Table 2.4.",
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.   Name of the sample"
+        ],
+        "concepts": [
+          "Activity 2.1",
+          "Turmeric paper",
+          "Observations",
+          "Table 2.4",
+          "Nature of samples"
+        ],
+        "context_relation": "The page is part of an educational activity involving the use of turmeric paper to test the nature of different samples.",
+        "limitations": [
+          "The page does not provide specific details about the samples or the nature of the activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40552,9 +40575,16 @@
       "asset_path": "assets/82ca623eb2a82f27eb49c675d52ee9d8e3d1d2b390dc8b9c237e0f4076cf4581.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red and yellow object with a sharp point.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40570,9 +40600,34 @@
       "asset_path": "assets/668684faf62ad993445a450901556457326f6e09b25bf6c09a251298f8f554d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A dropper is being used to apply a drop of a sample on a piece of turmeric paper.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "15",
+          "Using a dropper, put a drop of each of the samples used in",
+          "Activity 2.1, one by one, on separate pieces of turmeric paper.",
+          "Record your observations in Table 2.4.",
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.   Name of the sample"
+        ],
+        "concepts": [
+          "Activity 2.1",
+          "Dropper",
+          "Turmeric paper",
+          "Observations",
+          "Table 2.4",
+          "Nature of samples"
+        ],
+        "context_relation": "The image is related to the activity and observation recording in Activity 2.1.",
+        "limitations": [
+          "The image does not show the actual turmeric paper or the samples being tested.",
+          "The image does not show the results of the observations recorded in Table 2.4."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40588,9 +40643,27 @@
       "asset_path": "assets/03f6f584408c7cc7d9733bca03cd04f73191810a4990ac451e259aa8e5bc64c8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper testing.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "turmeric paper",
+          "testing",
+          "nature of samples"
+        ],
+        "context_relation": "Observations and recording",
+        "limitations": [
+          "No specific data or results are provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
