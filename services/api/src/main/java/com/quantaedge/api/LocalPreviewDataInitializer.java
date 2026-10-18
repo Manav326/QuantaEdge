@@ -17,18 +17,17 @@ public class LocalPreviewDataInitializer implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    UUID previewPublicId = UUID.fromString("7f4c7e1a-1b21-4db9-a6f6-9d4a1f1e7a31");
-    jdbc.update("delete from student where environment='LOCAL_PREVIEW' and public_id<>?", previewPublicId);
+    UUID previewPublicId = LocalPreviewIdentity.PUBLIC_ID;
 
     Long studentId = jdbc.queryForObject("""
       insert into student(public_id, display_name, class_code, board, language, environment, active)
-      values (?, 'आर्यन', '7', 'Bihar Board', 'hi', 'LOCAL_PREVIEW', true)
+      values (?, 'आर्यन', '7', 'Bihar Board', 'hi', ?, true)
       on conflict (public_id) do update set
         display_name=excluded.display_name, class_code=excluded.class_code,
         board=excluded.board, language=excluded.language,
-        environment='LOCAL_PREVIEW', active=true
+        environment=excluded.environment, active=true
       returning id
-      """, Long.class, previewPublicId);
+      """, Long.class, previewPublicId, LocalPreviewIdentity.ENVIRONMENT);
 
     Long institutionId=jdbc.queryForObject("""
       select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
