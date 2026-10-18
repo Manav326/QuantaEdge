@@ -54,6 +54,14 @@ public class QaTestPackController {
     return qa.install(text(body, "packKey"), text(body, "idempotencyKey"), owner.staffId());
   }
 
+  @PostMapping("/runs/{runId}/verify")
+  public Map<String,Object> verify(
+      @PathVariable UUID runId,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    AuthContext owner = requireOwner(context);
+    return qa.verifyRun(runId, owner.staffId());
+  }
+
   @GetMapping("/runs/{runId}")
   public Map<String,Object> run(
       @PathVariable UUID runId,
