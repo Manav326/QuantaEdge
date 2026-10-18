@@ -849,7 +849,7 @@ public class QaTestPackService {
   }
 
   private boolean baselineSnapshotsMatch(Map<String,Object> before, Map<String,Object> after) {
-    List<String> protectedTables = List.of("institution_tenant", "user_account", "student");
+    List<String> protectedTables = List.of("institution_tenant", "institution_branding", "user_account", "student", "guardian_student", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt");
     if (before == null || after == null || before.size() != protectedTables.size()
         || after.size() != protectedTables.size()) return false;
     for (String table : protectedTables) {
@@ -864,7 +864,7 @@ public class QaTestPackService {
 
   private Map<String,Object> baselineSnapshot() {
     Map<String,Object> snapshot = new LinkedHashMap<>();
-    for (String table : List.of("institution_tenant","user_account","student")) {
+    for (String table : List.of("institution_tenant","institution_branding","user_account","student","guardian_student","institution_user_membership","institution_membership","student_track_enrollment","student_lesson_progress","student_question_attempt")) {
       Map<String,Object> result = jdbc.queryForMap(
           "select count(*) as row_count, md5(coalesce(string_agg(md5(to_jsonb(t)::text), '' order by t.id),'')) as fingerprint from "
               + table + " t where qa_test_run_id is null");
