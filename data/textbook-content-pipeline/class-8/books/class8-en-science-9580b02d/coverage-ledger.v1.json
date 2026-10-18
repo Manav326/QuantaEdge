@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 674,
-    "successful_visual_analyses": 669,
-    "missing_visual_analyses": 1617,
+    "raw_analysis_result_rows": 677,
+    "successful_visual_analyses": 672,
+    "missing_visual_analyses": 1614,
     "failed_visual_analyses": 5,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1622,
+    "unresolved_count": 1619,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26618,9 +26618,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26636,9 +26645,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26654,9 +26672,40 @@
       "asset_path": "page-0015.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "List of names and academic positions of various educators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Santosh Gharpure, Professor, IIT Bombay, Mumbai",
+          "Satyajit Rath, Visiting Professor, Indian Institute of Science Education and Research, Pune",
+          "Savita Ladage, Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Sujata Bhargava, Former Professor, Savitribai Phule Pune University, Pune",
+          "Surendra Ghaskadbi, Former Scientist G, Agharkar Research Institute, Pune",
+          "V.B. Bhatia, Former Professor, Department of Physics and Astrophysics, University of Delhi, Delhi",
+          "Vijay Sarda, Former Associate Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "Viswajanani J Sattigeri, Head, CSIR-Traditional Knowledge Digital Library Unit, New Delhi",
+          "V.P. Srivastava, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Yukti Sharma, Professor, Department of Education (CIE), University of Delhi, Delhi"
+        ],
+        "concepts": [
+          "educational institutions",
+          "academic positions",
+          "professors",
+          "visiting professors",
+          "former professors",
+          "scientists",
+          "educational research institutes",
+          "universities",
+          "departments of physics and astrophysics",
+          "traditional knowledge digital library"
+        ],
+        "context_relation": "List of educators and their positions in various educational institutions and research institutes.",
+        "limitations": [
+          "The list is limited to names and positions, not the details of their work or achievements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
