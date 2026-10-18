@@ -65,7 +65,6 @@ export default function GoogleSignInButton({
   const [error, setError] = useState('');
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState(false);
-  const clientId = (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '').trim();
 
   const onCredential = useCallback(async (response: GoogleCredentialResponse) => {
     const credential = String(response.credential || '').trim();
@@ -114,11 +113,22 @@ export default function GoogleSignInButton({
     let active = true;
     setReady(false);
     setError('');
-    if (!clientId) {
-      setError('Google sign-in is not configured for this deployment yet.');
-      return () => { active = false; };
-    }
-    loadGoogleIdentityServices().then(() => {
+    const initialize = async () => {
+      const configResponse = await fetch('/api/v1/auth/google/config', {
+        method: 'GET',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: { Accept: 'application/json' },
+      });
+      const config = await configResponse.json().catch(() => ({}));
+      if (!configResponse.ok) {
+        throw new Error(config.message || config.error || 'Google sign-in configuration could not be loaded.');
+      }
+      const clientId = String(config.clientId || '').trim();
+      if (!config.configured || !clientId) {
+        throw new Error('Google sign-in is not configured on this server yet. Ask an administrator to configure GOOGLE_WEB_CLIENT_ID.');
+      }
+      await loadGoogleIdentityServices();
       if (!active || !target.current || !window.google?.accounts?.id) return;
       target.current.replaceChildren();
       window.google.accounts.id.initialize({
@@ -140,11 +150,12 @@ export default function GoogleSignInButton({
         locale,
       });
       setReady(true);
-    }).catch(reason => {
+    };
+    void initialize().catch(reason => {
       if (active) setError(reason instanceof Error ? reason.message : 'Google sign-in could not be loaded.');
     });
     return () => { active = false; };
-  }, [clientId, context, locale, onCredential]);
+  }, [context, locale, onCredential]);
 
   return (
     <div className="qe-google-signin">

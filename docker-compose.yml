@@ -83,8 +83,6 @@ services:
   web:
     build:
       context: ./apps/web
-      args:
-        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_WEB_CLIENT_ID:-}
     environment:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
