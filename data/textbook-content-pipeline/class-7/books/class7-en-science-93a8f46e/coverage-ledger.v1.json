@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 617,
-    "successful_visual_analyses": 609,
-    "missing_visual_analyses": 6871,
+    "raw_analysis_result_rows": 620,
+    "successful_visual_analyses": 612,
+    "missing_visual_analyses": 6868,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6879,
+    "unresolved_count": 6876,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33721,9 +33721,30 @@
       "asset_path": "assets/a592d0632241c5072c548d6f5f312d32a7abe5876728d63993cada569e210bd3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing vials of different liquids and test tubes with blue litmus paper strips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Litmus as an indicator",
+          "Science Laboratory",
+          "Activity 2.1: Let us explore",
+          "Collecting samples",
+          "Cutting blue litmus paper"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text.",
+        "limitations": [
+          "The image does not show the actual litmus paper strips or the liquids being tested."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -33739,9 +33760,40 @@
       "asset_path": "assets/43a679389c746bf00fd0a82ef7231294bd4b8715b281d65390b26d3721b54814.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table with several small bottles and test tubes containing different liquids, likely for a science experiment involving litmus paper and various solutions.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Science Experiment",
+          "Lemon Juice",
+          "Soap Solution",
+          "Amla Juice",
+          "Tamarind Water",
+          "Vinegar",
+          "Baking Soda Solution",
+          "Lime Water",
+          "Tap Water",
+          "Washing Powder Solution",
+          "Sugar Solution",
+          "Salt Solution",
+          "Blue Litmus Paper"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text, which involves collecting samples of different liquids and using a strip of blue litmus paper for an experiment.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the litmus paper testing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -33757,9 +33809,30 @@
       "asset_path": "assets/6b08be827a908139d61e8542a68a72e279dca63bd09e581f0e80612b16e61b14.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A boy is using a pipette to transfer a liquid into a test tube.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1",
+          "Collecting samples",
+          "Cutting litmus paper"
+        ],
+        "context_relation": "The image is related to the activity described in the visible text.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the litmus paper test."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
