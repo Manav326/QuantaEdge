@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 665,
-    "successful_visual_analyses": 658,
-    "missing_visual_analyses": 1413,
-    "failed_visual_analyses": 7,
+    "raw_analysis_result_rows": 669,
+    "successful_visual_analyses": 661,
+    "missing_visual_analyses": 1409,
+    "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1420,
+    "unresolved_count": 1417,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26769,7 +26769,7 @@
       "asset_path": "page-0015.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -26787,9 +26787,26 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Photographs of rocks and minerals for Chapter 11 'Nature's Treasures' and illustrations from Stellari.",
+        "visual_type": "photo",
+        "visible_text": [
+          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11"
+        ],
+        "concepts": [
+          "rocks",
+          "minerals",
+          "photographs",
+          "illustrations",
+          "Stellari"
+        ],
+        "context_relation": "The photographs and illustrations are provided for educational content related to Chapter 11 'Nature's Treasures'.",
+        "limitations": [
+          "The image does not provide specific details about the content of the photographs or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26805,9 +26822,26 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Photographs of rocks and minerals for Chapter 11 'Nature's Treasures' provided by various experts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11"
+        ],
+        "concepts": [
+          "rocks",
+          "minerals",
+          "photographs",
+          "Indian Astronomical Observatory",
+          "HBCSE, TIFR, Mumbai"
+        ],
+        "context_relation": "The photographs and illustrations are provided for educational purposes in Chapter 11 of the textbook.",
+        "limitations": [
+          "The image does not show the photographs or illustrations themselves."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26823,9 +26857,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

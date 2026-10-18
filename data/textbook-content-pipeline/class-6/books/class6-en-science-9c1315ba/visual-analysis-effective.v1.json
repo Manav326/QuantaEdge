@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fe99fbf805d7764aa414d08eed3ae4f8c89aada94cecafa2b1eec42cc4fffb37",
+  "raw_analysis_sha256": "0ecca45946ea7a7702827fbeba742b44b1cd6619828545cf823942d7a8bc3768",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:17:05Z",
+      "checkpointed_at": "2026-10-18T12:19:34Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -28534,6 +28534,178 @@
         "context_relation": "Acknowledgements section of a textbook",
         "limitations": [
           "No visible content on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "63a975c34f1065630c7c14aa",
+      "asset_sha256": "938b2e0a9102f298041c3687691b01bc67b5f0e7c1291c39d42fc1d87dd87d51",
+      "page_text_context_sha256": "16c16f72b228d553278d78ed1d411644ae7381b3fac44372e691bd44febc6c27",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 15,
+      "asset_path": "page-0015.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bd4c52b2a585d0a6a1b357df",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ab1351f5af64b41da759c1a6e459b7bf4101d7e1caa279ed1700e985b509e3e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Photographs of rocks and minerals for Chapter 11 'Nature's Treasures' and illustrations from Stellari.",
+        "visual_type": "photo",
+        "visible_text": [
+          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11"
+        ],
+        "concepts": [
+          "rocks",
+          "minerals",
+          "photographs",
+          "illustrations",
+          "Stellari"
+        ],
+        "context_relation": "The photographs and illustrations are provided for educational content related to Chapter 11 'Nature's Treasures'.",
+        "limitations": [
+          "The image does not provide specific details about the content of the photographs or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:25:04Z",
+      "effective_analysis": {
+        "visual_summary": "Photographs of rocks and minerals for Chapter 11 'Nature's Treasures' and illustrations from Stellari.",
+        "visual_type": "photo",
+        "visible_text": [
+          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11"
+        ],
+        "concepts": [
+          "rocks",
+          "minerals",
+          "photographs",
+          "illustrations",
+          "Stellari"
+        ],
+        "context_relation": "The photographs and illustrations are provided for educational content related to Chapter 11 'Nature's Treasures'.",
+        "limitations": [
+          "The image does not provide specific details about the content of the photographs or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "238c5c47670f0a13ebd81bd2",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ab1351f5af64b41da759c1a6e459b7bf4101d7e1caa279ed1700e985b509e3e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Photographs of rocks and minerals for Chapter 11 'Nature's Treasures' provided by various experts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11"
+        ],
+        "concepts": [
+          "rocks",
+          "minerals",
+          "photographs",
+          "Indian Astronomical Observatory",
+          "HBCSE, TIFR, Mumbai"
+        ],
+        "context_relation": "The photographs and illustrations are provided for educational purposes in Chapter 11 of the textbook.",
+        "limitations": [
+          "The image does not show the photographs or illustrations themselves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:25:29Z",
+      "effective_analysis": {
+        "visual_summary": "Photographs of rocks and minerals for Chapter 11 'Nature's Treasures' provided by various experts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11"
+        ],
+        "concepts": [
+          "rocks",
+          "minerals",
+          "photographs",
+          "Indian Astronomical Observatory",
+          "HBCSE, TIFR, Mumbai"
+        ],
+        "context_relation": "The photographs and illustrations are provided for educational purposes in Chapter 11 of the textbook.",
+        "limitations": [
+          "The image does not show the photographs or illustrations themselves."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8dbeca4bba3c32a57e150d59",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ab1351f5af64b41da759c1a6e459b7bf4101d7e1caa279ed1700e985b509e3e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:25:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
