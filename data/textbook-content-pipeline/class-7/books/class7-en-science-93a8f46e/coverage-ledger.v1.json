@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 782,
-    "successful_visual_analyses": 774,
-    "missing_visual_analyses": 6706,
+    "raw_analysis_result_rows": 786,
+    "successful_visual_analyses": 778,
+    "missing_visual_analyses": 6702,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6714,
+    "unresolved_count": 6710,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39811,9 +39811,27 @@
       "asset_path": "assets/3108908e5b5f5a7abacb792e9a21033a47883a763211c495a5963238274e7fdf.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper testing.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Turmeric paper",
+          "Observations"
+        ],
+        "context_relation": "The table is used to record observations from the activity involving turmeric paper.",
+        "limitations": [
+          "The table is incomplete, missing specific details about the samples and their colors."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39829,9 +39847,27 @@
       "asset_path": "assets/53d5debaf4e721b0ac597bbbbd84e2295f42a590ad8575fc772a14ade6a4bc9d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table for recording observations of turmeric paper testing.",
+        "visual_type": "table",
+        "visible_text": [
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.",
+          "Name of the sample"
+        ],
+        "concepts": [
+          "Observations",
+          "Turmeric paper",
+          "Nature of samples"
+        ],
+        "context_relation": "The table is used to record the results of testing different samples using turmeric paper.",
+        "limitations": [
+          "The table is incomplete, missing specific details about the samples tested."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39847,9 +39883,31 @@
       "asset_path": "assets/fb36b61a318253c622b698b2a9cb5e828801b4e08b837cdc1407b114d777c93a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a piece of turmeric paper with a droplet of a sample on it, next to a small pile of turmeric powder.",
+        "visual_type": "photo",
+        "visible_text": [
+          "15",
+          "Using a dropper, put a drop of each of the samples used in",
+          "Activity 2.1, one by one, on separate pieces of turmeric paper.",
+          "Record your observations in Table 2.4.",
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.   Name of the sample"
+        ],
+        "concepts": [
+          "Testing the nature of samples",
+          "Turmeric paper",
+          "Activity 2.1",
+          "Table 2.4"
+        ],
+        "context_relation": "The image is related to the educational content of the textbook, specifically the activity and table mentioned in the text.",
+        "limitations": [
+          "The image does not show the actual activity or table being referred to in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39865,9 +39923,33 @@
       "asset_path": "assets/5fabbe837ff153d6a503f5cd3b4d395d20fadeefa1ddbded7c9abc4853814a49.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of turmeric powder on a white background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "15",
+          "Using a dropper, put a drop of each of the samples used in",
+          "Activity 2.1, one by one, on separate pieces of turmeric paper.",
+          "Record your observations in Table 2.4.",
+          "Neutral Table 2.4: Testing the nature of samples with turmeric paper",
+          "The colour of the turmeric paper",
+          "S.No.   Name of the sample"
+        ],
+        "concepts": [
+          "turmeric powder",
+          "Activity 2.1",
+          "Observations",
+          "Table 2.4",
+          "Nature of samples"
+        ],
+        "context_relation": "The image is related to the educational content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the nature of the samples tested.",
+          "The image does not show the results of the observations recorded in Table 2.4."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
