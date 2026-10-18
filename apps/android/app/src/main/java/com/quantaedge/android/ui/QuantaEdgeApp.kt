@@ -3135,7 +3135,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             AppRoute.DIAGNOSTIC -> openDiagnostic()
             AppRoute.ASSESSMENTS -> openAssessments(assessmentSubjectFilter)
             AppRoute.ASSESSMENT_RESULTS -> loadAssessmentResults()
-            AppRoute.RESOURCES -> openResources(currentSubject)
+            AppRoute.RESOURCES -> openResources(resourceSubjectFilter)
             AppRoute.DOCUMENT_READER -> retryDocumentPage()
             AppRoute.CLASSES -> openClasses(currentSubject)
             AppRoute.RECORDING_PLAYER -> openRecording(selectedRecording)
@@ -3263,7 +3263,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             "learn" -> { lastStudentNavGroup = key; openSubject(currentSubject) }
             "practice" -> { lastStudentNavGroup = key; openAssessments("ALL") }
             "progress" -> { lastStudentNavGroup = key; openProgress() }
-            "library" -> { lastStudentNavGroup = key; openResources(currentSubject) }
+            "library" -> { lastStudentNavGroup = key; openResources() }
         }
     }
     BackHandler(enabled = signedIn || route == AppRoute.LOGIN) {
