@@ -998,7 +998,7 @@ public class CourseMarketplaceController {
     if("SUSPENDED".equals(previousStatus)) {
       throw new SecurityException("Membership in the selected institution is suspended. Contact the institution administrator.");
     }
-    Long authorized=jdbc.queryForObject("""
+    Boolean authorized=jdbc.queryForObject("""
       select exists(select 1 from institution_membership m
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         join guardian_student gs on gs.student_id=m.student_id
