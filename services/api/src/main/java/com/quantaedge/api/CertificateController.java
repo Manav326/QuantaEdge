@@ -117,12 +117,12 @@ public class CertificateController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> items = jdbc.queryForList("""
-        SELECT CASE WHEN s.program_id IS NULL
+        SELECT CASE WHEN p.id IS NULL
                     THEN 'CLASS:' || cc.code || ':' || s.code
-                    ELSE 'COURSE:' || s.program_id::text || ':' || s.code
+                    ELSE 'COURSE:' || p.id::text || ':' || s.code
                END AS track_key,
                cc.code AS class_code, s.code AS subject_code, s.display_name AS subject_name,
-               s.program_id AS course_id, p.display_name AS course_name,
+               p.id AS course_id, p.display_name AS course_name,
                COUNT(DISTINCT l.id) AS lessons,
                COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed,
                COALESCE(round(100.0 * COUNT(DISTINCT l.id)
@@ -134,19 +134,32 @@ public class CertificateController {
         JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         LEFT JOIN curriculum_program p ON p.id=s.program_id
+          OR (s.program_id IS NULL AND p.class_id=cc.id
+            AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
+            AND EXISTS(select 1 from curriculum_program_subject mapped_subject
+              where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
+                and mapped_subject.subject_id=s.id))
         LEFT JOIN curriculum_chapter ch
           ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
         LEFT JOIN student_lesson_progress progress
           ON progress.student_id=st.id AND progress.lesson_id=l.id
         WHERE st.id=? AND st.active=true
-          AND ((s.program_id IS NULL AND cc.code=st.class_code)
+          AND (
+            (s.program_id IS NULL AND cc.code=st.class_code
+              AND (cc.code NOT IN ('6','7','8') OR (
+                p.id IS NOT NULL AND EXISTS (
+                  SELECT 1 FROM student_program_enrollment spe
+                  WHERE spe.student_id=st.id AND spe.program_id=p.id AND spe.status='ACTIVE'
+                )
+              )))
             OR (s.program_id IS NOT NULL AND p.status='ACTIVE'
                 AND EXISTS (
                   SELECT 1 FROM student_program_enrollment spe
                   WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
-                )))
-        GROUP BY cc.code,cc.sort_order,s.code,s.display_name,s.program_id,p.display_name,s.sort_order
+                ))
+          )
+        GROUP BY cc.code,cc.sort_order,s.code,s.display_name,s.program_id,p.id,p.code,p.display_name,s.sort_order
         ORDER BY cc.sort_order,s.sort_order,s.code
         """, context.studentId());
     return Map.of("items", items);
