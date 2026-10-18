@@ -95,10 +95,11 @@ export default function InstitutionsAdminPage() {
         api<Institution[]>('/api/v1/hrms/platform/institutions'),
         api<Course[]>('/api/v1/hrms/platform/institutions/catalog/courses'),
         api<ThemePreset[]>('/api/v1/hrms/platform/institutions/theme-presets'),
-        api<IntegrationReadiness>('/api/v1/hrms/platform/institutions/integration-readiness'),
+        api<IntegrationReadiness>('/api/v1/hrms/platform/institutions/integration-readiness')
+          .catch(e=>{setReadinessError(e instanceof Error?e.message:'Platform integration readiness is unavailable.');return null;}),
       ]);
       setOverview(o);setInstitutions(Array.isArray(i)?i:[]);setCatalog(Array.isArray(c)?c:[]);setThemePresets(Array.isArray(presets)?presets:[]);
-      setIntegrationReadiness(integrations);setReadinessError('');
+      if(integrations){setIntegrationReadiness(integrations);setReadinessError('');}
     }catch(e){const msg=e instanceof Error?e.message:'Platform tenant records could not be loaded.';setError(msg);if(/authentication|required|session expired/i.test(msg))router.replace('/login');}
     finally{setLoading(false);}
   },[router]);
