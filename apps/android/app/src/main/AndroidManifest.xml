@@ -18,10 +18,6 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -34,6 +30,618 @@
                 <data android:scheme="https" android:host="qe.thinkwithsujeet.in" android:pathPrefix="${institutionLinkPath}" />
             </intent-filter>
         </activity>
+        <activity-alias
+            android:name=".launcher.Platform"
+            android:targetActivity=".MainActivity"
+            android:label="${applicationLabel}"
+            android:icon="${applicationIcon}"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot01"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_01_label"
+            android:icon="@drawable/tenant_launcher_alias_01"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot02"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_02_label"
+            android:icon="@drawable/tenant_launcher_alias_02"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot03"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_03_label"
+            android:icon="@drawable/tenant_launcher_alias_03"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot04"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_04_label"
+            android:icon="@drawable/tenant_launcher_alias_04"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot05"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_05_label"
+            android:icon="@drawable/tenant_launcher_alias_05"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot06"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_06_label"
+            android:icon="@drawable/tenant_launcher_alias_06"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot07"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_07_label"
+            android:icon="@drawable/tenant_launcher_alias_07"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot08"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_08_label"
+            android:icon="@drawable/tenant_launcher_alias_08"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot09"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_09_label"
+            android:icon="@drawable/tenant_launcher_alias_09"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot10"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_10_label"
+            android:icon="@drawable/tenant_launcher_alias_10"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot11"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_11_label"
+            android:icon="@drawable/tenant_launcher_alias_11"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot12"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_12_label"
+            android:icon="@drawable/tenant_launcher_alias_12"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot13"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_13_label"
+            android:icon="@drawable/tenant_launcher_alias_13"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot14"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_14_label"
+            android:icon="@drawable/tenant_launcher_alias_14"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot15"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_15_label"
+            android:icon="@drawable/tenant_launcher_alias_15"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot16"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_16_label"
+            android:icon="@drawable/tenant_launcher_alias_16"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot17"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_17_label"
+            android:icon="@drawable/tenant_launcher_alias_17"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot18"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_18_label"
+            android:icon="@drawable/tenant_launcher_alias_18"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot19"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_19_label"
+            android:icon="@drawable/tenant_launcher_alias_19"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot20"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_20_label"
+            android:icon="@drawable/tenant_launcher_alias_20"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot21"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_21_label"
+            android:icon="@drawable/tenant_launcher_alias_21"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot22"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_22_label"
+            android:icon="@drawable/tenant_launcher_alias_22"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot23"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_23_label"
+            android:icon="@drawable/tenant_launcher_alias_23"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot24"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_24_label"
+            android:icon="@drawable/tenant_launcher_alias_24"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot25"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_25_label"
+            android:icon="@drawable/tenant_launcher_alias_25"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot26"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_26_label"
+            android:icon="@drawable/tenant_launcher_alias_26"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot27"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_27_label"
+            android:icon="@drawable/tenant_launcher_alias_27"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot28"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_28_label"
+            android:icon="@drawable/tenant_launcher_alias_28"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot29"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_29_label"
+            android:icon="@drawable/tenant_launcher_alias_29"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot30"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_30_label"
+            android:icon="@drawable/tenant_launcher_alias_30"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot31"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_31_label"
+            android:icon="@drawable/tenant_launcher_alias_31"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot32"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_32_label"
+            android:icon="@drawable/tenant_launcher_alias_32"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot33"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_33_label"
+            android:icon="@drawable/tenant_launcher_alias_33"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot34"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_34_label"
+            android:icon="@drawable/tenant_launcher_alias_34"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot35"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_35_label"
+            android:icon="@drawable/tenant_launcher_alias_35"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot36"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_36_label"
+            android:icon="@drawable/tenant_launcher_alias_36"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot37"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_37_label"
+            android:icon="@drawable/tenant_launcher_alias_37"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot38"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_38_label"
+            android:icon="@drawable/tenant_launcher_alias_38"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot39"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_39_label"
+            android:icon="@drawable/tenant_launcher_alias_39"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot40"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_40_label"
+            android:icon="@drawable/tenant_launcher_alias_40"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot41"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_41_label"
+            android:icon="@drawable/tenant_launcher_alias_41"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot42"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_42_label"
+            android:icon="@drawable/tenant_launcher_alias_42"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot43"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_43_label"
+            android:icon="@drawable/tenant_launcher_alias_43"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot44"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_44_label"
+            android:icon="@drawable/tenant_launcher_alias_44"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot45"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_45_label"
+            android:icon="@drawable/tenant_launcher_alias_45"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot46"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_46_label"
+            android:icon="@drawable/tenant_launcher_alias_46"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot47"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_47_label"
+            android:icon="@drawable/tenant_launcher_alias_47"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot48"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_48_label"
+            android:icon="@drawable/tenant_launcher_alias_48"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot49"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_49_label"
+            android:icon="@drawable/tenant_launcher_alias_49"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".launcher.TenantSlot50"
+            android:targetActivity=".MainActivity"
+            android:label="@string/tenant_launcher_alias_50_label"
+            android:icon="@drawable/tenant_launcher_alias_50"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

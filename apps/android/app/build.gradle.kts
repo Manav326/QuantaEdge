@@ -1,5 +1,21 @@
+import groovy.json.JsonSlurper
 import org.gradle.api.tasks.Copy
+import java.io.File
 import java.security.MessageDigest
+
+data class TenantLauncherAliasEntry(
+    val slot: Int,
+    val institutionCode: String,
+    val displayName: String,
+    val iconFile: File
+)
+
+fun xmlEscapeForAndroidString(value: String): String = value
+    .replace("&", "&amp;")
+    .replace("<", "&lt;")
+    .replace(">", "&gt;")
+    .replace("\"", "&quot;")
+    .replace("'", "&apos;")
 
 plugins {
     id("com.android.application")
@@ -29,18 +45,85 @@ val configuredInstitutionCode = providers.gradleProperty("quantaedgeInstitutionC
 val suppliedInstitutionName = providers.gradleProperty("quantaedgeInstitutionName")
     .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_NAME"))
     .orElse("").get().trim()
-val configuredInstitutionDisplayName = if (configuredInstitutionCode.isBlank()) "QuantaEdge" else suppliedInstitutionName
-require(configuredInstitutionCode.isBlank() || configuredInstitutionDisplayName.length in 2..180) {
-    "A tenant-branded Android package requires QUANTAEDGE_INSTITUTION_NAME (2–180 characters)."
+val configuredInstitutionIconPath = providers.gradleProperty("quantaedgeInstitutionIconPath")
+    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_ICON_PATH"))
+    .orNull?.trim()?.takeIf { it.isNotBlank() }
+
+// Default distribution is one shared Play package. A different package is an explicit
+// alternate distribution mode, never an automatic side effect of setting a tenant code.
+val configuredInstitutionApplicationIdOverride = providers.gradleProperty("quantaedgeInstitutionApplicationId")
+    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_APPLICATION_ID"))
+    .orNull?.trim()?.takeIf { it.isNotBlank() }
+val isDedicatedInstitutionPackage = configuredInstitutionApplicationIdOverride != null &&
+    configuredInstitutionApplicationIdOverride != "com.quantaedge.android"
+val configuredInstitutionApplicationId = configuredInstitutionApplicationIdOverride ?: "com.quantaedge.android"
+val configuredInstitutionDisplayName = if (isDedicatedInstitutionPackage) suppliedInstitutionName else "QuantaEdge"
+
+require(configuredInstitutionCode.isBlank() || isDedicatedInstitutionPackage) {
+    "The shared QuantaEdge package must resolve the school from its trusted /school/{institutionCode}/ link. Set QUANTAEDGE_INSTITUTION_APPLICATION_ID only for the separate dedicated-package distribution."
+}
+require(!isDedicatedInstitutionPackage || configuredInstitutionCode.isNotBlank()) {
+    "A dedicated institution package requires QUANTAEDGE_INSTITUTION_CODE."
+}
+require(!isDedicatedInstitutionPackage || configuredInstitutionDisplayName.length in 2..180) {
+    "A dedicated institution package requires QUANTAEDGE_INSTITUTION_NAME (2–180 characters)."
 }
 require(configuredInstitutionDisplayName.none { it.code < 32 || it.code == 127 }) {
     "Institution display name contains control characters."
 }
-val configuredInstitutionIconPath = providers.gradleProperty("quantaedgeInstitutionIconPath")
-    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_ICON_PATH"))
+require(!isDedicatedInstitutionPackage || !configuredInstitutionIconPath.isNullOrBlank()) {
+    "A dedicated institution package requires QUANTAEDGE_INSTITUTION_ICON_PATH. The shared Play-listing package instead uses its packaged launcher aliases."
+}
+require(isDedicatedInstitutionPackage || configuredInstitutionIconPath == null) {
+    "QUANTAEDGE_INSTITUTION_ICON_PATH belongs to the optional dedicated-package mode. Shared package launcher aliases use QUANTAEDGE_LAUNCHER_ALIAS_MANIFEST."
+}
+
+val configuredLauncherAliasManifestPath = providers.gradleProperty("quantaedgeLauncherAliasManifest")
+    .orElse(providers.environmentVariable("QUANTAEDGE_LAUNCHER_ALIAS_MANIFEST"))
     .orNull?.trim()?.takeIf { it.isNotBlank() }
-// Every generated segment must begin with a letter. Institution codes may start
-// with digits or contain only punctuation after normalization, so always prefix the slug.
+val configuredLauncherAliases: List<TenantLauncherAliasEntry> =
+    if (configuredLauncherAliasManifestPath == null) {
+        emptyList()
+    } else {
+        require(!isDedicatedInstitutionPackage) {
+            "QUANTAEDGE_LAUNCHER_ALIAS_MANIFEST is only supported by the shared application-ID distribution."
+        }
+        val aliasManifest = file(configuredLauncherAliasManifestPath)
+        require(aliasManifest.isFile) {
+            "QUANTAEDGE_LAUNCHER_ALIAS_MANIFEST does not point to a readable JSON file: " + aliasManifest.absolutePath
+        }
+        val parsed = JsonSlurper().parse(aliasManifest) as? List<*>
+            ?: error("The launcher alias manifest must be a JSON array of tenant entries.")
+        require(parsed.size <= 50) { "At most 50 reviewed tenant launcher aliases are supported per shared-app release." }
+        parsed.mapIndexed { index, raw ->
+            val row = raw as? Map<*, *> ?: error("Launcher alias entry ${index + 1} must be an object.")
+            val code = (row["institutionCode"] ?: row["code"])?.toString()?.trim()?.uppercase().orEmpty()
+            val displayName = (row["displayName"] ?: row["name"])?.toString()?.trim().orEmpty()
+            val iconPath = (row["iconPath"] ?: row["icon_path"])?.toString()?.trim().orEmpty()
+            val slot = (row["slot"] as? Number)?.toInt() ?: index + 1
+            require(code.matches(Regex("^[A-Z0-9][A-Z0-9_-]{2,31}$"))) {
+                "Launcher alias entry ${index + 1} has an invalid institutionCode."
+            }
+            require(displayName.length in 2..180 && displayName.none { it.code < 32 || it.code == 127 }) {
+                "Launcher alias entry ${index + 1} must have a valid 2–180 character displayName."
+            }
+            require(slot in 1..50) { "Launcher alias entry ${index + 1} slot must be between 1 and 50." }
+            require(iconPath.isNotBlank()) { "Launcher alias entry ${index + 1} must specify iconPath." }
+            TenantLauncherAliasEntry(slot, code, displayName, file(iconPath))
+        }
+    }
+require(configuredLauncherAliases.map { it.institutionCode }.distinct().size == configuredLauncherAliases.size) {
+    "Launcher alias manifest contains duplicate institution codes."
+}
+require(configuredLauncherAliases.map { it.slot }.distinct().size == configuredLauncherAliases.size) {
+    "Launcher alias manifest contains duplicate slots."
+}
+val configuredLauncherSlotMap = configuredLauncherAliases
+    .sortedBy { it.slot }
+    .joinToString(";") { it.institutionCode + "=" + it.slot.toString().padStart(2, '0') }
+
+// Five-hex-digit suffixes are valid alphanumeric ID material. These values are used
+// only by explicit dedicated packages; the normal shared app resolves branding at runtime.
 val tenantPackageSlug = "school" + configuredInstitutionCode.lowercase()
     .filter { it in 'a'..'z' || it in '0'..'9' }
     .take(20).ifBlank { "tenant" }
@@ -50,28 +133,27 @@ val tenantPackageHash = if (configuredInstitutionCode.isBlank()) "" else
         .take(4).joinToString("") { byte ->
             (byte.toInt() and 0xff).toString(16).padStart(2, '0')
         }
-val configuredInstitutionApplicationId = providers.gradleProperty("quantaedgeInstitutionApplicationId")
-    .orElse(providers.environmentVariable("QUANTAEDGE_INSTITUTION_APPLICATION_ID"))
-    .orNull?.trim()?.takeIf { it.isNotBlank() }
-    ?: if (configuredInstitutionCode.isBlank()) "com.quantaedge.android"
-       else "com.quantaedge.android.tenant." + tenantPackageSlug + tenantPackageHash
-val institutionAutoVerify = configuredInstitutionCode.isNotBlank().toString()
-val institutionLinkPath = if (configuredInstitutionCode.isBlank()) {
-    "/__no_tenant_app_link_for_platform_build__/"
-} else {
+val institutionAutoVerify = "true"
+val institutionLinkPath = if (isDedicatedInstitutionPackage) {
     "/school/" + configuredInstitutionCode + "/"
-}
-val institutionLinkScheme = if (configuredInstitutionCode.isBlank()) {
-    "qe-institution"
 } else {
+    "/school/"
+}
+val institutionLinkScheme = if (isDedicatedInstitutionPackage) {
     "qe-institution-" + tenantPackageSlug + tenantPackageHash
+} else {
+    "qe-institution"
 }
 require(configuredInstitutionApplicationId.matches(Regex("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"))) {
-    "QUANTAEDGE_INSTITUTION_APPLICATION_ID must be a valid, unique Android package ID."
+    "QUANTAEDGE_INSTITUTION_APPLICATION_ID must be a valid Android package ID."
 }
-require(configuredInstitutionCode.isBlank() || configuredInstitutionApplicationId != "com.quantaedge.android") {
-    "A separately listed institution app needs its own application ID."
+require(configuredInstitutionApplicationId == "com.quantaedge.android" || isDedicatedInstitutionPackage) {
+    "A non-default Android application ID is only supported by the explicit dedicated-package distribution."
 }
+require(configuredLauncherAliases.isEmpty() || !isDedicatedInstitutionPackage) {
+    "Use either the shared package's launcher alias manifest or the separate dedicated-package mode, not both."
+}
+
 fun buildConfigString(value: String): String = "\"" + value
     .replace("\\", "\\\\").replace("\"", "\\\"")
     .replace("\n", "\\n").replace("\r", "\\r") + "\""
@@ -119,7 +201,8 @@ android {
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$configuredGoogleWebClientId\"")
         buildConfigField("String", "INSTITUTION_CODE", buildConfigString(configuredInstitutionCode))
         buildConfigField("String", "INSTITUTION_DISPLAY_NAME", buildConfigString(configuredInstitutionDisplayName))
-        buildConfigField("boolean", "IS_TENANT_BRANDED", configuredInstitutionCode.isNotBlank().toString())
+        buildConfigField("String", "INSTITUTION_LAUNCHER_SLOTS", buildConfigString(configuredLauncherSlotMap))
+        buildConfigField("boolean", "IS_TENANT_BRANDED", isDedicatedInstitutionPackage.toString())
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -190,22 +273,59 @@ tasks.register<Copy>("syncQuantaEdgeBranding") {
             image.width.toLong() * image.height.toLong() <= 16_000_000L) {
             "The launcher icon must be a valid PNG/JPEG no larger than 4096 by 4096 pixels."
         }
-        if (configuredInstitutionCode.isNotBlank()) {
+        if (isDedicatedInstitutionPackage) {
             require(!configuredInstitutionIconPath.isNullOrBlank()) {
-                "A tenant-branded Android package requires QUANTAEDGE_INSTITUTION_ICON_PATH so the installed launcher icon is school-branded."
+                "A dedicated institution package requires QUANTAEDGE_INSTITUTION_ICON_PATH."
+            }
+        }
+        configuredLauncherAliases.forEach { entry ->
+            require(entry.iconFile.isFile && entry.iconFile.length() in 1..2_097_152L) {
+                "Launcher alias icon for " + entry.institutionCode + " must be a readable image no larger than 2 MiB."
+            }
+            val image = javax.imageio.ImageIO.read(entry.iconFile)
+            require(image != null && image.width in 1..4096 && image.height in 1..4096 &&
+                image.width.toLong() * image.height.toLong() <= 16_000_000L) {
+                "Launcher alias icon for " + entry.institutionCode + " is corrupt or exceeds the dimension limit."
             }
         }
     }
     doLast {
-        // Convert both PNG and JPEG uploads to a real PNG resource. Never just rename JPEG bytes.
-        val sourceIcon = tenantLauncherIcon ?: brandIcon.asFile
-        val decoded = requireNotNull(javax.imageio.ImageIO.read(sourceIcon)) {
-            "The launcher icon could not be decoded: " + sourceIcon.absolutePath
+        // Convert both PNG and JPEG uploads to real PNG resources. Never just rename JPEG bytes.
+        val fallbackIcon = tenantLauncherIcon ?: brandIcon.asFile
+        val decoded = requireNotNull(javax.imageio.ImageIO.read(fallbackIcon)) {
+            "The launcher icon could not be decoded: " + fallbackIcon.absolutePath
         }
-        val destination = generatedBrandingRes.get().dir("drawable-nodpi").file("qe_launcher_icon.png").asFile
-        destination.parentFile.mkdirs()
+        val drawableDir = generatedBrandingRes.get().dir("drawable-nodpi").asFile
+        drawableDir.mkdirs()
+        val destination = File(drawableDir, "qe_launcher_icon.png")
         check(javax.imageio.ImageIO.write(decoded, "png", destination)) {
             "The launcher image could not be encoded as PNG."
+        }
+
+        val aliasBySlot = configuredLauncherAliases.associateBy { it.slot }
+        val valuesDir = generatedBrandingRes.get().dir("values").asFile
+        valuesDir.mkdirs()
+        val stringsFile = File(valuesDir, "tenant_launcher_aliases.xml")
+        stringsFile.writeText(buildString {
+            appendLine("<resources>")
+            for (slot in 1..50) {
+                val entry = aliasBySlot[slot]
+                val label = entry?.displayName ?: "School learning space"
+                appendLine("    <string name=\"tenant_launcher_alias_${slot.toString().padStart(2, '0')}_label\">${xmlEscapeForAndroidString(label)}</string>")
+            }
+            appendLine("</resources>")
+        }, Charsets.UTF_8)
+
+        for (slot in 1..50) {
+            val entry = aliasBySlot[slot]
+            val source = entry?.iconFile ?: fallbackIcon
+            val aliasImage = requireNotNull(javax.imageio.ImageIO.read(source)) {
+                "Launcher alias icon source could not be decoded for slot " + slot
+            }
+            val aliasDestination = File(drawableDir, "tenant_launcher_alias_${slot.toString().padStart(2, '0')}.png")
+            check(javax.imageio.ImageIO.write(aliasImage, "png", aliasDestination)) {
+                "Launcher alias image could not be encoded for slot " + slot
+            }
         }
     }
 }
