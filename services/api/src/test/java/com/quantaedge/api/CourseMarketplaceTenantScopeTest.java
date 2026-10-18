@@ -65,7 +65,7 @@ class CourseMarketplaceTenantScopeTest {
     assertTrue(catalogueSql.contains("where o.institution_id=? and o.status='PUBLISHED'"));
     assertTrue(catalogueSql.contains("assignment.status='ASSIGNED'"));
     assertTrue(catalogueSql.contains("tenant_scope.status='ACTIVE'"));
-    assertTrue(catalogueSql.contains("grant_row.institution_id=?"));
+    assertTrue(catalogueSql.contains("legacy_grant.institution_id=?"));
     assertTrue(catalogueSql.contains("cp.institution_id=?"));
     assertTrue(!catalogueSql.contains("not exists(select 1 from institution_membership"));
     assertTrue(List.of(catalogueArgs).contains(17L));
