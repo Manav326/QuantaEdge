@@ -185,7 +185,7 @@ public class StudentProgramController {
           where im.student_id=? and im.status='ACTIVE'
         )
       """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId,
-        context.studentId(), courseId, context.studentId(), context.studentId(), courseId, courseId, context.studentId());
+        context.studentId(), courseId, courseId, context.studentId(), context.studentId(), courseId, context.studentId());
     if (!Boolean.TRUE.equals(hasAuthorisedEnrolment)) {
       throw new SecurityException("This course is not available for self-enrolment. Choose a published free course or purchase its paid offer.");
     }
