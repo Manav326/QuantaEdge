@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 572,
-    "successful_visual_analyses": 564,
-    "missing_visual_analyses": 6916,
+    "raw_analysis_result_rows": 575,
+    "successful_visual_analyses": 567,
+    "missing_visual_analyses": 6913,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6924,
+    "unresolved_count": 6921,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31887,9 +31887,18 @@
       "asset_path": "assets/ccb62afcd35fb908c9d05617def681f00402c615dac5185a0d33cdcf6b20404c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with various drawings of fruits and vegetables.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the science fair and the white sheet of paper with drawings.",
+        "limitations": [
+          "The image does not provide specific details about the drawings or their significance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31905,9 +31914,24 @@
       "asset_path": "assets/4e2ee940645bc5a49c464b672348c2a429f1bcdff38f10dcab54908363a49772.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome message"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31923,9 +31947,24 @@
       "asset_path": "assets/1ce6cef724f436735e7f179d32708d2de6b854308b5f17585f5273b4e6f9967b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

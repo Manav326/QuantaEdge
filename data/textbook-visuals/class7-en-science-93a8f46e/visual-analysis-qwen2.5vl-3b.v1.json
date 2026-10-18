@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 564,
+    "assets_selected": 567,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 562,
-    "assets_remaining": 6926,
+    "assets_analyzed": 565,
+    "assets_remaining": 6923,
     "assets_completion_percent": 7.5,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 559,
+    "assets_skipped_from_checkpoint": 562,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:58:21Z"
+      "checkpointed_at": "2026-10-18T05:01:29Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:58:40Z"
+      "checkpointed_at": "2026-10-18T05:01:49Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -20554,6 +20554,102 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T05:00:50Z"
+    },
+    {
+      "asset_id": "ba677ba8d5509b49fa630b87",
+      "asset_sha256": "ccb62afcd35fb908c9d05617def681f00402c615dac5185a0d33cdcf6b20404c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/ccb62afcd35fb908c9d05617def681f00402c615dac5185a0d33cdcf6b20404c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with various drawings of fruits and vegetables.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the science fair and the white sheet of paper with drawings.",
+        "limitations": [
+          "The image does not provide specific details about the drawings or their significance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:02:22Z"
+    },
+    {
+      "asset_id": "d0cd9fe884efbb8bf8726f9f",
+      "asset_sha256": "4e2ee940645bc5a49c464b672348c2a429f1bcdff38f10dcab54908363a49772",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/4e2ee940645bc5a49c464b672348c2a429f1bcdff38f10dcab54908363a49772.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome message"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:03:01Z"
+    },
+    {
+      "asset_id": "ce8ddbabb506199e6c2140d2",
+      "asset_sha256": "1ce6cef724f436735e7f179d32708d2de6b854308b5f17585f5273b4e6f9967b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/1ce6cef724f436735e7f179d32708d2de6b854308b5f17585f5273b4e6f9967b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white sheet of paper with the words 'Welcome to the Wonderful World of Science' appearing after being sprayed with a liquid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words 'Welcome to the Wonderful World of Science' appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image is related to the text about the school hosting a science fair to celebrate National Science Day.",
+        "limitations": [
+          "The image does not show the actual science fair or the volunteers involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:03:39Z"
     }
   ]
 }
