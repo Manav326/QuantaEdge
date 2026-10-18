@@ -38,6 +38,7 @@ app:
     enabled: ${APP_QA_ENABLED:false}
     environment-approved: ${APP_QA_ENVIRONMENT_APPROVED:false}
     environment-label: ${APP_QA_ENVIRONMENT_LABEL:}
+    target-database: ${APP_QA_TARGET_DATABASE:}
     fixture-password: ${APP_QA_FIXTURE_PASSWORD:}
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
