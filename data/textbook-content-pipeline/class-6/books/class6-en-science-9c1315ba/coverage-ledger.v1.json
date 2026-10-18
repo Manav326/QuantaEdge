@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 753,
-    "successful_visual_analyses": 740,
-    "missing_visual_analyses": 1325,
+    "raw_analysis_result_rows": 757,
+    "successful_visual_analyses": 744,
+    "missing_visual_analyses": 1321,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1338,
+    "unresolved_count": 1334,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29549,9 +29549,37 @@
       "asset_path": "page-0027.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook titled 'Diversity in the Living World' with a quote about trees giving shade and fruits to others, and an illustration of children in a school setting.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter Diversity in the Living World 2",
+          "छायामनयसय कुर्वन्ति तितिष्ठन्ति स्वयमातपे ।",
+          "फलान्यपि परार्थाय वृक्षाः सतपुरुषा इव ॥",
+          "(सुभाषित)",
+          "Trees stand in the Sun and give shade to others. Their",
+          "fruits are also for others. Likewise, good people bear all",
+          "hardships and bring welfare to others. They give to others",
+          "whatever they have earned.",
+          "(Wise saying)",
+          "It is a pleasant morning after yesterday’s refreshing rain.",
+          "Dr Raghu and Maniram chacha (uncle) have been invited to",
+          "the school by the science teacher, Madam Sulekha, to"
+        ],
+        "concepts": [
+          "trees giving shade",
+          "fruits for others",
+          "good people bearing hardships",
+          "welfare to others",
+          "children in a school setting"
+        ],
+        "context_relation": "The quote and illustration are related to the theme of diversity in the living world.",
+        "limitations": [
+          "The image does not show the full quote or the full illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29567,9 +29595,19 @@
       "asset_path": "assets/201e4da11760edf0d56d90aa1615b3002165708069d0d6a72cd144af7242b9bd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a man in a blue shirt, waving his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon illustration, not a photograph or diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29585,9 +29623,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29603,9 +29650,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

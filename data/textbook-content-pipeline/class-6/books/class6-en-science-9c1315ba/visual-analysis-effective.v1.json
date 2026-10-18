@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "341e4e6c6739e6f36f0df1c6e1cad57160207e6828b733316eeeb3d82c404daf",
+  "raw_analysis_sha256": "9fa2027f643e70b13adf074a4dfde109f7fa08243097550c200522c00bbfd3e3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T15:04:46Z",
+      "checkpointed_at": "2026-10-18T15:10:23Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -32848,6 +32848,206 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5092b1b8d6f35d304f2302e3",
+      "asset_sha256": "6a21776dce5511e42ae63ffaeb04ec39f28fa51f317ba45f712e0e0372395098",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 27,
+      "asset_path": "page-0027.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2060beb476756dd57e6245e77ce5821a3536bf9f2e1a86f3ff661c954be62336",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook titled 'Diversity in the Living World' with a quote about trees giving shade and fruits to others, and an illustration of children in a school setting.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter Diversity in the Living World 2",
+          "छायामनयसय कुर्वन्ति तितिष्ठन्ति स्वयमातपे ।",
+          "फलान्यपि परार्थाय वृक्षाः सतपुरुषा इव ॥",
+          "(सुभाषित)",
+          "Trees stand in the Sun and give shade to others. Their",
+          "fruits are also for others. Likewise, good people bear all",
+          "hardships and bring welfare to others. They give to others",
+          "whatever they have earned.",
+          "(Wise saying)",
+          "It is a pleasant morning after yesterday’s refreshing rain.",
+          "Dr Raghu and Maniram chacha (uncle) have been invited to",
+          "the school by the science teacher, Madam Sulekha, to"
+        ],
+        "concepts": [
+          "trees giving shade",
+          "fruits for others",
+          "good people bearing hardships",
+          "welfare to others",
+          "children in a school setting"
+        ],
+        "context_relation": "The quote and illustration are related to the theme of diversity in the living world.",
+        "limitations": [
+          "The image does not show the full quote or the full illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:14:38Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook titled 'Diversity in the Living World' with a quote about trees giving shade and fruits to others, and an illustration of children in a school setting.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter Diversity in the Living World 2",
+          "छायामनयसय कुर्वन्ति तितिष्ठन्ति स्वयमातपे ।",
+          "फलान्यपि परार्थाय वृक्षाः सतपुरुषा इव ॥",
+          "(सुभाषित)",
+          "Trees stand in the Sun and give shade to others. Their",
+          "fruits are also for others. Likewise, good people bear all",
+          "hardships and bring welfare to others. They give to others",
+          "whatever they have earned.",
+          "(Wise saying)",
+          "It is a pleasant morning after yesterday’s refreshing rain.",
+          "Dr Raghu and Maniram chacha (uncle) have been invited to",
+          "the school by the science teacher, Madam Sulekha, to"
+        ],
+        "concepts": [
+          "trees giving shade",
+          "fruits for others",
+          "good people bearing hardships",
+          "welfare to others",
+          "children in a school setting"
+        ],
+        "context_relation": "The quote and illustration are related to the theme of diversity in the living world.",
+        "limitations": [
+          "The image does not show the full quote or the full illustration."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6cb512d206c187584fb26162",
+      "asset_sha256": "201e4da11760edf0d56d90aa1615b3002165708069d0d6a72cd144af7242b9bd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/201e4da11760edf0d56d90aa1615b3002165708069d0d6a72cd144af7242b9bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2db557f5418225fa435f4637d0d73306d2235524de0ea91eef45ffd6dbacf54f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a man in a blue shirt, waving his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon illustration, not a photograph or diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:16:11Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a man in a blue shirt, waving his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon illustration, not a photograph or diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44d61d8f54396bc565f50bb7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2db557f5418225fa435f4637d0d73306d2235524de0ea91eef45ffd6dbacf54f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:16:27Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8f580f5ff3b62e77b642ab4",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2db557f5418225fa435f4637d0d73306d2235524de0ea91eef45ffd6dbacf54f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:16:43Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
           "The page is completely blank and does not contain any text or images."
         ]
