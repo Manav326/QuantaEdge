@@ -133,6 +133,20 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void malformedRequestSelectorIsAClientErrorNotAnInternalServerError() {
+    JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
+    InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc, "", "ROUTED");
+
+    InstitutionTenantContextService.InvalidInstitutionContextException error =
+        assertThrows(InstitutionTenantContextService.InvalidInstitutionContextException.class,
+            () -> service.selectTenantCode("not a code"));
+
+    assertEquals(400, error.statusCode());
+    assertEquals("INVALID_INSTITUTION_CODE", error.errorCode());
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
   void unknownOrInactiveInstitutionFailsClosed() {
     JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
