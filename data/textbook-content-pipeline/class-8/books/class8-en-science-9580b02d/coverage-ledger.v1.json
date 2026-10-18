@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 415,
-    "successful_visual_analyses": 413,
-    "missing_visual_analyses": 1876,
+    "raw_analysis_result_rows": 418,
+    "successful_visual_analyses": 416,
+    "missing_visual_analyses": 1873,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1878,
+    "unresolved_count": 1875,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -19411,9 +19411,18 @@
       "asset_path": "assets/6d7df83f967dd01fafd11016e920ed24391b04ced82a88532e08f5291b21b3cb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid-colored rectangular shape with a gradient effect transitioning from a darker shade at the top to a lighter shade at the bottom.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for a textbook.",
+        "limitations": [
+          "The image does not contain any text or specific content that can be analyzed for educational content editing."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19429,9 +19438,18 @@
       "asset_path": "assets/cb3269126bef4741a8ebc191575a7d393ed5496d23670013af2b4cad9464fa5c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long, horizontal, gradient-colored strip with a warm, golden hue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a decorative or thematic element, possibly used as a background or border for educational content.",
+        "limitations": [
+          "The image does not contain any specific text or data points that can be analyzed for educational content. It is a simple, abstract visual element without any discernible meaning or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19447,9 +19465,19 @@
       "asset_path": "assets/263339cbc4d96c7955c82e6585318b1b0d658953cb9ab885f722e6de89c0c255.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light yellow to orange, possibly indicating a title or heading area.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a title or heading area of a page, possibly for an educational content editor to use as a placeholder or design element.",
+        "limitations": [
+          "The image does not contain any specific text or content that can be analyzed for educational content.",
+          "The image is a gradient background, which may not convey specific information or concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
