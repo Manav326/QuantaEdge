@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 821,
+    "assets_selected": 822,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 817,
-    "assets_remaining": 1261,
-    "assets_completion_percent": 39.3,
+    "assets_analyzed": 818,
+    "assets_remaining": 1260,
+    "assets_completion_percent": 39.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 816,
+    "assets_skipped_from_checkpoint": 817,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:24:32Z"
+      "checkpointed_at": "2026-10-18T20:28:13Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:25:25Z"
+      "checkpointed_at": "2026-10-18T20:29:07Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:26:35Z"
+      "checkpointed_at": "2026-10-18T20:30:19Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25432,7 +25432,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:27:02Z"
+      "checkpointed_at": "2026-10-18T20:30:46Z"
     },
     {
       "asset_id": "1b6dd2be916d0f2957d56770",
@@ -25523,6 +25523,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T20:27:11Z"
+    },
+    {
+      "asset_id": "8fecdbf40ab3e8f2ca9ff45f",
+      "asset_sha256": "4df111d8c86da58648282cb4d406a83aacfaf3a3da91293b15403594dc351785",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/4df111d8c86da58648282cb4d406a83aacfaf3a3da91293b15403594dc351785.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3a00fecd350aeb38ef19b978db10d9bbd49dda082596bc1f12632ef5a7343ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of an elderly man wearing glasses and a cap, with a white beard and a red shirt.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "adaptations",
+          "habitat",
+          "special features",
+          "mountainous regions",
+          "sea turtles",
+          "hot or cold deserts",
+          "rhododendron"
+        ],
+        "context_relation": "The image is related to the educational content about adaptations and habitats.",
+        "limitations": [
+          "The image does not provide specific details about the adaptations of the deodar tree or the rhododendron."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:32:01Z"
     }
   ]
 }
