@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a440654718c9550e0f03fc86268c4a7c2a32b759ee7062f021cc59cc0d38f81b",
+  "raw_analysis_sha256": "1a655b907aa99c1e90303edebfa9497b6eb7404828224cfb20b8ef57a9d8128e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T01:57:28Z",
+      "checkpointed_at": "2026-10-18T02:00:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -17573,6 +17573,168 @@
       "effective_analysis": {
         "visual_summary": "A blue circular object with a blurred background.",
         "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8cdcc988a0b02e19c247652c",
+      "asset_sha256": "174bca67eaf069bea4e95c0e1353fe185d49a479e87709ddd43dc8fc5c78f383",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/174bca67eaf069bea4e95c0e1353fe185d49a479e87709ddd43dc8fc5c78f383.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a long, thin object against a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible distortion in image"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:00:47Z",
+      "effective_analysis": {
+        "visual_summary": "A blurred image of a long, thin object against a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible distortion in image"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "614074a2c01da88dfb3f4956",
+      "asset_sha256": "3aeac72b1ed23af78320bae6557e194bc58d950d852f735553c4b889c9e7bfdf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/3aeac72b1ed23af78320bae6557e194bc58d950d852f735553c4b889c9e7bfdf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:01:19Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "05301458bc9c02936768a1a8",
+      "asset_sha256": "406532d796d022a2b15b5e003d98e31a1a55e17823de61015cedb311a9edc2bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/406532d796d022a2b15b5e003d98e31a1a55e17823de61015cedb311a9edc2bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green plant stem with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a plant stem, which is not directly related to the text about human growth and changes in materials.",
+        "limitations": [
+          "The image does not provide any text or context related to the content of the textbook.",
+          "The image is a close-up of a plant stem, which is not directly related to the text about human growth and changes in materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:01:54Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green plant stem with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a plant stem, which is not directly related to the text about human growth and changes in materials.",
+        "limitations": [
+          "The image does not provide any text or context related to the content of the textbook.",
+          "The image is a close-up of a plant stem, which is not directly related to the text about human growth and changes in materials."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b62ae6558368d5d23b3c817",
+      "asset_sha256": "300f2861396194c2aa78bf06f8528d47ec9a25b23d0d7178e81e155af10f57a0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/300f2861396194c2aa78bf06f8528d47ec9a25b23d0d7178e81e155af10f57a0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a small green object in the top right corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:02:26Z",
+      "effective_analysis": {
+        "visual_summary": "A white page with a small green object in the top right corner.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
         "context_relation": "uncertain",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 360,
+    "assets_selected": 364,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 359,
-    "assets_remaining": 7129,
+    "assets_analyzed": 363,
+    "assets_remaining": 7125,
     "assets_completion_percent": 4.8,
     "assets_failed": 4,
-    "assets_skipped_from_checkpoint": 355,
+    "assets_skipped_from_checkpoint": 359,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T01:57:28Z"
+      "checkpointed_at": "2026-10-18T02:00:14Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -11713,6 +11713,119 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T01:59:36Z"
+    },
+    {
+      "asset_id": "8cdcc988a0b02e19c247652c",
+      "asset_sha256": "174bca67eaf069bea4e95c0e1353fe185d49a479e87709ddd43dc8fc5c78f383",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/174bca67eaf069bea4e95c0e1353fe185d49a479e87709ddd43dc8fc5c78f383.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred image of a long, thin object against a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "possible distortion in image"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:00:47Z"
+    },
+    {
+      "asset_id": "614074a2c01da88dfb3f4956",
+      "asset_sha256": "3aeac72b1ed23af78320bae6557e194bc58d950d852f735553c4b889c9e7bfdf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/3aeac72b1ed23af78320bae6557e194bc58d950d852f735553c4b889c9e7bfdf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object details",
+          "blurred background"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:01:19Z"
+    },
+    {
+      "asset_id": "05301458bc9c02936768a1a8",
+      "asset_sha256": "406532d796d022a2b15b5e003d98e31a1a55e17823de61015cedb311a9edc2bb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/406532d796d022a2b15b5e003d98e31a1a55e17823de61015cedb311a9edc2bb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green plant stem with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a plant stem, which is not directly related to the text about human growth and changes in materials.",
+        "limitations": [
+          "The image does not provide any text or context related to the content of the textbook.",
+          "The image is a close-up of a plant stem, which is not directly related to the text about human growth and changes in materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:01:54Z"
+    },
+    {
+      "asset_id": "2b62ae6558368d5d23b3c817",
+      "asset_sha256": "300f2861396194c2aa78bf06f8528d47ec9a25b23d0d7178e81e155af10f57a0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/300f2861396194c2aa78bf06f8528d47ec9a25b23d0d7178e81e155af10f57a0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "97d8730e11f6266e2fcd1943074b36bc24a0e4e19956f5e36202da23b0c782d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A white page with a small green object in the top right corner.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:02:26Z"
     }
   ]
 }
