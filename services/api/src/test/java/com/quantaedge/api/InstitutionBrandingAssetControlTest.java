@@ -167,6 +167,6 @@ class InstitutionBrandingAssetControlTest {
     assertEquals(304, response.getStatusCode().value());
     assertNull(response.getBody());
     assertEquals("\"" + digest + "\"", response.getHeaders().getETag());
-    assertFalse(response.getHeaders().containsKey("Content-Length"));
+    assertNull(response.getHeaders().getFirst("Content-Length"));
   }
 }
