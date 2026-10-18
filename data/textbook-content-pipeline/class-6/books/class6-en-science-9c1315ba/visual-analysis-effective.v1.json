@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b996f5cd0d671ed635f20f698481ad199ca0006894af098c5d8bcc5fdec37119",
+  "raw_analysis_sha256": "82319113f07390b6414061a7608fccaef782e63d398723f50ae5b49fe373fdb9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:24:22Z",
+      "checkpointed_at": "2026-10-18T16:32:05Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -34108,7 +34108,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T16:25:26Z",
+      "checkpointed_at": "2026-10-18T16:33:10Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -34854,6 +34854,146 @@
         "limitations": [
           "The text does not provide figures or images for visual representation.",
           "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "255b4ee240d82aad44256329",
+      "asset_sha256": "175b7a2642812552f8c0414b55ae879f0722cca7c11fbedf7b2620759b5b9199",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/175b7a2642812552f8c0414b55ae879f0722cca7c11fbedf7b2620759b5b9199.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d729e13b51742bf611f9d748a1fb41e891d596a404b49945c59bc9d9c4db942",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "roots",
+          "leaves",
+          "plant",
+          "venation"
+        ],
+        "context_relation": "exploring the structure and characteristics of plants",
+        "limitations": [
+          "The image does not provide specific details about the venation of the leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:34:46Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "roots",
+          "leaves",
+          "plant",
+          "venation"
+        ],
+        "context_relation": "exploring the structure and characteristics of plants",
+        "limitations": [
+          "The image does not provide specific details about the venation of the leaves."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "05fdd0a759c3b3395344d7aa",
+      "asset_sha256": "c693beedf6acf6fcebb63b2752c704f5f4295b3d230cd0749058a068f3d39028",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/c693beedf6acf6fcebb63b2752c704f5f4295b3d230cd0749058a068f3d39028.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d729e13b51742bf611f9d748a1fb41e891d596a404b49945c59bc9d9c4db942",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "roots",
+          "leaves",
+          "plant",
+          "venation"
+        ],
+        "context_relation": "exploring the structure and characteristics of plants",
+        "limitations": [
+          "The image does not provide specific details about the venation of the leaves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:36:21Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "roots",
+          "leaves",
+          "plant",
+          "venation"
+        ],
+        "context_relation": "exploring the structure and characteristics of plants",
+        "limitations": [
+          "The image does not provide specific details about the venation of the leaves."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b25eb965e5e7d366e230df45",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d729e13b51742bf611f9d748a1fb41e891d596a404b49945c59bc9d9c4db942",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible text or images present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T16:36:36Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible text or images present."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
