@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1013,
+    "assets_selected": 1016,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1011,
-    "assets_remaining": 6477,
+    "assets_analyzed": 1014,
+    "assets_remaining": 6474,
     "assets_completion_percent": 13.5,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1008,
+    "assets_skipped_from_checkpoint": 1011,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:23:54Z"
+      "checkpointed_at": "2026-10-18T19:27:11Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:24:18Z"
+      "checkpointed_at": "2026-10-18T19:27:34Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -37435,6 +37435,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
       "checkpointed_at": "2026-10-18T19:26:27Z"
+    },
+    {
+      "asset_id": "8d942f06ab9f3dc33bf47146",
+      "asset_sha256": "18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a red object with a dotted line extending from it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:27:39Z"
+    },
+    {
+      "asset_id": "2b144dba7730eaf99b89edb3",
+      "asset_sha256": "6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red butterfly with a dotted trail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:27:43Z"
+    },
+    {
+      "asset_id": "3ceb81a21df3a34088cc396c",
+      "asset_sha256": "0f99e55757883649ea22854b66d584ec2909e0542f6ffcb9c632322e67442722",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/0f99e55757883649ea22854b66d584ec2909e0542f6ffcb9c632322e67442722.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration showing a person spilling vinegar and soap solution on an eggshell or marble, with bubbles forming.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Bubbles",
+          "Vinegar",
+          "Soap Solution",
+          "Eggshell or Marble"
+        ],
+        "context_relation": "The image is related to the question about why bubbles occur with vinegar but not with soap solution.",
+        "limitations": [
+          "No specific question or answer is provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:28:22Z"
     }
   ]
 }
