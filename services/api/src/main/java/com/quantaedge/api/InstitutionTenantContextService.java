@@ -49,7 +49,7 @@ public class InstitutionTenantContextService {
       "/api/v1/structured-lessons",
       "/api/v1/practice",
       "/api/v1/learning/",
-      "/api/v1/guardians/children/",
+      "/api/v1/guardians/children",
       "/api/v1/certificates",
       "/api/v1/tutor",
       "/api/v1/learning-chat"
