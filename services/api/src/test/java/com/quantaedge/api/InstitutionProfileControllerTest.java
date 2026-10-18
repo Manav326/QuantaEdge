@@ -63,6 +63,29 @@ class InstitutionProfileControllerTest {
   }
 
   @Test
+  void profileUpdateDoesNotOverwriteACustomizedBrandDisplayName() {
+    when(authorization.requirePermission(platformOwner, "QE_PLATFORM_OWNER")).thenReturn(platformOwner);
+    Map<String,Object> current = new LinkedHashMap<>();
+    current.put("display_name", "Old School");
+    current.put("legal_name", null);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(current));
+    when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1, 0, 1, 1);
+
+    PlatformInstitutionController controller =
+        new PlatformInstitutionController(jdbc, authorization, institutionAuth, objectMapper);
+    Map<String,Object> result = controller.updateInstitutionProfile(42L,
+        Map.of("displayName", "New School", "legalName", ""), platformOwner);
+
+    assertEquals("New School", result.get("displayName"));
+    assertEquals(false, result.get("defaultBrandNameSynchronized"));
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc, atLeast(4)).update(sql.capture(), any(Object[].class));
+    assertTrue(sql.getAllValues().stream().anyMatch(q ->
+        q.contains("update institution_branding set display_name=?,version=version+1")
+            && q.contains("where institution_id=? and display_name=?")));
+  }
+
+  @Test
   void profileUpdateRejectsNonOwnerBeforeReadingInstitutionData() {
     when(authorization.requirePermission(null, "QE_PLATFORM_OWNER"))
         .thenThrow(new SecurityException("Permission required: QE_PLATFORM_OWNER"));
