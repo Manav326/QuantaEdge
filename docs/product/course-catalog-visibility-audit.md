@@ -40,6 +40,18 @@ The current HRMS upload path is PNG/JPEG only, capped at 2 MiB, with server-side
 - [ ] Store the source separately from generated renditions; persist hashes, dimensions, asset role and branding version; publish only the selected, validated rendition for that institution.
 - [ ] Test malformed/oversized PDFs, malformed images, conversion limits, transparency, light/dark backgrounds, logo replacement/removal, stale cache URLs, and cross-tenant isolation. Keep the current audit trail and dynamic versioned asset delivery.
 
+## Implementation progress — 2026-10-18
+
+- [x] **C1 — Product identities (source committed; CI pending):** additive migration V122 creates active `CLASS_6`, `CLASS_7`, and `CLASS_8` product identities with registered stable public IDs. It does not rename `GENERAL`, alter `NAVODAYA_BATCH`, seed offers/prices, or enroll learners.
+- [ ] **C2 — Explicit curriculum mapping (implementation slice landed; acceptance open):** each class product maps only to active, same-class legacy subject rows. This reuses class-scoped chapter, lesson and source IDs rather than copying content or provenance. Key course catalogue, enrolment, marketplace subject summaries, student lesson filtering, progress metrics, structured lesson access, assessment filtering and PDF catalogue scope honour this mapping in this source change. Complete full endpoint/security coverage including certificates and real browser/device validation before checking this task off.
+- [x] **C3 — Admin configuration inventory (source committed; CI pending):** active product records are returned by the existing Admin Marketplace list endpoint, where a staff administrator can supply price/title/description and deliberately choose DRAFT/PUBLISHED/ARCHIVED.
+- [ ] **C4 — Student marketplace publication:** intentionally still requires an administrator to set the actual INR price and publish the offer. The migration does not make courses free or silently public.
+- [ ] **C5–C7 — Access/tenant/ownership, full web/Android parity and complete integration acceptance:** still open until current-main Actions and mapped class-course browser/API/Android tests prove publication, checkout/free enrollment, tenant entitlement, lesson/PDF/assessment/certificate and progress boundaries.
+
+### Current exact-main verification
+
+The prior Actions API test failure was corrected and run [#3772](https://github.com/Manav326/QuantaEdge/actions/runs/39095464683) passed all eight jobs. Run [#3773](https://github.com/Manav326/QuantaEdge/actions/runs/39096141800) also passed, but it predates the product-mapping implementation. The class-product/mapping changes require a fresh successful Actions run for their exact commit before the implementation slice can be called verified.
+
 ## Status
 
-**Audit complete; implementation tasks C1–C7 and logo normalization tasks remain open.** No prices, course access, test completion or public offer status were invented or changed as part of this audit.
+**Audit complete; first catalogue implementation slice added, with end-to-end gates still open.** No price, enrollment, paid entitlement, free access or public offer status is invented. The student Marketplace continues to list only explicitly published offers; All Courses continues to list courses the learner actually owns/enrolled in.

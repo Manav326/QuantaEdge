@@ -116,7 +116,12 @@ public class AdminContentController {
       """);
     List<Object> args = new ArrayList<>();
     if (courseId != null) {
-      sql.append(" and p.id=? and p.status='ACTIVE'");
+      sql.append("""
+        and exists(select 1 from curriculum_program scope_program
+          join curriculum_program_subject cps on cps.program_id=scope_program.id
+          where scope_program.id=? and scope_program.status='ACTIVE' and cps.subject_id=s.id
+            and (s.program_id=scope_program.id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))
+        """);
       args.add(courseId);
     } else if (programCode == null || programCode.isBlank()) {
       sql.append(" and s.program_id is null");

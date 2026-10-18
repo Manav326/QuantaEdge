@@ -399,8 +399,9 @@ public class GuardianController {
           c.code as curriculum_class_code,
           count(distinct ch.id) as chapters,count(distinct l.id) as lessons
         from curriculum_program_subject ps
-        join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
-          and s.class_id=ps.class_id and s.active=true
+        join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
         join curriculum_class c on c.id=s.class_id
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
           and ch.content_status='PUBLISHED'
@@ -428,8 +429,9 @@ public class GuardianController {
     List<Map<String,Object>> subjects=jdbc.queryForList("""
       select s.id,s.code
       from curriculum_program_subject ps
-      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
-        and s.class_id=ps.class_id and s.active=true
+      join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
       where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
       """,courseId);
     if(subjects.isEmpty())throw new IllegalStateException("This course has no active subject tracks yet.");

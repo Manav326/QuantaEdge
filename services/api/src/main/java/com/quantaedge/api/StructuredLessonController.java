@@ -249,8 +249,8 @@ public class StructuredLessonController {
         and spe.program_id=? and spe.status='ACTIVE'
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
       join curriculum_program_subject ps on ps.program_id=p.id
-      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
-        and s.class_id=ps.class_id and s.active=true
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or (s.program_id is null and p.class_id=s.class_id and ps.class_id=s.class_id))
       join curriculum_class c on c.id=s.class_id and c.active=true
       where st.id=? and st.active=true
         and lower(s.code)=lower(?)

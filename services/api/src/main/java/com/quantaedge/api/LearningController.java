@@ -71,7 +71,7 @@ public class LearningController {
     String classScope = programId == null ? "c.code=?" : "true";
     String programScope = programId == null
         ? "s.program_id IS NULL"
-        : "s.program_id=? AND EXISTS (SELECT 1 FROM curriculum_program_subject cps WHERE cps.program_id=? AND cps.subject_id=s.id)";
+        : "EXISTS (SELECT 1 FROM curriculum_program_subject cps JOIN curriculum_program scope_program ON scope_program.id=cps.program_id AND scope_program.status='ACTIVE' WHERE cps.program_id=? AND cps.subject_id=s.id AND (s.program_id=cps.program_id OR (s.program_id IS NULL AND scope_program.class_id=s.class_id AND cps.class_id=s.class_id)))";
     String sql = """
       with learner as (select id from student where id=? and active=true)
       select l.id,l.code,coalesce(lt.title,l.title) as title,coalesce(lt.summary,l.summary) as summary,
@@ -186,7 +186,7 @@ public class LearningController {
       return jdbc.queryForList(sql, context.studentId(), language, language, language, language, classCode, subjectCode);
     }
     return jdbc.queryForList(sql, context.studentId(), language, language, language, language,
-        subjectCode, programId, programId);
+        subjectCode, programId);
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {

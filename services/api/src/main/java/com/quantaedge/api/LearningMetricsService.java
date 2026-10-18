@@ -17,7 +17,12 @@ public class LearningMetricsService {
   }
 
   public Map<String,Object> statsFor(long studentId, Long programId) {
-    String subjectScope = programId == null ? "s.program_id is null" : "s.program_id=?";
+    String subjectScope = programId == null ? "s.program_id is null" : """
+      exists(select 1 from curriculum_program_subject cps
+        join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE'
+        where cps.program_id=? and cps.subject_id=s.id
+          and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))
+      """;
     Map<String,Object> result=new LinkedHashMap<>(jdbc.queryForMap("""
       select id,public_id,public_user_id,display_name,class_code,board,language,
              case when profile_image_data_url is not null

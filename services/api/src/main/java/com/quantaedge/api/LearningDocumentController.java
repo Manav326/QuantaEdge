@@ -216,7 +216,16 @@ public class LearningDocumentController {
       """;
     StringBuilder where=new StringBuilder(" where 1=1");List<Object> filterArgs=new ArrayList<>();
     if (courseId != null) {
-      where.append(" and p.id=? and p.status='ACTIVE'");
+      where.append("""
+        and exists(select 1 from curriculum_program scope_program
+          join curriculum_program_subject cps on cps.program_id=scope_program.id
+          join curriculum_subject scope_subject on scope_subject.id=cps.subject_id
+            and scope_subject.class_id=cps.class_id and scope_subject.active=true
+          where scope_program.id=? and scope_program.status='ACTIVE'
+            and scope_subject.id=s.id
+            and (scope_subject.program_id=scope_program.id or
+              (scope_subject.program_id is null and scope_program.class_id=scope_subject.class_id and cps.class_id=scope_subject.class_id)))
+        """);
       filterArgs.add(courseId);
     } else if (programCode != null && !programCode.isBlank()) {
       where.append(" and upper(p.code)=upper(?) and p.status='ACTIVE'");
@@ -526,8 +535,14 @@ public class LearningDocumentController {
           : "This course code is ambiguous; use its numeric course ID.");
       programId = ((Number)enrolledProgram.getFirst().get("id")).longValue();
     }
-    String programScope = programId == null ? "s.program_id is null"
-        : "s.program_id=? and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String programScope = programId == null ? "s.program_id is null" : """
+      exists(select 1 from curriculum_program_subject cps
+        join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE'
+        where cps.program_id=? and cps.subject_id=s.id
+          and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id))
+          and exists(select 1 from student_program_enrollment spe
+            where spe.student_id=st.id and spe.program_id=scope_program.id and spe.status='ACTIVE'))
+      """;
     String learnerScope = programId == null ? "c.code=st.class_code" : "true";
     String sql = """
       select d.id as document_id,d.scope,d.book_part,d.title,d.edition,d.language,d.page_start,d.page_end,

@@ -118,8 +118,8 @@ public class PlatformInstitutionController {
           string_agg(distinct c.code, ', ' order by c.code) as class_code
         from curriculum_program p
         left join curriculum_program_subject ps on ps.program_id=p.id
-        left join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
-          and s.class_id=ps.class_id and s.active=true
+        left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+          and (s.program_id=ps.program_id or (s.program_id is null and p.class_id=s.class_id and ps.class_id=s.class_id))
         left join curriculum_class c on c.id=s.class_id and c.active=true
         where p.status='ACTIVE' and p.code<>'GENERAL'
         group by p.id,p.code,p.display_name

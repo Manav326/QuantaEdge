@@ -28,6 +28,28 @@ class ApplicationStartupSmokeTest {
 
 
   @Test
+  void classSixThroughEightAreRealCourseProductsWithMappedLegacyTracksAndNoAutomaticEnrollment() {
+    assertEquals(3, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+        and p.status='ACTIVE' and p.curriculum_version='CURRENT'
+    """, Integer.class));
+    assertEquals(3, jdbc.queryForObject("""
+      select count(distinct p.code) from curriculum_program p
+      join curriculum_class c on c.id=p.class_id and c.code=substring(p.code,7)
+      join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+        and s.program_id is null and s.active=true
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.status='ACTIVE'
+    """, Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+    """, Integer.class), "Creating course products must not auto-enrol existing learners.");
+  }
+
+  @Test
   void bilingualSchemaExistsAndTranslationInventoryQueryExecutes() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_program') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.lesson_translation') is not null", Boolean.class));

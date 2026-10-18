@@ -109,7 +109,7 @@ public class AssessmentController {
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=safeText(query,160);
     String chapterFilter=chapterId==null?"":" and ch.id=?";
-    String courseFilter=courseId==null?"s.program_id is null":"s.program_id=?";
+    String courseFilter=courseId==null?"s.program_id is null":"exists (select 1 from curriculum_program_subject cps join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE' where cps.program_id=? and cps.subject_id=s.id and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))";
     String fromWhere="""
       from question q join lesson l on l.id=q.lesson_id
       join curriculum_chapter ch on ch.id=l.chapter_id
@@ -166,7 +166,7 @@ public class AssessmentController {
     if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))throw badRequest("Choose a valid assessment status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-    String courseFilter=courseId==null?"s.program_id is null":"s.program_id=?";
+    String courseFilter=courseId==null?"s.program_id is null":"exists (select 1 from curriculum_program_subject cps join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE' where cps.program_id=? and cps.subject_id=s.id and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))";
     String fromJoins="""
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
