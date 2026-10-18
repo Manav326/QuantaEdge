@@ -109,6 +109,51 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     return () => { active = false; };
   }, [role]);
 
+  // Learning screens resolve a server-confirmed active course before rendering.
+  // This keeps old links usable while preventing the legacy class-only curriculum fallback.
+  useEffect(() => {
+    if (role !== 'student') return;
+    const courseScopedRoutes = [
+      '/student/learn', '/student/structured-lessons', '/student/practice',
+      '/student/tests', '/student/diagnostic', '/student/progress',
+      '/student/textbooks', '/student/classes',
+    ];
+    if (!courseScopedRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) return;
+    const query = new URLSearchParams(window.location.search);
+    if (query.has('courseId') || query.has('programCode')) return;
+    let active = true;
+    (async () => {
+      try {
+        const response = await fetch('/api/v1/students/me/programs', {
+          credentials: 'same-origin', cache: 'no-store',
+        });
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) router.replace('/login/student');
+          return;
+        }
+        const rows = await response.json();
+        if (!active) return;
+        const course = (Array.isArray(rows) ? rows : []).find((item: any) =>
+          item && (item.is_enrolled === true || item.enrolled === true)
+        );
+        if (!course) {
+          router.replace('/student/courses');
+          return;
+        }
+        const courseId = Number(course.id || course.course_id);
+        if (!Number.isSafeInteger(courseId) || courseId <= 0) {
+          router.replace('/student/courses');
+          return;
+        }
+        query.set('courseId', String(courseId));
+        router.replace(pathname + '?' + query.toString());
+      } catch {
+        // The target screen's own error state handles transient failures.
+      }
+    })();
+    return () => { active = false; };
+  }, [pathname, role, router]);
+
   // Deep links open the relevant group automatically; students can still collapse it manually.
   useEffect(() => {
     if (role !== 'student') {

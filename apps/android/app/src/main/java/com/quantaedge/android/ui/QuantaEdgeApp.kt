@@ -1115,7 +1115,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (courseId <= 0L) return
         val course = studentPrograms.firstOrNull {
             it.longAny("id", "course_id") == courseId &&
-                (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+                (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused") || it.optBoolean("has_access"))
         }
         if (course == null) {
             error = if (language == "hi") "यह course आपके खाते में उपलब्ध नहीं है।" else "This course is not available to your account."
@@ -1365,6 +1365,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         currentSubject = subjectCode
         val previousCourseId = currentCourseId
         val targetCourseId = courseId.takeIf { it > 0L } ?: currentCourseId
+        if (targetCourseId <= 0L && studentPrograms.none {
+            it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
+        }) {
+            error = ""
+            route = AppRoute.ALL_COURSES
+            runTask { refreshStudentPrograms() }
+            return
+        }
         val shouldActivateCourse = targetCourseId > 0L && previousCourseId != targetCourseId
         currentCourseId = targetCourseId.coerceAtLeast(0L)
         lessons = emptyList()
@@ -1399,6 +1407,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun openStructuredLessons() {
+        if (currentCourseId <= 0L && studentPrograms.none {
+            it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
+        }) {
+            structuredLessonMode = false
+            route = AppRoute.ALL_COURSES
+            runTask { refreshStudentPrograms() }
+            return
+        }
         structuredLessonMode = true
         structuredLessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS

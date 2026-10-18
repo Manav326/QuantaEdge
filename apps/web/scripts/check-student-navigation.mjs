@@ -372,3 +372,28 @@ assert.ok(androidApp.includes('ZoneId.of("Asia/Kolkata")') &&
 
 
 console.log('Navigation, localization, live-class authorization, resumable offline-video, student resource parity, course checkout and issue #66 dashboard source contracts passed.');
+
+
+// Course catalogue and access-scope regression contract (V122).
+const courseScopeMigration = read('../../../services/api/src/main/resources/db/migration/V122__class_courses_and_content_scope.sql');
+const marketplaceApi = read('../../../services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java');
+const studentProgramsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StudentProgramController.java');
+const androidMarketplaceCourseScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentMarketplaceScreen.kt');
+assert.ok(courseScopeMigration.includes("'CLASS_' || c.code") && courseScopeMigration.includes("'CRS'"),
+  'Classes 6–8 must be promoted to stable direct-course identities.');
+assert.ok(courseScopeMigration.includes('UPDATE curriculum_subject s') && courseScopeMigration.includes('UPDATE textbook_source_book b'),
+  'Existing canonical subjects and textbook source records must be re-scoped in place.');
+assert.ok(courseScopeMigration.includes('INSERT INTO student_program_enrollment') && courseScopeMigration.includes('has_other_active_course'),
+  'Existing learner access must be preserved without silently stealing focus from an active independent course.');
+assert.ok(marketplaceApi.includes('left join course_marketplace_offer o') && marketplaceApi.includes('as offer_available'),
+  'Student and family marketplaces must list active courses even before offers are published.');
+assert.ok(studentProgramsApi.includes('as offer_available') && studentProgramsApi.includes('as has_access'),
+  'The course catalogue must expose offer and learner access states from the server.');
+assert.ok(coursePage.includes('courses.map(course => {') && coursePage.includes('View course offer'),
+  'All Courses must render the full catalogue, not only already-enrolled courses.');
+assert.ok(marketplacePage.includes('offer.offer_available === true'),
+  'An unpublished offer must never be treated as a free course in web.');
+assert.ok(androidMarketplaceCourseScreen.includes('val offerAvailable') && androidMarketplaceCourseScreen.includes('!offerAvailable -> Text'),
+  'Android Marketplace must distinguish unpublished offers from free published offers.');
+assert.ok(layout.includes('courseScopedRoutes') && layout.includes("query.set('courseId', String(courseId))"),
+  'Navigation into learning routes without courseId must resolve the server-confirmed active course.');

@@ -79,6 +79,8 @@ fun StudentMarketplaceScreen(
             val title = offer.optString("title").ifBlank { offer.optString("course_name", "Course") }
             val pricePaise = offer.optLong("price_paise", -1L)
             val currency = offer.optString("currency", "INR")
+            val offerAvailable = offer.optBoolean("offer_available", !offer.isNull("price_paise"))
+            val validPrice = offerAvailable && currency == "INR" && pricePaise >= 0L
             val owned = offer.optBoolean("has_access") || offer.optBoolean("purchased")
             val subjects = offer.optJSONArray("subjects")?.let { array ->
                 (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
@@ -94,13 +96,14 @@ fun StudentMarketplaceScreen(
                         Text(
                             when {
                                 owned -> if (hi) "आपका course" else "Owned"
-                                pricePaise > 0L && currency == "INR" -> inr.format(pricePaise / 100.0)
-                                pricePaise == 0L -> if (hi) "मुफ़्त" else "Free"
+                                !offerAvailable -> if (hi) "जल्द उपलब्ध होगा" else "Coming soon"
+                                validPrice && pricePaise > 0L -> inr.format(pricePaise / 100.0)
+                                validPrice && pricePaise == 0L -> if (hi) "मुफ़्त" else "Free"
                                 else -> if (hi) "अभी उपलब्ध नहीं" else "Unavailable"
                             },
                             style = MaterialTheme.typography.titleSmall, color = when {
-                                owned || pricePaise == 0L -> LocalQuantaEdgeSemanticColors.current.success
-                                pricePaise > 0L && currency == "INR" -> LocalQuantaEdgeSemanticColors.current.primaryText
+                                owned || (validPrice && pricePaise == 0L) -> LocalQuantaEdgeSemanticColors.current.success
+                                validPrice && pricePaise > 0L -> LocalQuantaEdgeSemanticColors.current.primaryText
                                 else -> MaterialTheme.colorScheme.error
                             }, fontWeight = FontWeight.Bold
                         )
@@ -116,19 +119,21 @@ fun StudentMarketplaceScreen(
                             Text(if (hi) "यह course आपके Courses में है।" else "This course is already in your Courses.",
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
                         }
-                        pricePaise > 0L && currency == "INR" && offer.optBoolean("parent_managed") -> Button(
+                        !offerAvailable -> Text(if (hi) "यह course catalogue में है, पर खरीदने का offer प्रकाशित नहीं हुआ।" else "This course is listed, but its purchase offer has not been published yet.",
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        validPrice && pricePaise > 0L && offer.optBoolean("parent_managed") -> Button(
                             onClick = { onAskParent(id) }, enabled = !busy && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(if (busyCourseId == id) { if (hi) "अनुरोध भेज रहा है…" else "Sending request…" }
                                 else if (hi) "अभिभावक से खरीदने को कहें" else "Ask parent to buy")
                         }
-                        pricePaise > 0L && currency == "INR" -> Button(
+                        validPrice && pricePaise > 0L -> Button(
                             onClick = { onBuy(id) }, enabled = !busy && id > 0L && busyCourseId != id, modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(if (busyCourseId == id) { if (hi) "Checkout खुल रहा है…" else "Opening checkout…" }
                                 else if (hi) "Razorpay से खरीदें" else "Buy with Razorpay")
                         }
-                        pricePaise == 0L -> OutlinedButton(
+                        validPrice && pricePaise == 0L -> OutlinedButton(
                             onClick = { onJoinFree(id) }, enabled = !busy && id > 0L, modifier = Modifier.fillMaxWidth()
                         ) { Text(if (hi) "मुफ़्त course जोड़ें" else "Join free course") }
                         else -> Text(if (hi) "यह offer अभी खरीदने के लिए उपलब्ध नहीं है।" else "This offer is not currently available for purchase.",

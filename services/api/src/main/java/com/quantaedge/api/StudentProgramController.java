@@ -28,7 +28,21 @@ public class StudentProgramController {
         exists(select 1 from student_program_enrollment spe
           where spe.student_id=st.id and spe.program_id=p.id and spe.status='ACTIVE') as enrolled,
         exists(select 1 from student_program_enrollment spe
-          where spe.student_id=st.id and spe.program_id=p.id and spe.status='PAUSED') as paused
+          where spe.student_id=st.id and spe.program_id=p.id and spe.status='PAUSED') as paused,
+        (
+          exists(select 1 from student_program_enrollment spe
+            where spe.student_id=st.id and spe.program_id=p.id and spe.status in ('ACTIVE','PAUSED'))
+          or exists(select 1 from course_purchase cp where cp.student_id=st.id and cp.course_id=p.id)
+          or exists(select 1 from course_entitlement ce where ce.course_id=p.id
+            and (ce.holder_student_id=st.id or ce.holder_user_id=st.user_account_id))
+          or exists(select 1 from institution_membership im
+            join institution_tenant it on it.id=im.institution_id and it.status='ACTIVE'
+            join institution_course_entitlement ice on ice.institution_id=im.institution_id
+              and ice.program_id=p.id and ice.status='ACTIVE' and ice.valid_from<=now()
+              and (ice.valid_until is null or ice.valid_until>now())
+            where im.student_id=st.id and im.status='ACTIVE')
+        ) as has_access,
+        exists(select 1 from course_marketplace_offer o where o.course_id=p.id and o.status='PUBLISHED') as offer_available
       from student st
       join curriculum_program p on p.status='ACTIVE'
       where st.id=? and st.active=true and p.code<>'GENERAL'
@@ -126,6 +140,13 @@ public class StudentProgramController {
           where cp.student_id=? and cp.course_id=?
         )
         or exists(
+          select 1 from course_entitlement ce
+          where ce.course_id=? and (
+            ce.holder_student_id=?
+            or ce.holder_user_id=(select st.user_account_id from student st where st.id=? and st.active=true)
+          )
+        )
+        or exists(
           select 1 from course_marketplace_offer o
           where o.course_id=? and o.status='PUBLISHED'
             and o.price_paise=0 and o.currency='INR'
@@ -139,7 +160,8 @@ public class StudentProgramController {
             and (e.valid_until is null or e.valid_until>now())
           where im.student_id=? and im.status='ACTIVE'
         )
-      """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId, courseId, courseId, context.studentId());
+      """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId,
+          courseId, context.studentId(), context.studentId(), courseId, courseId, context.studentId());
     if (!Boolean.TRUE.equals(hasAuthorisedEnrolment)) {
       throw new SecurityException("This course is not available for self-enrolment. Choose a published free course or purchase its paid offer.");
     }

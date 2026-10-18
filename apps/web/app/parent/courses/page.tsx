@@ -8,7 +8,8 @@ import { LocaleText, useLocale } from '../../components/LanguageProvider';
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
   course_id: number; title: string; course_name: string; course_code: string;
-  description?: string | null; price_paise: number; currency: string;
+  description?: string | null; price_paise: number | null; currency: string | null;
+  offer_available?: boolean;
   owned_by_parent?: boolean; owned_by_child?: boolean; owned_child_ids?: string | null;
   transferable_by_parent?: boolean;
   subjects?: Array<{ subject_code?: string; subject_name?: string; chapters?: number; lessons?: number }>;
@@ -319,18 +320,20 @@ export default function ParentCoursesPage() {
             : <div className="parent-courses-page__grid">{courses.map(course => {
               const ownedByParent = course.owned_by_parent === true;
               const transferableByParent = course.transferable_by_parent === true;
-              const isFree = Number(course.price_paise) === 0;
+              const offerAvailable = course.offer_available === true;
+              const isFree = offerAvailable && Number(course.price_paise) === 0;
               const selectedChild = Number(childByCourse[course.course_id] || 0);
               const ownedChildIds = new Set(String(course.owned_child_ids || '').split(',')
                 .map(value => Number(value.trim())).filter(value => Number.isSafeInteger(value) && value > 0));
               const selectedChildAlreadyOwns = selectedChild > 0 && ownedChildIds.has(selectedChild);
               return <article className="parent-courses-page__course" key={course.course_id}>
                 <div className="parent-courses-page__course-top"><span className="parent-courses-page__course-icon" aria-hidden="true">✦</span>
-                  <span className="parent-courses-page__price">{ownedByParent && !isFree
+                  <span className="parent-courses-page__price">{ownedByParent
                     ? (english ? 'Owned by you' : 'आपके पास उपलब्ध')
                     : course.owned_by_child === true
                       ? (english ? 'A child has access' : 'एक बच्चे के पास पहुँच है')
-                      : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}</span></div>
+                      : !offerAvailable ? (english ? 'Coming soon' : 'जल्द उपलब्ध होगा')
+                        : isFree ? (english ? 'Free' : 'निःशुल्क') : money(Number(course.price_paise))}</span></div>
                 <h3>{course.title || course.course_name}</h3>
                 <small className="parent-courses-page__course-code">{course.course_code}</small>
                 {course.description && <p>{course.description}</p>}
@@ -343,9 +346,13 @@ export default function ParentCoursesPage() {
                       : <LocaleText hinglish="यह कोर्स आपकी व्यक्तिगत learning profile में पहले से उपलब्ध है।"
                           english="This course is already available in your personal learning profile." />}
                   </p>}
+                {!offerAvailable && <p className="parent-courses-page__owned-note">
+                  <LocaleText hinglish="इस कोर्स का offer अभी प्रकाशित नहीं है। प्रकाशित होने तक खरीद या free-enrolment उपलब्ध नहीं है।"
+                    english="This course has no published offer yet. Purchase and free enrolment remain unavailable until it is published." />
+                </p>}
                 <div className="parent-courses-page__buy-actions">
                   <button className="button button-dark button-small" type="button"
-                    disabled={busy !== '' || (ownedByParent && (isFree || !transferableByParent))}
+                    disabled={busy !== '' || !offerAvailable || (ownedByParent && (isFree || !transferableByParent))}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void startPaidCheckout(course.course_id, 'SELF')}>
                     {busy === 'checkout-' + course.course_id || busy === 'free-' + course.course_id
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
@@ -360,7 +367,7 @@ export default function ParentCoursesPage() {
                     </select>
                   </label>
                   <button className="button button-light button-small" type="button"
-                    disabled={busy !== '' || !selectedChild || selectedChildAlreadyOwns}
+                    disabled={busy !== '' || !offerAvailable || !selectedChild || selectedChildAlreadyOwns}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void startPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
                     {selectedChildAlreadyOwns
                       ? (english ? 'Already has access' : 'पहले से पहुँच है')

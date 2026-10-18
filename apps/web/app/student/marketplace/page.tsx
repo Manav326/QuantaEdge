@@ -14,8 +14,9 @@ type Offer = {
   course_code: string;
   curriculum_version?: string;
   description?: string | null;
-  price_paise: number;
-  currency: string;
+  price_paise: number | null;
+  currency: string | null;
+  offer_available?: boolean;
   has_access: boolean;
   purchased: boolean;
   parent_managed?: boolean;
@@ -245,8 +246,8 @@ export default function StudentMarketplacePage() {
       )}
       {!loading && !loadError && offers.length === 0 && (
         <div className={styles.stateCard}>
-          <h2>No published course offers yet</h2>
-          <p>Published courses will appear here when they are made available for purchase.</p>
+          <h2>No active courses are listed yet</h2>
+          <p>Active courses appear here. Purchase and free-enrolment options are enabled only after an authorized administrator publishes an offer.</p>
         </div>
       )}
 
@@ -254,12 +255,12 @@ export default function StudentMarketplacePage() {
         <section className={styles.grid} aria-label="Available course offers">
           {offers.map((offer) => {
             const owned = offer.has_access || offer.purchased;
-            const validPrice = Number.isSafeInteger(Number(offer.price_paise)) && offer.price_paise >= 0 && offer.currency === 'INR';
+            const validPrice = offer.offer_available === true && Number.isSafeInteger(Number(offer.price_paise)) && Number(offer.price_paise) >= 0 && offer.currency === 'INR';
             return (
               <article className={styles.courseCard} key={offer.course_id}>
                 <div className={styles.cardTop}>
                   <div className={styles.courseMark} aria-hidden="true">✦</div>
-                  <div className={styles.price}>{owned ? 'Owned' : validPrice ? offer.price_paise === 0 ? 'Free' : money(offer.price_paise) : 'Unavailable'}</div>
+                  <div className={styles.price}>{owned ? 'Owned' : validPrice ? Number(offer.price_paise) === 0 ? 'Free' : money(Number(offer.price_paise)) : 'Coming soon'}</div>
                 </div>
                 <h2>{offer.title || offer.course_name}</h2>
                 <p className={styles.meta}>{offer.curriculum_version || offer.course_code}</p>
@@ -273,7 +274,7 @@ export default function StudentMarketplacePage() {
                   {owned ? (
                     <Link className={styles.primaryButton} href={'/student/courses?focus=' + encodeURIComponent(String(offer.course_id))}>Open course</Link>
                   ) : !validPrice ? (
-                    <button className={styles.disabledButton} type="button" disabled>Not available for purchase</button>
+                    <button className={styles.disabledButton} type="button" disabled>Offer not published yet</button>
                   ) : offer.parent_managed && offer.price_paise > 0 ? (
                     <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null}
                       onClick={() => void askParentToBuy(offer.course_id)}>

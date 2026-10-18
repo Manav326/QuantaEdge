@@ -66,7 +66,7 @@ export default function StudentHome(){
         const body=await response.json();
         if(!response.ok) throw new Error(body.message||body.error||'Courses could not be loaded.');
         const rows=Array.isArray(body)?body:[];
-        const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true);
+        const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true||course.has_access===true);
         if(active) {
           setCourses(rows);
           setCourseCatalogReady(true);
@@ -75,6 +75,10 @@ export default function StudentHome(){
             return;
           }
           const serverActive=ownedRows.find((course:any)=>course.is_enrolled===true);
+          if(!serverActive) {
+            router.replace('/student/courses');
+            return;
+          }
           const activeId=serverActive?Number(serverActive.id):null;
           setActiveCourseId(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0 ? activeId : null);
           if(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0) {
@@ -134,9 +138,12 @@ export default function StudentHome(){
 
   useEffect(()=>{
     let active=true;
+    setTextbooksLoading(true);
+    setTextbooksError('');
     (async()=>{
       try {
-        const response=await fetch('/api/v1/learning/documents',{credentials:'same-origin',cache:'no-store'});
+        const courseQuery=activeCourseId!==null?'?courseId='+encodeURIComponent(String(activeCourseId)):'';
+        const response=await fetch('/api/v1/learning/documents'+courseQuery,{credentials:'same-origin',cache:'no-store'});
         if(response.status===401||response.status===403){router.replace('/login/student');return}
         const body=await response.json();
         if(!response.ok) throw new Error(body.detail||body.message||body.error||'Textbooks could not be loaded.');
@@ -148,7 +155,7 @@ export default function StudentHome(){
       }
     })();
     return ()=>{active=false};
-  },[router]);
+  },[router,activeCourseId]);
 
 
   useEffect(()=>{

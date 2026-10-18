@@ -57,7 +57,7 @@ public class CourseMarketplaceController {
     this.baseUrl = (baseUrl == null ? "https://api.razorpay.com/v1" : baseUrl.trim()).replaceAll("/+$", "");
   }
 
-  /** Only explicitly published offers are discoverable; this is not a list of every curriculum row. */
+  /** All active learner courses are discoverable. Only published offers can be acquired. */
   @GetMapping("/courses")
   public List<Map<String, Object>> courses(
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
@@ -66,18 +66,29 @@ public class CourseMarketplaceController {
         select p.id as course_id, p.public_id, p.code as course_code,
           coalesce(nullif(o.title_override,''),p.display_name) as title,
           p.display_name as course_name, p.curriculum_version,
-          o.description, o.price_paise, o.currency, o.status as offer_status,
-          exists(select 1 from student_program_enrollment e
-            where e.student_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')) as has_access,
-          exists(select 1 from course_purchase cp
-            where cp.student_id=? and cp.course_id=p.id) as purchased,
-          exists(select 1 from student_login_credential c
-            where c.student_id=? and c.active=true) as parent_managed
-        from course_marketplace_offer o
-        join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where o.status='PUBLISHED'
+          o.description, o.price_paise, o.currency,
+          (o.course_id is not null) as offer_available,
+          (
+            exists(select 1 from student_program_enrollment e
+              where e.student_id=? and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
+            or exists(select 1 from course_purchase cp where cp.student_id=? and cp.course_id=p.id)
+            or exists(select 1 from course_entitlement ce
+              where ce.course_id=p.id and (ce.holder_user_id=? or ce.holder_student_id=?))
+            or exists(select 1 from institution_membership im
+              join institution_tenant it on it.id=im.institution_id and it.status='ACTIVE'
+              join institution_course_entitlement ice on ice.institution_id=im.institution_id
+                and ice.program_id=p.id and ice.status='ACTIVE' and ice.valid_from<=now()
+                and (ice.valid_until is null or ice.valid_until>now())
+              where im.student_id=? and im.status='ACTIVE')
+          ) as has_access,
+          exists(select 1 from course_purchase cp where cp.student_id=? and cp.course_id=p.id) as purchased,
+          exists(select 1 from student_login_credential c where c.student_id=? and c.active=true) as parent_managed
+        from curriculum_program p
+        left join course_marketplace_offer o on o.course_id=p.id and o.status='PUBLISHED'
+        where p.status='ACTIVE' and p.code<>'GENERAL'
         order by p.display_name,p.id
-        """, context.studentId(), context.studentId(), context.studentId());
+        """, context.studentId(), context.studentId(), context.userId(), context.studentId(),
+            context.studentId(), context.studentId(), context.studentId());
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -108,7 +119,7 @@ public class CourseMarketplaceController {
       select p.id as course_id,p.public_id,p.code as course_code,
         coalesce(nullif(o.title_override,''),p.display_name) as title,
         p.display_name as course_name,p.curriculum_version,o.description,
-        o.price_paise,o.currency,o.status as offer_status,
+        o.price_paise,o.currency,o.status as offer_status,(o.course_id is not null) as offer_available,
         (exists(select 1 from course_entitlement ce
           where ce.course_id=p.id and ce.holder_user_id=?)
          or exists(select 1 from student st join student_program_enrollment e on e.student_id=st.id
@@ -132,9 +143,9 @@ public class CourseMarketplaceController {
              or exists(select 1 from student_program_enrollment e
                  where e.student_id=gs.student_id and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
            )) as owned_child_ids
-      from course_marketplace_offer o
-      join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
-      where o.status='PUBLISHED'
+      from curriculum_program p
+      left join course_marketplace_offer o on o.course_id=p.id and o.status='PUBLISHED'
+      where p.status='ACTIVE' and p.code<>'GENERAL'
       order by p.display_name,p.id
       """, parentId, parentId, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {

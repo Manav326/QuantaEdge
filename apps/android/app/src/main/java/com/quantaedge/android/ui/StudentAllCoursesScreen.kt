@@ -38,7 +38,7 @@ fun StudentAllCoursesScreen(
     onRefresh: () -> Unit
 ) {
     val hi = language == "hi"
-    val owned = programs.filter { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused") }
+    val visibleCourses = programs
     Column(
         modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -52,7 +52,7 @@ fun StudentAllCoursesScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        if (owned.isEmpty()) {
+        if (visibleCourses.isEmpty()) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
@@ -81,9 +81,11 @@ fun StudentAllCoursesScreen(
                 }
             }
         } else {
-            owned.forEach { course ->
+            visibleCourses.forEach { course ->
                 val id = course.optLong("id", course.optLong("course_id"))
-                val active = id == activeCourseId
+                val active = id == activeCourseId && course.optBoolean("is_enrolled", course.optBoolean("enrolled"))
+                val hasAccess = course.optBoolean("has_access") || course.optBoolean("is_enrolled", course.optBoolean("enrolled")) || course.optBoolean("paused")
+                val offerAvailable = course.optBoolean("offer_available")
                 val subjects = course.optJSONArray("subjects")?.let { array ->
                     (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
                 }.orEmpty()
@@ -112,14 +114,19 @@ fun StudentAllCoursesScreen(
                                 shape = MaterialTheme.shapes.small
                             ) {
                                 Text(
-                                    if (active) { if (hi) "सीख रहे हैं" else "Learning now" } else "Enrolled",
+                                    when {
+                                        active -> if (hi) "सीख रहे हैं" else "Learning now"
+                                        hasAccess -> if (hi) "आपके courses में" else "In your courses"
+                                        offerAvailable -> if (hi) "Marketplace में उपलब्ध" else "Available in Marketplace"
+                                        else -> if (hi) "जल्द उपलब्ध होगा" else "Coming soon"
+                                    },
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = if (active) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
-                        if (total > 0) {
+                        if (active && total > 0) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(if (hi) "$done / $total lessons पूरे" else "$done of $total lessons completed",
                                     modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
@@ -128,9 +135,17 @@ fun StudentAllCoursesScreen(
                             }
                             LinearProgressIndicator(progress = { pct / 100f }, modifier = Modifier.fillMaxWidth())
                         }
-                        if (!active) {
+                        if (!active && hasAccess) {
                             OutlinedButton(onClick = { onActivateCourse(id) }, enabled = !busy && id > 0L) {
-                                Text(if (hi) "इस course पर पढ़ें" else "Focus on this course")
+                                Text(if (hi) "इस course पर पढ़ें" else "Open / focus on this course")
+                            }
+                        } else if (!hasAccess) {
+                            OutlinedButton(onClick = onMarketplace, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                                Text(if (offerAvailable) {
+                                    if (hi) "Marketplace में देखें" else "View offer in Marketplace"
+                                } else {
+                                    if (hi) "अभी join नहीं कर सकते" else "Not yet available to join"
+                                })
                             }
                         }
                         if (subjects.isNotEmpty()) {
@@ -139,8 +154,8 @@ fun StudentAllCoursesScreen(
                             subjects.forEach { subject ->
                                 val code = subject.optString("subject_code", subject.optString("code"))
                                 Row(
-                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(enabled = !busy && id > 0L) {
-                                        onOpenSubject(code, id)
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(enabled = active && !busy && id > 0L) {
+                                        if (active) onOpenSubject(code, id)
                                     }.padding(vertical = 7.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -149,7 +164,7 @@ fun StudentAllCoursesScreen(
                                         Text(subject.optInt("lessons", 0).toString() + " lessons",
                                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
-                                    Text("→", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
+                                    Text(if (active) "→" else "🔒", color = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleMedium)
                                 }
                             }
                         } else {
@@ -161,7 +176,7 @@ fun StudentAllCoursesScreen(
             }
         }
         Button(onClick = onMarketplace, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-            Text(if (hi) "और courses खोजें · Marketplace" else "Explore more courses · Marketplace")
+            Text(if (hi) "Marketplace में सभी courses देखें" else "Explore all courses in Marketplace")
         }
     }
 }
