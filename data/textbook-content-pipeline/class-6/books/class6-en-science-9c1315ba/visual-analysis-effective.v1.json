@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ee01faa4dbd8679b3cd1e0da85898639750c603d14a3af117adf23388317e723",
+  "raw_analysis_sha256": "7e4a8aa634c300338d37009345d28045957adc8332cc4ae22f4cf2c7a1676f09",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:03:47Z",
+      "checkpointed_at": "2026-10-18T14:11:33Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -31326,6 +31326,166 @@
         "context_relation": "The page is likely a blank or transitional page in the textbook.",
         "limitations": [
           "The page is empty and does not contain any visual or textual content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9eb9f06a1b611e65feb09c8e",
+      "asset_sha256": "8360fd57a000cd4a0ac46c033d85de3689f1417ef807cbe59f4b23ec91037ca3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/8360fd57a000cd4a0ac46c033d85de3689f1417ef807cbe59f4b23ec91037ca3.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze. The page appears to be blank or contains no content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:13:07Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze. The page appears to be blank or contains no content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b89903705e57e121553b6f92",
+      "asset_sha256": "00982f4ef0918f4b84bec60955d0b5ed4352fa2aea473a41826c4bf30149adff",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/00982f4ef0918f4b84bec60955d0b5ed4352fa2aea473a41826c4bf30149adff.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:14:40Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8d1cc355b55a5063dd2b8022",
+      "asset_sha256": "a03403c3d342c30f82865d3a5058d3c250df4f9ffeb2532ae1bbe9eda6276788",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/a03403c3d342c30f82865d3a5058d3c250df4f9ffeb2532ae1bbe9eda6276788.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze. The page appears to be blank or contains no content. The page may serve as a placeholder or a transition between sections of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:16:14Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze. The page appears to be blank or contains no content. The page may serve as a placeholder or a transition between sections of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d331f73e9fcd110331737795",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:16:30Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
