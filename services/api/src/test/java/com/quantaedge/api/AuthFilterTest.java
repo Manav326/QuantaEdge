@@ -84,7 +84,7 @@ class AuthFilterTest {
         "POST", "/api/v1/hrms/platform/institutions/42/branding/assets/logo");
     request.addHeader(AuthService.WORKSPACE_HEADER, "HRMS");
     request.addHeader("Origin", "http://localhost:3002");
-    request.setContentLength(2_300_000);
+    request.setContent(new byte[2_300_000]);
     MockHttpServletResponse response = new MockHttpServletResponse();
     MockFilterChain chain = new MockFilterChain();
 
@@ -105,7 +105,7 @@ class AuthFilterTest {
         "POST", "/api/v1/hrms/platform/institutions/42/branding/assets/app-icon");
     request.addHeader(AuthService.WORKSPACE_HEADER, "HRMS");
     request.addHeader("Origin", "http://localhost:3002");
-    request.setContentLength(128);
+    request.setContent(new byte[128]);
     MockHttpServletResponse response = new MockHttpServletResponse();
     MockFilterChain chain = new MockFilterChain();
 
