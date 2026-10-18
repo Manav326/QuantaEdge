@@ -27,11 +27,38 @@ public class StudentProgramController {
       select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,p.curriculum_version,p.status,
         exists(select 1 from student_program_enrollment spe
           where spe.student_id=st.id and spe.program_id=p.id and spe.status='ACTIVE') as enrolled,
-        exists(select 1 from student_program_enrollment spe
-          where spe.student_id=st.id and spe.program_id=p.id and spe.status='PAUSED') as paused
+        (exists(select 1 from student_program_enrollment spe
+          where spe.student_id=st.id and spe.program_id=p.id and spe.status='PAUSED')
+          or exists(select 1 from student_course_access_grant grant_row
+            where grant_row.student_id=st.id and grant_row.course_id=p.id
+              and grant_row.grant_reason='LEGACY_CLASS_ENROLLMENT'
+            and not exists(select 1 from student_program_enrollment existing
+              where existing.student_id=st.id and existing.program_id=p.id
+                and existing.status='ACTIVE'))) as paused
       from student st
       join curriculum_program p on p.status='ACTIVE'
       where st.id=? and st.active=true and p.code<>'GENERAL'
+        and (
+          not exists(select 1 from institution_membership active_membership
+            where active_membership.student_id=st.id and active_membership.status='ACTIVE')
+          or exists(
+            select 1
+            from institution_membership active_membership
+            join institution_tenant tenant on tenant.id=active_membership.institution_id
+              and tenant.status='ACTIVE'
+            join institution_course_entitlement institution_grant
+              on institution_grant.institution_id=active_membership.institution_id
+              and institution_grant.program_id=p.id and institution_grant.status='ACTIVE'
+              and institution_grant.valid_from<=now()
+              and (institution_grant.valid_until is null or institution_grant.valid_until>now())
+            where active_membership.student_id=st.id and active_membership.status='ACTIVE'
+          )
+          or exists(select 1 from course_purchase purchase
+            where purchase.student_id=st.id and purchase.course_id=p.id)
+          or exists(select 1 from student_course_access_grant legacy_grant
+            where legacy_grant.student_id=st.id and legacy_grant.course_id=p.id
+              and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+        )
       order by p.display_name,p.id
       """, context.studentId());
 
@@ -127,6 +154,11 @@ public class StudentProgramController {
           where cp.student_id=? and cp.course_id=?
         )
         or exists(
+          select 1 from student_course_access_grant legacy_grant
+          where legacy_grant.student_id=? and legacy_grant.course_id=?
+            and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT'
+        )
+        or exists(
           select 1 from course_marketplace_offer o
           where o.course_id=? and o.status='PUBLISHED'
             and o.price_paise=0 and o.currency='INR'
@@ -140,7 +172,8 @@ public class StudentProgramController {
             and (e.valid_until is null or e.valid_until>now())
           where im.student_id=? and im.status='ACTIVE'
         )
-      """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId, courseId, courseId, context.studentId());
+      """, Boolean.class, context.studentId(), courseId, context.studentId(), courseId,
+        context.studentId(), courseId, courseId, courseId, context.studentId());
     if (!Boolean.TRUE.equals(hasAuthorisedEnrolment)) {
       throw new SecurityException("This course is not available for self-enrolment. Choose a published free course or purchase its paid offer.");
     }
