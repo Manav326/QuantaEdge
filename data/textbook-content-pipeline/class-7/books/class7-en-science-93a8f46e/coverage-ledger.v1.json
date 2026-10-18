@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 686,
-    "successful_visual_analyses": 676,
-    "missing_visual_analyses": 6802,
+    "raw_analysis_result_rows": 689,
+    "successful_visual_analyses": 679,
+    "missing_visual_analyses": 6799,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6812,
+    "unresolved_count": 6809,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36206,9 +36206,24 @@
       "asset_path": "assets/35532260309cd2c5b5e8c0cda12a01f76be2e85654b68b4ffb2a8093029a66cb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a golden scroll holder at the top left corner.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 2.2: Let us relate and explore"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "edible substances",
+          "taste"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "unclear if the scroll contains text or is blank"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36224,9 +36239,33 @@
       "asset_path": "assets/2b7e61a3c17b24aba2bd023592afab8cc10ae29d57d8809241590839145a4746.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Taste",
+          "Substances",
+          "Group A",
+          "Table 2.2",
+          "Edible substances",
+          "Acids"
+        ],
+        "context_relation": "The text discusses the taste of substances in Group A of Table 2.2 and relates it to the presence of acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36242,9 +36281,18 @@
       "asset_path": "assets/ad40b391440445fb89d0061a00c2ab833855e6fa83bd7661fe13696989f73164.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a fire hydrant.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a fire hydrant, which is not directly related to the text about acids and sour substances.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is visually represented."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

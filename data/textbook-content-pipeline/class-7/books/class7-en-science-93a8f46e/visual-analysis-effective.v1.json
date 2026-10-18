@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8554615617035393185adc20735d8f5e6af0576105cad7549ce0edbfe91835e2",
+  "raw_analysis_sha256": "583600c7a9f574f43ad1fc0eb610c0364242c519cf0926a37a48efb9d8ad7a12",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:44:28Z",
+      "checkpointed_at": "2026-10-18T06:46:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:44:48Z",
+      "checkpointed_at": "2026-10-18T06:46:31Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -38976,6 +38976,168 @@
           "The image does not provide any specific information about the substances in Group A or their taste.",
           "The image is a close-up of a mouth and tongue, which may not be directly related to the text about Table 2.2 and substances.",
           "The image does not show any specific substances or their taste, only a general concept of taste and acids."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d1127172d7b33c575ffbc940",
+      "asset_sha256": "35532260309cd2c5b5e8c0cda12a01f76be2e85654b68b4ffb2a8093029a66cb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/35532260309cd2c5b5e8c0cda12a01f76be2e85654b68b4ffb2a8093029a66cb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a golden scroll holder at the top left corner.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 2.2: Let us relate and explore"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "edible substances",
+          "taste"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "unclear if the scroll contains text or is blank"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:47:06Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a golden scroll holder at the top left corner.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Activity 2.2: Let us relate and explore"
+        ],
+        "concepts": [
+          "Table 2.2",
+          "edible substances",
+          "taste"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "unclear if the scroll contains text or is blank"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ea45c9c69d7860d18dc611e3",
+      "asset_sha256": "2b7e61a3c17b24aba2bd023592afab8cc10ae29d57d8809241590839145a4746",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/2b7e61a3c17b24aba2bd023592afab8cc10ae29d57d8809241590839145a4746.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Taste",
+          "Substances",
+          "Group A",
+          "Table 2.2",
+          "Edible substances",
+          "Acids"
+        ],
+        "context_relation": "The text discusses the taste of substances in Group A of Table 2.2 and relates it to the presence of acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:47:47Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Taste",
+          "Substances",
+          "Group A",
+          "Table 2.2",
+          "Edible substances",
+          "Acids"
+        ],
+        "context_relation": "The text discusses the taste of substances in Group A of Table 2.2 and relates it to the presence of acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3847a7c8459762aa3f7ab30a",
+      "asset_sha256": "ad40b391440445fb89d0061a00c2ab833855e6fa83bd7661fe13696989f73164",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/ad40b391440445fb89d0061a00c2ab833855e6fa83bd7661fe13696989f73164.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a fire hydrant.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a fire hydrant, which is not directly related to the text about acids and sour substances.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is visually represented."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:48:20Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a fire hydrant.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a fire hydrant, which is not directly related to the text about acids and sour substances.",
+        "limitations": [
+          "The image does not provide any additional information beyond what is visually represented."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
