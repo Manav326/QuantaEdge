@@ -40,6 +40,18 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void marketplaceDiscoveryAndExplicitCheckoutRequireTenantButNotPriorMembership() {
+    assertEquals(true,InstitutionTenantContextService.requiresInstitutionContext("/api/v1/marketplace/courses"));
+    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/marketplace/courses"));
+    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/marketplace/family/courses"));
+    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("POST","/api/v1/marketplace/courses/123/orders"));
+    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("POST","/api/v1/marketplace/family/courses/123/enroll-free"));
+    assertEquals(false,InstitutionTenantContextService.requiresActiveMembership("POST","/api/v1/marketplace/family/orders/567/verify"));
+    assertEquals(true,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/learning/sessions"));
+    assertEquals(true,InstitutionTenantContextService.requiresActiveMembership("GET","/api/v1/students/me"));
+  }
+
+  @Test
   void publicBrandingAndIdentityRoutesDoNotRequireAnInstitutionContext() {
     assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
         "/api/v1/institution/public/branding/SCHOOL-A"));
