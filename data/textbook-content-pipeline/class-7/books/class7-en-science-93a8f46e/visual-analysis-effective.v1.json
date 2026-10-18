@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "71ed1558f3adfa2c57f662220dabd6a096e5a67017dc0b3ff674780fd3ab51f7",
+  "raw_analysis_sha256": "ed2f2a4e47d3775b180af47357f0e98af185b19270126c74621f5058ad9aa1c3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:57:00Z",
+      "checkpointed_at": "2026-10-18T19:59:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:57:21Z",
+      "checkpointed_at": "2026-10-18T20:00:17Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -60008,6 +60008,186 @@
         "context_relation": "The image is related to the question about why bubbles occurred with vinegar but not with soap solution.",
         "limitations": [
           "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4edb4252498bf6521cf3dc5a",
+      "asset_sha256": "51410a5029d547ccc08b711990b605bdf8aa162bd772b9a87c78ea4c1e597483",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/51410a5029d547ccc08b711990b605bdf8aa162bd772b9a87c78ea4c1e597483.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The page is discussing an exploratory project related to the experiment described in the visible text.",
+        "limitations": [
+          "The page does not provide specific details about the experiment or the results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:00:58Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The page is discussing an exploratory project related to the experiment described in the visible text.",
+        "limitations": [
+          "The page does not provide specific details about the experiment or the results."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b615ff3ad871fd2a7b71205a",
+      "asset_sha256": "6d76a472956bc2d184e93e83c3395e758e5e7d5b2f15a517bd8096204f323a96",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/6d76a472956bc2d184e93e83c3395e758e5e7d5b2f15a517bd8096204f323a96.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Bubbles",
+          "Vinegar",
+          "Soap solution",
+          "Eggshells or marble"
+        ],
+        "context_relation": "The image is a page from a textbook discussing an experiment related to chemical reactions and the properties of vinegar and soap solution.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:01:39Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Bubbles",
+          "Vinegar",
+          "Soap solution",
+          "Eggshells or marble"
+        ],
+        "context_relation": "The image is a page from a textbook discussing an experiment related to chemical reactions and the properties of vinegar and soap solution.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the results."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a445838f4d3a9055f5c8a62f",
+      "asset_sha256": "6b4a4279079a867900047922625941fdd35758c0c56cc003a039439241487cc1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/6b4a4279079a867900047922625941fdd35758c0c56cc003a039439241487cc1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a4dbbcbc9d3860c5c9502205f38c35122b5d53c683234871358c2a78896733d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The page is discussing an experiment where vinegar and soap solution are used on eggshells or marble to observe the formation of bubbles.",
+        "limitations": [
+          "The page does not provide the answer to the question about why bubbles occurred with vinegar but not with soap solution."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T20:02:22Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The page is discussing an experiment where vinegar and soap solution are used on eggshells or marble to observe the formation of bubbles.",
+        "limitations": [
+          "The page does not provide the answer to the question about why bubbles occurred with vinegar but not with soap solution."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
