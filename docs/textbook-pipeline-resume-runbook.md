@@ -118,3 +118,7 @@ Before cancelling or rerunning an Actions job, check its last completed step and
 Use the existing **Prepare textbook visual candidates v3 (additive)** workflow. In Actions, choose **Run workflow**, select the class, and set `analysis_mode=resume_layers_4_5` to continue saved visual analysis without rebuilding candidate packs. The core workflow supports single-class recovery and the combined Class 7–8 path; no extra workflow file is needed.
 
 Resume preflight uses the shared `missing_artifact(message, expected_reference)` classifier. It recognizes explicit registry absence responses, including the exact ORAS/GHCR `failed to resolve <tag>: <package>:<tag>: not found` response, and does not mistake arbitrary proxy, upstream, or authentication errors for an absent checkpoint. Missing checkpoints are treated as not started only when no Layer 4 work is recorded; an existing partial checkpoint is never silently regenerated.
+
+### Coordinator regression-test correction (18 October 2026)
+
+The per-class continuation markers are generated from the fixed class set `(6, 7, 8)` using the same `class-{grade}.v1.json` naming pattern. The regression test checks that loop and naming pattern rather than requiring three duplicated string literals. Layer 4–5 remains resumable from the existing source-bound Git/GHCR checkpoints; this test adjustment does not alter any completion gate.
