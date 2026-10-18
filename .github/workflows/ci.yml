@@ -129,6 +129,23 @@ jobs:
           echo "people=$people" >> "$GITHUB_OUTPUT"
           echo "content=$content" >> "$GITHUB_OUTPUT"
 
+  verify-google-client-id-scope:
+    name: Diagnose Google client ID scope (value never printed)
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Check client ID availability without a GitHub environment
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
+        shell: bash
+        run: |
+          if [ -n "$GOOGLE_WEB_CLIENT_ID" ]; then
+            echo "Repository/organization-scoped Google client ID is available."
+          else
+            echo "::error::Google client ID is not available outside an environment. Configure a repository-level Actions secret/variable or verify the intended environment scope."
+            exit 1
+          fi
+
   build-android-apk:
     name: Build Android APK
     runs-on: ubuntu-latest
