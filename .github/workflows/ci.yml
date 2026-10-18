@@ -129,22 +129,6 @@ jobs:
           echo "people=$people" >> "$GITHUB_OUTPUT"
           echo "content=$content" >> "$GITHUB_OUTPUT"
 
-  verify-google-client-id-scope:
-    name: Diagnose Google client ID scope (value never printed)
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      - name: Check client ID availability without a GitHub environment
-        env:
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
-        shell: bash
-        run: |
-          if [ -n "$GOOGLE_WEB_CLIENT_ID" ]; then
-            echo "Repository/organization-scoped Google client ID is available."
-          else
-            echo "::warning::Google client ID is not available outside an environment. Production image/APK jobs still require it in the scope they use."
-          fi
-
   build-android-apk:
     name: Build Android APK
     runs-on: ubuntu-latest
@@ -174,13 +158,9 @@ jobs:
         run: node scripts/check-android-ui-localization.mjs
       - name: Run Android unit tests and build debug APK
         env:
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           QUANTAEDGE_API_BASE_URL: https://qe.thinkwithsujeet.in/
         run: |
           set -euo pipefail
-          if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
-            test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to this build. Configure it as an Actions secret or variable visible to the production environment."; exit 1; }
-          fi
           test -n "$QUANTAEDGE_API_BASE_URL" || { echo "::error::Android API base URL is not configured."; exit 1; }
           gradle -p apps/android testDebugUnitTest assembleDebug
       - name: Upload installable APK
@@ -267,12 +247,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Verify Google sign-in configuration before publishing the API image
-        if: github.event_name != 'pull_request'
-        env:
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
-        run: |
-          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to the production API image build. Configure an Actions secret or variable."; exit 1; }
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log in to GHCR
@@ -298,8 +272,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            APP_AUTH_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           cache-from: type=gha,scope=api
           cache-to: type=gha,mode=max,scope=api
 
@@ -313,12 +285,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Verify Google sign-in configuration before publishing the web image
-        if: github.event_name != 'pull_request'
-        env:
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
-        run: |
-          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::GOOGLE_WEB_CLIENT_ID is unavailable to the production web image build. Configure an Actions secret or variable."; exit 1; }
       - name: Verify structured lesson UI contract
         run: node scripts/check-structured-lesson-ui-contract.mjs
       - name: Verify student navigation contract
@@ -347,8 +313,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID || vars.GOOGLE_WEB_CLIENT_ID }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
 
