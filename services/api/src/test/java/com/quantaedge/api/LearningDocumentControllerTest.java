@@ -30,6 +30,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class LearningDocumentControllerTest {
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   @Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
@@ -114,7 +116,7 @@ class LearningDocumentControllerTest {
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.studentDocumentPage(55L, 1, "full", student));
+        () -> controller.studentDocumentPage(55L, 1, "full", student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).queryForObject(
@@ -217,9 +219,9 @@ class LearningDocumentControllerTest {
         contains("select pdf_bytes from learning_pdf_asset where id=?"),
         eq(byte[].class), eq(12L))).thenReturn(sourcePdf);
 
-    var pageOne = controller.studentDocumentPage(88L, 1, "full", student);
-    var pageTwo = controller.studentDocumentPage(88L, 2, "full", student);
-    var thumbnail = controller.studentDocumentPage(88L, 2, "thumbnail", student);
+    var pageOne = controller.studentDocumentPage(88L, 1, "full", student, TEST_TENANT);
+    var pageTwo = controller.studentDocumentPage(88L, 2, "full", student, TEST_TENANT);
+    var thumbnail = controller.studentDocumentPage(88L, 2, "thumbnail", student, TEST_TENANT);
 
     assertEquals(200, pageOne.getStatusCode().value());
     assertEquals(200, pageTwo.getStatusCode().value());
@@ -261,9 +263,9 @@ class LearningDocumentControllerTest {
         eq(byte[].class), eq(12L))).thenReturn(sourcePdf);
 
     Map<String, Object> finalBatch =
-        controller.studentDocumentPageBatch(88L, 2, 10, "thumbnail", student);
+        controller.studentDocumentPageBatch(88L, 2, 10, "thumbnail", student, TEST_TENANT);
     Map<String, Object> afterEnd =
-        controller.studentDocumentPageBatch(88L, 3, 10, "thumbnail", student);
+        controller.studentDocumentPageBatch(88L, 3, 10, "thumbnail", student, TEST_TENANT);
 
     assertEquals(2, finalBatch.get("pageCount"));
     assertEquals(10, finalBatch.get("requestedLimit"));
