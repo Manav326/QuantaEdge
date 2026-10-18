@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 830,
-    "successful_visual_analyses": 819,
-    "missing_visual_analyses": 1248,
+    "raw_analysis_result_rows": 831,
+    "successful_visual_analyses": 820,
+    "missing_visual_analyses": 1247,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1259,
+    "unresolved_count": 1258,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -32415,25 +32415,21 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
-          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
-          "Camels found in the cold desert have two humps each.",
-          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
-          "Moreover, they grow long hair from head to neck, which help them survive."
+          "Camels store food in their humps."
         ],
         "concepts": [
           "deserts",
-          "camels",
-          "humps",
-          "food storage",
+          "food availability",
+          "hump structure",
           "cold desert",
           "hot desert",
-          "winter",
+          "hump shrinkage",
+          "food storage",
           "long hair"
         ],
-        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, focusing on how they adapt to their surroundings.",
         "limitations": [
-          "The text does not provide visual aids or diagrams to support the information.",
-          "The text does not include any specific questions or exercises related to the information."
+          "The text does not include any visual aids or diagrams to support the information."
         ]
       },
       "chapter_id": null,
@@ -32469,9 +32465,32 @@
       "asset_path": "page-0044.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A tree with pink flowers in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.13: Different features of rhododendrons",
+          "Sagar tells his classmates that he went to the Andaman",
+          "and Nicobar Islands with his parents for a special event.",
+          "He saw huge whales and colourful fish in the ocean. His",
+          "father explained that the streamlined body of fish helps",
+          "them to swim in water."
+        ],
+        "concepts": [
+          "Rhododendrons",
+          "Andaman and Nicobar Islands",
+          "Whales",
+          "Fish",
+          "Streamlined body",
+          "Swimming"
+        ],
+        "context_relation": "The image is a photograph of a tree with pink flowers in the background.",
+        "limitations": [
+          "The image does not provide information about the specific species of the tree or the location where it is found."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c58f0f0df976069b8c3d12b266d5ebe65af1e0cc1b35df9fe63fa581e45e5e70",
+  "raw_analysis_sha256": "2e372088ed3ff3f04dfc49222fdcf924af753db3140f43c44feef07afe2d493e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:14:02Z",
+      "checkpointed_at": "2026-10-18T20:18:13Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:14:55Z",
+      "checkpointed_at": "2026-10-18T20:19:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:16:05Z",
+      "checkpointed_at": "2026-10-18T20:20:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37546,56 +37546,48 @@
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
-          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
-          "Camels found in the cold desert have two humps each.",
-          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
-          "Moreover, they grow long hair from head to neck, which help them survive."
+          "Camels store food in their humps."
         ],
         "concepts": [
           "deserts",
-          "camels",
-          "humps",
-          "food storage",
+          "food availability",
+          "hump structure",
           "cold desert",
           "hot desert",
-          "winter",
+          "hump shrinkage",
+          "food storage",
           "long hair"
         ],
-        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, focusing on how they adapt to their surroundings.",
         "limitations": [
-          "The text does not provide visual aids or diagrams to support the information.",
-          "The text does not include any specific questions or exercises related to the information."
+          "The text does not include any visual aids or diagrams to support the information."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:16:47Z",
+      "checkpointed_at": "2026-10-18T20:20:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the hump structure of camels in different desert environments.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "In deserts, food is not available easily. Camels store food in their humps. Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food. Camels found in the cold desert have two humps each. These two humps shrink in late winters because there is not much ",
-          "Camels found in the hot desert have one hump each that helps them to survive during the scarcity of food.",
-          "Camels found in the cold desert have two humps each.",
-          "These two humps shrink in late winters because there is not much food available in the cold desert and they have to use food stored in their humps during that time.",
-          "Moreover, they grow long hair from head to neck, which help them survive."
+          "Camels store food in their humps."
         ],
         "concepts": [
           "deserts",
-          "camels",
-          "humps",
-          "food storage",
+          "food availability",
+          "hump structure",
           "cold desert",
           "hot desert",
-          "winter",
+          "hump shrinkage",
+          "food storage",
           "long hair"
         ],
-        "context_relation": "The text provides information about the hump structure of camels in different desert environments, explaining how they adapt to their environment to survive.",
+        "context_relation": "The text provides information about the hump structure of camels in different desert environments, focusing on how they adapt to their surroundings.",
         "limitations": [
-          "The text does not provide visual aids or diagrams to support the information.",
-          "The text does not include any specific questions or exercises related to the information."
+          "The text does not include any visual aids or diagrams to support the information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -37619,6 +37611,74 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "93971e0f1e980f0367559e6e",
+      "asset_sha256": "3b17e3abe6a36525cfb100b5313bd9fd14fcdf56e7d36d385dad93e54789dee5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 44,
+      "asset_path": "page-0044.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "1e37f942db6cf5e10d2facdcc2f30b89f537a1f9e9296c69194f8d13e9a4b12a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A tree with pink flowers in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.13: Different features of rhododendrons",
+          "Sagar tells his classmates that he went to the Andaman",
+          "and Nicobar Islands with his parents for a special event.",
+          "He saw huge whales and colourful fish in the ocean. His",
+          "father explained that the streamlined body of fish helps",
+          "them to swim in water."
+        ],
+        "concepts": [
+          "Rhododendrons",
+          "Andaman and Nicobar Islands",
+          "Whales",
+          "Fish",
+          "Streamlined body",
+          "Swimming"
+        ],
+        "context_relation": "The image is a photograph of a tree with pink flowers in the background.",
+        "limitations": [
+          "The image does not provide information about the specific species of the tree or the location where it is found."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:23:30Z",
+      "effective_analysis": {
+        "visual_summary": "A tree with pink flowers in the background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 2.13: Different features of rhododendrons",
+          "Sagar tells his classmates that he went to the Andaman",
+          "and Nicobar Islands with his parents for a special event.",
+          "He saw huge whales and colourful fish in the ocean. His",
+          "father explained that the streamlined body of fish helps",
+          "them to swim in water."
+        ],
+        "concepts": [
+          "Rhododendrons",
+          "Andaman and Nicobar Islands",
+          "Whales",
+          "Fish",
+          "Streamlined body",
+          "Swimming"
+        ],
+        "context_relation": "The image is a photograph of a tree with pink flowers in the background.",
+        "limitations": [
+          "The image does not provide information about the specific species of the tree or the location where it is found."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
