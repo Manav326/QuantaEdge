@@ -292,6 +292,7 @@ public class PracticeController {
     if(types.isEmpty()) return List.of();
     String typePlaceholders=String.join(",",java.util.Collections.nCopies(types.size(),"?"));
     String sql="""
+      with tenant_scope as (select ?::bigint as institution_id)
       select q.id
       from question q
       join lesson l on l.id=q.lesson_id and l.active=true and l.status='PUBLISHED'
@@ -305,11 +306,13 @@ public class PracticeController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
+              and spe.program_id=s.program_id and spe.status='ACTIVE'
           ))
         )
         and exists(select 1 from student_track_enrollment ste
-                   where ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE')
+                   where ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
+                      and ste.subject_id=s.id and ste.status='ACTIVE')
         and q.question_type in (__TYPE_PLACEHOLDERS__)
         and (__SCOPE_FILTER__)
       """.replace("__TYPE_PLACEHOLDERS__",typePlaceholders).replace("__SCOPE_FILTER__",scopeFilter);
@@ -317,12 +320,12 @@ public class PracticeController {
       sql+="""
         and exists(
           select 1 from student_question_attempt prior
-          where prior.student_id=st.id and prior.question_id=q.id
-            and prior.activity_kind in ('LESSON_INLINE','PRACTICE') and prior.correct=false
+          where prior.student_id=st.id and prior.institution_id=(select institution_id from tenant_scope)
+              and prior.question_id=q.id and prior.activity_kind in ('LESSON_INLINE','PRACTICE') and prior.correct=false
             and not exists(
               select 1 from student_question_attempt newer
-              where newer.student_id=prior.student_id and newer.question_id=prior.question_id
-                and newer.activity_kind in ('LESSON_INLINE','PRACTICE')
+              where newer.student_id=prior.student_id and newer.institution_id=(select institution_id from tenant_scope)
+                  and newer.question_id=prior.question_id and newer.activity_kind in ('LESSON_INLINE','PRACTICE')
                 and (newer.answered_at>prior.answered_at
                   or (newer.answered_at=prior.answered_at and newer.id>prior.id))
             )
@@ -332,14 +335,15 @@ public class PracticeController {
       sql+="""
         and not exists(
           select 1 from student_question_attempt tried
-          where tried.student_id=st.id and tried.question_id=q.id
-            and tried.activity_kind in ('LESSON_INLINE','PRACTICE')
+          where tried.student_id=st.id and tried.institution_id=(select institution_id from tenant_scope)
+              and tried.question_id=q.id and tried.activity_kind in ('LESSON_INLINE','PRACTICE')
         )
         """;
     }
     if(excludeCurrentLesson) sql+=" and q.lesson_id<>?";
     sql+=" order by random() limit ?";
     List<Object> args=new ArrayList<>();
+    args.add(institutionId);
     args.add(studentId);
     args.add(chapterId);
     args.addAll(types);
@@ -364,21 +368,21 @@ public class PracticeController {
   private Map<String,Object> getSessionForTenant(long sessionId,String language,AuthContext context,long institutionId) {
     List<Map<String,Object>> sessions=jdbc.queryForList("""
       select id,status,requested_question_count,selected_question_count,created_at,completed_at
-      from student_practice_session where id=? and student_id=?
-      """,sessionId,context.studentId());
+      from student_practice_session where id=? and student_id=? and institution_id=?
+      """,sessionId,context.studentId(),institutionId);
     if(sessions.isEmpty())throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Practice session not found.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select psq.question_id,psq.sequence_no,psq.answered_at,psq.question_snapshot::text as question_snapshot,
              (select count(*) from student_question_attempt a
-              where a.practice_session_id=ps.id and a.question_id=psq.question_id) as attempt_count,
+              where a.practice_session_id=ps.id and a.institution_id=ps.institution_id and a.question_id=psq.question_id) as attempt_count,
              (select a.correct from student_question_attempt a
-              where a.practice_session_id=ps.id and a.question_id=psq.question_id
+              where a.practice_session_id=ps.id and a.institution_id=ps.institution_id and a.question_id=psq.question_id
               order by a.answered_at desc,a.id desc limit 1) as last_correct
       from student_practice_session_question psq
       join student_practice_session ps on ps.id=psq.practice_session_id
-      where ps.id=? and ps.student_id=?
+      where ps.id=? and ps.student_id=? and ps.institution_id=?
       order by psq.sequence_no
-      """,sessionId,context.studentId());
+      """,sessionId,context.studentId(),institutionId);
     List<Map<String,Object>> questions=new ArrayList<>();
     for(Map<String,Object> row:rows) {
       try {
