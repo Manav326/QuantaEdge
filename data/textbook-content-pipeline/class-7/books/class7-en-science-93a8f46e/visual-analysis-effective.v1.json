@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "afc156f81b5bf52e14dfcda441afc832105b3cf1f32fc47c1cacbe41cf74c88f",
+  "raw_analysis_sha256": "8fe5d4db46394abf1cc32b2c889633781d70f5c96a51ee721534f65f7b34b32d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:08:19Z",
+      "checkpointed_at": "2026-10-18T06:11:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:08:39Z",
+      "checkpointed_at": "2026-10-18T06:11:34Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -36861,6 +36861,144 @@
         "limitations": [
           "The table does not specify the results of the litmus paper tests for each sample."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0ca183c861b4c354d093e229",
+      "asset_sha256": "18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red and blue litmus paper strips are shown, with a question about their composition and color change.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I am curious to know—what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us find out!",
+          "Litmus is a natural substance obtained from lichens. It is",
+          "available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Color change",
+          "Composition",
+          "Lichens"
+        ],
+        "context_relation": "The image is related to the question about the composition and color change of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the composition or color change of litmus paper strips."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:11:46Z",
+      "effective_analysis": {
+        "visual_summary": "Red and blue litmus paper strips are shown, with a question about their composition and color change.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I am curious to know—what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us find out!",
+          "Litmus is a natural substance obtained from lichens. It is",
+          "available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Color change",
+          "Composition",
+          "Lichens"
+        ],
+        "context_relation": "The image is related to the question about the composition and color change of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the composition or color change of litmus paper strips."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c9e8fe73745462aabdf6d5f",
+      "asset_sha256": "6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red butterfly with a dotted tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:11:50Z",
+      "effective_analysis": {
+        "visual_summary": "A red butterfly with a dotted tail.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "94fce2f5ad8c155f73685193",
+      "asset_sha256": "0d417829fc1738f7a3da416b00a39a670c0ba366dfa421d60a0fae899c23fbcf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/0d417829fc1738f7a3da416b00a39a670c0ba366dfa421d60a0fae899c23fbcf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a tree with green leaves and a brown trunk.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:12:22Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a tree with green leaves and a brown trunk.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
