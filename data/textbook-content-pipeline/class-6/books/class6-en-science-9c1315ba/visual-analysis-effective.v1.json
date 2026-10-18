@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e4d4cfc9a678dc65e325633f749f24682e56eeb99ad541ea6da2f79bbe03748a",
+  "raw_analysis_sha256": "9cc0e70f16fbee320e318d9bad6cb29469a7577aa17c3555912295932991d0c0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:27:06Z",
+      "checkpointed_at": "2026-10-18T14:34:46Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -31840,6 +31840,230 @@
         "context_relation": "The image is a visual representation of the scientific method, emphasizing the importance of questioning and analysis in scientific inquiry.",
         "limitations": [
           "The image does not provide specific details about the scientific method."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7d9150a2b3793e20eb71b7c1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:35:00Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5cabe38338432fae3a336cb9",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:35:13Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "86e09017e12146ba931503d9",
+      "asset_sha256": "ba519513c634fcc325948033f1aa5e6ac0a38f6ffcd6dde14287f40fdd13919b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "page-0024.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the scientific method and its application in everyday life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "First, we observe something that we find interesting or we do not understand.",
+          "This makes us wonder and perhaps think of a question about it.",
+          "Then, we guess a possible answer to that question.",
+          "We test this guess through experiments or more observations.",
+          "We then try to analyse the results to see if it actually answers our question.",
+          "Scientists are people who follow the scientific method to solve problems or to discover new things. But anyone who follows the scientific method is working like a scientist. Someone cooking food may be wondering why the dal has spilled out of the cooker—was there too much water?",
+          "Think of a bicycle repair person trying to find out why a tyre is flat—from where did the air leak out? Or an electrician trying to find why a light bulb is not working—is there some problem with the bulb or the switch? When we try to ask questions and find out answers, we are all, in a way, scienti",
+          "Activity 1.2: Let us think and write",
+          "Describe a daily life situation where you think someone was following a scientific method.",
+          "Do you now realise that there are several daily-life situations where we knowingly or unknowingly apply the scientific"
+        ],
+        "concepts": [
+          "scientific method",
+          "observation",
+          "question",
+          "experiment",
+          "analysis",
+          "everyday life",
+          "scientific thinking"
+        ],
+        "context_relation": "The page explains the scientific method and its application in everyday life.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of the scientific method in everyday life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:39:27Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining the scientific method and its application in everyday life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "First, we observe something that we find interesting or we do not understand.",
+          "This makes us wonder and perhaps think of a question about it.",
+          "Then, we guess a possible answer to that question.",
+          "We test this guess through experiments or more observations.",
+          "We then try to analyse the results to see if it actually answers our question.",
+          "Scientists are people who follow the scientific method to solve problems or to discover new things. But anyone who follows the scientific method is working like a scientist. Someone cooking food may be wondering why the dal has spilled out of the cooker—was there too much water?",
+          "Think of a bicycle repair person trying to find out why a tyre is flat—from where did the air leak out? Or an electrician trying to find why a light bulb is not working—is there some problem with the bulb or the switch? When we try to ask questions and find out answers, we are all, in a way, scienti",
+          "Activity 1.2: Let us think and write",
+          "Describe a daily life situation where you think someone was following a scientific method.",
+          "Do you now realise that there are several daily-life situations where we knowingly or unknowingly apply the scientific"
+        ],
+        "concepts": [
+          "scientific method",
+          "observation",
+          "question",
+          "experiment",
+          "analysis",
+          "everyday life",
+          "scientific thinking"
+        ],
+        "context_relation": "The page explains the scientific method and its application in everyday life.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations of the scientific method in everyday life."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6ace48bcaa049e7d345d87a1",
+      "asset_sha256": "0b6970a3d8f9862887409c11fb3d25700c505759ec91ba78875df0c939ded332",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/0b6970a3d8f9862887409c11fb3d25700c505759ec91ba78875df0c939ded332.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "951b451418766324e02d57e5755ea34e5a2e3169c3ed15ca78b2d0fd6f0b20a9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of students are engaged in an activity involving small objects and a glass container.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 1.3: Let us think and write",
+          "If you have to ask \"Why?\" about something, what would",
+          "you",
+          "do?"
+        ],
+        "concepts": [
+          "Observation",
+          "Curiosity",
+          "Scientific Method",
+          "Exploration",
+          "Questioning",
+          "Solving Problems"
+        ],
+        "context_relation": "The image illustrates an educational activity that encourages students to observe, ask questions, and explore, which are key components of the scientific method.",
+        "limitations": [
+          "The image does not provide specific details about the objects or the activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:41:12Z",
+      "effective_analysis": {
+        "visual_summary": "A group of students are engaged in an activity involving small objects and a glass container.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 1.3: Let us think and write",
+          "If you have to ask \"Why?\" about something, what would",
+          "you",
+          "do?"
+        ],
+        "concepts": [
+          "Observation",
+          "Curiosity",
+          "Scientific Method",
+          "Exploration",
+          "Questioning",
+          "Solving Problems"
+        ],
+        "context_relation": "The image illustrates an educational activity that encourages students to observe, ask questions, and explore, which are key components of the scientific method.",
+        "limitations": [
+          "The image does not provide specific details about the objects or the activity."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
