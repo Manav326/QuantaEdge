@@ -12,12 +12,25 @@ public class RecommendationController {
   private final AuthorizationService authorization;
   public RecommendationController(JdbcTemplate jdbc,AuthorizationService authorization){this.jdbc=jdbc;this.authorization=authorization;}
 
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() < 1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED", "Select the institution for recommendations.");
+    }
+    return tenant.institutionId();
+  }
+
   @GetMapping("/next")
-  public Map<String,Object> next(@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> next(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     Long diagnostics=jdbc.queryForObject("""
-      select count(*) from student_diagnostic_attempt where student_id=? and status='SUBMITTED'
-      """,Long.class,context.studentId());
+      select count(*) from student_diagnostic_attempt
+      where student_id=? and institution_id=? and status='SUBMITTED'
+      """,Long.class,context.studentId(),institutionId);
     if(diagnostics==null||diagnostics==0) return Map.of("available",true,"kind","DIAGNOSTIC","reason","INITIAL_DIAGNOSTIC");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select l.id,l.code,l.title,l.summary,l.estimated_minutes,
@@ -29,14 +42,16 @@ public class RecommendationController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       left join question q on q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
-      left join student_concept_mastery m on m.student_id=? and m.concept_id=q.concept_id
-      left join student_lesson_progress p on p.student_id=? and p.lesson_id=l.id
-      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join student_concept_mastery m on m.student_id=? and m.institution_id=? and m.concept_id=q.concept_id
+      left join student_lesson_progress p on p.student_id=? and p.institution_id=? and p.lesson_id=l.id
+      join student_track_enrollment ste on ste.student_id=? and ste.institution_id=?
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join lateral (
         select round(100.0*att.final_score/nullif(att.max_score,0))::int as percent
         from student_assessment_attempt att
         join assessment a on a.id=att.assessment_id
-        where att.student_id=? and att.status='RELEASED' and att.final_score is not null and att.max_score>0
+        where att.student_id=? and att.institution_id=? and att.status='RELEASED'
+          and att.final_score is not null and att.max_score>0
           and (a.lesson_id=l.id or (a.lesson_id is null and a.chapter_id=ch.id))
         order by att.released_at desc,att.id desc limit 1
       ) test_result on true
@@ -52,7 +67,8 @@ public class RecommendationController {
                coalesce(round(avg(coalesce(m.mastery_percent,0))*0.7 + coalesce(test_result.percent,avg(coalesce(m.mastery_percent,0)))*0.3),0),
                s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       limit 1
-      """,context.studentId(),context.studentId(),context.studentId(),context.studentId(),context.studentId());
+      """,context.studentId(),institutionId,context.studentId(),institutionId,
+          context.studentId(),institutionId,context.studentId(),institutionId,context.studentId());
     if(rows.isEmpty()) return Map.of("available",false);
     return Map.of("available",true,"reason","PROGRESS_MASTERY_AND_RELEASED_ASSESSMENTS","lesson",rows.getFirst());
   }
