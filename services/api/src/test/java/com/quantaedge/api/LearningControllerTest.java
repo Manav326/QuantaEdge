@@ -74,7 +74,7 @@ class LearningControllerTest {
         "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
         "practice_best_graded_count", 10L, "practice_best_percent", 80)));
 
-    List<Map<String,Object>> rows = controller.lessons("7", "maths", "hi", student, TEST_TENANT);
+    List<Map<String,Object>> rows = controller.lessons("7", "maths", "hi", null, null, student, TEST_TENANT);
 
     assertEquals(1, rows.size());
     assertEquals(3L, rows.getFirst().get("mcq_count"));
