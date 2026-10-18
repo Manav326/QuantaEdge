@@ -23,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import tools.jackson.databind.ObjectMapper;
 
 class CertificateControllerArtifactCorrectionTest {
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   @TempDir
   Path tempDir;
 
@@ -92,7 +94,7 @@ class CertificateControllerArtifactCorrectionTest {
     CertificateController controller = new CertificateController(
         jdbc, authorization, renderer, storage, new ObjectMapper(), java.math.BigDecimal.valueOf(80));
 
-    ResponseEntity<byte[]> response = controller.downloadMyCertificate(3001L, "pdf", student);
+    ResponseEntity<byte[]> response = controller.downloadMyCertificate(3001L, "pdf", student, TEST_TENANT);
 
     assertEquals(200, response.getStatusCode().value());
     assertArrayEquals(new byte[] {9, 8, 7}, response.getBody());
