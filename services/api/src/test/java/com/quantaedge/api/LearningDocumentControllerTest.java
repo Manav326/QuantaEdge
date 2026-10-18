@@ -64,7 +64,7 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    List<Map<String, Object>> rows = controller.studentDocumentCatalog(null, "hi", student, TEST_TENANT);
+    List<Map<String, Object>> rows = controller.studentDocumentCatalog(null, "hi", null, null, null, student, TEST_TENANT);
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
@@ -81,7 +81,7 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    assertTrue(controller.studentDocumentCatalog("science", "english", student, TEST_TENANT).isEmpty());
+    assertTrue(controller.studentDocumentCatalog("science", "english", null, null, null, student, TEST_TENANT).isEmpty());
 
     verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("en"), eq("science"), eq("science"));
   }
@@ -92,7 +92,7 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    assertTrue(controller.studentDocumentCatalog("science", "hi", "en", student, TEST_TENANT).isEmpty());
+    assertTrue(controller.studentDocumentCatalog("science", "hi", "en", null, null, student, TEST_TENANT).isEmpty());
 
     verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("hi"), eq("science"), eq("science"));
     verify(jdbc).queryForList(contains("coalesce(ct.display_name,ch.display_name) as chapter_name"),
@@ -103,7 +103,7 @@ class LearningDocumentControllerTest {
     when(authorization.requireStudent(student)).thenReturn(student);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.studentDocumentCatalog(null, "fr", student, TEST_TENANT));
+        () -> controller.studentDocumentCatalog(null, "fr", null, null, null, student, TEST_TENANT));
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc);
