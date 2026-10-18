@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 562,
-    "successful_visual_analyses": 562,
-    "missing_visual_analyses": 1516,
+    "raw_analysis_result_rows": 565,
+    "successful_visual_analyses": 565,
+    "missing_visual_analyses": 1513,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1516,
+    "unresolved_count": 1513,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -23826,9 +23826,18 @@
       "asset_path": "assets/15cc74ec06bdd3a596101fcdf92220b433e6053d3d7199350fc3cfd1cab5843d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, rectangular shape with a gradient background transitioning from light brown to dark brown.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a cover or header for a document or textbook.",
+        "limitations": [
+          "The image does not contain any text or symbols that can be directly analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23844,9 +23853,18 @@
       "asset_path": "assets/2d57ee1a1532c9618a8adb79c81858314fe884317cb1bbd65dcc116f1dbcff67.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light to dark shades.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and lack of distinct objects or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -23862,9 +23880,18 @@
       "asset_path": "assets/7249fb19d3232258e309b77d6814fce0aba6afc9f32fc7ce7f348c21836959c3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background transitioning from white to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient effect."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
