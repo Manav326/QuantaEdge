@@ -86,6 +86,13 @@ The source enum `StudentNavigationContract.kt` declares these 34 destinations:
 
 The Compose shell sometimes owns several destinations; therefore a one-enum-to-one-source-file mapping is not assumed. Each destination must be traced through `QuantaEdgeApp.kt`, its component and navigation transitions. Device checks must include back behavior, session restoration, keyboard/IME, loading/error states, supported screen sizes, and web parity where required.
 
+
+### 4.5 First source-scan pass completed (partial, not sign-off)
+
+After the initial route inventory, the page-entry source for all 59 Web/Admin/People routes was fetched and scanned for component-level structure signals, form/action handlers, API endpoint literals, state/error signals and direct navigation. The Android `QuantaEdgeApp.kt` navigation switch was scanned to map the 34 declared destinations to shell-owned or standalone Compose renderers; key standalone identity, lifecycle, course/marketplace, guardian, certificate, profile/progress, live/recorded media, tutor and structured-lesson components were also scanned.
+
+The concrete observations and gaps are in [phase-1-source-review-log.md](./phase-1-source-review-log.md). CSV review status now uses `SOURCE_SCAN_PARTIAL` for this level. It does **not** certify every imported component, authorization branch, API contract, database mutation or runtime state. Those remain explicit Phase 1 tasks.
+
 ## 5. Persona and permission matrix
 
 These are required audit personas, not a statement that fixture accounts currently exist.
