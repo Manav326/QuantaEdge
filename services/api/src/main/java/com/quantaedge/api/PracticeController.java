@@ -38,8 +38,11 @@ public class PracticeController {
 
   @GetMapping("/catalog")
   public List<Map<String,Object>> catalog(
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     return jdbc.queryForList("""
       select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -59,17 +62,17 @@ public class PracticeController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=? and spe.program_id=s.program_id and spe.status='ACTIVE'
           ))
         )
         and exists(select 1 from student_track_enrollment ste
-                   where ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE')
+                   where ste.student_id=st.id and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE')
       group by ch.id,ch.code,ch.display_name,s.code,s.display_name,
                coalesce(nullif(btrim(q.topic),''),ch.display_name),
                coalesce(nullif(btrim(q.subtopic),''),'')
       order by s.display_name,coalesce(ch.teaching_order,ch.sort_order),
                ch.display_name,topic_name,subtopic_name
-      """,context.studentId());
+      """,context.studentId(),institutionId,institutionId);
   }
 
   /**
@@ -80,8 +83,11 @@ public class PracticeController {
   @PostMapping("/sessions/from-lesson")
   @Transactional
   public Map<String,Object> createSessionFromLesson(@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     String language=normalizeLanguage(body.get("language"));
     int lessonId=integer(body.get("lessonId"),"lessonId",1,Integer.MAX_VALUE);
 
@@ -94,12 +100,12 @@ public class PracticeController {
     String marker=json(List.of(Map.of("sourceLessonId",lessonId)));
     List<Map<String,Object>> existing=jdbc.queryForList("""
       select id from student_practice_session
-      where student_id=? and status='IN_PROGRESS' and topic_selections @> ?::jsonb
+      where student_id=? and institution_id=? and status='IN_PROGRESS' and topic_selections @> ?::jsonb
       order by created_at desc,id desc limit 1
-      """,context.studentId(),marker);
+      """,context.studentId(),institutionId,marker);
     if(!existing.isEmpty()) {
       long existingId=((Number)existing.getFirst().get("id")).longValue();
-      return getSession(existingId,language,context);
+      return getSessionForTenant(existingId,language,context,institutionId);
     }
 
     List<Map<String,Object>> lessonRows=jdbc.queryForList("""
@@ -111,7 +117,7 @@ public class PracticeController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and s.active=true and c.active=true
         and (
@@ -119,10 +125,10 @@ public class PracticeController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=ste.institution_id and spe.program_id=s.program_id and spe.status='ACTIVE'
           ))
         )
-      """,context.studentId(),lessonId);
+      """,context.studentId(),institutionId,lessonId);
     if(lessonRows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson not found or unavailable.");
 
     Map<String,Object> lesson=lessonRows.getFirst();
@@ -207,14 +213,14 @@ public class PracticeController {
         "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
     // Prefer unseen approved questions. Previously missed questions are a deliberate revision
     // fallback, not mixed into a fresh set, and prior diagnostic answers do not consume practice.
-    List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+    List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
         scopeFilter,scopeArgs,lessonId,requestedCount,false,false);
 
     // If no fresh non-MCQ questions remain, use fresh MCQs from another lesson in the same
     // objective/concept scope; do not simply repeat the MCQs shown inline on this lesson.
     if(selectedIds.isEmpty()) {
       selectedTypes=List.of("MCQ");
-      selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,true,false);
     }
 
@@ -224,12 +230,12 @@ public class PracticeController {
       selectedTypes=List.of(
           "TRUE_FALSE","INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
           "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
-      selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,false,true);
     }
     if(selectedIds.isEmpty()) {
       selectedTypes=List.of("MCQ");
-      selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),institutionId,chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,true,true);
     }
     if(selectedIds.isEmpty()) {
@@ -244,9 +250,9 @@ public class PracticeController {
         "chapterName",chapterName,"topic",lessonTitle));
     Long sessionId=jdbc.queryForObject("""
       insert into student_practice_session(
-        student_id,status,requested_question_count,selected_question_count,question_types,topic_selections
-      ) values(?,'IN_PROGRESS',?,?,?::jsonb,?::jsonb) returning id
-      """,Long.class,context.studentId(),requestedCount,selectedIds.size(),json(selectedTypes),json(topicSelections));
+        student_id,institution_id,status,requested_question_count,selected_question_count,question_types,topic_selections
+      ) values(?,?,'IN_PROGRESS',?,?,?::jsonb,?::jsonb) returning id
+      """,Long.class,context.studentId(),institutionId,requestedCount,selectedIds.size(),json(selectedTypes),json(topicSelections));
 
     List<Map<String,Object>> questions=new ArrayList<>();
     int sequence=1;
@@ -261,7 +267,7 @@ public class PracticeController {
       questions.add(toPublicQuestion(localized));
     }
     if(questions.isEmpty()) throw badRequest("The selected questions are no longer available. Refresh the lesson and try again.");
-    jdbc.update("update student_practice_session set selected_question_count=? where id=?",questions.size(),sessionId);
+    jdbc.update("update student_practice_session set selected_question_count=? where id=? and institution_id=?",questions.size(),sessionId,institutionId);
 
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("sessionId",sessionId);
@@ -280,7 +286,7 @@ public class PracticeController {
     return result;
   }
 
-  private List<Long> selectAutoPracticeQuestions(long studentId,long chapterId,List<String> types,
+  private List<Long> selectAutoPracticeQuestions(long studentId,long institutionId,long chapterId,List<String> types,
       String scopeFilter,List<Object> scopeArgs,long currentLessonId,int requestedCount,
       boolean excludeCurrentLesson,boolean missedOnly) {
     if(types.isEmpty()) return List.of();
@@ -346,9 +352,16 @@ public class PracticeController {
   @GetMapping("/sessions/{sessionId}")
   public Map<String,Object> getSession(@PathVariable long sessionId,
       @RequestParam(required=false,defaultValue="hi") String language,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
+    return getSessionForTenant(sessionId,language,context,institutionId);
+  }
+
+  private Map<String,Object> getSessionForTenant(long sessionId,String language,AuthContext context,long institutionId) {
     List<Map<String,Object>> sessions=jdbc.queryForList("""
       select id,status,requested_question_count,selected_question_count,created_at,completed_at
       from student_practice_session where id=? and student_id=?
@@ -482,6 +495,14 @@ public class PracticeController {
   private String json(Object value) {
     try{return mapper.writeValueAsString(value);}
     catch(JacksonException ex){throw new IllegalStateException("Could not save practice session data.",ex);}
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() < 1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED", "Select the institution for practice.");
+    }
+    return tenant.institutionId();
   }
 
   private ResponseStatusException badRequest(String message) {
