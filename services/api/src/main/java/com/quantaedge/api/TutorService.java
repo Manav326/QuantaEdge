@@ -494,9 +494,9 @@ public class TutorService {
         from institution_membership m
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         left join institution_branding b on b.institution_id=t.id
-        where m.student_id=? and m.status='ACTIVE'
+        where m.student_id=? and m.institution_id=? and m.status='ACTIVE'
         order by t.id limit 2
-        """,studentId);
+        """,studentId,institutionId);
     if (schools.isEmpty()) return "QuantaEdge";
     // The request carries no tenant selector. Never guess between two school identities
     // or reveal either school's name in a generic tutor response.
