@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 439,
-    "successful_visual_analyses": 439,
-    "missing_visual_analyses": 1639,
+    "raw_analysis_result_rows": 442,
+    "successful_visual_analyses": 442,
+    "missing_visual_analyses": 1636,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1639,
+    "unresolved_count": 1636,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -20480,9 +20480,23 @@
       "asset_path": "assets/1dde85e4ed077c20cd52dfd8c73016fe177da507f435da7299ea21aa1ea93a48.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar chart with two bars, one in white and one in orange, spanning the width of the page.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient bar chart",
+          "comparison"
+        ],
+        "context_relation": "The gradient bar chart visually represents a comparison between two categories or data points.",
+        "limitations": [
+          "The chart does not provide specific numerical values or labels for the bars, making it difficult to interpret the exact data represented."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20498,9 +20512,16 @@
       "asset_path": "assets/48aca3854f727c4778d2d85d7925bd3ef2cd9fb39a33f689c0814d511a4276c2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, solid color background with no visible objects or text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20516,9 +20537,19 @@
       "asset_path": "assets/285abcc56c5174d79e4b771d0920381c792ffc0e9271b3caab1cf78b81c5fb6e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of orange and yellow colors.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover design for a textbook",
+        "limitations": [
+          "Unclear content or subject matter",
+          "No specific text or labels visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

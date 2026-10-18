@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 439,
+    "assets_selected": 442,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 437,
-    "assets_remaining": 1641,
-    "assets_completion_percent": 21.0,
+    "assets_analyzed": 440,
+    "assets_remaining": 1638,
+    "assets_completion_percent": 21.2,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 434,
+    "assets_skipped_from_checkpoint": 437,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:03:33Z"
+      "checkpointed_at": "2026-10-18T04:06:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:04:14Z"
+      "checkpointed_at": "2026-10-18T04:07:32Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -13096,6 +13096,94 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T04:06:03Z"
+    },
+    {
+      "asset_id": "f5fbd976626ad8d728a4ee4d",
+      "asset_sha256": "1dde85e4ed077c20cd52dfd8c73016fe177da507f435da7299ea21aa1ea93a48",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/1dde85e4ed077c20cd52dfd8c73016fe177da507f435da7299ea21aa1ea93a48.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal gradient bar chart with two bars, one in white and one in orange, spanning the width of the page.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient bar chart",
+          "comparison"
+        ],
+        "context_relation": "The gradient bar chart visually represents a comparison between two categories or data points.",
+        "limitations": [
+          "The chart does not provide specific numerical values or labels for the bars, making it difficult to interpret the exact data represented."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:08:09Z"
+    },
+    {
+      "asset_id": "a3ac8bad6346ef94200d9796",
+      "asset_sha256": "48aca3854f727c4778d2d85d7925bd3ef2cd9fb39a33f689c0814d511a4276c2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/48aca3854f727c4778d2d85d7925bd3ef2cd9fb39a33f689c0814d511a4276c2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A solid, solid color background with no visible objects or text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:08:44Z"
+    },
+    {
+      "asset_id": "071e0b69c3d7bac8a97a0141",
+      "asset_sha256": "285abcc56c5174d79e4b771d0920381c792ffc0e9271b3caab1cf78b81c5fb6e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/285abcc56c5174d79e4b771d0920381c792ffc0e9271b3caab1cf78b81c5fb6e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of orange and yellow colors.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover design for a textbook",
+        "limitations": [
+          "Unclear content or subject matter",
+          "No specific text or labels visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:09:20Z"
     }
   ]
 }
