@@ -189,6 +189,8 @@ No browser E2E framework was positively identified in the inspected package mani
 | QA1-09 | P2 | Historical UI/UX and localization tracker statuses are tied to old source revisions; older “done” labels may not be current verification. | Revalidate against current SHA; distinguish historical source change from current browser/assistive-tech certification. |
 | QA1-10 | P1 | Data-pack install/uninstall requires more than seeding rows due to foreign keys, uploaded files/media, sessions, provider resources, and existing identity conflicts. Existing compose default sets `APP_DEMO_SEED=true`; migration V125 owns the `QUANTA-EDGE` tenant and historical membership backfill. | Entity dependency graph, immutable run ownership manifest, rollback/retry design, collision tests, provider/file cleanup and proof that unrelated/demo data remains unchanged. See [data and cleanup map](./phase-1-data-and-cleanup-map.md). |
 | QA1-11 | P1 | The 70-case workflow register exists, but none of its runtime scenarios has been executed in this audit; 7 QA install/uninstall cases describe future functionality. | Execute cases on isolated test environment/device, attach run SHA and evidence, split multi-step cases when a failure needs a reproducible defect case. |
+| QA1-12 | P1 | The API route inventory has been source-extracted for 435 mapping annotations. Static guard hints do not prove endpoint-by-endpoint auth, tenant/resource ownership, DB effects or response states. | Review shared filters/helpers and route method body per operation; map exact permissions, DB writes, side effects and scenario IDs; run allow/deny integration tests. |
+| QA1-13 | P1 | Role templates evolve across migrations (including removal of older HR/payroll/team-scope grants); nav visibility may differ from effective API permission. | Verify effective grants on a freshly migrated test database; compare UI affordances with server authorization and include at least one denied request for each sensitive role boundary. |
 
 ## 12. Phase 1 work register
 
@@ -204,6 +206,8 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Add 70 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
 - [x] Add a separate 93-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
 - [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
+- [x] Source-extract 435 REST/STOMP mapping entries from 48 Java files; generated guard hints remain partial and need human review.
+- [x] Document Education Admin base-role defaults, HRMS additional-role templates and distinct platform-owner/institution-admin authority.
 - [x] Trace all 34 declared Android routes through the destination switch and document component branches plus the custom back/return contract (device verification remains open).
 - [x] Inspect representative auth/workspace, guardian, tenant, marketplace, content, assessment, certificate and HRMS controller guards (partial; see API permission map).
 - [x] Record the initial test-data marker search result and its limits.
