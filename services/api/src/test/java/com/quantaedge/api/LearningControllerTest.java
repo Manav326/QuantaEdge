@@ -116,12 +116,12 @@ class LearningControllerTest {
   void revokedInstitutionCourseEntitlementBlocksPreviouslyEnrolledLesson() {
     when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
         .thenReturn(1L);
-    when(jdbc.queryForObject(contains("select s.program_id from lesson l"), eq(Long.class), eq(42L)))
+    when(jdbc.queryForObject(contains("select coalesce(s.program_id,("), eq(Long.class), eq(42L)))
         .thenReturn(91L);
     when(jdbc.queryForObject(contains("from institution_membership m"), eq(Boolean.class), eq(7L)))
         .thenReturn(true);
-    when(jdbc.queryForObject(contains("from course_marketplace_offer o"), eq(Boolean.class),
-        eq(91L), eq(7L), eq(7L), eq(91L), eq(91L))).thenReturn(false);
+    when(jdbc.queryForObject(contains("from student_course_access_grant legacy_grant"), eq(Boolean.class),
+        eq(91L), eq(7L), eq(7L), eq(91L), eq(7L), eq(91L))).thenReturn(false);
 
     assertThrows(SecurityException.class, () -> controller.lesson(42L, "hi", student));
   }
