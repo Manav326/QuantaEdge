@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f03220dd97836f05efad2249eb2139503767199337a0761a427452f24e41fbcc",
+  "raw_analysis_sha256": "281b335f4354785bdd317363aaa1c7a31ad5006d78e660f7b8717470a6764c09",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:59:36Z",
+      "checkpointed_at": "2026-10-18T07:02:22Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:59:55Z",
+      "checkpointed_at": "2026-10-18T07:02:42Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -40000,6 +40000,144 @@
         "context_relation": "The page is likely part of a textbook or educational material.",
         "limitations": [
           "The page is blank and does not contain any specific content or visual elements related to the text provided in the prompt."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d14f24ea3707d186ef7ae80f",
+      "asset_sha256": "b1ef5831f0ab1532087e9a856acd32fcb809ec7f3d53ce175983220fc86828d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/b1ef5831f0ab1532087e9a856acd32fcb809ec7f3d53ce175983220fc86828d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a red horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "neutral",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:03:14Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a red horizontal line at the top.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "neutral",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5567a96a91f4eb46791e4eeb",
+      "asset_sha256": "a8cb60c945490d1b4884b120af65697c03e1167e91f257da4de4e2fd7ebb0194",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/a8cb60c945490d1b4884b120af65697c03e1167e91f257da4de4e2fd7ebb0194.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a red border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "neutral",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:03:47Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a red border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "neutral",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e6df72b5908b0bf78e1ab53",
+      "asset_sha256": "a49e78c9a212055fa4d583eb89b7c3432fd32fbe286f5272e7350c4446f92e9c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/a49e78c9a212055fa4d583eb89b7c3432fd32fbe286f5272e7350c4446f92e9c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Taste",
+          "Edible substances",
+          "Group A of Table 2.2",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and how they relate to the presence of acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T07:04:28Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the taste of substances in Group A of Table 2.2.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour.",
+          "Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "Taste",
+          "Edible substances",
+          "Group A of Table 2.2",
+          "Acids"
+        ],
+        "context_relation": "The text is discussing the taste of substances in Group A of Table 2.2 and how they relate to the presence of acids.",
+        "limitations": [
+          "The text does not provide specific examples of substances in Group A of Table 2.2."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
