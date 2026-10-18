@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 723,
+    "assets_selected": 727,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 722,
-    "assets_remaining": 6766,
-    "assets_completion_percent": 9.6,
+    "assets_analyzed": 726,
+    "assets_remaining": 6762,
+    "assets_completion_percent": 9.7,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 718,
+    "assets_skipped_from_checkpoint": 722,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13285,7 +13285,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T11:52:38Z"
+      "checkpointed_at": "2026-10-18T11:58:33Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -26651,6 +26651,167 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
       "checkpointed_at": "2026-10-18T11:57:37Z"
+    },
+    {
+      "asset_id": "3c038cefded5fe7f7f96dbcb",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20–30 drops of lemon juice in test tube A",
+          "and 20–30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Droppers",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:59:49Z"
+    },
+    {
+      "asset_id": "0eb3064ecf8949bcd85dcb73",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Droppers",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:00:17Z"
+    },
+    {
+      "asset_id": "03d0359fe2573f7b94848992",
+      "asset_sha256": "b6069cdde201f5ee877d493759c1bd86e19219fc540db1b539241f639fd5c6b5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/b6069cdde201f5ee877d493759c1bd86e19219fc540db1b539241f639fd5c6b5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to add drops and observe color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Observation",
+          "Color change",
+          "Experimental procedure"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:01:34Z"
+    },
+    {
+      "asset_id": "a3f4aeb0caca19df15da2851",
+      "asset_sha256": "23bdc818ea3064ddb0cecac9bb36bab36783f32696760558fb3da9d3a8bdbacf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/23bdc818ea3064ddb0cecac9bb36bab36783f32696760558fb3da9d3a8bdbacf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a0d117dd1f7dfcbced58a944c34ec44a4ee2f9d6b161cc108641a295cf66ec5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes labeled A and B containing lemon juice and soap solution respectively, with instructions to observe and record any color changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "13",
+          "Add 20 – 30 drops of lemon juice in test tube A",
+          "and 20 – 30 drops of soap solution in test tube B with the help of droppers.",
+          "Observe and record any colour changes (Fig. 2.8) to the extract in Table 2.3."
+        ],
+        "concepts": [
+          "Test tubes",
+          "Lemon juice",
+          "Soap solution",
+          "Color changes",
+          "Observation",
+          "Recording",
+          "Table 2.3"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image provided, only text instructions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:02:53Z"
     }
   ]
 }
