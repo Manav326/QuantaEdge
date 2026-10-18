@@ -24,6 +24,8 @@ type Detail = Institution & {
   admins?: Admin[]; courses?: Entitlement[];
 };
 type Overview = { institutions?: { institutions_total?: number; institutions_active?: number; institutions_suspended?: number }; billing?: { current_period_billable_enrollments?: number; amount_by_currency?: string } };
+type IntegrationCheck = {integration:string;configured:boolean;required:boolean;owner:string;tenantCredentialsRequired:boolean;operatorAction:string};
+type IntegrationReadiness = {owner:string;ready:boolean;checks:IntegrationCheck[];secretValuesReturned:boolean;asOf:string};
 type Learner = { learner_reference?: string; display_name?: string; class_code?: string; city?: string; state?: string; membership_status?: string; joined_at?: string; completed_lessons?: number; lessons_with_activity?: number; average_lesson_progress_percent?: number };
 type ThemePreset = { id: string; name: string; primary: string; accent: string; themeTokens?: ThemeTokens };
 type AuditEvent = { id: number; action: string; target_type: string; target_id?: string; details?: unknown; created_at?: string };
@@ -48,6 +50,8 @@ export default function InstitutionsAdminPage() {
   const [session,setSession]=useState<Session|null>(null);
   const [ready,setReady]=useState(false);
   const [overview,setOverview]=useState<Overview|null>(null);
+  const [integrationReadiness,setIntegrationReadiness]=useState<IntegrationReadiness|null>(null);
+  const [readinessError,setReadinessError]=useState('');
   const [institutions,setInstitutions]=useState<Institution[]>([]);
   const [catalog,setCatalog]=useState<Course[]>([]);
   const [detail,setDetail]=useState<Detail|null>(null);
@@ -86,13 +90,15 @@ export default function InstitutionsAdminPage() {
       const me=await api<Session>('/api/v1/auth/me');setSession(me);setReady(true);
       if(!me.staffId){router.replace('/login');return;}
       if(!me.permissions?.includes('QE_PLATFORM_OWNER'))return;
-      const [o,i,c,presets]=await Promise.all([
+      const [o,i,c,presets,integrations]=await Promise.all([
         api<Overview>('/api/v1/hrms/platform/institutions/overview'),
         api<Institution[]>('/api/v1/hrms/platform/institutions'),
         api<Course[]>('/api/v1/hrms/platform/institutions/catalog/courses'),
         api<ThemePreset[]>('/api/v1/hrms/platform/institutions/theme-presets'),
+        api<IntegrationReadiness>('/api/v1/hrms/platform/institutions/integration-readiness'),
       ]);
       setOverview(o);setInstitutions(Array.isArray(i)?i:[]);setCatalog(Array.isArray(c)?c:[]);setThemePresets(Array.isArray(presets)?presets:[]);
+      setIntegrationReadiness(integrations);setReadinessError('');
     }catch(e){const msg=e instanceof Error?e.message:'Platform tenant records could not be loaded.';setError(msg);if(/authentication|required|session expired/i.test(msg))router.replace('/login');}
     finally{setLoading(false);}
   },[router]);
@@ -155,7 +161,7 @@ export default function InstitutionsAdminPage() {
     event.preventDefault();setSaving(true);setError('');setNotice('');setJoinCode('');
     try{
       const result=await api<{institutionId:number;displayName:string;nextStep:string}>('/api/v1/hrms/platform/institutions',{method:'POST',body:JSON.stringify(create)});
-      setJoinCode('');setNotice('Institution '+result.displayName+' created. Configure its billing contract, then issue the learner join code.');
+      setJoinCode('');setNotice('Institution '+result.displayName+' created. HRMS manages provider credentials centrally; configure the institution billing contract, verify platform integration readiness, then issue its learner join link.');
       setCreate({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
       setShowCreate(false);await loadBase();await loadDetail(result.institutionId);
     }catch(e){setError(e instanceof Error?e.message:'Could not create institution.');}finally{setSaving(false);}
@@ -324,6 +330,25 @@ export default function InstitutionsAdminPage() {
 
   return <main className={styles.page}>
     <header className={styles.pageHeader}><div><span className={styles.eyebrow}>HRMS · PLATFORM OWNER</span><h1>Institution operations</h1><p>Control school and college tenants, course authorisation, white-label identity and billable enrollments.</p></div><div className={styles.headerActions}><button className={styles.secondary} onClick={()=>void loadBase()} disabled={loading}>Refresh data</button><button className={styles.primary} onClick={()=>setShowCreate(v=>!v)}>{showCreate?'Close form':'＋ Add institution'}</button></div></header>
+    <section className={styles.panel} aria-labelledby="hrms-integrations-heading">
+      <div className={styles.panelHeading}>
+        <div><span className={styles.eyebrow}>HRMS-MANAGED PLATFORM SETUP</span><h2 id="hrms-integrations-heading">Shared integration readiness</h2>
+          <p>HRMS owns OAuth, payment, OTP and provider credentials. Tenant administrators do not supply API keys or client secrets.</p>
+        </div>
+        {integrationReadiness?<span className={styles.status+(integrationReadiness.ready?' '+styles.active:' '+styles.suspended)}>{integrationReadiness.ready?'CONFIGURED':'ACTION REQUIRED'}</span>:null}
+      </div>
+      {readinessError?<p className={styles.disclaimer} role="status">Platform readiness could not be loaded: {readinessError}. This is an HRMS configuration check, not a tenant setup task.</p>
+        :integrationReadiness?<>
+          <div className={styles.readOnlyGrid}>
+            {integrationReadiness.checks.map(check=><div className={styles.readOnlyItem} key={check.integration}>
+              <span>{check.integration.replaceAll('_',' ')}{check.required?' · Required':' · Optional'}</span>
+              <strong>{check.configured?'Configuration present':'Needs HRMS configuration'}</strong>
+              <small>{check.operatorAction}</small>
+            </div>)}
+          </div>
+          <p className={styles.disclaimer}>This checks the presence of central configuration only. HRMS must complete real provider sign-in, payment verification and tenant-origin tests before declaring a tenant ready. Secret values are never displayed here.</p>
+        </>:<p className={styles.disclaimer}>Loading HRMS-owned integration configuration…</p>}
+    </section>
     {error?<div className={styles.error} role="alert">{error}</div>:null}{notice?<div className={styles.notice} role="status">{notice}</div>:null}
     {joinCode&&detail&&joinCodeInstitutionId===detail.id?<div className={styles.codeNotice}><div><span>SCHOOL LEARNING LINK · SHARE SECURELY</span><strong>{detail.brand_display_name||detail.display_name}</strong><small>Expires {fmt(codeExpiry)}. This invitation is scoped to {detail.tenant_code} and links learners directly into the school-branded app.</small><small className={styles.invitationLinkPreview}>{schoolLearningLink()}</small></div><button className={styles.primary} onClick={()=>void copySchoolLink()}>Copy school learning link</button><button className={styles.secondary} onClick={()=>void copyCode()}>Copy code only</button><button className={styles.quiet} onClick={()=>{setJoinCode('');setJoinCodeInstitutionId(null);}}>Dismiss</button></div>:null}
     <section className={styles.metrics}>
