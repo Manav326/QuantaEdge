@@ -62,6 +62,20 @@ class InstitutionTenantContextServiceTest {
   }
 
   @Test
+  void parentInstitutionMembershipIsAccountScopedAndFailsClosed() {
+    JdbcTemplate jdbc=org.mockito.Mockito.mock(JdbcTemplate.class);
+    when(jdbc.queryForObject(anyString(),eq(Boolean.class),eq(17L),eq(99L))).thenReturn(false);
+    InstitutionTenantContextService service=new InstitutionTenantContextService(jdbc);
+    AuthContext parent=new AuthContext(99L,null,"PARENT","Guardian");
+    InstitutionTenantContext schoolA=new InstitutionTenantContext(17L,"SCHOOL-A","School A");
+    InstitutionTenantContextService.InvalidInstitutionContextException error=assertThrows(
+        InstitutionTenantContextService.InvalidInstitutionContextException.class,
+        ()->service.assertActiveMembership(parent,schoolA));
+    assertEquals("INSTITUTION_MEMBERSHIP_REQUIRED",error.errorCode());
+    verify(jdbc).queryForObject(anyString(),eq(Boolean.class),eq(17L),eq(99L));
+  }
+
+  @Test
   void parentCannotUseChildMembershipFromAnotherInstitution() {
     JdbcTemplate jdbc=org.mockito.Mockito.mock(JdbcTemplate.class);
     when(jdbc.queryForObject(anyString(),eq(Boolean.class),eq(17L),eq(99L),eq(42L)))
