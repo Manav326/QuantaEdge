@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 718,
+    "assets_selected": 719,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 714,
-    "assets_remaining": 1577,
-    "assets_completion_percent": 31.2,
+    "assets_analyzed": 716,
+    "assets_remaining": 1575,
+    "assets_completion_percent": 31.3,
     "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 713,
+    "assets_skipped_from_checkpoint": 714,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:10:24Z"
+      "checkpointed_at": "2026-10-18T23:17:49Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:11:12Z"
+      "checkpointed_at": "2026-10-18T23:18:41Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:11:50Z"
+      "checkpointed_at": "2026-10-18T23:19:23Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -21542,39 +21542,105 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the connection between weather events and the behavior of particles in materials.",
+        "visual_summary": "The image shows a page from a textbook, likely discussing the relationship between particles and their movements in various states of matter, such as solids, liquids, and gases, and how these particles affect weather events and daily life.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "So, these forces are connected to powerful weather events—like storms and cyclones—that affect our daily lives, agriculture, and even our safety.",
-          "To truly understand how air can exert pressure or why water boils at a certain temperature we need to zoom into these materials and see what kind of particles they are made up of, and how they move around.",
-          "Everything around us is made of tiny particles. In materials that are solid these particles cannot move much, while in gases they can move around freely.",
-          "Classifying things around us is an important feature of science. We can also classify materials around us into elements (pure substances), compounds (two or more elements bonded together), and mixtures (combinations that can be separated physically).",
-          "Once we know how particles combine or mix, we can then understand solutions—for example, how sugar dissolves in tea to make it sweet.",
-          "From the world of particles and mixtures, we then move into the world of light. We'll study how light rays reflect off flat and curved mirrors, and bends when passing through lenses and helps us understand the working of many objects around us. The bending of light explains what happens when we see ",
-          "It's not just a polished mirror that reflects light, rough surfaces reflect light as well, and so does the Moon. Depending on the relative positions of the Earth, Moon, and Sun, a slightly different part of the Moon is illuminated each night, giving rise to the beautiful phases of the Moon that we s",
-          "Watching the periodic cycles of the Moon's phases allowed humans to come up with the first calendars. By combining careful observations of sunrises, sunsets, and lunar cycles, various calendars came into being. Isn't it fascinating that the calendars which determine our routines on Earth are linked "
+          "So, these forces are connected to powerful weather",
+          "events—like storms and cyclones—that affect our daily",
+          "lives, agriculture, and even our safety.",
+          "To truly understand how air can exert pressure or",
+          "why water boils at a certain temperature we need to",
+          "zoom into these materials and see what kind of particles",
+          "they are made up of, and how they move around.",
+          "Everything around us is made of tiny particles.",
+          "In materials that are solid these particles cannot move",
+          "much, while in gases they can move around freely.",
+          "Classifying things around us is an important feature",
+          "of science. We can also classify materials around us",
+          "into elements (pure substances), compounds (two",
+          "or more elements bonded together), and mixtures",
+          "(combinations that can be separated physically).",
+          "Once we know how particles combine or mix, we can then",
+          "understand solutions—for example, how sugar dissolves in tea",
+          "to make it sweet.",
+          "From the world of particles and",
+          "mixtures, we then move into the world",
+          "of light. We'll study how light rays reflect",
+          "off flat and curved mirrors, and bends",
+          "when passing through lenses and helps",
+          "us understand the working of many",
+          "objects around us. The bending of light",
+          "explains what happens when we see an image in a shiny",
+          "metal spoon or how corrective glasses help many of us",
+          "see clearly.",
+          "It's not just a polished mirror that reflects light,",
+          "rough surfaces reflect light as well, and so does"
         ],
         "concepts": [
-          "weather events",
           "particles",
+          "states of matter",
+          "weather events",
+          "pressure",
+          "boiling",
           "classification",
-          "solutions",
+          "elements",
+          "compounds",
+          "mixtures",
           "light",
           "mirrors",
           "lenses",
           "Moon phases",
           "calendars"
         ],
-        "context_relation": "The image is a page from a textbook discussing the connection between weather events and the behavior of particles in materials.",
+        "context_relation": "The image is a page from a textbook discussing the relationship between particles and their movements in various states of matter, and how these particles affect weather events and daily life.",
         "limitations": [
-          "The image does not provide specific examples or detailed explanations for each concept."
+          "The image does not provide specific details about the textbook or its content."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:16:37Z"
+      "checkpointed_at": "2026-10-18T23:20:40Z"
+    },
+    {
+      "asset_id": "1b0de3f2aab5cee261d2f558",
+      "asset_sha256": "31009bb76fd51e0034eca63ad30ae1892fc363c5fabbb33690506244ecb1b937",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/31009bb76fd51e0034eca63ad30ae1892fc363c5fabbb33690506244ecb1b937.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "977554edfd999f43bb0e179dd42eb60686108159d3b5b184c63195f85bf66f4a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a forest scene with various animals and plants, including a hawk perched on a tree branch, a fox standing on the ground, a rabbit sitting on the grass, and a deer grazing in the background. The scene also features a tree stump with mushrooms growing on it, and a bird flying in the sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "forest",
+          "animals",
+          "plants",
+          "hawk",
+          "fox",
+          "rabbit",
+          "deer",
+          "tree stump",
+          "mushrooms",
+          "bird"
+        ],
+        "context_relation": "The illustration represents the relationships between living organisms and their environment, as described in the text.",
+        "limitations": [
+          "The text in the image does not provide specific details about the relationships between the animals and their environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:22:23Z"
     }
   ]
 }
