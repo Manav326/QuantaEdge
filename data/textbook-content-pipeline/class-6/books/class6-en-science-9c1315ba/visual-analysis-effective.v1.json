@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4fc2772ba3fac098f54d084ed95696b48db34b132d738ade828b517f562ed328",
+  "raw_analysis_sha256": "d254828688d781b6376142156243bd9540f3bd24427c1cdf67c5a52bdb6c95bc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:08:09Z",
+      "checkpointed_at": "2026-10-18T19:14:25Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:09:04Z",
+      "checkpointed_at": "2026-10-18T19:15:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29353,7 +29353,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:10:17Z",
+      "checkpointed_at": "2026-10-18T19:16:33Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -36327,6 +36327,86 @@
         "limitations": [
           "limited to the text and diagram provided"
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7fd194928692879887bb0502",
+      "asset_sha256": "671ffe75091b0b1ec40c6019de8e0c61aebe24c1a8fbe2d0ca70349c3c60390d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/671ffe75091b0b1ec40c6019de8e0c61aebe24c1a8fbe2d0ca70349c3c60390d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1b6f3b8f9fa644e0e745fb5d5550f48be0bc8dc27f747cdbd803d6b1531da3d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a brown jacket and a yellow shirt, with a green background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the educational content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional context or information about the educational content.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements.",
+          "The image does not show any specific educational content or data related to the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:17:42Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a brown jacket and a yellow shirt, with a green background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the educational content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional context or information about the educational content.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements.",
+          "The image does not show any specific educational content or data related to the textbook page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cc469e91087471a97384aa5d",
+      "asset_sha256": "47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1b6f3b8f9fa644e0e745fb5d5550f48be0bc8dc27f747cdbd803d6b1531da3d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden plank with a natural wood grain pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of Table 2.5 in the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:18:50Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden plank with a natural wood grain pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of Table 2.5 in the text.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
