@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 795,
+    "assets_selected": 796,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 791,
-    "assets_remaining": 1287,
-    "assets_completion_percent": 38.1,
+    "assets_analyzed": 793,
+    "assets_remaining": 1285,
+    "assets_completion_percent": 38.2,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 790,
+    "assets_skipped_from_checkpoint": 791,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:02:21Z"
+      "checkpointed_at": "2026-10-18T19:08:09Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:03:14Z"
+      "checkpointed_at": "2026-10-18T19:09:04Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:04:25Z"
+      "checkpointed_at": "2026-10-18T19:10:17Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -24542,6 +24542,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T19:07:03Z"
+    },
+    {
+      "asset_id": "de7008fee9695b75bd7aa560",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ca00bc3d37caf97470a32e8b51bd3bfb0263da5a0bf731f2466f1393764e7617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:10:27Z"
+    },
+    {
+      "asset_id": "cb61acfe51dc4ca03f8461e3",
+      "asset_sha256": "63f6028bb6589b2515c12111ff90d1c82cfa2ec4e69514c3e638230ed716752c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 39,
+      "asset_path": "page-0039.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ca00bc3d37caf97470a32e8b51bd3bfb0263da5a0bf731f2466f1393764e7617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different animals and their movements.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 2.9: Let us find out",
+          "You have recorded the movement of a few animals in",
+          "Table 2.2. You may have also observed how other animals",
+          "move from place to place. Let us now think about the types",
+          "of movement in animals. A number of animals are shown",
+          "in Fig. 2.7. You can add more animals that you may have",
+          "observed and create a poster on the variety of animals.",
+          "Which body parts are used by the animals in the poster you",
+          "created and those in Fig. 2.7 for movement?",
+          "Fig. 2.7: Diversity in animals",
+          "List these animals in Table 2.5.",
+          "Note the ways in which these animals move and name",
+          "the body parts used for movement. Some examples are",
+          "given in Table 2.5."
+        ],
+        "concepts": [
+          "animal movement",
+          "various animals",
+          "body parts",
+          "poster creation"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "limited to the text and diagram provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:13:21Z"
     }
   ]
 }
