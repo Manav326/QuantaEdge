@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "634857fa1b0a88fb0a174fb289729d15078b0c2e9550bb8bfcb52afddaf71d6e",
+  "raw_analysis_sha256": "735d89ce234f5e302bb62d6272bfc4e13cefbc07ed63440e46d44553d2e9dd31",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T14:15:16Z",
+      "checkpointed_at": "2026-10-18T14:21:24Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -47210,6 +47210,262 @@
         "limitations": [
           "The image does not show the final product of the greeting card.",
           "The image does not show the teacher's reaction to the card."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44cc08a9fd28cf1026eb1d62",
+      "asset_sha256": "4416bbeb4564a3843e54786cf4c8aea9524dd0a45eb863198a1784895f59c398",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/4416bbeb4564a3843e54786cf4c8aea9524dd0a45eb863198a1784895f59c398.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card made by Ashwin for Guru Purnima, featuring a message in Odia language.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language",
+          "on the dried paper using one of the solutions",
+          "in the teacher's mother tongue (Odia) language"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Message"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, including the materials used and the language of the message.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:22:44Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin for Guru Purnima, featuring a message in Odia language.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language",
+          "on the dried paper using one of the solutions",
+          "in the teacher's mother tongue (Odia) language"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Message"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, including the materials used and the language of the message.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "13d0fea5cdd3d65fe7c1347b",
+      "asset_sha256": "e96ee4112971829011038419aaeaa49ed5c1c7b15c19c9bcca4fb64c4d595a73",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/e96ee4112971829011038419aaeaa49ed5c1c7b15c19c9bcca4fb64c4d595a73.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card made by Ashwin to express gratitude to his teacher on Guru Purnima, featuring a turmeric paste design and written in Odia language.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language",
+          "using one of the solutions",
+          "on the dried paper"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, emphasizing the use of Odia language and turmeric paste.",
+        "limitations": [
+          "The image does not provide specific details about the design or the content of the card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:24:05Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card made by Ashwin to express gratitude to his teacher on Guru Purnima, featuring a turmeric paste design and written in Odia language.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language",
+          "using one of the solutions",
+          "on the dried paper"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, emphasizing the use of Odia language and turmeric paste.",
+        "limitations": [
+          "The image does not provide specific details about the design or the content of the card."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c81f26e3d011a6ac517824c9",
+      "asset_sha256": "44e4fef478d681197e5192f66243e0bea20f69ef5f9be2242728287695be63b8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/44e4fef478d681197e5192f66243e0bea20f69ef5f9be2242728287695be63b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with a plant growing from a seed, accompanied by text in Odia language.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia language) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Plant growing from a seed"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima, using Odia language and a plant growing from a seed as a symbol of gratitude.",
+        "limitations": [
+          "The image does not show the actual greeting card or the process of creating it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:25:19Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card with a plant growing from a seed, accompanied by text in Odia language.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia language) on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Greeting card",
+          "Turmeric paste",
+          "Odia language",
+          "Plant growing from a seed"
+        ],
+        "context_relation": "The image is related to the text about Ashwin creating a greeting card for Guru Purnima, using Odia language and a plant growing from a seed as a symbol of gratitude.",
+        "limitations": [
+          "The image does not show the actual greeting card or the process of creating it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1fc1b66b5dc96dfbea713adc",
+      "asset_sha256": "978f8f55223ed68314f08e522599fa665bddd870d619528820cb439afd52032c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/978f8f55223ed68314f08e522599fa665bddd870d619528820cb439afd52032c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442791750414456a0dc9b159404654e7d2f1dca0532257a417cea9adf8381161",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A greeting card with text in Odia language.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language",
+          "on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, including the use of Odia language and turmeric paste.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T14:26:32Z",
+      "effective_analysis": {
+        "visual_summary": "A greeting card with text in Odia language.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ashwin created a greeting card to pay gratitude to his teacher",
+          "on the day of Guru Purnima.",
+          "He applied turmeric paste on white paper and dried it.",
+          "He wrote his wishes in the teacher's mother tongue (Odia) language",
+          "on the dried paper using one of the solutions"
+        ],
+        "concepts": [
+          "Guru Purnima",
+          "Turmeric paste",
+          "Odia language",
+          "Wishes"
+        ],
+        "context_relation": "The image shows the process of creating a greeting card for Guru Purnima, including the use of Odia language and turmeric paste.",
+        "limitations": [
+          "The image does not show the final product of the greeting card."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
