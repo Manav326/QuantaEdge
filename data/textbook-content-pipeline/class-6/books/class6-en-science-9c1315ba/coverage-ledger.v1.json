@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 810,
-    "successful_visual_analyses": 800,
-    "missing_visual_analyses": 1268,
+    "raw_analysis_result_rows": 812,
+    "successful_visual_analyses": 802,
+    "missing_visual_analyses": 1266,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1278,
+    "unresolved_count": 1276,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31781,9 +31781,31 @@
       "asset_path": "page-0040.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table listing animals and their movement types and body parts used.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.5: Movements in animals and their body parts involved",
+          "S. no.    Name of the       Type of      Body parts used",
+          "animal       movement      for movement",
+          "1.    Ant                                Legs",
+          "2.    Goat            Walks and jumps  Legs",
+          "3.    Pigeon           Walks and flies    Legs and wings",
+          "4.    Housefly         Walks and flies    Legs and wings",
+          "5.     Fish             Fins"
+        ],
+        "concepts": [
+          "Animals",
+          "Movement types",
+          "Body parts used for movement"
+        ],
+        "context_relation": "The table provides a structured overview of different animals and their movement types, emphasizing the body parts used.",
+        "limitations": [
+          "The table does not include all possible animals or movement types."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31799,9 +31821,18 @@
       "asset_path": "assets/7b9f84a5d02dce9deb997ae2cccc709ef2a43b8184ba3a380e781f78e940cc4b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow textured rectangular shape with rounded corners.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a textured yellow rectangular shape, possibly used as a background or border for text.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
