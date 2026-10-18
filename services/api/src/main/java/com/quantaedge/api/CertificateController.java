@@ -644,7 +644,8 @@ public class CertificateController {
     List<Map<String,Object>> issuers = jdbc.queryForList("""
         select t.id as institution_id,t.tenant_code,
           coalesce(b.display_name,t.display_name) as issuer_display_name,
-          coalesce(b.logo_asset_key,'') as issuer_logo_asset_id
+          coalesce(b.logo_asset_key,'') as issuer_logo_asset_id,
+          coalesce(b.theme_tokens::text,'{}') as issuer_theme_tokens
         from institution_membership m
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         left join institution_branding b on b.institution_id=t.id
@@ -681,11 +682,13 @@ public class CertificateController {
           where institution_id=? and asset_id=? and asset_type='LOGO' and active=true
           """, institutionId, logoAssetId);
     }
+    Map<String,String> lightPalette = issuerLightPalette(issuer.get("issuer_theme_tokens"));
     snapshot.put("issuerInstitutionId", institutionId);
     snapshot.put("issuerTenantCode", clean(issuer.get("tenant_code")));
     snapshot.put("issuerDisplayName", displayName);
+    snapshot.put("issuerThemePalette", lightPalette);
     if (!logoAssetId.isBlank()) snapshot.put("issuerLogoAssetId", logoAssetId);
-    return new CertificateRenderer.CertificateBranding(displayName,logo);
+    return new CertificateRenderer.CertificateBranding(displayName,logo,lightPalette);
   }
 
   private CertificateRenderer.CertificateBranding certificateBrandingFromSnapshot(Map<String,Object> snapshot) {
@@ -706,7 +709,31 @@ public class CertificateController {
           where institution_id=? and asset_id=? and asset_type='LOGO'
           """, institutionId, logoAssetId);
     }
-    return new CertificateRenderer.CertificateBranding(displayName,logo);
+    return new CertificateRenderer.CertificateBranding(displayName,logo,issuerPaletteFromSnapshot(snapshot));
+  }
+
+  private Map<String,String> issuerLightPalette(Object rawThemeTokens) {
+    Map<String,Object> source = readSnapshot(clean(rawThemeTokens));
+    Map<String,Object> normalized = InstitutionThemeTokens.normalize(source);
+    Object rawLight = normalized.get("light");
+    if (!(rawLight instanceof Map<?,?> light)) return Map.of();
+    Map<String,String> palette = new LinkedHashMap<>();
+    for (Map.Entry<?,?> entry : light.entrySet()) {
+      if (!(entry.getKey() instanceof String key) || !(entry.getValue() instanceof String value)) continue;
+      if (value.matches("^#[0-9A-Fa-f]{6}$")) palette.put(key, value.toUpperCase(Locale.ROOT));
+    }
+    return Map.copyOf(palette);
+  }
+
+  private Map<String,String> issuerPaletteFromSnapshot(Map<String,Object> snapshot) {
+    Object rawPalette = snapshot.get("issuerThemePalette");
+    if (!(rawPalette instanceof Map<?,?> values)) return Map.of();
+    Map<String,String> palette = new LinkedHashMap<>();
+    for (Map.Entry<?,?> entry : values.entrySet()) {
+      if (!(entry.getKey() instanceof String key) || !(entry.getValue() instanceof String value)) continue;
+      if (value.matches("^#[0-9A-Fa-f]{6}$")) palette.put(key, value.toUpperCase(Locale.ROOT));
+    }
+    return Map.copyOf(palette);
   }
 
   private byte[] queryOptionalByteArray(String sql,Object... args) {
