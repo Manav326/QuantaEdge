@@ -157,7 +157,7 @@ public class LearningMetricsService {
       left join chapter_concept cc on cc.id=q.concept_id
       join lesson l on l.id=q.lesson_id join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
-      where qa.student_id=? and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
+      where qa.student_id=? __TENANT_QA__ and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
         and __SUBJECT_SCOPE__
       order by qa.answered_at desc,qa.id desc limit 20
       """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
