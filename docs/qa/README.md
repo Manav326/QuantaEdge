@@ -12,6 +12,7 @@
 - [Data Relationship and Cleanup Map](./phase-1-data-and-cleanup-map.md): identity/tenant/course/learning/HRMS dependencies, protected baseline data and safe-uninstall requirements.
 - [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 70 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
 - [Existing Test Evidence](./phase-1-existing-test-evidence.md): links current API/Android test sources to scenario domains and separates tests-present from runtime-verified evidence.
+- [Android Composition Map](./phase-1-android-composition-map.md): maps all 34 native routes to their actual shell/component renderers and documents BackHandler return contracts.
 
 ## Evidence and status rules
 
