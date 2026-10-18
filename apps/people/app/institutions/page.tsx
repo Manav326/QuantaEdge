@@ -58,7 +58,7 @@ export default function InstitutionsAdminPage() {
   const [showCreate,setShowCreate]=useState(false);
   const [showAdmin,setShowAdmin]=useState(false);
   const [editingCard,setEditingCard]=useState<EditableCard|null>(null);
-  const [courseDraft,setCourseDraft]=useState<Record<number,boolean>>({});
+  const [courseDraft,setCourseDraft]=useState<Record<string,boolean>>({});
   const [pendingCrop,setPendingCrop]=useState<{assetType:'logo'|'app-icon';file:File}|null>(null);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
@@ -220,8 +220,9 @@ export default function InstitutionsAdminPage() {
       if(!response.ok)throw new Error(String(data.message||data.detail||data.error||'Image upload failed ('+response.status+')'));
       setNotice(assetType==='logo'?'School logo uploaded and versioned.':'School app icon uploaded and versioned.');
       const resumeBrandEdit=editingCard==='branding';
+      const draftBrand=brand;
       await loadDetail(detail.id);
-      if(resumeBrandEdit)setEditingCard('branding');
+      if(resumeBrandEdit){setBrand(draftBrand);setEditingCard('branding');}
     }catch(e){setError(e instanceof Error?e.message:'Branding image could not be uploaded.');}
     finally{setSaving(false);}
   }
@@ -238,8 +239,9 @@ export default function InstitutionsAdminPage() {
         ? (assetType==='logo'?'School logo removed. Learner surfaces will use the school initial until another logo is uploaded.':'School app icon removed. Learner browser icons will use the school initial until another icon is uploaded.')
         : 'There was no active '+label+' to remove.');
       const resumeBrandEdit=editingCard==='branding';
+      const draftBrand=brand;
       await loadDetail(detail.id);
-      if(resumeBrandEdit)setEditingCard('branding');
+      if(resumeBrandEdit){setBrand(draftBrand);setEditingCard('branding');}
     }catch(e){setError(e instanceof Error?e.message:'The branding asset could not be removed.');}
     finally{setSaving(false);}
   }
