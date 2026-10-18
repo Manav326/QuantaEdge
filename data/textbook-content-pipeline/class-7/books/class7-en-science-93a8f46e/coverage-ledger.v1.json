@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 926,
-    "successful_visual_analyses": 917,
-    "missing_visual_analyses": 6562,
+    "raw_analysis_result_rows": 930,
+    "successful_visual_analyses": 921,
+    "missing_visual_analyses": 6558,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6571,
+    "unresolved_count": 6567,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45109,9 +45109,33 @@
       "asset_path": "assets/f6723b509cbadf7e9e43c5bab14ce763482dc639bc1a20aad610ea35b186d2b0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A drop of blue litmus solution turns red in a lemon juice solution, and then changes to blue when lime water is added, indicating the solution is no longer acidic.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the",
+          "lemon juice solution, the colour of the solution turns red. When",
+          "lime water is added to this test tube, the colour of the solution",
+          "eventually changes from red to blue. This shows that the solution",
+          "in the test tube is no longer acidic. Lime water has neutralised",
+          "the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a",
+          "base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Lemon juice",
+          "Lime water"
+        ],
+        "context_relation": "The image shows a chemical reaction where an acid (lemon juice) reacts with a base (lime water) to neutralize each other.",
+        "limitations": [
+          "The image does not show the actual chemical reaction or the neutralization process.",
+          "The image does not provide a visual representation of the pH change."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45127,9 +45151,16 @@
       "asset_path": "assets/fd4a6a8179a8269f8dea905c4867650f1a5cae8733514964be265f501e94c206.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a blue hook with a yellow rope wrapped around it.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45145,9 +45176,28 @@
       "asset_path": "assets/f2cfc11515699b6e21409ead7821da43156756251d6967d0e8a9f19fe61e4fd9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A chemical reaction involving the neutralization of an acid with a base, as indicated by the color change in litmus solution.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red. When lime water is added to this test tube, the colour of the solution eventually changes from red to blue. This shows that the solution in the test tube is no longer acidic. Li",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Neutralization",
+          "Acid",
+          "Base",
+          "Litmus Solution",
+          "Lemon Juice",
+          "Lime Water"
+        ],
+        "context_relation": "The image illustrates a chemical reaction where an acid (lemon juice) is neutralized by a base (lime water), as evidenced by the color change in the litmus solution.",
+        "limitations": [
+          "The image does not show the actual chemical reaction or the neutralization process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45163,9 +45213,28 @@
       "asset_path": "assets/d2606f1b564c213531d8f36f595e26a97360000e9a4aa8a0ea1599575ff6eda7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A chemical reaction involving blue litmus solution and lime water, demonstrating the neutralization of an acid by a base.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Initially, when a drop of blue litmus solution is added to the lemon juice solution, the colour of the solution turns red.",
+          "When lime water is added to this test tube, the colour of the solution eventually changes from red to blue.",
+          "This shows that the solution in the test tube is no longer acidic.",
+          "Lime water has neutralized the effect of the acid.",
+          "When the solution of an acid is mixed with the solution of a base"
+        ],
+        "concepts": [
+          "Acid-base neutralization",
+          "Litmus test",
+          "Neutralization"
+        ],
+        "context_relation": "The image illustrates a chemical reaction where an acid (lemon juice) is neutralized by a base (lime water).",
+        "limitations": [
+          "The image does not show the actual chemical reaction taking place."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
