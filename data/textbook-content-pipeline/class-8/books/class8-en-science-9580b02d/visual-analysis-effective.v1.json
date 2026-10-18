@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "96a2eecfc5dacba99f9e999e99a424da2902495d63e41f731c5db54f2aec33f2",
+  "raw_analysis_sha256": "bdd3e841ea09805bc613888d20dea7df893fef0250e9b37a0ee57169ab851d1f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:17:49Z",
+      "checkpointed_at": "2026-10-18T23:23:37Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:18:41Z",
+      "checkpointed_at": "2026-10-18T23:24:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T23:19:23Z",
+      "checkpointed_at": "2026-10-18T23:25:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -31646,6 +31646,136 @@
         "context_relation": "The illustration represents the relationships between living organisms and their environment, as described in the text.",
         "limitations": [
           "The text in the image does not provide specific details about the relationships between the animals and their environment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ea410fffb2d9c3a46f3b4916",
+      "asset_sha256": "58b9663ae7dea50f5332d08b4a0471c6aeb09b87fe8e8dc2bce19e11df4f2414",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/58b9663ae7dea50f5332d08b4a0471c6aeb09b87fe8e8dc2bce19e11df4f2414.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "977554edfd999f43bb0e179dd42eb60686108159d3b5b184c63195f85bf66f4a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a pond with various aquatic plants, fish, tadpoles, frogs, a turtle, and a duck. The pond is surrounded by green hills and trees.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pond",
+          "aquatic plants",
+          "fish",
+          "tadpoles",
+          "frogs",
+          "turtle",
+          "duck",
+          "green hills",
+          "trees"
+        ],
+        "context_relation": "The image represents a natural environment, focusing on aquatic life and vegetation.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:26:45Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a pond with various aquatic plants, fish, tadpoles, frogs, a turtle, and a duck. The pond is surrounded by green hills and trees.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pond",
+          "aquatic plants",
+          "fish",
+          "tadpoles",
+          "frogs",
+          "turtle",
+          "duck",
+          "green hills",
+          "trees"
+        ],
+        "context_relation": "The image represents a natural environment, focusing on aquatic life and vegetation.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a1c30b69f385ba7044b7eb85",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "977554edfd999f43bb0e179dd42eb60686108159d3b5b184c63195f85bf66f4a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A calendar page with dates from March 1 to March 22, 2025.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "5",
+          "But it’s not just calendars or the movements",
+          "of the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns  of  relationships  between",
+          "living",
+          "organisms and their environments. Every living",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22"
+        ],
+        "concepts": [
+          "calendar",
+          "investigative world of science",
+          "relationships between living organisms and their environments"
+        ],
+        "context_relation": "The calendar page is related to the chapter on exploring the investigative world of science.",
+        "limitations": [
+          "The visible text does not provide specific details about the calendar dates or the chapter content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T23:27:18Z",
+      "effective_analysis": {
+        "visual_summary": "A calendar page with dates from March 1 to March 22, 2025.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "5",
+          "But it’s not just calendars or the movements",
+          "of the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns  of  relationships  between",
+          "living",
+          "organisms and their environments. Every living",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22"
+        ],
+        "concepts": [
+          "calendar",
+          "investigative world of science",
+          "relationships between living organisms and their environments"
+        ],
+        "context_relation": "The calendar page is related to the chapter on exploring the investigative world of science.",
+        "limitations": [
+          "The visible text does not provide specific details about the calendar dates or the chapter content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

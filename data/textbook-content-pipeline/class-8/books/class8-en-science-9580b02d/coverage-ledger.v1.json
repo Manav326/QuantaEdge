@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 726,
-    "successful_visual_analyses": 719,
-    "missing_visual_analyses": 1565,
+    "raw_analysis_result_rows": 728,
+    "successful_visual_analyses": 721,
+    "missing_visual_analyses": 1563,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1572,
+    "unresolved_count": 1570,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28461,9 +28461,28 @@
       "asset_path": "assets/58b9663ae7dea50f5332d08b4a0471c6aeb09b87fe8e8dc2bce19e11df4f2414.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of a pond with various aquatic plants, fish, tadpoles, frogs, a turtle, and a duck. The pond is surrounded by green hills and trees.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pond",
+          "aquatic plants",
+          "fish",
+          "tadpoles",
+          "frogs",
+          "turtle",
+          "duck",
+          "green hills",
+          "trees"
+        ],
+        "context_relation": "The image represents a natural environment, focusing on aquatic life and vegetation.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28479,9 +28498,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A calendar page with dates from March 1 to March 22, 2025.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 — Exploring the Investigative World of Science",
+          "5",
+          "But it’s not just calendars or the movements",
+          "of the Sun and Moon that are linked. Right here",
+          "on Earth, there are marvellous and complex",
+          "patterns  of  relationships  between",
+          "living",
+          "organisms and their environments. Every living",
+          "SUN MON  TUE  WED  THU    FRI   SAT",
+          "MAR 1 22"
+        ],
+        "concepts": [
+          "calendar",
+          "investigative world of science",
+          "relationships between living organisms and their environments"
+        ],
+        "context_relation": "The calendar page is related to the chapter on exploring the investigative world of science.",
+        "limitations": [
+          "The visible text does not provide specific details about the calendar dates or the chapter content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
