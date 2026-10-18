@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 675,
+    "assets_selected": 677,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 672,
-    "assets_remaining": 1619,
-    "assets_completion_percent": 29.3,
+    "assets_analyzed": 674,
+    "assets_remaining": 1617,
+    "assets_completion_percent": 29.4,
     "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 670,
+    "assets_skipped_from_checkpoint": 672,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T20:51:52Z"
+      "checkpointed_at": "2026-10-18T20:59:40Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T20:52:40Z"
+      "checkpointed_at": "2026-10-18T21:00:29Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -19943,6 +19943,103 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "b0358ff046707700e2112b5b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:00:46Z"
+    },
+    {
+      "asset_id": "8f1e416d66c5fe02aa8775a3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:01:02Z"
+    },
+    {
+      "asset_id": "35f32b476dc5977bc161e8e8",
+      "asset_sha256": "362d4dcf2027094e5b567212d28e12d11b4d5208983201ca08847ce5f4c4741d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 17,
+      "asset_path": "page-0017.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
+          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
+        ],
+        "concepts": [
+          "Acknowledgments",
+          "Contributors",
+          "Editors",
+          "Support",
+          "Publication process"
+        ],
+        "context_relation": "Acknowledgments for the book's contributors and editors",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:05:14Z"
     }
   ]
 }

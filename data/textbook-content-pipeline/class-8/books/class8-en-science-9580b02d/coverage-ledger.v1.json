@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 680,
-    "successful_visual_analyses": 674,
-    "missing_visual_analyses": 1611,
+    "raw_analysis_result_rows": 683,
+    "successful_visual_analyses": 677,
+    "missing_visual_analyses": 1608,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1617,
+    "unresolved_count": 1614,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26807,9 +26807,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26825,9 +26834,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26843,9 +26862,30 @@
       "asset_path": "page-0017.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
+          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
+          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
+          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
+        ],
+        "concepts": [
+          "Acknowledgments",
+          "Contributors",
+          "Editors",
+          "Support",
+          "Publication process"
+        ],
+        "context_relation": "Acknowledgments for the book's contributors and editors",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
