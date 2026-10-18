@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1033,
-    "successful_visual_analyses": 1021,
-    "missing_visual_analyses": 6455,
+    "raw_analysis_result_rows": 1036,
+    "successful_visual_analyses": 1024,
+    "missing_visual_analyses": 6452,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6467,
+    "unresolved_count": 6464,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48573,9 +48573,29 @@
       "asset_path": "assets/6421070c1f8a48635b4238d87d9f7198668b175a2e63204c17ed1198ae3888e7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The image is a page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "limitations": [
+          "The image does not show the experiment or the results.",
+          "The image does not provide a diagram or chart."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48591,9 +48611,28 @@
       "asset_path": "assets/17814bb8e99e53f55e01e3a31fa77d583733ea38675b4ae112dc04fbe9682165.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The image is a page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48609,9 +48648,28 @@
       "asset_path": "assets/795af11395f3dc042a0e98eb6382e993cc289ef47a732b50f6692a8750de28a4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "EEPER Aman accidentally spilt vinegar on some pieces of an eggshell or marble and noticed bubbling.",
+          "He then poured a soap solution on another piece of eggshell or marble, but no bubbles appeared.",
+          "Why did bubbles occur with vinegar but not with soap solution?"
+        ],
+        "concepts": [
+          "Experiment",
+          "Vinegar",
+          "Soap solution",
+          "Eggshell or marble",
+          "Bubbles"
+        ],
+        "context_relation": "The image is a page from a textbook discussing an experiment involving vinegar and soap solution on eggshells or marble.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
