@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0fba529444f012c6be4877ae971ff55d3ffe44fe6bae8c206d600c8e900d39dd",
+  "raw_analysis_sha256": "ce21c09ea31ab7f5adccf181dede6176d4b1504c38e028a26e6dacb40428eed1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -631,14 +631,14 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T07:42:20Z",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:12:03Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -663,7 +663,7 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -1506,95 +1506,21 @@
     {
       "asset_id": "c6a831694848458053f2aa82",
       "asset_sha256": "ab0f20f40fe4048794c5900d88619dabbca30024537e8f7e23b859e7b1814569",
+      "page_text_context_sha256": "11a3f607feba5db1456194b2106732e2c89fd578c10f26502f2428a9c0003407",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 6,
       "asset_path": "page-0006.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "11a3f607feba5db1456194b2106732e2c89fd578c10f26502f2428a9c0003407",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "reflect on learning. These activities are inclusive in nature. Some\nactivities require both the teacher and learners to prepare in\nadvance.\n\nChapter 1, titled ‘The Wonderful World of Science’, provides a\nholistic view of the new topic of Science introduced in the Middle\nStage. It showcases, through ",
-          "In order to sustain the interest of the readers, some of the\nchallenging ideas, additional information, poems, stories, strange\nfacts and other interesting materials are also presented as add on\nnon-evaluative content in the boxes labelled ‘Do you know?’, ‘More\nto know!’, ‘Think it over!’ and ‘More ",
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "learning",
-          "activities",
-          "inclusive",
-          "preparation",
-          "essence of Science",
-          "thinking",
-          "observing",
-          "doing",
-          "asking questions",
-          "world of science",
-          "curriculum",
-          "non-evaluative",
-          "challenging ideas",
-          "additional information",
-          "poems",
-          "stories",
-          "strange facts",
-          "interesting materials",
-          "non-evaluative content",
-          "boxes"
-        ],
-        "context_relation": "The page discusses the importance of learning, activities, and preparation for learning, as well as the content and structure of a textbook chapter on science.",
-        "limitations": [
-          "The page does not provide specific details about the textbook or its content.",
-          "The page does not include any visual elements or illustrations.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T07:43:02Z",
-      "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "reflect on learning. These activities are inclusive in nature. Some\nactivities require both the teacher and learners to prepare in\nadvance.\n\nChapter 1, titled ‘The Wonderful World of Science’, provides a\nholistic view of the new topic of Science introduced in the Middle\nStage. It showcases, through ",
-          "In order to sustain the interest of the readers, some of the\nchallenging ideas, additional information, poems, stories, strange\nfacts and other interesting materials are also presented as add on\nnon-evaluative content in the boxes labelled ‘Do you know?’, ‘More\nto know!’, ‘Think it over!’ and ‘More ",
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "learning",
-          "activities",
-          "inclusive",
-          "preparation",
-          "essence of Science",
-          "thinking",
-          "observing",
-          "doing",
-          "asking questions",
-          "world of science",
-          "curriculum",
-          "non-evaluative",
-          "challenging ideas",
-          "additional information",
-          "poems",
-          "stories",
-          "strange facts",
-          "interesting materials",
-          "non-evaluative content",
-          "boxes"
-        ],
-        "context_relation": "The page discusses the importance of learning, activities, and preparation for learning, as well as the content and structure of a textbook chapter on science.",
-        "limitations": [
-          "The page does not provide specific details about the textbook or its content.",
-          "The page does not include any visual elements or illustrations.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -27188,6 +27114,128 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "19f9bdf06d433dca53e60efe",
+      "asset_sha256": "3442a9cf65eb3b77b1b4aef62bd954bd1678d8d9e09cb3dc1e9cabf40c9040b7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/3442a9cf65eb3b77b1b4aef62bd954bd1678d8d9e09cb3dc1e9cabf40c9040b7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "background",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:18:29Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "background",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "61ac6f35f4989c26ad5cb826",
+      "asset_sha256": "100535a04168c81e1204b6cd937251958cb74609f6d6691304d5b7aff31696d9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/100535a04168c81e1204b6cd937251958cb74609f6d6691304d5b7aff31696d9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful gradient background with a blend of pink, yellow, and black colors.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "background design"
+        ],
+        "context_relation": "The background serves as a visual element for the text 'Reprint 2026-27'.",
+        "limitations": [
+          "The image does not contain any specific content or information beyond the text and background."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:20:09Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful gradient background with a blend of pink, yellow, and black colors.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "color gradient",
+          "background design"
+        ],
+        "context_relation": "The background serves as a visual element for the text 'Reprint 2026-27'.",
+        "limitations": [
+          "The image does not contain any specific content or information beyond the text and background."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "56ca5af75ade64843fc05bc9",
+      "asset_sha256": "086e92891ad5dcc9ef80e0189e0b4dc0077a8d98da6bbde6b241b3cbf482e32d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/086e92891ad5dcc9ef80e0189e0b4dc0077a8d98da6bbde6b241b3cbf482e32d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T11:21:34Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
