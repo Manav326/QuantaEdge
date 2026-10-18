@@ -1475,6 +1475,20 @@ public class AssessmentController {
     throw missingInstitutionContext();
   }
 
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant == null || tenant.institutionId() < 1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing assessments.");
+    }
+    return tenant.institutionId();
+  }
+
+  private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext() {
+    return new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400,"INSTITUTION_CONTEXT_REQUIRED",
+        "Legacy assessment calls must provide an explicit institution through the authenticated HTTP boundary.");
+  }
+
   // ---------- Shared private helpers ----------
 
   private String newOfflinePackageToken() {
