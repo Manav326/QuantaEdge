@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 347,
+    "assets_selected": 350,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 345,
-    "assets_remaining": 1946,
-    "assets_completion_percent": 15.1,
+    "assets_analyzed": 348,
+    "assets_remaining": 1943,
+    "assets_completion_percent": 15.2,
     "assets_failed": 2,
-    "assets_skipped_from_checkpoint": 342,
+    "assets_skipped_from_checkpoint": 345,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T03:29:07Z"
+      "checkpointed_at": "2026-10-18T03:35:34Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T03:29:55Z"
+      "checkpointed_at": "2026-10-18T03:36:24Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -10383,6 +10383,94 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T03:34:22Z"
+    },
+    {
+      "asset_id": "b245dab4ea424a5db94a47b0",
+      "asset_sha256": "e3b0de657917c63da6f4c8e42d026cf0bd37470a2b11427cd2befb477cf30d95",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e3b0de657917c63da6f4c8e42d026cf0bd37470a2b11427cd2befb477cf30d95.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of yellow and orange colors.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T03:37:56Z"
+    },
+    {
+      "asset_id": "5b6d47ee9dd32b1c64fa3c56",
+      "asset_sha256": "d77ad2001cee3b233aaabb96de30e4bfff7ad5a4c97c870bb0cc9c2ac77b4770",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d77ad2001cee3b233aaabb96de30e4bfff7ad5a4c97c870bb0cc9c2ac77b4770.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and white striped pattern.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped pattern",
+          "yellow and white"
+        ],
+        "context_relation": "The pattern is likely a design element on a page or cover.",
+        "limitations": [
+          "The pattern is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T03:39:32Z"
+    },
+    {
+      "asset_id": "74ea1143a029b27b8b630b02",
+      "asset_sha256": "bd03094ed3f7cfa30b6ee3813c9fe5fc25121d045d82333761003f19d9ff6d55",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/bd03094ed3f7cfa30b6ee3813c9fe5fc25121d045d82333761003f19d9ff6d55.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear text content",
+          "No specific objects or figures"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T03:41:04Z"
     }
   ]
 }
