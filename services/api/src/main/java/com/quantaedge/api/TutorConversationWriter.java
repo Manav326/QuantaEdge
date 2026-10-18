@@ -16,6 +16,29 @@ public class TutorConversationWriter {
     this.jdbc=jdbc;
   }
 
+  /**
+   * Persists only when the session belongs to the same institution that authorized the caller.
+   * The older overload remains for isolated legacy tests; learner HTTP controllers use this one.
+   */
+  @Transactional
+  public void persistTurn(long sessionId, long institutionId, String mode, String userMessage, TutorReply reply) {
+    int updated=jdbc.update(
+        "update tutor_session set last_message_at=now() where id=? and institution_id=? and ended_at is null",
+        sessionId,institutionId);
+    if (updated!=1) {
+      throw new TutorUnavailableException("Tutor session has ended or belongs to a different institution");
+    }
+    jdbc.update(
+        "insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",
+        sessionId,mode,userMessage);
+    jdbc.update("""
+        insert into tutor_message(session_id,role,mode,message,model,provider_response_id,input_tokens,output_tokens)
+        values(?,'ASSISTANT',?,?,?,?,?,?)
+        """,
+        sessionId,mode,reply.text(),reply.model(),reply.providerResponseId(),
+        reply.inputTokens(),reply.outputTokens());
+  }
+
   @Transactional
   public void persistTurn(long sessionId, String mode, String userMessage, TutorReply reply) {
     int updated=jdbc.update(
