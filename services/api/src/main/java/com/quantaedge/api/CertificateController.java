@@ -91,31 +91,40 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates")
   public Map<String, Object> myCertificates(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
-        WHERE c.student_id=?
+        WHERE c.student_id=? AND c.institution_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
-        """, context.studentId());
+        """, context.studentId(),institutionId);
     return Map.of("items", items);
   }
 
   /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
   @GetMapping("/students/me/certificates/{certificateId}")
   public Map<String, Object> myCertificate(@PathVariable long certificateId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     if (certificateId < 1) throw new IllegalArgumentException("Choose a valid certificate.");
-    return publicCertificateById(certificateId, context.studentId());
+    return publicCertificateById(certificateId, context.studentId(),institutionId);
   }
 
   /** Active class and course subject tracks available for earned certificates. */
   @GetMapping("/students/me/certificates/subject-tracks")
   public Map<String, Object> subjectTracks(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT CASE WHEN p.id IS NULL
                     THEN 'CLASS:' || cc.code || ':' || s.code
@@ -130,7 +139,7 @@ public class CertificateController {
                    AS completion_percent
         FROM student st
         JOIN student_track_enrollment ste
-          ON ste.student_id=st.id AND ste.status='ACTIVE'
+          ON ste.student_id=st.id AND ste.institution_id=? AND ste.status='ACTIVE'
         JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         LEFT JOIN curriculum_program p ON p.id=s.program_id
@@ -143,39 +152,42 @@ public class CertificateController {
           ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
         LEFT JOIN student_lesson_progress progress
-          ON progress.student_id=st.id AND progress.lesson_id=l.id
+          ON progress.student_id=st.id AND progress.institution_id=ste.institution_id AND progress.lesson_id=l.id
         WHERE st.id=? AND st.active=true
           AND (
             (s.program_id IS NULL AND cc.code=st.class_code
               AND (cc.code NOT IN ('6','7','8') OR (
                 p.id IS NOT NULL AND EXISTS (
                   SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.program_id=p.id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=ste.institution_id AND spe.program_id=p.id AND spe.status='ACTIVE'
                 )
               )))
             OR (s.program_id IS NOT NULL AND p.status='ACTIVE'
                 AND EXISTS (
                   SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=ste.institution_id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
                 ))
           )
         GROUP BY cc.code,cc.sort_order,s.code,s.display_name,s.program_id,p.id,p.code,p.display_name,s.sort_order
         ORDER BY cc.sort_order,s.sort_order,s.code
-        """, context.studentId());
+        """, institutionId,context.studentId());
     return Map.of("items", items);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates")
   public Map<String, Object> childCertificates(@PathVariable long studentId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    requireGuardianChild(context, studentId);
+    long institutionId=requireInstitution(tenant);
+    requireGuardianChild(context, studentId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
-        WHERE c.student_id=?
+        WHERE c.student_id=? AND c.institution_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
-        """, studentId);
+        """, studentId,institutionId);
     return Map.of("items", items, "studentId", studentId);
   }
 
@@ -183,31 +195,40 @@ public class CertificateController {
   @Transactional
   public ResponseEntity<byte[]> viewChildCertificate(@PathVariable long studentId,
       @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    requireGuardianChild(context, studentId);
-    return certificateArtifact(certificateId, studentId, format, true);
+    long institutionId=requireInstitution(tenant);
+    requireGuardianChild(context, studentId,institutionId);
+    return certificateArtifact(certificateId, studentId, format, true,institutionId);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> downloadChildCertificate(@PathVariable long studentId,
       @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    requireGuardianChild(context, studentId);
-    return certificateArtifact(certificateId, studentId, format, false);
+    long institutionId=requireInstitution(tenant);
+    requireGuardianChild(context, studentId,institutionId);
+    return certificateArtifact(certificateId, studentId, format, false,institutionId);
   }
 
-  private void requireGuardianChild(AuthContext context, long studentId) {
+  private void requireGuardianChild(AuthContext context,long studentId,long institutionId) {
     Boolean allowed = jdbc.queryForObject("""
         SELECT EXISTS (
           SELECT 1 FROM guardian_student gs
-          JOIN student st ON st.id=gs.student_id
+          JOIN student st ON st.id=gs.student_id AND st.active=true
+          JOIN institution_membership m ON m.student_id=st.id
+            AND m.institution_id=? AND m.status='ACTIVE'
+          JOIN institution_tenant t ON t.id=m.institution_id AND t.status='ACTIVE'
           WHERE gs.guardian_user_id=? AND gs.student_id=? AND gs.active=true
-            AND gs.consent_status='CONSENTED' AND st.active=true
+            AND gs.consent_status='CONSENTED'
         )
-        """, Boolean.class, context.userId(), studentId);
+        """, Boolean.class,institutionId,context.userId(),studentId);
     if (!Boolean.TRUE.equals(allowed)) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Child not found.");
     }
