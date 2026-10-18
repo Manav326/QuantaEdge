@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 457,
+    "assets_selected": 460,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 455,
-    "assets_remaining": 1623,
-    "assets_completion_percent": 21.9,
+    "assets_analyzed": 458,
+    "assets_remaining": 1620,
+    "assets_completion_percent": 22.0,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 452,
+    "assets_skipped_from_checkpoint": 455,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:23:42Z"
+      "checkpointed_at": "2026-10-18T04:27:04Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T04:24:25Z"
+      "checkpointed_at": "2026-10-18T04:27:45Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -13604,6 +13604,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
       "checkpointed_at": "2026-10-18T04:26:14Z"
+    },
+    {
+      "asset_id": "ad3a3bfa0ac89897b57fee49",
+      "asset_sha256": "7bbea20413f42a9110551857b1dcf4dbfaf1f517d137becdf7a115c7b10395a2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/7bbea20413f42a9110551857b1dcf4dbfaf1f517d137becdf7a115c7b10395a2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to gold.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:28:21Z"
+    },
+    {
+      "asset_id": "167047d9e4e65c6d22ca631b",
+      "asset_sha256": "b132f3cd9b54cf15380482860050275066b4b6553b0156842c8a14e3d44c777d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/b132f3cd9b54cf15380482860050275066b4b6553b0156842c8a14e3d44c777d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:28:55Z"
+    },
+    {
+      "asset_id": "8be7ccf8666f55240c01a3fc",
+      "asset_sha256": "9e0b38058d0fe8bb094cf4596a4f7a15fa735da13738ceb91c2b28a4aad0ce6e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/9e0b38058d0fe8bb094cf4596a4f7a15fa735da13738ceb91c2b28a4aad0ce6e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, abstract background with warm colors.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or objects"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T04:29:29Z"
     }
   ]
 }
