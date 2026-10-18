@@ -17,6 +17,7 @@
 - [API Route Inventory](./phase-1-api-route-inventory.csv): source-extracted register of 435 Spring request/STOMP route mappings across 48 Java source files, including path composition, method name, source line and static guard hints.
 - [Role/Workspace Permission Matrix](./phase-1-role-workspace-matrix.md): source-derived Education Admin, HRMS, platform-owner, institution-admin and learner/guardian permission boundaries.
 - [Runtime Execution Log](./phase-1-runtime-execution-log.csv): one execution row per scenario, ready to capture the exact commit/environment/persona/device, actual result, evidence, defect and cleanup verification.
+- [Consolidated Coverage Gaps](./phase-1-coverage-gaps.md): prioritized open findings and the required closure sequence before Phase 2 test-data installation.
 
 ## Current audit snapshot
 
