@@ -951,6 +951,36 @@ public class LearningClassController {
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
+        and (
+          (s.program_id is null and c.code not in ('6','7','8'))
+          or exists(
+            select 1
+            from curriculum_program scope_course
+            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+              and scope_map.class_id=c.id and scope_map.subject_id=s.id
+            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
+            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
+              and (
+                not exists(select 1 from institution_membership m
+                  where m.student_id=st.id and m.status='ACTIVE')
+                or exists(
+                  select 1 from institution_membership m
+                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
+                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
+                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
+                  where m.student_id=st.id and m.status='ACTIVE'
+                )
+                or exists(select 1 from course_purchase cp
+                  where cp.student_id=st.id and cp.course_id=scope_course.id)
+                or exists(select 1 from student_course_access_grant legacy_grant
+                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
+                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+              )
+          )
+        )
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and ta.id is not null and ta.status='APPROVED'
         and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
@@ -1175,6 +1205,36 @@ public class LearningClassController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       where rc.status='PUBLISHED' and (?='' or s.code=?)
+        and (
+          (s.program_id is null and c.code not in ('6','7','8'))
+          or exists(
+            select 1
+            from curriculum_program scope_course
+            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+              and scope_map.class_id=c.id and scope_map.subject_id=s.id
+            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
+            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
+              and (
+                not exists(select 1 from institution_membership m
+                  where m.student_id=st.id and m.status='ACTIVE')
+                or exists(
+                  select 1 from institution_membership m
+                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
+                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
+                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
+                  where m.student_id=st.id and m.status='ACTIVE'
+                )
+                or exists(select 1 from course_purchase cp
+                  where cp.student_id=st.id and cp.course_id=scope_course.id)
+                or exists(select 1 from student_course_access_grant legacy_grant
+                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
+                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+              )
+          )
+        )
         and (?=0 or exists(
           select 1 from curriculum_program_subject course_filter
           join curriculum_program mapped_program on mapped_program.id=course_filter.program_id
