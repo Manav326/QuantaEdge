@@ -71,7 +71,7 @@ class AssessmentLifecycleIntegrationTest {
       update assessment set status='ARCHIVED',is_current=false,updated_at=now() where id=?
       """, fixture.assessmentId());
     Map<String,Object> catalogue = controller.studentAssessmentCatalog(
-        null, "hi", 24, 0, fixture.student(), TEST_TENANT);
+        null, null, "hi", 24, 0, fixture.student(), fixture.tenant());
     List<Map<String,Object>> visible = (List<Map<String,Object>>) catalogue.get("items");
     assertTrue(visible.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()));
@@ -103,7 +103,7 @@ class AssessmentLifecycleIntegrationTest {
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()),
         "An archived test must no longer appear as an actionable test after its attempt is submitted.");
 
-    Map<String,Object> results = controller.studentResults("hi", 25, 0, fixture.student(), TEST_TENANT);
+    Map<String,Object> results = controller.studentResults("hi", null, 25, 0, fixture.student(), fixture.tenant());
     List<Map<String,Object>> resultItems = (List<Map<String,Object>>) results.get("items");
     assertEquals(1, resultItems.size());
     assertEquals(fixture.assessmentId(),
