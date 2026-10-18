@@ -1,10 +1,21 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
+import jakarta.servlet.http.Cookie;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -91,7 +102,7 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(413, response.getStatus());
-    assertEquals(null, chain.getRequest());
+    assertNull(chain.getRequest());
     verifyNoInteractions(auth);
   }
 
@@ -112,8 +123,32 @@ class AuthFilterTest {
     filter.doFilter(request, response, chain);
 
     assertEquals(403, response.getStatus());
-    assertEquals(null, chain.getRequest());
+    assertNull(chain.getRequest());
     verifyNoInteractions(auth);
+  }
+
+  @Test
+  void malformedInstitutionSelectorIsRejectedBeforeTheControllerRuns() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/students/me/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.addHeader(InstitutionTenantContextService.HEADER_NAME, "bad code");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("STUDENT"), "valid-session"));
+    when(auth.currentForWorkspace("valid-session", "STUDENT"))
+        .thenReturn(new AuthContext(null, 42L, null, "STUDENT", "Learner", "STUDENT"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(400, response.getStatus());
+    assertTrue(response.getContentAsString().contains("INVALID_INSTITUTION_CODE"));
+    assertNull(chain.getRequest());
+    verifyNoInteractions(jdbc);
   }
 
   @Test
@@ -124,10 +159,60 @@ class AuthFilterTest {
     MockHttpServletRequest request = new MockHttpServletRequest("OPTIONS", "/api/v1/hrms/access-users");
     request.addHeader("Origin", "http://localhost:3002");
     MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
 
-    filter.doFilter(request, response, new MockFilterChain());
+    filter.doFilter(request, response, chain);
 
     verifyNoInteractions(auth);
     assertEquals(200, response.getStatus());
+    assertEquals(request, chain.getRequest());
+  }
+
+  @Test
+  void tenantScopedCourseCatalogueRejectsMissingInstitutionContext() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(mock(JdbcTemplate.class));
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/students/me/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("STUDENT"), "valid-session"));
+    when(auth.currentForWorkspace("valid-session", "STUDENT"))
+        .thenReturn(new AuthContext(null, 42L, null, "STUDENT", "Learner", "STUDENT"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(400, response.getStatus());
+    assertTrue(response.getContentAsString().contains("INSTITUTION_CONTEXT_REQUIRED"));
+    assertNull(chain.getRequest());
+  }
+
+  @Test
+  void activeTenantContextDoesNotAuthorizeANonMember() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
+        Map.<String,Object>of("id", 91L, "tenant_code", "SCHOOL-A", "display_name", "School A")));
+    when(jdbc.queryForObject(contains("institution_membership"), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(false);
+    InstitutionTenantContextService tenantService = new InstitutionTenantContextService(jdbc);
+    AuthFilter filter = new AuthFilter(auth, audit, null, tenantService);
+    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/students/me/programs");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    request.addHeader(InstitutionTenantContextService.HEADER_NAME, "school-a");
+    request.setCookies(new Cookie(AuthService.sessionCookieForWorkspace("STUDENT"), "valid-session"));
+    when(auth.currentForWorkspace("valid-session", "STUDENT"))
+        .thenReturn(new AuthContext(null, 42L, null, "STUDENT", "Learner", "STUDENT"));
+    MockHttpServletResponse response = new MockHttpServletResponse();
+    MockFilterChain chain = new MockFilterChain();
+
+    filter.doFilter(request, response, chain);
+
+    assertEquals(403, response.getStatus());
+    assertTrue(response.getContentAsString().contains("INSTITUTION_MEMBERSHIP_REQUIRED"));
+    assertNull(chain.getRequest());
   }
 }

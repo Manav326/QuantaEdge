@@ -1,6 +1,7 @@
 package com.quantaedge.android.ui
 
 import android.content.Context
+import com.quantaedge.android.data.ApiClient
 import org.json.JSONException
 import org.json.JSONObject
 import androidx.compose.runtime.getValue
@@ -60,6 +61,7 @@ class QuantaEdgeThemeController(context: Context) {
             .putString(KEY_TENANT_THEME_PREFIX + code, normalizedThemeJson)
             .putString(KEY_ACTIVE_INSTITUTION, code)
             .apply()
+        ApiClient.setInstitutionCode(code)
         activeInstitutionCode = code
         themeTokensJson = normalizedThemeJson
     }
@@ -81,6 +83,7 @@ class QuantaEdgeThemeController(context: Context) {
         }
         val validCached = preferences.getString(KEY_TENANT_THEME_PREFIX + code, null)
         preferences.edit().putString(KEY_ACTIVE_INSTITUTION, code).apply()
+        ApiClient.setInstitutionCode(code)
         activeInstitutionCode = code
         themeTokensJson = validCached
     }
@@ -88,6 +91,7 @@ class QuantaEdgeThemeController(context: Context) {
     /** Clear the active tenant scope on logout or when the account is not institution-bound. */
     fun clearInstitutionTheme() {
         preferences.edit().remove(KEY_ACTIVE_INSTITUTION).apply()
+        ApiClient.setInstitutionCode(null)
         activeInstitutionCode = null
         themeTokensJson = null
     }
