@@ -56,6 +56,6 @@ class GuardianCourseEnrollmentTest {
     assertEquals(17L, result.get("institutionId"));
     assertEquals("NAV-A7K2Q", result.get("publicId"));
     assertEquals(1, result.get("subjectCount"));
-    verify(auth).auditChildEvent(90L, 70L, "COURSE_ENROLLED", "{\\\"courseId\\\":91,\\\"institutionId\\\":17,\\\"subjectCount\\\":1}");
+    verify(auth).auditChildEvent(90L, 70L, "COURSE_ENROLLED", "{\"courseId\":91,\"institutionId\":17,\"subjectCount\":1}");
   }
 }
