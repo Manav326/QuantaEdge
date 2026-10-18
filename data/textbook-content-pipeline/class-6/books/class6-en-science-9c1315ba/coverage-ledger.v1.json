@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 421,
-    "successful_visual_analyses": 421,
-    "missing_visual_analyses": 1657,
+    "raw_analysis_result_rows": 424,
+    "successful_visual_analyses": 424,
+    "missing_visual_analyses": 1654,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1657,
+    "unresolved_count": 1654,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -19984,9 +19984,23 @@
       "asset_path": "assets/b95e69c724f68b850c0581090809189916d8156a44a0832c45a9e8a398d97267.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to yellow, possibly representing a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "page header/footer"
+        ],
+        "context_relation": "The background likely serves as a visual separator between different sections of the textbook.",
+        "limitations": [
+          "The image does not provide specific content or information about the textbook's text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20002,9 +20016,16 @@
       "asset_path": "assets/d557e4e3736e305a77c28c63c2a21e9f87842e186e2f52982df9dcffd31e59ca.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20020,9 +20041,24 @@
       "asset_path": "assets/81f62f2dfb5eaf5107fe1340d457f326f807db07d1474903e3832b3efd8174e5.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal banner",
+          "gradient background",
+          "beige color"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the banner."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8e23e45b7369e41983dbfacbc5f8d96124a14ec25bc636e4f4c7e100ff7b2f5b",
+  "raw_analysis_sha256": "ee625094337ebf3d865ecf3c62c9c6826318605ff8dc099a1e9e6d6373d8193d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T03:44:11Z",
+      "checkpointed_at": "2026-10-18T03:47:21Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T03:44:51Z",
+      "checkpointed_at": "2026-10-18T03:48:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -18394,6 +18394,144 @@
         "context_relation": "Background for educational content",
         "limitations": [
           "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2cf90c11f9f405f1efa689be",
+      "asset_sha256": "b95e69c724f68b850c0581090809189916d8156a44a0832c45a9e8a398d97267",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/b95e69c724f68b850c0581090809189916d8156a44a0832c45a9e8a398d97267.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to yellow, possibly representing a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "page header/footer"
+        ],
+        "context_relation": "The background likely serves as a visual separator between different sections of the textbook.",
+        "limitations": [
+          "The image does not provide specific content or information about the textbook's text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:48:38Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to yellow, possibly representing a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "page header/footer"
+        ],
+        "context_relation": "The background likely serves as a visual separator between different sections of the textbook.",
+        "limitations": [
+          "The image does not provide specific content or information about the textbook's text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e6a22f0606392e1e27341c5",
+      "asset_sha256": "d557e4e3736e305a77c28c63c2a21e9f87842e186e2f52982df9dcffd31e59ca",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d557e4e3736e305a77c28c63c2a21e9f87842e186e2f52982df9dcffd31e59ca.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:49:11Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2eeb0f60ca8e397f8ae9af79",
+      "asset_sha256": "81f62f2dfb5eaf5107fe1340d457f326f807db07d1474903e3832b3efd8174e5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/81f62f2dfb5eaf5107fe1340d457f326f807db07d1474903e3832b3efd8174e5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal banner",
+          "gradient background",
+          "beige color"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the banner."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T03:49:53Z",
+      "effective_analysis": {
+        "visual_summary": "A horizontal banner with a gradient background transitioning from light beige to a darker shade of beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "horizontal banner",
+          "gradient background",
+          "beige color"
+        ],
+        "context_relation": "The banner is likely a decorative element at the top of a page, possibly indicating a reprint or edition year.",
+        "limitations": [
+          "The image does not provide specific details about the content or purpose of the banner."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
