@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9cc0e70f16fbee320e318d9bad6cb29469a7577aa17c3555912295932991d0c0",
+  "raw_analysis_sha256": "f24a3069f6a9d3e0b04f8e69a07196f066621b89093b9714784c455e70754ee7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:34:46Z",
+      "checkpointed_at": "2026-10-18T14:42:27Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -32064,6 +32064,210 @@
         "context_relation": "The image illustrates an educational activity that encourages students to observe, ask questions, and explore, which are key components of the scientific method.",
         "limitations": [
           "The image does not provide specific details about the objects or the activity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1c144ffb83179c1c5f800572",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "951b451418766324e02d57e5755ea34e5a2e3169c3ed15ca78b2d0fd6f0b20a9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:42:41Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f2bcb74b019e81fc86587b0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "951b451418766324e02d57e5755ea34e5a2e3169c3ed15ca78b2d0fd6f0b20a9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:42:56Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a35268627605aacaff3050ae",
+      "asset_sha256": "c97140cddeeb15e70d6874f01c5632bdb05715d996b64d3635772390d4c09efb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 25,
+      "asset_path": "page-0025.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "951b451418766324e02d57e5755ea34e5a2e3169c3ed15ca78b2d0fd6f0b20a9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the scientific method and encouraging curiosity and questioning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "method? Though we all apply the scientific method to\nsome extent, learning science will develop our capabilities\nfor finding solutions to bigger problems and solving\nmore mysteries of the universe. And to be able to learn\nscience well, the first and foremost thing is to be curious\nand observe your s",
+          "Activity 1.3: Let us think and write",
+          "If you have to ask “Why?” about something, what would\nyou ask about?",
+          "Try to write down how you would attempt to find an\nanswer to your question."
+        ],
+        "concepts": [
+          "scientific method",
+          "curiosity",
+          "questioning",
+          "exploration",
+          "teamwork",
+          "science"
+        ],
+        "context_relation": "The text discusses the importance of curiosity and questioning in learning science, and encourages students to think and write about their questions.",
+        "limitations": [
+          "The text does not provide specific examples or exercises for students to practice the scientific method."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:47:00Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the scientific method and encouraging curiosity and questioning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "method? Though we all apply the scientific method to\nsome extent, learning science will develop our capabilities\nfor finding solutions to bigger problems and solving\nmore mysteries of the universe. And to be able to learn\nscience well, the first and foremost thing is to be curious\nand observe your s",
+          "Activity 1.3: Let us think and write",
+          "If you have to ask “Why?” about something, what would\nyou ask about?",
+          "Try to write down how you would attempt to find an\nanswer to your question."
+        ],
+        "concepts": [
+          "scientific method",
+          "curiosity",
+          "questioning",
+          "exploration",
+          "teamwork",
+          "science"
+        ],
+        "context_relation": "The text discusses the importance of curiosity and questioning in learning science, and encourages students to think and write about their questions.",
+        "limitations": [
+          "The text does not provide specific examples or exercises for students to practice the scientific method."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ec1c2606a6bd09cf2a9465c1",
+      "asset_sha256": "ec0a4f2eb827acc2c42213cd0617beef83bcb69407013f681b1c0afe2a398816",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 26,
+      "asset_path": "assets/ec0a4f2eb827acc2c42213cd0617beef83bcb69407013f681b1c0afe2a398816.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4b6bdf98292a65420292ee7d0641329c9062ffbe877f059d7089baa4ab670000",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Four children standing in the rain, looking up at the sky and enjoying the rain.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries of the universe",
+          "Wonders of nature"
+        ],
+        "context_relation": "The image illustrates the theme of scientific exploration and curiosity, encouraging children to enjoy their scientific journey and never stop asking questions.",
+        "limitations": [
+          "The image does not provide specific details about the children's activities or the environment they are in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:48:41Z",
+      "effective_analysis": {
+        "visual_summary": "Four children standing in the rain, looking up at the sky and enjoying the rain.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Much like children enjoying the rain, science is all about joyful exploration.",
+          "After all, to be a wise person, you must be a 'whys' person!",
+          "Enjoy your scientific journey, keep exploring and never stop wondering about the amazing mysteries of the universe and asking."
+        ],
+        "concepts": [
+          "Science",
+          "Exploration",
+          "Wisdom",
+          "Mysteries of the universe",
+          "Wonders of nature"
+        ],
+        "context_relation": "The image illustrates the theme of scientific exploration and curiosity, encouraging children to enjoy their scientific journey and never stop asking questions.",
+        "limitations": [
+          "The image does not provide specific details about the children's activities or the environment they are in."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
