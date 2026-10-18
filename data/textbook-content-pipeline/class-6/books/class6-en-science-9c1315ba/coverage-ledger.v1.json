@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 610,
-    "successful_visual_analyses": 610,
-    "missing_visual_analyses": 1468,
+    "raw_analysis_result_rows": 613,
+    "successful_visual_analyses": 613,
+    "missing_visual_analyses": 1465,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1468,
+    "unresolved_count": 1465,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -25188,9 +25188,23 @@
       "asset_path": "assets/be940af646a9034707b77133711ea6b10c0ea0ec14128db49e3761ec208d4db7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a blend of colors transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "color transition"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25206,9 +25220,16 @@
       "asset_path": "assets/6f5c3210d40cbfc1d0f2646fa1a6021b3b0f4e64f348e798cda5014c12e3f110.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A solid, solid color background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25224,9 +25245,26 @@
       "asset_path": "assets/994b9b6cee0e94f94f9b91d0d0bcd9d14e6ae7753fb77d509ef505e0c3155bff.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a blend of warm colors transitioning from a light beige to a darker beige.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "color",
+          "beige",
+          "2026-27"
+        ],
+        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "limitations": [
+          "No specific objects or figures are present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
