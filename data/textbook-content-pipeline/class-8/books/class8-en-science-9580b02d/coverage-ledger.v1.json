@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 683,
-    "successful_visual_analyses": 677,
-    "missing_visual_analyses": 1608,
-    "failed_visual_analyses": 6,
+    "raw_analysis_result_rows": 685,
+    "successful_visual_analyses": 678,
+    "missing_visual_analyses": 1606,
+    "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1614,
+    "unresolved_count": 1613,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -26865,7 +26865,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -26874,15 +26874,17 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgments",
-          "Contributors",
-          "Editors",
-          "Support",
-          "Publication process"
+          "Acknowledgment",
+          "Textbook",
+          "Freelance Language Editor",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors",
+        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific limitations mentioned",
+          "The page does not contain any visual elements.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -26901,9 +26903,41 @@
       "asset_path": "assets/70489484f265580068eeff859bd8a306d82b3a94631dfec38f12f8812f4f4ee0.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text describing the duties of citizens of India as per Article 51A of the Indian Constitution.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;",
+          "(c)  to uphold and protect the sovereignty, unity and integrity of India;",
+          "(d)  to defend the country and render national service when called upon to do so;",
+          "(e)  to promote harmony and the spirit of common brotherhood among the people;"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Article 51A",
+          "Fundamental Duties",
+          "Citizenship",
+          "National Flag",
+          "National Anthem",
+          "Sovereignty",
+          "Unity",
+          "Integrity",
+          "National Service",
+          "Harmony",
+          "Brotherhood"
+        ],
+        "context_relation": "The text describes the duties of citizens of India as per Article 51A of the Indian Constitution.",
+        "limitations": [
+          "The text is a direct quote from the Constitution of India and does not provide additional context or analysis."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26919,7 +26953,7 @@
       "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
