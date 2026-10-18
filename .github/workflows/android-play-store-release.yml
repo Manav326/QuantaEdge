@@ -80,13 +80,16 @@ jobs:
       - name: Build signed, optimized Play Store bundle
         env:
           QUANTAEDGE_API_BASE_URL: ${{ inputs.api_base_url }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
           QUANTAEDGE_VERSION_CODE: ${{ inputs.version_code }}
           QUANTAEDGE_VERSION_NAME: ${{ inputs.version_name }}
         shell: bash
         run: |
           set -euo pipefail
+          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::Missing repository Actions secret GOOGLE_WEB_CLIENT_ID; the Google account picker cannot be configured in this release."; exit 1; }
           gradle -p apps/android bundleRelease \
             -PquantaedgeApiBaseUrl="$QUANTAEDGE_API_BASE_URL" \
+            -PgoogleWebClientId="$GOOGLE_WEB_CLIENT_ID" \
             -PquantaedgeVersionCode="$QUANTAEDGE_VERSION_CODE" \
             -PquantaedgeVersionName="$QUANTAEDGE_VERSION_NAME" \
             --no-daemon --build-cache

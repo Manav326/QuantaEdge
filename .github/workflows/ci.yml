@@ -157,7 +157,12 @@ jobs:
       - name: Run Android unit tests and build debug APK
         env:
           GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
-        run: gradle -p apps/android testDebugUnitTest assembleDebug
+          QUANTAEDGE_API_BASE_URL: https://qe.thinkwithsujeet.in/
+        run: |
+          set -euo pipefail
+          test -n "$GOOGLE_WEB_CLIENT_ID" || { echo "::error::Missing repository Actions secret GOOGLE_WEB_CLIENT_ID; Android Google sign-in cannot be configured."; exit 1; }
+          test -n "$QUANTAEDGE_API_BASE_URL" || { echo "::error::Android API base URL is not configured."; exit 1; }
+          gradle -p apps/android testDebugUnitTest assembleDebug
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:

@@ -6,9 +6,6 @@ import android.graphics.BitmapFactory
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -92,8 +89,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.quantaedge.android.BuildConfig
 import com.quantaedge.android.R
 import com.quantaedge.android.ui.LocalInstitutionBrandIdentity
@@ -101,6 +96,8 @@ import com.quantaedge.android.RazorpayCourseCheckoutHost
 import com.quantaedge.android.data.InstitutionBrandingRepository
 import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiClient
+import com.quantaedge.android.data.GoogleCredentialFlow
+import com.quantaedge.android.data.GoogleSignInConfigurationException
 import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
 import com.quantaedge.android.data.OfflineAssessmentStore
@@ -720,6 +717,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     else "This account does not have permission to access this item."
                 else -> exception.message
             }
+            is GoogleSignInConfigurationException -> if (language == "hi")
+                "इस ऐप में Google साइन-इन कॉन्फ़िगर नहीं है। कृपया अपडेट किया गया ऐप इंस्टॉल करें या सहायता से संपर्क करें।"
+                else "Google sign-in isn't configured in this app build. Please install an updated app or contact support."
             is IOException -> if (language == "hi") "सर्वर से संपर्क नहीं हो पाया। नेटवर्क और कनेक्शन जाँचें।"
                 else "Couldn't reach the learning service. Check your network connection."
             else -> exception.message?.takeIf { it.isNotBlank() }
@@ -934,35 +934,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    suspend fun retrieveGoogleIdToken(context: Context): String {
-        val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID.trim()
-        if (webClientId.isBlank()) {
-            throw IOException("Google sign-in is not configured. Set GOOGLE_WEB_CLIENT_ID to the Google OAuth Web client ID.")
-        }
-        val credentialManager = CredentialManager.create(context)
-        val googleOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(webClientId)
-            .setAutoSelectEnabled(false)
-            .build()
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleOption)
-            .build()
-        val credential = credentialManager.getCredential(context, request).credential
-        if (credential !is CustomCredential ||
-            credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-            throw IOException("Google did not return a supported ID token. Please try again.")
-        }
-        return try {
-            GoogleIdTokenCredential.createFrom(credential.data).idToken
-        } catch (exception: Exception) {
-            throw IOException("Google's sign-in response could not be read. Please try again.", exception)
-        }
-    }
-
     fun signInWithGoogle(context: Context) {
         runTask {
-            val idToken = retrieveGoogleIdToken(context)
+            val idToken = GoogleCredentialFlow.requestIdToken(context, BuildConfig.GOOGLE_WEB_CLIENT_ID)
             val session = ApiClient.postObject("/api/v1/auth/google",
                 JSONObject().put("credential", idToken))
             val workspace = session.optString("workspace").uppercase()
@@ -1037,7 +1011,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun linkGoogleIdentity(context: Context) {
         runTask {
-            val idToken = retrieveGoogleIdToken(context)
+            val idToken = GoogleCredentialFlow.requestIdToken(context, BuildConfig.GOOGLE_WEB_CLIENT_ID)
             ApiClient.postObject("/api/v1/auth/google/link", JSONObject().put("credential", idToken))
             accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
             status = if (language == "hi") "Gmail सफलतापूर्वक लिंक हो गया।" else "Gmail linked successfully."
