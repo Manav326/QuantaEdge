@@ -9,7 +9,7 @@ Tenant-scoped learner API requests may carry:
 
 ```http
 X-QE-Workspace: STUDENT
-X-QE-Institution-Code: QUANTA-EDGE
+X-QE-Institution-Code: SCHOOL-A
 ```
 
 The institution code is a selector only. It does not authenticate the caller, create membership, prove parent/child association, assign a course, publish an offer, grant an entitlement, or authorize a read/write/payment. The backend resolves the selected code against an active `institution_tenant` row and exposes the resulting `InstitutionTenantContext` as the request attribute `institutionTenantContext`. A malformed selector returns `400 INVALID_INSTITUTION_CODE`; unknown or inactive institutions return `403 INSTITUTION_UNAVAILABLE`.
