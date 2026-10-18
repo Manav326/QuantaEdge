@@ -16,6 +16,7 @@
 - [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 93 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
 - [API Route Inventory](./phase-1-api-route-inventory.csv): source-extracted register of 435 Spring request/STOMP route mappings across 48 Java source files, including path composition, method name, source line and static guard hints.
 - [Role/Workspace Permission Matrix](./phase-1-role-workspace-matrix.md): source-derived Education Admin, HRMS, platform-owner, institution-admin and learner/guardian permission boundaries.
+- [Runtime Execution Log](./phase-1-runtime-execution-log.csv): one execution row per scenario, ready to capture the exact commit/environment/persona/device, actual result, evidence, defect and cleanup verification.
 
 ## Current audit snapshot
 
@@ -25,7 +26,7 @@
 | API mapped handler entries | 435 request/STOMP mapping rows across 48 source files; all 435 linked to existing scenario IDs, static extraction only |
 | Screen entries linked to scenario IDs | 93; references validated against the scenario register |
 | Workflow scenarios | 72 total: 65 `NOT_EXECUTED`, 7 `NOT_IMPLEMENTED` (future QA installer lifecycle) |
-| Browser/Android runtime-verified screens | 0 in this audit pass |
+| Browser/Android runtime-verified screens | 0 in this audit pass; deployed URL was inaccessible via available browser tool, so this does not establish site outage |
 | Per-screen state coverage | 93 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
 | Test-data ownership/uninstall implementation | Not started; schema and cleanup requirements documented only |
 
