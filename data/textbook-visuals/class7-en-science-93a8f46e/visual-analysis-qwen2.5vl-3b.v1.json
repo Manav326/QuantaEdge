@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 715,
+    "assets_selected": 718,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
     "assets_analyzed": 713,
     "assets_remaining": 6775,
     "assets_completion_percent": 9.5,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 710,
+    "assets_skipped_from_checkpoint": 713,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -295,7 +295,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
+      "run_id": "39121459903",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -2352,7 +2352,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
+      "run_id": "39121459903",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -4670,7 +4670,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
+      "run_id": "39121459903",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -4687,9 +4687,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
+      "run_id": "39121459903",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -9817,37 +9817,39 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Page from a textbook discussing the nature of science and its exploration of natural phenomena.",
+        "visual_type": "uncertain",
         "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts or learning about diﬀ erent things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown. In Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the classroom perhaps, and experience the world through activities and experiments. These are experiences that we hope will not just be interesting or exciting but also serve as stepping stones to a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about topics in different fields of science, from physics and chemistry to biology and earth sciences. While they might appear as different chapters, just as we had said in Grade 6, they are all interconnected. Scientific ideas in one area oft"
+          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
+          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
+          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
         ],
         "concepts": [
           "science",
+          "exploration",
           "curiosity",
-          "open-mindedness",
+          "questions",
           "process",
           "environment",
-          "society",
+          "responsibility",
           "human activities",
           "environmental challenges",
-          "sustainability",
+          "sustainable world",
           "properties of materials",
-          "discovery",
-          "interconnectedness"
+          "discoveries",
+          "interconnected ideas"
         ],
-        "context_relation": "The page discusses the nature of science and its connection to curiosity and open-mindedness.",
+        "context_relation": "exploration and understanding of natural phenomena",
         "limitations": [
-          "The page does not provide specific examples or activities for the reader to engage with."
+          "The text does not provide specific examples or activities for the reader to engage with.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T07:18:21Z"
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T11:28:58Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
