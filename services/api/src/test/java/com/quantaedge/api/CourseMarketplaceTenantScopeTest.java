@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,14 +57,18 @@ class CourseMarketplaceTenantScopeTest {
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
-    verify(jdbc).queryForList(sql.capture(), args.capture());
-    assertTrue(sql.getValue().contains("where o.institution_id=? and o.status='PUBLISHED'"));
-    assertTrue(sql.getValue().contains("assignment.status='ASSIGNED'"));
-    assertTrue(sql.getValue().contains("tenant_scope.status='ACTIVE'"));
-    assertTrue(sql.getValue().contains("grant_row.institution_id=?"));
-    assertTrue(sql.getValue().contains("cp.institution_id=?"));
-    assertTrue(!sql.getValue().contains("not exists(select 1 from institution_membership"));
-    assertTrue(List.of(args.getValue()).contains(17L));
+    verify(jdbc, times(2)).queryForList(sql.capture(), args.capture());
+    String catalogueSql = sql.getAllValues().stream()
+        .filter(value -> value.contains("from institution_marketplace_offer o"))
+        .findFirst().orElseThrow();
+    Object[] catalogueArgs = args.getAllValues().get(sql.getAllValues().indexOf(catalogueSql));
+    assertTrue(catalogueSql.contains("where o.institution_id=? and o.status='PUBLISHED'"));
+    assertTrue(catalogueSql.contains("assignment.status='ASSIGNED'"));
+    assertTrue(catalogueSql.contains("tenant_scope.status='ACTIVE'"));
+    assertTrue(catalogueSql.contains("grant_row.institution_id=?"));
+    assertTrue(catalogueSql.contains("cp.institution_id=?"));
+    assertTrue(!catalogueSql.contains("not exists(select 1 from institution_membership"));
+    assertTrue(List.of(catalogueArgs).contains(17L));
   }
 
   @Test
