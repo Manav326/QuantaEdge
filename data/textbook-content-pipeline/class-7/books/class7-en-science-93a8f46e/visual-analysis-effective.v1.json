@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "aba85d53c32f7ebe92ea507606b38567bfd4b9c5aea3f9e810e33bcb7821ec81",
+  "raw_analysis_sha256": "2ab4a64c42bb0f8373cc823f593b4044bc201256e93316dd45b4c34c993ad855",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T12:30:15Z",
+      "checkpointed_at": "2026-10-18T12:36:57Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -42872,6 +42872,234 @@
           "The image does not provide specific details about the vegetables, fruits, or flowers being used.",
           "The image does not show the process of preparing and testing the substances.",
           "The image does not include any text or labels that provide additional information about the substances being used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6d8ed0f1297eab89d504303a",
+      "asset_sha256": "3221d200667d98952e8d3c076a77ee313f4807da07e8d2d355c17527c17dad6c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/3221d200667d98952e8d3c076a77ee313f4807da07e8d2d355c17527c17dad6c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pile of white and blue objects, possibly paper or cards, with a blurred green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "results",
+          "process",
+          "substances",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The text is discussing the results of a process involving the preparation and testing of substances, including vegetables, fruits, and flowers, and mentions that these substances can act as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the objects in the pile.",
+          "The text is discussing a process and does not show the actual objects being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:38:34Z",
+      "effective_analysis": {
+        "visual_summary": "A pile of white and blue objects, possibly paper or cards, with a blurred green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "results",
+          "process",
+          "substances",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The text is discussing the results of a process involving the preparation and testing of substances, including vegetables, fruits, and flowers, and mentions that these substances can act as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the objects in the pile.",
+          "The text is discussing a process and does not show the actual objects being used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0d97eebb454e7bf7f8bd97ce",
+      "asset_sha256": "734c37c3d120f5bb5b96f2ba405849f544ae98216eab9943becece04496284d7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/734c37c3d120f5bb5b96f2ba405849f544ae98216eab9943becece04496284d7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of blue hydrangea flowers with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "hydrangea",
+          "blue flowers",
+          "green leaves",
+          "plant",
+          "cooler climates",
+          "acid-base indicators"
+        ],
+        "context_relation": "The image is related to the text discussing the use of hydrangea flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not show the process of preparing and testing the substances.",
+          "The image does not show the results of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:39:42Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of blue hydrangea flowers with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "hydrangea",
+          "blue flowers",
+          "green leaves",
+          "plant",
+          "cooler climates",
+          "acid-base indicators"
+        ],
+        "context_relation": "The image is related to the text discussing the use of hydrangea flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not show the process of preparing and testing the substances.",
+          "The image does not show the results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "978dba68b7609651d18b2dfd",
+      "asset_sha256": "51572b09f60ffe34c718ec01924f271dd91f717ae49762d7a19d08f6a064af6e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/51572b09f60ffe34c718ec01924f271dd91f717ae49762d7a19d08f6a064af6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue flower with a green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not a clear or detailed representation of the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:40:42Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue flower with a green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not a clear or detailed representation of the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "261e6baa52ecb859e5b8ed89",
+      "asset_sha256": "0f37c078d564bc58be4f270d627bcbdcc16e11822c057199fd8f67174a327145",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/0f37c078d564bc58be4f270d627bcbdcc16e11822c057199fd8f67174a327145.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and white cartoon character with a bow tie, surrounded by blue flowers.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about preparing extracts and testing substances with vegetables, fruits, or flowers.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:41:44Z",
+      "effective_analysis": {
+        "visual_summary": "A blue and white cartoon character with a bow tie, surrounded by blue flowers.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about preparing extracts and testing substances with vegetables, fruits, or flowers.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

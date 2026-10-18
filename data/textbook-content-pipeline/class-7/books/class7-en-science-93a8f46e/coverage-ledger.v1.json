@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 750,
-    "successful_visual_analyses": 743,
-    "missing_visual_analyses": 6738,
+    "raw_analysis_result_rows": 754,
+    "successful_visual_analyses": 747,
+    "missing_visual_analyses": 6734,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6745,
+    "unresolved_count": 6741,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38599,9 +38599,44 @@
       "asset_path": "assets/3221d200667d98952e8d3c076a77ee313f4807da07e8d2d355c17527c17dad6c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pile of white and blue objects, possibly paper or cards, with a blurred green background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "results",
+          "process",
+          "substances",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal) ﬂower",
+          "acid-base indicators",
+          "Hydrangea",
+          "cooler climates"
+        ],
+        "context_relation": "The text is discussing the results of a process involving the preparation and testing of substances, including vegetables, fruits, and flowers, and mentions that these substances can act as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the objects in the pile.",
+          "The text is discussing a process and does not show the actual objects being used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38617,9 +38652,26 @@
       "asset_path": "assets/734c37c3d120f5bb5b96f2ba405849f544ae98216eab9943becece04496284d7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of blue hydrangea flowers with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "hydrangea",
+          "blue flowers",
+          "green leaves",
+          "plant",
+          "cooler climates",
+          "acid-base indicators"
+        ],
+        "context_relation": "The image is related to the text discussing the use of hydrangea flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not show the process of preparing and testing the substances.",
+          "The image does not show the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38635,9 +38687,18 @@
       "asset_path": "assets/51572b09f60ffe34c718ec01924f271dd91f717ae49762d7a19d08f6a064af6e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue flower with a green background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not a clear or detailed representation of the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38653,9 +38714,18 @@
       "asset_path": "assets/0f37c078d564bc58be4f270d627bcbdcc16e11822c057199fd8f67174a327145.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and white cartoon character with a bow tie, surrounded by blue flowers.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about preparing extracts and testing substances with vegetables, fruits, or flowers.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
