@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d74a69de9f552abed57c817ad31cbb7076745fcce557f32cb4dfdeaccc499782",
+  "raw_analysis_sha256": "e697c7c1b781526b2d175149e9a76b6bf08ae912bf416aa5d34a7bf28d81c604",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:10:06Z",
+      "checkpointed_at": "2026-10-18T19:12:35Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T19:10:28Z",
+      "checkpointed_at": "2026-10-18T19:12:57Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -57763,6 +57763,134 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "75669cdc95f363f6a07b0a72",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "Question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "limitations": [
+          "The visible text is incomplete and does not provide the full question or answer.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:13:15Z",
+      "effective_analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A,",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "Question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "limitations": [
+          "The visible text is incomplete and does not provide the full question or answer.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e1f8cd3b77f73163ba9a5b24",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T19:13:21Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5de2c7c332b12d26dded6f61",
+      "asset_sha256": "8a841bef2b289bc576ac9aed940d8d0ec089307009f31554a1d1c11b315f899f",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "page-0040.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
