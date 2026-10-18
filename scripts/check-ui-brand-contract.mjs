@@ -53,6 +53,7 @@ const institutionAuthService = read('services/api/src/main/java/com/quantaedge/a
 const certificateController = read('services/api/src/main/java/com/quantaedge/api/CertificateController.java');
 const certificateRenderer = read('services/api/src/main/java/com/quantaedge/api/CertificateRenderer.java');
 const androidMainActivity = read('apps/android/app/src/main/java/com/quantaedge/android/MainActivity.kt');
+const androidTenantApp = read('apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidLocalization = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
 const androidCertificateScreen = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
 const tutorService = read('services/api/src/main/java/com/quantaedge/api/TutorService.java');
@@ -89,7 +90,7 @@ assert(studentMetadataLayout.includes("learnerMetadataForTenantCookie('qe-tenant
 assert(learnerMarketplace.includes('name: brand?.displayName || \'QuantaEdge\'') && learnerMarketplace.includes('institutionContextRequested && (!brand || isResolving)'), 'Learner checkout must use the validated school display name and must fail closed if school identity is unresolved.');
 assert(tenantBrandingProvider.includes("setStoredEnrollmentIssue('invalid')") && tenantBrandingProvider.includes("setStoredEnrollmentIssue('rate-limited')") && tenantBrandingProvider.includes("setStoredEnrollmentIssue('temporary')") && tenantBrandingProvider.includes('ENROLLMENT_ISSUE_SESSION_KEY'), 'Learner enrollment failures must remain visible across reloads within the current browser tab.');
 assert(tenantBrandingProvider.includes('retryEnrollment') && tenantBrandingProvider.includes('[pathname, enrollmentRetryVersion]') && workspaceLayout.includes('retryEnrollment') && workspaceLayout.includes('qe-enrollment-issue-retry'), 'Transient or rate-limited learner invitations must have a safe retry action.');
-assert(androidTenantBrand.includes('institutionEnrollmentMessage') || androidLocalization.includes('institutionEnrollmentMessage'), 'Android must expose a visible school enrollment failure state.');
+assert(androidTenantApp.includes('institutionEnrollmentMessage') && androidTenantApp.includes('institutionEnrollmentRetryable') && androidTenantApp.includes('institutionJoinFailure'), 'Android must expose a visible school enrollment failure state with safe retry and context-isolation behavior.');
 assert(androidAppManifest.includes('qe-institution') && androidTenantBrand.includes('LocalInstitutionBrandIdentity'), 'Android tenant identity and invitation routing must remain wired to the school context.');
 assert(workspaceLayout.includes('qe-enrollment-issue'), 'Failed learner invitations must produce accessible, actionable enrollment feedback.');
 assert(certificateController.includes('More than one school can issue this certificate') && certificateController.includes('issuers.size() > 1'), 'Certificate issuer selection must reject ambiguous multi-school attribution instead of silently switching to the platform issuer.');
