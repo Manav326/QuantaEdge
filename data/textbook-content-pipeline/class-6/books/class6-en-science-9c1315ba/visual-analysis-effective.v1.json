@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "78eb6c95fff4daf537d69ae24cd910cd6fd8feeced7ba40a6fea517607dc1a3a",
+  "raw_analysis_sha256": "5301c6a4780b9986567175bc06b9aa3476851ac9a10a71ea9763c04d1de81fe3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:54:25Z",
+      "checkpointed_at": "2026-10-18T13:05:06Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29788,6 +29788,262 @@
         "context_relation": "The image represents an underwater scene, likely used to illustrate the concept of the ocean and its inhabitants.",
         "limitations": [
           "The image does not contain any text or labels."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fddb142d71532d4162da383b",
+      "asset_sha256": "f15ba0f5d163ea9f8d2d036e0adf20924b54a12613c0e9c686f2a0e4c2bdacd8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/f15ba0f5d163ea9f8d2d036e0adf20924b54a12613c0e9c686f2a0e4c2bdacd8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spiral galaxy in outer space, surrounded by stars.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "galaxy",
+          "outer space",
+          "stars"
+        ],
+        "context_relation": "The image represents a galaxy, which is a large system of stars and space, often depicted in outer space.",
+        "limitations": [
+          "The image does not provide specific details about the galaxy's characteristics or its position in the universe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:06:46Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral galaxy in outer space, surrounded by stars.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "galaxy",
+          "outer space",
+          "stars"
+        ],
+        "context_relation": "The image represents a galaxy, which is a large system of stars and space, often depicted in outer space.",
+        "limitations": [
+          "The image does not provide specific details about the galaxy's characteristics or its position in the universe."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "90a8a2f8204cf1d040924297",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An underwater view of an ocean and a galaxy.",
+        "visual_type": "photo",
+        "visible_text": [
+          "An underwater view of an Ocean",
+          "A Galaxy"
+        ],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "related",
+        "limitations": [
+          "no specific context provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:07:04Z",
+      "effective_analysis": {
+        "visual_summary": "An underwater view of an ocean and a galaxy.",
+        "visual_type": "photo",
+        "visible_text": [
+          "An underwater view of an Ocean",
+          "A Galaxy"
+        ],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "related",
+        "limitations": [
+          "no specific context provided"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "237f8267b1a39aa4fd5580c6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An underwater view of an ocean and a galaxy.",
+        "visual_type": "photo",
+        "visible_text": [
+          "An underwater view of an Ocean",
+          "A Galaxy"
+        ],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "related",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:07:19Z",
+      "effective_analysis": {
+        "visual_summary": "An underwater view of an ocean and a galaxy.",
+        "visual_type": "photo",
+        "visible_text": [
+          "An underwater view of an Ocean",
+          "A Galaxy"
+        ],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "related",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "28645b649bcfe373934634dd",
+      "asset_sha256": "fa1415dfc5421983b6f0df110c603b87426ae975c739a867d79129420edffbab",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "page-0020.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Images of a desert, a coast, an underwater view of an ocean, and a galaxy, with text describing the vastness of outer space and the importance of unexpected discoveries.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Desert",
+          "A Coast",
+          "vastness of outer space, from what is cooking in the kitchen",
+          "to what is happening on the playground, some of the",
+          "most groundbreaking discoveries have often come from",
+          "unexpected places.",
+          "An underwater view of an Ocean",
+          "A Galaxy",
+          "Science is like a giant and unending jigsaw puzzle. Every",
+          "new discovery we make adds another piece to that puzzle.",
+          "And you know the best thing about this puzzle? There is",
+          "no limit to what we can discover, since every new piece",
+          "of knowledge leads to more questions and more things to",
+          "find out. Sometimes, we find that a piece of this puzzle has",
+          "been put in the wrong place and needs to be moved. New",
+          "discoveries often change our understanding of the world.",
+          "As you go through this book, you will encounter",
+          "interesting ideas, do some thought-provoking experiments,",
+          "and see how some of what we will find out is useful in our"
+        ],
+        "concepts": [
+          "desert",
+          "coast",
+          "underwater view",
+          "galaxy",
+          "jigsaw puzzle",
+          "discovery",
+          "knowledge",
+          "questions",
+          "understanding",
+          "usefulness"
+        ],
+        "context_relation": "describing the images and their significance",
+        "limitations": [
+          "the images are not labeled",
+          "the text is not fully visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:11:35Z",
+      "effective_analysis": {
+        "visual_summary": "Images of a desert, a coast, an underwater view of an ocean, and a galaxy, with text describing the vastness of outer space and the importance of unexpected discoveries.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Desert",
+          "A Coast",
+          "vastness of outer space, from what is cooking in the kitchen",
+          "to what is happening on the playground, some of the",
+          "most groundbreaking discoveries have often come from",
+          "unexpected places.",
+          "An underwater view of an Ocean",
+          "A Galaxy",
+          "Science is like a giant and unending jigsaw puzzle. Every",
+          "new discovery we make adds another piece to that puzzle.",
+          "And you know the best thing about this puzzle? There is",
+          "no limit to what we can discover, since every new piece",
+          "of knowledge leads to more questions and more things to",
+          "find out. Sometimes, we find that a piece of this puzzle has",
+          "been put in the wrong place and needs to be moved. New",
+          "discoveries often change our understanding of the world.",
+          "As you go through this book, you will encounter",
+          "interesting ideas, do some thought-provoking experiments,",
+          "and see how some of what we will find out is useful in our"
+        ],
+        "concepts": [
+          "desert",
+          "coast",
+          "underwater view",
+          "galaxy",
+          "jigsaw puzzle",
+          "discovery",
+          "knowledge",
+          "questions",
+          "understanding",
+          "usefulness"
+        ],
+        "context_relation": "describing the images and their significance",
+        "limitations": [
+          "the images are not labeled",
+          "the text is not fully visible"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

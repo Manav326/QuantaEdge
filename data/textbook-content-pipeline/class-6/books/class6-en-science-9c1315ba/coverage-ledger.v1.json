@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 689,
-    "successful_visual_analyses": 680,
-    "missing_visual_analyses": 1389,
+    "raw_analysis_result_rows": 693,
+    "successful_visual_analyses": 684,
+    "missing_visual_analyses": 1385,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1398,
+    "unresolved_count": 1394,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27566,9 +27566,22 @@
       "asset_path": "assets/f15ba0f5d163ea9f8d2d036e0adf20924b54a12613c0e9c686f2a0e4c2bdacd8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A spiral galaxy in outer space, surrounded by stars.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "galaxy",
+          "outer space",
+          "stars"
+        ],
+        "context_relation": "The image represents a galaxy, which is a large system of stars and space, often depicted in outer space.",
+        "limitations": [
+          "The image does not provide specific details about the galaxy's characteristics or its position in the universe."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27584,9 +27597,25 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An underwater view of an ocean and a galaxy.",
+        "visual_type": "photo",
+        "visible_text": [
+          "An underwater view of an Ocean",
+          "A Galaxy"
+        ],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "related",
+        "limitations": [
+          "no specific context provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27602,9 +27631,23 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An underwater view of an ocean and a galaxy.",
+        "visual_type": "photo",
+        "visible_text": [
+          "An underwater view of an Ocean",
+          "A Galaxy"
+        ],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "related",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27620,9 +27663,50 @@
       "asset_path": "page-0020.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Images of a desert, a coast, an underwater view of an ocean, and a galaxy, with text describing the vastness of outer space and the importance of unexpected discoveries.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Desert",
+          "A Coast",
+          "vastness of outer space, from what is cooking in the kitchen",
+          "to what is happening on the playground, some of the",
+          "most groundbreaking discoveries have often come from",
+          "unexpected places.",
+          "An underwater view of an Ocean",
+          "A Galaxy",
+          "Science is like a giant and unending jigsaw puzzle. Every",
+          "new discovery we make adds another piece to that puzzle.",
+          "And you know the best thing about this puzzle? There is",
+          "no limit to what we can discover, since every new piece",
+          "of knowledge leads to more questions and more things to",
+          "find out. Sometimes, we find that a piece of this puzzle has",
+          "been put in the wrong place and needs to be moved. New",
+          "discoveries often change our understanding of the world.",
+          "As you go through this book, you will encounter",
+          "interesting ideas, do some thought-provoking experiments,",
+          "and see how some of what we will find out is useful in our"
+        ],
+        "concepts": [
+          "desert",
+          "coast",
+          "underwater view",
+          "galaxy",
+          "jigsaw puzzle",
+          "discovery",
+          "knowledge",
+          "questions",
+          "understanding",
+          "usefulness"
+        ],
+        "context_relation": "describing the images and their significance",
+        "limitations": [
+          "the images are not labeled",
+          "the text is not fully visible"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
