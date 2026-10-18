@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 /** HRMS-only cross-tenant control plane. Every mutating method requires QE_PLATFORM_OWNER. */
 @RestController
@@ -439,74 +441,6 @@ public class PlatformInstitutionController {
         "paymentReceiver","HRMS_PLATFORM_ACCOUNT");
   }
 
-
-  @PutMapping("/{institutionId}/course-releases/{releaseId}/assignment")
-  @Transactional
-  public Map<String,Object> updateCourseReleaseAssignment(
-      @PathVariable long institutionId,
-      @PathVariable long releaseId,
-      @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    AuthContext owner=requirePlatformOwner(context);
-    assertInstitutionExists(institutionId);
-    Object raw=body==null?null:body.get("enabled");
-    if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
-    List<Map<String,Object>> releases=jdbc.queryForList("""
-        select r.id,r.program_id,r.origin_institution_id,r.release_version,r.status,p.code,p.display_name
-        from institution_course_release r
-        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where r.id=?
-        """,releaseId);
-    if(releases.isEmpty()) throw new IllegalArgumentException("The course release is unavailable.");
-    Map<String,Object> release=releases.getFirst();
-    if(!"SHAREABLE".equals(String.valueOf(release.get("status")))) {
-      throw new IllegalArgumentException("Only an origin-approved shareable course release can be assigned.");
-    }
-    Long assignmentId=null;
-    if(enabled) {
-      assignmentId=jdbc.queryForObject("""
-          insert into institution_course_assignment(
-            institution_id,program_id,course_release_id,assignment_source,status,
-            assigned_by_staff_id,assigned_at,revoked_at,created_at,updated_at
-          ) values(?,?,?,'PLATFORM','ACTIVE',?,now(),null,now(),now())
-          on conflict(institution_id,course_release_id) where course_release_id is not null
-          do update set assignment_source='PLATFORM',status='ACTIVE',assigned_by_staff_id=excluded.assigned_by_staff_id,
-            assigned_at=now(),revoked_at=null,updated_at=now()
-          returning id
-          """,Long.class,institutionId,((Number)release.get("program_id")).longValue(),releaseId,owner.staffId());
-    } else {
-      List<Map<String,Object>> prior=jdbc.queryForList("""
-          select id from institution_course_assignment
-          where institution_id=? and course_release_id=? and assignment_source='PLATFORM'
-          for update
-          """,institutionId,releaseId);
-      if(!prior.isEmpty()) assignmentId=((Number)prior.getFirst().get("id")).longValue();
-      jdbc.update("""
-          update institution_course_assignment set status='REVOKED',revoked_at=now(),updated_at=now()
-          where institution_id=? and course_release_id=? and assignment_source='PLATFORM' and status='ACTIVE'
-          """,institutionId,releaseId);
-      jdbc.update("""
-          update institution_marketplace_offer set status='ARCHIVED',updated_at=now()
-          where institution_id=? and course_release_id=? and status<>'ARCHIVED'
-          """,institutionId,releaseId);
-    }
-    jdbc.update("""
-        insert into institution_course_lifecycle_event(
-          institution_id,course_release_id,assignment_id,event_type,actor_platform_staff_id,details
-        ) values(?,?,?, ?, ?, jsonb_build_object('enabled',?,'originInstitutionId',?))
-        """,institutionId,releaseId,assignmentId,enabled?"COURSE_ASSIGNED":"COURSE_UNASSIGNED",
-        owner.staffId(),enabled,release.get("origin_institution_id"));
-    audit(owner,institutionId,"COURSE_RELEASE_ASSIGNMENT_CHANGED","COURSE_RELEASE",
-        String.valueOf(releaseId),Map.of("enabled",enabled,"assignmentId",assignmentId==null?0L:assignmentId));
-    Map<String,Object> result=new LinkedHashMap<>();
-    result.put("institutionId",institutionId);
-    result.put("releaseId",releaseId);
-    result.put("programId",release.get("program_id"));
-    result.put("assignmentId",assignmentId);
-    result.put("enabled",enabled);
-    result.put("offerPublished",false);
-    return result;
-  }
 
   @GetMapping("/course-releases/review-queue")
   public List<Map<String,Object>> courseReleaseReviewQueue(
@@ -1078,6 +1012,15 @@ public class PlatformInstitutionController {
     if(value==null || value.trim().length()<min || value.trim().length()>max
         || value.chars().anyMatch(Character::isISOControl)) {
       throw new IllegalArgumentException(label+" must be between "+min+" and "+max+" characters.");
+    }
+  }
+
+  private long number(Object value) {
+    if (value instanceof Number numeric) return numeric.longValue();
+    if (value == null) return 0L;
+    try { return Long.parseLong(String.valueOf(value).trim()); }
+    catch (NumberFormatException ex) {
+      throw new IllegalStateException("Expected a numeric database readiness value.", ex);
     }
   }
 
