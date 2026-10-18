@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 717,
+    "assets_selected": 720,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 715,
-    "assets_remaining": 1363,
-    "assets_completion_percent": 34.4,
+    "assets_analyzed": 719,
+    "assets_remaining": 1359,
+    "assets_completion_percent": 34.6,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 712,
+    "assets_skipped_from_checkpoint": 715,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:17:44Z"
+      "checkpointed_at": "2026-10-18T14:27:06Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -21657,6 +21657,137 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T14:25:52Z"
+    },
+    {
+      "asset_id": "6e58f204654360020730c7e3",
+      "asset_sha256": "82dc3a489f1862853ff2f9e61d0f323580f3a4e593651f8fb9fe485c9b3f157d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/82dc3a489f1862853ff2f9e61d0f323580f3a4e593651f8fb9fe485c9b3f157d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a bicycle handlebar with a red brake lever.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a part of a larger educational content about scientific inquiry and experimentation.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or observation it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:28:38Z"
+    },
+    {
+      "asset_id": "cc1f61287c9c56e05e915479",
+      "asset_sha256": "e9a9b66b3433d9a224d97188dfc7def2e2fdbb6abfbb4e126fab0e3780b360a7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/e9a9b66b3433d9a224d97188dfc7def2e2fdbb6abfbb4e126fab0e3780b360a7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person cleaning a bicycle tire with a metal bowl.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a person cleaning a bicycle tire, which is a common maintenance task.",
+        "limitations": [
+          "The image does not provide specific details about the cleaning process or the tools used.",
+          "The image does not include any text or labels that could provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:30:10Z"
+    },
+    {
+      "asset_id": "10c30fee85b67d874fe3c0ed",
+      "asset_sha256": "1563818413ff9d4da6164000e0e0752f01ad6a5c4deb0779e86b0ebbe0d141e5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/1563818413ff9d4da6164000e0e0752f01ad6a5c4deb0779e86b0ebbe0d141e5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a bicycle wheel and frame, focusing on the tire and frame details.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bicycle",
+          "wheel",
+          "frame",
+          "tire"
+        ],
+        "context_relation": "The image is a close-up of a bicycle, focusing on its wheel and frame, which is likely used to illustrate a concept related to bicycle mechanics or design.",
+        "limitations": [
+          "The image does not provide any specific information about the bicycle's brand, model, or specific features.",
+          "The image does not show any movement or action, focusing solely on the stationary components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:31:48Z"
+    },
+    {
+      "asset_id": "d1f50eaff1250b4c21a3d875",
+      "asset_sha256": "901e161219c5fbb1a18dcfdb7dcde67c3ad949fe29ddb7a48ca41e2b8102366a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/901e161219c5fbb1a18dcfdb7dcde67c3ad949fe29ddb7a48ca41e2b8102366a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand pointing towards the text, emphasizing the importance of questioning and analysis in scientific inquiry.",
+        "visual_type": "photo",
+        "visible_text": [
+          "First, we observe something that we find interesting or we do not understand.",
+          "This makes us wonder and perhaps think of a question about it.",
+          "Then, we guess a possible answer to that question.",
+          "We test this guess through experiments or more observations.",
+          "We then try to analyse the results to see if it actually answers our question."
+        ],
+        "concepts": [
+          "Observation",
+          "Questioning",
+          "Guessing",
+          "Experimentation",
+          "Analysis"
+        ],
+        "context_relation": "The image is a visual representation of the scientific method, emphasizing the importance of questioning and analysis in scientific inquiry.",
+        "limitations": [
+          "The image does not provide specific details about the scientific method."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:33:33Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 729,
-    "successful_visual_analyses": 716,
-    "missing_visual_analyses": 1349,
+    "raw_analysis_result_rows": 733,
+    "successful_visual_analyses": 720,
+    "missing_visual_analyses": 1345,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1362,
+    "unresolved_count": 1358,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28777,9 +28777,18 @@
       "asset_path": "assets/82dc3a489f1862853ff2f9e61d0f323580f3a4e593651f8fb9fe485c9b3f157d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a bicycle handlebar with a red brake lever.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a part of a larger educational content about scientific inquiry and experimentation.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or observation it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28795,9 +28804,19 @@
       "asset_path": "assets/e9a9b66b3433d9a224d97188dfc7def2e2fdbb6abfbb4e126fab0e3780b360a7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person cleaning a bicycle tire with a metal bowl.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a person cleaning a bicycle tire, which is a common maintenance task.",
+        "limitations": [
+          "The image does not provide specific details about the cleaning process or the tools used.",
+          "The image does not include any text or labels that could provide additional context or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28813,9 +28832,24 @@
       "asset_path": "assets/1563818413ff9d4da6164000e0e0752f01ad6a5c4deb0779e86b0ebbe0d141e5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a bicycle wheel and frame, focusing on the tire and frame details.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "bicycle",
+          "wheel",
+          "frame",
+          "tire"
+        ],
+        "context_relation": "The image is a close-up of a bicycle, focusing on its wheel and frame, which is likely used to illustrate a concept related to bicycle mechanics or design.",
+        "limitations": [
+          "The image does not provide any specific information about the bicycle's brand, model, or specific features.",
+          "The image does not show any movement or action, focusing solely on the stationary components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28831,9 +28865,30 @@
       "asset_path": "assets/901e161219c5fbb1a18dcfdb7dcde67c3ad949fe29ddb7a48ca41e2b8102366a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand pointing towards the text, emphasizing the importance of questioning and analysis in scientific inquiry.",
+        "visual_type": "photo",
+        "visible_text": [
+          "First, we observe something that we find interesting or we do not understand.",
+          "This makes us wonder and perhaps think of a question about it.",
+          "Then, we guess a possible answer to that question.",
+          "We test this guess through experiments or more observations.",
+          "We then try to analyse the results to see if it actually answers our question."
+        ],
+        "concepts": [
+          "Observation",
+          "Questioning",
+          "Guessing",
+          "Experimentation",
+          "Analysis"
+        ],
+        "context_relation": "The image is a visual representation of the scientific method, emphasizing the importance of questioning and analysis in scientific inquiry.",
+        "limitations": [
+          "The image does not provide specific details about the scientific method."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
