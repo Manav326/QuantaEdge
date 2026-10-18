@@ -6,13 +6,15 @@
 ## Documents
 
 - [Phase 1 — System and UI Audit](./phase-1-system-ui-audit.md): verified source baseline, application boundaries, audit findings, persona/workflow map, and exit criteria.
-- [UI Screen Inventory](./ui-screen-inventory.csv): machine-readable starter register for web routes and Android navigation destinations.
+- [UI Screen Inventory](./ui-screen-inventory.csv): machine-readable register of web routes and Android navigation destinations.
+- [Phase 1 Source Review Log](./phase-1-source-review-log.md): first-pass actions/API observations by route and Android shell mappings.
 
 ## Evidence and status rules
 
 | Status | Meaning |
 |---|---|
 | `SOURCE_INVENTORIED` | A page entry point or native navigation destination has been identified in source. |
+| `SOURCE_SCAN_PARTIAL` | The route entry and/or navigation mapping has been scanned for key actions, API paths and state-handling signals, but imported components, permissions or persistence contracts remain untraced. |
 | `SOURCE_REVIEWED` | Relevant source behavior, event handlers, API calls and permissions have been inspected. |
 | `RUNTIME_NOT_VERIFIED` | No reproducible browser/device execution evidence is recorded for that item. |
 | `AUTOMATED_VERIFIED` | An identified automated test ran against a named revision and its assertions passed. |
