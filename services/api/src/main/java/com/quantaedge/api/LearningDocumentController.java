@@ -538,14 +538,29 @@ public class LearningDocumentController {
           : "This course code is ambiguous; use its numeric course ID.");
       programId = ((Number)enrolledProgram.getFirst().get("id")).longValue();
     }
-    String programScope = programId == null ? "s.program_id is null" : """
+    String programScope = programId == null ? """
+      exists(select 1 from curriculum_program_subject cps
+        join curriculum_program scope_program on scope_program.id=cps.program_id
+          and scope_program.status='ACTIVE' and scope_program.code<>'GENERAL'
+        join student_program_enrollment spe on spe.student_id=st.id
+          and spe.institution_id=m.institution_id and spe.program_id=scope_program.id and spe.status='ACTIVE'
+        join institution_course_assignment course_assignment
+          on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
+        join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+          and course_release.program_id=scope_program.id
+        where cps.subject_id=s.id and cps.class_id=s.class_id
+          and (s.program_id=scope_program.id or (s.program_id is null and scope_program.class_id=s.class_id)))
+      """ : """
       exists(select 1 from curriculum_program_subject cps
         join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE'
+        join student_program_enrollment spe on spe.student_id=st.id
+          and spe.institution_id=m.institution_id and spe.program_id=scope_program.id and spe.status='ACTIVE'
+        join institution_course_assignment course_assignment
+          on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
+        join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+          and course_release.program_id=scope_program.id
         where cps.program_id=? and cps.subject_id=s.id
-          and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id))
-          and exists(select 1 from student_program_enrollment spe
-            where spe.student_id=st.id and spe.institution_id=m.institution_id
-              and spe.program_id=scope_program.id and spe.status='ACTIVE'))
+          and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))
       """;
     String learnerScope = programId == null ? "c.code=st.class_code" : "true";
     String sql = """
@@ -643,7 +658,7 @@ public class LearningDocumentController {
     if (startPage < 1) throw badRequest("The first page must be at least 1.");
     if (limit < 1) throw badRequest("The page batch size must be at least 1.");
     int boundedLimit = Math.min(limit, 10);
-    Map<String, Object> metadata = readableDocument(documentId, context.studentId());
+    Map<String, Object> metadata = readableDocument(documentId,context.studentId(),institutionId);
     int sourceStart = ((Number) metadata.get("page_start")).intValue();
     int sourceEnd = ((Number) metadata.get("page_end")).intValue();
     int visibleCount = sourceEnd - sourceStart + 1;
@@ -755,18 +770,27 @@ public class LearningDocumentController {
       join curriculum_subject s on s.id=d.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=? and d.status='PUBLISHED'
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
-        and (
-          (s.program_id is null and c.code=st.class_code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=m.institution_id and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
+        and c.code=st.class_code
+        and exists(
+          select 1 from curriculum_program ep
+          join curriculum_program_subject cps on cps.program_id=ep.id and cps.subject_id=s.id
+            and cps.class_id=s.class_id
+          join student_program_enrollment spe on spe.student_id=st.id
+            and spe.institution_id=m.institution_id and spe.program_id=ep.id and spe.status='ACTIVE'
+          join institution_course_assignment course_assignment
+            on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=ep.id
+          where ep.status='ACTIVE' and ep.code<>'GENERAL'
+            and (s.program_id=ep.id or (s.program_id is null and ep.class_id=s.class_id))
         )
       """,studentId,institutionId,documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
