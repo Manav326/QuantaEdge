@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a78544f941280f9d6a20de897fa8bb92d50909a834cda443cbae43530deb202d",
+  "raw_analysis_sha256": "78eb6c95fff4daf537d69ae24cd910cd6fd8feeced7ba40a6fea517607dc1a3a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T12:49:07Z",
+      "checkpointed_at": "2026-10-18T12:54:25Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29554,6 +29554,240 @@
         "context_relation": "introduction to the subject of science",
         "limitations": [
           "no visible text or images on the page"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0b98cec9796d71abc9d1c7db",
+      "asset_sha256": "a119ed1054865a57aa8ab27258ae759c9b73f636da3f388493e910774bbeebd8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 19,
+      "asset_path": "page-0019.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a981137472f56312bfb161596b9eff592a8866ec9a6bd852ba0166a91f3e65da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An introduction to the subject of science, emphasizing curiosity and exploration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 The Wonderful World of Science",
+          "As human beings, we have always been curious about our surroundings. We start exploring our surroundings and asking questions right from our childhood. Did you enjoy discovering and exploring the world around you in the Preparatory Stage of school? As you enter the Middle Stage, we will continue thi",
+          "Science is a way of thinking, observing and doing things to understand the world we live in and to uncover the secrets of the universe. Think of it as a big adventure—we ask questions, explore the world and try to understand how things work. For this, the most important thing is to have 'Curiosity',",
+          "Whether it is studying tiny grains of sand or massive mountains, a leaf of grass or a vast forest, there is always something new and exciting to discover. Have you ever looked up at the night sky and wondered why the stars shine? Or watched a flower bloom and wondered how it knows when to open?",
+          "These are just a few of the many mysteries that science helps us unravel. The most wonderful thing about science is that it is everywhere. From the depths of the ocean to the",
+          "A mountainous region"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Science",
+          "Exploration",
+          "Observation",
+          "Understanding",
+          "Mysteries",
+          "Science"
+        ],
+        "context_relation": "Introduction to the subject of science, emphasizing curiosity and exploration.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T12:58:48Z",
+      "effective_analysis": {
+        "visual_summary": "An introduction to the subject of science, emphasizing curiosity and exploration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 The Wonderful World of Science",
+          "As human beings, we have always been curious about our surroundings. We start exploring our surroundings and asking questions right from our childhood. Did you enjoy discovering and exploring the world around you in the Preparatory Stage of school? As you enter the Middle Stage, we will continue thi",
+          "Science is a way of thinking, observing and doing things to understand the world we live in and to uncover the secrets of the universe. Think of it as a big adventure—we ask questions, explore the world and try to understand how things work. For this, the most important thing is to have 'Curiosity',",
+          "Whether it is studying tiny grains of sand or massive mountains, a leaf of grass or a vast forest, there is always something new and exciting to discover. Have you ever looked up at the night sky and wondered why the stars shine? Or watched a flower bloom and wondered how it knows when to open?",
+          "These are just a few of the many mysteries that science helps us unravel. The most wonderful thing about science is that it is everywhere. From the depths of the ocean to the",
+          "A mountainous region"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Science",
+          "Exploration",
+          "Observation",
+          "Understanding",
+          "Mysteries",
+          "Science"
+        ],
+        "context_relation": "Introduction to the subject of science, emphasizing curiosity and exploration.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8f8257721a2ef861ae57c851",
+      "asset_sha256": "78a2df79c791e4e5c6721a8d7823cd9ed5a59de660f021178165c657393199e0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/78a2df79c791e4e5c6721a8d7823cd9ed5a59de660f021178165c657393199e0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A desert landscape with sand dunes, sparse vegetation, and a clear sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "desert",
+          "sand dunes",
+          "vegetation",
+          "landscape",
+          "sky"
+        ],
+        "context_relation": "The image represents a desert landscape, which is a type of environment.",
+        "limitations": [
+          "The image does not provide specific details about the types of vegetation or the exact location of the desert."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:00:28Z",
+      "effective_analysis": {
+        "visual_summary": "A desert landscape with sand dunes, sparse vegetation, and a clear sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "desert",
+          "sand dunes",
+          "vegetation",
+          "landscape",
+          "sky"
+        ],
+        "context_relation": "The image represents a desert landscape, which is a type of environment.",
+        "limitations": [
+          "The image does not provide specific details about the types of vegetation or the exact location of the desert."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "48b48ce32cd2bdbcf04a0aff",
+      "asset_sha256": "b1e92bd75d330aba2a9b4dbdf8ea04b1744489ae5bc764436b1aa835f07387ab",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/b1e92bd75d330aba2a9b4dbdf8ea04b1744489ae5bc764436b1aa835f07387ab.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A tropical beach scene with a rocky outcrop, palm trees, and a small wooden structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "beach",
+          "rocky outcrop",
+          "palm trees",
+          "wooden structure",
+          "tropical",
+          "coast",
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "The image represents a tropical beach scene, which is a part of the broader concept of the ocean and its surroundings.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:02:12Z",
+      "effective_analysis": {
+        "visual_summary": "A tropical beach scene with a rocky outcrop, palm trees, and a small wooden structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "beach",
+          "rocky outcrop",
+          "palm trees",
+          "wooden structure",
+          "tropical",
+          "coast",
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "The image represents a tropical beach scene, which is a part of the broader concept of the ocean and its surroundings.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9186950497fe5652f09fcd7c",
+      "asset_sha256": "253c7fb6358acc83aba1a6642582909399d045b9680f2209b0d3cf13350e2888",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/253c7fb6358acc83aba1a6642582909399d045b9680f2209b0d3cf13350e2888.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cba61c3b7f720db6f4aa1bf22306a608868b09ec4f51b38bfb56401f4c06ec33",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An underwater view of an ocean with colorful coral reefs and schools of fish.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "colorful coral reefs",
+          "schools of fish"
+        ],
+        "context_relation": "The image represents an underwater scene, likely used to illustrate the concept of the ocean and its inhabitants.",
+        "limitations": [
+          "The image does not contain any text or labels."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T13:03:52Z",
+      "effective_analysis": {
+        "visual_summary": "An underwater view of an ocean with colorful coral reefs and schools of fish.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "colorful coral reefs",
+          "schools of fish"
+        ],
+        "context_relation": "The image represents an underwater scene, likely used to illustrate the concept of the ocean and its inhabitants.",
+        "limitations": [
+          "The image does not contain any text or labels."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

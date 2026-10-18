@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 685,
-    "successful_visual_analyses": 676,
-    "missing_visual_analyses": 1393,
+    "raw_analysis_result_rows": 689,
+    "successful_visual_analyses": 680,
+    "missing_visual_analyses": 1389,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1402,
+    "unresolved_count": 1398,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27421,9 +27421,33 @@
       "asset_path": "page-0019.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An introduction to the subject of science, emphasizing curiosity and exploration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 1 The Wonderful World of Science",
+          "As human beings, we have always been curious about our surroundings. We start exploring our surroundings and asking questions right from our childhood. Did you enjoy discovering and exploring the world around you in the Preparatory Stage of school? As you enter the Middle Stage, we will continue thi",
+          "Science is a way of thinking, observing and doing things to understand the world we live in and to uncover the secrets of the universe. Think of it as a big adventure—we ask questions, explore the world and try to understand how things work. For this, the most important thing is to have 'Curiosity',",
+          "Whether it is studying tiny grains of sand or massive mountains, a leaf of grass or a vast forest, there is always something new and exciting to discover. Have you ever looked up at the night sky and wondered why the stars shine? Or watched a flower bloom and wondered how it knows when to open?",
+          "These are just a few of the many mysteries that science helps us unravel. The most wonderful thing about science is that it is everywhere. From the depths of the ocean to the",
+          "A mountainous region"
+        ],
+        "concepts": [
+          "Curiosity",
+          "Science",
+          "Exploration",
+          "Observation",
+          "Understanding",
+          "Mysteries",
+          "Science"
+        ],
+        "context_relation": "Introduction to the subject of science, emphasizing curiosity and exploration.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27439,9 +27463,24 @@
       "asset_path": "assets/78a2df79c791e4e5c6721a8d7823cd9ed5a59de660f021178165c657393199e0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A desert landscape with sand dunes, sparse vegetation, and a clear sky.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "desert",
+          "sand dunes",
+          "vegetation",
+          "landscape",
+          "sky"
+        ],
+        "context_relation": "The image represents a desert landscape, which is a type of environment.",
+        "limitations": [
+          "The image does not provide specific details about the types of vegetation or the exact location of the desert."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27457,9 +27496,29 @@
       "asset_path": "assets/b1e92bd75d330aba2a9b4dbdf8ea04b1744489ae5bc764436b1aa835f07387ab.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A tropical beach scene with a rocky outcrop, palm trees, and a small wooden structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "beach",
+          "rocky outcrop",
+          "palm trees",
+          "wooden structure",
+          "tropical",
+          "coast",
+          "underwater view",
+          "ocean",
+          "galaxy"
+        ],
+        "context_relation": "The image represents a tropical beach scene, which is a part of the broader concept of the ocean and its surroundings.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single illustration and does not represent a full page or multiple visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27475,9 +27534,23 @@
       "asset_path": "assets/253c7fb6358acc83aba1a6642582909399d045b9680f2209b0d3cf13350e2888.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An underwater view of an ocean with colorful coral reefs and schools of fish.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "underwater view",
+          "ocean",
+          "colorful coral reefs",
+          "schools of fish"
+        ],
+        "context_relation": "The image represents an underwater scene, likely used to illustrate the concept of the ocean and its inhabitants.",
+        "limitations": [
+          "The image does not contain any text or labels."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
