@@ -73,6 +73,16 @@ For every protected learner operation, derive one validated institution context,
 | Upgraded DB migration/integration | Pending | |
 | Final exact-`main` Actions matrix | Pending | |
 
+
+## Implementation progress log — 2026-10-18
+
+- Draft implementation PR: [#77](https://github.com/Manav326/QuantaEdge/pull/77), branch `fix/user-institution-course-access-main`, based on the current `main` without reverting the newer textbook pipeline data checkpoints.
+- Superseded draft [PR #76](https://github.com/Manav326/QuantaEdge/pull/76) was closed unmerged because its base had become stale; no code from it was merged to `main`.
+- Code changes currently cover route-context enforcement, parent-selected child/institution validation, lesson/progress/metrics, diagnostic and practice sessions, learning sessions, tutor sessions/history, assessment attempts/results, and certificate access/issuance.
+- Added a regression check for a parent attempting to use a child membership from another institution, and route tests for `/api/v1/students/{id}/lessons` while preserving the local preview exception.
+- GitHub Actions observed during this pass: [run 39137317792](https://github.com/Manav326/QuantaEdge/actions/runs/39137317792) was in progress; [run 39137403391](https://github.com/Manav326/QuantaEdge/actions/runs/39137403391) was pending at the latest observation. These are **not green evidence**. Recheck against the final PR head and final `main` SHA.
+- Remaining blockers/checklist items are intentionally still unchecked: shared course-access contract, endpoint inventory/remainder audit, consumer policy, migration/write invariants, read-only data diagnostics, clean/upgraded DB tests, full suite, and green Actions gate. No production database census or row reconciliation has been performed.
+
 ## Definition of done
 
 - [ ] No tenant-protected endpoint silently falls back to a global/legacy learner path.
