@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 757,
-    "successful_visual_analyses": 744,
-    "missing_visual_analyses": 1321,
-    "failed_visual_analyses": 13,
+    "raw_analysis_result_rows": 761,
+    "successful_visual_analyses": 747,
+    "missing_visual_analyses": 1317,
+    "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1334,
+    "unresolved_count": 1331,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -29677,7 +29677,7 @@
       "asset_path": "page-0028.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -29695,9 +29695,23 @@
       "asset_path": "assets/91e34a089bc5f2bb64ca9f3dc1a5764688d7f0616c4dbf8055390d27339d9919.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A vibrant red hibiscus flower with green leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "hibiscus",
+          "red flower",
+          "green leaves",
+          "botany"
+        ],
+        "context_relation": "The image is related to the educational content about plants and flowers, specifically focusing on the hibiscus flower.",
+        "limitations": [
+          "The image does not provide specific details about the hibiscus flower's features or its significance in the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29713,9 +29727,30 @@
       "asset_path": "assets/6bb771f065f4b36608d5c8fe24d4fa5cf564979fc3516bc4720df832778481da.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a young plant with three leaves and a root system.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Grass",
+          "Tulsi (Holy Basil)",
+          "Hibiscus (Gudhal)",
+          "Fig. 2.1: Examples of different features of plants"
+        ],
+        "concepts": [
+          "plant features",
+          "stem",
+          "leaf",
+          "flower",
+          "root system"
+        ],
+        "context_relation": "The image is related to the educational content about observing and recording plant features.",
+        "limitations": [
+          "The image does not show the actual plant, only an illustration.",
+          "The image does not include a table or diagram for recording observations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -29731,9 +29766,22 @@
       "asset_path": "assets/1016debb6de2daa57b31cb391809e3e90b5319715553a66ec98c968391ab0d53.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a plant leaf with three main leaves and a smaller leaf at the center.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "plant leaf",
+          "three main leaves",
+          "smaller leaf at the center"
+        ],
+        "context_relation": "The image is related to the educational content about observing and recording plant features.",
+        "limitations": [
+          "The image does not provide any specific information about the plant species."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
