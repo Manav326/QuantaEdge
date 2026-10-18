@@ -146,11 +146,14 @@ public class InstitutionTenantController {
   @GetMapping("/public/branding/{tenantCode}/assets/{assetType}")
   public ResponseEntity<byte[]> publicBrandingAsset(
       @PathVariable String tenantCode,
-      @PathVariable String assetType) {
+      @PathVariable String assetType,
+      @RequestParam(value="v",required=false,defaultValue="0") long requestedVersion,
+      HttpServletRequest request) {
     String normalized = tenantCode == null ? "" : tenantCode.trim().toUpperCase(Locale.ROOT);
     if (!normalized.matches("^[A-Z0-9][A-Z0-9_-]{2,31}$")) {
       throw new IllegalArgumentException("Institution code is invalid.");
     }
+    if (requestedVersion < 1) return ResponseEntity.notFound().header(HttpHeaders.CACHE_CONTROL, "no-store").build();
     String selectedType = assetType == null ? "" : assetType.trim().toLowerCase(Locale.ROOT);
     String databaseType = switch (selectedType) {
       case "logo" -> "LOGO";
@@ -165,19 +168,34 @@ public class InstitutionTenantController {
           on a.institution_id=t.id
           and a.asset_id=case when ?='LOGO' then b.logo_asset_key else b.app_icon_asset_key end
           and a.asset_type=? and a.active=true
-        where t.tenant_code=? and t.status='ACTIVE'
-        """, databaseType, databaseType, normalized);
-    if (rows.isEmpty()) throw new IllegalArgumentException("Branding asset is not available.");
+        where t.tenant_code=? and t.status='ACTIVE' and b.version=?
+        """, databaseType, databaseType, normalized, requestedVersion);
+    if (rows.isEmpty()) return ResponseEntity.notFound().header(HttpHeaders.CACHE_CONTROL, "no-store").build();
     Map<String,Object> asset = rows.getFirst();
     byte[] bytes = (byte[]) asset.get("image_bytes");
     String contentType = String.valueOf(asset.get("content_type"));
     String digest = String.valueOf(asset.get("content_sha256"));
-    return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(contentType))
-        .header(HttpHeaders.CACHE_CONTROL, "public, max-age=300, stale-while-revalidate=60")
-        .header(HttpHeaders.ETAG, "\"" + digest + "\"")
-        .header("X-Content-Type-Options", "nosniff")
-        .body(bytes);
+    String etag = "\"" + digest + "\"";
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.parseMediaType(contentType));
+    headers.setCacheControl("public, max-age=300, stale-while-revalidate=60");
+    headers.setETag(etag);
+    headers.set("X-Content-Type-Options", "nosniff");
+    headers.setContentLength(bytes.length);
+    if (matchesEntityTag(request.getHeader(HttpHeaders.IF_NONE_MATCH), etag)) {
+      headers.remove(HttpHeaders.CONTENT_LENGTH);
+      return ResponseEntity.<byte[]>status(304).headers(headers).build();
+    }
+    return ResponseEntity.ok().headers(headers).body(bytes);
+  }
+
+  private static boolean matchesEntityTag(String header, String etag) {
+    if (header == null || header.isBlank()) return false;
+    for (String candidate : header.split(",")) {
+      String value = candidate.trim();
+      if ("*".equals(value) || etag.equals(value) || ("W/" + etag).equals(value)) return true;
+    }
+    return false;
   }
 
   private static String assetUrl(String tenantCode, String assetType, long version, Object assetKey) {
