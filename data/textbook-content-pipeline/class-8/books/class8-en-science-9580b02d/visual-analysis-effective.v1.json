@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "202b705f4094e9fbc99e39782f26622ceef59d1fcb208492976d6874c862d8bb",
+  "raw_analysis_sha256": "c7fc24d740318bef4d2ba632279f53f23896b10cc70eb4ecf19d542c8b17bc47",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:43:19Z",
+      "checkpointed_at": "2026-10-18T21:49:53Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:44:08Z",
+      "checkpointed_at": "2026-10-18T21:50:42Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149731645",
-      "checkpointed_at": "2026-10-18T21:44:47Z",
+      "checkpointed_at": "2026-10-18T21:51:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -30055,6 +30055,88 @@
         "concepts": [],
         "context_relation": "Introduction to a chapter on exploring the investigative world of science.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "96d2b9e53815106a28c65916",
+      "asset_sha256": "8678da99bd891595607c243058748fc536d3cecd77451077898a99618d39011a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/8678da99bd891595607c243058748fc536d3cecd77451077898a99618d39011a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a part of an educational content, specifically a chapter introduction for a science textbook.",
+        "limitations": [
+          "The image does not contain any specific text or labels that can be used to determine the exact content of the textbook chapter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:52:55Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character pointing with one finger and raising the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a part of an educational content, specifically a chapter introduction for a science textbook.",
+        "limitations": [
+          "The image does not contain any specific text or labels that can be used to determine the exact content of the textbook chapter."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "96a1be5f08f9cac15c872a82",
+      "asset_sha256": "636d6e5bbb7ae2c2d5684c8531db931cc2324a9c4b4722e5cf3f4d23db413318",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/636d6e5bbb7ae2c2d5684c8531db931cc2324a9c4b4722e5cf3f4d23db413318.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "550695099ec6c1bb815409de95a6d96ad7d25ead1f1088b657710e784b91f33a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl holding a notebook and a pen, smiling and looking at the camera.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a science chapter, specifically Chapter 1 titled 'Exploring the Investigative World of Science'.",
+        "limitations": [
+          "The image does not provide specific details about the questions or activities related to the chapter.",
+          "The image does not show any specific scientific content or experiments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149731645",
+      "checkpointed_at": "2026-10-18T21:54:32Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl holding a notebook and a pen, smiling and looking at the camera.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a science chapter, specifically Chapter 1 titled 'Exploring the Investigative World of Science'.",
+        "limitations": [
+          "The image does not provide specific details about the questions or activities related to the chapter.",
+          "The image does not show any specific scientific content or experiments."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
