@@ -6,7 +6,7 @@ import styles from './Institutions.module.css';
 import InstitutionBrandAssetEditor from './InstitutionBrandAssetEditor';
 
 type Session = { staffId?: number; displayName?: string; permissions?: string[] };
-type EditableCard = 'status' | 'courses' | 'admins' | 'branding' | 'billing';
+type EditableCard = 'profile' | 'status' | 'courses' | 'admins' | 'branding' | 'billing';
 type Institution = {
   id: number; tenant_code: string; display_name: string; legal_name?: string | null; status: string;
   brand_display_name?: string | null; active_memberships?: number; authorized_courses?: number;
@@ -69,6 +69,7 @@ export default function InstitutionsAdminPage() {
   const [codeExpiry,setCodeExpiry]=useState('');
   const [create,setCreate]=useState({tenantCode:'',displayName:'',legalName:'',adminUsername:'',adminDisplayName:'',initialPassword:''});
   const [admin,setAdmin]=useState({username:'',displayName:'',initialPassword:''});
+  const [profile,setProfile]=useState({displayName:'',legalName:''});
   const [brand,setBrand]=useState({displayName:'',logoAssetKey:'',appIconAssetKey:'',storeListingUrl:'',presetId:'quantaedge-orange',appearance:'system',primary:'#F97316',accent:'#C2410C'});
   const [themePresets,setThemePresets]=useState<ThemePreset[]>([]);
   const [themePreview,setThemePreview]=useState<ThemeTokens|null>(null);
@@ -104,6 +105,7 @@ export default function InstitutionsAdminPage() {
         api<AuditEvent[]>('/api/v1/hrms/platform/institutions/'+id+'/audit'),
       ]);
       setDetail(d);setRoster(r.learners||[]);setAuditRows(a||[]);setTab('summary');setEditingCard(null);setShowAdmin(false);
+      setProfile({displayName:d.display_name||'',legalName:d.legal_name||''});
       setBrand({
         displayName:d.brand_display_name||d.display_name,logoAssetKey:d.logo_asset_key||'',
         appIconAssetKey:d.app_icon_asset_key||'',storeListingUrl:d.store_listing_url||'',
@@ -158,6 +160,15 @@ export default function InstitutionsAdminPage() {
       setShowCreate(false);await loadBase();await loadDetail(result.institutionId);
     }catch(e){setError(e instanceof Error?e.message:'Could not create institution.');}finally{setSaving(false);}
   };
+  async function saveInstitutionProfile(event:FormEvent){
+    event.preventDefault();if(!detail)return;setSaving(true);setError('');setNotice('');
+    try{
+      await api('/api/v1/hrms/platform/institutions/'+detail.id+'/profile',{method:'PUT',body:JSON.stringify(profile)});
+      setNotice('Institution profile saved. The separately customised white-label name, if any, remains unchanged.');
+      await loadBase();await loadDetail(detail.id);
+    }catch(e){setError(e instanceof Error?e.message:'Institution profile could not be saved.');}
+    finally{setSaving(false);}
+  }
   async function changeStatus(status:'ACTIVE'|'SUSPENDED'|'CLOSED'){
     if(!detail)return;const reason=window.prompt('Reason for changing '+detail.tenant_code+' to '+status+':','');if(reason===null)return;
     setSaving(true);setError('');
@@ -184,6 +195,7 @@ export default function InstitutionsAdminPage() {
   }
   function cancelCardEdit(card:EditableCard){
     if(detail){
+      if(card==='profile')setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});
       if(card==='courses')setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));
       if(card==='branding')setBrand({displayName:detail.brand_display_name||detail.display_name,logoAssetKey:detail.logo_asset_key||'',appIconAssetKey:detail.app_icon_asset_key||'',storeListingUrl:detail.store_listing_url||'',presetId:String(detail.themeTokens?.presetId||'quantaedge-orange'),appearance:String(detail.themeTokens?.appearance||'system'),primary:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316'),accent:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#C2410C')});
       if(card==='billing')setBilling({currency:detail.currency||'INR',unitPriceRupees:detail.unit_price_paise===undefined?'0.00':(detail.unit_price_paise/100).toFixed(2),billingCadence:detail.billing_cadence||'MONTHLY',effectiveFrom:detail.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:detail.effective_until?.slice(0,10)||''});
@@ -339,11 +351,16 @@ export default function InstitutionsAdminPage() {
       <section className={styles.detailColumn}>{!detail?<div className={styles.emptyPanel}><div className={styles.emptyIcon}>▤</div><h2>Select an institution</h2><p>Its settings and reports will appear here. All changes are audited and institution admins remain read-only.</p></div>:<>
         <section className={styles.panel}><div className={styles.detailHeader}><div><span className={styles.eyebrow}>{detail.tenant_code}</span><h2>{detail.display_name}</h2><p>{detail.legal_name||'Legal name not supplied'}</p></div><span className={styles.status+(detail.status==='ACTIVE'?' '+styles.active:detail.status==='SUSPENDED'?' '+styles.suspended:'')}>{detail.status}</span></div>
           <div className={styles.actions}><button className={styles.secondary} onClick={()=>{void navigator.clipboard?.writeText(detail.tenant_code).then(()=>setNotice('Tenant code copied.')).catch(()=>setNotice('Institution code: '+detail.tenant_code));}}>Copy tenant code</button>
+            {editingCard==='profile'?<><button type="button" className={styles.secondary} disabled={saving} onClick={()=>cancelCardEdit('profile')}>Cancel</button><button type="submit" form="institution-profile-form" className={styles.primary} disabled={saving}>{saving?'Saving…':'Save profile'}</button></>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>{setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});setEditingCard('profile');}}>Edit profile</button>}
             {editingCard==='status'?<>
               {detail.status==='ACTIVE'?<button className={styles.warning} disabled={saving} onClick={()=>void changeStatus('SUSPENDED')}>Suspend</button>:detail.status==='SUSPENDED'?<button className={styles.primary} disabled={saving} onClick={()=>void changeStatus('ACTIVE')}>Reactivate</button>:null}
               {detail.status!=='CLOSED'?<button className={styles.danger} disabled={saving} onClick={()=>void changeStatus('CLOSED')}>Close tenant</button>:null}
               <button type="button" className={styles.quiet} disabled={saving} onClick={()=>cancelCardEdit('status')}>Done</button>
             </>:<button type="button" className={styles.secondary} disabled={saving||editingCard!==null} onClick={()=>setEditingCard('status')}>Edit status</button>}</div>
+          {editingCard==='profile'?<form id="institution-profile-form" className={styles.form} onSubmit={saveInstitutionProfile}>
+            <label>Institution display name *<input required minLength={2} maxLength={180} value={profile.displayName} onChange={e=>setProfile(v=>({...v,displayName:e.target.value}))}/><small>The institution name is used as the white-label default unless a separate branded display name has been configured.</small></label>
+            <label>Legal name<input maxLength={220} value={profile.legalName} onChange={e=>setProfile(v=>({...v,legalName:e.target.value}))}/><small>Optional; shown in institution operations and legal records.</small></label>
+          </form>:null}
           <nav className={styles.tabs}>{([['summary','Settings'],['learners','Learner records'],['audit','Audit history']] as const).map(([id,label])=><button type="button" key={id} className={tab===id?styles.tabActive:''} onClick={()=>setTab(id)}>{label}</button>)}</nav>
         </section>
         {tab==='summary'?<>
