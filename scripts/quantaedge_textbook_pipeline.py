@@ -299,6 +299,7 @@ def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, pac
 def run_layers(args):
     repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[]
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
+    if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
     for s in selection["sources"]:
         slug=s["book_slug"];work=sroot/slug;invdir=work/"inventory";inv=invdir/"visual-inventory.v1.json"
         if not inv.is_file():raise ValueError(f"{slug}: inventory missing; refusing omission.")
@@ -357,7 +358,7 @@ def run_layers(args):
         while True:
             batch_number+=1
             print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
-            cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--include-page-previews","--run-id",args.run_id,"--output",str(raw)]
+            cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--include-page-previews","--run-id",args.run_id,"--timeout",str(args.request_timeout),"--output",str(raw)]
             if raw.is_file():cmd.append("--resume")
             else:
                 pull=vis/".checkpoint-recovery";pull.mkdir(exist_ok=True)
@@ -404,7 +405,7 @@ def rebuild_corrections(args):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest="mode",required=True)
-    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=5,help="Assets per durable Layer 4–5 checkpoint; smaller batches make progress visible and reduce uncheckpointed work.")
+    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=5,help="Assets per durable Layer 4–5 checkpoint; smaller batches make progress visible and reduce uncheckpointed work.");q.add_argument("--request-timeout",type=int,default=300,help="Maximum seconds for each Ollama HTTP request; prevents a stuck model call from hanging a GitHub runner indefinitely.")
     q=sub.add_parser("ledger")
     for k in ("inventory","raw-analysis","manifest","text-jsonl","effective-output","ledger-output"):q.add_argument("--"+k,type=Path,required=True)
     q.add_argument("--corrections",type=Path);q.add_argument("--repo-root",type=Path,default=Path.cwd())
