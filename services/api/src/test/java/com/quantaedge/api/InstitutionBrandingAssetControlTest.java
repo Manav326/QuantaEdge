@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,6 +78,26 @@ class InstitutionBrandingAssetControlTest {
 
     assertThrows(SecurityException.class, () -> controller.removeBrandingAsset(42L, "logo", null));
     verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void genericBrandingSaveCannotBypassValidatedAssetUploadAndRemoval() {
+    when(authorization.requirePermission(platformOwner, "QE_PLATFORM_OWNER")).thenReturn(platformOwner);
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    Map<String,Object> current = new LinkedHashMap<>();
+    current.put("display_name", "Example School");
+    current.put("logo_asset_key", "currently-selected-logo");
+    current.put("app_icon_asset_key", null);
+    current.put("store_listing_url", null);
+    current.put("theme_tokens", "{}");
+    when(jdbc.queryForMap(anyString(), eq(42L))).thenReturn(current);
+
+    PlatformInstitutionController controller =
+        new PlatformInstitutionController(jdbc, authorization, institutionAuth, objectMapper);
+
+    assertThrows(IllegalArgumentException.class, () -> controller.updateBranding(42L,
+        Map.of("displayName", "Example School", "logoAssetKey", "unapproved-asset-id"), platformOwner));
+    verify(jdbc, never()).update(anyString(), any(Object[].class));
   }
 
   @Test
