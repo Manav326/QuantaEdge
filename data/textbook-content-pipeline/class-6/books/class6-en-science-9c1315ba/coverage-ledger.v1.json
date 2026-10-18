@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 801,
-    "successful_visual_analyses": 791,
+    "successful_visual_analyses": 792,
     "missing_visual_analyses": 1277,
-    "failed_visual_analyses": 10,
+    "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1287,
+    "unresolved_count": 1286,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -27199,23 +27199,23 @@
           "Indian Astronomical Observatory",
           "HBCSE",
           "TIFR",
-          "Stellarium",
           "NCERT",
-          "Programme Office",
-          "Amrita Vishwa Vidyapeetham",
+          "DES",
           "Coimbatore",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Freelance Editor",
-          "Proofreader",
+          "Amrita Vishwa Vidyapeetham",
           "DTP Cell",
           "Publication Division",
-          "Contractual"
+          "Freelance Editor",
+          "Proofreader",
+          "Contractual",
+          "In-charge",
+          "Illustrations",
+          "Planetarium",
+          "Beyond Earth"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "The image may be a full page, not a cropped figure.",
+          "No specific limitations provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -28403,9 +28403,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about the properties and behavior of water, including its freezing and boiling points, and its role in survival.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Along with food, we need water to survive. Water is such a delightful substance. Have you ever jumped in a puddle when it rained? Do you ever wonder why and how it rains?",
+          "Have you noticed that water freezes and becomes ice when we cool it and boils and becomes steam when we heat it?",
+          "Do you enjoy drinking cool water in the summer or showering with warm water in the winter?",
+          "How do we understand hot and cold? Whether it is water, or our own body when we have",
+          "When we ha"
+        ],
+        "concepts": [
+          "properties of water",
+          "freezing",
+          "boiling",
+          "survival",
+          "heat and cold",
+          "water"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

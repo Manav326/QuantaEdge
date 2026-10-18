@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 791,
+    "assets_selected": 792,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 787,
-    "assets_remaining": 1291,
+    "assets_analyzed": 788,
+    "assets_remaining": 1290,
     "assets_completion_percent": 37.9,
-    "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 786,
+    "assets_failed": 9,
+    "assets_skipped_from_checkpoint": 787,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T18:09:35Z"
+      "checkpointed_at": "2026-10-18T18:21:13Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T18:10:29Z"
+      "checkpointed_at": "2026-10-18T18:22:06Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20053,23 +20053,23 @@
           "Indian Astronomical Observatory",
           "HBCSE",
           "TIFR",
-          "Stellarium",
           "NCERT",
-          "Programme Office",
-          "Amrita Vishwa Vidyapeetham",
+          "DES",
           "Coimbatore",
-          "Educator",
-          "Development Sector Professional",
-          "Chief Consultant",
-          "Freelance Editor",
-          "Proofreader",
+          "Amrita Vishwa Vidyapeetham",
           "DTP Cell",
           "Publication Division",
-          "Contractual"
+          "Freelance Editor",
+          "Proofreader",
+          "Contractual",
+          "In-charge",
+          "Illustrations",
+          "Planetarium",
+          "Beyond Earth"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "The image may be a full page, not a cropped figure.",
+          "No specific limitations provided.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T18:17:50Z"
+      "checkpointed_at": "2026-10-18T18:23:16Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21283,19 +21283,43 @@
     {
       "asset_id": "190f5091cd3d7c323c99783c",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "11784553b1e002bf03775695ae11bcbb6f56344fa6daa832841416078dde2a14",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 22,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11784553b1e002bf03775695ae11bcbb6f56344fa6daa832841416078dde2a14",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39121458410",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about the properties and behavior of water, including its freezing and boiling points, and its role in survival.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Along with food, we need water to survive. Water is such a delightful substance. Have you ever jumped in a puddle when it rained? Do you ever wonder why and how it rains?",
+          "Have you noticed that water freezes and becomes ice when we cool it and boils and becomes steam when we heat it?",
+          "Do you enjoy drinking cool water in the summer or showering with warm water in the winter?",
+          "How do we understand hot and cold? Whether it is water, or our own body when we have",
+          "When we ha"
+        ],
+        "concepts": [
+          "properties of water",
+          "freezing",
+          "boiling",
+          "survival",
+          "heat and cold",
+          "water"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the concepts."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T18:23:45Z"
     },
     {
       "asset_id": "7648bdfd0ca00b2a9aab1c0d",
@@ -21308,7 +21332,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39121458410",
+      "run_id": "39149728377",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
