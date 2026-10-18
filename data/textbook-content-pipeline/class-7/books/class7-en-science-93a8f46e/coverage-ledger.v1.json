@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 762,
-    "successful_visual_analyses": 754,
-    "missing_visual_analyses": 6726,
+    "raw_analysis_result_rows": 766,
+    "successful_visual_analyses": 758,
+    "missing_visual_analyses": 6722,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6734,
+    "unresolved_count": 6730,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39020,9 +39020,32 @@
       "asset_path": "assets/cc43a00831f7f1e51f8ea52b1c8bf3d3bce6fd010ca78f09bac9c08155e1d79c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass dish containing a bright orange substance, possibly a chemical reaction or extract.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "chemical reaction",
+          "extract",
+          "acid-base indicator",
+          "hydrangea",
+          "vegetables",
+          "fruits",
+          "flowers",
+          "beetroot",
+          "purple cabbage",
+          "turmeric",
+          "Indian blackberry (jamun)",
+          "red hibiscus (gudhal)",
+          "acid-base indicator"
+        ],
+        "context_relation": "The image is related to the educational content about preparing extracts and testing substances with vegetables, fruits, or flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the substances involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39038,9 +39061,25 @@
       "asset_path": "assets/ba07ce8eedb56f4009b03145214fb1869d187c2f71eb2bab289c2059b2855751.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a close-up of a bowl containing a yellowish substance, possibly turmeric, with a focus on its texture and color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "turmeric",
+          "yellowish substance",
+          "bowl",
+          "texture",
+          "color"
+        ],
+        "context_relation": "The image is related to the educational content about acid-base indicators, specifically turmeric.",
+        "limitations": [
+          "The image does not provide specific details about the texture or color of the substance.",
+          "The image does not show the process of preparing or testing the substance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39056,9 +39095,32 @@
       "asset_path": "assets/29fb10d33d165b2868e3acc6147511d59d934c31c0b43313ab63fbf18ac6f069.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of vegetables, fruits, and flowers as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or ﬂowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) ﬂower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Preparing extracts",
+          "Testing substances"
+        ],
+        "context_relation": "The text discusses the use of various natural substances as indicators for testing acidity and basicity.",
+        "limitations": [
+          "The text does not provide specific instructions for preparing extracts or testing substances."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39074,9 +39136,19 @@
       "asset_path": "assets/87332b2b3fda86295fee44980a677fa58973477db1a52ed897d7fcb6f7bde80a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a purple shirt and white pants, standing with their arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a standalone illustration and does not represent any specific data or information from the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
