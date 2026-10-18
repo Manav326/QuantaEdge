@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 464,
-    "successful_visual_analyses": 464,
-    "missing_visual_analyses": 1827,
+    "raw_analysis_result_rows": 467,
+    "successful_visual_analyses": 467,
+    "missing_visual_analyses": 1824,
     "failed_visual_analyses": 0,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1827,
+    "unresolved_count": 1824,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -20824,9 +20824,27 @@
       "asset_path": "assets/253d31bf6d346e87b6d21ed1b779769e3f0f8098e4cbc01174bd84a327cbe72f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from yellow to orange to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "gradient background",
+          "warm colors",
+          "transition",
+          "yellow",
+          "orange",
+          "white"
+        ],
+        "context_relation": "The background of a page, possibly a textbook cover or header.",
+        "limitations": [
+          "No specific content or text is visible beyond the gradient background."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20842,9 +20860,26 @@
       "asset_path": "assets/a9b225d6881c8bd5c0351772752a0e093b1c5177e798ae6349f3631e08ddb2aa.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and white striped background with a gradient effect.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow",
+          "white",
+          "stripes",
+          "gradient",
+          "background"
+        ],
+        "context_relation": "The background is likely used as a design element for the page, possibly to create a visual contrast or to add a decorative touch.",
+        "limitations": [
+          "The image does not provide specific information about the page's content or purpose."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -20860,9 +20895,16 @@
       "asset_path": "assets/4ddd01a85e7227cc22596b930ea9b5494c6071505913f0d1d8608cfc914c64d6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
