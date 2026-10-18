@@ -56,19 +56,73 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/$GH_REPOSITORY/actions/workflows/textbook-visual-candidates-v3.yml/runs?branch=main&per_page=100" \
             -o "$RUNNER_TEMP/layer45-runs.json"
-          active_runs="$(python - "$RUNNER_TEMP/layer45-runs.json" <<'PY'
+          active_run_ids="$(python - "$RUNNER_TEMP/layer45-runs.json" <<'PY'
           import json,sys
           d=json.load(open(sys.argv[1],encoding="utf-8"))
           rows=d.get("workflow_runs",[])
           active=[r for r in rows if r.get("status") in {"queued","in_progress","requested"} and r.get("head_branch")=="main"]
           for r in active:
-              print(f"ACTIVE_RUN id={r.get('id')} status={r.get('status')} event={r.get('event')} url={r.get('html_url')}")
+              print(r.get("id",""))
           print(f"ACTIVE_COUNT={len(active)}")
           PY
           )"
-          printf '%s\n' "$active_runs"
-          if grep -q '^ACTIVE_COUNT=[1-9]' <<< "$active_runs"; then
-            echo "A Layer 4–5 workflow is already queued or running; no duplicate resume will be dispatched."
+          printf '%s\n' "$active_run_ids"
+          active_count="$(grep -cE '^[0-9]+$' <<< "$active_run_ids" || true)"
+          if [[ "$active_count" -gt 0 ]]; then
+            stale_cancelled=false
+            while IFS= read -r run_id; do
+              [[ "$run_id" =~ ^[0-9]+$ ]] || continue
+              curl --retry 3 --retry-all-errors --retry-delay 2 -fsSL \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$GH_REPOSITORY/actions/runs/$run_id/jobs?per_page=100" \
+                -o "$RUNNER_TEMP/layer45-jobs-$run_id.json"
+              stale="$(python - "$RUNNER_TEMP/layer45-jobs-$run_id.json" <<'PY'
+          import json,sys
+          from datetime import datetime,timezone
+          data=json.load(open(sys.argv[1],encoding="utf-8"))
+          now=datetime.now(timezone.utc)
+          for job in data.get("jobs",[]):
+              for step in job.get("steps",[]):
+                  if step.get("name") != "Run exhaustive, resumable Layers 4–5 for the selected class" or step.get("status") != "in_progress":
+                      continue
+                  started=step.get("started_at")
+                  if not started:
+                      continue
+                  try:
+                      at=datetime.fromisoformat(started.replace("Z","+00:00"))
+                  except ValueError:
+                      continue
+                  age=(now-at).total_seconds()
+                  print(f"step_age_seconds={int(age)} job={job.get('name')}")
+                  if age >= 1800:
+                      print("true")
+                      raise SystemExit(0)
+          print("false")
+          PY
+              )"
+              if [[ "$stale" == *true ]]; then
+                echo "Run $run_id has a Layer 4–5 processing step idle for at least 30 minutes; cancelling only the stuck runner. Its per-asset and per-batch checkpoints remain the source of truth."
+                code="$(curl --retry 3 --retry-all-errors --retry-delay 2 -sS -o "$RUNNER_TEMP/cancel-$run_id.json" -w '%{http_code}' \
+                  -X POST \
+                  -H "Authorization: Bearer $GH_TOKEN" \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "X-GitHub-Api-Version: 2022-11-28" \
+                  "https://api.github.com/repos/$GH_REPOSITORY/actions/runs/$run_id/cancel")"
+                if [[ "$code" != "202" && "$code" != "409" ]]; then
+                  echo "Could not safely cancel stale run $run_id (HTTP $code):"
+                  cat "$RUNNER_TEMP/cancel-$run_id.json"
+                  exit 1
+                fi
+                stale_cancelled=true
+              fi
+            done <<< "$active_run_ids"
+            if [[ "$stale_cancelled" == "true" ]]; then
+              echo "Stale runner cancellation requested. The next coordinator tick will dispatch resume mode from the persisted checkpoints."
+              exit 0
+            fi
+            echo "A Layer 4–5 workflow is already queued or running and has not crossed the stale-run threshold; no duplicate resume will be dispatched."
             exit 0
           fi
 
