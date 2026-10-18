@@ -156,7 +156,7 @@ export default function InstitutionBrandAssetEditor({ assetType, file, onCancel,
     <section className={styles.cropModal} role="dialog" aria-modal="true" aria-labelledby="brand-crop-title">
       <header className={styles.cropModalHeader}>
         <div><span className={styles.eyebrow}>{assetType === 'logo' ? 'SCHOOL LOGO' : 'APP ICON'}</span><h2 id="brand-crop-title">Crop and resize image</h2><p>Drag the image to reposition it inside the frame, then choose a size and preview the result.</p></div>
-        <button type="button" className={styles.quiet} onClick={onCancel} disabled={exporting} aria-label="Close crop editor">✕</button>
+        <button type="button" className={styles.quiet} onClick={onCancel} disabled={exporting} aria-label="Close crop editor" autoFocus>✕</button>
       </header>
       <div className={styles.cropStage} ref={stageRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
         {sourceUrl ? <img ref={imageRef} src={sourceUrl} alt="Source image being cropped" draggable={false} onLoad={event => {setNaturalSize({width:event.currentTarget.naturalWidth,height:event.currentTarget.naturalHeight});setZoom(1);setOffset({x:0,y:0});}} onError={() => setError('This file is not a readable PNG/JPEG image. Choose another file.')} className={styles.cropSourceImage} style={{width:imageWidth+'px',height:imageHeight+'px',left:imageLeft+'px',top:imageTop+'px'}} /> : null}
