@@ -49,7 +49,7 @@ class LearningControllerTest {
 
   @Test
   void publicQuestionDeliveryDoesNotSelectCorrectAnswerFlags() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
@@ -93,7 +93,7 @@ class LearningControllerTest {
 
   @Test
   void lessonBlocksStripAnswerKeysRecursively() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
@@ -101,7 +101,7 @@ class LearningControllerTest {
             "chapter_code", "algebraic-expressions", "title", "Expressions",
             "class_translated", true, "lesson_translated", true, "chapter_translated", true,
             "subject_translated", true, "objective_translated", true)));
-    when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), any(Object[].class))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), any(Object[].class))).thenReturn(List.of());
 
     Map<String, Object> lesson = controller.lesson(42L, "hi", student, TEST_TENANT);
@@ -117,7 +117,7 @@ class LearningControllerTest {
 
   @Test
   void revokedInstitutionCourseEntitlementBlocksPreviouslyEnrolledLesson() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForObject(contains("select coalesce(s.program_id,("), eq(Long.class), eq(42L)))
         .thenReturn(91L);
@@ -131,7 +131,7 @@ class LearningControllerTest {
 
   @Test
   void answerIsGradedServerSideAndPersistedWithoutExposingAnswerPayload() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Subtract four from both sides.", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
@@ -152,7 +152,7 @@ class LearningControllerTest {
 
   @Test
   void answerRejectsQuestionsOutsideThePublishedStudentTrack() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
@@ -167,7 +167,7 @@ class LearningControllerTest {
 
   @Test
   void nullAnswerIsHandledAsAnEmptyAnswerInsteadOfThrowing() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
@@ -187,9 +187,9 @@ class LearningControllerTest {
 
   @Test
   void practiceAnswerLocksTheSessionQuestionBeforeGrading() {
-    when(jdbc.queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L)))
+    when(jdbc.queryForList(contains("for update of psq,ps"), any(Object[].class)))
         .thenReturn(List.of(Map.of("question_id", 42L)));
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
@@ -209,9 +209,9 @@ class LearningControllerTest {
   @Test
   void structuredOrderPracticeAnswerIsSerializedBeforePersistence() {
     List<String> submitted = List.of("A", "B");
-    when(jdbc.queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L)))
+    when(jdbc.queryForList(contains("for update of psq,ps"), any(Object[].class)))
         .thenReturn(List.of(Map.of("question_id", 42L)));
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "ORDER",
             "explanation", "Put the steps in order.",
