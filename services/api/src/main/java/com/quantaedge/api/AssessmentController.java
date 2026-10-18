@@ -1375,17 +1375,18 @@ public class AssessmentController {
       Long active=jdbc.queryForObject("""
         select count(*) from student_program_enrollment spe
         join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-        where spe.student_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
-        """,Long.class,context.studentId(),courseId);
+        where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
+        """,Long.class,context.studentId(),institutionId,courseId);
       if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
     }
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String resultScope=courseId==null
         ? "s.program_id is null and c.code=st.class_code"
-        : "s.program_id=? and exists(select 1 from student_program_enrollment spe join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' where spe.student_id=att.student_id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+        : "s.program_id=? and exists(select 1 from student_program_enrollment spe join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' where spe.student_id=att.student_id and spe.institution_id=(select institution_id from tenant_scope) and spe.program_id=s.program_id and spe.status='ACTIVE')";
     String sql="""
-      with ranked as (
+      with tenant_scope as (select ?::bigint as institution_id),
+      ranked as (
         select att.id as attempt_id,att.assessment_id,a.public_id as test_id,att.attempt_number,att.status,att.submitted_at,
                att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,a.is_generated,
                coalesce((select t.title from assessment_translation t
@@ -1410,8 +1411,8 @@ public class AssessmentController {
         join curriculum_class c on c.id=s.class_id
         join student st on st.id=att.student_id and st.active=true
         left join curriculum_chapter ch on ch.id=a.chapter_id
-        where att.student_id=? and att.status='RELEASED'
-          and __RESULT_SCOPE__
+        where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
+          and att.status='RELEASED' and __RESULT_SCOPE__
       ),
       grouped_attempts as (
         select assessment_id,
@@ -1441,7 +1442,7 @@ public class AssessmentController {
       order by latest.released_at desc,latest.attempt_id desc
       limit ? offset ?
       """.replace("__RESULT_SCOPE__",resultScope);
-    List<Object> args=new ArrayList<>(List.of(language,language,language,context.studentId()));
+    List<Object> args=new ArrayList<>(List.of(institutionId,language,language,language,context.studentId()));
     if(courseId!=null)args.add(courseId);
     args.add(rowLimit);args.add(rowOffset);
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args.toArray());
@@ -1453,23 +1454,25 @@ public class AssessmentController {
       items.add(item);
     }
     String totalSql="""
+      with tenant_scope as (select ?::bigint as institution_id)
       select count(distinct att.assessment_id)
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
       join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=att.student_id and st.active=true
-      where att.student_id=? and att.status='RELEASED'
-        and __RESULT_SCOPE__
+      where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
+        and att.status='RELEASED' and __RESULT_SCOPE__
       """.replace("__RESULT_SCOPE__",resultScope);
     Object[] totalArgs=courseId==null
-        ? new Object[]{context.studentId()} : new Object[]{context.studentId(),courseId};
+        ? new Object[]{institutionId,context.studentId()}
+        : new Object[]{institutionId,context.studentId(),courseId};
     Long total=jdbc.queryForObject(totalSql,Long.class,totalArgs);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   public Map<String,Object> studentResults(String language,Integer limit,Integer offset,AuthContext context) {
-    return studentResults(language,null,limit,offset,context);
+    throw missingInstitutionContext();
   }
 
   // ---------- Shared private helpers ----------
