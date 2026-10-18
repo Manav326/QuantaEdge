@@ -220,7 +220,7 @@ public class LearningController {
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
-    return lessonsForScope(classCode,subjectCode,language,null,authorization.requireStudent(context),null);
+    throw missingInstitutionContext();
   }
 
   @PostMapping("/lessons/{lessonId}/start")
