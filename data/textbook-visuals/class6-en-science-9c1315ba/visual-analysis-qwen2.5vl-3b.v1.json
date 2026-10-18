@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 328,
+    "assets_selected": 331,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 326,
-    "assets_remaining": 1752,
-    "assets_completion_percent": 15.7,
+    "assets_analyzed": 329,
+    "assets_remaining": 1749,
+    "assets_completion_percent": 15.8,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 323,
+    "assets_skipped_from_checkpoint": 326,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -437,14 +437,14 @@
         ],
         "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the textbooks or the curricular areas covered by the NCF-SE 2023."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T02:02:19Z"
+      "checkpointed_at": "2026-10-18T02:05:19Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -988,38 +988,39 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the importance of reflection in learning and the preparation required for activities. It also mentions Chapter 1 titled 'The Wonderful World of Science' which provides a holistic view of the new topic of Science.",
+        "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
         "visible_text": [
-          "reflect on learning. These activities are inclusive in nature. Some\nactivities require both the teacher and learners to prepare in\nadvance.",
-          "Chapter 1, titled 'The Wonderful World of Science', provides a\nholistic view of the new topic of Science introduced in the Middle\nStage. It showcases, through examples, the essence of Science—a\nway of thinking, observing, and finding out by doing, and by asking\nquestions. This chapter weaves togethe",
-          "In order to sustain the interest of the readers, some of the\nchallenging ideas, additional information, poems, stories, strange\nfacts and other interesting materials are also presented as add on\nnon-evaluative content in the boxes labelled 'Do you know?', 'More\nto know!', 'Think it over!' and 'More "
+          "reflect on learning. These activities are inclusive in nature. Some\nactivities require both the teacher and learners to prepare in\nadvance.\n\nChapter 1, titled ‘The Wonderful World of Science’, provides a\nholistic view of the new topic of Science introduced in the Middle\nStage. It showcases, through ",
+          "In order to sustain the interest of the readers, some of the\nchallenging ideas, additional information, poems, stories, strange\nfacts and other interesting materials are also presented as add on\nnon-evaluative content in the boxes labelled ‘Do you know?’, ‘More\nto know!’, ‘Think it over!’ and ‘More ",
+          "Reprint 2026-27"
         ],
         "concepts": [
-          "reflection",
           "learning",
           "activities",
-          "teacher",
-          "learners",
+          "inclusive",
           "preparation",
-          "Holistic view",
-          "Science",
-          "Middle Stage",
           "essence of Science",
           "thinking",
           "observing",
           "doing",
           "asking questions",
+          "world of science",
+          "curriculum",
           "non-evaluative",
-          "curious",
-          "goals of the curriculum",
-          "real-life situations",
-          "interest",
-          "connection"
+          "challenging ideas",
+          "additional information",
+          "poems",
+          "stories",
+          "strange facts",
+          "interesting materials",
+          "non-evaluative content",
+          "boxes"
         ],
-        "context_relation": "The page discusses the importance of reflection in learning and the preparation required for activities. It also mentions Chapter 1 titled 'The Wonderful World of Science' which provides a holistic view of the new topic of Science.",
+        "context_relation": "The page discusses the importance of learning, activities, and preparation for learning, as well as the content and structure of a textbook chapter on science.",
         "limitations": [
-          "The page does not provide specific details about the activities or the preparation required for them.",
+          "The page does not provide specific details about the textbook or its content.",
+          "The page does not include any visual elements or illustrations.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1027,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39087676447",
-      "checkpointed_at": "2026-10-18T02:04:28Z"
+      "checkpointed_at": "2026-10-18T02:06:01Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -9871,6 +9872,98 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39000915492",
       "checkpointed_at": "2026-10-17T10:42:10Z"
+    },
+    {
+      "asset_id": "c4397cc2bc097615776c6132",
+      "asset_sha256": "e3b0de657917c63da6f4c8e42d026cf0bd37470a2b11427cd2befb477cf30d95",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e3b0de657917c63da6f4c8e42d026cf0bd37470a2b11427cd2befb477cf30d95.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with a mix of yellow and orange colors.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "The image is blurred and lacks clear details.",
+          "The background is a gradient with yellow and orange colors.",
+          "No text or labels are visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T02:06:38Z"
+    },
+    {
+      "asset_id": "a2f780d28e5610b0c03b22dd",
+      "asset_sha256": "d77ad2001cee3b233aaabb96de30e4bfff7ad5a4c97c870bb0cc9c2ac77b4770",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/d77ad2001cee3b233aaabb96de30e4bfff7ad5a4c97c870bb0cc9c2ac77b4770.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and white striped background with a black border at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "striped background",
+          "yellow and white",
+          "black border"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible beyond the background and border."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T02:07:16Z"
+    },
+    {
+      "asset_id": "07a9cd4210ad663b6bdcbc4b",
+      "asset_sha256": "bd03094ed3f7cfa30b6ee3813c9fe5fc25121d045d82333761003f19d9ff6d55",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/bd03094ed3f7cfa30b6ee3813c9fe5fc25121d045d82333761003f19d9ff6d55.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "Unclear content due to blurriness and gradient nature of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39087676447",
+      "checkpointed_at": "2026-10-18T02:07:50Z"
     }
   ]
 }
