@@ -27,34 +27,61 @@ public class TutorService {
     this.historyMessages=env.getProperty("app.ai-tutor.history-messages",Integer.class,10);
   }
 
+  /** Unscoped compatibility signatures are intentionally fail-closed. */
   public Map<String,Object> startSession(AuthContext context,long lessonId){
-    return startSession(context,lessonId,false);
+    throw missingInstitutionContext();
   }
 
   public Map<String,Object> startSession(AuthContext context,long lessonId,boolean newChat){
-    context=authorization.requireStudent(context);ensureLessonAccess(context.studentId(),lessonId);
+    throw missingInstitutionContext();
+  }
+
+  public Map<String,Object> startSession(AuthContext context,long lessonId,boolean newChat,long institutionId){
+    context=authorization.requireStudent(context);
+    ensureLessonAccess(context.studentId(),lessonId,institutionId);
     if(!newChat){
       var rows=jdbc.query("""
         select id,public_id from tutor_session
-        where student_id=? and lesson_id=? and ended_at is null and created_at>now()-interval '24 hours'
+        where student_id=? and institution_id=? and lesson_id=?
+          and ended_at is null and created_at>now()-interval '24 hours'
         order by created_at desc limit 1
-        """,(rs,n)->Map.of("id",rs.getLong(1),"public_id",rs.getObject(2)),context.studentId(),lessonId);
-      if(!rows.isEmpty()){var row=rows.getFirst();return Map.of("available",provider.isAvailable(),"sessionId",row.get("id"),"publicId",row.get("public_id"),"reused",true);}
+        """,(rs,n)->Map.of("id",rs.getLong(1),"public_id",rs.getObject(2)),
+          context.studentId(),institutionId,lessonId);
+      if(!rows.isEmpty()){
+        var row=rows.getFirst();
+        return Map.of("available",provider.isAvailable(),"sessionId",row.get("id"),
+            "publicId",row.get("public_id"),"reused",true);
+      }
     }
-    Long id=jdbc.queryForObject("insert into tutor_session(public_id,student_id,lesson_id) values(gen_random_uuid(),?,?) returning id",Long.class,context.studentId(),lessonId);
+    Long id=jdbc.queryForObject("""
+        insert into tutor_session(public_id,student_id,institution_id,lesson_id)
+        values(gen_random_uuid(),?,?,?) returning id
+        """,Long.class,context.studentId(),institutionId,lessonId);
     return Map.of("available",provider.isAvailable(),"sessionId",id,"reused",false);
   }
 
   public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId){
-    context=authorization.requireStudent(context);ensureSessionOwner(context.studentId(),sessionId);
-    Long sessionLessonId=jdbc.queryForObject("select lesson_id from tutor_session where id=?",Long.class,sessionId);
-    ensureLessonAccess(context.studentId(),sessionLessonId);
+    throw missingInstitutionContext();
+  }
+
+  public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId,long institutionId){
+    context=authorization.requireStudent(context);
+    ensureSessionOwner(context.studentId(),sessionId,institutionId);
+    Long sessionLessonId=jdbc.queryForObject(
+        "select lesson_id from tutor_session where id=? and student_id=? and institution_id=?",
+        Long.class,sessionId,context.studentId(),institutionId);
+    ensureLessonAccess(context.studentId(),sessionLessonId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?30:limit,100));
-    String beforeFilter=beforeId==null?"":" and id < ?";
-    List<Object> args=new ArrayList<>();args.add(sessionId);if(beforeId!=null)args.add(beforeId);args.add(rowLimit+1);
+    String beforeFilter=beforeId==null?"":" and tm.id < ?";
+    List<Object> args=new ArrayList<>();
+    args.add(sessionId);args.add(context.studentId());args.add(institutionId);
+    if(beforeId!=null)args.add(beforeId);
+    args.add(rowLimit+1);
     List<Map<String,Object>> rows=jdbc.queryForList(
-      "select id,role,mode,message,created_at from tutor_message where session_id=?"+beforeFilter+
-      " order by id desc limit ?",args.toArray());
+      "select tm.id,tm.role,tm.mode,tm.message,tm.created_at from tutor_message tm " +
+      "join tutor_session ts on ts.id=tm.session_id " +
+      "where tm.session_id=? and ts.student_id=? and ts.institution_id=?"+beforeFilter+
+      " order by tm.id desc limit ?",args.toArray());
     boolean hasMore=rows.size()>rowLimit;
     if(hasMore)rows.remove(rows.size()-1);
     // Keep the paging cursor based on database rows before filtering, so a page made
@@ -69,10 +96,17 @@ public class TutorService {
   }
 
   public Map<String,Object> send(AuthContext context,long sessionId,String message,String mode,long questionId,String language){
+    throw missingInstitutionContext();
+  }
+
+  public Map<String,Object> send(AuthContext context,long sessionId,String message,String mode,long questionId,String language,long institutionId){
     long requestStartedNanos=System.nanoTime();
-    context=authorization.requireStudent(context);ensureSessionOwner(context.studentId(),sessionId);
-    Long sessionLessonId=jdbc.queryForObject("select lesson_id from tutor_session where id=?",Long.class,sessionId);
-    ensureLessonAccess(context.studentId(),sessionLessonId);
+    context=authorization.requireStudent(context);
+    ensureSessionOwner(context.studentId(),sessionId,institutionId);
+    Long sessionLessonId=jdbc.queryForObject(
+        "select lesson_id from tutor_session where id=? and student_id=? and institution_id=?",
+        Long.class,sessionId,context.studentId(),institutionId);
+    ensureLessonAccess(context.studentId(),sessionLessonId,institutionId);
     String tutorLanguage=normalizeTutorLanguage(language);
     String normalized=message==null?"":message.trim();
     if(normalized.isBlank())throw new IllegalArgumentException("Tutor message cannot be empty");
@@ -81,30 +115,30 @@ public class TutorService {
 
     long recent=jdbc.queryForObject("""
       select count(*) from tutor_message tm join tutor_session ts on ts.id=tm.session_id
-      where ts.student_id=? and tm.role='USER' and tm.created_at>=now()-interval '10 minutes'
-      """,Long.class,context.studentId());
+      where ts.student_id=? and ts.institution_id=? and tm.role='USER' and tm.created_at>=now()-interval '10 minutes'
+      """,Long.class,context.studentId(),institutionId);
     if(recent>=maxMessagesPer10m)throw new IllegalStateException("Tutor usage limit reached for now");
     long daily=jdbc.queryForObject("""
       select count(*) from tutor_message tm join tutor_session ts on ts.id=tm.session_id
-      where ts.student_id=? and tm.role='USER' and tm.created_at>=current_date
-      """,Long.class,context.studentId());
+      where ts.student_id=? and ts.institution_id=? and tm.role='USER' and tm.created_at>=current_date
+      """,Long.class,context.studentId(),institutionId);
     if(daily>=maxMessagesPerDay)throw new IllegalStateException("Daily tutor usage limit reached");
 
     String responseLanguage=detectTutorResponseLanguage(tutorLanguage,normalized);
     String languageReminder=buildLearningLanguageReminder(tutorLanguage,responseLanguage);
-    String tutorIdentityLabel=learnerTutorIdentityLabel(context.studentId());
+    String tutorIdentityLabel=learnerTutorIdentityLabel(context.studentId(),institutionId);
     String directAnswer=currentTutorDirectAnswer(responseLanguage,normalized);
     if(directAnswer!=null){
       String directText=appendLanguageReminder(directAnswer,languageReminder);
       TutorReply direct=new TutorReply(directText,null,0,0).withModelLabel("TUTOR_RULES");
-      conversationWriter.persistTurn(sessionId,mode,normalized,direct);
+      conversationWriter.persistTurn(sessionId,institutionId,mode,normalized,direct);
       return Map.of("message",direct.text(),"mode",mode);
     }
     String directIdentityAnswer=currentTutorMetaAnswer(responseLanguage,normalized,null,tutorIdentityLabel);
     if(directIdentityAnswer!=null){
       String directText=appendLanguageReminder(directIdentityAnswer,languageReminder);
       TutorReply direct=new TutorReply(directText,null,0,0).withModelLabel("TUTOR_IDENTITY");
-      conversationWriter.persistTurn(sessionId,mode,normalized,direct);
+      conversationWriter.persistTurn(sessionId,institutionId,mode,normalized,direct);
       return Map.of("message",direct.text(),"mode",mode);
     }
     if(!provider.isConfigured())throw new TutorUnavailableException("AI tutor is disabled or not configured");
@@ -133,8 +167,9 @@ public class TutorService {
           and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
-      where l.id=(select lesson_id from tutor_session where id=?) and l.active=true and l.status='PUBLISHED'
-      """,tutorLanguage,tutorLanguage,tutorLanguage,sessionId);
+      where l.id=? and exists(select 1 from tutor_session ts
+        where ts.id=? and ts.student_id=? and ts.institution_id=?) and l.active=true and l.status='PUBLISHED'
+      """,tutorLanguage,tutorLanguage,tutorLanguage,sessionLessonId,sessionId,context.studentId(),institutionId);
 
     String currentTopic = firstNonBlank(lesson.get("title"), lesson.get("chapter_name"), "this lesson");
     String qctx="";
@@ -161,9 +196,10 @@ public class TutorService {
             )::text)
           order by t.version_no desc,t.id desc limit 1
         ) qt on true
-        where q.id=? and q.lesson_id=(select lesson_id from tutor_session where id=?)
+        where q.id=? and q.lesson_id=? and exists(select 1 from tutor_session ts
+            where ts.id=? and ts.student_id=? and ts.institution_id=?)
           and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
-        """,tutorLanguage,questionId,sessionId);
+        """,tutorLanguage,questionId,sessionLessonId,sessionId,context.studentId(),institutionId);
       if(q.isEmpty())throw new SecurityException("Tutor question access denied");
       Map<String,Object> question=q.getFirst();
       qctx=compactText(json(question), 700);
@@ -185,20 +221,27 @@ public class TutorService {
             and t.source_hash::text=md5(b.content::text)
           order by t.version_no desc,t.id desc limit 1
         ) bt on true
-        where b.lesson_id=(select lesson_id from tutor_session where id=?) and b.active=true
+        where b.lesson_id=? and exists(select 1 from tutor_session ts
+            where ts.id=? and ts.student_id=? and ts.institution_id=?) and b.active=true
         order by b.sequence_no limit 4
-        """,tutorLanguage,sessionId);
+        """,tutorLanguage,sessionLessonId,sessionId,context.studentId(),institutionId);
       blocks=json(safeBlocks(rawBlocks));
-      retrievedCurriculum=curriculumRetriever.retrieve(sessionId,tutorLanguage,normalized,currentTopic);
+      retrievedCurriculum=curriculumRetriever.retrieve(sessionId,institutionId,tutorLanguage,normalized,currentTopic);
       mastery=json(jdbc.queryForList("""
         select cc.title,m.mastery_percent,m.attempts
         from student_concept_mastery m join chapter_concept cc on cc.id=m.concept_id
-        where m.student_id=? and cc.chapter_id=(select chapter_id from lesson where id=(select lesson_id from tutor_session where id=?))
+        where m.student_id=? and m.institution_id=? and cc.chapter_id=(select chapter_id from lesson where id=?
+          and exists(select 1 from tutor_session ts where ts.id=? and ts.student_id=? and ts.institution_id=?))
         order by m.mastery_percent asc nulls first limit 6
-        """,context.studentId(),sessionId));
+        """,context.studentId(),institutionId,sessionLessonId,sessionId,context.studentId(),institutionId));
     }
 
-    List<Map<String,Object>> history=jdbc.queryForList("select role,mode,message from tutor_message where session_id=? order by created_at desc,id desc limit ?",sessionId,historyMessages);
+    List<Map<String,Object>> history=jdbc.queryForList("""
+        select tm.role,tm.mode,tm.message from tutor_message tm
+        join tutor_session ts on ts.id=tm.session_id
+        where tm.session_id=? and ts.student_id=? and ts.institution_id=?
+        order by tm.created_at desc,tm.id desc limit ?
+        """,sessionId,context.studentId(),institutionId,historyMessages);
     history.removeIf(row -> isGenericTutorGreeting(String.valueOf(row.get("role")),String.valueOf(row.get("message"))));
     if(!isTutorFollowUpQuestion(normalized))history.clear();
     Collections.reverse(history);
@@ -288,7 +331,7 @@ public class TutorService {
     if(!finalText.equals(reply.text())){
       reply=new TutorReply(finalText,reply.providerResponseId(),reply.inputTokens(),reply.outputTokens(),reply.model());
     }
-    conversationWriter.persistTurn(sessionId,mode,normalized,reply);
+    conversationWriter.persistTurn(sessionId,institutionId,mode,normalized,reply);
     LOG.log(System.Logger.Level.INFO,
         "Tutor turn completed: mode={0}, selectedLanguage={1}, responseLanguage={2}, lessonContext={3}, promptChars={4}, inferenceMs={5}, totalMs={6}, model={7}, outputTokens={8}",
         new Object[]{mode,tutorLanguage,responseLanguage,useLessonContext,input.length(),inferenceMillis,
@@ -445,15 +488,15 @@ public class TutorService {
         + " के learning space का AI tutor हूँ। मैं पाठ समझने, उदाहरण हल करने और अभ्यास में मदद कर सकता हूँ।";
   }
 
-  private String learnerTutorIdentityLabel(long studentId) {
+  private String learnerTutorIdentityLabel(long studentId,long institutionId) {
     List<Map<String,Object>> schools=jdbc.queryForList("""
         select coalesce(nullif(trim(b.display_name),''),t.display_name) as display_name
         from institution_membership m
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         left join institution_branding b on b.institution_id=t.id
-        where m.student_id=? and m.status='ACTIVE'
+        where m.student_id=? and m.institution_id=? and m.status='ACTIVE'
         order by t.id limit 2
-        """,studentId);
+        """,studentId,institutionId);
     if (schools.isEmpty()) return "QuantaEdge";
     // The request carries no tenant selector. Never guess between two school identities
     // or reveal either school's name in a generic tutor response.
@@ -561,29 +604,96 @@ public class TutorService {
     throw new IllegalArgumentException("Tutor language must be 'hi' or 'en'.");
   }
 
-  private void ensureSessionOwner(long studentId,long sessionId){
-    Long count=jdbc.queryForObject("select count(*) from tutor_session where id=? and student_id=? and ended_at is null",Long.class,sessionId,studentId);
+  private void ensureSessionOwner(long studentId,long sessionId,long institutionId){
+    Long count=jdbc.queryForObject("""
+        select count(*) from tutor_session
+        where id=? and student_id=? and institution_id=? and ended_at is null
+        """,Long.class,sessionId,studentId,institutionId);
     if(count==null||count==0)throw new SecurityException("Tutor session access denied");
   }
 
-  private void ensureLessonAccess(long studentId,long lessonId){
+  private void ensureLessonAccess(long studentId,long lessonId,long institutionId){
     Long count=jdbc.queryForObject("""
-      select count(*) from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      select count(*) from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
+        and exists(select 1 from institution_membership m
+                   join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+                   where m.institution_id=? and m.student_id=? and m.status='ACTIVE')
         and exists(select 1 from student_track_enrollment ste
-                   where ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE')
+                   where ste.student_id=? and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE')
         and (
-          (s.program_id is null and c.code=(select class_code from student where id=? and active=true))
+          (s.program_id is null and c.code=(select class_code from student where id=? and active=true)
+            and (c.code not in ('6','7','8') or exists(
+              select 1
+              from curriculum_program class_course
+              join student_program_enrollment spe on spe.program_id=class_course.id
+                and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
+              join curriculum_program_subject cps on cps.program_id=class_course.id
+                and cps.class_id=c.id and cps.subject_id=s.id
+              where class_course.class_id=c.id and class_course.code='CLASS_' || c.code
+                and class_course.curriculum_version='CURRENT' and class_course.status='ACTIVE'
+            )))
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-            where spe.student_id=? and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=? and spe.institution_id=? and spe.program_id=s.program_id and spe.status='ACTIVE'
           ))
         )
-      """,Long.class,lessonId,studentId,studentId,studentId);
+      """,Long.class,lessonId,institutionId,studentId,studentId,institutionId,
+        studentId,studentId,institutionId,studentId,institutionId);
     if(count==null||count==0)throw new SecurityException("Tutor lesson access denied");
+    Long programId=jdbc.queryForObject("""
+      select coalesce(s.program_id,(
+        select class_course.id from curriculum_program class_course
+        where class_course.class_id=c.id and class_course.code='CLASS_' || c.code
+          and class_course.curriculum_version='CURRENT' and class_course.status='ACTIVE'
+          and c.code in ('6','7','8') limit 1
+      ))
+      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      where l.id=?
+      """,Long.class,lessonId);
+    if(programId!=null) assertCourseEntitlement(studentId,institutionId,programId);
+  }
+
+  private void assertCourseEntitlement(long studentId,long institutionId,long programId){
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where m.student_id=? and m.institution_id=? and m.status='ACTIVE'
+          and (
+            exists(select 1 from institution_course_entitlement e
+              where e.institution_id=m.institution_id and e.program_id=?
+                and e.status='ACTIVE' and e.valid_from<=now()
+                and (e.valid_until is null or e.valid_until>now()))
+            or exists(select 1 from course_purchase cp
+              where cp.institution_id=m.institution_id and cp.student_id=m.student_id and cp.course_id=?)
+            or exists(select 1 from student_course_access_grant g
+              where g.institution_id=m.institution_id and g.student_id=m.student_id
+                and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
+            or exists(select 1 from student_program_enrollment spe
+              join institution_course_assignment assignment
+                on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+              join institution_course_release release
+                on release.id=assignment.course_release_id and release.program_id=spe.program_id
+              where spe.institution_id=m.institution_id and spe.student_id=m.student_id
+                and spe.program_id=? and spe.status='ACTIVE')
+          )
+      )
+      """,Boolean.class,studentId,institutionId,programId,programId,programId,programId);
+    if(!Boolean.TRUE.equals(allowed)) throw new SecurityException(
+        "Tutor course access is not authorised for the selected institution.");
+  }
+
+  private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext(){
+    return new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400,"INSTITUTION_CONTEXT_REQUIRED",
+        "Legacy tutor calls must provide an explicit institution through the authenticated HTTP boundary.");
   }
 
   private List<Map<String,Object>> safeBlocks(List<Map<String,Object>> raw){
