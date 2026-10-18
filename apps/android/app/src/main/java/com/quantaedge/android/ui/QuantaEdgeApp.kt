@@ -100,6 +100,7 @@ import com.quantaedge.android.R
 import com.quantaedge.android.ui.LocalInstitutionBrandIdentity
 import com.quantaedge.android.RazorpayCourseCheckoutHost
 import com.quantaedge.android.data.InstitutionBrandingRepository
+import com.quantaedge.android.data.InstitutionLauncherAliasController
 import com.quantaedge.android.data.InstitutionBrandIdentity
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.data.ApiFailure
@@ -281,6 +282,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (incomingCode != null) {
             val previousCode = InstitutionBrandingRepository.normalizeCode(activeTenantCode)
             if (previousCode != incomingCode) {
+                // Switch to the generic launcher immediately; a different school's icon
+                // is enabled only after its canonical public branding record resolves.
+                InstitutionLauncherAliasController.apply(context, null)
                 institutionBrandIdentity = null
                 themeController.clearInstitutionTheme()
                 institutionBrandResolutionPending = true
@@ -294,6 +298,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         } else if (incomingJoinCode != null) {
             // A code-only invitation determines its tenant on the server; do not bind it
             // to a different school remembered from a previous learner/session.
+            InstitutionLauncherAliasController.apply(context, null)
             institutionBrandIdentity = null
             themeController.clearInstitutionTheme()
             institutionBrandResolutionPending = true
@@ -307,6 +312,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         .ifBlank { auth.textAny("role", "displayName", "display_name").ifBlank { "anonymous" } }
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
     LaunchedEffect(activeTenantCode, pendingInstitutionJoinCode, stateOwnerKey, institutionJoinRetryVersion) {
+        // This effect precedes the saveable UI-language state below, so read the
+        // persisted preference locally instead of referencing that later declaration.
+        val joinMessageLanguage = preferences.getString("language", "hi") ?: "hi"
         val role = auth.optString("role").uppercase()
         var joinFailedThisRun = false
         if (institutionJoinFailure && launchTenantCode == null && pendingInstitutionJoinCode.isBlank()) {
@@ -315,6 +323,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             activeTenantCode = ""
             preferences.edit().remove("institutionCode").remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
             institutionBrandResolutionPending = false
+            InstitutionLauncherAliasController.apply(context, null)
             return@LaunchedEffect
         }
         // Do not revive a previous signed-in user's persisted tenant palette on an unqualified launch.
@@ -325,6 +334,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             activeTenantCode = ""
             preferences.edit().remove("institutionCode").remove("institutionDisplayName").remove("institutionBrandingVersion").apply()
             institutionBrandResolutionPending = pendingInstitutionJoinCode.isNotBlank()
+            InstitutionLauncherAliasController.apply(context, null)
             return@LaunchedEffect
         }
         institutionBrandResolutionPending = true
@@ -352,28 +362,28 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         400, 404, 410, 422 -> {
                             pendingInstitutionJoinCode = ""
                             institutionEnrollmentRetryable = false
-                            institutionEnrollmentMessage = if (language == "hi")
+                            institutionEnrollmentMessage = if (joinMessageLanguage == "hi")
                                 "विद्यालय का आमंत्रण अमान्य या समाप्त हो गया है। अपने विद्यालय से नया learning link लें। नामांकन की पुष्टि नहीं हुई।"
                             else
                                 "This school invitation is invalid or expired. Ask your school for a new learning link. Enrollment is not confirmed."
                         }
                         429 -> {
                             institutionEnrollmentRetryable = true
-                            institutionEnrollmentMessage = if (language == "hi")
+                            institutionEnrollmentMessage = if (joinMessageLanguage == "hi")
                                 "इस आमंत्रण पर बहुत अधिक प्रयास हुए हैं। कुछ देर रुककर फिर कोशिश करें।"
                             else
                                 "There have been too many attempts. Wait a little before retrying this school invitation."
                         }
                         401, 403 -> {
                             institutionEnrollmentRetryable = false
-                            institutionEnrollmentMessage = if (language == "hi")
+                            institutionEnrollmentMessage = if (joinMessageLanguage == "hi")
                                 "आपका साइन-इन सत्यापित नहीं हो सका। फिर से साइन इन करके विद्यालय का लिंक खोलें।"
                             else
                                 "Your sign-in could not be verified. Sign in again, then reopen your school link."
                         }
                         else -> {
                             institutionEnrollmentRetryable = true
-                            institutionEnrollmentMessage = if (language == "hi")
+                            institutionEnrollmentMessage = if (joinMessageLanguage == "hi")
                                 "विद्यालय में नामांकन की पुष्टि नहीं हो सकी। नेटवर्क जाँचें और फिर कोशिश करें; विद्यालय का लिंक सुरक्षित है।"
                             else
                                 "School enrollment could not be confirmed. Check your connection and retry; your school link is retained."
@@ -402,10 +412,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (code == null) {
                 institutionBrandIdentity = null
                 themeController.clearInstitutionTheme()
+                InstitutionLauncherAliasController.apply(context, null)
             } else {
                 // A tenant cache is activated only after the existing resolver has validated the code.
                 themeController.activateCachedInstitutionTheme(code)
                 val identity = InstitutionBrandingRepository.fetch(code)
+                // Only a server-validated active tenant and one of the reviewed,
+                // pre-packaged icons may change the shared app's launcher identity.
+                InstitutionLauncherAliasController.apply(context, identity.institutionCode)
                 themeController.applyInstitutionTheme(code, identity.themeTokensJson)
                 preferences.edit()
                     .putString("institutionCode", identity.institutionCode)
@@ -426,6 +440,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 InstitutionBrandIdentity(code, fallbackName, packagedLogo, null, 0L, "{}")
             } else null
             themeController.clearInstitutionTheme()
+            if (code == null) InstitutionLauncherAliasController.apply(context, null)
         } finally {
             institutionBrandResolutionPending = false
         }
@@ -2693,10 +2708,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.postObject("/api/v1/account/me/transition-to-parent",
                 JSONObject().put("confirmParentTransition", true))
             ApiClient.clearSession()
+            InstitutionLauncherAliasController.apply(context, null)
             preferences.edit().remove("institutionCode")
                 .remove("institutionDisplayName")
                 .remove("institutionBrandingVersion")
                 .apply()
+            activeTenantCode = ""
             institutionBrandIdentity = null
             themeController.clearInstitutionTheme()
             institutionBrandResolutionPending = launchTenantCode != null
@@ -2966,6 +2983,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             runCatching { ApiClient.postObject("/api/v1/auth/logout") }
             WorkManager.getInstance(context.applicationContext).cancelAllWorkByTag("quantaedge-resource-download")
             ApiClient.clearSession()
+            InstitutionLauncherAliasController.apply(context, null)
+            preferences.edit().remove("institutionCode")
+                .remove("institutionDisplayName")
+                .remove("institutionBrandingVersion")
+                .apply()
+            activeTenantCode = ""
+            institutionBrandIdentity = null
+            themeController.clearInstitutionTheme()
+            institutionBrandResolutionPending = launchTenantCode != null || pendingInstitutionJoinCode.isNotBlank()
             AppRoute.values().forEach { savedRoute ->
                 saveableStateHolder.removeState("$stateOwnerKey:${savedRoute.name}")
                 saveableStateHolder.removeState("anonymous:${savedRoute.name}")
