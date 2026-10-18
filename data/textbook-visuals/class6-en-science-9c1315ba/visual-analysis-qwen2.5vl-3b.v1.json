@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 806,
+    "assets_selected": 808,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 803,
-    "assets_remaining": 1275,
-    "assets_completion_percent": 38.6,
+    "assets_analyzed": 805,
+    "assets_remaining": 1273,
+    "assets_completion_percent": 38.7,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 801,
+    "assets_skipped_from_checkpoint": 803,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:35:59Z"
+      "checkpointed_at": "2026-10-18T19:39:27Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:36:52Z"
+      "checkpointed_at": "2026-10-18T19:40:21Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T19:38:02Z"
+      "checkpointed_at": "2026-10-18T19:41:30Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -24925,6 +24925,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T19:38:25Z"
+    },
+    {
+      "asset_id": "135a24f35cca2ee811c585f2",
+      "asset_sha256": "f1ac3a719e34991030ed133c38b1e81cfc95856aa2bc094f4e8c1c863de41a07",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 41,
+      "asset_path": "page-0041.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "bd9d0fadac7535a591cbe9e3a7c18e658582efe3780e4223edefca93e61e0d1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the success story of the Silent Valley Movement in Kerala, India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Success Story—Save Silent Valley Movement",
+          "This is a real story of a forest in the Palakkad district of",
+          "Kerala. It is about preserving untouched beauty of a moist",
+          "evergreen forest and its rich biodiversity. The now-famous",
+          "Silent Valley was saved by a remarkable movement led by",
+          "common people who were not even residing in the vicinity of",
+          "the forest. The battle against the proposal of a hydroelectric",
+          "dam across the Kunthipuzha river persisted for 10 years. At",
+          "that time, people used all possible available means, such as",
+          "widespread awareness programmes, letters to editors, articles",
+          "in, newspapers, seminars, and petitions and appeals in court.",
+          "The movement was successful in saving the Silent Valley."
+        ],
+        "concepts": [
+          "Silent Valley",
+          "Palakkad district",
+          "Kerala",
+          "hydroelectric dam",
+          "Kunthipuzha river",
+          "widespread awareness programmes",
+          "letters to editors",
+          "articles in",
+          "newspapers",
+          "seminars",
+          "petitions and appeals in court"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The text does not provide specific details about the movement's methods or the reasons behind its success.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:44:28Z"
+    },
+    {
+      "asset_id": "7936e85c973429b2b336082a",
+      "asset_sha256": "816cf8c4ce5cfeb16eceeb54d5954ad48fe72554ff97aa4d3ab3f5134b2394f4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 42,
+      "asset_path": "assets/816cf8c4ce5cfeb16eceeb54d5954ad48fe72554ff97aa4d3ab3f5134b2394f4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7c4f33cef2841fb93187de28e302dcd297c37d00ead7d94bf3fb081ecf71a5d7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of green cactus plants with red spines and small white flowers.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cactus",
+          "green",
+          "red spines",
+          "small white flowers"
+        ],
+        "context_relation": "desert",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T19:45:36Z"
     }
   ]
 }
