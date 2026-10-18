@@ -317,7 +317,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
         if (!pathname.startsWith('/student')) return null;
         const joinCode = readPendingJoinCode();
         if (!joinCode) return null;
-        setEnrollmentIssue(null);
+        setStoredEnrollmentIssue(null);
         try {
           const response = await fetch('/api/v1/institution/join', {
             method: 'POST',
