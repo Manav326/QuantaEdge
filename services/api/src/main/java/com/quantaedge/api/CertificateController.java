@@ -221,7 +221,7 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
                s.display_name AS subject_name,cc.code AS class_code,
-               s.program_id AS course_id,p.display_name AS course_name,
+               coalesce(s.program_id,p.id) AS course_id,p.display_name AS course_name,
                round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
                existing.id AS certificate_id,existing.certificate_number,
                existing.status AS certificate_status
@@ -230,6 +230,11 @@ public class CertificateController {
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
         LEFT JOIN curriculum_program p ON p.id=s.program_id
+        OR (s.program_id IS NULL AND p.class_id=cc.id
+          AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
+          AND EXISTS(select 1 from curriculum_program_subject mapped_subject
+            where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
+              and mapped_subject.subject_id=s.id))
         JOIN student st ON st.id=att.student_id AND st.active=true
         LEFT JOIN LATERAL (
           SELECT cert.id,cert.certificate_number,cert.status
@@ -247,7 +252,11 @@ public class CertificateController {
               AND 100.0*att.final_score/att.max_score >= ?
               AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
               AND s.active=true AND cc.active=true
-              AND ((s.program_id is null and st.class_code=cc.code)
+              AND ((s.program_id is null and st.class_code=cc.code
+                and (cc.code not in ('6','7','8') or (p.id is not null and exists(
+                  SELECT 1 FROM student_program_enrollment spe
+                  WHERE spe.student_id=st.id AND spe.program_id=p.id AND spe.status='ACTIVE'
+                ))))
                 or (s.program_id is not null and exists(
                   SELECT 1 FROM student_program_enrollment spe
                   JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
@@ -303,7 +312,7 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.status,att.final_score,att.max_score,att.released_at,s.id AS subject_id,
                s.code AS subject_code,s.display_name AS subject_name,cc.code AS class_code,
-               s.program_id AS course_id,p.display_name AS course_name,
+               coalesce(s.program_id,p.id) AS course_id,p.display_name AS course_name,
                round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
                EXISTS (
                  SELECT 1 FROM student_track_enrollment ste
@@ -312,7 +321,16 @@ public class CertificateController {
                  JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id AND active_cc.active=true
                  WHERE ste.student_id=att.student_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
                    AND active_st.id=att.student_id AND active_s.id=s.id
-                   AND ((active_s.program_id is null and active_cc.code=active_st.class_code)
+                   AND ((active_s.program_id is null and active_cc.code=active_st.class_code
+                       and (active_cc.code not in ('6','7','8') or exists(
+                         select 1 from curriculum_program active_course
+                         join curriculum_program_subject active_map on active_map.program_id=active_course.id
+                           and active_map.class_id=active_s.class_id and active_map.subject_id=active_s.id
+                         join student_program_enrollment active_spe on active_spe.program_id=active_course.id
+                           and active_spe.student_id=active_st.id and active_spe.status='ACTIVE'
+                         where active_course.class_id=active_cc.id and active_course.code='CLASS_' || active_cc.code
+                           and active_course.curriculum_version='CURRENT' and active_course.status='ACTIVE'
+                       )))
                      or (active_s.program_id is not null and exists(
                        select 1 from student_program_enrollment active_spe
                        join curriculum_program active_p on active_p.id=active_spe.program_id and active_p.status='ACTIVE'
@@ -327,6 +345,11 @@ public class CertificateController {
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
         LEFT JOIN curriculum_program p ON p.id=s.program_id
+        OR (s.program_id IS NULL AND p.class_id=cc.id
+          AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
+          AND EXISTS(select 1 from curriculum_program_subject mapped_subject
+            where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
+              and mapped_subject.subject_id=s.id))
         JOIN student st ON st.id=att.student_id AND st.active=true
         LEFT JOIN LATERAL (
           SELECT COUNT(DISTINCT l.id) AS total_lessons,
@@ -530,7 +553,7 @@ public class CertificateController {
 
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
-               cc.code AS class_code,s.id AS subject_id,s.program_id,p.display_name AS course_name,
+               cc.code AS class_code,s.id AS subject_id,coalesce(s.program_id,p.id) AS program_id,p.display_name AS course_name,
                s.code AS subject_code,s.display_name AS subject_name,
                a.id AS assessment_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.id AS assessment_attempt_id,att.final_score,att.max_score,att.released_at,
@@ -542,10 +565,19 @@ public class CertificateController {
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
         LEFT JOIN curriculum_program p ON p.id=s.program_id
+        OR (s.program_id IS NULL AND p.class_id=cc.id
+          AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
+          AND EXISTS(select 1 from curriculum_program_subject mapped_subject
+            where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
+              and mapped_subject.subject_id=s.id))
         JOIN student st ON st.id=att.student_id AND st.active=true
         WHERE st.id=? AND att.student_id=? AND att.id=? AND att.status='RELEASED'
           AND att.final_score IS NOT NULL AND att.max_score>0
-          AND ((s.program_id is null and st.class_code=cc.code)
+          AND ((s.program_id is null and st.class_code=cc.code
+              and (cc.code not in ('6','7','8') or (p.id is not null and exists(
+                select 1 from student_program_enrollment spe
+                where spe.student_id=st.id and spe.program_id=p.id and spe.status='ACTIVE'
+              ))))
             or (s.program_id is not null and exists(
               select 1 from student_program_enrollment spe
               join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
