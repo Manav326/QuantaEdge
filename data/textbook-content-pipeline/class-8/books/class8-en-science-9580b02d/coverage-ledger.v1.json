@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 376,
-    "successful_visual_analyses": 374,
-    "missing_visual_analyses": 1915,
+    "raw_analysis_result_rows": 379,
+    "successful_visual_analyses": 377,
+    "missing_visual_analyses": 1912,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1917,
+    "unresolved_count": 1914,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -18303,9 +18303,18 @@
       "asset_path": "assets/756b783838e4fc6aae0002a084a0b704f574705589ec490b8e9a2e1ed680216e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a yellow background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18321,9 +18330,20 @@
       "asset_path": "assets/cfb1b5da89005ab656aba1647dbbdd7853ed2250612898f1d569b9d4b4caa5bb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or labels are present in the image.",
+          "The image does not provide any specific information or data points.",
+          "The image is a simple gradient background without any additional elements or objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18339,9 +18359,23 @@
       "asset_path": "assets/1a10a166690ad4bcafc47fc6aa54ad68466e5310d86265bfeb486095ff58b990.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow and beige gradient background with a black border at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow and beige gradient background",
+          "black border at the bottom"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
