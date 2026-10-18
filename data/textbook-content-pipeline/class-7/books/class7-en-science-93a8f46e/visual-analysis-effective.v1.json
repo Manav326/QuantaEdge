@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "87f82fd156d2cc7bc44905b52f0909758ae443e1946a615b734f9bf211c73eae",
+  "raw_analysis_sha256": "73ef184e658e63f7c51ca62dbfb909091738a4204206f99c2285e8ff8d778681",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:38:01Z",
+      "checkpointed_at": "2026-10-18T18:41:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:38:23Z",
+      "checkpointed_at": "2026-10-18T18:42:09Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -56375,6 +56375,118 @@
           "The page does not provide specific examples or solutions for the problems mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "15f76cf3d6e2800ca957202a",
+      "asset_sha256": "18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/18e1d766a10f0e4f856b5b22d833fb3e636cd0a91a7d87e2dd683cd3933785fb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red dashed line forming a circular pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:42:45Z",
+      "effective_analysis": {
+        "visual_summary": "A red dashed line forming a circular pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1cc834ba48bcaed9e975c2f1",
+      "asset_sha256": "6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:43:21Z",
+      "effective_analysis": {
+        "visual_summary": "A red butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "57e7412a5e6648899346d8bb",
+      "asset_sha256": "3fcac7171e96ef133e9f41fcde27d709930dc8a30c6bbea1b280ba745359cf8c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/3fcac7171e96ef133e9f41fcde27d709930dc8a30c6bbea1b280ba745359cf8c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:43:56Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
