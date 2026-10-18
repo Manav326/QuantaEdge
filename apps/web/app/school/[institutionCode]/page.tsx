@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
 
 export default function SchoolLearningEntryPage() {
   const { locale } = useLocale();
   const english = locale === 'english';
-  const { brand, isResolving, institutionContextRequested } = useTenantBranding();
+  const params = useParams<{ institutionCode: string }>();
+  const { brand, isResolving, institutionContextRequested, resolveInstitutionCode } = useTenantBranding();
 
   if (isResolving) {
     return (
@@ -27,6 +29,9 @@ export default function SchoolLearningEntryPage() {
           <h1>{english ? 'This school link is unavailable' : 'विद्यालय का यह लिंक उपलब्ध नहीं है'}</h1>
           <p>{english ? 'The school link may have expired or been changed. Please ask your school for its current learning link.' : 'विद्यालय का लिंक समाप्त या बदला हुआ हो सकता है। अपने विद्यालय से नया learning link लें।'}</p>
           {institutionContextRequested ? <p role="status">{english ? 'This invitation opens only this school’s learning space. Ask your school for a new link if this one no longer works.' : 'यह आमंत्रण केवल इसी विद्यालय का learning space खोलता है। लिंक काम न करे तो विद्यालय से नया लिंक लें।'}</p> : null}
+          <button type="button" className="button button-light" onClick={() => void resolveInstitutionCode(params.institutionCode)}>
+            {english ? 'Try again' : 'फिर कोशिश करें'}
+          </button>
         </section>
       </main>
     );
