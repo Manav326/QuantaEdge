@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7e4a8aa634c300338d37009345d28045957adc8332cc4ae22f4cf2c7a1676f09",
+  "raw_analysis_sha256": "54594324f17465a6f5d6613dbe0abd7df0d0f30a93d359ee1317c6195e185682",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T14:11:33Z",
+      "checkpointed_at": "2026-10-18T14:17:44Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -31486,6 +31486,162 @@
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
           "No visible text or images to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "61b160787e73f1888715b7ad",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:17:58Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "264647961a857697afa5e279",
+      "asset_sha256": "a84b5b9053936d6084e562d6d98084fc87040cf61530d7b27e00bd6a21fc86e3",
+      "page_text_context_sha256": "4fdaaeb112d0f5474ab20c035bd07fbd59041011986cde7ee64d0a74b1a3cb38",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "asset_path": "page-0023.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0b205aeb30932858c542e4d2",
+      "asset_sha256": "86f6f2956d30ff201a03a5ab62a7e7515d655ee48ac505b857275ed5dfea7350",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/86f6f2956d30ff201a03a5ab62a7e7515d655ee48ac505b857275ed5dfea7350.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gas stove with a pot on it, showing a bubbling liquid inside the pot.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gas stove",
+          "pot",
+          "bubbling liquid"
+        ],
+        "context_relation": "The image shows a common kitchen appliance used for cooking.",
+        "limitations": [
+          "The image does not provide specific details about the type of liquid or the cooking process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:24:21Z",
+      "effective_analysis": {
+        "visual_summary": "A gas stove with a pot on it, showing a bubbling liquid inside the pot.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gas stove",
+          "pot",
+          "bubbling liquid"
+        ],
+        "context_relation": "The image shows a common kitchen appliance used for cooking.",
+        "limitations": [
+          "The image does not provide specific details about the type of liquid or the cooking process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b9c0c961ef3891ed80fd8c85",
+      "asset_sha256": "a5c2c8c8af46bdfa5514631ab3a87dd54412123c1f6e3905fdea36bc93536f61",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/a5c2c8c8af46bdfa5514631ab3a87dd54412123c1f6e3905fdea36bc93536f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b053ee4a16052d2f0a41874fa71b16f65619dc209bf4708b2bb13c9e6cad85d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is fixing a bicycle tire.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fixing bicycle tire",
+          "person repairing bicycle",
+          "bicycle tire repair"
+        ],
+        "context_relation": "The image is related to the concept of bicycle repair.",
+        "limitations": [
+          "The image does not provide specific details about the repair process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T14:25:52Z",
+      "effective_analysis": {
+        "visual_summary": "A person is fixing a bicycle tire.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fixing bicycle tire",
+          "person repairing bicycle",
+          "bicycle tire repair"
+        ],
+        "context_relation": "The image is related to the concept of bicycle repair.",
+        "limitations": [
+          "The image does not provide specific details about the repair process."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

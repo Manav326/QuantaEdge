@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 725,
-    "successful_visual_analyses": 713,
-    "missing_visual_analyses": 1353,
-    "failed_visual_analyses": 12,
+    "raw_analysis_result_rows": 729,
+    "successful_visual_analyses": 716,
+    "missing_visual_analyses": 1349,
+    "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1365,
+    "unresolved_count": 1362,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28670,9 +28670,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28688,7 +28697,7 @@
       "asset_path": "page-0023.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -28706,9 +28715,22 @@
       "asset_path": "assets/86f6f2956d30ff201a03a5ab62a7e7515d655ee48ac505b857275ed5dfea7350.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gas stove with a pot on it, showing a bubbling liquid inside the pot.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gas stove",
+          "pot",
+          "bubbling liquid"
+        ],
+        "context_relation": "The image shows a common kitchen appliance used for cooking.",
+        "limitations": [
+          "The image does not provide specific details about the type of liquid or the cooking process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28724,9 +28746,22 @@
       "asset_path": "assets/a5c2c8c8af46bdfa5514631ab3a87dd54412123c1f6e3905fdea36bc93536f61.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person is fixing a bicycle tire.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fixing bicycle tire",
+          "person repairing bicycle",
+          "bicycle tire repair"
+        ],
+        "context_relation": "The image is related to the concept of bicycle repair.",
+        "limitations": [
+          "The image does not provide specific details about the repair process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
