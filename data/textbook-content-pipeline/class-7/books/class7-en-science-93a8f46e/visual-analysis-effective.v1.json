@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bfc643d67bae0ffc4b826cd4334a588d7832a2faa18d754716c5fa501656b4ae",
+  "raw_analysis_sha256": "110c3dd882b5bcba386cf785718eda7589e615e8d398d9774a17f83edfd21216",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:27:09Z",
+      "checkpointed_at": "2026-10-18T06:30:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:27:29Z",
+      "checkpointed_at": "2026-10-18T06:30:25Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -38038,6 +38038,186 @@
         "limitations": [
           "No specific chemical reactions or results are shown",
           "No additional context or information is provided"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bcf2617e03e3c6130b643300",
+      "asset_sha256": "234fcced769f2fb9a37c610a66bf99a39347acc74b06c4c67ca22c98f2e0af80",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/234fcced769f2fb9a37c610a66bf99a39347acc74b06c4c67ca22c98f2e0af80.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red and blue litmus paper strips are shown, with a caption asking about their composition and color change when tested with different samples.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us ﬁnd out!",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance"
+        ],
+        "context_relation": "exploration of litmus paper properties",
+        "limitations": [
+          "No specific chemical reactions are shown",
+          "No detailed explanation of the chemical composition of litmus"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:31:05Z",
+      "effective_analysis": {
+        "visual_summary": "Red and blue litmus paper strips are shown, with a caption asking about their composition and color change when tested with different samples.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us ﬁnd out!",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance"
+        ],
+        "context_relation": "exploration of litmus paper properties",
+        "limitations": [
+          "No specific chemical reactions are shown",
+          "No detailed explanation of the chemical composition of litmus"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e0d0d88684ccce1d3ea5dc44",
+      "asset_sha256": "0fb4e0654a4ae91960eb2573d3b3cb8b2483679228fe37c773ffd01ddb84a20b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/0fb4e0654a4ae91960eb2573d3b3cb8b2483679228fe37c773ffd01ddb84a20b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing blue and red litmus paper strips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Lichens",
+          "Solid",
+          "Solution"
+        ],
+        "context_relation": "The image is related to the text discussing the composition and properties of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the chemical composition or the mechanism of color change."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:31:42Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing blue and red litmus paper strips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Lichens",
+          "Solid",
+          "Solution"
+        ],
+        "context_relation": "The image is related to the text discussing the composition and properties of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the chemical composition or the mechanism of color change."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bf87a4cd6e5d4bf2e82cd740",
+      "asset_sha256": "b8cb1eece06a9474e9a8cefc0b07fbedba2d2c3ad93b498bda46089d6aebced4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/b8cb1eece06a9474e9a8cefc0b07fbedba2d2c3ad93b498bda46089d6aebced4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing blue and red litmus paper strips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Lichens",
+          "Solid",
+          "Solution"
+        ],
+        "context_relation": "The image is related to the text discussing the composition and properties of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the chemical composition or the mechanism of color change."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:32:19Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing blue and red litmus paper strips.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "Litmus",
+          "Lichens",
+          "Solid",
+          "Solution"
+        ],
+        "context_relation": "The image is related to the text discussing the composition and properties of litmus paper strips.",
+        "limitations": [
+          "The image does not provide specific details about the chemical composition or the mechanism of color change."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
