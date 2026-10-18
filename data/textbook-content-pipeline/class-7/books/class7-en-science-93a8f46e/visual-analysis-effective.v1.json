@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0c3d34146d247d0f22ab3c8026b77e3e542e9155126727c57a9da32bd20103de",
+  "raw_analysis_sha256": "1ccbac716d7198e513a25362d44a00b6c36c343066b6bee972ad831139728878",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:20:57Z",
+      "checkpointed_at": "2026-10-18T18:23:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:21:19Z",
+      "checkpointed_at": "2026-10-18T18:24:00Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -55403,6 +55403,112 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6804fb811c95ab69ce6ddd69",
+      "asset_sha256": "039da89535ea4316c8b297cf8cdcdbbe0d104b53e540081418262c745845b22f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/039da89535ea4316c8b297cf8cdcdbbe0d104b53e540081418262c745845b22f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:24:34Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2eff4d442eea393b23fcb500",
+      "asset_sha256": "753e250ad153d86e5d3b27eadc7312f553c7f9798156452d27dbf08ef48d2039",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/753e250ad153d86e5d3b27eadc7312f553c7f9798156452d27dbf08ef48d2039.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A rope with a blue loop at one end."
+        ],
+        "concepts": [
+          "rope",
+          "blue loop"
+        ],
+        "context_relation": "uncertain",
+        "limitations": [
+          "uncertain"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:25:10Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A rope with a blue loop at one end."
+        ],
+        "concepts": [
+          "rope",
+          "blue loop"
+        ],
+        "context_relation": "uncertain",
+        "limitations": [
+          "uncertain"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7a02257f1b5bca929eeb73f2",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "page_text_context_sha256": "a1126efc13800942ec64cac46b177b0e38a5270773a520565d6cc6b8c974d5a4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 39,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
