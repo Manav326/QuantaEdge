@@ -34,6 +34,11 @@ app:
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001,http://localhost:3002}
   demo-seed: ${APP_DEMO_SEED:false}
+  qa:
+    enabled: ${APP_QA_ENABLED:false}
+    environment-approved: ${APP_QA_ENVIRONMENT_APPROVED:false}
+    environment-label: ${APP_QA_ENVIRONMENT_LABEL:}
+    fixture-password: ${APP_QA_FIXTURE_PASSWORD:QaTest!2026}
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
   institution:
