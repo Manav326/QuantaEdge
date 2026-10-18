@@ -263,7 +263,14 @@ public class AuthFilter extends OncePerRequestFilter {
             InstitutionTenantContext tenantContext;
             if (InstitutionTenantContextService.requiresInstitutionContext(uri)) {
               tenantContext = institutionTenantContextService.requireSelector(selectedInstitutionCode);
-              institutionTenantContextService.assertActiveMembership(context,tenantContext);
+              boolean parentCreatingChild = "POST".equalsIgnoreCase(request.getMethod())
+                  && "/api/v1/guardians/children".equals(uri)
+                  && context != null && context.isParent();
+              // First-child onboarding has no existing membership by definition. The controller
+              // must validate a sibling membership or redeem a valid institution join code.
+              if (!parentCreatingChild) {
+                institutionTenantContextService.assertActiveMembership(context,tenantContext);
+              }
               Long targetChildId = guardianChildId(uri);
               if (targetChildId != null) {
                 institutionTenantContextService.assertGuardianChildMembership(
