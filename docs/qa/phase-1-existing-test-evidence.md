@@ -37,9 +37,9 @@ In this Phase 1 audit, the items below have **source-present evidence only** unl
 
 ## 3. Native Android test depth
 
-The 15 JVM test files located under `apps/android/app/src/test` cover domain/UI contracts including navigation grouping, answers, lesson policy/recap/visual gates, math text, assessment timer, lesson classes, live player, QR verification, resource owner key, offline assessment sanitizer, recorded/offline video and tutor message parser.
+The 15 JVM test files located under `apps/android/app/src/test` cover domain/UI contracts including navigation grouping, answers, lesson policy/recap/visual gates, math text, assessment timer, lesson classes, live player, QR verification, resource owner key, offline assessment sanitizer, recorded/offline video and tutor message parser. The `apps/android/app/src` directory currently contains `main` and `test`; no `androidTest` source directory was found in that tree.
 
-The CI command found in `.github/workflows/ci.yml` is `gradle -p apps/android testDebugUnitTest assembleDebug`. This proves that the workflow is configured for JVM unit tests and APK assembly; it is not a connected-device Compose interaction test. Do not represent the JVM suite as a complete emulator UI audit.
+Repository searches during this pass returned no matches for Playwright, Cypress, Puppeteer, WebdriverIO, `@playwright/test`, `createComposeRule`, `AndroidJUnit4`, Maestro or Appium. This is search evidence, not a mathematical proof that no external test harness exists outside the repository. The CI command found in `.github/workflows/ci.yml` is `gradle -p apps/android testDebugUnitTest assembleDebug`. This configures JVM unit tests and APK assembly; it is not a connected-device Compose interaction test. Do not represent the JVM suite as a complete emulator UI audit.
 
 ## 4. CI/static checks vs runtime tests
 
