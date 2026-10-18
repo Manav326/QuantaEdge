@@ -148,7 +148,7 @@ Required design principle for the later implementation: a unique installation/ru
 
 ## 8. Workflow scenario mapping
 
-A 72-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) now defines stable IDs, personas, preconditions, steps, expected UI/data behavior, negative/security cases, synthetic-fixture safety, cleanup constraints and test method for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and future QA-pack lifecycle behavior. The 7 `QA-00x` installer scenarios are explicitly `NOT_IMPLEMENTED`; the remaining 65 scenarios (including operational health and fresh-database migration checks) are `NOT_EXECUTED`. None is marked passed. The screen inventory has a `scenario_ids` column so screen entries map into those workflows; screen-level control decomposition still needs further review.
+A 72-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) now defines stable IDs, personas, preconditions, steps, expected UI/data behavior, negative/security cases, synthetic-fixture safety, cleanup constraints and test method for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and future QA-pack lifecycle behavior. The 7 `QA-00x` installer scenarios are explicitly `NOT_IMPLEMENTED`; the remaining 65 scenarios (including operational health and fresh-database migration checks) are `NOT_EXECUTED`. None is marked passed. All 93 UI inventory rows are now marked `SCENARIO_MAPPED` and reference only existing scenario IDs; the independent check found no broken references. The 435-row API route inventory is also linked to scenario IDs with no blank or unknown references. This is traceability, not execution: screen-level control decomposition, exact endpoint assertions and runtime verification remain open.
 
 ## 9. Per-screen state coverage checklist
 
@@ -205,6 +205,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
 - [x] Add 72 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
 - [x] Add a separate 93-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
+- [x] Link all 93 screen entries and all 435 extracted API mapping rows to existing scenario IDs; verify no unknown or missing references.
 - [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
 - [x] Source-extract 435 REST/STOMP mapping entries from 48 Java files; generated guard hints remain partial and need human review.
 - [x] Document Education Admin base-role defaults, HRMS additional-role templates and distinct platform-owner/institution-admin authority.
