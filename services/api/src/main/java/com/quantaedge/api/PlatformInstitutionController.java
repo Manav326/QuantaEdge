@@ -213,6 +213,52 @@ public class PlatformInstitutionController {
     }
   }
 
+  @PutMapping("/{institutionId}/profile")
+  @Transactional
+  public Map<String,Object> updateInstitutionProfile(
+      @PathVariable long institutionId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner = requirePlatformOwner(context);
+    String displayName = value(body,"displayName");
+    String legalName = value(body,"legalName");
+    requireText(displayName,2,180,"Institution display name");
+    if(legalName.length()>220 || legalName.chars().anyMatch(Character::isISOControl)) {
+      throw new IllegalArgumentException("Institution legal name must be no more than 220 characters and cannot contain control characters.");
+    }
+    List<Map<String,Object>> rows = jdbc.queryForList(
+        "select display_name,legal_name from institution_tenant where id=? for update",institutionId);
+    if(rows.isEmpty()) throw new IllegalArgumentException("Institution not found.");
+    Map<String,Object> current = rows.getFirst();
+    String previousDisplayName = String.valueOf(current.get("display_name"));
+    String previousLegalName = nullableString(current.get("legal_name"));
+    jdbc.update("""
+        update institution_tenant set display_name=?,legal_name=?,updated_by_staff_id=?,updated_at=now()
+        where id=?
+        """,displayName,emptyToNull(legalName),owner.staffId(),institutionId);
+    // If the white-label name still follows the institution name, keep it in sync.
+    // A deliberately customised brand display name is preserved.
+    int renamedDefaultBrand = jdbc.update("""
+        update institution_branding set display_name=?,version=version+1,updated_by_staff_id=?,updated_at=now()
+        where institution_id=? and display_name=?
+        """,displayName,owner.staffId(),institutionId,previousDisplayName);
+    jdbc.update("""
+        insert into institution_membership_event(institution_id,event_type,actor_platform_staff_id,details)
+        values (?,'INSTITUTION_PROFILE_CHANGED',?,jsonb_build_object(
+          'displayNameChanged',?,'legalNameChanged',?))
+        """,institutionId,owner.staffId(),!previousDisplayName.equals(displayName),
+        !java.util.Objects.equals(previousLegalName,emptyToNull(legalName)));
+    Map<String,Object> details = new LinkedHashMap<>();
+    details.put("previousDisplayName",previousDisplayName);
+    details.put("displayName",displayName);
+    details.put("previousLegalName",previousLegalName==null?"":previousLegalName);
+    details.put("legalName",legalName);
+    details.put("defaultBrandNameSynchronized",renamedDefaultBrand>0);
+    audit(owner,institutionId,"INSTITUTION_PROFILE_CHANGED","INSTITUTION",String.valueOf(institutionId),details);
+    return Map.of("institutionId",institutionId,"displayName",displayName,
+        "legalName",legalName,"defaultBrandNameSynchronized",renamedDefaultBrand>0);
+  }
+
   @PutMapping("/{institutionId}/status")
   @Transactional
   public Map<String,Object> updateStatus(
