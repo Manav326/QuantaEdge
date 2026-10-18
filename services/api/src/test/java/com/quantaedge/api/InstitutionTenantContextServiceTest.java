@@ -15,6 +15,26 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 class InstitutionTenantContextServiceTest {
   @Test
+  void certificateAndChildCertificateRoutesRequireAnInstitutionContext() {
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/students/me/certificates"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/students/me/certificates/123/download"));
+    assertEquals(true, InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/guardians/children/456/certificates"));
+  }
+
+  @Test
+  void publicBrandingAndIdentityRoutesDoNotRequireAnInstitutionContext() {
+    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/institution/public/branding/SCHOOL-A"));
+    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/auth/me"));
+    assertEquals(false, InstitutionTenantContextService.requiresInstitutionContext(
+        "/api/v1/hrms/platform/institutions"));
+  }
+
+  @Test
   void missingSelectorDoesNotInventADefaultTenant() {
     JdbcTemplate jdbc = org.mockito.Mockito.mock(JdbcTemplate.class);
     InstitutionTenantContextService service = new InstitutionTenantContextService(jdbc);

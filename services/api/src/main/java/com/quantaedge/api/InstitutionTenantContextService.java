@@ -32,6 +32,7 @@ public class InstitutionTenantContextService {
    */
   private static final List<String> TENANT_REQUIRED_PREFIXES = List.of(
       "/api/v1/students/me/programs",
+      "/api/v1/students/me/certificates",
       "/api/v1/marketplace",
       "/api/v1/parent/course-requests",
       "/api/v1/lessons",
