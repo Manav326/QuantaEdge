@@ -705,7 +705,7 @@ public class QaTestPackService {
       join curriculum_class c on c.id=s.class_id
       join question q on q.lesson_id=l.id
       where c.code='7' and c.active=true and s.active=true and s.code in ('maths','science')
-        and ch.active=true and ch.content_status='PUBLISHED'
+        and ch.active=true
         and l.active=true and l.status='PUBLISHED'
         and exists(select 1 from question_option qo where qo.question_id=q.id and qo.is_correct=true)
         and exists(select 1 from question_option qo where qo.question_id=q.id and qo.is_correct=false)
