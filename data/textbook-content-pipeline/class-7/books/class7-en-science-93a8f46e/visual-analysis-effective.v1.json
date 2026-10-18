@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "583600c7a9f574f43ad1fc0eb610c0364242c519cf0926a37a48efb9d8ad7a12",
+  "raw_analysis_sha256": "19ebbaded2190ba6379d0bf156d527db4e0d87dc9506618e80dd71c22efed987",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:46:12Z",
+      "checkpointed_at": "2026-10-18T06:48:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:46:31Z",
+      "checkpointed_at": "2026-10-18T06:49:18Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -39138,6 +39138,170 @@
         "context_relation": "The image is a visual representation of a fire hydrant, which is not directly related to the text about acids and sour substances.",
         "limitations": [
           "The image does not provide any additional information beyond what is visually represented."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "24886f6a886ce82a17beac70",
+      "asset_sha256": "0bb40b664ae824be2b11345431b041af25b41e732c0b9366b42350b6a281e0a6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/0bb40b664ae824be2b11345431b041af25b41e732c0b9366b42350b6a281e0a6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of various fruits and vegetables with arrows pointing to them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fruits",
+          "vegetables",
+          "arrows",
+          "taste",
+          "acids"
+        ],
+        "context_relation": "The image is related to the educational content about the taste of substances containing acids.",
+        "limitations": [
+          "The image does not provide specific details about the taste of each substance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:49:53Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of various fruits and vegetables with arrows pointing to them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fruits",
+          "vegetables",
+          "arrows",
+          "taste",
+          "acids"
+        ],
+        "context_relation": "The image is related to the educational content about the taste of substances containing acids.",
+        "limitations": [
+          "The image does not provide specific details about the taste of each substance."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "38feaf52f27d496250589dcc",
+      "asset_sha256": "c38ab7805cfc4d9099f453b4df248b0fd7730bc8be32e31ff9af888155a8eb0e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/c38ab7805cfc4d9099f453b4df248b0fd7730bc8be32e31ff9af888155a8eb0e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of various fruits and vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "edible substances",
+          "taste",
+          "acids"
+        ],
+        "context_relation": "exploration of edible substances and their taste",
+        "limitations": [
+          "none"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:50:29Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of various fruits and vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "11",
+          "Activity 2.2: Let us relate and explore",
+          "Are all the substances in Group A of Table 2.2 edible?",
+          "Have you ever tasted these edible substances?",
+          "Can you recall their taste?",
+          "You will find that all these substances taste sour. Thus, we can say that substances that taste sour tend to contain acids and are"
+        ],
+        "concepts": [
+          "edible substances",
+          "taste",
+          "acids"
+        ],
+        "context_relation": "exploration of edible substances and their taste",
+        "limitations": [
+          "none"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dccf6affb1b4cfda13e5ca84",
+      "asset_sha256": "03c97fb78783c7b89d7e9d648db0da0f55db852a4aa5e5b4eb655b698208480c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/03c97fb78783c7b89d7e9d648db0da0f55db852a4aa5e5b4eb655b698208480c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "51f25a5b79ef8ce51e1dce710ac1c82d110854c6d63cbcc8872038a8eed178e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A basket containing various fruits and vegetables, with an arrow pointing to tomatoes.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "basket",
+          "fruits",
+          "vegetables",
+          "tomatoes"
+        ],
+        "context_relation": "The image is related to the topic of edible substances and their taste, specifically focusing on sour substances.",
+        "limitations": [
+          "The image does not provide specific details about the taste or composition of the substances."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:51:03Z",
+      "effective_analysis": {
+        "visual_summary": "A basket containing various fruits and vegetables, with an arrow pointing to tomatoes.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "basket",
+          "fruits",
+          "vegetables",
+          "tomatoes"
+        ],
+        "context_relation": "The image is related to the topic of edible substances and their taste, specifically focusing on sour substances.",
+        "limitations": [
+          "The image does not provide specific details about the taste or composition of the substances."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
