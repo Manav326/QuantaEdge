@@ -507,7 +507,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     };
     void run();
     return () => { cancelled = true; };
-  }, [pathname, enrollmentRetryVersion]);
+  }, [pathname, enrollmentRetryVersion, setStoredEnrollmentIssue]);
 
   const value = useMemo(() => ({
     brand, isResolving, institutionContextRequested, enrollmentIssue,
