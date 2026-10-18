@@ -43,6 +43,11 @@ public class PlatformInstitutionController {
   private final AuthorizationService authorization;
   private final InstitutionAuthService institutionAuth;
   private final ObjectMapper objectMapper;
+  @org.springframework.beans.factory.annotation.Value("${app.auth.google-client-id:}") private String googleClientId;
+  @org.springframework.beans.factory.annotation.Value("${app.razorpay.key-id:}") private String razorpayKeyId;
+  @org.springframework.beans.factory.annotation.Value("${app.razorpay.key-secret:}") private String razorpayKeySecret;
+  @org.springframework.beans.factory.annotation.Value("${app.google-meet.client-id:}") private String googleMeetClientId;
+  @org.springframework.beans.factory.annotation.Value("${app.google-meet.client-secret:}") private String googleMeetClientSecret;
 
   public PlatformInstitutionController(
       JdbcTemplate jdbc,
@@ -53,6 +58,59 @@ public class PlatformInstitutionController {
     this.authorization = authorization;
     this.institutionAuth = institutionAuth;
     this.objectMapper = objectMapper;
+  }
+
+  /**
+   * Non-secret integration readiness for HRMS/platform operators. This endpoint reports only
+   * whether centrally-managed configuration exists; provider secrets and client secrets are
+   * never returned. Tenant administrators are not expected to supply any of these credentials.
+   */
+  @GetMapping("/integration-readiness")
+  public Map<String,Object> integrationReadiness(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    List<Map<String,Object>> checks=new ArrayList<>();
+    addReadinessCheck(checks,"GOOGLE_OAUTH",googleClientId!=null&&!googleClientId.isBlank(),
+        true,"HRMS configures the shared verified Google identity client and registers enabled tenant origins centrally.");
+    addReadinessCheck(checks,"RAZORPAY",razorpayKeyId!=null&&!razorpayKeyId.isBlank()
+        &&razorpayKeySecret!=null&&!razorpayKeySecret.isBlank(),
+        true,"HRMS configures the platform payment credentials; each order remains institution-scoped.");
+    String otpUrl=System.getenv("APP_OTP_PROVIDER_URL");
+    String otpToken=System.getenv("APP_OTP_PROVIDER_TOKEN");
+    addReadinessCheck(checks,"OTP_DELIVERY",otpUrl!=null&&!otpUrl.isBlank()
+        &&otpToken!=null&&!otpToken.isBlank(),true,
+        "HRMS configures the shared OTP delivery provider; tenant admins do not manage delivery credentials.");
+    String cors=System.getenv("APP_CORS_ALLOWED_ORIGINS");
+    String learningOrigins=System.getenv("APP_AUTH_LEARNING_ORIGINS");
+    addReadinessCheck(checks,"TENANT_WEB_ORIGINS",cors!=null&&!cors.isBlank()
+        &&learningOrigins!=null&&!learningOrigins.isBlank(),true,
+        "HRMS registers each active institution's learner origin with the API and OAuth provider before activation.");
+    addReadinessCheck(checks,"GOOGLE_MEET",googleMeetClientId!=null&&!googleMeetClientId.isBlank()
+        &&googleMeetClientSecret!=null&&!googleMeetClientSecret.isBlank(),
+        false,"Optional until the platform enables Meet-based sessions; credentials remain HRMS-managed.");
+    boolean requiredReady=checks.stream().filter(c->Boolean.TRUE.equals(c.get("required")))
+        .allMatch(c->Boolean.TRUE.equals(c.get("configured")));
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("owner","HRMS");
+    result.put("ready",requiredReady);
+    result.put("checks",checks);
+    result.put("secretValuesReturned",false);
+    result.put("asOf",Instant.now().toString());
+    audit(owner,null,"INTEGRATION_READINESS_VIEWED","PLATFORM_INTEGRATIONS",null,
+        Map.of("ready",requiredReady));
+    return result;
+  }
+
+  private void addReadinessCheck(List<Map<String,Object>> checks,String integration,
+      boolean configured,boolean required,String operatorAction) {
+    Map<String,Object> item=new LinkedHashMap<>();
+    item.put("integration",integration);
+    item.put("configured",configured);
+    item.put("required",required);
+    item.put("owner","HRMS");
+    item.put("tenantCredentialsRequired",false);
+    item.put("operatorAction",configured?"Configuration values are present. End-to-end provider verification is still required.":operatorAction);
+    checks.add(item);
   }
 
   @GetMapping("/theme-presets")

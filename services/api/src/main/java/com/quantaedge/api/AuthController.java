@@ -18,18 +18,28 @@ public class AuthController {
   private final AuthService auth;
   private final StaffAuditService staffAudit;
   private final GoogleIdentityService googleIdentity;
+  private final InstitutionTenantContextService tenantContexts;
+  private final InstitutionMembershipService memberships;
   private final boolean secureCookies;
 
   @Autowired
-  public AuthController(AuthService auth, StaffAuditService staffAudit, GoogleIdentityService googleIdentity,
+  public AuthController(AuthService auth,StaffAuditService staffAudit,GoogleIdentityService googleIdentity,
+      InstitutionTenantContextService tenantContexts,InstitutionMembershipService memberships,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
-    this.auth=auth; this.staffAudit=staffAudit; this.googleIdentity=googleIdentity; this.secureCookies=secureCookies;
+    this.auth=auth;this.staffAudit=staffAudit;this.googleIdentity=googleIdentity;
+    this.tenantContexts=tenantContexts;this.memberships=memberships;this.secureCookies=secureCookies;
+  }
+
+  /** Source-compatible constructor for focused tests that do not exercise account onboarding. */
+  public AuthController(AuthService auth,StaffAuditService staffAudit,GoogleIdentityService googleIdentity,
+      @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
+    this(auth,staffAudit,googleIdentity,null,null,secureCookies);
   }
 
   /** Retained for existing focused controller tests that do not exercise Google sign-in. */
-  public AuthController(AuthService auth, StaffAuditService staffAudit,
+  public AuthController(AuthService auth,StaffAuditService staffAudit,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
-    this(auth, staffAudit, null, secureCookies);
+    this(auth,staffAudit,null,null,null,secureCookies);
   }
 
   /**
@@ -44,13 +54,19 @@ public class AuthController {
   }
 
   @PostMapping("/my-learning-session")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> openPersonalLearningSession(
       @RequestAttribute(value="authContext", required=false) AuthContext context,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     if (context == null || !context.isParent() || context.userId() == null) {
       throw new SecurityException("An authenticated parent account is required to open personal learning.");
     }
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
+    requireMembershipService().requireExistingMembership(context,tenant);
     AuthContext learner = auth.openParentLearningContext(context.userId());
+    requireMembershipService().ensureStudentMembership(learner.studentId(),tenant.institutionId(),
+        "PARENT_PERSONAL_LEARNING",context.userId());
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
   }
@@ -64,13 +80,21 @@ public class AuthController {
   }
 
   @PostMapping("/google")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> googleSignIn(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     if (googleIdentity == null) throw new IllegalStateException("Google sign-in is not configured.");
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     GoogleIdentityService.GoogleSignIn verified = googleIdentity.authenticate(
         String.valueOf(body.getOrDefault("credential", "")));
     AuthContext context = verified.context();
+    if(verified.accountCreated()) {
+      requireMembershipService().establishForNewAccount(context,tenant,"GOOGLE_SIGNUP");
+    } else {
+      requireMembershipService().requireExistingMembership(context,tenant);
+    }
     String workspace = context.isParent() ? "PARENT" : "STUDENT";
     boolean androidClient = isAndroidClient(clientHeader);
     ResponseEntity<Map<String,Object>> session = withCookie(
@@ -88,8 +112,12 @@ public class AuthController {
   }
 
   @PostMapping("/account-signup/request-otp")
-  public Map<String,Object> requestAccountSignupOtp(@RequestBody Map<String,Object> body) {
-    String devCode = auth.requestOtp(String.valueOf(body.getOrDefault("mobile", "")), "ACCOUNT_SIGNUP");
+  public Map<String,Object> requestAccountSignupOtp(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
+    String devCode = auth.requestOtp(String.valueOf(body.getOrDefault("mobile", "")),
+        "ACCOUNT_SIGNUP",tenant.institutionId());
     var result = new LinkedHashMap<String,Object>();
     result.put("accepted", true);
     result.put("expiresInSeconds", 300);
@@ -98,15 +126,19 @@ public class AuthController {
   }
 
   @PostMapping("/account-signup/verify-otp")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> verifyAccountSignupOtp(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     AuthContext context = auth.verifyOtp(
         String.valueOf(body.getOrDefault("mobile", "")),
         String.valueOf(body.getOrDefault("otp", "")),
         "ACCOUNT_SIGNUP",
         String.valueOf(body.getOrDefault("displayName", "")),
-        false, null);
+        false, null,tenant.institutionId());
+    requireMembershipService().establishForNewAccount(context,tenant,"PHONE_SIGNUP");
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(context, "STUDENT", androidClient), "STUDENT", androidClient);
   }
@@ -114,10 +146,13 @@ public class AuthController {
   @PostMapping("/account-login")
   public ResponseEntity<Map<String,Object>> accountLogin(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     AuthContext context = auth.loginAccountByUsername(
         String.valueOf(body.getOrDefault("username", "")),
         String.valueOf(body.getOrDefault("password", "")));
+    requireMembershipService().requireExistingMembership(context,tenant);
     String workspace = context.isParent() ? "PARENT" : "STUDENT";
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(context, workspace, androidClient), workspace, androidClient);
@@ -126,13 +161,20 @@ public class AuthController {
   @PostMapping("/request-otp")
   public Map<String,Object> requestOtp(
       @RequestBody Map<String,Object> body,
-      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode) {
     String mobile=String.valueOf(body.getOrDefault("mobile",""));
     String purpose=String.valueOf(body.getOrDefault("purpose","LOGIN"));
     if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))) {
       throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
     }
-    String devCode=auth.requestOtp(mobile,purpose);
+    String devCode;
+    if ("SIGNUP".equals(purpose) || "ACCOUNT_SIGNUP".equals(purpose)) {
+      InstitutionTenantContext tenant=requireTenant(institutionCode);
+      devCode=auth.requestOtp(mobile,purpose,tenant.institutionId());
+    } else {
+      devCode=auth.requestOtp(mobile,purpose);
+    }
     var result=new LinkedHashMap<String,Object>();
     result.put("accepted",true); result.put("expiresInSeconds",300);
     if(devCode!=null) result.put("devCode",devCode);
@@ -156,19 +198,40 @@ public class AuthController {
   }
 
   @PostMapping("/verify-otp")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> verifyOtp(
       @RequestBody Map<String,Object> body,
       @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))) {
       throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
     }
-    AuthContext context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
-        String.valueOf(body.getOrDefault("otp","")),
-        String.valueOf(body.getOrDefault("purpose","LOGIN")),
-        body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
-        Boolean.TRUE.equals(body.get("firstAccess")),
-        body.get("password")==null?null:String.valueOf(body.get("password")));
+    String purpose=String.valueOf(body.getOrDefault("purpose","LOGIN"));
+    if ("ACCOUNT_SIGNUP".equals(purpose)) {
+      throw new IllegalArgumentException("Use the account-signup verification endpoint for learner signup.");
+    }
+    InstitutionTenantContext tenant=null;
+    AuthContext context;
+    if ("SIGNUP".equals(purpose)) {
+      tenant=requireTenant(institutionCode);
+      context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
+          String.valueOf(body.getOrDefault("otp","")),purpose,
+          body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
+          Boolean.TRUE.equals(body.get("firstAccess")),
+          body.get("password")==null?null:String.valueOf(body.get("password")),tenant.institutionId());
+      requireMembershipService().establishForNewAccount(context,tenant,"PHONE_SIGNUP");
+    } else {
+      context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
+          String.valueOf(body.getOrDefault("otp","")),purpose,
+          body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
+          Boolean.TRUE.equals(body.get("firstAccess")),
+          body.get("password")==null?null:String.valueOf(body.get("password")));
+      if(context.isStudent() || context.isParent()) {
+        tenant=requireTenant(institutionCode);
+        requireMembershipService().requireExistingMembership(context,tenant);
+      }
+    }
     String workspace;
     if (context.isEmployee()) {
       workspace = AuthService.normalizeWorkspace(workspaceHeader);
@@ -219,9 +282,12 @@ public class AuthController {
   @PostMapping("/parent-login")
   public ResponseEntity<Map<String,Object>> parentLogin(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     AuthContext context=auth.loginParent(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("password","")));
+    requireMembershipService().requireExistingMembership(context,tenant);
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(context, "PARENT", androidClient), "PARENT", androidClient);
   }
@@ -229,11 +295,14 @@ public class AuthController {
   @PostMapping("/student-login")
   public ResponseEntity<Map<String,Object>> studentLogin(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     String parentIdentifier = String.valueOf(body.getOrDefault("parentIdentifier",
         body.getOrDefault("parentMobile", body.getOrDefault("parentEmail", ""))));
     AuthContext context=auth.loginStudentByParent(parentIdentifier,
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
+    requireMembershipService().requireExistingMembership(context,tenant);
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(context, "STUDENT", androidClient), "STUDENT", androidClient);
   }
@@ -241,9 +310,12 @@ public class AuthController {
   @PostMapping("/learner-login")
   public ResponseEntity<Map<String,Object>> learnerLogin(
       @RequestBody Map<String,Object> body,
+      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
       @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
+    InstitutionTenantContext tenant=requireTenant(institutionCode);
     AuthContext context=auth.loginIndependentLearner(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("password","")));
+    requireMembershipService().requireExistingMembership(context,tenant);
     boolean androidClient = isAndroidClient(clientHeader);
     return withCookie(auth.issueSession(context,"STUDENT",androidClient),"STUDENT",androidClient);
   }
@@ -393,6 +465,19 @@ public class AuthController {
         && auth.staffMustChangePassword(context.staffId()));
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString())
         .body(body);
+  }
+
+  private InstitutionTenantContext requireTenant(String institutionCode) {
+    if(tenantContexts==null) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before creating or accessing an account.");
+    }
+    return tenantContexts.requireSelector(institutionCode);
+  }
+
+  private InstitutionMembershipService requireMembershipService() {
+    if(memberships==null) throw new IllegalStateException("Institution membership service is not configured.");
+    return memberships;
   }
 
   private boolean isAndroidClient(String clientHeader) {

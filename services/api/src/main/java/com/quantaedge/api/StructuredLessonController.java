@@ -43,8 +43,11 @@ public class StructuredLessonController {
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) Integer classNumber,
       @RequestParam(required = false) Long courseId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     String locale = normalizeLanguage(language);
     String requestedSubject = subjectCode == null ? "" : subjectCode.trim();
     if (classNumber != null && classNumber < 1) {
@@ -59,8 +62,8 @@ public class StructuredLessonController {
           && !requestedSubject.equalsIgnoreCase(artifacts.subjectCode(artifact))) continue;
       if (classNumber != null && classNumber != artifacts.classNumber(artifact)) continue;
       if (courseId != null) {
-        if (!studentHasCourseTrackAccess(context.studentId(), courseId, artifact)) continue;
-      } else if (!studentHasTrackAccess(context.studentId(), artifact)) continue;
+        if (!studentHasCourseTrackAccess(context.studentId(),courseId,artifact,institutionId)) continue;
+      } else if (!studentHasTrackAccess(context.studentId(),artifact,institutionId)) continue;
       JsonNode source = artifact.source();
       Map<String, Object> item = new LinkedHashMap<>();
       item.put("artifactId", artifact.artifactId());
@@ -82,11 +85,14 @@ public class StructuredLessonController {
   @GetMapping("/{artifactId}")
   public ObjectNode lesson(@PathVariable String artifactId,
       @RequestParam(required = false, defaultValue = "hi") String language,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     String locale = normalizeLanguage(language);
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
-    ensureStudentTrackAccess(context.studentId(), artifact);
+    ensureStudentTrackAccess(context.studentId(),artifact,institutionId);
     ObjectNode payload = artifacts.toStudentPayload(artifact);
     payload.put("requested_language", locale);
     return payload;
@@ -102,15 +108,18 @@ public class StructuredLessonController {
       @PathVariable String questionId,
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     String locale = normalizeLanguage(language);
     if (body == null || !body.containsKey("response")) {
       throw new IllegalArgumentException("A response is required.");
     }
 
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
-    ensureStudentTrackAccess(context.studentId(), artifact);
+    ensureStudentTrackAccess(context.studentId(),artifact,institutionId);
     JsonNode question = artifacts.questionForStudent(artifact, questionId);
     JsonNode response = artifacts.validateResponse(question, body.get("response"));
     StructuredLessonArtifactService.Evaluation evaluation = artifacts.evaluateResponse(question, response, locale);
@@ -123,16 +132,16 @@ public class StructuredLessonController {
 
     jdbc.update("""
       insert into student_structured_question_response
-        (student_id, artifact_id, artifact_sha256, question_id, response,
+        (institution_id,student_id,artifact_id,artifact_sha256,question_id,response,
          result_status, score, max_score, attempt_count, first_submitted_at, last_submitted_at)
-      values (?, ?, ?, ?, ?::jsonb, ?, ?, ?, 1, now(), now())
-      on conflict (student_id, artifact_id, artifact_sha256, question_id)
+      values (?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, 1, now(), now())
+      on conflict (institution_id,student_id,artifact_id,artifact_sha256,question_id)
       do update set response=excluded.response,
         result_status=excluded.result_status, score=excluded.score, max_score=excluded.max_score,
         attempt_count=student_structured_question_response.attempt_count+1,
         last_submitted_at=now()
       """,
-      context.studentId(), artifact.artifactId(), artifact.sha256(), questionId, serialized,
+      institutionId,context.studentId(),artifact.artifactId(),artifact.sha256(),questionId,serialized,
       evaluation.status().toUpperCase(Locale.ROOT), evaluation.score(), evaluation.maxScore());
 
     Map<String, Object> result = new LinkedHashMap<>();
@@ -153,18 +162,21 @@ public class StructuredLessonController {
   @GetMapping("/{artifactId}/responses")
   public Map<String, Object> savedResponses(@PathVariable String artifactId,
       @RequestParam(required = false, defaultValue = "hi") String language,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     String locale = normalizeLanguage(language);
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
-    ensureStudentTrackAccess(context.studentId(), artifact);
+    ensureStudentTrackAccess(context.studentId(),artifact,institutionId);
     Map<String, Object> questions = new LinkedHashMap<>();
     for (Map<String, Object> row : jdbc.queryForList("""
       select question_id, response::text as response, result_status, score, max_score
       from student_structured_question_response
-      where student_id=? and artifact_id=? and artifact_sha256=?
+      where institution_id=? and student_id=? and artifact_id=? and artifact_sha256=?
       order by last_submitted_at, question_id
-      """, context.studentId(), artifact.artifactId(), artifact.sha256())) {
+      """,institutionId,context.studentId(),artifact.artifactId(),artifact.sha256())) {
       String id = String.valueOf(row.get("question_id"));
       try {
         JsonNode question = artifacts.questionForStudent(artifact, id);
@@ -189,9 +201,9 @@ public class StructuredLessonController {
     for (Map<String, Object> row : jdbc.queryForList("""
       select block_id, response::text as response
       from student_structured_activity_response
-      where student_id=? and artifact_id=? and artifact_sha256=?
+      where institution_id=? and student_id=? and artifact_id=? and artifact_sha256=?
       order by last_saved_at, block_id
-      """, context.studentId(), artifact.artifactId(), artifact.sha256())) {
+      """,institutionId,context.studentId(),artifact.artifactId(),artifact.sha256())) {
       String id = String.valueOf(row.get("block_id"));
       try {
         artifacts.activityBlockForStudent(artifact, id);
@@ -208,13 +220,16 @@ public class StructuredLessonController {
   @Transactional
   public Map<String, Object> saveActivityResponse(@PathVariable String artifactId,
       @PathVariable String blockId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     if (body == null || !body.containsKey("response")) {
       throw new IllegalArgumentException("An activity response is required.");
     }
     StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
-    ensureStudentTrackAccess(context.studentId(), artifact);
+    ensureStudentTrackAccess(context.studentId(),artifact,institutionId);
     JsonNode response = artifacts.validateActivityResponse(artifact, blockId, body.get("response"));
     String serialized;
     try {
@@ -224,56 +239,92 @@ public class StructuredLessonController {
     }
     jdbc.update("""
       insert into student_structured_activity_response
-        (student_id, artifact_id, artifact_sha256, block_id, response, attempt_count, first_saved_at, last_saved_at)
-      values (?, ?, ?, ?, ?::jsonb, 1, now(), now())
-      on conflict (student_id, artifact_id, artifact_sha256, block_id)
+        (institution_id,student_id,artifact_id,artifact_sha256,block_id,response, attempt_count, first_saved_at, last_saved_at)
+      values (?, ?, ?, ?, ?, ?::jsonb, 1, now(), now())
+      on conflict (institution_id,student_id,artifact_id,artifact_sha256,block_id)
       do update set response=excluded.response,
         attempt_count=student_structured_activity_response.attempt_count+1, last_saved_at=now()
-      """, context.studentId(), artifact.artifactId(), artifact.sha256(), blockId, serialized);
+      """,institutionId,context.studentId(),artifact.artifactId(),artifact.sha256(),blockId,serialized);
     return Map.of("blockId", blockId, "saved", true);
   }
 
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null || tenant.institutionId()<1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing structured lessons.");
+    }
+    return tenant.institutionId();
+  }
+
   private void ensureStudentTrackAccess(long studentId,
-      StructuredLessonArtifactService.PublishedArtifact artifact) {
-    if (!studentHasTrackAccess(studentId, artifact)) {
-      throw new SecurityException("Student access to this structured lesson is not permitted.");
+      StructuredLessonArtifactService.PublishedArtifact artifact,long institutionId) {
+    if(!studentHasTrackAccess(studentId,artifact,institutionId)) {
+      throw new SecurityException("Student access to this structured lesson is not permitted in the selected institution.");
     }
   }
 
-  private boolean studentHasCourseTrackAccess(long studentId, long courseId,
-      StructuredLessonArtifactService.PublishedArtifact artifact) {
-    Long allowed = jdbc.queryForObject("""
+  private boolean studentHasCourseTrackAccess(long studentId,long courseId,
+      StructuredLessonArtifactService.PublishedArtifact artifact,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
       select count(*)
       from student st
-      join student_program_enrollment spe on spe.student_id=st.id
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
         and spe.program_id=? and spe.status='ACTIVE'
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=p.id
       join curriculum_program_subject ps on ps.program_id=p.id
       join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
         and (s.program_id=ps.program_id or (s.program_id is null and p.class_id=s.class_id and ps.class_id=s.class_id))
       join curriculum_class c on c.id=s.class_id and c.active=true
-      where st.id=? and st.active=true
-        and lower(s.code)=lower(?)
-        and regexp_replace(c.code, '[^0-9]', '', 'g')=?
-      """, Long.class, courseId, studentId, artifacts.subjectCode(artifact),
+      where st.id=? and st.active=true and lower(s.code)=lower(?)
+        and regexp_replace(c.code,'[^0-9]','','g')=?
+      """,Long.class,institutionId,courseId,studentId,artifacts.subjectCode(artifact),
         String.valueOf(artifacts.classNumber(artifact)));
-    return allowed != null && allowed > 0;
+    return allowed!=null&&allowed>0;
   }
 
   private boolean studentHasTrackAccess(long studentId,
-      StructuredLessonArtifactService.PublishedArtifact artifact) {
-    Long allowed = jdbc.queryForObject("""
+      StructuredLessonArtifactService.PublishedArtifact artifact,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
       select count(*)
       from student_track_enrollment ste
+      join institution_membership m on m.student_id=ste.student_id
+        and m.institution_id=ste.institution_id and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
       join student st on st.id=ste.student_id and st.active=true
       join curriculum_subject s on s.id=ste.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      where ste.student_id=? and ste.status='ACTIVE'
+      where ste.student_id=? and ste.institution_id=? and ste.status='ACTIVE'
         and lower(s.code)=lower(?)
-        and regexp_replace(c.code, '[^0-9]', '', 'g')=?
-      """, Long.class, studentId, artifacts.subjectCode(artifact),
+        and regexp_replace(c.code,'[^0-9]','','g')=?
+        and (
+          (s.program_id is not null and exists(select 1 from student_program_enrollment spe
+            where spe.institution_id=m.institution_id and spe.student_id=st.id
+              and spe.program_id=s.program_id and spe.status='ACTIVE'))
+          or (s.program_id is null and c.code=st.class_code and (
+            c.code not in ('6','7','8') or exists(
+              select 1 from curriculum_program class_course
+              join student_program_enrollment spe on spe.program_id=class_course.id
+                and spe.institution_id=m.institution_id and spe.student_id=st.id and spe.status='ACTIVE'
+              join curriculum_program_subject cps on cps.program_id=class_course.id
+                and cps.class_id=s.class_id and cps.subject_id=s.id
+              join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+                and assignment.status='ASSIGNED'
+              join institution_course_release release on release.id=assignment.course_release_id
+                and release.program_id=class_course.id
+              where class_course.class_id=c.id and class_course.code='CLASS_'||c.code
+                and class_course.curriculum_version='CURRENT' and class_course.status='ACTIVE'
+            )
+          ))
+        )
+      """,Long.class,studentId,institutionId,artifacts.subjectCode(artifact),
         String.valueOf(artifacts.classNumber(artifact)));
-    return allowed != null && allowed > 0;
+    return allowed!=null&&allowed>0;
   }
 
   private String localizedText(JsonNode locales, String locale) {

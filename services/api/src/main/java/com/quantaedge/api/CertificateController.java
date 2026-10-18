@@ -91,31 +91,40 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates")
   public Map<String, Object> myCertificates(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
-        WHERE c.student_id=?
+        WHERE c.student_id=? AND c.institution_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
-        """, context.studentId());
+        """, context.studentId(),institutionId);
     return Map.of("items", items);
   }
 
   /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
   @GetMapping("/students/me/certificates/{certificateId}")
   public Map<String, Object> myCertificate(@PathVariable long certificateId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     if (certificateId < 1) throw new IllegalArgumentException("Choose a valid certificate.");
-    return publicCertificateById(certificateId, context.studentId());
+    return publicCertificateById(certificateId, context.studentId(),institutionId);
   }
 
   /** Active class and course subject tracks available for earned certificates. */
   @GetMapping("/students/me/certificates/subject-tracks")
   public Map<String, Object> subjectTracks(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT CASE WHEN p.id IS NULL
                     THEN 'CLASS:' || cc.code || ':' || s.code
@@ -130,7 +139,7 @@ public class CertificateController {
                    AS completion_percent
         FROM student st
         JOIN student_track_enrollment ste
-          ON ste.student_id=st.id AND ste.status='ACTIVE'
+          ON ste.student_id=st.id AND ste.institution_id=? AND ste.status='ACTIVE'
         JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         LEFT JOIN curriculum_program p ON p.id=s.program_id
@@ -143,39 +152,42 @@ public class CertificateController {
           ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
         LEFT JOIN student_lesson_progress progress
-          ON progress.student_id=st.id AND progress.lesson_id=l.id
+          ON progress.student_id=st.id AND progress.institution_id=ste.institution_id AND progress.lesson_id=l.id
         WHERE st.id=? AND st.active=true
           AND (
             (s.program_id IS NULL AND cc.code=st.class_code
               AND (cc.code NOT IN ('6','7','8') OR (
                 p.id IS NOT NULL AND EXISTS (
                   SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.program_id=p.id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=ste.institution_id AND spe.program_id=p.id AND spe.status='ACTIVE'
                 )
               )))
             OR (s.program_id IS NOT NULL AND p.status='ACTIVE'
                 AND EXISTS (
                   SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=ste.institution_id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
                 ))
           )
         GROUP BY cc.code,cc.sort_order,s.code,s.display_name,s.program_id,p.id,p.code,p.display_name,s.sort_order
         ORDER BY cc.sort_order,s.sort_order,s.code
-        """, context.studentId());
+        """, institutionId,context.studentId());
     return Map.of("items", items);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates")
   public Map<String, Object> childCertificates(@PathVariable long studentId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    requireGuardianChild(context, studentId);
+    long institutionId=requireInstitution(tenant);
+    requireGuardianChild(context, studentId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
-        WHERE c.student_id=?
+        WHERE c.student_id=? AND c.institution_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
-        """, studentId);
+        """, studentId,institutionId);
     return Map.of("items", items, "studentId", studentId);
   }
 
@@ -183,31 +195,40 @@ public class CertificateController {
   @Transactional
   public ResponseEntity<byte[]> viewChildCertificate(@PathVariable long studentId,
       @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    requireGuardianChild(context, studentId);
-    return certificateArtifact(certificateId, studentId, format, true);
+    long institutionId=requireInstitution(tenant);
+    requireGuardianChild(context, studentId,institutionId);
+    return certificateArtifact(certificateId, studentId, format, true,institutionId);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> downloadChildCertificate(@PathVariable long studentId,
       @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
-    requireGuardianChild(context, studentId);
-    return certificateArtifact(certificateId, studentId, format, false);
+    long institutionId=requireInstitution(tenant);
+    requireGuardianChild(context, studentId,institutionId);
+    return certificateArtifact(certificateId, studentId, format, false,institutionId);
   }
 
-  private void requireGuardianChild(AuthContext context, long studentId) {
+  private void requireGuardianChild(AuthContext context,long studentId,long institutionId) {
     Boolean allowed = jdbc.queryForObject("""
         SELECT EXISTS (
           SELECT 1 FROM guardian_student gs
-          JOIN student st ON st.id=gs.student_id
+          JOIN student st ON st.id=gs.student_id AND st.active=true
+          JOIN institution_membership m ON m.student_id=st.id
+            AND m.institution_id=? AND m.status='ACTIVE'
+          JOIN institution_tenant t ON t.id=m.institution_id AND t.status='ACTIVE'
           WHERE gs.guardian_user_id=? AND gs.student_id=? AND gs.active=true
-            AND gs.consent_status='CONSENTED' AND st.active=true
+            AND gs.consent_status='CONSENTED'
         )
-        """, Boolean.class, context.userId(), studentId);
+        """, Boolean.class,institutionId,context.userId(),studentId);
     if (!Boolean.TRUE.equals(allowed)) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Child not found.");
     }
@@ -215,8 +236,11 @@ public class CertificateController {
 
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
@@ -239,11 +263,11 @@ public class CertificateController {
         LEFT JOIN LATERAL (
           SELECT cert.id,cert.certificate_number,cert.status
           FROM student_certificate cert
-          WHERE cert.student_id=att.student_id AND cert.assessment_attempt_id=att.id
+          WHERE cert.student_id=att.student_id AND cert.institution_id=att.institution_id AND cert.assessment_attempt_id=att.id
             AND cert.achievement_type='ASSESSMENT_PASS'
           ORDER BY cert.issued_at DESC,cert.id DESC LIMIT 1
         ) existing ON true
-        WHERE att.student_id=?
+        WHERE att.student_id=? AND att.institution_id=?
           AND (
             existing.id IS NOT NULL
             OR (
@@ -255,22 +279,22 @@ public class CertificateController {
               AND ((s.program_id is null and st.class_code=cc.code
                 and (cc.code not in ('6','7','8') or (p.id is not null and exists(
                   SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.program_id=p.id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=att.institution_id AND spe.program_id=p.id AND spe.status='ACTIVE'
                 ))))
                 or (s.program_id is not null and exists(
                   SELECT 1 FROM student_program_enrollment spe
                   JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
-                  WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.institution_id=att.institution_id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
                 )))
               AND EXISTS (
                 SELECT 1 FROM student_track_enrollment ste
-                WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                WHERE ste.student_id=st.id AND ste.institution_id=att.institution_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
               )
             )
           )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
-        """, context.studentId(), minimumPassPercent);
+        """, context.studentId(),institutionId,minimumPassPercent);
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
@@ -285,8 +309,11 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/assessment-eligibility")
   public Map<String, Object> assessmentCertificateEligibility(
       @RequestParam String attemptIds,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     Set<Long> uniqueIds = new LinkedHashSet<>();
     for (String raw : attemptIds.split(",")) {
       String value = raw.trim();
@@ -307,6 +334,7 @@ public class CertificateController {
     String placeholders = String.join(",", java.util.Collections.nCopies(uniqueIds.size(), "?"));
     List<Object> args = new ArrayList<>();
     args.add(context.studentId());
+    args.add(institutionId);
     args.addAll(uniqueIds);
     String sql = """
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
@@ -319,7 +347,7 @@ public class CertificateController {
                  JOIN student active_st ON active_st.id=ste.student_id AND active_st.active=true
                  JOIN curriculum_subject active_s ON active_s.id=ste.subject_id AND active_s.active=true
                  JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id AND active_cc.active=true
-                 WHERE ste.student_id=att.student_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                 WHERE ste.student_id=att.student_id AND ste.institution_id=att.institution_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
                    AND active_st.id=att.student_id AND active_s.id=s.id
                    AND ((active_s.program_id is null and active_cc.code=active_st.class_code
                        and (active_cc.code not in ('6','7','8') or exists(
@@ -327,14 +355,14 @@ public class CertificateController {
                          join curriculum_program_subject active_map on active_map.program_id=active_course.id
                            and active_map.class_id=active_s.class_id and active_map.subject_id=active_s.id
                          join student_program_enrollment active_spe on active_spe.program_id=active_course.id
-                           and active_spe.student_id=active_st.id and active_spe.status='ACTIVE'
+                           and active_spe.student_id=active_st.id and active_spe.institution_id=att.institution_id and active_spe.status='ACTIVE'
                          where active_course.class_id=active_cc.id and active_course.code='CLASS_' || active_cc.code
                            and active_course.curriculum_version='CURRENT' and active_course.status='ACTIVE'
                        )))
                      or (active_s.program_id is not null and exists(
                        select 1 from student_program_enrollment active_spe
                        join curriculum_program active_p on active_p.id=active_spe.program_id and active_p.status='ACTIVE'
-                       where active_spe.student_id=active_st.id and active_spe.program_id=active_s.program_id and active_spe.status='ACTIVE'
+                       where active_spe.student_id=active_st.id and active_spe.institution_id=att.institution_id and active_spe.program_id=active_s.program_id and active_spe.status='ACTIVE'
                      )))
                ) AS active_subject_track,
                COALESCE(progress.total_lessons,0) AS published_lessons,
@@ -356,20 +384,20 @@ public class CertificateController {
                  COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
           FROM curriculum_chapter ch
           JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-          LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.lesson_id=l.id
+          LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.institution_id=att.institution_id AND p.lesson_id=l.id
           WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         ) progress ON true
         LEFT JOIN LATERAL (
           SELECT stored.id,stored.certificate_number,stored.status
           FROM student_certificate stored
-          WHERE stored.student_id=att.student_id AND stored.assessment_attempt_id=att.id
+          WHERE stored.student_id=att.student_id AND stored.institution_id=att.institution_id AND stored.assessment_attempt_id=att.id
             AND stored.achievement_type='ASSESSMENT_PASS'
           ORDER BY stored.issued_at DESC,stored.id DESC LIMIT 1
         ) cert ON true
         WHERE att.student_id=?
         ORDER BY att.released_at DESC NULLS LAST,att.id DESC
         """;
-    sql = sql.replace("WHERE att.student_id=?", "WHERE att.student_id=? AND att.id IN (" + placeholders + ")");
+    sql = sql.replace("WHERE att.student_id=?", "WHERE att.student_id=? AND att.institution_id=? AND att.id IN (" + placeholders + ")");
     List<Map<String, Object>> rows = jdbc.queryForList(sql, args.toArray());
     List<Map<String, Object>> items = new ArrayList<>();
     for (Map<String, Object> row : rows) {
@@ -403,8 +431,11 @@ public class CertificateController {
   @PostMapping("/students/me/certificates/issue")
   @Transactional
   public Map<String, Object> issueCertificate(@RequestBody IssueRequest request,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     if (request == null) throw new IllegalArgumentException("Choose the achievement for your certificate.");
     long studentId = context.studentId();
 
@@ -428,10 +459,10 @@ public class CertificateController {
         from curriculum_program p
         join curriculum_class c on c.id=p.class_id and c.code=?
         join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.status='ACTIVE'
+          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
         where p.code='CLASS_' || c.code and p.curriculum_version='CURRENT'
           and p.status='ACTIVE'
-        """,Long.class,ownClass,studentId);
+        """,Long.class,ownClass,studentId,institutionId);
       if(activeClassCourses.size()>1)
         throw new SecurityException("Select the matching Class "+ownClass+" course before issuing a certificate.");
       if(activeClassCourses.size()==1) courseId=activeClassCourses.getFirst();
@@ -445,31 +476,71 @@ public class CertificateController {
     if ("SUBJECT_COMPLETION".equals(type)) {
       String subjectCode = clean(request.subjectCode()).toLowerCase(Locale.ROOT);
       if (!subjectCode.matches("[a-z0-9_-]{1,40}")) throw new IllegalArgumentException("Choose a valid subject track.");
-      return issueSubjectCompletion(studentId, student, subjectCode, courseId, template, language, request.institutionCode());
+      return issueSubjectCompletion(studentId,student,subjectCode,courseId,template,language,request.institutionCode(),institutionId);
     }
     if ("ASSESSMENT_PASS".equals(type)) {
       if (request.assessmentAttemptId() == null || request.assessmentAttemptId() < 1) {
         throw new IllegalArgumentException("Choose a released assessment result.");
       }
-      return issueAssessmentPass(studentId, student, request.assessmentAttemptId(), courseId, template, language, request.institutionCode());
+      return issueAssessmentPass(studentId,student,request.assessmentAttemptId(),courseId,template,language,request.institutionCode(),institutionId);
     }
     throw new IllegalArgumentException("Choose SUBJECT_COMPLETION or ASSESSMENT_PASS.");
   }
 
   private Map<String, Object> issueSubjectCompletion(long studentId, Map<String, Object> student,
-      String subjectCode, Long courseId, String template, String language, String institutionCode) {
+      String subjectCode, Long courseId, String template, String language, String institutionCode,long institutionId) {
     String classCode = String.valueOf(student.get("class_code"));
-    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
+    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId,institutionId);
     String key = courseId==null
         ? "SUBJECT_COMPLETION:" + classCode + ":" + subjectCode
         : "COURSE_SUBJECT_COMPLETION:" + courseId + ":" + subjectCode;
-    Map<String, Object> existing = existingCertificate(studentId, key);
-    if (existing == null) existing = existingSubjectCompletionCertificate(studentId, classCode, subjectCode, courseId);
+    Map<String, Object> existing = existingCertificate(studentId,key,institutionId);
+    if (existing == null) existing = existingSubjectCompletionCertificate(studentId,classCode,subjectCode,courseId,institutionId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
-    String courseScope=courseId==null
-        ? "s.program_id is null and cc.code=st.class_code and (cc.code not in ('6','7','8') or exists(select 1 from curriculum_program mapped_course join curriculum_program_subject mapped_subject on mapped_subject.program_id=mapped_course.id and mapped_subject.class_id=s.class_id and mapped_subject.subject_id=s.id join student_program_enrollment mapped_enrollment on mapped_enrollment.program_id=mapped_course.id and mapped_enrollment.student_id=st.id and mapped_enrollment.status='ACTIVE' where mapped_course.code='CLASS_' || cc.code and mapped_course.curriculum_version='CURRENT' and mapped_course.status='ACTIVE'))"
-        : "exists(select 1 from curriculum_program scope_course join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id and scope_map.subject_id=s.id and scope_map.class_id=s.class_id join student_program_enrollment spe on spe.program_id=scope_course.id and spe.student_id=st.id and spe.status='ACTIVE' where scope_course.id=? and scope_course.status='ACTIVE' and scope_course.code<>'GENERAL' and (s.program_id=scope_course.id or s.program_id is null))";
+    String courseScope = courseId == null
+        ? """
+          s.program_id is null
+          and cc.code=st.class_code
+          and (
+            cc.code not in ('6','7','8')
+            or exists (
+              select 1
+              from curriculum_program mapped_course
+              join curriculum_program_subject mapped_subject
+                on mapped_subject.program_id=mapped_course.id
+               and mapped_subject.class_id=s.class_id
+               and mapped_subject.subject_id=s.id
+              join student_program_enrollment mapped_enrollment
+                on mapped_enrollment.program_id=mapped_course.id
+               and mapped_enrollment.student_id=st.id
+               and mapped_enrollment.institution_id=ste.institution_id
+               and mapped_enrollment.status='ACTIVE'
+              where mapped_course.code='CLASS_' || cc.code
+                and mapped_course.curriculum_version='CURRENT'
+                and mapped_course.status='ACTIVE'
+            )
+          )
+          """
+        : """
+          exists (
+            select 1
+            from curriculum_program scope_course
+            join curriculum_program_subject scope_map
+              on scope_map.program_id=scope_course.id
+             and scope_map.subject_id=s.id
+             and scope_map.class_id=s.class_id
+            join student_program_enrollment spe
+              on spe.program_id=scope_course.id
+             and spe.student_id=st.id
+             and spe.institution_id=ste.institution_id
+             and spe.status='ACTIVE'
+            where scope_course.id=?
+              and scope_course.status='ACTIVE'
+              and scope_course.code<>'GENERAL'
+              and (s.program_id=scope_course.id or s.program_id is null)
+          )
+          """;
     String sql="""
         SELECT st.display_name AS recipient_name,st.class_code,cc.code AS source_class_code,
                s.id AS subject_id,s.program_id,p.display_name AS course_name,
@@ -477,17 +548,17 @@ public class CertificateController {
                COUNT(DISTINCT l.id) AS total_lessons,
                COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed_lessons
         FROM student st
-        JOIN student_track_enrollment ste ON ste.student_id=st.id AND ste.status='ACTIVE'
+        JOIN student_track_enrollment ste ON ste.student_id=st.id AND ste.institution_id=? AND ste.status='ACTIVE'
         JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         LEFT JOIN curriculum_program p ON p.id=s.program_id
         LEFT JOIN curriculum_chapter ch ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-        LEFT JOIN student_lesson_progress progress ON progress.student_id=st.id AND progress.lesson_id=l.id
+        LEFT JOIN student_lesson_progress progress ON progress.student_id=st.id AND progress.institution_id=ste.institution_id AND progress.lesson_id=l.id
         WHERE st.id=? AND st.active=true AND lower(s.code)=lower(?) AND __COURSE_SCOPE__
         GROUP BY st.display_name,st.class_code,cc.code,s.id,s.program_id,p.display_name,s.code,s.display_name
         """.replace("__COURSE_SCOPE__",courseScope);
-    List<Object> args=new ArrayList<>(List.of(studentId,subjectCode));
+    List<Object> args=new ArrayList<>(List.of(institutionId,studentId,subjectCode));
     if(courseId!=null)args.add(courseId);
     Map<String, Object> achievement=queryOptional(sql,args.toArray());
     if (achievement != null && courseId != null) {
@@ -541,16 +612,16 @@ public class CertificateController {
     snapshot.put("completedLessonsAtIssue", completed);
     return createIssuedCertificate(studentId, key, "SUBJECT_COMPLETION", sourceClassCode,
         ((Number) achievement.get("subject_id")).longValue(), courseId, null, template, language,
-        String.valueOf(achievement.get("recipient_name")), title, summary, snapshot, institutionCode);
+        String.valueOf(achievement.get("recipient_name")),title,summary,snapshot,institutionCode,institutionId);
   }
 
   private Map<String, Object> issueAssessmentPass(long studentId, Map<String, Object> student,
-      long attemptId, Long requestedCourseId, String template, String language, String institutionCode) {
+      long attemptId, Long requestedCourseId, String template, String language, String institutionCode,long institutionId) {
     // Once issued, a certificate is a durable record. Reopening it must not depend on live
     // attempt or enrollment filters. This lookup is always scoped to the authenticated student.
     String key = "ASSESSMENT_PASS:" + attemptId;
-    Map<String, Object> existing = existingCertificate(studentId, key);
-    if (existing == null) existing = existingAssessmentCertificate(studentId, attemptId);
+    Map<String, Object> existing = existingCertificate(studentId,key,institutionId);
+    if (existing == null) existing = existingAssessmentCertificate(studentId,attemptId,institutionId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
     Map<String, Object> achievement = queryOptional("""
@@ -573,7 +644,7 @@ public class CertificateController {
             where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
               and mapped_subject.subject_id=s.id))
         JOIN student st ON st.id=att.student_id AND st.active=true
-        WHERE st.id=? AND att.student_id=? AND att.id=? AND att.status='RELEASED'
+        WHERE st.id=? AND att.student_id=? AND att.id=? AND att.institution_id=? AND att.status='RELEASED'
           AND att.final_score IS NOT NULL AND att.max_score>0
           AND ((s.program_id is null and st.class_code=cc.code
               and (cc.code not in ('6','7','8') or (p.id is not null and exists(
@@ -585,7 +656,7 @@ public class CertificateController {
               join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
               where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
             )))
-        """, studentId, studentId, attemptId);
+        """, studentId, studentId, attemptId,institutionId);
     if (achievement == null) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "Only your own released, graded assessment result from an active learning track can earn a certificate.");
@@ -594,7 +665,7 @@ public class CertificateController {
     if(requestedCourseId!=null && !requestedCourseId.equals(courseId)) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"The selected course does not match this assessment attempt.");
     }
-    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
+    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId,institutionId);
     if (!"ADMIN_CREATED".equals(clean(achievement.get("assessment_type")))
         || Boolean.TRUE.equals(achievement.get("is_generated"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -602,7 +673,7 @@ public class CertificateController {
     }
 
     Map<String, Object> progress = subjectCompletionStats(studentId,
-        ((Number) achievement.get("subject_id")).longValue());
+        ((Number) achievement.get("subject_id")).longValue(),institutionId);
     if (!Boolean.TRUE.equals(progress.get("active_subject_track"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           courseId==null
@@ -654,18 +725,18 @@ public class CertificateController {
     snapshot.put("artifactVersion", 5);
     return createIssuedCertificate(studentId, key, "ASSESSMENT_PASS", classCode,
         ((Number) achievement.get("subject_id")).longValue(), courseId, attemptId, template, language,
-        String.valueOf(achievement.get("recipient_name")), title, summary, snapshot, institutionCode);
+        String.valueOf(achievement.get("recipient_name")),title,summary,snapshot,institutionCode,institutionId);
   }
 
   private Map<String, Object> createIssuedCertificate(long studentId, String achievementKey,
       String achievementType, String classCode, long subjectId, Long courseId, Long attemptId, String template,
       String language, String recipient, String title, String summary, Map<String, Object> snapshot,
-      String institutionCode) {
+      String institutionCode,long institutionId) {
     snapshot.putIfAbsent("artifactVersion", 5);
     OffsetDateTime issuedAt = OffsetDateTime.now(ZoneId.of("Asia/Kolkata"));
     String certificateNumber = "QE-" + issuedAt.getYear() + "-"
         + HexFormat.of().withUpperCase().formatHex(randomBytes(8));
-    CertificateRenderer.CertificateBranding issuer = resolveCertificateIssuer(studentId, courseId, institutionCode, snapshot);
+    CertificateRenderer.CertificateBranding issuer = resolveCertificateIssuer(studentId,courseId,institutionCode,snapshot,institutionId);
     CertificateRenderer.CertificateDetails details =
         certificateDetails(snapshot, achievementType, language, classCode, title);
     // Keep the legacy render overload for direct QuantaEdge certificates. Besides preserving
@@ -680,14 +751,14 @@ public class CertificateController {
       png = storage.store(rendered.png(), "png");
       jdbc.update("""
           INSERT INTO student_certificate(
-            certificate_number,student_id,achievement_key,achievement_type,class_code,subject_id,program_id,
+            certificate_number,student_id,institution_id,achievement_key,achievement_type,class_code,subject_id,program_id,
             assessment_attempt_id,template_id,language,recipient_name,achievement_title,
             achievement_summary,achievement_snapshot,artifact_version,status,issued_at,pdf_storage_key,png_storage_key,
             pdf_sha256,png_sha256,pdf_size_bytes,png_size_bytes)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,5,'ISSUED',?,?,?,?,?,?,?)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,5,'ISSUED',?,?,?,?,?,?,?)
           """,
-          certificateNumber, studentId, achievementKey, achievementType, classCode, subjectId, courseId,
-          attemptId, template, language, safeText(recipient, 120), safeText(title, 240),
+          certificateNumber,studentId,institutionId,achievementKey,achievementType,classCode,subjectId,courseId,
+          attemptId,template,language,safeText(recipient, 120),safeText(title, 240),
           safeText(summary, 600), json(snapshot), issuedAt, pdf.storageKey(), png.storageKey(),
           pdf.sha256(), png.sha256(), pdf.sizeBytes(), png.sizeBytes());
       long certificateId = jdbc.queryForObject(
@@ -696,7 +767,7 @@ public class CertificateController {
           INSERT INTO certificate_audit_log(certificate_id,actor_student_id,actor_role,action,detail)
           VALUES (?,?,'STUDENT','ISSUED',?::jsonb)
           """, certificateId, studentId, json(snapshot));
-      return publicCertificateById(certificateId, studentId);
+      return publicCertificateById(certificateId,studentId,institutionId);
     } catch (RuntimeException ex) {
       if (png != null) storage.deleteQuietly(png.storageKey());
       if (pdf != null) storage.deleteQuietly(pdf.storageKey());
@@ -705,7 +776,7 @@ public class CertificateController {
   }
 
   private CertificateRenderer.CertificateBranding resolveCertificateIssuer(
-      long studentId, Long courseId, String requestedInstitutionCode, Map<String,Object> snapshot) {
+      long studentId,Long courseId,String requestedInstitutionCode,Map<String,Object> snapshot,long institutionId) {
     String requestedCode = clean(requestedInstitutionCode).toUpperCase(Locale.ROOT);
     if (!requestedCode.isEmpty() && !requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{2,31}$")) {
       throw new IllegalArgumentException("The school identity is invalid.");
@@ -718,16 +789,18 @@ public class CertificateController {
         from institution_membership m
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         left join institution_branding b on b.institution_id=t.id
-        where m.student_id=? and m.status='ACTIVE'
+        where m.student_id=? and m.institution_id=? and m.status='ACTIVE'
           and (?='' or t.tenant_code=?)
           and (?::bigint is null or exists (
             select 1 from institution_course_entitlement e
             join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
             where e.institution_id=t.id and e.program_id=? and e.status='ACTIVE'
               and e.valid_from<=now() and (e.valid_until is null or e.valid_until>now())
-          ))
+          ) or exists(select 1 from course_purchase cp where cp.institution_id=t.id and cp.student_id=m.student_id and cp.course_id=?)
+            or exists(select 1 from student_course_access_grant g where g.institution_id=t.id and g.student_id=m.student_id and g.course_id=?)
+            or exists(select 1 from student_program_enrollment spe where spe.institution_id=t.id and spe.student_id=m.student_id and spe.program_id=? and spe.status='ACTIVE'))
         order by t.id
-        """, studentId, requestedCode, requestedCode, courseId, courseId);
+        """,studentId,institutionId,requestedCode,requestedCode,courseId,courseId,courseId,courseId,courseId);
     if (issuers.isEmpty()) {
       if (!requestedCode.isEmpty()) {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -740,7 +813,7 @@ public class CertificateController {
           "More than one school can issue this certificate. Reopen your school learning link and retry.");
     }
     Map<String,Object> issuer=issuers.getFirst();
-    long institutionId=number(issuer.get("institution_id"));
+    long issuerInstitutionId=number(issuer.get("institution_id"));
     String displayName=clean(issuer.get("issuer_display_name"));
     if (displayName.isBlank()) return null;
     String logoAssetId=clean(issuer.get("issuer_logo_asset_id"));
@@ -749,10 +822,10 @@ public class CertificateController {
       logo=queryOptionalByteArray("""
           select image_bytes from institution_branding_asset
           where institution_id=? and asset_id=? and asset_type='LOGO' and active=true
-          """, institutionId, logoAssetId);
+          """, issuerInstitutionId, logoAssetId);
     }
     Map<String,String> lightPalette = issuerLightPalette(issuer.get("issuer_theme_tokens"));
-    snapshot.put("issuerInstitutionId", institutionId);
+    snapshot.put("issuerInstitutionId", issuerInstitutionId);
     snapshot.put("issuerTenantCode", clean(issuer.get("tenant_code")));
     snapshot.put("issuerDisplayName", displayName);
     snapshot.put("issuerThemePalette", lightPalette);
@@ -814,31 +887,35 @@ public class CertificateController {
   @Transactional
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
       @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return studentCertificateArtifact(certificateId, format, context, false);
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    return studentCertificateArtifact(certificateId,format,context,false,requireInstitution(tenant));
   }
 
   @GetMapping("/students/me/certificates/{certificateId}/view")
   @Transactional
   public ResponseEntity<byte[]> viewMyCertificate(@PathVariable long certificateId,
       @RequestParam(defaultValue = "pdf") String format,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return studentCertificateArtifact(certificateId, format, context, true);
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    return studentCertificateArtifact(certificateId,format,context,true,requireInstitution(tenant));
   }
 
-  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId, String format,
-      AuthContext context, boolean inline) {
-    context = authorization.requireStudent(context);
-    return certificateArtifact(certificateId, context.studentId(), format, inline);
+  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId,String format,
+      AuthContext context,boolean inline,long institutionId) {
+    context=authorization.requireStudent(context);
+    return certificateArtifact(certificateId,context.studentId(),format,inline,institutionId);
   }
 
-  private ResponseEntity<byte[]> certificateArtifact(long certificateId, long studentId,
-      String format, boolean inline) {
+  private ResponseEntity<byte[]> certificateArtifact(long certificateId,long studentId,
+      String format,boolean inline,long institutionId) {
     String normalizedFormat = format == null ? "pdf" : format.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
     }
-    Map<String, Object> certificate = loadCertificateArtifactRow(certificateId, studentId);
+    Map<String, Object> certificate = loadCertificateArtifactRow(certificateId,studentId,institutionId);
     if (certificate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     if ("REVOKED".equals(certificate.get("status"))) {
       throw new ResponseStatusException(HttpStatus.GONE, "This certificate has been revoked and is no longer downloadable as valid proof.");
@@ -869,7 +946,11 @@ public class CertificateController {
    * Prior artifacts are archived in the existing revision ledger; certificate ID and issue date
    * are deliberately preserved. This uses existing tables and adds no schema migration.
    */
-  private Map<String, Object> loadCertificateArtifactRow(long certificateId, Long studentId) {
+  private Map<String, Object> loadCertificateArtifactRow(long certificateId,Long studentId) {
+    return loadCertificateArtifactRow(certificateId,studentId,null);
+  }
+
+  private Map<String, Object> loadCertificateArtifactRow(long certificateId,Long studentId,Long institutionId) {
     String sql = """
         SELECT c.id,c.certificate_number,c.status,c.achievement_type,c.class_code,c.program_id,
                p.display_name AS course_name,c.subject_id,s.code AS subject_code,s.display_name AS subject_name,
@@ -882,14 +963,11 @@ public class CertificateController {
         LEFT JOIN curriculum_program p ON p.id=c.program_id
         WHERE c.id=?
         """;
-    Object[] args;
-    if (studentId != null) {
-      sql += " AND c.student_id=?";
-      args = new Object[]{certificateId, studentId};
-    } else {
-      args = new Object[]{certificateId};
-    }
-    return queryOptional(sql + " FOR UPDATE OF c", args);
+    List<Object> args=new ArrayList<>();
+    args.add(certificateId);
+    if(studentId!=null){sql+=" AND c.student_id=?";args.add(studentId);}
+    if(institutionId!=null){sql+=" AND c.institution_id=?";args.add(institutionId);}
+    return queryOptional(sql+" FOR UPDATE OF c",args.toArray());
   }
 
   private Map<String, Object> correctCertificateArtifact(Map<String, Object> certificate) {
@@ -1255,13 +1333,13 @@ public class CertificateController {
     return adminCertificateById(certificateId);
   }
 
-  private Map<String, Object> subjectCompletionStats(long studentId, long subjectId) {
+  private Map<String, Object> subjectCompletionStats(long studentId,long subjectId,long institutionId) {
     return jdbc.queryForMap("""
         SELECT EXISTS (
                  SELECT 1
                  FROM student st
                  JOIN student_track_enrollment ste
-                   ON ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                   ON ste.student_id=st.id AND ste.institution_id=? AND ste.subject_id=s.id AND ste.status='ACTIVE'
                  JOIN curriculum_class cc
                    ON cc.id=s.class_id AND cc.active=true
                  WHERE st.id=? AND st.active=true AND s.active=true
@@ -1269,19 +1347,20 @@ public class CertificateController {
                      or (s.program_id is not null and exists(
                        select 1 from student_program_enrollment spe
                        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-                       where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+                       where spe.student_id=st.id and spe.institution_id=ste.institution_id
+                         and spe.program_id=s.program_id and spe.status='ACTIVE'
                      )))
                ) AS active_subject_track,
                COUNT(DISTINCT l.id) AS total_lessons,
-               COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
+               COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed_lessons
         FROM curriculum_subject s
         LEFT JOIN curriculum_chapter ch
           ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-        LEFT JOIN student_lesson_progress p ON p.student_id=? AND p.lesson_id=l.id
+        LEFT JOIN student_lesson_progress progress ON progress.student_id=? AND progress.institution_id=? AND progress.lesson_id=l.id
         WHERE s.id=?
         GROUP BY s.id
-        """, studentId, studentId, subjectId);
+        """,institutionId,studentId,studentId,institutionId,subjectId);
   }
 
   private ResponseStatusException certificateConflict(String language, String english, String hindi) {
@@ -1289,41 +1368,42 @@ public class CertificateController {
         "hi".equalsIgnoreCase(language) ? hindi : english);
   }
 
-  private Map<String, Object> existingCertificate(long studentId, String key) {
-    Map<String, Object> row = queryOptional("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?",
-        studentId, key);
-    if (row == null) return null;
-    return publicCertificateById(((Number) row.get("id")).longValue(), studentId);
+  private Map<String, Object> existingCertificate(long studentId,String key,long institutionId) {
+    Map<String,Object> row=queryOptional("SELECT id,status FROM student_certificate WHERE student_id=? AND institution_id=? AND achievement_key=?",
+        studentId,institutionId,key);
+    if(row==null)return null;
+    return publicCertificateById(((Number)row.get("id")).longValue(),studentId,institutionId);
   }
 
   /** Resolve legacy subject completion by identity if its stored achievement_key used an older format. */
-  private Map<String, Object> existingSubjectCompletionCertificate(long studentId, String classCode, String subjectCode, Long courseId) {
+  private Map<String, Object> existingSubjectCompletionCertificate(long studentId,String classCode,
+      String subjectCode,Long courseId,long institutionId) {
     String sql;
     Object[] args;
-    if (courseId == null) {
-      sql = "SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id " +
-          "WHERE c.student_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.class_code=? " +
+    if(courseId==null) {
+      sql="SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id "+
+          "WHERE c.student_id=? AND c.institution_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.class_code=? "+
           "AND c.program_id IS NULL AND s.code=? ORDER BY c.issued_at DESC,c.id DESC LIMIT 1";
-      args = new Object[]{studentId, classCode, subjectCode};
+      args=new Object[]{studentId,institutionId,classCode,subjectCode};
     } else {
-      sql = "SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id " +
-          "WHERE c.student_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.program_id=? " +
+      sql="SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id "+
+          "WHERE c.student_id=? AND c.institution_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.program_id=? "+
           "AND s.code=? ORDER BY c.issued_at DESC,c.id DESC LIMIT 1";
-      args = new Object[]{studentId, courseId, subjectCode};
+      args=new Object[]{studentId,institutionId,courseId,subjectCode};
     }
-    Map<String, Object> row = queryOptional(sql, args);
-    if (row == null) return null;
-    return publicCertificateById(number(row.get("id")), studentId);
+    Map<String,Object> row=queryOptional(sql,args);
+    if(row==null)return null;
+    return publicCertificateById(number(row.get("id")),studentId,institutionId);
   }
 
   /** Resolve legacy assessment records by student + attempt identity rather than achievement_key spelling. */
-  private Map<String, Object> existingAssessmentCertificate(long studentId, long attemptId) {
-    Map<String, Object> row = queryOptional(
-        "SELECT c.id FROM student_certificate c WHERE c.student_id=? AND c.assessment_attempt_id=? " +
+  private Map<String, Object> existingAssessmentCertificate(long studentId,long attemptId,long institutionId) {
+    Map<String,Object> row=queryOptional(
+        "SELECT c.id FROM student_certificate c WHERE c.student_id=? AND c.institution_id=? AND c.assessment_attempt_id=? "+
         "AND c.achievement_type='ASSESSMENT_PASS' ORDER BY c.issued_at DESC,c.id DESC LIMIT 1",
-        studentId, attemptId);
-    if (row == null) return null;
-    return publicCertificateById(number(row.get("id")), studentId);
+        studentId,institutionId,attemptId);
+    if(row==null)return null;
+    return publicCertificateById(number(row.get("id")),studentId,institutionId);
   }
   private Map<String, Object> existingOrRejectRevoked(Map<String, Object> certificate) {
     if ("REVOKED".equals(certificate.get("status"))) {
@@ -1333,10 +1413,25 @@ public class CertificateController {
     return certificate;
   }
 
-  private Map<String, Object> publicCertificateById(long id, long studentId) {
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null || tenant.institutionId()<1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing certificates.");
+    }
+    return tenant.institutionId();
+  }
+
+  private Map<String, Object> publicCertificateById(long id,long studentId) {
     Map<String, Object> row = queryOptional("SELECT " + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN
-        + " WHERE c.id=? AND c.student_id=?", id, studentId);
-    if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
+        + " WHERE c.id=? AND c.student_id=?",id,studentId);
+    if(row==null)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Certificate not found.");
+    return row;
+  }
+
+  private Map<String, Object> publicCertificateById(long id,long studentId,long institutionId) {
+    Map<String,Object> row=queryOptional("SELECT "+CERTIFICATE_COLUMNS+" "+CERTIFICATE_JOIN
+        +" WHERE c.id=? AND c.student_id=? AND c.institution_id=?",id,studentId,institutionId);
+    if(row==null)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Certificate not found.");
     return row;
   }
 
@@ -1364,13 +1459,17 @@ public class CertificateController {
     return name.isBlank() ? code : name;
   }
 
-  private void requireActiveCourseEnrollment(long studentId,long courseId) {
+  private void requireActiveCourseEnrollment(long studentId,long courseId,long institutionId) {
     Long active=jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
+      join institution_membership m on m.student_id=spe.student_id
+        and m.institution_id=spe.institution_id and m.status='ACTIVE'
+      join institution_tenant t on t.id=spe.institution_id and t.status='ACTIVE'
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
-      where spe.student_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
-      """,Long.class,studentId,courseId);
-    if(active==null || active==0)throw new SecurityException("Active enrolment in this course is required.");
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=?
+        and spe.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,studentId,institutionId,courseId);
+    if(active==null || active==0)throw new SecurityException("Active enrolment in this course is required in the selected institution.");
   }
 
   private String normalizeLanguage(String requested, String fallback) {

@@ -33,6 +33,13 @@ public class InstitutionTenantContextService {
    * tenant context and per-course access service.
    */
   private static final List<String> TENANT_REQUIRED_PREFIXES = List.of(
+      // Legacy and current learner routes must share the same fail-closed tenant boundary.
+      "/api/v1/students/",
+      "/api/v1/diagnostic",
+      "/api/v1/recommendations",
+      "/api/v1/learning/sessions",
+      "/api/v1/learning/assessments",
+      "/api/v1/learning/assessment-attempts",
       "/api/v1/students/me/programs",
       "/api/v1/students/me/certificates",
       "/api/v1/marketplace",
@@ -42,7 +49,7 @@ public class InstitutionTenantContextService {
       "/api/v1/structured-lessons",
       "/api/v1/practice",
       "/api/v1/learning/",
-      "/api/v1/guardians/children/",
+      "/api/v1/guardians/children",
       "/api/v1/certificates",
       "/api/v1/tutor",
       "/api/v1/learning-chat"
@@ -152,6 +159,7 @@ public class InstitutionTenantContextService {
 
   public static boolean requiresInstitutionContext(String requestPath) {
     if (requestPath == null) return false;
+
     // Public identity, account/session, institution join, institution-admin and HRMS-control
     // routes are intentionally not classified as learner-content APIs.
     if (requestPath.startsWith("/api/v1/auth/")
@@ -205,15 +213,12 @@ public class InstitutionTenantContextService {
       member = jdbc.queryForObject("""
           select exists(
             select 1
-            from guardian_student gs
-            join student st on st.id=gs.student_id and st.active=true
-            join institution_membership m on m.student_id=st.id
-              and m.institution_id=? and m.status='ACTIVE'
+            from institution_user_membership m
+            join user_account u on u.id=m.user_id and u.active=true
             join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-            where gs.guardian_user_id=? and gs.active=true
-              and gs.consent_status='CONSENTED'
+            where m.institution_id=? and m.user_id=? and m.status='ACTIVE'
           )
-          """, Boolean.class, tenant.institutionId(), caller.userId());
+          """,Boolean.class,tenant.institutionId(),caller.userId());
     } else {
       member = false;
     }
@@ -222,6 +227,37 @@ public class InstitutionTenantContextService {
       throw new InvalidInstitutionContextException(
           403, "INSTITUTION_MEMBERSHIP_REQUIRED",
           "Your account has no active membership in the selected institution.");
+    }
+  }
+
+  /**
+   * Validates the exact child selected by a parent operation, not merely that some child of the
+   * parent belongs to the selected institution. Controller checks may impose a stricter access
+   * level (for example FULL for profile changes); this check establishes the tenant boundary.
+   */
+  public void assertGuardianChildMembership(
+      AuthContext caller, InstitutionTenantContext tenant, long studentId) {
+    if (caller == null || tenant == null || !caller.isParent() || studentId < 1) {
+      throw new InvalidInstitutionContextException(
+          403, "GUARDIAN_CHILD_ACCESS_REQUIRED",
+          "A valid parent session and selected child are required.");
+    }
+    Boolean allowed = jdbc.queryForObject("""
+        select exists(
+          select 1
+          from guardian_student gs
+          join student st on st.id=gs.student_id and st.active=true
+          join institution_membership m on m.student_id=st.id
+            and m.institution_id=? and m.status='ACTIVE'
+          join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+          where gs.guardian_user_id=? and gs.student_id=?
+            and gs.active=true and gs.consent_status='CONSENTED'
+        )
+        """, Boolean.class, tenant.institutionId(), caller.userId(), studentId);
+    if (!Boolean.TRUE.equals(allowed)) {
+      throw new InvalidInstitutionContextException(
+          403, "GUARDIAN_CHILD_INSTITUTION_MISMATCH",
+          "The selected child is not actively linked to this parent in the selected institution.");
     }
   }
 

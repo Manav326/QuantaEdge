@@ -37,9 +37,9 @@ class AuthServiceRegistrationTest {
     when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"),
         eq(Long.class), eq(NORMALIZED_MOBILE))).thenReturn(0L);
 
-    assertEquals("123456", auth.requestOtp(MOBILE, "SIGNUP"));
+    assertEquals("123456", auth.requestOtp(MOBILE, "SIGNUP", 1L));
     verify(jdbc).update(contains("insert into otp_challenge"), eq(NORMALIZED_MOBILE),
-        eq("SIGNUP"), org.mockito.ArgumentMatchers.anyString());
+        eq("SIGNUP"), org.mockito.ArgumentMatchers.anyString(), eq(1L));
   }
 
   @Test
