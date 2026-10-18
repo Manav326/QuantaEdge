@@ -643,3 +643,8 @@ html[data-qe-appearance] .qe-language-switcher--menu-setting select {
 .qe-enrollment-issue-dismiss{flex:0 0 auto;border:0;background:transparent;color:inherit;font-size:22px;line-height:1;padding:0 4px;cursor:pointer}
 .qe-enrollment-issue-dismiss:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:4px}
 @media(max-width:600px){.qe-enrollment-issue{margin:10px 12px;padding:12px;gap:8px}}
+
+.qe-enrollment-issue-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.qe-enrollment-issue-retry{min-height:34px;padding:6px 12px;border:1px solid currentColor;border-radius:9px;background:transparent;color:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.qe-enrollment-issue-retry:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+@media(max-width:600px){.qe-enrollment-issue-actions{align-self:flex-start}.qe-enrollment-issue-retry{padding:6px 9px}}
