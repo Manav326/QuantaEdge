@@ -108,3 +108,8 @@
 @media(max-width:650px){.themePreviewMeta{align-items:flex-start;flex-direction:column}.themePreviewMeta>span{max-width:100%}.themePreviewCard{padding:10px}}
 
 .invitationLinkPreview{display:block;max-width:100%;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;padding:9px 11px;border:1px solid var(--qe-color-border-subtle,#D1D5DB);border-radius:9px;background:var(--qe-color-surface,#fff);color:var(--qe-color-text,#172033);margin-top:8px}
+
+.brandAssetActions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.brandAssetPreview{flex-wrap:wrap;min-width:0}
+.brandAssetPreview img{max-width:min(180px,100%);max-height:84px;min-width:0}
+@media(max-width:650px){.brandAssetActions{width:100%;justify-content:flex-start}.brandAssetActions button{min-height:40px}}
