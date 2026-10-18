@@ -23,13 +23,15 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         workflow = read("textbook-visual-candidates-v3.yml")
         marker = "[resume-visual-layers-4-5-classes-7-8]"
         self.assertIn(marker, workflow)
+        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", workflow)
+        self.assertIn("[resume-visual-layers-4-5-class-6]", workflow)
         self.assertIn("matrix:", workflow)
-        self.assertIn("max-parallel: 2", workflow)
+        self.assertIn("max-parallel: 3", workflow)
         self.assertIn("fromJSON(contains(github.event.head_commit.message", workflow)
-        self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
-        self.assertIn("inputs.vision_model || 'qwen2.5vl:3b'", workflow)
+        self.assertIn("inputs.analysis_mode || ((github.event_name == 'push'", workflow)
+        self.assertIn("VISION_MODEL: ${{ inputs.vision_model || needs.continuation-gate.outputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
         self.assertNotIn("VISION_MODEL: ${{ inputs.vision_model }}", workflow)
-        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '5' }}", workflow)
+        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || needs.continuation-gate.outputs.checkpoint_batch_size || '5' }}", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("'classes-7-8-resume'", workflow)
 
@@ -48,7 +50,18 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '[\"7\",\"8\"]'", matrix_line)
         self.assertIn("'class-7-resume'", workflow)
         self.assertIn("'class-8-resume'", workflow)
-        self.assertIn("max-parallel: 2", workflow)
+        self.assertIn("max-parallel: 3", workflow)
+
+    def test_cancelled_class6_to8_run_automatically_resumes_from_committed_state(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("workflow_run:", workflow)
+        self.assertIn('workflows: ["Prepare textbook visual candidates v3 (additive)"]', workflow)
+        self.assertIn("github.event.workflow_run.conclusion == 'cancelled'", workflow)
+        self.assertIn("needs.continuation-gate.outputs.resume_active == 'true'", workflow)
+        self.assertIn("data/textbook-content-pipeline/resume-control.v1.json", workflow)
+        self.assertIn("needs.prepare.result == 'success'", workflow)
+        self.assertIn("status(content): complete Class 6-8 Layer 5 resume", workflow)
+
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         preflight = workflow.index("- name: Preflight and restore matching Layer 4 checkpoints before loading the vision model")

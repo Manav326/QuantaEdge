@@ -6,6 +6,14 @@ A rerun is not automatically a resume. A resume must reuse verified completed wo
 
 All generated pipeline data and savepoints belong under `data/`. Application code, workflow definitions, and documentation must not become alternate locations for generated data. Candidate and generated lesson artifacts remain review-only; publication is never enabled by a resume action.
 
+## Automatic continuation for Classes 6–8 Layer 4–5
+
+The joint recovery push marker `[resume-visual-layers-4-5-classes-6-8]` starts one class matrix with all three classes allowed to run in parallel. It uses `resume_layers_4_5`, the existing `qwen2.5vl:3b` Layer 4 checkpoint identity, and five-asset durable savepoints.
+
+GitHub-hosted runners have a finite job-duration limit. A cancelled Layer 4–5 workflow now checks the tracked `data/textbook-content-pipeline/resume-control.v1.json` state and automatically launches another **resume** run while that control state remains active. Each new run must restore or validate the existing source-bound checkpoints; it does not switch to `analyze_all` or rebuild the candidate packs just because the prior runner ended. The control state is disabled only after the full Class 6–8 matrix succeeds, which means every selected whole-book ledger was reported `COMPLETE`.
+
+This automation intentionally does **not** weaken the Layer 5 completion gate or fabricate completion by changing `INCOMPLETE` to `COMPLETE`. Source/PDF/hash mismatches and unverifiable checkpoints still fail closed for diagnosis instead of triggering blind re-analysis. The status file is a continuation control, not a curriculum artifact; it stays under `data/`.
+
 ## One entrypoint per pipeline
 
 The general Layers 1–8 content pipeline uses two main workflow entrypoints. Choose the operation in the workflow's **Run workflow** form; separate resume-only wrappers have been retired.
