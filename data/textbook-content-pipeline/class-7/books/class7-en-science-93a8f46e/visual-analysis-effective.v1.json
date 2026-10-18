@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e42b109edc61f3d997d5cfe87e0e057d2f5dda8c5288a17b7cdd9e6aef965a52",
+  "raw_analysis_sha256": "7adac206842a0f50020cc65152ac666a678c7c86911a2494db4a24706532294b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:15:40Z",
+      "checkpointed_at": "2026-10-18T06:18:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T06:15:59Z",
+      "checkpointed_at": "2026-10-18T06:18:38Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -37254,6 +37254,196 @@
         "context_relation": "The image is a diagram related to the text about litmus paper strips.",
         "limitations": [
           "The image does not show the color change of the litmus paper strips."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f5131daf026dd96038ff94c5",
+      "asset_sha256": "1c70469212e1e6e484a4289699373e07fe2a2ca75cbae823a9c83b03c8572b4a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/1c70469212e1e6e484a4289699373e07fe2a2ca75cbae823a9c83b03c8572b4a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a microphone and a camera, with a colorful background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us ﬁnd out!",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance",
+          "lichens"
+        ],
+        "context_relation": "The image is related to the text about litmus paper and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:19:17Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a microphone and a camera, with a colorful background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us ﬁnd out!",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance",
+          "lichens"
+        ],
+        "context_relation": "The image is related to the text about litmus paper and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b267a816c8c94b359403d967",
+      "asset_sha256": "f90a1f5ecdb56d36a8a3c69e6f1dfdac88e6e3990482ada89e7af306a9491b11",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/f90a1f5ecdb56d36a8a3c69e6f1dfdac88e6e3990482ada89e7af306a9491b11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a blue and red litmus paper strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "litmus paper",
+          "chemical reaction",
+          "color change"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the question and answer section of the textbook.",
+        "limitations": [
+          "The image does not show the actual litmus paper strips, only a diagram of them."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:19:53Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a blue and red litmus paper strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "litmus paper",
+          "chemical reaction",
+          "color change"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the question and answer section of the textbook.",
+        "limitations": [
+          "The image does not show the actual litmus paper strips, only a diagram of them."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dced41886db257147f02db61",
+      "asset_sha256": "7a798c4e12287a0160d2f60f316c7bda06fcff5e6c21761fdcef0ac9d1ed6790",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/7a798c4e12287a0160d2f60f316c7bda06fcff5e6c21761fdcef0ac9d1ed6790.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a35f6102fef8e1e73d6cafbe5afe13d3d032fef16528251d0cd61bea50ab1f5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue and red litmus paper strip, showing the change in color when a sample is applied.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance"
+        ],
+        "context_relation": "The image is a close-up of a litmus paper strip, showing the change in color when a sample is applied.",
+        "limitations": [
+          "The image does not show the full page or the entire context of the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T06:20:34Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue and red litmus paper strip, showing the change in color when a sample is applied.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance"
+        ],
+        "context_relation": "The image is a close-up of a litmus paper strip, showing the change in color when a sample is applied.",
+        "limitations": [
+          "The image does not show the full page or the entire context of the question."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

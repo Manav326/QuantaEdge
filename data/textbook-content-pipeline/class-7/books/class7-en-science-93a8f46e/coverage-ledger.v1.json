@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 656,
-    "successful_visual_analyses": 647,
-    "missing_visual_analyses": 6832,
+    "raw_analysis_result_rows": 659,
+    "successful_visual_analyses": 650,
+    "missing_visual_analyses": 6829,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6841,
+    "unresolved_count": 6838,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35134,9 +35134,32 @@
       "asset_path": "assets/1c70469212e1e6e484a4289699373e07fe2a2ca75cbae823a9c83b03c8572b4a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a microphone and a camera, with a colorful background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Let us ﬁnd out!",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance",
+          "lichens"
+        ],
+        "context_relation": "The image is related to the text about litmus paper and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35152,9 +35175,25 @@
       "asset_path": "assets/f90a1f5ecdb56d36a8a3c69e6f1dfdac88e6e3990482ada89e7af306a9491b11.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a blue and red litmus paper strip.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: Blue and red litmus paper strips",
+          "Litmus is a natural substance obtained from lichens. It is available both as a solid and a solution."
+        ],
+        "concepts": [
+          "litmus paper",
+          "chemical reaction",
+          "color change"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the question and answer section of the textbook.",
+        "limitations": [
+          "The image does not show the actual litmus paper strips, only a diagram of them."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35170,9 +35209,32 @@
       "asset_path": "assets/7a798c4e12287a0160d2f60f316c7bda06fcff5e6c21761fdcef0ac9d1ed6790.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue and red litmus paper strip, showing the change in color when a sample is applied.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I am curious to know — what are these",
+          "red and blue litmus paper strips made of?",
+          "Why do they change colour when drops",
+          "of some samples are put on them?",
+          "Fig. 2.3: Blue and red litmus",
+          "paper strips",
+          "Litmus  is a natural substance obtained from lichens.  It  is",
+          "available both as a s"
+        ],
+        "concepts": [
+          "litmus paper",
+          "color change",
+          "chemical reaction",
+          "natural substance"
+        ],
+        "context_relation": "The image is a close-up of a litmus paper strip, showing the change in color when a sample is applied.",
+        "limitations": [
+          "The image does not show the full page or the entire context of the question."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
