@@ -206,6 +206,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Add 72 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
 - [x] Add a separate 93-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
 - [x] Link all 93 screen entries and all 435 extracted API mapping rows to existing scenario IDs; verify no unknown or missing references.
+- [x] Add a runtime execution log with one row per workflow scenario and explicit evidence/cleanup columns.
 - [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
 - [x] Source-extract 435 REST/STOMP mapping entries from 48 Java files; generated guard hints remain partial and need human review.
 - [x] Document Education Admin base-role defaults, HRMS additional-role templates and distinct platform-owner/institution-admin authority.
