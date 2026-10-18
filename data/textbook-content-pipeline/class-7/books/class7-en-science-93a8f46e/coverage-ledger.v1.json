@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 746,
-    "successful_visual_analyses": 739,
-    "missing_visual_analyses": 6742,
+    "raw_analysis_result_rows": 750,
+    "successful_visual_analyses": 743,
+    "missing_visual_analyses": 6738,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6749,
+    "unresolved_count": 6745,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -38442,9 +38442,34 @@
       "asset_path": "assets/c8a202f70051e91d503a194aa72fed0bcdc125a1e2406777cb519995518c5e64.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a full page from a textbook, likely discussing the use of vegetables, fruits, or flowers as acid-base indicators in a scientific experiment.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Scientific experiment",
+          "Vegetables, fruits, flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The image is likely a continuation of a lesson or experiment described in the text.",
+        "limitations": [
+          "The image does not show any specific experiment or results.",
+          "The text is incomplete and does not provide a clear visual representation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38460,9 +38485,35 @@
       "asset_path": "assets/8558db12aed2293c14edf572ab7d8c23c6411bdf0cae5dbb4a0a6ec65b08de04.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image contains text discussing the use of vegetables, fruits, and flowers as acid-base indicators in a scientific experiment.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Scientific experiment",
+          "Vegetables",
+          "Fruits",
+          "Flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The text is providing instructions and information about a scientific experiment involving the use of various natural substances as indicators for pH levels.",
+        "limitations": [
+          "The image does not contain a diagram, chart, graph, table, map, cartoon, photo, or illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38478,9 +38529,32 @@
       "asset_path": "assets/f8299172a612d5a7f41809097e5683ed360ee5ff1d6943be510d14a87470bedb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a list of vegetables, fruits, and flowers that can be used as acid-base indicators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are sure that you will be excited about the above results.",
+          "You may repeat the process of preparing the extract and testing",
+          "substances with some vegetables, fruits, or flowers, such as",
+          "beetroot, purple cabbage, turmeric, Indian blackberry (jamun)",
+          "and red hibiscus (gudhal) flower. They can also act as acid-base",
+          "indicators.",
+          "FASCINATING FACTS",
+          "Hydrangea is a plant that",
+          "grows in cooler climates in"
+        ],
+        "concepts": [
+          "Acid-base indicators",
+          "Vegetables, fruits, and flowers",
+          "Hydrangea"
+        ],
+        "context_relation": "The image provides information about using natural substances as indicators for pH tests.",
+        "limitations": [
+          "The image does not show any visual representation of the substances or the testing process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38496,9 +38570,20 @@
       "asset_path": "assets/e8692fb5ff63c0110e84627a3e82a06a6c13f665b1f23901859424dad221ca51.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leafy vegetable, possibly lettuce, with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about preparing and testing substances with vegetables, fruits, or flowers as acid-base indicators.",
+        "limitations": [
+          "The image does not provide specific details about the vegetables, fruits, or flowers being used.",
+          "The image does not show the process of preparing and testing the substances.",
+          "The image does not include any text or labels that provide additional information about the substances being used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
