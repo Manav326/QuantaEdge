@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 755,
+    "assets_selected": 758,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 753,
-    "assets_remaining": 1325,
-    "assets_completion_percent": 36.2,
-    "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 750,
+    "assets_analyzed": 756,
+    "assets_remaining": 1322,
+    "assets_completion_percent": 36.4,
+    "assets_failed": 15,
+    "assets_skipped_from_checkpoint": 753,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T15:35:29Z"
+      "checkpointed_at": "2026-10-18T15:43:32Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -22914,64 +22914,19 @@
     {
       "asset_id": "b774a52d7cb0d92087bcb1db",
       "asset_sha256": "6b30e918053e216338afcc644368301befcaa75dc2c0e0f2877cafc0a732f66a",
+      "page_text_context_sha256": "cf1a0e01d86fefc810281a9c7f843839cdd7f282a4a0fcab1bf6214a3169caa4",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 30,
       "asset_path": "page-0030.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "cf1a0e01d86fefc810281a9c7f843839cdd7f282a4a0fcab1bf6214a3169caa4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook discussing observations of plants and animals.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "What similarities and differences did you find among the\nplants that you observed?\nYou must have observed that plants have a variety of\nfeatures such as—",
-          "tall/short, hard/soft stem",
-          "different shapes of leaves and their arrangement on\nthe stem or branches",
-          "flowers varying in colour, shape, and scent",
-          "Now, create a list of animals you observed during this\nwalk or from your previous experiences. Record the places\nwhere they live, the food they eat and the way they move\naround in Table 2.2. Some examples have been provided\nfor you.",
-          "Table 2.2: Observations of different animals around us",
-          "Name of\nthe animal\n(local name)",
-          "Place where\nthey live",
-          "Food they\neat",
-          "The way\nthey move\naround",
-          "Any other\nobservations\nand features",
-          "Crow",
-          "Tree",
-          "Insects",
-          "Fly and walk",
-          "Carrying a\ntwig in its\nbeak",
-          "Ant",
-          "Nest in soil\nand burrow",
-          "Leaves, seeds\nand insects",
-          "Have six legs",
-          "Cow",
-          "Grasses,\nleaves",
-          "Any other",
-          "What are the similarities and differences among the\nanimals that you have observed and recorded in Table 2.2?\nYou would have observed that some animals live on land\nwhile some others live on trees. Birds live on trees. Fish live\nin water and some animals like frogs live on land as well\nas in water. ",
-          "Sketch the plants and animals observed by you in your\nnotebook or prepare a scrapbook with leaves, flowers from\ndifferent plants and feathers from animals. Write all the\ndetails you have gathered about them."
-        ],
-        "concepts": [
-          "Observations of plants and animals",
-          "Similarities and differences",
-          "Animals living on land and trees",
-          "Animals living in water",
-          "Animals consuming diverse foods",
-          "Animals exhibiting variety of movements"
-        ],
-        "context_relation": "Observations and descriptions of plants and animals",
-        "limitations": [
-          "No specific visual elements provided",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
-      "checkpointed_at": "2026-10-18T15:40:09Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "50c147c57e8e2e87ca99b4df",
@@ -23040,6 +22995,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121458410",
       "checkpointed_at": "2026-10-18T15:42:16Z"
+    },
+    {
+      "asset_id": "e87a8acdf645f3cc53f52185",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fef71a2febe9beb1ce51c6f739830f2a90cce0c60e681eb72d428089b9003279",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation of plants and animals during travel",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:45:39Z"
+    },
+    {
+      "asset_id": "a395336f3e30b52528d4e1b7",
+      "asset_sha256": "a19c97afb0b60b94e630cd850f1a9b1557affcd386c1be97584fa49256c88ff9",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 31,
+      "asset_path": "page-0031.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "fef71a2febe9beb1ce51c6f739830f2a90cce0c60e681eb72d428089b9003279",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A classroom scene with children drawing on a blackboard.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "While  travelling  to and from  school, observe your\nsurroundings and look out for a variety of plants and\nanimals. Add the name of any plant or animal that you have\nnot listed before in Tables 2.1 and 2.2.",
+          "Activity 2.2: Let us appreciate",
+          "Close your eyes for 30 seconds and think of one plant\nand one animal that you have closely observed and\nappreciated very much.",
+          "Now each one of you can draw the plant and animal\nthat you thought of on the blackboard.",
+          "What are your observations about the various plants\nand animals that have been drawn?"
+        ],
+        "concepts": [
+          "Observing plants and animals",
+          "Drawing on a blackboard",
+          "Biodiversity"
+        ],
+        "context_relation": "Educational",
+        "limitations": [
+          "No specific data or statistics are provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:49:38Z"
+    },
+    {
+      "asset_id": "ac6ff73e9342745e1910c2ad",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 32,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "232889d78a732c98934e6cc102f309bf4d2e72415a482c9629d0f656ee02645f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121458410",
+      "checkpointed_at": "2026-10-18T15:49:54Z"
     }
   ]
 }
