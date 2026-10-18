@@ -116,7 +116,8 @@ async function fetchTenantBrand(codeInput: string): Promise<TenantBrand> {
 
 function tenantCodeFromSchoolPath(): string | null {
   const segments = window.location.pathname.split('/').filter(Boolean);
-  return segments.length === 2 && segments[0].toLowerCase() === 'school'
+  // The school slug is stable across /school/{code}/, /login/student and signup paths.
+  return segments.length >= 2 && segments[0].toLowerCase() === 'school'
     ? normalizedCode(segments[1])
     : null;
 }
@@ -144,6 +145,7 @@ const SERVER_BRANDING_COOKIES = [
   { name: 'qe-tenant-student', path: '/student' },
   { name: 'qe-tenant-login-student', path: '/login/student' },
   { name: 'qe-tenant-signup', path: '/signup' },
+  { name: 'qe-tenant-session', path: '/session' },
 ] as const;
 
 function saveTenantMetadataCookies(code: string | null) {
