@@ -18,18 +18,28 @@ public class AuthController {
   private final AuthService auth;
   private final StaffAuditService staffAudit;
   private final GoogleIdentityService googleIdentity;
+  private final InstitutionTenantContextService tenantContexts;
+  private final InstitutionMembershipService memberships;
   private final boolean secureCookies;
 
   @Autowired
-  public AuthController(AuthService auth, StaffAuditService staffAudit, GoogleIdentityService googleIdentity,
+  public AuthController(AuthService auth,StaffAuditService staffAudit,GoogleIdentityService googleIdentity,
+      InstitutionTenantContextService tenantContexts,InstitutionMembershipService memberships,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
-    this.auth=auth; this.staffAudit=staffAudit; this.googleIdentity=googleIdentity; this.secureCookies=secureCookies;
+    this.auth=auth;this.staffAudit=staffAudit;this.googleIdentity=googleIdentity;
+    this.tenantContexts=tenantContexts;this.memberships=memberships;this.secureCookies=secureCookies;
+  }
+
+  /** Source-compatible constructor for focused tests that do not exercise account onboarding. */
+  public AuthController(AuthService auth,StaffAuditService staffAudit,GoogleIdentityService googleIdentity,
+      @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
+    this(auth,staffAudit,googleIdentity,null,null,secureCookies);
   }
 
   /** Retained for existing focused controller tests that do not exercise Google sign-in. */
-  public AuthController(AuthService auth, StaffAuditService staffAudit,
+  public AuthController(AuthService auth,StaffAuditService staffAudit,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
-    this(auth, staffAudit, null, secureCookies);
+    this(auth,staffAudit,null,null,null,secureCookies);
   }
 
   /**
@@ -393,6 +403,19 @@ public class AuthController {
         && auth.staffMustChangePassword(context.staffId()));
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString())
         .body(body);
+  }
+
+  private InstitutionTenantContext requireTenant(String institutionCode) {
+    if(tenantContexts==null) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before creating or accessing an account.");
+    }
+    return tenantContexts.requireSelector(institutionCode);
+  }
+
+  private InstitutionMembershipService requireMembershipService() {
+    if(memberships==null) throw new IllegalStateException("Institution membership service is not configured.");
+    return memberships;
   }
 
   private boolean isAndroidClient(String clientHeader) {
