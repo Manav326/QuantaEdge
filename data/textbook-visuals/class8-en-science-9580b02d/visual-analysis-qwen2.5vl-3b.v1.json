@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 500,
+    "assets_selected": 503,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 498,
-    "assets_remaining": 1793,
-    "assets_completion_percent": 21.7,
+    "assets_analyzed": 501,
+    "assets_remaining": 1790,
+    "assets_completion_percent": 21.9,
     "assets_failed": 0,
-    "assets_skipped_from_checkpoint": 495,
+    "assets_skipped_from_checkpoint": 498,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T13:04:33Z"
+      "checkpointed_at": "2026-10-18T13:11:30Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1775,7 +1775,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
-      "checkpointed_at": "2026-10-18T13:05:53Z"
+      "checkpointed_at": "2026-10-18T13:12:50Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -14797,6 +14797,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121461294",
       "checkpointed_at": "2026-10-18T13:09:49Z"
+    },
+    {
+      "asset_id": "794970c8c99c70589e3def24",
+      "asset_sha256": "0755daa7b101cce43a97aa7f31f399ce287966eba5ad3b9e392a698722838e13",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/0755daa7b101cce43a97aa7f31f399ce287966eba5ad3b9e392a698722838e13.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T13:13:58Z"
+    },
+    {
+      "asset_id": "b52d549a6547883da75be581",
+      "asset_sha256": "0ca4ccd44bf9210f7c3cd242fb121fbc3fd2309c8daaaf7234943829effbd440",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/0ca4ccd44bf9210f7c3cd242fb121fbc3fd2309c8daaaf7234943829effbd440.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or header for a page.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T13:15:11Z"
+    },
+    {
+      "asset_id": "f3dfa607ed83aee1c20b1cc0",
+      "asset_sha256": "5e0dc6d6dc4c2193f0ff84650d198cee170840b68889ea762f9fbc118d27566e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/5e0dc6d6dc4c2193f0ff84650d198cee170840b68889ea762f9fbc118d27566e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long horizontal banner with a gradient background transitioning from yellow to orange, possibly representing a title or heading.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The banner likely serves as a title or heading for the content that follows.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121461294",
+      "checkpointed_at": "2026-10-18T13:16:27Z"
     }
   ]
 }
