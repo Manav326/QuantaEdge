@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 717,
-    "successful_visual_analyses": 705,
-    "missing_visual_analyses": 1361,
+    "raw_analysis_result_rows": 721,
+    "successful_visual_analyses": 709,
+    "missing_visual_analyses": 1357,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1373,
+    "unresolved_count": 1369,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -28442,9 +28442,18 @@
       "asset_path": "assets/f87642eb73b427a5baaea0ea928511b83c5a97d579187e646bce650ab0c689e4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28460,9 +28469,30 @@
       "asset_path": "assets/e62e54da294f347456db30b34f78d0b6461847d7057e9511f8006236d54f5538.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page discussing questions about the Earth and beyond.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We will have an almost unending list of questions about everything on Earth as we further explore this book. But why limit our questions to the Earth alone? We can ask questions on things beyond—the Sun, the Moon, and the millions of stars that shine in the sky!",
+          "Whether you are learning about the structure of a leaf, discovering how things move, or separating the skin of a peanut seed, we hope each chapter of this book will ignite",
+          "to find answers"
+        ],
+        "concepts": [
+          "questions about the Earth",
+          "questions about the Sun",
+          "questions about the Moon",
+          "questions about stars",
+          "learning about the structure of a leaf",
+          "discovering how things move",
+          "separating the skin of a peanut seed"
+        ],
+        "context_relation": "The page discusses the idea of exploring beyond the Earth, suggesting questions about the Sun, Moon, and stars, as well as learning about the Earth's structure and processes.",
+        "limitations": [
+          "The page does not provide specific examples or details about the questions or processes being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28478,9 +28508,18 @@
       "asset_path": "assets/177cdf5f28e2248a70f7238c0ac620e4242779078fe5c877a7b5b57356a03e16.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "No visible text or images to analyze. The page is completely black and blank."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -28496,9 +28535,18 @@
       "asset_path": "assets/b2d5b4bcf77a4cf858458996824396a5e643085a6e27949809e1239f4d7a9d95.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or transitional page in the textbook.",
+        "limitations": [
+          "The page is empty and does not contain any visual or textual content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
