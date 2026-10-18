@@ -743,20 +743,25 @@ public class AssessmentController {
   public Map<String, Object> assessmentLeaderboard(
       @PathVariable long assessmentId,
       @RequestParam(required = false, defaultValue = "hi") String language,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
 
     // Keep the leaderboard behind the same class/subject enrollment and lesson-completion gate
     // as the student test catalogue. Students with a saved attempt may still inspect its standings
     // after the assessment is archived, consistent with the durable released-results history.
     Long eligible = jdbc.queryForObject("""
+      with tenant_scope as (select ?::bigint as institution_id)
       select count(*)
       from assessment a
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id
+        and ste.institution_id=(select institution_id from tenant_scope)
         and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
@@ -764,22 +769,25 @@ public class AssessmentController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
+              and spe.program_id=s.program_id and spe.status='ACTIVE'
           )))
         and (a.status='PUBLISHED' or exists(
           select 1 from student_assessment_attempt resumable
           where resumable.assessment_id=a.id and resumable.student_id=st.id
+            and resumable.institution_id=(select institution_id from tenant_scope)
             and resumable.status in ('IN_PROGRESS','AWAITING_REVIEW','GRADED','RELEASED')
         ))
         and (
           exists(select 1 from student_assessment_attempt resumable
                  where resumable.assessment_id=a.id and resumable.student_id=st.id
+                   and resumable.institution_id=(select institution_id from tenant_scope)
                    and resumable.status in ('IN_PROGRESS','AWAITING_REVIEW','GRADED','RELEASED'))
           or (
       """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
           )
         )
-      """, Long.class, context.studentId(), assessmentId);
+      """, Long.class, institutionId,context.studentId(), assessmentId);
     if (eligible == null || eligible == 0) {
       // Do not reveal whether another class's assessment exists.
       throw notFound("Assessment", assessmentId);
@@ -804,7 +812,8 @@ public class AssessmentController {
     if (metadata.isEmpty()) throw notFound("Assessment", assessmentId);
 
     List<Map<String, Object>> rankedRows = jdbc.queryForList("""
-      with released_attempts as (
+      with tenant_scope as (select ?::bigint as institution_id),
+      released_attempts as (
         select att.id as attempt_id, att.student_id,
                coalesce(nullif(btrim(st.display_name), ''), 'Student') as student_name,
                att.final_score as score, att.max_score,
@@ -813,7 +822,7 @@ public class AssessmentController {
                att.submitted_at
         from student_assessment_attempt att
         join student st on st.id=att.student_id and st.active=true
-        where att.assessment_id=?
+        where att.assessment_id=? and att.institution_id=(select institution_id from tenant_scope)
           and att.status='RELEASED'
           and att.final_score is not null
           and att.submitted_at is not null
@@ -846,7 +855,7 @@ public class AssessmentController {
       from ranked
       where leaderboard_rank<=20 or student_id=?
       order by leaderboard_rank
-      """, assessmentId, context.studentId());
+      """, institutionId,assessmentId, context.studentId());
 
     List<Map<String, Object>> items = new ArrayList<>();
     Map<String, Object> currentStudent = null;
