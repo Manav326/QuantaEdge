@@ -813,7 +813,7 @@ public class CertificateController {
           "More than one school can issue this certificate. Reopen your school learning link and retry.");
     }
     Map<String,Object> issuer=issuers.getFirst();
-    long institutionId=number(issuer.get("institution_id"));
+    long issuerInstitutionId=number(issuer.get("institution_id"));
     String displayName=clean(issuer.get("issuer_display_name"));
     if (displayName.isBlank()) return null;
     String logoAssetId=clean(issuer.get("issuer_logo_asset_id"));
@@ -822,10 +822,10 @@ public class CertificateController {
       logo=queryOptionalByteArray("""
           select image_bytes from institution_branding_asset
           where institution_id=? and asset_id=? and asset_type='LOGO' and active=true
-          """, institutionId, logoAssetId);
+          """, issuerInstitutionId, logoAssetId);
     }
     Map<String,String> lightPalette = issuerLightPalette(issuer.get("issuer_theme_tokens"));
-    snapshot.put("issuerInstitutionId", institutionId);
+    snapshot.put("issuerInstitutionId", issuerInstitutionId);
     snapshot.put("issuerTenantCode", clean(issuer.get("tenant_code")));
     snapshot.put("issuerDisplayName", displayName);
     snapshot.put("issuerThemePalette", lightPalette);
