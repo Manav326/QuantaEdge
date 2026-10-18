@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 713,
-    "successful_visual_analyses": 703,
-    "missing_visual_analyses": 6775,
+    "raw_analysis_result_rows": 716,
+    "successful_visual_analyses": 706,
+    "missing_visual_analyses": 6772,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6785,
+    "unresolved_count": 6782,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37163,9 +37163,29 @@
       "asset_path": "assets/6f9d0ea76374cb76e4b8fe3f9cc6821b58c4b0221e98d819b57fc2b238a960d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red rose petal with a small red dot on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "2.1.2 Red rose as an indicator",
+          "You might have observed many coloured flowers in your surroundings. Try making your indicators using these flowers.",
+          "Activity 2.3: Let us prepare",
+          "Collect some fallen petals of red roses available in your surroundings (Fig. 2.5). It is advised not to pluck flowers. You may pick petals or flowers fallen on the ground."
+        ],
+        "concepts": [
+          "Red rose as an indicator",
+          "Collecting petals of red roses",
+          "Not plucking flowers",
+          "Picking petals or flowers fallen on the ground"
+        ],
+        "context_relation": "The image is related to the activity of preparing indicators using red rose petals.",
+        "limitations": [
+          "The image does not show the actual petals or flowers.",
+          "The image does not show the preparation process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37181,9 +37201,28 @@
       "asset_path": "assets/51d855f22e5904efddfbaa9e2fce02b5976b22b443db39c6fc5c628d9bfbb823.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a red rose petal on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "2.1.2 Red rose as an indicator",
+          "You might have observed many coloured flowers in your surroundings. Try making your indicators using these flowers.",
+          "Activity 2.3: Let us prepare",
+          "Collect some fallen petals of red roses available in your surroundings (Fig. 2.5). It is advised not to pluck flowers. You may pick petals or flowers fallen on the ground."
+        ],
+        "concepts": [
+          "Red rose as an indicator",
+          "Collecting petals of red roses",
+          "Not plucking flowers",
+          "Preparing indicators using flowers"
+        ],
+        "context_relation": "The image is related to the activity of preparing indicators using red rose petals.",
+        "limitations": [
+          "The image does not show the actual preparation of the indicators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37199,9 +37238,28 @@
       "asset_path": "assets/ce10ac86f7cce7a867c5eb67441aeffff5c55fb093a049d773515e0069849171.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a red rose petal at the end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "2.1.2 Red rose as an indicator",
+          "You might have observed many coloured flowers in your surroundings. Try making your indicators using these flowers.",
+          "Activity 2.3: Let us prepare",
+          "Collect some fallen petals of red roses available in your surroundings (Fig. 2.5). It is advised not to pluck flowers. You may pick petals or flowers fallen on the ground."
+        ],
+        "concepts": [
+          "Red rose as an indicator",
+          "Collecting petals of red roses",
+          "Not plucking flowers",
+          "Picking petals or flowers fallen on the ground"
+        ],
+        "context_relation": "The image is related to the activity of preparing indicators using red rose petals.",
+        "limitations": [
+          "The image does not show the actual preparation of the indicator."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
