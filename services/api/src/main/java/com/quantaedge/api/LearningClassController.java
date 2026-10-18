@@ -686,7 +686,7 @@ public class LearningClassController {
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,cs.title as session_title
       from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
       join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=rc.chapter_id
-      left join learning_class_session cs on cs.id=rc.class_session_id
+      left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or rc.status=?)
       order by rc.created_at desc,rc.id desc limit ? offset ?
       """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
@@ -870,57 +870,50 @@ public class LearningClassController {
       @RequestParam(required=false) String subjectCode,@RequestParam(required=false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestParam(defaultValue="false") Boolean includeFuture,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     Long courseScopeId=courseId==null?0L:courseId;
-    requireStudentCourseScope(context.studentId(), courseId);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
     String subjectFilter=safeText(subjectCode,40);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,cs.join_window_minutes,
              s.code as subject_code,s.display_name as subject_name,ch.id as chapter_id,ch.code as chapter_code,
              ch.display_name as chapter_name,host.display_name as host_staff_name,
-             exists(select 1 from recorded_class rc where rc.class_session_id=cs.id and rc.status='PUBLISHED') as has_recording,
+             exists(select 1 from recorded_class rc where rc.class_session_id=cs.id
+               and rc.institution_id=cs.institution_id and rc.status='PUBLISHED') as has_recording,
              coalesce(att.join_count,0) as join_count,coalesce(att.total_seconds,0) as attended_seconds,
              (att.active_since_at is not null) as currently_joined
       from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
-      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
-        and (
-          (s.program_id is null and c.code not in ('6','7','8'))
-          or exists(
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
-              and scope_map.class_id=c.id and scope_map.subject_id=s.id
-            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
-              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
-            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
-              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
-              and (
-                not exists(select 1 from institution_membership m
-                  where m.student_id=st.id and m.status='ACTIVE')
-                or exists(
-                  select 1 from institution_membership m
-                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
-                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
-                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
-                  where m.student_id=st.id and m.status='ACTIVE'
-                )
-                or exists(select 1 from course_purchase cp
-                  where cp.student_id=st.id and cp.course_id=scope_course.id)
-                or exists(select 1 from student_course_access_grant legacy_grant
-                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
-                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-              )
-          )
+      where cs.institution_id=m.institution_id and cs.status<>'CANCELLED'
+        and cs.ends_at>now()-interval '60 days'
+        and exists(
+          select 1
+          from curriculum_program scope_course
+          join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+            and scope_map.class_id=c.id and scope_map.subject_id=s.id
+          join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+            and scope_enrollment.student_id=st.id and scope_enrollment.institution_id=m.institution_id
+            and scope_enrollment.status='ACTIVE'
+          join institution_course_assignment course_assignment on course_assignment.institution_id=m.institution_id
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=scope_course.id
+          where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+            and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and ta.id is not null and ta.status='APPROVED'
@@ -941,45 +934,34 @@ public class LearningClassController {
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
-      """,context.studentId(),Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
+      """,context.studentId(),institutionId,Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
-        and (
-          (s.program_id is null and c.code not in ('6','7','8'))
-          or exists(
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
-              and scope_map.class_id=c.id and scope_map.subject_id=s.id
-            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
-              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
-            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
-              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
-              and (
-                not exists(select 1 from institution_membership m
-                  where m.student_id=st.id and m.status='ACTIVE')
-                or exists(
-                  select 1 from institution_membership m
-                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
-                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
-                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
-                  where m.student_id=st.id and m.status='ACTIVE'
-                )
-                or exists(select 1 from course_purchase cp
-                  where cp.student_id=st.id and cp.course_id=scope_course.id)
-                or exists(select 1 from student_course_access_grant legacy_grant
-                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
-                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-              )
-          )
+      where cs.institution_id=m.institution_id and cs.status<>'CANCELLED'
+        and cs.ends_at>now()-interval '60 days'
+        and exists(
+          select 1
+          from curriculum_program scope_course
+          join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+            and scope_map.class_id=c.id and scope_map.subject_id=s.id
+          join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+            and scope_enrollment.student_id=st.id and scope_enrollment.institution_id=m.institution_id
+            and scope_enrollment.status='ACTIVE'
+          join institution_course_assignment course_assignment on course_assignment.institution_id=m.institution_id
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=scope_course.id
+          where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+            and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and ta.id is not null and ta.status='APPROVED'
@@ -999,7 +981,7 @@ public class LearningClassController {
                 and course_filter.class_id=s.class_id))
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
+      """,Long.class,context.studentId(),institutionId,Boolean.TRUE.equals(includeFuture),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -1007,48 +989,39 @@ public class LearningClassController {
   @Transactional
   public Map<String, Object> joinLiveClass(
       @PathVariable long sessionId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select cs.id,cs.private_join_url,cs.youtube_video_id,cs.provider,cs.title,cs.status,cs.starts_at,cs.ends_at,cs.join_window_minutes
       from learning_class_session cs
       join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.id=? and cs.status in ('SCHEDULED','LIVE')
-        and (
-          (s.program_id is null and c.code not in ('6','7','8'))
-          or exists(
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
-              and scope_map.class_id=c.id and scope_map.subject_id=s.id
-            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
-              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
-            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
-              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
-              and (
-                not exists(select 1 from institution_membership m
-                  where m.student_id=st.id and m.status='ACTIVE')
-                or exists(
-                  select 1 from institution_membership m
-                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
-                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
-                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
-                  where m.student_id=st.id and m.status='ACTIVE'
-                )
-                or exists(select 1 from course_purchase cp
-                  where cp.student_id=st.id and cp.course_id=scope_course.id)
-                or exists(select 1 from student_course_access_grant legacy_grant
-                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
-                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-              )
-          )
+      where cs.id=? and cs.institution_id=m.institution_id and cs.status in ('SCHEDULED','LIVE')
+        and exists(
+          select 1
+          from curriculum_program scope_course
+          join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+            and scope_map.class_id=c.id and scope_map.subject_id=s.id
+          join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+            and scope_enrollment.student_id=st.id and scope_enrollment.institution_id=m.institution_id
+            and scope_enrollment.status='ACTIVE'
+          join institution_course_assignment course_assignment on course_assignment.institution_id=m.institution_id
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=scope_course.id
+          where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+            and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
@@ -1057,7 +1030,7 @@ public class LearningClassController {
         and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """, context.studentId(), sessionId);
+      """,context.studentId(),institutionId,sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
     Map<String, Object> session = rows.getFirst();
     OffsetDateTime now = OffsetDateTime.now();
@@ -1096,14 +1069,19 @@ public class LearningClassController {
   @Transactional
   public Map<String, Object> leaveLiveClass(
       @PathVariable long sessionId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     int updated = jdbc.update("""
       update learning_class_attendance set
         total_seconds=total_seconds+greatest(0,floor(extract(epoch from (now()-active_since_at)))::bigint),
         active_since_at=null,last_left_at=now(),updated_at=now()
       where session_id=? and student_id=? and active_since_at is not null
-      """, sessionId, context.studentId());
+        and exists(select 1 from learning_class_session cs
+          where cs.id=learning_class_attendance.session_id and cs.institution_id=?)
+      """,sessionId,context.studentId(),institutionId);
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("sessionId", sessionId);
     result.put("left", updated == 1);
@@ -1117,10 +1095,13 @@ public class LearningClassController {
   public Map<String,Object> studentRecordedClasses(
       @RequestParam(required=false) String subjectCode,@RequestParam(required=false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     Long courseScopeId=courseId==null?0L:courseId;
-    requireStudentCourseScope(context.studentId(), courseId);
+    requireStudentCourseScope(context.studentId(),courseId,institutionId);
     String subjectFilter=safeText(subjectCode,40);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
@@ -1135,10 +1116,14 @@ public class LearningClassController {
       from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
-      left join learning_class_session cs on cs.id=rc.class_session_id
-      left join student_recorded_class_progress progress on progress.recorded_class_id=rc.id and progress.student_id=st.id
+      left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
+      left join student_recorded_class_progress progress on progress.recorded_class_id=rc.id
+        and progress.student_id=st.id and progress.institution_id=m.institution_id
       left join lateral (
         select r.id as resource_id,a.id as assignment_id
         from learning_resource r join learning_resource_assignment a on a.resource_id=r.id
@@ -1154,36 +1139,21 @@ public class LearningClassController {
           a.sort_order,a.id
         limit 1
       ) download on true
-      where rc.status='PUBLISHED' and (?='' or s.code=?)
-        and (
-          (s.program_id is null and c.code not in ('6','7','8'))
-          or exists(
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
-              and scope_map.class_id=c.id and scope_map.subject_id=s.id
-            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
-              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
-            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
-              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
-              and (
-                not exists(select 1 from institution_membership m
-                  where m.student_id=st.id and m.status='ACTIVE')
-                or exists(
-                  select 1 from institution_membership m
-                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
-                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
-                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
-                  where m.student_id=st.id and m.status='ACTIVE'
-                )
-                or exists(select 1 from course_purchase cp
-                  where cp.student_id=st.id and cp.course_id=scope_course.id)
-                or exists(select 1 from student_course_access_grant legacy_grant
-                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
-                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-              )
-          )
+      where rc.institution_id=m.institution_id and rc.status='PUBLISHED' and (?='' or s.code=?)
+        and exists(
+          select 1
+          from curriculum_program scope_course
+          join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+            and scope_map.class_id=c.id and scope_map.subject_id=s.id
+          join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+            and scope_enrollment.student_id=st.id and scope_enrollment.institution_id=m.institution_id
+            and scope_enrollment.status='ACTIVE'
+          join institution_course_assignment course_assignment on course_assignment.institution_id=m.institution_id
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=scope_course.id
+          where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+            and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (?=0 or exists(
           select 1 from curriculum_program_subject course_filter
@@ -1197,43 +1167,31 @@ public class LearningClassController {
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by coalesce(ch.teaching_order,ch.sort_order),rc.created_at desc,rc.id desc limit ? offset ?
-      """,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
+      """,context.studentId(),institutionId,subjectFilter,subjectFilter,courseScopeId,courseScopeId,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
-      where rc.status='PUBLISHED' and (?='' or s.code=?)
-        and (
-          (s.program_id is null and c.code not in ('6','7','8'))
-          or exists(
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
-              and scope_map.class_id=c.id and scope_map.subject_id=s.id
-            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
-              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
-            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
-              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
-              and (
-                not exists(select 1 from institution_membership m
-                  where m.student_id=st.id and m.status='ACTIVE')
-                or exists(
-                  select 1 from institution_membership m
-                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
-                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
-                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
-                  where m.student_id=st.id and m.status='ACTIVE'
-                )
-                or exists(select 1 from course_purchase cp
-                  where cp.student_id=st.id and cp.course_id=scope_course.id)
-                or exists(select 1 from student_course_access_grant legacy_grant
-                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
-                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-              )
-          )
+      where rc.institution_id=m.institution_id and rc.status='PUBLISHED' and (?='' or s.code=?)
+        and exists(
+          select 1
+          from curriculum_program scope_course
+          join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+            and scope_map.class_id=c.id and scope_map.subject_id=s.id
+          join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+            and scope_enrollment.student_id=st.id and scope_enrollment.institution_id=m.institution_id
+            and scope_enrollment.status='ACTIVE'
+          join institution_course_assignment course_assignment on course_assignment.institution_id=m.institution_id
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=scope_course.id
+          where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+            and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (?=0 or exists(
           select 1 from curriculum_program_subject course_filter
@@ -1246,16 +1204,19 @@ public class LearningClassController {
                 and course_filter.class_id=s.class_id))
         ))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """,Long.class,context.studentId(),subjectFilter,subjectFilter,courseScopeId,courseScopeId);
+      """,Long.class,context.studentId(),institutionId,subjectFilter,subjectFilter,courseScopeId,courseScopeId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/learning/recorded-classes/{recordingId}")
   public Map<String, Object> studentRecordedClass(
       @PathVariable long recordingId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    Map<String, Object> recording = readableRecording(recordingId, context.studentId());
+    long institutionId=requireInstitution(tenant);
+    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId);
     recording.remove("storage_key");
     recording.remove("sha256");
     return recording;
@@ -1266,9 +1227,12 @@ public class LearningClassController {
   public Map<String, Object> saveRecordedProgress(
       @PathVariable long recordingId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    Map<String, Object> recording = readableRecording(recordingId, context.studentId());
+    long institutionId=requireInstitution(tenant);
+    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId);
     int position = integer(body.get("positionSeconds"), "Playback position", 0, 86400);
     long maxSeconds = recording.get("duration_seconds") instanceof Number n ? n.longValue() : 86400;
     if (position > maxSeconds) throw badRequest("Playback position exceeds the recording duration.");
@@ -1278,14 +1242,14 @@ public class LearningClassController {
     if (maxSeconds > 0 && position >= maxSeconds - 10) completed = true;
     jdbc.update("""
       insert into student_recorded_class_progress(
-        student_id,recorded_class_id,last_position_seconds,watched_seconds,completed,last_played_at,updated_at
-      ) values(?,?,?,?,?,now(),now())
-      on conflict(student_id,recorded_class_id) do update set
+        institution_id,student_id,recorded_class_id,last_position_seconds,watched_seconds,completed,last_played_at,updated_at
+      ) values(?,?,?,?,?,?,now(),now())
+      on conflict(institution_id,student_id,recorded_class_id) do update set
         last_position_seconds=excluded.last_position_seconds,
         watched_seconds=greatest(student_recorded_class_progress.watched_seconds,excluded.watched_seconds),
         completed=student_recorded_class_progress.completed or excluded.completed,
         last_played_at=now(),updated_at=now()
-      """, context.studentId(), recordingId, position, watched, completed);
+      """,institutionId,context.studentId(),recordingId,position,watched,completed);
     return Map.of("recordingId", recordingId, "positionSeconds", position, "completed", completed);
   }
 
@@ -1293,9 +1257,12 @@ public class LearningClassController {
   public ResponseEntity<StreamingResponseBody> streamRecordedClass(
       @PathVariable long recordingId,
       @RequestHeader(value = "Range", required = false) String rangeHeader,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    Map<String, Object> recording = readableRecording(recordingId, context.studentId());
+    long institutionId=requireInstitution(tenant);
+    Map<String, Object> recording = readableRecording(recordingId,context.studentId(),institutionId);
     String storageKey = String.valueOf(recording.get("storage_key"));
     Path file = mediaStorage.resolve(storageKey);
     if (!Files.isRegularFile(file)) throw notFound("Recorded media", recordingId);
@@ -1353,7 +1320,7 @@ public class LearningClassController {
 
   // ---------------- Access checks and shared helpers ----------------
 
-  private Map<String, Object> readableRecording(long recordingId, long studentId) {
+  private Map<String, Object> readableRecording(long recordingId,long studentId,long institutionId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select rc.id as recorded_class_id,rc.title,rc.description,rc.storage_key,rc.original_filename,
              rc.media_type,rc.file_size_bytes,rc.sha256,rc.duration_seconds,rc.created_at,rc.published_at,
@@ -1366,75 +1333,65 @@ public class LearningClassController {
       join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
-      left join learning_class_session cs on cs.id=rc.class_session_id
+      left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       left join student_recorded_class_progress progress
         on progress.recorded_class_id=rc.id and progress.student_id=st.id
-      where rc.id=? and rc.status='PUBLISHED'
-        and (
-          (s.program_id is null and c.code not in ('6','7','8'))
-          or exists(
-            select 1
-            from curriculum_program scope_course
-            join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
-              and scope_map.class_id=c.id and scope_map.subject_id=s.id
-            join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
-              and scope_enrollment.student_id=st.id and scope_enrollment.status='ACTIVE'
-            where scope_course.class_id=c.id and scope_course.status='ACTIVE'
-              and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
-              and (
-                not exists(select 1 from institution_membership m
-                  where m.student_id=st.id and m.status='ACTIVE')
-                or exists(
-                  select 1 from institution_membership m
-                  join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-                  join institution_course_entitlement ent on ent.institution_id=m.institution_id
-                    and ent.program_id=scope_course.id and ent.status='ACTIVE'
-                    and ent.valid_from<=now() and (ent.valid_until is null or ent.valid_until>now())
-                  where m.student_id=st.id and m.status='ACTIVE'
-                )
-                or exists(select 1 from course_purchase cp
-                  where cp.student_id=st.id and cp.course_id=scope_course.id)
-                or exists(select 1 from student_course_access_grant legacy_grant
-                  where legacy_grant.student_id=st.id and legacy_grant.course_id=scope_course.id
-                    and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
-              )
-          )
+      where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'
+        and exists(
+          select 1
+          from curriculum_program scope_course
+          join curriculum_program_subject scope_map on scope_map.program_id=scope_course.id
+            and scope_map.class_id=c.id and scope_map.subject_id=s.id
+          join student_program_enrollment scope_enrollment on scope_enrollment.program_id=scope_course.id
+            and scope_enrollment.student_id=st.id and scope_enrollment.institution_id=m.institution_id
+            and scope_enrollment.status='ACTIVE'
+          join institution_course_assignment course_assignment on course_assignment.institution_id=m.institution_id
+            and course_assignment.status='ASSIGNED'
+          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+            and course_release.program_id=scope_course.id
+          where scope_course.class_id=c.id and scope_course.status='ACTIVE'
+            and (s.program_id=scope_course.id or (s.program_id is null and scope_course.class_id=s.class_id))
         )
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      """, studentId, recordingId);
+      """,studentId,institutionId,recordingId);
     if (rows.isEmpty()) throw notFound("Recorded class", recordingId);
     return new LinkedHashMap<>(rows.getFirst());
   }
 
-  private void requireStudentCourseScope(long studentId, Long courseId) {
-    if (courseId == null) return;
-    if (courseId <= 0L) throw new IllegalArgumentException("Course ID must be positive.");
-    Boolean enrolled=jdbc.queryForObject("""
-      select exists(select 1 from student_program_enrollment e
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null||tenant.institutionId()<1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before joining a class.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireStudentCourseScope(long studentId,Long courseId,long institutionId) {
+    Boolean member=jdbc.queryForObject("""
+      select exists(select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student st on st.id=m.student_id and st.active=true
+        where m.student_id=? and m.institution_id=? and m.status='ACTIVE')
+      """,Boolean.class,studentId,institutionId);
+    if(!Boolean.TRUE.equals(member)) throw new SecurityException(
+        "The learner is not an active member of the selected institution.");
+    if(courseId==null) return;
+    if(courseId<=0L) throw new IllegalArgumentException("Course ID must be positive.");
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from student_program_enrollment e
         join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where e.student_id=? and e.program_id=? and e.status='ACTIVE')
-      """,Boolean.class,studentId,courseId);
-    if (!Boolean.TRUE.equals(enrolled)) throw new SecurityException("Active enrolment in this course is required.");
-    Boolean tenantAllowed=jdbc.queryForObject("""
-      select
-        not exists(select 1 from institution_membership m
-          where m.student_id=? and m.status='ACTIVE')
-        or exists(
-          select 1 from institution_membership m
-          join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
-          join institution_course_entitlement ent on ent.institution_id=m.institution_id
-            and ent.program_id=? and ent.status='ACTIVE' and ent.valid_from<=now()
-            and (ent.valid_until is null or ent.valid_until>now())
-          where m.student_id=? and m.status='ACTIVE'
-        )
-        or exists(select 1 from course_purchase cp where cp.student_id=? and cp.course_id=?)
-        or exists(select 1 from student_course_access_grant g
-          where g.student_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
-      """,Boolean.class,studentId,courseId,studentId,studentId,courseId,studentId,courseId);
-    if(!Boolean.TRUE.equals(tenantAllowed))
-      throw new SecurityException("This course is not authorised for your institution.");
+        join institution_course_assignment a on a.institution_id=e.institution_id and a.status='ASSIGNED'
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+        where e.student_id=? and e.institution_id=? and e.program_id=? and e.status='ACTIVE')
+      """,Boolean.class,studentId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(allowed)) throw new SecurityException(
+        "Active enrollment and course release in the selected institution are required.");
   }
 
   private long positiveLong(Object value,String label) {
@@ -1505,7 +1462,7 @@ public class LearningClassController {
       join curriculum_subject s on s.id=rc.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=rc.chapter_id
-      left join learning_class_session cs on cs.id=rc.class_session_id
+      left join learning_class_session cs on cs.id=rc.class_session_id and cs.institution_id=rc.institution_id
       where rc.id=?
       """, recordingId);
     if (rows.isEmpty()) throw notFound("Recorded class", recordingId);
