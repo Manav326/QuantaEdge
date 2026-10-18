@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 585,
+    "assets_selected": 588,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 583,
-    "assets_remaining": 6905,
+    "assets_analyzed": 586,
+    "assets_remaining": 6902,
     "assets_completion_percent": 7.8,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 580,
+    "assets_skipped_from_checkpoint": 583,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:19:22Z"
+      "checkpointed_at": "2026-10-18T05:21:55Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13302,7 +13302,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T05:19:41Z"
+      "checkpointed_at": "2026-10-18T05:22:14Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -21401,6 +21401,133 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
       "checkpointed_at": "2026-10-18T05:21:17Z"
+    },
+    {
+      "asset_id": "3324db0c27e32e1e76c416f8",
+      "asset_sha256": "46b6bc24d1ca1ce5907fb3d1445d3c623867747650dc560ca44961f7e6439fc8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/46b6bc24d1ca1ce5907fb3d1445d3c623867747650dc560ca44961f7e6439fc8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d16f8ffbb64a78be155246d91cf4a063b755e639322ffaa13ab5f8ac706ebc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of substances to be collected for an activity involving litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances",
+          "Collecting samples",
+          "Litmus paper",
+          "Cutting into small pieces"
+        ],
+        "context_relation": "The text is providing instructions for an activity involving litmus paper and substances.",
+        "limitations": [
+          "The image does not show the actual activity or the litmus paper being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:22:27Z"
+    },
+    {
+      "asset_id": "cc363230b9d81357a7cd490e",
+      "asset_sha256": "5ae003c5b56dd4995292011587c1807936efd4077c75eecb4346e98eec3461eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/5ae003c5b56dd4995292011587c1807936efd4077c75eecb4346e98eec3461eb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d16f8ffbb64a78be155246d91cf4a063b755e639322ffaa13ab5f8ac706ebc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of substances to be collected and tested with litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances to be collected",
+          "Litmus paper"
+        ],
+        "context_relation": "The image is related to an educational activity involving litmus paper and various substances.",
+        "limitations": [
+          "The image does not show the actual litmus paper or the substances being tested."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:23:08Z"
+    },
+    {
+      "asset_id": "f687c0df3c29c18fd9153379",
+      "asset_sha256": "5ae003c5b56dd4995292011587c1807936efd4077c75eecb4346e98eec3461eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/5ae003c5b56dd4995292011587c1807936efd4077c75eecb4346e98eec3461eb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d16f8ffbb64a78be155246d91cf4a063b755e639322ffaa13ab5f8ac706ebc4e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A list of substances to be collected for an activity involving litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances",
+          "Collecting samples",
+          "Litmus paper",
+          "Cutting into small pieces"
+        ],
+        "context_relation": "The image is related to an educational activity involving litmus paper and various substances.",
+        "limitations": [
+          "The image does not show the actual activity or results."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T05:23:21Z"
     }
   ]
 }

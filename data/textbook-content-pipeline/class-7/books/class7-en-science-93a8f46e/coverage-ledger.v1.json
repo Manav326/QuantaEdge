@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 593,
-    "successful_visual_analyses": 585,
-    "missing_visual_analyses": 6895,
+    "raw_analysis_result_rows": 596,
+    "successful_visual_analyses": 588,
+    "missing_visual_analyses": 6892,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6903,
+    "unresolved_count": 6900,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -32713,9 +32713,33 @@
       "asset_path": "assets/46b6bc24d1ca1ce5907fb3d1445d3c623867747650dc560ca44961f7e6439fc8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A list of substances to be collected for an activity involving litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances",
+          "Collecting samples",
+          "Litmus paper",
+          "Cutting into small pieces"
+        ],
+        "context_relation": "The text is providing instructions for an activity involving litmus paper and substances.",
+        "limitations": [
+          "The image does not show the actual activity or the litmus paper being used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32731,9 +32755,31 @@
       "asset_path": "assets/5ae003c5b56dd4995292011587c1807936efd4077c75eecb4346e98eec3461eb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A list of substances to be collected and tested with litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances to be collected",
+          "Litmus paper"
+        ],
+        "context_relation": "The image is related to an educational activity involving litmus paper and various substances.",
+        "limitations": [
+          "The image does not show the actual litmus paper or the substances being tested."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32749,9 +32795,33 @@
       "asset_path": "assets/5ae003c5b56dd4995292011587c1807936efd4077c75eecb4346e98eec3461eb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A list of substances to be collected for an activity involving litmus paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.1 Nature — Our Science Laboratory",
+          "2.1.1 Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Collect samples of lemon juice, soap solution, amla juice, tamarind water, vinegar, baking soda solution, lime water, tap water, washing powder solution, sugar solution, and salt solution.",
+          "Take a strip of blue litmus paper and cut it into small pieces."
+        ],
+        "concepts": [
+          "Nature",
+          "Science Laboratory",
+          "Litmus as an indicator",
+          "Activity 2.1: Let us explore",
+          "Substances",
+          "Collecting samples",
+          "Litmus paper",
+          "Cutting into small pieces"
+        ],
+        "context_relation": "The image is related to an educational activity involving litmus paper and various substances.",
+        "limitations": [
+          "The image does not show the actual activity or results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
