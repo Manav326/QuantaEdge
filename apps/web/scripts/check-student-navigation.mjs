@@ -136,8 +136,12 @@ assert.ok(marketplacePage.includes("'/api/v1/marketplace/courses/'") && marketpl
 assert.ok(dashboardPage.includes('qe-active-course-section') && dashboardPage.includes('/student/courses') && dashboardPage.includes('/student/marketplace'),
   'Dashboard must show the active course and link to dedicated Courses and Marketplace screens.');
 assert.ok(!dashboardPage.includes("courses.map((course:any)=>("), 'Dashboard must not display the entire all-courses catalogue inline.');
-assert.ok(androidApp.includes('FloatingTutorDock(') && androidApp.includes('route == AppRoute.LESSON && tutorOpen'),
-  'Android AI Tutor must be a floating overlay scoped to the active lesson.');
+assert.ok(androidApp.includes('FloatingTutorDock(') &&
+  androidApp.includes('route == AppRoute.LESSON && lesson.longAny("id", "lesson_id") > 0L') &&
+  !androidApp.includes('if (tutorMinimized)'),
+  'Android AI Tutor must use one dock/bubble scoped to the active lesson, without a second LessonScreen bubble.');
+assert.ok(!androidApp.includes('Text(if (language == "hi") "ट्यूटर" else "Tutor")'),
+  'The Learn submenu must not expose the unusable Tutor text link.');
 assert.ok(androidApp.includes('StudentAllCoursesScreen(') && androidApp.includes('StudentMarketplaceScreen('),
   'Android must have dedicated All Courses and Marketplace routes.');
 
@@ -325,6 +329,9 @@ assert.ok(androidFloatingTutorContract.includes('userResized') &&
   androidFloatingTutorContract.includes('availableWidth = (maxWidth - 16.dp).coerceAtLeast(1.dp)') &&
   androidFloatingTutorContract.includes('coerceIn(minOf(260f, maxResizeWidth), maxResizeWidth)'),
   'The floating tutor must honour resize gestures and keep the panel within very small, split-screen and IME-reduced viewports.');
+assert.ok(androidFloatingTutorContract.includes('if (!opened || minimized)') &&
+  androidFloatingTutorContract.includes('if (opened) onRestore() else onOpen()'),
+  'The closed launcher and minimized tutor must share one bubble owner.');
 
 
 

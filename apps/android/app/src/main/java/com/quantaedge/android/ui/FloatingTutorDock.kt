@@ -34,13 +34,14 @@ import org.json.JSONObject
 import kotlin.math.max
 
 /**
- * Lesson-only floating shell for the native tutor.
+ * The one lesson-only floating shell for the native tutor.
  *
- * Conversation/session state stays in QuantaEdgeApp; this component only owns
- * geometry and presentation state so minimizing or resizing never restarts chat.
+ * Closed, minimized and expanded states share one dock/bubble to avoid duplicate
+ * floating controls. Conversation/session state stays in QuantaEdgeApp.
  */
 @Composable
 fun FloatingTutorDock(
+    opened: Boolean,
     minimized: Boolean,
     lessonTitle: String,
     learningLanguage: String,
@@ -56,6 +57,7 @@ fun FloatingTutorDock(
     onLoadOlder: () -> Unit,
     onNewChat: () -> Unit,
     onMinimize: () -> Unit,
+    onOpen: () -> Unit,
     onRestore: () -> Unit,
     onRetry: () -> Unit,
     onClose: () -> Unit
@@ -98,7 +100,7 @@ fun FloatingTutorDock(
         val panelLeft = (left ?: defaultLeft).coerceIn(8f, (viewportWidth - effectiveWidth.value - 8f).coerceAtLeast(8f))
         val panelTop = (top ?: defaultTop).coerceIn(8f, (viewportHeight - effectiveHeight.value - 8f).coerceAtLeast(8f))
 
-        if (minimized) {
+        if (!opened || minimized) {
             val bubbleSize = 58.dp
             val bubbleDefaultLeft = (viewportWidth - bubbleSize.value - 18f).coerceAtLeast(8f)
             val bubbleDefaultTop = (viewportHeight - bubbleSize.value - 22f).coerceAtLeast(8f)
@@ -109,7 +111,7 @@ fun FloatingTutorDock(
                     .offset(x = bubbleX.dp, y = bubbleY.dp)
                     .size(bubbleSize)
                     .clip(CircleShape)
-                    .clickable(onClick = onRestore)
+                    .clickable(onClick = { if (opened) onRestore() else onOpen() })
                     .pointerInput(viewportWidth, viewportHeight) {
                         detectDragGestures { change, dragAmount ->
                             change.consume()

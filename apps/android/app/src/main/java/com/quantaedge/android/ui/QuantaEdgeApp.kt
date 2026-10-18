@@ -560,10 +560,21 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             tutorMinimized = false
             tutorScopeLessonId = activeLessonId.takeIf { it > 0L } ?: 0L
         } else if (route != AppRoute.LESSON ||
-            (tutorOpen && tutorScopeLessonId > 0L && activeLessonId > 0L && tutorScopeLessonId != activeLessonId)) {
+            (tutorScopeLessonId > 0L && activeLessonId > 0L && tutorScopeLessonId != activeLessonId)) {
+            // A tutor session belongs to one lesson only. Drop both its visible state
+            // and cached history before another lesson can be opened.
             tutorOpen = false
             tutorMinimized = false
             tutorScopeLessonId = 0L
+            tutorSession = JSONObject()
+            tutorMessages = emptyList()
+            tutorQuestionId = 0L
+            tutorAvailable = false
+            tutorConnecting = false
+            tutorSendInFlight = false
+            tutorHasOlderMessages = false
+            tutorOlderBeforeId = null
+            tutorLoadingOlderMessages = false
         }
     }
     var error by remember { mutableStateOf("") }
@@ -2017,9 +2028,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
+    fun isCurrentTutorScope(lessonId: Long, sessionId: Long? = null): Boolean {
+        if (lessonId <= 0L || route != AppRoute.LESSON ||
+            lesson.longAny("id", "lesson_id") != lessonId || tutorScopeLessonId != lessonId) return false
+        return sessionId == null || tutorSession.longAny("sessionId", "session_id") == sessionId
+    }
+
     fun openTutorWithQuestion(questionId: Long) {
         val activeLessonId = lesson.longAny("id", "lesson_id")
         if (route != AppRoute.LESSON || activeLessonId <= 0L) return
+        val activeLearningLanguage = learningContentLanguage
         tutorQuestionId = questionId
         tutorScopeLessonId = activeLessonId
         tutorOpen = true
@@ -2028,19 +2046,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         tutorAvailable = false
         tutorSession = JSONObject()
         tutorMessages = emptyList()
+        tutorSendInFlight = false
         tutorHasOlderMessages = false
         tutorOlderBeforeId = null
+        tutorLoadingOlderMessages = false
         error = ""
         runTask {
             try {
-                val lessonId = lesson.longAny("id", "lesson_id")
-                if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
-                tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                    JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
-                tutorAvailable = tutorSession.optBoolean("available")
+                val createdSession = ApiClient.postObject("/api/v1/tutor/sessions",
+                    JSONObject().put("lessonId", activeLessonId).put("language", activeLearningLanguage))
+                if (!isCurrentTutorScope(activeLessonId)) return@runTask
+                tutorSession = createdSession
+                tutorAvailable = createdSession.optBoolean("available")
                 if (tutorAvailable) {
+                    val sessionId = createdSession.longAny("sessionId", "session_id")
                     val initial = ApiClient.getObject("/api/v1/tutor/sessions/" +
-                        tutorSession.longAny("sessionId", "session_id") + "/messages?limit=30")
+                        sessionId + "/messages?limit=30")
+                    if (!isCurrentTutorScope(activeLessonId, sessionId)) return@runTask
                     tutorMessages = initial.optJSONArray("items").objectItems()
                     tutorHasOlderMessages = initial.optBoolean("hasMore")
                     tutorOlderBeforeId = initial.opt("nextBeforeId")?.toString()?.toLongOrNull()
@@ -2051,10 +2073,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         else "AI tutor is not enabled for this lesson yet."
                 }
             } catch (exception: Exception) {
-                tutorAvailable = false
-                error = tutorErrorMessage(exception)
+                if (isCurrentTutorScope(activeLessonId)) {
+                    tutorAvailable = false
+                    error = tutorErrorMessage(exception)
+                }
             } finally {
-                tutorConnecting = false
+                if (isCurrentTutorScope(activeLessonId)) tutorConnecting = false
             }
         }
     }
@@ -2075,17 +2099,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun startNewTutorChat() {
         if (busy || tutorConnecting || tutorSendInFlight || !tutorAvailable) return
+        val activeLessonId = lesson.longAny("id", "lesson_id")
+        val activeSessionId = tutorSession.longAny("sessionId", "session_id")
+        if (!isCurrentTutorScope(activeLessonId, activeSessionId)) return
+        val activeLearningLanguage = learningContentLanguage
+        var expectedSessionId = activeSessionId
         tutorConnecting = true
         error = ""
         runTask {
             try {
-                val lessonId = lesson.longAny("id", "lesson_id")
-                if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
-                tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                    JSONObject().put("lessonId", lessonId)
-                        .put("language", learningContentLanguage)
+                val newSession = ApiClient.postObject("/api/v1/tutor/sessions",
+                    JSONObject().put("lessonId", activeLessonId)
+                        .put("language", activeLearningLanguage)
                         .put("newChat", true))
-                tutorAvailable = tutorSession.optBoolean("available")
+                if (!isCurrentTutorScope(activeLessonId, activeSessionId)) return@runTask
+                tutorSession = newSession
+                expectedSessionId = newSession.longAny("sessionId", "session_id")
+                tutorAvailable = newSession.optBoolean("available")
                 tutorMessages = emptyList()
                 tutorHasOlderMessages = false
                 tutorOlderBeforeId = null
@@ -2094,18 +2124,22 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         else "A new chat was created, but the AI tutor is currently unavailable."
                 }
             } catch (exception: Exception) {
-                tutorAvailable = false
-                error = tutorErrorMessage(exception)
+                if (isCurrentTutorScope(activeLessonId, activeSessionId)) {
+                    tutorAvailable = false
+                    error = tutorErrorMessage(exception)
+                }
             } finally {
-                tutorConnecting = false
+                if (isCurrentTutorScope(activeLessonId, expectedSessionId)) tutorConnecting = false
             }
         }
     }
 
     fun loadOlderTutorMessages() {
+        val activeLessonId = lesson.longAny("id", "lesson_id")
         val sessionId = tutorSession.longAny("sessionId", "session_id")
         val beforeId = tutorOlderBeforeId
-        if (sessionId <= 0L || beforeId == null || !tutorHasOlderMessages || tutorLoadingOlderMessages) return
+        if (!isCurrentTutorScope(activeLessonId, sessionId) || beforeId == null ||
+            !tutorHasOlderMessages || tutorLoadingOlderMessages) return
         error = ""
         tutorLoadingOlderMessages = true
         scope.launch {
@@ -2113,6 +2147,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 val olderPage = ApiClient.getObject(
                     "/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30&beforeId=" + beforeId
                 )
+                if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                 val older = olderPage.optJSONArray("items").objectItems()
                 tutorMessages = (older + tutorMessages).distinctBy { item ->
                     item.opt("id")?.toString()?.takeIf { it.isNotBlank() && it != "null" }
@@ -2122,9 +2157,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 tutorOlderBeforeId = olderPage.opt("nextBeforeId")?.toString()?.toLongOrNull()
                 if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
             } catch (exception: Exception) {
-                error = tutorErrorMessage(exception)
+                if (isCurrentTutorScope(activeLessonId, sessionId)) error = tutorErrorMessage(exception)
             } finally {
-                tutorLoadingOlderMessages = false
+                if (isCurrentTutorScope(activeLessonId, sessionId)) tutorLoadingOlderMessages = false
             }
         }
     }
@@ -2162,12 +2197,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun sendTutorMessage(message: String, mode: String) {
         if (busy || tutorSendInFlight || message.isBlank()) return
+        val activeLessonId = lesson.longAny("id", "lesson_id")
         val sessionId = tutorSession.longAny("sessionId", "session_id")
         if (sessionId <= 0L) {
             error = if (language == "hi") "ट्यूटर सत्र तैयार नहीं है। फिर से जोड़ें।"
                 else "The tutor session is not ready. Reconnect and try again."
             return
         }
+        if (!isCurrentTutorScope(activeLessonId, sessionId)) return
+        val activeQuestionId = tutorQuestionId
+        val activeLearningLanguage = learningContentLanguage
         // Render the user's turn immediately, as the web tutor does, then reconcile with
         // persisted server history after the model responds.
         val previousMessages = tutorMessages
@@ -2184,13 +2223,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             try {
                 try {
                     ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
-                        JSONObject().put("message", message).put("mode", mode).put("questionId", tutorQuestionId)
-                            .put("language", learningContentLanguage))
+                        JSONObject().put("message", message).put("mode", mode).put("questionId", activeQuestionId)
+                            .put("language", activeLearningLanguage))
+                    if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                     val latestPage = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                    if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                     applyTutorMessagePage(latestPage)
                 } catch (exception: Exception) {
                     // Do not wait for a recoverable turn on a definite authorization or
                     // validation error. Network/server failures are reconciled against history.
+                    if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                     if (exception is ApiFailure &&
                         exception.statusCode in 400..499 &&
                         exception.statusCode != 408 &&
@@ -2199,6 +2241,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         throw exception
                     }
                     val recoveredPage = recoverTutorTurn(sessionId, message)
+                    if (!isCurrentTutorScope(activeLessonId, sessionId)) return@launch
                     if (recoveredPage != null) {
                         applyTutorMessagePage(recoveredPage)
                     } else {
@@ -2207,10 +2250,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     }
                 }
             } catch (exception: Exception) {
-                tutorMessages = previousMessages
-                error = tutorErrorMessage(exception)
+                if (isCurrentTutorScope(activeLessonId, sessionId)) {
+                    tutorMessages = previousMessages
+                    error = tutorErrorMessage(exception)
+                }
             } finally {
-                tutorSendInFlight = false
+                if (isCurrentTutorScope(activeLessonId, sessionId)) tutorSendInFlight = false
             }
         }
     }
@@ -3391,9 +3436,6 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             TextButton(onClick = { openClasses(currentSubject) }, enabled = !busy) {
                                 Text(if (language == "hi") "कक्षाएँ" else "Live classes")
                             }
-                            TextButton(onClick = { openTutor() }, enabled = !busy && lesson.longAny("id", "lesson_id") > 0L) {
-                                Text(if (language == "hi") "ट्यूटर" else "Tutor")
-                            }
                         }
                         "practice" -> Row(
                             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 2.dp),
@@ -3836,8 +3878,6 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     } else LessonScreen(
                         lesson = lesson,
                         language = language,
-                        tutorMinimized = tutorMinimized,
-                        onRestoreTutor = ::restoreTutor,
                         answers = answers,
                         feedbacks = feedbacks,
                         answerLocks = lessonAnswerLocks,
@@ -4096,8 +4136,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                 }
                 }
-                    if (route == AppRoute.LESSON && tutorOpen) {
+                    if (route == AppRoute.LESSON && lesson.longAny("id", "lesson_id") > 0L) {
                         FloatingTutorDock(
+                            opened = tutorOpen,
                             minimized = tutorMinimized,
                             lessonTitle = lesson.textAny("title"),
                             learningLanguage = learningContentLanguage,
@@ -4113,6 +4154,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             onLoadOlder = ::loadOlderTutorMessages,
                             onNewChat = ::startNewTutorChat,
                             onMinimize = ::minimizeTutor,
+                            onOpen = ::openTutor,
                             onRestore = ::restoreTutor,
                             onRetry = ::retryTutorConnection,
                             onClose = {
@@ -5214,8 +5256,6 @@ private fun TopicNavigationBar(
 private fun LessonScreen(
     lesson: JSONObject,
     language: String,
-    tutorMinimized: Boolean,
-    onRestoreTutor: () -> Unit,
     answers: MutableMap<String, String>,
     feedbacks: MutableMap<String, String>,
     answerLocks: Map<String, Boolean>,
@@ -5303,24 +5343,7 @@ private fun LessonScreen(
                 Text(if (language == "hi") "अभ्यास शुरू करें" else "Start practice",
                     style = MaterialTheme.typography.labelMedium)
             }
-            TextButton(onClick = onTutor, enabled = !busy && lessonId > 0,
-                modifier = Modifier.height(40.dp)) {
-                Text(if (language == "hi") "Tutor से पूछें" else "Ask tutor")
-            }
         }
-        }
-        if (tutorMinimized) {
-            FloatingActionButton(
-                onClick = onRestoreTutor,
-                modifier = Modifier.align(Alignment.BottomEnd).padding(end = 18.dp, bottom = 84.dp)
-                    .semantics {
-                        contentDescription = if (language == "hi") "ट्यूटर फिर खोलें" else "Restore tutor"
-                    },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Text("✦", fontSize = 23.sp)
-            }
         }
     }
 }
