@@ -12,6 +12,7 @@ CREATE TABLE qa_test_run (
   target_database_label varchar(120) NOT NULL,
   source_commit_sha varchar(64),
   pack_definition_sha256 char(64) NOT NULL,
+  manifest_sha256 char(64),
   created_by_staff_id bigint REFERENCES staff_account(id) ON DELETE SET NULL,
   planned_resource_count integer NOT NULL DEFAULT 0 CHECK (planned_resource_count >= 0),
   created_resource_count integer NOT NULL DEFAULT 0 CHECK (created_resource_count >= 0),
