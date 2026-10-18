@@ -20,7 +20,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -40,13 +39,9 @@ class InstitutionBrandingAssetControlTest {
   private final AuthContext platformOwner =
       new AuthContext(null, null, 17L, "STAFF", "Platform owner", "HRMS");
 
-  @BeforeEach
-  void allowExplicitPlatformOwnerForControllerUnitTests() {
-    when(authorization.requirePermission(platformOwner, "QE_PLATFORM_OWNER")).thenReturn(platformOwner);
-  }
-
   @Test
   void ownerCanRemoveAnAssetAndRemovalInvalidatesTheBrandingVersion() {
+    when(authorization.requirePermission(platformOwner, "QE_PLATFORM_OWNER")).thenReturn(platformOwner);
     when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
     when(jdbc.queryForMap("select logo_asset_key as asset_id from institution_branding where institution_id=?", 42L))
         .thenReturn(Map.of("asset_id", "existing-logo-asset"));
