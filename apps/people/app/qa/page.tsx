@@ -456,7 +456,7 @@ export default function QaCenterPage() {
         </section>
       )}
 
-      {credentialPayload && (
+      {credentialPayload != null && (
         <section className={styles.credentials} aria-labelledby="qa-credentials-heading">
           <h2 id="qa-credentials-heading">{t('people.qa.credentials')}</h2>
           <PeopleFeedback tone="warning">{t('people.qa.credentialsWarning')}</PeopleFeedback>
