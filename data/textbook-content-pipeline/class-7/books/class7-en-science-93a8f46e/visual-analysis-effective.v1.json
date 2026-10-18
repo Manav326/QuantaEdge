@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4dc9f24936917537b9e8f365f4276cf16e0a4f12a791d281afcd43a6f30cb9fa",
+  "raw_analysis_sha256": "e2c0973827c4c64a0021efa6698f65d1dbf6d21dfbd686bb8667c663ba5ab023",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:44:41Z",
+      "checkpointed_at": "2026-10-18T18:47:47Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149729681",
-      "checkpointed_at": "2026-10-18T18:45:03Z",
+      "checkpointed_at": "2026-10-18T18:48:11Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -56614,6 +56614,152 @@
           "The image does not provide any specific information or context related to the text content.",
           "The image is a simple illustration and does not contain any equations, diagrams, or other complex visual elements.",
           "The image does not show any specific educational content or question related to the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f181b3519bfc0ddeaea97cd0",
+      "asset_sha256": "fe4b69f3c3d03956b7820e63d8e407c4b0ce351d07817f26da2e0fa9cd605e80",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/fe4b69f3c3d03956b7820e63d8e407c4b0ce351d07817f26da2e0fa9cd605e80.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a spoon dipping into a solution.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a simple illustration and does not convey any specific information or context related to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:48:49Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a spoon dipping into a solution.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a simple illustration and does not convey any specific information or context related to the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "920611e2554b6c20e46bb28a",
+      "asset_sha256": "90a03599e773a301c421202286230b405357adcd64c95dfdee7c439139444c6c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/90a03599e773a301c421202286230b405357adcd64c95dfdee7c439139444c6c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a pink strip of paper over a brown surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information relevant to the textbook content.",
+          "The image is a simple illustration and does not convey any specific educational information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:49:26Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a pink strip of paper over a brown surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information relevant to the textbook content.",
+          "The image is a simple illustration and does not convey any specific educational information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3e385a3c099940bd8595d567",
+      "asset_sha256": "600f511c247838733f6b7b31e593e87a4e5b0dc1add7eaa52b8b629f43ce0631",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/600f511c247838733f6b7b31e593e87a4e5b0dc1add7eaa52b8b629f43ce0631.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "equation",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "The question is about a solution that turns red litmus paper to blue and the solution that would reverse this change.",
+        "limitations": [
+          "The question is incomplete, as it only mentions three unknown solutions and does not provide the solutions themselves."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149729681",
+      "checkpointed_at": "2026-10-18T18:50:08Z",
+      "effective_analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "equation",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "The question is about a solution that turns red litmus paper to blue and the solution that would reverse this change.",
+        "limitations": [
+          "The question is incomplete, as it only mentions three unknown solutions and does not provide the solutions themselves."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

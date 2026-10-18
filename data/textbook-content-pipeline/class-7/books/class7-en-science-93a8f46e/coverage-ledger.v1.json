@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 985,
-    "successful_visual_analyses": 976,
-    "missing_visual_analyses": 6503,
+    "raw_analysis_result_rows": 988,
+    "successful_visual_analyses": 979,
+    "missing_visual_analyses": 6500,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6512,
+    "unresolved_count": 6509,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47117,9 +47117,19 @@
       "asset_path": "assets/fe4b69f3c3d03956b7820e63d8e407c4b0ce351d07817f26da2e0fa9cd605e80.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a spoon dipping into a solution.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a simple illustration and does not convey any specific information or context related to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47135,9 +47145,19 @@
       "asset_path": "assets/90a03599e773a301c421202286230b405357adcd64c95dfdee7c439139444c6c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a pink strip of paper over a brown surface.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information relevant to the textbook content.",
+          "The image is a simple illustration and does not convey any specific educational information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47153,9 +47173,29 @@
       "asset_path": "assets/600f511c247838733f6b7b31e593e87a4e5b0dc1add7eaa52b8b629f43ce0631.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about a solution turning red litmus paper to blue and the solution that would reverse the change.",
+        "visual_type": "equation",
+        "visible_text": [
+          "1. A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "(i) Lime water",
+          "(ii) Baking soda",
+          "(iii) Vinegar",
+          "(iv) Common salt solution"
+        ],
+        "concepts": [
+          "litmus paper",
+          "solution",
+          "reversing change"
+        ],
+        "context_relation": "The question is about a solution that turns red litmus paper to blue and the solution that would reverse this change.",
+        "limitations": [
+          "The question is incomplete, as it only mentions three unknown solutions and does not provide the solutions themselves."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
