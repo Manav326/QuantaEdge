@@ -250,11 +250,6 @@ public class AuthFilter extends OncePerRequestFilter {
               "BRANDING_ASSET_TOO_LARGE", "Branding upload requests must be 2 MiB plus multipart overhead or smaller.");
           return;
         }
-        if (contentLength < 0) {
-          writeJsonError(response, HttpServletResponse.SC_LENGTH_REQUIRED,
-              "BRANDING_ASSET_LENGTH_REQUIRED", "A content length is required for branding image uploads.");
-          return;
-        }
         if (context == null || authorization == null
             || !authorization.hasPermission(context, "QE_PLATFORM_OWNER")) {
           writeJsonError(response, HttpServletResponse.SC_FORBIDDEN,
