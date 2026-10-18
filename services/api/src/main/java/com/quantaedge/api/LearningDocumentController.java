@@ -506,8 +506,11 @@ public class LearningDocumentController {
       @RequestParam(required = false) String displayLanguage,
       @RequestParam(required = false) Long courseId,
       @RequestParam(required = false) String programCode,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     String subjectFilter = subjectCode == null ? "" : subjectCode.trim();
     String languageFilter = normalizeDocumentLanguage(language);
     String chapterDisplayLanguage = normalizeDocumentLanguage(displayLanguage == null ? language : displayLanguage);
@@ -518,17 +521,17 @@ public class LearningDocumentController {
         enrolledProgram = jdbc.queryForList("""
           select p.id
           from curriculum_program p
-          join student_program_enrollment spe on spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE'
+          join student_program_enrollment spe on spe.student_id=? and spe.institution_id=? and spe.program_id=p.id and spe.status='ACTIVE'
           where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
-          """, context.studentId(), courseId);
+          """, context.studentId(),institutionId,courseId);
       } else {
         enrolledProgram = jdbc.queryForList("""
           select p.id
           from curriculum_program p
-          join student_program_enrollment spe on spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE'
+          join student_program_enrollment spe on spe.student_id=? and spe.institution_id=? and spe.program_id=p.id and spe.status='ACTIVE'
           where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
           order by p.id
-          """, context.studentId(), programCode.trim());
+          """, context.studentId(),institutionId,programCode.trim());
       }
       if (enrolledProgram.size() != 1) throw new SecurityException(enrolledProgram.isEmpty()
           ? "Active enrolment in this course is required."
@@ -541,7 +544,8 @@ public class LearningDocumentController {
         where cps.program_id=? and cps.subject_id=s.id
           and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id))
           and exists(select 1 from student_program_enrollment spe
-            where spe.student_id=st.id and spe.program_id=scope_program.id and spe.status='ACTIVE'))
+            where spe.student_id=st.id and spe.institution_id=m.institution_id
+              and spe.program_id=scope_program.id and spe.status='ACTIVE'))
       """;
     String learnerScope = programId == null ? "c.code=st.class_code" : "true";
     String sql = """
@@ -558,7 +562,10 @@ public class LearningDocumentController {
       join curriculum_subject s on s.id=d.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=m.institution_id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join lateral (
         select t.id,t.display_name
@@ -568,7 +575,7 @@ public class LearningDocumentController {
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
       left join student_learning_document_progress p
-        on p.learning_document_id=d.id and p.student_id=st.id
+        on p.learning_document_id=d.id and p.student_id=st.id and p.institution_id=m.institution_id
       where d.status='PUBLISHED'
         and d.language=?
         and (?='' or s.code=?)
@@ -580,32 +587,35 @@ public class LearningDocumentController {
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
       """.replace("__LEARNER_SCOPE__",learnerScope).replace("__PROGRAM_SCOPE__",programScope);
     if (programId == null) {
-      return jdbc.queryForList(sql, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter);
+      return jdbc.queryForList(sql, context.studentId(),institutionId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter);
     }
-    return jdbc.queryForList(sql, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter, programId);
+    return jdbc.queryForList(sql, context.studentId(),institutionId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter,programId);
   }
 
   /** Source-compatible overloads for existing Java callers. */
   public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, AuthContext context) {
-    return studentDocumentCatalog(subjectCode, language, null, null, null, context);
+    throw missingInstitutionContext();
   }
   public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, String displayLanguage, AuthContext context) {
-    return studentDocumentCatalog(subjectCode, language, displayLanguage, null, null, context);
+    throw missingInstitutionContext();
   }
   public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, String displayLanguage, String programCode, AuthContext context) {
-    return studentDocumentCatalog(subjectCode, language, displayLanguage, null, programCode, context);
+    throw missingInstitutionContext();
   }
   @GetMapping("/learning/documents/{documentId}")
   public Map<String, Object> studentDocument(
       @PathVariable long documentId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    Map<String, Object> document = readableDocument(documentId, context.studentId());
+    long institutionId=requireInstitution(tenant);
+    Map<String, Object> document = readableDocument(documentId,context.studentId(),institutionId);
     int lastPage = 1;
     List<Map<String, Object>> progress = jdbc.queryForList("""
       select last_page from student_learning_document_progress
-      where student_id=? and learning_document_id=?
-      """, context.studentId(), documentId);
+      where institution_id=? and student_id=? and learning_document_id=?
+      """,institutionId,context.studentId(),documentId);
     if (!progress.isEmpty()) lastPage = ((Number) progress.getFirst().get("last_page")).intValue();
     document.remove("pdf_asset_id");
     document.remove("asset_sha256");
@@ -625,8 +635,11 @@ public class LearningDocumentController {
       @RequestParam(value = "startPage", defaultValue = "1") int startPage,
       @RequestParam(value = "limit", defaultValue = "10") int limit,
       @RequestParam(value = "rendition", defaultValue = "thumbnail") String rendition,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
     if (startPage < 1) throw badRequest("The first page must be at least 1.");
     if (limit < 1) throw badRequest("The page batch size must be at least 1.");
     int boundedLimit = Math.min(limit, 10);
@@ -670,10 +683,13 @@ public class LearningDocumentController {
       @PathVariable long documentId,
       @PathVariable int pageNumber,
       @RequestParam(value = "rendition", defaultValue = "full") String rendition,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     // Authenticate and re-check active enrollment/publication before even looking in the cache.
     context = authorization.requireStudent(context);
-    Map<String, Object> metadata = readableDocument(documentId, context.studentId());
+    long institutionId=requireInstitution(tenant);
+    Map<String, Object> metadata = readableDocument(documentId,context.studentId(),institutionId);
     int start = ((Number) metadata.get("page_start")).intValue();
     int end = ((Number) metadata.get("page_end")).intValue();
     int visibleCount = end - start + 1;
@@ -706,17 +722,20 @@ public class LearningDocumentController {
   public Map<String, Object> saveDocumentProgress(
       @PathVariable long documentId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
-    Map<String, Object> document = readableDocument(documentId, context.studentId());
+    long institutionId=requireInstitution(tenant);
+    Map<String, Object> document = readableDocument(documentId,context.studentId(),institutionId);
     int pageCount = ((Number) document.get("page_count")).intValue();
     int lastPage = integerValue(body.get("lastPage"), "lastPage", 1, pageCount);
     jdbc.update("""
-      insert into student_learning_document_progress(student_id,learning_document_id,last_page,last_opened_at,updated_at)
-      values(?,?,?,now(),now())
-      on conflict(student_id,learning_document_id) do update set
+      insert into student_learning_document_progress(institution_id,student_id,learning_document_id,last_page,last_opened_at,updated_at)
+      values(?,?,?, ?,now(),now())
+      on conflict(institution_id,student_id,learning_document_id) do update set
         last_page=excluded.last_page,last_opened_at=now(),updated_at=now()
-      """, context.studentId(), documentId, lastPage);
+      """,institutionId,context.studentId(),documentId,lastPage);
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("documentId", documentId);
     result.put("lastPage", lastPage);
@@ -724,7 +743,7 @@ public class LearningDocumentController {
     return result;
   }
 
-  private Map<String, Object> readableDocument(long documentId, long studentId) {
+  private Map<String, Object> readableDocument(long documentId,long studentId,long institutionId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.id as document_id,d.pdf_asset_id,a.sha256 as asset_sha256,
              a.file_size_bytes as asset_file_size_bytes,d.scope,d.book_part,d.title,d.edition,d.language,
@@ -746,10 +765,10 @@ public class LearningDocumentController {
           or (s.program_id is not null and exists(
             select 1 from student_program_enrollment spe
             join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            where spe.student_id=st.id and spe.institution_id=m.institution_id and spe.program_id=s.program_id and spe.status='ACTIVE'
           ))
         )
-      """, studentId, documentId);
+      """,studentId,institutionId,documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
   }
@@ -960,6 +979,20 @@ public class LearningDocumentController {
     } catch (NoSuchAlgorithmException ex) {
       throw new IllegalStateException("SHA-256 is not available.", ex);
     }
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null||tenant.institutionId()<1) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before opening a textbook.");
+    }
+    return tenant.institutionId();
+  }
+
+  private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext() {
+    return new InstitutionTenantContextService.InvalidInstitutionContextException(
+        400,"INSTITUTION_CONTEXT_REQUIRED",
+        "Legacy textbook calls must provide an explicit institution context.");
   }
 
   private String normalizeDocumentLanguage(Object value) {
