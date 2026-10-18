@@ -63,9 +63,8 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("actions: write", coordinator)
         self.assertIn("/actions/workflows/textbook-visual-candidates-v3.yml/dispatches", coordinator)
         self.assertIn("resume_layers_4_5", coordinator)
-        self.assertIn("class-6.v1.json", coordinator)
-        self.assertIn("class-7.v1.json", coordinator)
-        self.assertIn("class-8.v1.json", coordinator)
+        self.assertIn("for grade in (6,7,8)", coordinator)
+        self.assertIn('p=root/f"class-{grade}.v1.json"', coordinator)
 
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
