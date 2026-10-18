@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 822,
+    "assets_selected": 823,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 818,
-    "assets_remaining": 1260,
+    "assets_analyzed": 819,
+    "assets_remaining": 1259,
     "assets_completion_percent": 39.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 817,
+    "assets_skipped_from_checkpoint": 818,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:28:13Z"
+      "checkpointed_at": "2026-10-18T20:33:05Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:29:07Z"
+      "checkpointed_at": "2026-10-18T20:34:00Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20077,7 +20077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:30:19Z"
+      "checkpointed_at": "2026-10-18T20:35:12Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25432,7 +25432,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T20:30:46Z"
+      "checkpointed_at": "2026-10-18T20:35:39Z"
     },
     {
       "asset_id": "1b6dd2be916d0f2957d56770",
@@ -25559,6 +25559,41 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39149728377",
       "checkpointed_at": "2026-10-18T20:32:01Z"
+    },
+    {
+      "asset_id": "f3374075d454c0b7a53ff5cb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a3a00fecd350aeb38ef19b978db10d9bbd49dda082596bc1f12632ef5a7343ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "adaptations",
+          "habitat",
+          "mountainous regions",
+          "sea turtles",
+          "hot or cold desert",
+          "rhododendron"
+        ],
+        "context_relation": "The text discusses adaptations and habitats of plants and animals.",
+        "limitations": [
+          "No visible text or images are present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39149728377",
+      "checkpointed_at": "2026-10-18T20:35:56Z"
     }
   ]
 }
