@@ -6392,14 +6392,16 @@ private fun ResourcesScreen(
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
     var subjectFilter by rememberSaveable { mutableStateOf(subject.ifBlank { "ALL" }) }
-    var expandedSubject by rememberSaveable { mutableStateOf(subject.ifBlank { "" }) }
+    var expandedSubject by rememberSaveable { mutableStateOf(subject.takeUnless { it.isBlank() || it == "ALL" } ?: "") }
     var chapterPageSize by rememberSaveable { mutableIntStateOf(10) }
     val chapterPages = remember { mutableStateMapOf<String, Int>() }
 
-    LaunchedEffect(subject) {
+    LaunchedEffect(subject, documents) {
         if (subject.isNotBlank() && subject != "ALL" && subjectFilter == "ALL") {
             subjectFilter = subject
             expandedSubject = subject
+        } else if (subject == "ALL" && expandedSubject.isBlank() && documents.isNotEmpty()) {
+            expandedSubject = documents.firstOrNull()?.textAny("subject_code", "subjectCode").orEmpty()
         }
     }
 
@@ -6419,7 +6421,6 @@ private fun ResourcesScreen(
             }
             Triple(code, rows, Triple(books, chapters, others))
         }
-        .sortedBy { (_, rows, _) -> rows.firstOrNull()?.textAny("subject_name", "subjectName")?.lowercase().orEmpty() }
 
     val visibleDocumentCount = documents.count {
         subjectFilter == "ALL" || it.textAny("subject_code", "subjectCode").equals(subjectFilter, true)
@@ -6468,7 +6469,6 @@ private fun ResourcesScreen(
                 documents.map { it.textAny("subject_code", "subjectCode") to it.textAny("subject_name", "subjectName") }
                     .filter { it.first.isNotBlank() }
                     .distinctBy { it.first }
-                    .sortedBy { it.second.lowercase() }
             filters.forEach { (code, label) ->
                 if (subjectFilter.equals(code, true)) {
                     Button(onClick = {
