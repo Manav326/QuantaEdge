@@ -1104,7 +1104,9 @@ public class AuthService {
 
   public AuthContext previewLogin() {
     if(!demoSeed) throw new IllegalStateException("Preview login is disabled");
-    Long id=jdbc.queryForObject("select id from student where environment='LOCAL_PREVIEW' and active=true order by id limit 1",Long.class);
+    Long id=jdbc.queryForObject(
+        "select id from student where public_id=? and environment=? and active=true",
+        Long.class, LocalPreviewIdentity.PUBLIC_ID, LocalPreviewIdentity.ENVIRONMENT);
     if(id==null) throw new IllegalStateException("Preview student unavailable");
     return contextForStudent(null,id);
   }
