@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2ab4a64c42bb0f8373cc823f593b4044bc201256e93316dd45b4c34c993ad855",
+  "raw_analysis_sha256": "fd073d85a9bc3c30eb4716185c07bdf966db1001cd14be315c0604fb1329becd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -19873,7 +19873,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39121459903",
-      "checkpointed_at": "2026-10-18T12:36:57Z",
+      "checkpointed_at": "2026-10-18T12:42:38Z",
       "effective_analysis": {
         "visual_summary": "Illustration of an eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -43100,6 +43100,168 @@
         "context_relation": "The image is not directly related to the text about preparing extracts and testing substances with vegetables, fruits, or flowers.",
         "limitations": [
           "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c06c53eafb0f9897c6e63fdb",
+      "asset_sha256": "839d9e12bfb2a50d0c91db4aa3a70320e8894bdbc023cfe18ea74210ad4b07ae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/839d9e12bfb2a50d0c91db4aa3a70320e8894bdbc023cfe18ea74210ad4b07ae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue flower with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about preparing and testing substances with vegetables, fruits, or flowers as acid-base indicators.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details.",
+          "The text in the image is not readable or relevant to the content of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:43:42Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a blue flower with green leaves in the background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about preparing and testing substances with vegetables, fruits, or flowers as acid-base indicators.",
+        "limitations": [
+          "The image is blurry and not clear enough to identify specific details.",
+          "The text in the image is not readable or relevant to the content of the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fe346844281699d310b5b484",
+      "asset_sha256": "e0022f126a3c35265b69f455bf630586a367486e77ac65e0c492d85e4fcb6737",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/e0022f126a3c35265b69f455bf630586a367486e77ac65e0c492d85e4fcb6737.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border on the left side.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook discussing the use of natural substances as acid-base indicators.",
+        "limitations": [
+          "The page is blank and does not contain any text or images related to the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:44:43Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a black border on the left side.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook discussing the use of natural substances as acid-base indicators.",
+        "limitations": [
+          "The page is blank and does not contain any text or images related to the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1691219cc317efeccb6bcceb",
+      "asset_sha256": "a8ee94c845268792272e2aaab220561282660f27e02ebce0cab4df4193ed004c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/a8ee94c845268792272e2aaab220561282660f27e02ebce0cab4df4193ed004c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green leaf with a small insect on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:45:38Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a small insect on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6a8c9a763ff2e6fcd4cbb8ee",
+      "asset_sha256": "1af4787d06b71cd1b6bd6ad808e16144cfda541878dec057a7d030d5dc9b16e6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/1af4787d06b71cd1b6bd6ad808e16144cfda541878dec057a7d030d5dc9b16e6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a27fa0a6ce99f1eee7bc0fbc9f2e8f2dc1c2550cfc7613a76f5c355170d401ad",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green leaf with a small insect on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image does not provide any specific information about the text's content.",
+          "The image does not show any specific educational content related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39121459903",
+      "checkpointed_at": "2026-10-18T12:46:39Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green leaf with a small insect on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image does not provide any specific information about the text's content.",
+          "The image does not show any specific educational content related to the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
