@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f76ed62bbd3992defcdc14eef665dcaa9769975e170feb0ce6796d37a0b3e906",
+  "raw_analysis_sha256": "00467bd9592a89934226fd224907252fda574c3e54e5c17c3797510d43996b57",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T02:30:28Z",
+      "checkpointed_at": "2026-10-18T02:33:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19511,6 +19511,216 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "62eee521cfa05ef44b7efcc3",
+      "asset_sha256": "9e914b5cb1fc29a815b0400aef60a9dbbf6584b51399b6f0c3acbc52f2f0637d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/9e914b5cb1fc29a815b0400aef60a9dbbf6584b51399b6f0c3acbc52f2f0637d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:33:30Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "78972777a7f3064e8853e7ca",
+      "asset_sha256": "bedfc39c3f5a2689c6f4059ca61f603492ffbed96cd10a92f478d3fcc6ed6b52",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/bedfc39c3f5a2689c6f4059ca61f603492ffbed96cd10a92f478d3fcc6ed6b52.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe we live in. While we’ll perhaps learn about it only later, light and shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The text does not provide specific details about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:34:08Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe we live in. While we’ll perhaps learn about it only later, light and shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The text does not provide specific details about the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d71791a9d8e02e32a14db69d",
+      "asset_sha256": "a09d8e3f1fa67b4c1a43245501d60154db69a5683915b7361e6d0f7bb5ef7ce2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/a09d8e3f1fa67b4c1a43245501d60154db69a5683915b7361e6d0f7bb5ef7ce2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe we live in. While we’ll perhaps learn about it only later, light and shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the educational content related to the concepts of light and shadows in the context of understanding the universe.",
+        "limitations": [
+          "The page does not contain any equations, diagrams, or charts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:34:47Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe we live in. While we’ll perhaps learn about it only later, light and shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the educational content related to the concepts of light and shadows in the context of understanding the universe.",
+        "limitations": [
+          "The page does not contain any equations, diagrams, or charts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5eb29ecb86c8682da16ae316",
+      "asset_sha256": "9ee7794297bbb471ac768ba4794a59f5951f065f7d60db3f6ffb6100e991872a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 25,
+      "asset_path": "assets/9ee7794297bbb471ac768ba4794a59f5951f065f7d60db3f6ffb6100e991872a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the concept of light and its relation to the universe and shadows.",
+        "limitations": [
+          "The text does not provide specific details about the understanding of the universe."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T02:35:26Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the concept of light and its relation to the universe and shadows.",
+        "limitations": [
+          "The text does not provide specific details about the understanding of the universe."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

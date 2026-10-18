@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 408,
-    "successful_visual_analyses": 402,
-    "missing_visual_analyses": 7080,
+    "raw_analysis_result_rows": 412,
+    "successful_visual_analyses": 406,
+    "missing_visual_analyses": 7076,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7086,
+    "unresolved_count": 7082,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -24523,9 +24523,16 @@
       "asset_path": "assets/9e914b5cb1fc29a815b0400aef60a9dbbf6584b51399b6f0c3acbc52f2f0637d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a hook at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24541,9 +24548,26 @@
       "asset_path": "assets/bedfc39c3f5a2689c6f4059ca61f603492ffbed96cd10a92f478d3fcc6ed6b52.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe we live in. While we’ll perhaps learn about it only later, light and shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the significance of light and shadows in understanding the universe.",
+        "limitations": [
+          "The text does not provide specific details about the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24559,9 +24583,26 @@
       "asset_path": "assets/a09d8e3f1fa67b4c1a43245501d60154db69a5683915b7361e6d0f7bb5ef7ce2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "of light has given us a very deep understanding of the universe we live in. While we’ll perhaps learn about it only later, light and shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The page discusses the educational content related to the concepts of light and shadows in the context of understanding the universe.",
+        "limitations": [
+          "The page does not contain any equations, diagrams, or charts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24577,9 +24618,29 @@
       "asset_path": "assets/9ee7794297bbb471ac768ba4794a59f5951f065f7d60db3f6ffb6100e991872a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the understanding of the universe through light and shadows.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "5",
+          "of light has given us a very deep understanding of the universe",
+          "we live in. While we’ll perhaps learn about it only later, light and",
+          "shadows are not just limited to things around us at home.",
+          "Science"
+        ],
+        "concepts": [
+          "light",
+          "universe",
+          "understanding",
+          "shadows"
+        ],
+        "context_relation": "The text discusses the concept of light and its relation to the universe and shadows.",
+        "limitations": [
+          "The text does not provide specific details about the understanding of the universe."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
