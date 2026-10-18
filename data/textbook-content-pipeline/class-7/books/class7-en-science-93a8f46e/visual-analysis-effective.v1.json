@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e9dc5899def365ba8b604a587e686575d918fc148b5adc6fa9438729211374cf",
+  "raw_analysis_sha256": "3859abfe16830ef9f2eb620aa9f3f8a82bf504882b5c2e905207418418e91ed5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:39:50Z",
+      "checkpointed_at": "2026-10-18T04:42:06Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19907,7 +19907,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39086204410",
-      "checkpointed_at": "2026-10-18T04:40:09Z",
+      "checkpointed_at": "2026-10-18T04:42:26Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -30402,6 +30402,232 @@
         "context_relation": "The image is a visual representation of a science fair event where a white sheet of paper with words appears after being sprayed with a liquid.",
         "limitations": [
           "The image does not provide specific details about the liquid or the substance it sprayed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dbb0b7f993b1ccd895c93109",
+      "asset_sha256": "6513440f026bd51d7eaa781532f6027527a631a079888de96285d0801fad466b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/6513440f026bd51d7eaa781532f6027527a631a079888de96285d0801fad466b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science",
+          "Volunteer",
+          "Liquid",
+          "Welcome message",
+          "Science fair entry gate",
+          "Science fair celebration",
+          "Science fair message"
+        ],
+        "context_relation": "The image shows a scene from a science fair celebration where children received a message on a white sheet of paper.",
+        "limitations": [
+          "The image does not show the actual message on the paper."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:42:42Z",
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science",
+          "Volunteer",
+          "Liquid",
+          "Welcome message",
+          "Science fair entry gate",
+          "Science fair celebration",
+          "Science fair message"
+        ],
+        "context_relation": "The image shows a scene from a science fair celebration where children received a message on a white sheet of paper.",
+        "limitations": [
+          "The image does not show the actual message on the paper."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a5a8e97bcefef818aa4a64b2",
+      "asset_sha256": "cd254156c1796631b74058d737416705a0e1c56258f928d1f53e9ca50f03d3df",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/cd254156c1796631b74058d737416705a0e1c56258f928d1f53e9ca50f03d3df.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children receiving a white sheet of paper with the words 'Welcome to the Wonderful World of Science' written on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate National Science Day. At the entry gate, siblings Ashwin and Keerthi were greeted with a white sheet of paper. They were curious to know why a white sheet of paper was given to them!  A few steps ahead, there was a volunteer spraying a li"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image shows a moment from a science fair celebration, where children receive a white sheet of paper with a welcoming message.",
+        "limitations": [
+          "The image does not show the actual science fair or the children's reactions to the message."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:43:25Z",
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet of paper with the words 'Welcome to the Wonderful World of Science' written on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate National Science Day. At the entry gate, siblings Ashwin and Keerthi were greeted with a white sheet of paper. They were curious to know why a white sheet of paper was given to them!  A few steps ahead, there was a volunteer spraying a li"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image shows a moment from a science fair celebration, where children receive a white sheet of paper with a welcoming message.",
+        "limitations": [
+          "The image does not show the actual science fair or the children's reactions to the message."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0ae149f0169688c61fdcb5cd",
+      "asset_sha256": "ec818fa83ada9adc01a87daeaf4d1fe1ac5bfd52bdb63e5cd12305babdb3936d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 27,
+      "asset_path": "assets/ec818fa83ada9adc01a87daeaf4d1fe1ac5bfd52bdb63e5cd12305babdb3936d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8d38567f8e94a2dff2fd36412ed921e4685f160a74393c78949a5e87cd40de7e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it at a science fair.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science fair entry gate",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome message",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image shows a part of a larger event, the National Science Day celebration, where children received a message on a white sheet at the entry gate of a science fair.",
+        "limitations": [
+          "The image does not show the entire event or the message on the white sheet in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39086204410",
+      "checkpointed_at": "2026-10-18T04:44:11Z",
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it at a science fair.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science fair entry gate",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome message",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image shows a part of a larger event, the National Science Day celebration, where children received a message on a white sheet at the entry gate of a science fair.",
+        "limitations": [
+          "The image does not show the entire event or the message on the white sheet in detail."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

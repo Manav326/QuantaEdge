@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 551,
-    "successful_visual_analyses": 544,
-    "missing_visual_analyses": 6937,
+    "raw_analysis_result_rows": 554,
+    "successful_visual_analyses": 547,
+    "missing_visual_analyses": 6934,
     "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6944,
+    "unresolved_count": 6941,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30971,9 +30971,41 @@
       "asset_path": "assets/6513440f026bd51d7eaa781532f6027527a631a079888de96285d0801fad466b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science",
+          "Volunteer",
+          "Liquid",
+          "Welcome message",
+          "Science fair entry gate",
+          "Science fair celebration",
+          "Science fair message"
+        ],
+        "context_relation": "The image shows a scene from a science fair celebration where children received a message on a white sheet of paper.",
+        "limitations": [
+          "The image does not show the actual message on the paper."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30989,9 +31021,27 @@
       "asset_path": "assets/cd254156c1796631b74058d737416705a0e1c56258f928d1f53e9ca50f03d3df.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet of paper with the words 'Welcome to the Wonderful World of Science' written on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate National Science Day. At the entry gate, siblings Ashwin and Keerthi were greeted with a white sheet of paper. They were curious to know why a white sheet of paper was given to them!  A few steps ahead, there was a volunteer spraying a li"
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image shows a moment from a science fair celebration, where children receive a white sheet of paper with a welcoming message.",
+        "limitations": [
+          "The image does not show the actual science fair or the children's reactions to the message."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31007,9 +31057,39 @@
       "asset_path": "assets/ec818fa83ada9adc01a87daeaf4d1fe1ac5bfd52bdb63e5cd12305babdb3936d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it at a science fair.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science fair entry gate",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome message",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image shows a part of a larger event, the National Science Day celebration, where children received a message on a white sheet at the entry gate of a science fair.",
+        "limitations": [
+          "The image does not show the entire event or the message on the white sheet in detail."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
