@@ -213,7 +213,7 @@ public class QaTestPackService {
       String manifestHash = manifestChecksum(runId);
       jdbc.update("""
         update qa_test_run set state='INSTALLED',planned_resource_count=?,
-          created_resource_count=?,cleaned_resource_count=0,pack_definition_sha256=?,
+          created_resource_count=?,cleaned_resource_count=0,manifest_sha256=?,
           installed_at=now(),updated_at=now(),error_code=null,error_summary=null
         where run_id=?
         """, resourceCount, resourceCount, manifestHash, runId);
@@ -329,8 +329,8 @@ public class QaTestPackService {
     String passwordHash = passwordEncoder.encode(fixturePassword);
     Long tenantA = insertTenant(runId, actorStaffId, "QAT" + slug + "A", "QA " + slug + " Institution A");
     Long tenantB = insertTenant(runId, actorStaffId, "QAT" + slug + "B", "QA " + slug + " Institution B");
-    insertBranding(runId, "tenant-a-branding", tenantA, "QA Institution A");
-    insertBranding(runId, "tenant-b-branding", tenantB, "QA Institution B");
+    insertBranding(runId, "tenant-a-branding", tenantA, "QA Institution A", "institution-QAT" + slug + "A");
+    insertBranding(runId, "tenant-b-branding", tenantB, "QA Institution B", "institution-QAT" + slug + "B");
 
     String parentAMobile = testMobile(runId, 1);
     String parentBMobile = testMobile(runId, 2);
@@ -344,40 +344,40 @@ public class QaTestPackService {
     Long independentLearner = insertUser(runId, "QA Independent Learner " + slug, "LEARNER",
         learnerMobile, learnerUsername, passwordHash, "independent-learner");
 
-    insertUserMembership(runId, "parent-a-membership", tenantA, parentA);
-    insertUserMembership(runId, "parent-b-membership", tenantB, parentB);
-    insertUserMembership(runId, "adult-learner-membership", tenantA, independentLearner);
+    insertUserMembership(runId, "parent-a-membership", tenantA, parentA, "institution-QAT" + slug + "A", "user-parent-a");
+    insertUserMembership(runId, "parent-b-membership", tenantB, parentB, "institution-QAT" + slug + "B", "user-parent-b");
+    insertUserMembership(runId, "adult-learner-membership", tenantA, independentLearner, "institution-QAT" + slug + "A", "user-independent-learner");
 
     Long childA = insertStudent(runId, "QA Child A " + slug, "en", null, "child-a");
     Long childB = insertStudent(runId, "QA Child B " + slug, "hi", null, "child-b");
     Long adultStudent = insertStudent(runId, "QA Adult Learner " + slug, "en", independentLearner, "adult-student");
 
-    insertGuardianStudent(runId, "parent-a-child-a", parentA, childA);
-    insertGuardianStudent(runId, "parent-b-child-b", parentB, childB);
+    insertGuardianStudent(runId, "parent-a-child-a", parentA, childA, "user-parent-a", "student-child-a");
+    insertGuardianStudent(runId, "parent-b-child-b", parentB, childB, "user-parent-b", "student-child-b");
     String childAUsername = "qa_child_" + slug.toLowerCase(Locale.ROOT) + "a";
     String childBUsername = "qa_child_" + slug.toLowerCase(Locale.ROOT) + "b";
-    insertStudentCredential(runId, "child-a-credential", parentA, childA, childAUsername, passwordHash);
-    insertStudentCredential(runId, "child-b-credential", parentB, childB, childBUsername, passwordHash);
+    insertStudentCredential(runId, "child-a-credential", parentA, childA, childAUsername, passwordHash, "user-parent-a", "student-child-a");
+    insertStudentCredential(runId, "child-b-credential", parentB, childB, childBUsername, passwordHash, "user-parent-b", "student-child-b");
 
-    insertStudentMembership(runId, "child-a-institution-membership", tenantA, childA);
-    insertStudentMembership(runId, "child-b-institution-membership", tenantB, childB);
-    insertStudentMembership(runId, "adult-institution-membership", tenantA, adultStudent);
+    insertStudentMembership(runId, "child-a-institution-membership", tenantA, childA, "institution-QAT" + slug + "A", "student-child-a");
+    insertStudentMembership(runId, "child-b-institution-membership", tenantB, childB, "institution-QAT" + slug + "B", "student-child-b");
+    insertStudentMembership(runId, "adult-institution-membership", tenantA, adultStudent, "institution-QAT" + slug + "A", "student-adult-student");
 
-    ensureRequiredTracks(runId, childA, tenantA);
-    ensureRequiredTracks(runId, childB, tenantB);
-    ensureRequiredTracks(runId, adultStudent, tenantA);
+    ensureRequiredTracks(runId, childA, tenantA, "student-child-a", "institution-QAT" + slug + "A");
+    ensureRequiredTracks(runId, childB, tenantB, "student-child-b", "institution-QAT" + slug + "B");
+    ensureRequiredTracks(runId, adultStudent, tenantA, "student-adult-student", "institution-QAT" + slug + "A");
 
     Map<String,Object> content = requiredPublishedClass7Question();
     Long lessonId = number(content.get("lesson_id"));
     Long questionId = number(content.get("question_id"));
     String correct = String.valueOf(content.get("correct_option"));
     String wrong = String.valueOf(content.get("wrong_option"));
-    insertProgress(runId, "child-a-progress", childA, tenantA, lessonId);
-    insertProgress(runId, "child-b-progress", childB, tenantB, lessonId);
-    insertProgress(runId, "adult-progress", adultStudent, tenantA, lessonId);
-    insertQuestionAttempt(runId, "child-a-correct-attempt", childA, tenantA, questionId, correct, true);
-    insertQuestionAttempt(runId, "child-b-wrong-attempt", childB, tenantB, questionId, wrong, false);
-    insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantA, questionId, correct, true);
+    insertProgress(runId, "child-a-progress", childA, tenantA, lessonId, "student-child-a");
+    insertProgress(runId, "child-b-progress", childB, tenantB, lessonId, "student-child-b");
+    insertProgress(runId, "adult-progress", adultStudent, tenantA, lessonId, "student-adult-student");
+    insertQuestionAttempt(runId, "child-a-correct-attempt", childA, tenantA, questionId, correct, true, "student-child-a");
+    insertQuestionAttempt(runId, "child-b-wrong-attempt", childB, tenantB, questionId, wrong, false, "student-child-b");
+    insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantA, questionId, correct, true, "student-adult-student");
 
     Map<String,Object> credentials = new LinkedHashMap<>();
     credentials.put("parentA", Map.of("institutionCode", "QAT" + slug + "A", "mobile", parentAMobile, "username", parentAUsername, "password", fixturePassword));
@@ -402,13 +402,13 @@ public class QaTestPackService {
     return id;
   }
 
-  private void insertBranding(UUID runId, String key, Long institutionId, String displayName) {
+  private void insertBranding(UUID runId, String key, Long institutionId, String displayName, String institutionResourceKey) {
     jdbc.update("""
       insert into institution_branding(institution_id,display_name,theme_tokens,qa_test_run_id)
       values (?,?,'{}'::jsonb,?)
       """, institutionId, displayName, runId);
     addResource(runId, key, "INSTITUTION_BRANDING", institutionId, 95,
-        List.of("institution-" + (key.endsWith("a-branding") ? "A" : "B")), "institution_branding");
+        List.of(institutionResourceKey), "institution_branding");
   }
 
   private Long insertUser(UUID runId, String displayName, String role, String mobile, String username,
@@ -423,16 +423,15 @@ public class QaTestPackService {
     return id;
   }
 
-  private void insertUserMembership(UUID runId, String key, Long institutionId, Long userId) {
+  private void insertUserMembership(UUID runId, String key, Long institutionId, Long userId,
+      String institutionResourceKey, String userResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into institution_user_membership(
         institution_id,user_id,status,joined_at,left_at,qa_test_run_id
       ) values (?,?,'ACTIVE',now(),null,?) returning id
       """, Long.class, institutionId, userId, runId);
     addResource(runId, key, "INSTITUTION_USER_MEMBERSHIP", id, 60,
-        List.of("institution-" + (key.contains("tenant-b") || key.startsWith("parent-b") ? "B" : "A"),
-          "user-" + (key.startsWith("parent-a") ? "parent-a" : key.startsWith("parent-b") ? "parent-b" : "independent-learner")),
-        "institution_user_membership");
+        List.of(institutionResourceKey, userResourceKey), "institution_user_membership");
   }
 
   private Long insertStudent(UUID runId, String displayName, String language, Long linkedUserId, String resourceKey) {
@@ -445,7 +444,8 @@ public class QaTestPackService {
     return id;
   }
 
-  private void insertGuardianStudent(UUID runId, String key, Long parentUserId, Long studentId) {
+  private void insertGuardianStudent(UUID runId, String key, Long parentUserId, Long studentId,
+      String parentResourceKey, String studentResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into guardian_student(
         guardian_user_id,student_id,relationship,consent_status,consented_at,active,
@@ -454,30 +454,33 @@ public class QaTestPackService {
       returning id
       """, Long.class, parentUserId, studentId, parentUserId, runId);
     addResource(runId, key, "GUARDIAN_STUDENT", id, 40,
-        List.of(parentUserId.equals(0L) ? "" : "user-parent", "student-child"), "guardian_student");
+        List.of(parentResourceKey, studentResourceKey), "guardian_student");
   }
 
   private void insertStudentCredential(UUID runId, String key, Long parentUserId, Long studentId,
-      String username, String passwordHash) {
+      String username, String passwordHash, String parentResourceKey, String studentResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_login_credential(
         guardian_user_id,student_id,username,password_hash,active,qa_test_run_id
       ) values (?,?,?, ?,true,?) returning id
       """, Long.class, parentUserId, studentId, username, passwordHash, runId);
-    addResource(runId, key, "STUDENT_LOGIN_CREDENTIAL", id, 35, List.of("student-child", "user-parent"),
-        "student_login_credential");
+    addResource(runId, key, "STUDENT_LOGIN_CREDENTIAL", id, 35,
+        List.of(studentResourceKey, parentResourceKey), "student_login_credential");
   }
 
-  private void insertStudentMembership(UUID runId, String key, Long institutionId, Long studentId) {
+  private void insertStudentMembership(UUID runId, String key, Long institutionId, Long studentId,
+      String institutionResourceKey, String studentResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into institution_membership(
         institution_id,student_id,status,joined_at,left_at,created_at,updated_at,qa_test_run_id
       ) values (?,?,'ACTIVE',now(),null,now(),now(),?) returning id
       """, Long.class, institutionId, studentId, runId);
-    addResource(runId, key, "INSTITUTION_MEMBERSHIP", id, 50, List.of(), "institution_membership");
+    addResource(runId, key, "INSTITUTION_MEMBERSHIP", id, 50,
+        List.of(institutionResourceKey, studentResourceKey), "institution_membership");
   }
 
-  private void ensureRequiredTracks(UUID runId, Long studentId, Long institutionId) {
+  private void ensureRequiredTracks(UUID runId, Long studentId, Long institutionId,
+      String studentResourceKey, String institutionResourceKey) {
     List<Map<String,Object>> rows = jdbc.queryForList("""
       insert into student_track_enrollment(student_id,subject_id,institution_id,status,qa_test_run_id)
       select ?,s.id,?,'ACTIVE',?
@@ -489,7 +492,8 @@ public class QaTestPackService {
     if (rows.isEmpty()) throw new IllegalStateException("Class 7 active Maths/Science tracks are unavailable in the approved QA database.");
     for (Map<String,Object> row : rows) {
       long id = number(row.get("id"));
-      addResource(runId, "track-enrollment-" + id, "STUDENT_TRACK_ENROLLMENT", id, 30, List.of(), "student_track_enrollment");
+      addResource(runId, "track-enrollment-" + id, "STUDENT_TRACK_ENROLLMENT", id, 30,
+          List.of(studentResourceKey, institutionResourceKey), "student_track_enrollment");
     }
   }
 
@@ -514,30 +518,30 @@ public class QaTestPackService {
     return rows.getFirst();
   }
 
-  private void insertProgress(UUID runId, String key, Long studentId, Long institutionId, Long lessonId) {
+  private void insertProgress(UUID runId, String key, Long studentId, Long institutionId, Long lessonId, String studentResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_lesson_progress(
         student_id,institution_id,lesson_id,status,progress_percent,started_at,completed_at,last_opened_at,qa_test_run_id
       ) values (?,?,?,'IN_PROGRESS',35,now(),null,now(),?) returning id
       """, Long.class, studentId, institutionId, lessonId, runId);
-    addResource(runId, key, "STUDENT_LESSON_PROGRESS", id, 20, List.of("student"), "student_lesson_progress");
+    addResource(runId, key, "STUDENT_LESSON_PROGRESS", id, 20, List.of(studentResourceKey), "student_lesson_progress");
   }
 
   private void insertQuestionAttempt(UUID runId, String key, Long studentId, Long institutionId,
-      Long questionId, String optionKey, boolean correct) {
+      Long questionId, String optionKey, boolean correct, String studentResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_question_attempt(
         student_id,institution_id,question_id,selected_option,correct,answered_at,qa_test_run_id
       ) values (?,?,?,?,?,now(),?) returning id
       """, Long.class, studentId, institutionId, questionId, optionKey, correct, runId);
-    addResource(runId, key, "STUDENT_QUESTION_ATTEMPT", id, 10, List.of("student"), "student_question_attempt");
+    addResource(runId, key, "STUDENT_QUESTION_ATTEMPT", id, 10, List.of(studentResourceKey), "student_question_attempt");
   }
 
   private void addResource(UUID runId, String key, String kind, Long resourceId, int cleanupOrder,
       List<String> dependencies, String internalTable) {
     Map<String,Object> ref = new LinkedHashMap<>();
     ref.put("table", internalTable);
-    ref.put("primaryKey", "id");
+    ref.put("primaryKey", "institution_branding".equals(internalTable) ? "institution_id" : "id");
     ref.put("runOwnershipColumn", "qa_test_run_id");
     ref.put("runId", runId.toString());
     ref.put("resourceId", resourceId);
