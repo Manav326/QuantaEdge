@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 443,
-    "successful_visual_analyses": 437,
-    "missing_visual_analyses": 7045,
+    "raw_analysis_result_rows": 446,
+    "successful_visual_analyses": 440,
+    "missing_visual_analyses": 7042,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7051,
+    "unresolved_count": 7048,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -25935,9 +25935,41 @@
       "asset_path": "assets/5cc406c62e35573fc0b780cf89958ff4158b4847ca9374827c1643f5ca428a31.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "Science fair",
+          "National Science Day",
+          "Children",
+          "Science",
+          "Acidic",
+          "Basic",
+          "Neutral",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome to the Wonderful World of Science"
+        ],
+        "context_relation": "The image shows a scene from a science fair where children received a white sheet with a message on it.",
+        "limitations": [
+          "The image does not show the actual message on the white sheet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25953,9 +25985,36 @@
       "asset_path": "assets/ce0461d50720c6c9ccd3283bdd489284ddb9b28731cf660ed5b0c1e41f819426.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets",
+          "sprayed. To their surprise, the words ‘Welcome to the Wonderful",
+          "World of Science’ appeared on the papers the moment the liquid",
+          "was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "National Science Day",
+          "Science fair",
+          "Volunteer",
+          "Welcome message",
+          "Acidic, Basic, and Neutral substances"
+        ],
+        "context_relation": "The image shows a moment from a science fair where children receive a message on a white sheet.",
+        "limitations": [
+          "The image does not show the actual message or the substance being sprayed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -25971,9 +26030,34 @@
       "asset_path": "assets/4da16e9b0b555fec2685aadf22377010b8dafe951906ff2ef698fb32c9dcab8d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children receiving a white sheet with a message on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring",
+          "Substances: Acidic, 2",
+          "Basic, and Neutral",
+          "On 28 February, the school hosted a science fair to celebrate",
+          "National Science Day. At the entry gate, siblings Ashwin and",
+          "Keerthi were greeted with a white sheet of paper. They were",
+          "curious to know why a white sheet of paper was given to them!",
+          "A few steps ahead, there was a volunteer spraying a liquid on these sheets of paper. The siblings also got their white sheets sprayed. To their surprise, the words ‘Welcome to the Wonderful World of Science’ appeared on the papers the moment the liquid was sprayed (Fig. 2.1)."
+        ],
+        "concepts": [
+          "National Science Day",
+          "Science fair",
+          "Acidic, Basic, and Neutral substances",
+          "Volunteer",
+          "Spraying liquid",
+          "Welcome message"
+        ],
+        "context_relation": "The image shows the beginning of a science fair event where children receive a message on a white sheet of paper.",
+        "limitations": [
+          "The image does not show the actual science fair event or the children's reaction to the message."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
