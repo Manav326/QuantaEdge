@@ -236,6 +236,16 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
   const [enrollmentIssue, setEnrollmentIssue] = useState<EnrollmentIssueKind | null>(() => storedEnrollmentIssue());
   const [enrollmentRetryVersion, setEnrollmentRetryVersion] = useState(0);
 
+  const setStoredEnrollmentIssue = useCallback((issue: EnrollmentIssueKind | null) => {
+    setEnrollmentIssue(issue);
+    try {
+      if (issue) window.sessionStorage.setItem(ENROLLMENT_ISSUE_SESSION_KEY, issue);
+      else window.sessionStorage.removeItem(ENROLLMENT_ISSUE_SESSION_KEY);
+    } catch {
+      // A status message should not prevent access if storage is blocked.
+    }
+  }, []);
+
   const resolveInstitutionCode = useCallback(async (input: string): Promise<boolean> => {
     const code = normalizedCode(input);
     if (!code) return false;
@@ -267,16 +277,6 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
     applyTenantIdentity(null);
   }, []);
 
-  const setStoredEnrollmentIssue = useCallback((issue: EnrollmentIssueKind | null) => {
-    setEnrollmentIssue(issue);
-    try {
-      if (issue) window.sessionStorage.setItem(ENROLLMENT_ISSUE_SESSION_KEY, issue);
-      else window.sessionStorage.removeItem(ENROLLMENT_ISSUE_SESSION_KEY);
-    } catch {
-      // A status message should not prevent access if storage is blocked.
-    }
-  }, []);
-
   const clearEnrollmentIssue = useCallback(() => setStoredEnrollmentIssue(null), [setStoredEnrollmentIssue]);
   const retryEnrollment = useCallback(() => setEnrollmentRetryVersion(version => version + 1), []);
 
@@ -289,7 +289,7 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
       const hasUrlJoin = urlHasJoinParam();
       const urlJoin = joinCodeFromCurrentUrl();
       if (hasUrlJoin) {
-        setEnrollmentIssue(null);
+        setStoredEnrollmentIssue(null);
         savePendingJoinCode(urlJoin, urlCode);
         // Invite secrets live in the URL fragment for transport; once safely stored in
         // session storage, remove them from the address bar/history before authentication.
@@ -350,12 +350,12 @@ export function TenantBrandingProvider({ children }: { children: ReactNode }) {
             return null;
           }
           savePendingJoinCode(null);
-          setEnrollmentIssue(null);
+          setStoredEnrollmentIssue(null);
           return joinedCode;
         } catch {
           // The server may have committed membership before the connection failed.
           // Repeating redemption is safe because the API is idempotent for active memberships.
-          setEnrollmentIssue('temporary');
+          setStoredEnrollmentIssue('temporary');
           return null;
         }
       };
