@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1033,
-    "successful_visual_analyses": 1021,
+    "successful_visual_analyses": 1023,
     "missing_visual_analyses": 1045,
-    "failed_visual_analyses": 12,
+    "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1057,
+    "unresolved_count": 1055,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36969,9 +36969,38 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for testing for fats in food items.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3.2 Test for fats",
+          "Activity 3.6: Let us investigate",
+          "Take a small part of the food items that you tested for",
+          "the presence of starch in Activity 3.5.",
+          "Place each food item on a separate piece of paper.",
+          "Wrap the paper around the food and press it. Be careful",
+          "not to tear the paper.",
+          "If a food item contains a little water, allow the paper",
+          "to dry.",
+          "Does the paper develop an oily patch? What do you think",
+          "is the reason for this patch? If oil or butter is present in the",
+          "food item, it leaves an oily patch on the paper. Now, hold",
+          "the paper against light. Can you see the light"
+        ],
+        "concepts": [
+          "testing for fats",
+          "starch",
+          "oil or butter",
+          "paper",
+          "light"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific image provided, only text instructions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36987,9 +37016,39 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for testing for fats in food items.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3.2 Test for fats",
+          "Activity 3.6: Let us investigate",
+          "Take a small part of the food items that you tested for",
+          "the presence of starch in Activity 3.5.",
+          "Place each food item on a separate piece of paper.",
+          "Wrap the paper around the food and press it. Be careful",
+          "not to tear the paper.",
+          "If a food item contains a little water, allow the paper",
+          "to dry.",
+          "Does the paper develop an oily patch? What do you think",
+          "is the reason for this patch? If oil or butter is present in the",
+          "food item, it leaves an oily patch on the paper. Now, hold",
+          "the paper against light. Can you see the light"
+        ],
+        "concepts": [
+          "Testing for fats",
+          "Food items",
+          "Starch",
+          "Paper",
+          "Oily patch",
+          "Light"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific image provided, only text instructions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
