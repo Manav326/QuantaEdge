@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 967,
-    "successful_visual_analyses": 955,
-    "missing_visual_analyses": 1111,
+    "raw_analysis_result_rows": 970,
+    "successful_visual_analyses": 958,
+    "missing_visual_analyses": 1108,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1123,
+    "unresolved_count": 1120,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -37495,9 +37495,45 @@
       "asset_path": "page-0070.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Nutritional comparison between potato wafers and roasted chana.",
+        "visual_type": "table",
+        "visible_text": [
+          "(a) Potato wafers",
+          "(b) Roasted chana",
+          "Nutritional Information (per 100 g)",
+          "Energy",
+          "Fats",
+          "Carbohydrates",
+          "Proteins",
+          "Dietary Fibre",
+          "536 kcal",
+          "35.0 g",
+          "53.0 g",
+          "7.0 g",
+          "4.8 g",
+          "355 kcal",
+          "6.26 g",
+          "58.58 g",
+          "18.64 g",
+          "16.8 g"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "Fats",
+          "Carbohydrates",
+          "Proteins",
+          "Dietary Fibre",
+          "Comparison between potato wafers and roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "The image does not provide the actual nutritional values for the foods."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37513,9 +37549,16 @@
       "asset_path": "assets/c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A large, textured, yellow rectangular shape with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37531,9 +37574,23 @@
       "asset_path": "assets/bd9a485825a14a86d3002c63ebd08385bbf65d7879873eab74b1afa303dd3c3b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Logo of FSSAI with colorful text and a leaf symbol.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "FSSAI"
+        ],
+        "concepts": [
+          "Food Safety and Standard Authority of India"
+        ],
+        "context_relation": "The logo represents the organization responsible for food safety standards in India.",
+        "limitations": [
+          "No specific details about the logo's design or meaning are provided in the text. The text is focused on the organization's role in food safety and does not describe the logo's appearance or significance.",
+          "Unrecognized model visual_type 'logo'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 955,
+    "assets_selected": 958,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 953,
-    "assets_remaining": 1125,
-    "assets_completion_percent": 45.9,
+    "assets_analyzed": 956,
+    "assets_remaining": 1122,
+    "assets_completion_percent": 46.0,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 950,
+    "assets_skipped_from_checkpoint": 953,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:12:33Z"
+      "checkpointed_at": "2026-10-19T11:17:24Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T11:13:33Z"
+      "checkpointed_at": "2026-10-19T11:18:24Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -30615,6 +30615,120 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T11:16:11Z"
+    },
+    {
+      "asset_id": "af970d3c0009554717e5b283",
+      "asset_sha256": "52285b75bc992baee5f73c9a9306c6fcfc19e135556fe8b76442423fa10df074",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 70,
+      "asset_path": "page-0070.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ea0dcb20aa346f19485bc72e8624af2410a9b5742ff1c76ab314c06c95ffcacf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Nutritional comparison between potato wafers and roasted chana.",
+        "visual_type": "table",
+        "visible_text": [
+          "(a) Potato wafers",
+          "(b) Roasted chana",
+          "Nutritional Information (per 100 g)",
+          "Energy",
+          "Fats",
+          "Carbohydrates",
+          "Proteins",
+          "Dietary Fibre",
+          "536 kcal",
+          "35.0 g",
+          "53.0 g",
+          "7.0 g",
+          "4.8 g",
+          "355 kcal",
+          "6.26 g",
+          "58.58 g",
+          "18.64 g",
+          "16.8 g"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "Fats",
+          "Carbohydrates",
+          "Proteins",
+          "Dietary Fibre",
+          "Comparison between potato wafers and roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "The image does not provide the actual nutritional values for the foods."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:22:22Z"
+    },
+    {
+      "asset_id": "2f560d9cab67bc34b10a1efe",
+      "asset_sha256": "c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d68de83f85d96be150653f569c15c49e640818ac8a7a70b4078fb9a38cbfca9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A large, textured, yellow rectangular shape with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:23:54Z"
+    },
+    {
+      "asset_id": "8391059f65b4706ca28d0b07",
+      "asset_sha256": "bd9a485825a14a86d3002c63ebd08385bbf65d7879873eab74b1afa303dd3c3b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/bd9a485825a14a86d3002c63ebd08385bbf65d7879873eab74b1afa303dd3c3b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7d68de83f85d96be150653f569c15c49e640818ac8a7a70b4078fb9a38cbfca9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Logo of FSSAI with colorful text and a leaf symbol.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "FSSAI"
+        ],
+        "concepts": [
+          "Food Safety and Standard Authority of India"
+        ],
+        "context_relation": "The logo represents the organization responsible for food safety standards in India.",
+        "limitations": [
+          "No specific details about the logo's design or meaning are provided in the text. The text is focused on the organization's role in food safety and does not describe the logo's appearance or significance.",
+          "Unrecognized model visual_type 'logo'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T11:25:30Z"
     }
   ]
 }
