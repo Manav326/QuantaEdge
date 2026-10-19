@@ -11,6 +11,9 @@ const sessionProxy = read('../proxy.ts');
 const testsClient = read('../app/student/tests/TestsClient.tsx');
 const practiceClient = read('../app/student/practice/PracticeClient.tsx');
 const learnClient = read('../app/student/learn/LearnClient.tsx');
+const structuredLessonsClient = read('../app/student/structured-lessons/StructuredLessonsClient.tsx');
+const structuredLessonDetailClient = read('../app/student/structured-lessons/StructuredLessonDetailClient.tsx');
+const structuredLessonsApi = read('../../../services/api/src/main/java/com/quantaedge/api/StructuredLessonController.java');
 const certificatesPage = read('../app/student/certificates/page.tsx');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
@@ -217,16 +220,24 @@ const coursesPage = read('../app/student/courses/page.tsx');
 const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
-assert.ok(coursesPage.includes("'/student/structured-lessons?courseId=' + encodeURIComponent(String(courseId))") &&
-  coursesPage.includes('Open structured course'), 'Course focus must open the exact selected course structured catalogue.');
+assert.ok(coursesPage.includes("'/student/structured-lessons?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
+  coursesPage.includes("String(course.public_id || id)") && coursesPage.includes('Open structured course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
 assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
   courseScope.includes('This course is not enrolled in your current institution account.') &&
   courseScope.includes('qe:student:activeCourseId'), 'Course scope must normalize IDs, reject unavailable explicit IDs and persist primary course focus.');
+assert.ok(courseScope.includes("String(course.public_id || '').toUpperCase() === requestedText.toUpperCase()") &&
+  structuredLessonsClient.includes('activeCourse?.public_id || courseId') &&
+  structuredLessonDetailClient.includes('activeCourse?.public_id || courseId') &&
+  structuredLessonsApi.includes('private long resolveCourseId(String suppliedCourseId)') &&
+  structuredLessonsApi.includes('value.matches("[A-Z]{3}[A-Z0-9]{5}")'),
+  'Web structured learning must route by 8-character public course IDs and resolve them server-side to the internal row ID.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('Selected structured course opened.') &&
   androidApp.includes('"/api/v1/learning/structured-lessons?" + params') &&
-  androidApp.includes('"courseId=" + courseId + "&language="'),
-  'Android course cards must route into the structured catalogue with the selected course ID.');
+  androidApp.includes('fun structuredPublicCourseId(courseId: Long): String') &&
+  androidApp.includes('"courseId=" + structuredPublicCourseId(courseId) + "&language="') &&
+  androidApp.includes('Regex("^[A-Z]{3}[A-Z0-9]{5}$")'),
+  'Android course cards must route structured catalogues with the 8-character public course ID, not the internal numeric row ID.');
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
   parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),
   'Parent reports must require explicit course selection for multi-course children.');
