@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1528,
-    "successful_visual_analyses": 1506,
-    "missing_visual_analyses": 5960,
+    "raw_analysis_result_rows": 1531,
+    "successful_visual_analyses": 1509,
+    "missing_visual_analyses": 5957,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5982,
+    "unresolved_count": 5979,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -67568,9 +67568,18 @@
       "asset_path": "assets/8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text about circuit diagrams.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -67586,9 +67595,19 @@
       "asset_path": "assets/d1e9a20f191acbedf84c91870bfecf1c9a96cfe79ad6be46d27acf7c9968d4c7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A symbol representing a component in an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electrical circuit",
+          "symbol representation"
+        ],
+        "context_relation": "The image is a representation of a component in an electrical circuit.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -67604,9 +67623,23 @@
       "asset_path": "assets/640e3e466ba9c9cda4138e972629ef5caf4198bfb726dbb8bc4fb353a6b8a28a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A symbol representing a capacitor in a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "capacitor"
+        ],
+        "context_relation": "The image is a part of a textbook discussing the representation of circuit components in a simplified manner.",
+        "limitations": [
+          "The image does not provide specific details about the capacitor's function or its role in a circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

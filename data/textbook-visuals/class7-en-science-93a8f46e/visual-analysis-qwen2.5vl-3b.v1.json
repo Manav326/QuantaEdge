@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1506,
+    "assets_selected": 1509,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1504,
-    "assets_remaining": 5984,
+    "assets_analyzed": 1507,
+    "assets_remaining": 5981,
     "assets_completion_percent": 20.1,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1501,
+    "assets_skipped_from_checkpoint": 1504,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:50:16Z"
+      "checkpointed_at": "2026-10-19T10:53:02Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:50:38Z"
+      "checkpointed_at": "2026-10-19T10:53:23Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -57163,6 +57163,96 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T10:52:21Z"
+    },
+    {
+      "asset_id": "a7053729efa5a97c43a61c2b",
+      "asset_sha256": "8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text about circuit diagrams.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:53:58Z"
+    },
+    {
+      "asset_id": "037124aee51b8593304095b2",
+      "asset_sha256": "d1e9a20f191acbedf84c91870bfecf1c9a96cfe79ad6be46d27acf7c9968d4c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/d1e9a20f191acbedf84c91870bfecf1c9a96cfe79ad6be46d27acf7c9968d4c7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing a component in an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electrical circuit",
+          "symbol representation"
+        ],
+        "context_relation": "The image is a representation of a component in an electrical circuit.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:54:32Z"
+    },
+    {
+      "asset_id": "16103547b8555fbb09707fd4",
+      "asset_sha256": "640e3e466ba9c9cda4138e972629ef5caf4198bfb726dbb8bc4fb353a6b8a28a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/640e3e466ba9c9cda4138e972629ef5caf4198bfb726dbb8bc4fb353a6b8a28a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing a capacitor in a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "capacitor"
+        ],
+        "context_relation": "The image is a part of a textbook discussing the representation of circuit components in a simplified manner.",
+        "limitations": [
+          "The image does not provide specific details about the capacitor's function or its role in a circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:55:09Z"
     }
   ]
 }

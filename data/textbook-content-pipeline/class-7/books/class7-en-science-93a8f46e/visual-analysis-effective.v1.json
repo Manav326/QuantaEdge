@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fb7e618342dac6dd3f0cda175b676da1bf69aeabbdc51b572d69a518bb522cad",
+  "raw_analysis_sha256": "1681c38fc9053909d1a5c5e18326f0416648bcdb2e006242942296cc07705625",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:50:16Z",
+      "checkpointed_at": "2026-10-19T10:53:02Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:50:38Z",
+      "checkpointed_at": "2026-10-19T10:53:23Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -89889,6 +89889,138 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a7053729efa5a97c43a61c2b",
+      "asset_sha256": "8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text about circuit diagrams.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:53:58Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen or marker.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text about circuit diagrams.",
+        "limitations": [
+          "The image does not provide any specific information about the text content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "037124aee51b8593304095b2",
+      "asset_sha256": "d1e9a20f191acbedf84c91870bfecf1c9a96cfe79ad6be46d27acf7c9968d4c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/d1e9a20f191acbedf84c91870bfecf1c9a96cfe79ad6be46d27acf7c9968d4c7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing a component in an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electrical circuit",
+          "symbol representation"
+        ],
+        "context_relation": "The image is a representation of a component in an electrical circuit.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:54:32Z",
+      "effective_analysis": {
+        "visual_summary": "A symbol representing a component in an electrical circuit.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "electrical circuit",
+          "symbol representation"
+        ],
+        "context_relation": "The image is a representation of a component in an electrical circuit.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16103547b8555fbb09707fd4",
+      "asset_sha256": "640e3e466ba9c9cda4138e972629ef5caf4198bfb726dbb8bc4fb353a6b8a28a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/640e3e466ba9c9cda4138e972629ef5caf4198bfb726dbb8bc4fb353a6b8a28a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A symbol representing a capacitor in a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "capacitor"
+        ],
+        "context_relation": "The image is a part of a textbook discussing the representation of circuit components in a simplified manner.",
+        "limitations": [
+          "The image does not provide specific details about the capacitor's function or its role in a circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:55:09Z",
+      "effective_analysis": {
+        "visual_summary": "A symbol representing a capacitor in a circuit diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "circuit diagram",
+          "capacitor"
+        ],
+        "context_relation": "The image is a part of a textbook discussing the representation of circuit components in a simplified manner.",
+        "limitations": [
+          "The image does not provide specific details about the capacitor's function or its role in a circuit."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
