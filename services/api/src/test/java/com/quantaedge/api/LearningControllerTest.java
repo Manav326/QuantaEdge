@@ -56,7 +56,7 @@ class LearningControllerTest {
     controller.questions(42L, "hi", student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq("hi"), eq(42L));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq("hi"), eq(42L));
     assertTrue(sql.getValue().contains("as attempted"));
     assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
@@ -69,6 +69,10 @@ class LearningControllerTest {
   void lessonCatalogueIncludesDurableMcqAndPracticeHistoryForEachTopic() {
     when(jdbc.queryForObject("select class_code from student where id=? and active=true", String.class, 7L))
         .thenReturn("7");
+    when(jdbc.queryForList(contains("select p.id"), eq(1L), eq("maths"), eq(7L)))
+        .thenReturn(List.of(Map.of("id", 91L)));
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class),
+        eq(1L), eq(7L), eq(91L), eq(91L), eq(91L), eq(91L))).thenReturn(true);
     lenient().when(jdbc.queryForList(contains("practice_best_correct_count"), any(Object[].class))).thenReturn(List.of(Map.of(
         "id", 99L, "title", "Fractions", "mcq_count", 3L, "mcq_answered_count", 3L,
         "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
@@ -84,7 +88,7 @@ class LearningControllerTest {
     assertEquals(10L, rows.getFirst().get("practice_best_graded_count"));
     assertEquals(80, rows.getFirst().get("practice_best_percent"));
     org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("7"), eq("maths"));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(1L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("7"), eq("maths"));
     assertTrue(sql.getValue().contains("student_question_attempt"));
     assertTrue(sql.getValue().contains("student_practice_session"));
     assertTrue(sql.getValue().contains("status='COMPLETED'"));
@@ -135,7 +139,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Subtract four from both sides.", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.evaluate(anyString(), eq("B"))).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
