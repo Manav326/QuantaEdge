@@ -99,7 +99,7 @@ public class AssessmentController {
   public Map<String,Object> questionBank(
       @RequestParam String classCode,
       @RequestParam String subjectCode,
-      @RequestParam(required = false) Long courseId,
+      @RequestParam Long courseId,
       @RequestParam(required = false) Long chapterId,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="40") Integer limit,
