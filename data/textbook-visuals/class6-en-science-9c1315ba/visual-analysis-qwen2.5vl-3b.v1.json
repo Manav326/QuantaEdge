@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1008,
+    "assets_selected": 1011,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1006,
-    "assets_remaining": 1072,
-    "assets_completion_percent": 48.4,
+    "assets_analyzed": 1009,
+    "assets_remaining": 1069,
+    "assets_completion_percent": 48.6,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1003,
+    "assets_skipped_from_checkpoint": 1006,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:20:51Z"
+      "checkpointed_at": "2026-10-19T13:27:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T13:21:52Z"
+      "checkpointed_at": "2026-10-19T13:28:54Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -32496,6 +32496,87 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T13:26:37Z"
+    },
+    {
+      "asset_id": "c617f6e167c063cd7499fcc1",
+      "asset_sha256": "c29889b516d4c84b224e93082102d8a562c41b3382cb36c253b9426929279bae",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/c29889b516d4c84b224e93082102d8a562c41b3382cb36c253b9426929279bae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red rectangular object with a textured surface.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a red rectangular object.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:30:25Z"
+    },
+    {
+      "asset_id": "88a2596dca21d719ca792322",
+      "asset_sha256": "9d4ba02f18e435700a839f96601f68ff19600daab8b25e3553e28d9e21d0eb2b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/9d4ba02f18e435700a839f96601f68ff19600daab8b25e3553e28d9e21d0eb2b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A U-shaped magnet with one end red and the other white.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a magnet, likely used to illustrate the concept of magnetic fields or the properties of magnets.",
+        "limitations": [
+          "The image does not provide specific details about the properties or uses of the magnet.",
+          "The image does not include any text or labels that would provide additional context or information about the magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:32:01Z"
+    },
+    {
+      "asset_id": "c4f6d5a4d593b8a5a443a0f3",
+      "asset_sha256": "1c4ac6504f9dcba760daf7a49de8ac7fd1a16d3871378d61c99ec0d75fd8b522",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 80,
+      "asset_path": "assets/1c4ac6504f9dcba760daf7a49de8ac7fd1a16d3871378d61c99ec0d75fd8b522.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3e926066f441a811703da6c9009228a42f46232f910a4084a9dc075299984ccf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black circular object with a hole in the center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:33:33Z"
     }
   ]
 }
