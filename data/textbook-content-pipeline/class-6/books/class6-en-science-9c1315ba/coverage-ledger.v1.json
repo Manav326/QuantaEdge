@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 849,
-    "successful_visual_analyses": 838,
-    "missing_visual_analyses": 1229,
+    "raw_analysis_result_rows": 850,
+    "successful_visual_analyses": 839,
+    "missing_visual_analyses": 1228,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1240,
+    "unresolved_count": 1239,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33134,9 +33134,26 @@
       "asset_path": "assets/dfb0e358e83ddc82b9a1b4c8e87a6feea4d5e992700fd62e9261f3744f50bde4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pink sticky note with the word 'Key Points' written on it.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Key Points"
+        ],
+        "concepts": [
+          "grouping",
+          "biodiversity",
+          "plants",
+          "animals",
+          "features"
+        ],
+        "context_relation": "The image is related to the text discussing the classification of plants and animals based on their features.",
+        "limitations": [
+          "The image does not provide any additional information beyond the text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
