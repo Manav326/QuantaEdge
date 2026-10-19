@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 779,
-    "successful_visual_analyses": 768,
-    "missing_visual_analyses": 1512,
+    "raw_analysis_result_rows": 781,
+    "successful_visual_analyses": 770,
+    "missing_visual_analyses": 1510,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1523,
+    "unresolved_count": 1521,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30276,9 +30276,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the structure and functions of cells in plants, including the nucleus, cell wall, and plastids.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The nucleus regulates all activities that occur within the cell.",
+          "It also regulates growth.",
+          "The cell wall in the plant cell provides rigidity and strength to plants.",
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids.",
+          "Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis."
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis"
+        ],
+        "context_relation": "The page discusses the structure and functions of cells in plants, focusing on the nucleus, cell wall, and plastids.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations.",
+          "The page does not provide any visual representations of the structures discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30294,9 +30318,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

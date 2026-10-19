@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4c1c2ba59442426ab7755bb46cd6612f138009e8ed241a7d8ec04e5fae5f08ef",
+  "raw_analysis_sha256": "4ae4679849e97e87774bd30dff0b1196a413d37d04e5f6772f108265a539ea3e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:22:32Z",
+      "checkpointed_at": "2026-10-19T03:28:27Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:23:20Z",
+      "checkpointed_at": "2026-10-19T03:29:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:23:58Z",
+      "checkpointed_at": "2026-10-19T03:29:54Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -34526,6 +34526,116 @@
         "context_relation": "The image is likely related to the chapter on the invisible living world, specifically focusing on plant cells and their components.",
         "limitations": [
           "The image does not provide specific details about the structure or function of the cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5c7091b0cc7c1c15c930e7aa",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the structure and functions of cells in plants, including the nucleus, cell wall, and plastids.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The nucleus regulates all activities that occur within the cell.",
+          "It also regulates growth.",
+          "The cell wall in the plant cell provides rigidity and strength to plants.",
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids.",
+          "Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis."
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis"
+        ],
+        "context_relation": "The page discusses the structure and functions of cells in plants, focusing on the nucleus, cell wall, and plastids.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations.",
+          "The page does not provide any visual representations of the structures discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:30:31Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the structure and functions of cells in plants, including the nucleus, cell wall, and plastids.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The nucleus regulates all activities that occur within the cell.",
+          "It also regulates growth.",
+          "The cell wall in the plant cell provides rigidity and strength to plants.",
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids.",
+          "Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis."
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "plastids",
+          "chloroplasts",
+          "chlorophyll",
+          "photosynthesis"
+        ],
+        "context_relation": "The page discusses the structure and functions of cells in plants, focusing on the nucleus, cell wall, and plastids.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations.",
+          "The page does not provide any visual representations of the structures discussed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8347d5a94bf97eeaf216756f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 33,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:30:48Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
