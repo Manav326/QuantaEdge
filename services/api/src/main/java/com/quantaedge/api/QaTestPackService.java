@@ -703,8 +703,8 @@ public class QaTestPackService {
     String lowerSlug = slug.toLowerCase(Locale.ROOT);
     String passwordHash = passwordEncoder.encode(fixturePassword);
 
-    // Three explicit tenants model the HRMS control plane, a destination institution receiving an
-    // approved course, and a third independent institution that must not inherit that assignment.
+    // HRMS owns the tenant registry. Three synthetic tenant institutions exercise cross-tenant
+    // assignment: A/B receive QuantaEdge Class 7, while C receives QuantaEdge Class 6 only.
     Long tenantA = insertTenant(runId, actorStaffId, "QAT" + slug + "A", "QA " + slug + " Institution A");
     Long tenantB = insertTenant(runId, actorStaffId, "QAT" + slug + "B", "QA " + slug + " Institution B");
     Long tenantC = insertTenant(runId, actorStaffId, "QAT" + slug + "C", "QA " + slug + " Institution C");
@@ -823,13 +823,9 @@ public class QaTestPackService {
   }
 
   /**
-   * Creates an institution-owned release, grants it to its origin institution, shares that approved
-   * release with institution B through an HRMS assignment, and gives institution C a separate
-   * origin-owned release. All account, release, assignment and entitlement rows are run-owned.
-   */
-  /**
-   * QuantaEdge owns Class 6/7/8. This graph creates only run-owned release/assignment/entitlement
-   * records: HRMS assigns Class 7 to institutions A/B and Class 6 to institution C.
+   * QuantaEdge remains the source institution for Classes 6/7/8. The QA run creates two removable
+   * release revisions, assigned by HRMS as Class 7 to A/B and Class 6 to C; curriculum master rows
+   * and the QuantaEdge tenant itself are referenced, not owned by this QA run.
    */
   private Map<String,Object> insertInstitutionCourseGraph(
       UUID runId, String slug, Long tenantA, Long tenantB, Long tenantC,
