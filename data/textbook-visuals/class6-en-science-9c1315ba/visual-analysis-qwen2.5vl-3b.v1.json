@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 931,
+    "assets_selected": 934,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 929,
-    "assets_remaining": 1149,
-    "assets_completion_percent": 44.7,
+    "assets_analyzed": 932,
+    "assets_remaining": 1146,
+    "assets_completion_percent": 44.9,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 926,
+    "assets_skipped_from_checkpoint": 929,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:07:11Z"
+      "checkpointed_at": "2026-10-19T10:14:13Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T10:08:11Z"
+      "checkpointed_at": "2026-10-19T10:15:13Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -29555,6 +29555,130 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T10:13:01Z"
+    },
+    {
+      "asset_id": "c83765cc5be8aec98801d798",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab467f9345f09ff4f2a78dacf944fa875f5cd63b4403d5737b475facacd433d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:15:28Z"
+    },
+    {
+      "asset_id": "f0681e38ac8a45fd6771ebf1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 64,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab467f9345f09ff4f2a78dacf944fa875f5cd63b4403d5737b475facacd433d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:15:41Z"
+    },
+    {
+      "asset_id": "424a4fa67671a88fee0e4962",
+      "asset_sha256": "748418515e70a3321776802d9ff634c68a9f4f9ac881c332aa1c2272a1240010",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 64,
+      "asset_path": "page-0064.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ab467f9345f09ff4f2a78dacf944fa875f5cd63b4403d5737b475facacd433d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the benefits of vegetables and fruits.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "milk, green vegetables, fruits and wholegrains regularly.",
+          "These food items are some sources of vitamins (Fig. 3.6) and",
+          "minerals. Although vitamins and minerals are required in",
+          "small amounts, they are essential to keep our body healthy.",
+          "What differences do you observe in raw and cooked",
+          "vegetables? Have you ever noticed that vegetables",
+          "sometimes lose their bright colour, or become softer and",
+          "less crisp when cooked? Some nutrients like vitamin C and",
+          "others are lost during cooking due to high heat. Would it",
+          "not be wise to include fruits and uncooked vegetables into",
+          "our diet? Washing cut or peeled vegetables and fruits may",
+          "also result in the loss of some vitamins. However, it is highly",
+          "recommended that all fruits and vegetables be thoroughly",
+          "washed before consumption.",
+          "Do we obtain all",
+          "nutrients from",
+          "plants and animals?",
+          "No, Medu. Nutrients like",
+          "salt can be obtained from",
+          "seawater or from rocks.",
+          "Also, Vitamin D can be",
+          "naturally produced by our",
+          "body upon exposure to",
+          "sunlight.",
+          "Fruits and vegetables are rich in dietary fibres. Let us see",
+          "how dietary fibres are beneficial for us.",
+          "In addition to the essential nutrients, our body needs dietary",
+          "fibres and water. Dietary fibres, also known as roughage, do",
+          "not provide any nutrients to our body. However, they are an",
+          "essential component of our food. They help our body get rid of"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "vegetables",
+          "fruits",
+          "dietary fibres",
+          "dietary fibres",
+          "roughage",
+          "unsuitable plant products"
+        ],
+        "context_relation": "The image is a visual representation of the text.",
+        "limitations": [
+          "The image does not provide specific details about the vitamins and minerals mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T10:20:05Z"
     }
   ]
 }
