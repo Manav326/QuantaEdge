@@ -87,7 +87,10 @@ class QaTestPackServiceTest {
 
     assertEquals(1, packs.size());
     assertEquals("TENANT_LEARNER_BOUNDARY_V1", packs.getFirst().get("packKey"));
+    assertEquals(2, packs.getFirst().get("version"));
     assertFalse(Boolean.TRUE.equals(packs.getFirst().get("createsExternalResources")));
+    assertTrue(Boolean.TRUE.equals(packs.getFirst().get("createsRunOwnedSyntheticCurriculum")));
+    assertFalse(Boolean.TRUE.equals(packs.getFirst().get("requiresPublishedClass7Question")));
   }
 
   static final class MapAssert {
