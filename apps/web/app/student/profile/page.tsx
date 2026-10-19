@@ -1,6 +1,7 @@
 'use client';
 
 import AccountIdentitySettings from '../../components/AccountIdentitySettings';
+import AuthenticatedProfileImage from '../../components/AuthenticatedProfileImage';
 import { UiText } from '../../i18n/useUiTranslation';
 import { translateUi } from '../../i18n/catalog';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
