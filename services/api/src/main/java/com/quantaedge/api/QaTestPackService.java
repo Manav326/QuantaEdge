@@ -33,8 +33,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class QaTestPackService {
   private static final String PACK_KEY = "TENANT_LEARNER_BOUNDARY_V1";
-  private static final int PACK_VERSION = 1;
-  private static final String PACK_DEFINITION = "TENANT_LEARNER_BOUNDARY_V1:1:two-tenants-parent-child-adult-learner-course7-progress-attempts";
+  private static final int PACK_VERSION = 2;
+  private static final String PACK_DEFINITION = "TENANT_LEARNER_BOUNDARY_V1:2:two-tenants-parent-child-adult-learner-run-owned-synthetic-class7-curriculum-progress-attempts";
   private static final Pattern IDEMPOTENCY_KEY = Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._:-]{7,119}$");
   private static final Pattern ENVIRONMENT_LABEL = Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$");
   private static final Pattern QA_DATABASE = Pattern.compile("(?i)^[a-z0-9][a-z0-9_-]*(?:_qa|_test|_ci|_integration)(?:_[a-z0-9]+)?$");
@@ -95,10 +95,10 @@ public class QaTestPackService {
     pack.put("packKey", PACK_KEY);
     pack.put("version", PACK_VERSION);
     pack.put("title", "Tenant and learner boundary smoke pack");
-    pack.put("summary", "Two synthetic institutions, two parent-child pairs, one independent learner, class-7 tracks, progress and contrasting question attempts.");
+    pack.put("summary", "Two synthetic institutions, two parent-child pairs, one independent learner, class-7 tracks, a run-owned synthetic lesson/question/options fixture, progress and contrasting question attempts.");
     pack.put("personas", List.of("Parent A", "Minor child A", "Parent B", "Minor child B", "Independent adult learner"));
     pack.put("createsExternalResources", false);
-    pack.put("requiresPublishedClass7Question", true);
+    pack.put("createsRunOwnedSyntheticCurriculum", true);
     pack.put("status", "AVAILABLE");
     pack.put("coverageLimit", "This starter pack does not yet seed HRMS/payroll, live-media or provider resources.");
     return List.of(pack);
@@ -429,6 +429,15 @@ public class QaTestPackService {
         "correct=" + correctAttempts + ", incorrect=" + incorrectAttempts,
         Map.of("correct", correctAttempts, "incorrect", incorrectAttempts));
 
+    long ownedLessons = scalarCount("select count(*) from lesson where qa_test_run_id=?", runId);
+    long ownedQuestions = scalarCount("select count(*) from question where qa_test_run_id=?", runId);
+    long ownedOptions = scalarCount("select count(*) from question_option where qa_test_run_id=?", runId);
+    addCheck(runId, checks, "PACK_OWNED_CURRICULUM_FIXTURE",
+        ownedLessons == 1 && ownedQuestions == 1 && ownedOptions == 2,
+        "Exactly one run-owned published lesson, one question and two options",
+        "lessons=" + ownedLessons + ", questions=" + ownedQuestions + ", options=" + ownedOptions,
+        Map.of("lessons", ownedLessons, "questions", ownedQuestions, "options", ownedOptions));
+
     List<Map<String,Object>> resources = jdbc.queryForList("""
       select id,resource_key,resource_kind,resource_id,state
       from qa_test_run_resource where run_id=? order by resource_key
@@ -461,7 +470,8 @@ public class QaTestPackService {
       where run_id=? and resource_kind not in (
         'INSTITUTION','INSTITUTION_BRANDING','USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT',
         'INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP','STUDENT_LOGIN_CREDENTIAL',
-        'STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT'
+        'STUDENT_TRACK_ENROLLMENT','STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT',
+        'LESSON','QUESTION','QUESTION_OPTION'
       )
       """, runId);
     addCheck(runId, checks, "STARTER_PACK_HAS_NO_EXTERNAL_RESOURCES", unexpectedExternalResources == 0,
@@ -505,6 +515,9 @@ public class QaTestPackService {
     String kind = String.valueOf(resource.get("resource_kind"));
     String sql = switch (kind) {
       case "STUDENT_QUESTION_ATTEMPT" -> "select exists(select 1 from student_question_attempt where id=? and qa_test_run_id=?)";
+      case "LESSON" -> "select exists(select 1 from lesson where id=? and qa_test_run_id=?)";
+      case "QUESTION" -> "select exists(select 1 from question where id=? and qa_test_run_id=?)";
+      case "QUESTION_OPTION" -> "select exists(select 1 from question_option where id=? and qa_test_run_id=?)";
       case "STUDENT_LESSON_PROGRESS" -> "select exists(select 1 from student_lesson_progress where id=? and qa_test_run_id=?)";
       case "STUDENT_TRACK_ENROLLMENT" -> "select exists(select 1 from student_track_enrollment where id=? and qa_test_run_id=?)";
       case "STUDENT_LOGIN_CREDENTIAL" -> "select exists(select 1 from student_login_credential where id=? and qa_test_run_id=?)";
@@ -564,23 +577,23 @@ public class QaTestPackService {
     ensureRequiredTracks(runId, childB, tenantB, "student-child-b", "institution-QAT" + slug + "B");
     ensureRequiredTracks(runId, adultStudent, tenantA, "student-adult-student", "institution-QAT" + slug + "A");
 
-    Map<String,Object> content = requiredPublishedClass7Question();
+    Map<String,Object> content = insertSyntheticClass7Question(runId);
     Long lessonId = number(content.get("lesson_id"));
     Long questionId = number(content.get("question_id"));
     String correct = String.valueOf(content.get("correct_option"));
     String wrong = String.valueOf(content.get("wrong_option"));
     insertProgress(runId, "child-a-progress", childA, tenantA, lessonId,
-        "student-child-a", "institution-QAT" + slug + "A");
+        "student-child-a", "institution-QAT" + slug + "A", String.valueOf(content.get("lesson_resource_key")));
     insertProgress(runId, "child-b-progress", childB, tenantB, lessonId,
-        "student-child-b", "institution-QAT" + slug + "B");
+        "student-child-b", "institution-QAT" + slug + "B", String.valueOf(content.get("lesson_resource_key")));
     insertProgress(runId, "adult-progress", adultStudent, tenantA, lessonId,
-        "student-adult-student", "institution-QAT" + slug + "A");
+        "student-adult-student", "institution-QAT" + slug + "A", String.valueOf(content.get("lesson_resource_key")));
     insertQuestionAttempt(runId, "child-a-correct-attempt", childA, tenantA, questionId, correct, true,
-        "student-child-a", "institution-QAT" + slug + "A");
+        "student-child-a", "institution-QAT" + slug + "A", String.valueOf(content.get("question_resource_key")));
     insertQuestionAttempt(runId, "child-b-wrong-attempt", childB, tenantB, questionId, wrong, false,
-        "student-child-b", "institution-QAT" + slug + "B");
+        "student-child-b", "institution-QAT" + slug + "B", String.valueOf(content.get("question_resource_key")));
     insertQuestionAttempt(runId, "adult-correct-attempt", adultStudent, tenantA, questionId, correct, true,
-        "student-adult-student", "institution-QAT" + slug + "A");
+        "student-adult-student", "institution-QAT" + slug + "A", String.valueOf(content.get("question_resource_key")));
 
     Map<String,Object> credentials = new LinkedHashMap<>();
     credentials.put("parentA", Map.of("institutionCode", "QAT" + slug + "A", "mobile", parentAMobile, "username", parentAUsername, "password", fixturePassword));
@@ -700,48 +713,98 @@ public class QaTestPackService {
     }
   }
 
-  private Map<String,Object> requiredPublishedClass7Question() {
-    List<Map<String,Object>> rows = jdbc.queryForList("""
-      select l.id as lesson_id,q.id as question_id,
-        (select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct=true order by qo.option_key limit 1) as correct_option,
-        (select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct=false order by qo.option_key limit 1) as wrong_option
-      from lesson l
-      join curriculum_chapter ch on ch.id=l.chapter_id
+  /**
+   * Build a namespaced synthetic lesson/question/options only in the approved isolated QA
+   * database. The chapter is shared curriculum and is referenced read-only; all created rows carry
+   * the run UUID, are individually recorded in the manifest, and are removed by exact IDs.
+   */
+  private Map<String,Object> insertSyntheticClass7Question(UUID runId) {
+    String slug = runId.toString().replace("-", "").substring(0, 12).toLowerCase(Locale.ROOT);
+    String lessonKey = "qa-lesson-" + slug;
+    String questionKey = "qa-question-" + slug;
+    String optionAKey = "qa-question-option-a-" + slug;
+    String optionBKey = "qa-question-option-b-" + slug;
+    List<Long> chapters = jdbc.queryForList("""
+      select ch.id
+      from curriculum_chapter ch
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      join question q on q.lesson_id=l.id
-      where c.code='7' and c.active=true and s.active=true and s.code in ('maths','science')
-        and ch.active=true
-        and l.active=true and l.status='PUBLISHED'
-        and exists(select 1 from question_option qo where qo.question_id=q.id and qo.is_correct=true)
-        and exists(select 1 from question_option qo where qo.question_id=q.id and qo.is_correct=false)
-      order by l.id,q.id limit 1
-      """);
-    if (rows.isEmpty()) throw new IllegalStateException("The approved QA database needs one published Class 7 Maths/Science lesson with a question containing both correct and incorrect options.");
-    return rows.getFirst();
+      where c.code='7' and c.active=true and s.code='maths' and s.active=true and ch.active=true
+      order by ch.id limit 1
+      """, Long.class);
+    if (chapters.isEmpty()) {
+      throw new IllegalStateException("An active Class 7 Maths chapter is required to attach the run-owned QA fixture.");
+    }
+
+    Long lessonId = jdbc.queryForObject("""
+      insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active,qa_test_run_id)
+      values (?,?,?,?,5,'PUBLISHED',999,true,?) returning id
+      """, Long.class, chapters.getFirst(), "qa-lifecycle-" + slug,
+      "QA-only synthetic lesson " + slug, "Run-owned curriculum fixture; not production teaching content.", runId);
+    addResource(runId, lessonKey, "LESSON", lessonId, 26, List.of(), "lesson");
+
+    Long questionId = jdbc.queryForObject("""
+      insert into question(
+        lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,
+        source_kind,source_title,source_ref,tags,marks,exam_format,topic,subtopic,skill,
+        answer_payload,review_status,review_notes,reviewed_at,qa_test_run_id
+      ) values (
+        ?,'MCQ','QA fixture: choose the correct lifecycle answer.',
+        'Synthetic options exercise QA-pack progress and attempt ownership.',
+        'CORE',999,true,'AUTHOR_CREATED','QuantaEdge QA synthetic fixture',?,
+        jsonb_build_array('qa-test-fixture','synthetic','not-production-curriculum'),
+        1,'MCQ','QA lifecycle','Run ownership','Option selection',
+        jsonb_build_object('kind','OPTION','value','B'),'APPROVED',
+        'Synthetic QA fixture; not a production curriculum question.',now(),?
+      ) returning id
+      """, Long.class, lessonId, "qa-lifecycle:" + runId, runId);
+    addResource(runId, questionKey, "QUESTION", questionId, 24, List.of(lessonKey), "question");
+
+    Long optionAId = jdbc.queryForObject("""
+      insert into question_option(question_id,option_key,label,is_correct,sort_order,qa_test_run_id)
+      values (?,'A','Incorrect synthetic option',false,1,?) returning id
+      """, Long.class, questionId, runId);
+    addResource(runId, optionAKey, "QUESTION_OPTION", optionAId, 22, List.of(questionKey), "question_option");
+
+    Long optionBId = jdbc.queryForObject("""
+      insert into question_option(question_id,option_key,label,is_correct,sort_order,qa_test_run_id)
+      values (?,'B','Correct synthetic option',true,2,?) returning id
+      """, Long.class, questionId, runId);
+    addResource(runId, optionBKey, "QUESTION_OPTION", optionBId, 22, List.of(questionKey), "question_option");
+
+    Map<String,Object> result = new LinkedHashMap<>();
+    result.put("lesson_id", lessonId);
+    result.put("question_id", questionId);
+    result.put("correct_option", "B");
+    result.put("wrong_option", "A");
+    result.put("lesson_resource_key", lessonKey);
+    result.put("question_resource_key", questionKey);
+    result.put("option_a_resource_key", optionAKey);
+    result.put("option_b_resource_key", optionBKey);
+    return result;
   }
 
   private void insertProgress(UUID runId, String key, Long studentId, Long institutionId, Long lessonId,
-      String studentResourceKey, String institutionResourceKey) {
+      String studentResourceKey, String institutionResourceKey, String lessonResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_lesson_progress(
         student_id,institution_id,lesson_id,status,progress_percent,started_at,completed_at,last_opened_at,qa_test_run_id
       ) values (?,?,?,'IN_PROGRESS',35,now(),null,now(),?) returning id
       """, Long.class, studentId, institutionId, lessonId, runId);
     addResource(runId, key, "STUDENT_LESSON_PROGRESS", id, 20,
-        List.of(studentResourceKey, institutionResourceKey), "student_lesson_progress");
+        List.of(studentResourceKey, institutionResourceKey, lessonResourceKey), "student_lesson_progress");
   }
 
   private void insertQuestionAttempt(UUID runId, String key, Long studentId, Long institutionId,
       Long questionId, String optionKey, boolean correct, String studentResourceKey,
-      String institutionResourceKey) {
+      String institutionResourceKey, String questionResourceKey) {
     Long id = jdbc.queryForObject("""
       insert into student_question_attempt(
         student_id,institution_id,question_id,selected_option,correct,answered_at,qa_test_run_id
       ) values (?,?,?,?,?,now(),?) returning id
       """, Long.class, studentId, institutionId, questionId, optionKey, correct, runId);
     addResource(runId, key, "STUDENT_QUESTION_ATTEMPT", id, 10,
-        List.of(studentResourceKey, institutionResourceKey), "student_question_attempt");
+        List.of(studentResourceKey, institutionResourceKey, questionResourceKey), "student_question_attempt");
   }
 
   private void addResource(UUID runId, String key, String kind, Long resourceId, int cleanupOrder,
@@ -798,6 +861,15 @@ public class QaTestPackService {
       case "STUDENT_QUESTION_ATTEMPT" -> new DeleteSpec(
           "delete from student_question_attempt where id=? and qa_test_run_id=?",
           "select qa_test_run_id from student_question_attempt where id=?");
+      case "QUESTION_OPTION" -> new DeleteSpec(
+          "delete from question_option where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from question_option where id=?");
+      case "QUESTION" -> new DeleteSpec(
+          "delete from question where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from question where id=?");
+      case "LESSON" -> new DeleteSpec(
+          "delete from lesson where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from lesson where id=?");
       case "STUDENT_LESSON_PROGRESS" -> new DeleteSpec(
           "delete from student_lesson_progress where id=? and qa_test_run_id=?",
           "select qa_test_run_id from student_lesson_progress where id=?");
@@ -859,7 +931,7 @@ public class QaTestPackService {
   }
 
   private boolean baselineSnapshotsMatch(Map<String,Object> before, Map<String,Object> after) {
-    List<String> protectedTables = List.of("institution_tenant", "institution_branding", "user_account", "student", "guardian_student", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt");
+    List<String> protectedTables = List.of("institution_tenant", "institution_branding", "user_account", "student", "guardian_student", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
     if (before == null || after == null || before.size() != protectedTables.size()
         || after.size() != protectedTables.size()) return false;
     for (String table : protectedTables) {
@@ -874,17 +946,20 @@ public class QaTestPackService {
 
   private Map<String,Object> baselineSnapshot() {
     Map<String,Object> snapshot = new LinkedHashMap<>();
-    Map<String,String> primaryKeys = Map.of(
-        "institution_tenant", "id",
-        "institution_branding", "institution_id",
-        "user_account", "id",
-        "student", "id",
-        "guardian_student", "id",
-        "institution_user_membership", "id",
-        "institution_membership", "id",
-        "student_track_enrollment", "id",
-        "student_lesson_progress", "id",
-        "student_question_attempt", "id");
+    Map<String,String> primaryKeys = Map.ofEntries(
+        Map.entry("institution_tenant", "id"),
+        Map.entry("institution_branding", "institution_id"),
+        Map.entry("user_account", "id"),
+        Map.entry("student", "id"),
+        Map.entry("guardian_student", "id"),
+        Map.entry("institution_user_membership", "id"),
+        Map.entry("institution_membership", "id"),
+        Map.entry("student_track_enrollment", "id"),
+        Map.entry("student_lesson_progress", "id"),
+        Map.entry("student_question_attempt", "id"),
+        Map.entry("lesson", "id"),
+        Map.entry("question", "id"),
+        Map.entry("question_option", "id"));
     for (Map.Entry<String,String> tableEntry : primaryKeys.entrySet()) {
       String table = tableEntry.getKey();
       String primaryKey = tableEntry.getValue();
