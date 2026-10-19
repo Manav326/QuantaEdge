@@ -1049,13 +1049,6 @@ public class LearningDocumentController {
     }
   }
 
-  private long requireInstitution(InstitutionTenantContext tenant) {
-    if(tenant==null||tenant.institutionId()<1) {
-      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
-          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before opening a textbook.");
-    }
-    return tenant.institutionId();
-  }
 
   private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext() {
     return new InstitutionTenantContextService.InvalidInstitutionContextException(
