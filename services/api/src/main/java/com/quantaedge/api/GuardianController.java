@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -298,6 +300,7 @@ public class GuardianController {
 
   @GetMapping("/children/{studentId}/report")
   public Map<String,Object> report(@PathVariable long studentId,
+      @RequestParam(required=false) Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant){
@@ -319,9 +322,41 @@ public class GuardianController {
         and m.institution_id=? and m.status='ACTIVE'
       where st.id=? and st.active=true and st.environment='PRODUCTION'
       """,institutionId,studentId);
+
+    List<Map<String,Object>> enrolledCourses=jdbc.queryForList("""
+      select distinct p.id as course_id,p.display_name as course_name,p.code as course_code,spe.status as enrollment_status
+      from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')
+      order by p.display_name,p.id
+      """,studentId,institutionId);
+    if(enrolledCourses.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This child has no enrolled course in the selected institution. Enrol the child in a course before viewing a learning report.");
+    }
+    Long selectedCourseId=courseId;
+    if(selectedCourseId==null) {
+      if(enrolledCourses.size()>1) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            "Choose one of the child's enrolled courses before viewing this report.");
+      }
+      selectedCourseId=((Number)enrolledCourses.getFirst().get("course_id")).longValue();
+    }
+    final long scopedCourseId=selectedCourseId;
+    Map<String,Object> selectedCourse=enrolledCourses.stream()
+        .filter(item -> ((Number)item.get("course_id")).longValue()==scopedCourseId)
+        .findFirst().orElseThrow(() -> new SecurityException(
+            "The selected course is not enrolled for this child in the selected institution."));
     Map<String,Object> result=new java.util.LinkedHashMap<>(
-        learningMetrics.statsFor(studentId,null,institutionId));
+        learningMetrics.statsFor(studentId,scopedCourseId,institutionId));
     result.putAll(child);
+    result.put("courseId",scopedCourseId);
+    result.put("course_id",scopedCourseId);
+    result.put("courseName",selectedCourse.get("course_name"));
+    result.put("course_name",selectedCourse.get("course_name"));
+    result.put("availableCourses",enrolledCourses);
     return result;
   }
 
@@ -488,7 +523,10 @@ public class GuardianController {
       select distinct p.id,p.public_id,p.code,p.display_name,p.curriculum_version,p.status,
         exists(select 1 from student_program_enrollment spe
           where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
-            and spe.status='ACTIVE') as enrolled
+            and spe.status='ACTIVE') as enrolled,
+        exists(select 1 from student_program_enrollment spe
+          where spe.institution_id=? and spe.student_id=? and spe.program_id=p.id
+            and spe.status='PAUSED') as paused
       from curriculum_program p
       join institution_course_assignment assignment on assignment.institution_id=?
         and assignment.status='ASSIGNED'
@@ -512,7 +550,7 @@ public class GuardianController {
               and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
         )
       order by p.display_name,p.id
-      """, institutionId,studentId,institutionId,institutionId,institutionId,studentId,
+      """, institutionId,studentId,institutionId,studentId,institutionId,institutionId,institutionId,studentId,
           institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
     for(Map<String,Object> program:programs) {
       long courseId=((Number)program.get("id")).longValue();
