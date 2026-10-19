@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 876,
-    "successful_visual_analyses": 866,
-    "missing_visual_analyses": 1415,
+    "raw_analysis_result_rows": 878,
+    "successful_visual_analyses": 868,
+    "missing_visual_analyses": 1413,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1425,
+    "unresolved_count": 1423,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33843,9 +33843,27 @@
       "asset_path": "assets/d680dfa6f626d2efb7940ef8186b54b76ed8cafce94e79cd3122622191c10522.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a book with a yellow cover and a red ribbon tied around it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Book ID: ncert-c8-english-hecu1",
+          "Source PDF page: 48",
+          "Asset kind: embedded_image",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "book",
+          "yellow cover",
+          "red ribbon"
+        ],
+        "context_relation": "The image is related to the book content.",
+        "limitations": [
+          "The image does not provide specific details about the book's content or the page number. The text in the image is incomplete and does not provide a clear context for the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -33861,9 +33879,31 @@
       "asset_path": "assets/cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a book, possibly reading or studying.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast",
+          "11.4% of India’s population is",
+          "foodis",
+          "More",
+          "than",
+          "100",
+          "million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "India's population"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image does not provide specific details about the book or the person holding it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
