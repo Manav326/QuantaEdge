@@ -492,6 +492,27 @@ public class AuthService {
           normalized,displayName,passwordEncoder.encode(password));
     int linked=jdbc.update("update student set user_account_id=? where id=? and user_account_id is null",userId,studentId);
     if(linked!=1) throw new IllegalStateException("Learner account link changed during conversion; retry sign-in.");
+    // Mirror active institution memberships to the newly linked account without
+    // reactivating any membership that an institution previously suspended.
+    jdbc.update("""
+      WITH created_memberships AS (
+        INSERT INTO institution_user_membership(
+          institution_id,user_id,status,joined_at,left_at,created_at,updated_at
+        )
+        SELECT im.institution_id,?,'ACTIVE',now(),null,now(),now()
+        FROM institution_membership im
+        JOIN institution_tenant tenant ON tenant.id=im.institution_id AND tenant.status='ACTIVE'
+        WHERE im.student_id=? AND im.status='ACTIVE'
+        ON CONFLICT(institution_id,user_id) DO NOTHING
+        RETURNING id,institution_id,user_id
+      )
+      INSERT INTO institution_user_membership_event(
+        institution_id,membership_id,user_id,event_type,actor_user_id,details
+      )
+      SELECT institution_id,id,user_id,'USER_MEMBERSHIP_CREATED',user_id,
+        jsonb_build_object('source','LEARNER_ACCOUNT_CONVERSION')
+      FROM created_memberships
+      """,userId,studentId);
     int limited=jdbc.update("""
       update guardian_student set access_level='LIMITED'
       where student_id=? and active=true and consent_status='CONSENTED' and access_level='FULL'
