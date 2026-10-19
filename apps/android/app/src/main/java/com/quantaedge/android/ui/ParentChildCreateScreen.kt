@@ -28,24 +28,21 @@ import androidx.compose.ui.unit.dp
 fun ParentChildCreateScreen(
     busy: Boolean,
     remainingSlots: Int,
-    onCreate: (String, String, String, String, String, List<String>, Boolean) -> Unit
+    onCreate: (String, String, String, String, String, Boolean) -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var classCode by rememberSaveable { mutableStateOf("7") }
     var learningLanguage by rememberSaveable { mutableStateOf("hi") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var maths by rememberSaveable { mutableStateOf(true) }
-    var science by rememberSaveable { mutableStateOf(true) }
     var consent by rememberSaveable { mutableStateOf(false) }
     val institutionBrand = LocalInstitutionBrandIdentity.current
     val institutionContextPending = LocalInstitutionBrandResolutionPending.current
-    val tracks = listOfNotNull("maths".takeIf { maths }, "science".takeIf { science })
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(localizedUiText("छात्र प्रोफ़ाइल बनाएँ"), style = MaterialTheme.typography.headlineSmall)
-        Text(localizedUiText("Choose the learning language. Guardian consent is required."),
+        Text(localizedUiText("Create the student profile, then assign institution courses. Guardian consent is required."),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         if (remainingSlots <= 0) {
             EmptyState(
@@ -70,15 +67,6 @@ fun ParentChildCreateScreen(
                 if (learningLanguage == "en") Button(onClick = { learningLanguage = "en" }, enabled = !busy) { Text("English") }
                 else TextButton(onClick = { learningLanguage = "en" }, enabled = !busy) { Text("English") }
             }
-            Text(localizedUiText("पढ़ने के विषय"), style = MaterialTheme.typography.titleSmall)
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Checkbox(checked = maths, onCheckedChange = { maths = it }, enabled = !busy)
-                Text(localizedUiText("गणित"))
-            }
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Checkbox(checked = science, onCheckedChange = { science = it }, enabled = !busy)
-                Text(localizedUiText("विज्ञान"))
-            }
             OutlinedTextField(value = username, onValueChange = { username = it.trim().lowercase().filter { c -> c.isLetterOrDigit() || c in "._-" }.take(32) },
                 label = { Text(localizedUiText("Login username (3–32 अक्षर)")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(value = password, onValueChange = { password = it },
@@ -88,8 +76,8 @@ fun ParentChildCreateScreen(
                 Checkbox(checked = consent, onCheckedChange = { consent = it }, enabled = !busy)
                 Text(localizedUiText("मैं अभिभावक हूँ और इस छात्र खाते के निर्माण व सीखने की प्रगति के लिए सहमति देता/देती हूँ।"))
             }
-            Button(onClick = { onCreate(name.trim(), classCode, learningLanguage, username, password, tracks, consent) },
-                enabled = !busy && name.trim().length >= 2 && username.length >= 3 && password.length >= 8 && tracks.isNotEmpty() && consent,
+            Button(onClick = { onCreate(name.trim(), classCode, learningLanguage, username, password, consent) },
+                enabled = !busy && name.trim().length >= 2 && username.length >= 3 && password.length >= 8 && consent,
                 modifier = Modifier.fillMaxWidth()) { Text(localizedUiText(if (busy) "बना रहे हैं…" else "सहमति के साथ छात्र बनाएँ")) }
         }
     }
