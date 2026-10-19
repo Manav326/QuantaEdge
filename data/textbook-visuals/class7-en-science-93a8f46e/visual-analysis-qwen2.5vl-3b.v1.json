@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1775,
+    "assets_selected": 1780,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1775,
-    "assets_remaining": 5713,
-    "assets_completion_percent": 23.7,
+    "assets_analyzed": 1780,
+    "assets_remaining": 5708,
+    "assets_completion_percent": 23.8,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1770,
+    "assets_skipped_from_checkpoint": 1775,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -66302,6 +66302,180 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270473891",
       "checkpointed_at": "2026-10-19T18:18:45Z"
+    },
+    {
+      "asset_id": "e6c86a7a038fad46fd6aadf9",
+      "asset_sha256": "2a8f4bf10de382f3276c6c87cca8081cd9fcc78bcc2d7f2ceb3f85892c48f923",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/2a8f4bf10de382f3276c6c87cca8081cd9fcc78bcc2d7f2ceb3f85892c48f923.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rectangular battery with a blue bottom and a white top, with a small object on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of batteries and electrical circuits, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the battery's type or the circuit it is used in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:20:29Z"
+    },
+    {
+      "asset_id": "de12431ac480dd93fd857161",
+      "asset_sha256": "9138fe6e32066af3875a6681f4cc5013203f1bfd82421012eb6524e9e708e3f1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/9138fe6e32066af3875a6681f4cc5013203f1bfd82421012eb6524e9e708e3f1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) and a toy fan (Fig. 3.22b) connected in a circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.22a",
+          "Fig. 3.22b",
+          "Fig. 3.22c"
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit"
+        ],
+        "context_relation": "The image is related to the text about using a solar panel to power a toy fan.",
+        "limitations": [
+          "The image does not show the actual circuit setup.",
+          "The image does not show the types of cells available in an electrical items shop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:22:10Z"
+    },
+    {
+      "asset_id": "07e47591af1eddf132be3655",
+      "asset_sha256": "9247c10a737df83a938d1dabd86d54078b9a025bf7b041d2f3dd809c964c1607",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/9247c10a737df83a938d1dabd86d54078b9a025bf7b041d2f3dd809c964c1607.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a solar panel connected to a toy fan.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "(a)",
+          "(b)",
+          "(c)",
+          "Fig. 3.22"
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit"
+        ],
+        "context_relation": "The image is a visual representation of the circuit diagram for connecting a solar panel to a toy fan.",
+        "limitations": [
+          "The image does not provide specific details about the types of cells available in an electrical items shop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:23:48Z"
+    },
+    {
+      "asset_id": "03f4e3ac24d4e3b597c400d5",
+      "asset_sha256": "7a32687ff536a5d14f122ed99cdd5c4da3f6f0d305d88b1b5ae326cf79addc84",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/7a32687ff536a5d14f122ed99cdd5c4da3f6f0d305d88b1b5ae326cf79addc84.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) and a toy fan (Fig. 3.22b) connected in a circuit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.22a",
+          "Fig. 3.22b",
+          "Fig. 3.22c"
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit"
+        ],
+        "context_relation": "The image is a visual representation of a circuit using a solar panel to power a toy fan.",
+        "limitations": [
+          "The image does not show the actual circuit setup.",
+          "The image does not show the types of cells available in an electrical items shop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:25:32Z"
+    },
+    {
+      "asset_id": "79d3ab0ce7c06218d2879ac6",
+      "asset_sha256": "24d355aa346153fe6d793a812cea8843826b44309458af83bf5016e5ba3251b0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/24d355aa346153fe6d793a812cea8843826b44309458af83bf5016e5ba3251b0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec2c5120d0056fd0e4fa6028d5263100552614461f014684be5f8943b266c8ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a solar panel (Fig. 3.22a) and a toy fan (Fig. 3.22b) connected in a circuit (Fig. 3.22c).",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Using a solar panel (Fig. 3.22a) as a source of electrical energy, make a circuit to run a toy fan (Fig. 3.22b) as shown in Fig. 3.22c.",
+          "Visit an electrical items shop. With the help of the shopkeeper, identify the various types of cells available."
+        ],
+        "concepts": [
+          "solar panel",
+          "toy fan",
+          "circuit"
+        ],
+        "context_relation": "The image is related to an educational content about making a circuit using a solar panel and a toy fan.",
+        "limitations": [
+          "The image does not provide specific details about the types of cells available in an electrical items shop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T18:27:17Z"
     }
   ]
 }
