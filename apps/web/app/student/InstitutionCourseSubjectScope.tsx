@@ -1,6 +1,7 @@
 'use client';
 
 import { useTenantBranding } from '../components/TenantBrandingProvider';
+import styles from './InstitutionCourseSubjectScope.module.css';
 import { PrimaryCoursePicker, type EnrolledCourse, type EnrolledCourseSubject } from './CourseScope';
 
 type Props = {
@@ -49,8 +50,8 @@ export default function InstitutionCourseSubjectScope({
   const selectedSubject = subjectIsValid ? subjectCode : (includeAllSubjects ? 'ALL' : '');
 
   return (
-    <div className={['qe-institution-course-subject-scope', className].filter(Boolean).join(' ')} data-course-id={courseId ?? ''}>
-      <div className="qe-scope-institution" aria-label={institutionLabel}>
+    <div className={[styles.scope, 'qe-institution-course-subject-scope', className].filter(Boolean).join(' ')} data-course-id={courseId ?? ''}>
+      <div className={styles.institution} aria-label={institutionLabel}>
         <span>{institutionLabel}</span>
         <strong>{institutionName}</strong>
       </div>
@@ -61,7 +62,7 @@ export default function InstitutionCourseSubjectScope({
         loading={loading}
         label={resolvedCourseLabel}
       />
-      <label className="qe-scope-subject">
+      <label className={styles.field}>
         <span>{resolvedSubjectLabel}</span>
         <select
           value={selectedSubject || (includeAllSubjects ? 'ALL' : '')}
