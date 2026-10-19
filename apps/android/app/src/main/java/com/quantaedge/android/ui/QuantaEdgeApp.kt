@@ -7277,15 +7277,15 @@ private fun ParentReportScreen(
                             }
                         } else {
                             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                                OutlinedButton(onClick = { onViewCertificate(childId, certificateId) },
+                                OutlinedButton(onClick = { onViewCertificate(childId, selectedCourseId, certificateId) },
                                     enabled = canAccess, modifier = Modifier.weight(1f)) {
                                     Text(t("View", "देखें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "pdf") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "pdf") },
                                     enabled = canAccess, modifier = Modifier.weight(1f)) {
                                     Text(t("Save PDF", "PDF सेव करें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "png") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "png") },
                                     enabled = canAccess, modifier = Modifier.weight(1f)) {
                                     Text(t("Save PNG", "PNG सेव करें"))
                                 }
