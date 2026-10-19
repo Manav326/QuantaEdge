@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 962,
-    "successful_visual_analyses": 947,
-    "missing_visual_analyses": 1329,
+    "raw_analysis_result_rows": 964,
+    "successful_visual_analyses": 949,
+    "missing_visual_analyses": 1327,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1344,
+    "unresolved_count": 1342,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36701,9 +36701,25 @@
       "asset_path": "assets/9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "vaccine",
+          "immune system",
+          "tetanus",
+          "smallpox"
+        ],
+        "context_relation": "The image is related to the text about vaccines and the immune system.",
+        "limitations": [
+          "The image does not show the text about the first vaccine discovery by Edward Jenner."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36719,9 +36735,24 @@
       "asset_path": "assets/49e97688d42feded86c572f2d32f7595a967053328fdd4eb66f4b2c01b66b7dc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a healthcare worker administering a vaccine to a patient.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "vaccine",
+          "healthcare worker",
+          "patient",
+          "vaccination",
+          "immunization"
+        ],
+        "context_relation": "The image is related to the topic of vaccination and immunization.",
+        "limitations": [
+          "The image does not provide specific details about the type of vaccine being administered."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

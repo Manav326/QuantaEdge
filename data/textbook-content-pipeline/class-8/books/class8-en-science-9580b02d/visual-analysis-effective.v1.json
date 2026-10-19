@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3cf9a2802de30616b4857b4e6409138d26f26ed88b43db1df7c11e370e22ae83",
+  "raw_analysis_sha256": "e8298f9e5a6d6be719f111a94933531e2287007b6ce2ea25a6387c6446ace69f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:51:06Z",
+      "checkpointed_at": "2026-10-19T18:59:51Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:51:52Z",
+      "checkpointed_at": "2026-10-19T19:00:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:52:29Z",
+      "checkpointed_at": "2026-10-19T19:01:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -44806,6 +44806,112 @@
         "context_relation": "The image does not provide any specific context or relation to the text.",
         "limitations": [
           "The image does not contain any text or information related to the content of the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c31a7ce7ac5a90333ee87c5a",
+      "asset_sha256": "9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "vaccine",
+          "immune system",
+          "tetanus",
+          "smallpox"
+        ],
+        "context_relation": "The image is related to the text about vaccines and the immune system.",
+        "limitations": [
+          "The image does not show the text about the first vaccine discovery by Edward Jenner."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:02:51Z",
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "vaccine",
+          "immune system",
+          "tetanus",
+          "smallpox"
+        ],
+        "context_relation": "The image is related to the text about vaccines and the immune system.",
+        "limitations": [
+          "The image does not show the text about the first vaccine discovery by Edward Jenner."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5e3c46d9a7c5079c6120345e",
+      "asset_sha256": "49e97688d42feded86c572f2d32f7595a967053328fdd4eb66f4b2c01b66b7dc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/49e97688d42feded86c572f2d32f7595a967053328fdd4eb66f4b2c01b66b7dc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a healthcare worker administering a vaccine to a patient.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "vaccine",
+          "healthcare worker",
+          "patient",
+          "vaccination",
+          "immunization"
+        ],
+        "context_relation": "The image is related to the topic of vaccination and immunization.",
+        "limitations": [
+          "The image does not provide specific details about the type of vaccine being administered."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:04:28Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a healthcare worker administering a vaccine to a patient.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "vaccine",
+          "healthcare worker",
+          "patient",
+          "vaccination",
+          "immunization"
+        ],
+        "context_relation": "The image is related to the topic of vaccination and immunization.",
+        "limitations": [
+          "The image does not provide specific details about the type of vaccine being administered."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

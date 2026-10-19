@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 947,
+    "assets_selected": 949,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 944,
-    "assets_remaining": 1347,
-    "assets_completion_percent": 41.2,
+    "assets_analyzed": 946,
+    "assets_remaining": 1345,
+    "assets_completion_percent": 41.3,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 942,
+    "assets_skipped_from_checkpoint": 944,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:51:06Z"
+      "checkpointed_at": "2026-10-19T18:59:51Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:51:52Z"
+      "checkpointed_at": "2026-10-19T19:00:39Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:52:29Z"
+      "checkpointed_at": "2026-10-19T19:01:16Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30101,6 +30101,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T18:58:41Z"
+    },
+    {
+      "asset_id": "c31a7ce7ac5a90333ee87c5a",
+      "asset_sha256": "9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/9479ba624f1a667eb282e6229e1828908981bd1bd9ba95ed8611ebde6671bddc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "vaccine",
+          "immune system",
+          "tetanus",
+          "smallpox"
+        ],
+        "context_relation": "The image is related to the text about vaccines and the immune system.",
+        "limitations": [
+          "The image does not show the text about the first vaccine discovery by Edward Jenner."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:02:51Z"
+    },
+    {
+      "asset_id": "5e3c46d9a7c5079c6120345e",
+      "asset_sha256": "49e97688d42feded86c572f2d32f7595a967053328fdd4eb66f4b2c01b66b7dc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/49e97688d42feded86c572f2d32f7595a967053328fdd4eb66f4b2c01b66b7dc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a healthcare worker administering a vaccine to a patient.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "vaccine",
+          "healthcare worker",
+          "patient",
+          "vaccination",
+          "immunization"
+        ],
+        "context_relation": "The image is related to the topic of vaccination and immunization.",
+        "limitations": [
+          "The image does not provide specific details about the type of vaccine being administered."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T19:04:28Z"
     }
   ]
 }
