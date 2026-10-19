@@ -10,6 +10,7 @@ import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Classes.module.css';
 import LearningChatPanel from './LearningChatPanel';
+import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
 
 type LiveClass = {
   session_id:number;title:string;description?:string;provider:string;youtube_video_id?:string|null;starts_at:string;ends_at:string;status:string;join_window_minutes?:number|null;
@@ -25,6 +26,7 @@ type Recording = {
 
 async function api(url:string,init:RequestInit={}) {
   const headers=new Headers(init.headers||{});
+  headers.set('X-QE-Workspace','STUDENT');
   if(init.body)headers.set('Content-Type','application/json');
   const response=await fetch(url,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw=await response.text();let body:any={};
@@ -45,19 +47,9 @@ export default function StudentClassesClient(){
   const searchParams=useSearchParams();
   const requestedCourseIdText=searchParams.get('courseId') || '';
   const requestedCourseId=Number(requestedCourseIdText);
-  const [activeCourseId,setActiveCourseId]=useState<number|null>(null);
+  const {courses,activeCourse,courseId:activeCourseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(
+    Number.isSafeInteger(requestedCourseId)&&requestedCourseId>0?requestedCourseId:null);
   const {locale}=useLocale();
-  useEffect(()=>{
-    if(Number.isSafeInteger(requestedCourseId)&&requestedCourseId>0){
-      setActiveCourseId(requestedCourseId);
-      try{window.localStorage.setItem('qe:student:activeCourseId',String(requestedCourseId));}catch{}
-      return;
-    }
-    try{
-      const saved=Number(window.localStorage.getItem('qe:student:activeCourseId')||0);
-      setActiveCourseId(Number.isSafeInteger(saved)&&saved>0?saved:null);
-    }catch{setActiveCourseId(null);}
-  },[requestedCourseIdText]);
   const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [tab,setTab]=useState<'live'|'recorded'>('live');
   const [subjectFilter,setSubjectFilter]=useState('ALL');
@@ -84,10 +76,11 @@ export default function StudentClassesClient(){
 
   const load=useCallback(async()=>{
     setLoading(true);setError('');
+    if(activeCourseId===null){setSessions([]);setRecordings([]);setLiveTotal(0);setRecordingsTotal(0);setLoading(false);return;}
     try{
       const params=new URLSearchParams();
       if(subjectFilter!=='ALL')params.set('subjectCode',subjectFilter);
-      if(activeCourseId!==null)params.set('courseId',String(activeCourseId));
+      params.set('courseId',String(activeCourseId));
       const liveParams=new URLSearchParams(params.toString());liveParams.set('limit',String(livePageSize));liveParams.set('offset',String(livePage*livePageSize));
       const recordingParams=new URLSearchParams(params.toString());recordingParams.set('limit',String(recordingPageSize));recordingParams.set('offset',String(recordingPage*recordingPageSize));
       const [live,videoRows]=await Promise.all([
@@ -105,6 +98,8 @@ export default function StudentClassesClient(){
       setError(e instanceof Error?e.message:translateUi(locale, 'legacy.web.your.class.library.could.not.be.loaded.ef90dceb'));
     }finally{setLoading(false);}
   },[subjectFilter,livePage,recordingPage,livePageSize,recordingPageSize,router,locale,activeCourseId]);
+  useEffect(()=>{setSubjectFilter('ALL');setLivePage(0);setRecordingPage(0);},[activeCourseId]);
+  const availableSubjects=(activeCourse?.subjects||[]).map(subject=>({code:String(subject.subject_code||subject.code||''),name:String(subject.subject_name||subject.display_name||subject.subject_code||subject.code||'')})).filter(subject=>subject.code);
   useEffect(()=>{void load();},[load]);
 
   useEffect(()=>()=>{
@@ -231,10 +226,10 @@ export default function StudentClassesClient(){
 
   return <main className={styles.shell}>
     <section className={styles.wrap}>
-      {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
+      {courseError&&<div className={styles.error} role="alert">{courseError}</div>}{error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
       {activeJoined&&<div className={styles.joinedBanner}><span>●</span><div><b>{translateUi(locale, 'legacy.web.you.are.checked.in.7ace0a90')}</b><small>{activeJoined.title} · {translateUi(locale, 'legacy.web.attendance.is.being.recorded.while.you.96ff7a5a')}</small></div>{activeJoinUrl&&joinedSessionId===activeJoined.session_id&&<a className={styles.openSecureLink} href={activeJoinUrl} target="_blank" rel="noreferrer">{translateUi(locale, 'legacy.web.open.secure.meeting.569ad001')}</a>}{activeJoined.provider!=='YOUTUBE_LIVE'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void openMeetingAgain(activeJoined.session_id)}>{translateUi(locale, 'legacy.web.refresh.meeting.link.64ac8938')}</button>}<button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(activeJoined.session_id)}>{translateUi(locale, 'legacy.web.leave.save.attendance.a503253e')}</button></div>}
       {activeJoined&&activeJoined.provider==='YOUTUBE_LIVE'&&activeVideoId&&<section className={styles.videoFrame} aria-label={translateUi(locale, 'legacy.web.live.broadcast.0729c57a')}><iframe title={activeJoined.title} src={'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(activeVideoId)+'?autoplay=1'} style={{width:'100%',aspectRatio:'16 / 9',border:0}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></section>}
-      <div className={styles.toolbar}><div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>{translateUi(locale, 'legacy.web.live.classes.82bc4e33')} <span>{liveTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>{translateUi(locale, 'legacy.web.recorded.classes.733f426a')} <span>{recordingsTotal}</span></button></div><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setLivePage(0);setRecordingPage(0)}}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option><option value="maths">{translateUi(locale, 'legacy.web.mathematics.4cf6be1a')}</option><option value="science">{translateUi(locale, 'legacy.web.science.f85a10aa')}</option></select></label></div>
+      <div className={styles.toolbar}><div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>{translateUi(locale, 'legacy.web.live.classes.82bc4e33')} <span>{liveTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>{translateUi(locale, 'legacy.web.recorded.classes.733f426a')} <span>{recordingsTotal}</span></button></div><PrimaryCoursePicker courses={courses} courseId={activeCourseId} onChange={selectCourse} loading={loadingCourses} label={locale==='english'?'Primary course':'मुख्य कोर्स'}/><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setLivePage(0);setRecordingPage(0)}} disabled={activeCourseId===null}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{availableSubjects.map(subject=><option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label></div>
 
       {tab==='live'?<>
         <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.timetable.15fa760f')}</span><h2>{translateUi(locale, 'legacy.web.live.and.scheduled.sessions.16cb640d')}</h2><p>{translateUi(locale, 'legacy.web.meeting.links.are.released.only.after..814f18cc')}</p></div><button type="button" className={styles.refreshButton} onClick={()=>void load()}>{translateUi(locale, 'legacy.web.refresh.e9337860')}</button></div>
