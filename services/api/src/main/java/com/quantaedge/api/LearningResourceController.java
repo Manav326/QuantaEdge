@@ -397,6 +397,7 @@ public class LearningResourceController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireCourseId(courseId);
+    ensureStudentHasActiveCourse(context.studentId(),institutionId,courseId);
     String locale=normalizeLanguage(language);
     int targets=(chapterId==null?0:1)+(lessonId==null?0:1)+(artifactId==null||artifactId.isBlank()?0:1);
     if(targets!=1)throw badRequest("Supply exactly one chapterId, lessonId, or artifactId.");
@@ -465,8 +466,8 @@ public class LearningResourceController {
       String sourceKind=String.valueOf(raw.get("source_kind"));
       long id=((Number)raw.get("resource_id")).longValue(),assignment=((Number)raw.get("assignment_id")).longValue();
       if("PRIVATE_UPLOAD".equals(sourceKind)||"RECORDED_CLASS".equals(sourceKind)) {
-        item.put("streamUrl","/api/v1/learning/resources/"+id+"/stream?assignmentId="+assignment);
-        if(Boolean.TRUE.equals(raw.get("download_allowed")))item.put("downloadUrl","/api/v1/learning/resources/"+id+"/download?assignmentId="+assignment);
+        item.put("streamUrl","/api/v1/learning/resources/"+id+"/stream?assignmentId="+assignment+"&courseId="+courseId);
+        if(Boolean.TRUE.equals(raw.get("download_allowed")))item.put("downloadUrl","/api/v1/learning/resources/"+id+"/download?assignmentId="+assignment+"&courseId="+courseId);
       } else if("LEARNING_DOCUMENT".equals(sourceKind)) {
         item.put("learningDocumentId",raw.get("learning_document_id"));item.put("readerApiUrl","/api/v1/learning/documents/"+raw.get("learning_document_id")+"?courseId="+courseId);
       } else if("CONTENT_ASSET".equals(sourceKind)) {
@@ -741,6 +742,23 @@ public class LearningResourceController {
       throw badRequest("Select an active course before accessing this learning resource.");
     }
     return courseId;
+  }
+
+  private void ensureStudentHasActiveCourse(long studentId,long institutionId,long courseId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from student st
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+          and spe.program_id=p.id and spe.status='ACTIVE'
+        join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+        where st.id=? and st.active=true
+      )
+      """,Boolean.class,institutionId,courseId,studentId);
+    if(!Boolean.TRUE.equals(allowed))throw new SecurityException("The selected course is not actively enrolled in this institution.");
   }
 
   private void ensureStudentCanAccessChapterInCourse(long studentId,Map<String,Object> chapter,
