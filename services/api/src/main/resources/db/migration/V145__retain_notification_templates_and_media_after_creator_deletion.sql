@@ -1,4 +1,4 @@
--- V141: historical notification template/media records must survive creator deactivation/deletion.
+-- V145: historical notification template/media records must survive creator deactivation/deletion.
 -- Sender/uploader identity is audit metadata, not a lifetime ownership invariant.
 ALTER TABLE notification_template
   DROP CONSTRAINT IF EXISTS ck_notification_template_editor;

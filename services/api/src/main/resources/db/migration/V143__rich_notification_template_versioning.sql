@@ -1,4 +1,4 @@
--- V140: immutable template families retain versions after edits.
+-- V143: immutable template families retain versions after edits.
 ALTER TABLE notification_template
   ADD COLUMN template_family_id uuid;
 

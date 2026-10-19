@@ -1,4 +1,4 @@
--- V139: durable rich notifications, reusable content templates and recipient delivery state.
+-- V142: durable rich notifications, reusable content templates and recipient delivery state.
 -- Content is versioned JSON data, never executable HTML. Media bytes live in private storage.
 
 CREATE TABLE notification_template (

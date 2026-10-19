@@ -1,8 +1,17 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 
 const read = (path) => readFileSync(path, 'utf8');
 const senderApps = ['web', 'admin', 'people'];
+const migrationDirectory = 'services/api/src/main/resources/db/migration';
+const migrationVersions = new Map();
+for (const filename of readdirSync(migrationDirectory).filter(name => /^V\\d+__.*\\.sql$/.test(name))) {
+  const version = filename.match(/^V(\\d+)__/)?.[1];
+  const previous = migrationVersions.get(version);
+  assert.ok(!previous, `Flyway version ${version} is duplicated: ${previous} and ${filename}`);
+  migrationVersions.set(version, filename);
+}
+
 const sharedFiles = [
   'NotificationStudio.tsx',
   'NotificationStudio.module.css',
@@ -40,9 +49,10 @@ for (const path of [
   'services/api/src/main/java/com/quantaedge/api/RichNotificationService.java',
   'services/api/src/main/java/com/quantaedge/api/NotificationDispatchScheduler.java',
   'services/api/src/test/java/com/quantaedge/api/NotificationContentValidatorTest.java',
-  'services/api/src/main/resources/db/migration/V139__rich_notification_platform.sql',
-  'services/api/src/main/resources/db/migration/V140__rich_notification_template_versioning.sql',
-  'services/api/src/main/resources/db/migration/V141__retain_notification_templates_and_media_after_creator_deletion.sql',
+  'services/api/src/main/resources/db/migration/V142__rich_notification_platform.sql',
+  'services/api/src/main/resources/db/migration/V143__rich_notification_template_versioning.sql',
+  'services/api/src/main/resources/db/migration/V144__rich_notification_template_active_name.sql',
+  'services/api/src/main/resources/db/migration/V145__retain_notification_templates_and_media_after_creator_deletion.sql',
   'docs/product/rich-notification-platform-contract.md',
 ]) {
   assert.doesNotThrow(() => read(path), `Required notification feature file is missing: ${path}`);

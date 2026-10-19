@@ -460,7 +460,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
           <div className={styles.formGrid}>
             <label>Saved template<select value={templateId} onChange={event => chooseTemplate(event.target.value)}>
               <option value="">New notification</option>
-              {templates.map(template => <option key={template.id} value={template.id}>{String(field(template,'template_name','templateName') ?? 'Template')} · v{field(template,'content_version','contentVersion') ?? 1}</option>)}
+              {templates.map(template => <option key={template.id} value={template.id}>{String(field(template,'template_name','templateName') ?? 'Template')} · v{template.content_version ?? template.contentVersion ?? 1}</option>)}
             </select></label>
             <label>Preset<select value="" onChange={event => {
               const preset = PRESETS[Number(event.target.value)];
@@ -650,7 +650,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         <div className={styles.sticky}>
           <div className={styles.sideCard}><h3>Rich content blocks</h3><p>Combine hero layouts, formatted copy, image/video/animation assets, course and event cards, highlights and action buttons.</p><ul><li>Reorder blocks</li><li>Preview the actual renderer</li><li>Save immutable versions</li><li>Safe links and accessible media</li></ul></div>
           <div className={styles.sideCard}><h3>Delivery behavior</h3><p>The persistent inbox is the source of truth. Push is a compact heads-up where configured; opening it reveals the complete content.</p><p className={styles.muted}>No send occurs until audience validation and confirmation succeed.</p></div>
-          <div className={styles.sideCard}><h3>Template library</h3>{templates.length?<div className={styles.templateList}>{templates.slice(0,8).map(t=><button type="button" key={t.id} onClick={()=>chooseTemplate(String(t.id))}><span>{String(field(t,'template_name','templateName')??'Template')}</span><small>v{field(t,'content_version','contentVersion')??1} · {t.status}</small></button>)}</div>:<p className={styles.muted}>Your saved templates will appear here.</p>}</div>
+          <div className={styles.sideCard}><h3>Template library</h3>{templates.length?<div className={styles.templateList}>{templates.slice(0,8).map(t=><button type="button" key={t.id} onClick={()=>chooseTemplate(String(t.id))}><span>{String(field(t,'template_name','templateName')??'Template')}</span><small>v{t.content_version ?? t.contentVersion ?? 1} · {t.status}</small></button>)}</div>:<p className={styles.muted}>Your saved templates will appear here.</p>}</div>
         </div>
       </aside>
     </div>

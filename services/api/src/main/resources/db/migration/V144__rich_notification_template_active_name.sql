@@ -1,5 +1,5 @@
--- V141: index active template names independently from immutable version numbers.
--- Version uniqueness is enforced by (template_family_id, content_version) in V140.
+-- V144: index active template names independently from immutable version numbers.
+-- Version uniqueness is enforced by (template_family_id, content_version) in V143.
 -- The earlier name/version index wrongly blocked two different template families from
 -- using the same display name at the same family-relative version number.
 DROP INDEX IF EXISTS uq_notification_template_name_version;
