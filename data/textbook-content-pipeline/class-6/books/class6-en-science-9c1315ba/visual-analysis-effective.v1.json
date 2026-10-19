@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f0664142bdab6ff29c069e177dfa97925e2b0dc6aae5f41b8edaa06ab85e0d48",
+  "raw_analysis_sha256": "b3dac447884db1bda0c6177d1d828cbc37e48feb7d8a1963cda647a64cf3ccb7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:53:44Z",
+      "checkpointed_at": "2026-10-19T02:56:58Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:54:26Z",
+      "checkpointed_at": "2026-10-19T02:57:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:55:18Z",
+      "checkpointed_at": "2026-10-19T02:58:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:55:57Z",
+      "checkpointed_at": "2026-10-19T02:59:15Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -39968,6 +39968,90 @@
         "limitations": [
           "No visible text or images to analyze.",
           "No visible text or images to interpret."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "55ce91b9a8edfb10b09015f4",
+      "asset_sha256": "247069c6eaa31a3b6da01b698abe8272018e8339a29a681c4715610b7926e37f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 52,
+      "asset_path": "page-0052.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "bab985a7f2e78e2bc3bcef8118e5c4f4959513488940daf1dbc30a41662ef5f3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "instructions for a science project involving plants and biodiversity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Label the plants in your school with their local names with\nthe help of your teacher or the gardener. List them in your\nnotebook.",
+          "With the help of your teacher, plan a field visit or a nature\nwalk. Record your observations. Prepare a class biodiversity\nregister by consolidating the observations and notes of all\nthe students taken during the field visit or nature walk.",
+          "Find out about ‘Project Tiger’ and other similar projects\ninitiated in India to protect our biodiversity. Prepare a\npresentation for your class.",
+          "Divide your class into groups of six students each. Initiate a\ndiscussion in the class on how you can protect biodiversity\naround you. Prepare a group-wise report that includes\nsuggestions given by members of each group.",
+          "Interact with elders in your family or neighbourhood to find\nout various plants and animals that they see now but were\nnot seen earlier and vice-versa. Collect pictures of these\nplants and animals and paste them in a scrapbook. Find out\nmore about them from your teacher."
+        ],
+        "concepts": [
+          "plants",
+          "local names",
+          "teacher",
+          "gardener",
+          "field visit",
+          "nature walk",
+          "biodiversity",
+          "register",
+          "Project Tiger",
+          "presentation",
+          "group-wise report",
+          "elder",
+          "family",
+          "neighbourhood",
+          "scrapbook"
+        ],
+        "context_relation": "instructions for a science project",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:01:01Z",
+      "effective_analysis": {
+        "visual_summary": "instructions for a science project involving plants and biodiversity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Label the plants in your school with their local names with\nthe help of your teacher or the gardener. List them in your\nnotebook.",
+          "With the help of your teacher, plan a field visit or a nature\nwalk. Record your observations. Prepare a class biodiversity\nregister by consolidating the observations and notes of all\nthe students taken during the field visit or nature walk.",
+          "Find out about ‘Project Tiger’ and other similar projects\ninitiated in India to protect our biodiversity. Prepare a\npresentation for your class.",
+          "Divide your class into groups of six students each. Initiate a\ndiscussion in the class on how you can protect biodiversity\naround you. Prepare a group-wise report that includes\nsuggestions given by members of each group.",
+          "Interact with elders in your family or neighbourhood to find\nout various plants and animals that they see now but were\nnot seen earlier and vice-versa. Collect pictures of these\nplants and animals and paste them in a scrapbook. Find out\nmore about them from your teacher."
+        ],
+        "concepts": [
+          "plants",
+          "local names",
+          "teacher",
+          "gardener",
+          "field visit",
+          "nature walk",
+          "biodiversity",
+          "register",
+          "Project Tiger",
+          "presentation",
+          "group-wise report",
+          "elder",
+          "family",
+          "neighbourhood",
+          "scrapbook"
+        ],
+        "context_relation": "instructions for a science project",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
