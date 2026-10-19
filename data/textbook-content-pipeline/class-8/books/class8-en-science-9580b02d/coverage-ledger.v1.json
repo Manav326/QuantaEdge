@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 824,
-    "successful_visual_analyses": 816,
+    "successful_visual_analyses": 818,
     "missing_visual_analyses": 1467,
-    "failed_visual_analyses": 8,
+    "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1475,
+    "unresolved_count": 1473,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30497,9 +30497,43 @@
       "asset_path": "page-0033.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram of a plant cell showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids. Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis. In non-green parts, they help in the storage of substances. Plant cells also have a large empty-looking space call",
+          "Fig. 2.5: A schematic drawing of (a) An animal cell and (b) A plant cell. (The colours are to show different parts of the cell)",
+          "We have now understood the basic structure of cell. And we now also understand that plant and animal cells differ in shape and structure.",
+          "Do different animal cells also vary in their shape and structure?",
+          "2.1 Variation in shape and structure of cells",
+          "The muscle cell and the nerve cell of a human are shown in Fig. 2.6a and (b). What are the similarities and differences you see in them?",
+          "A muscle cell (Fig. 2.6a) is shaped like a spindle, while a nerve cell (Fig. 2.6b) is very long and has branches. Similarly, some cells are round in shape, while others are long and thin. The number of cells also varies in different organisms. Why do cells look so different from each other? Does the"
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "chloroplast",
+          "vacuole",
+          "animal cell",
+          "plant cell",
+          "muscle cell",
+          "nerve cell",
+          "shape",
+          "structure",
+          "variation",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "The image is a diagram explaining the structure of plant and animal cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component.",
+          "The image does not show the exact number of cells in different organisms.",
+          "The image does not provide information about the exact number of cells in different organisms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30753,9 +30787,34 @@
       "asset_path": "page-0034.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The unique shape, size, and structure of cells help them carry out their specific functions. How do these cells help in performing various functions in the body?",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them\ncarry out their specific functions. But how do these cells help in\nperforming various functions in the body? Let us find out.",
+          "You observed in Activity 2.3 that inner cheek cells are thin\nand flat. They form a protective lining on the inner surface of the\ncheek. Nerve cells also known as neurons carry messages in our\nbody. The elongated shape and branched structure help them\nreach different parts of the body and pass on mes",
+          "You have already studied the digestive system in Grade 7. Different\nparts of the digestive system are made up of different types of cells.\nA group of muscle cells are present in the food pipe. These cells\ncontract and relax in a wave-like manner, pushing the food down\nto the stomach. This movement i",
+          "2.2 What Are the Levels of Organisation in\nthe Body of a Living Organism?",
+          "The body of a living organism is organised in a complex way. Cell\n(Fig. 2.7a), is the basic unit of life, just like a brick is the basic unit of wall\n(Fig. 2.3d). A group of similar cells forms a type of tissue (Fig. 2.7b).\nDifferent tissues are organised to form an organ (Fig. 2.7c). Several\norgans",
+          "These levels of organisation help us understand how simple\nbuilding blocks like cells come together to form a complex\nliving being.",
+          "The life of complex living organisms begins with a single cell—\n'egg'. The egg of any organism has an amazing ability to divide\nrepeatedly to form a complete living being made up of many cells.\nSuch living beings are called multicellular organisms. Animals,\nincluding humans, and plants are all examp"
+        ],
+        "concepts": [
+          "cell",
+          "tissue",
+          "organ",
+          "organ system",
+          "organism",
+          "multicellular organisms"
+        ],
+        "context_relation": "The text discusses the unique shape, size, and structure of cells and how they help in performing various functions in the body. It also explains the levels of organisation in the body of a living organism.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

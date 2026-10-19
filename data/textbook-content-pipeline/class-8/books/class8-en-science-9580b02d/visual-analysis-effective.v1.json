@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d45efa70307ddf885872ad68dac8cbf44b03fa4931ba77e2f73fd53d6d01fdb9",
+  "raw_analysis_sha256": "1c48b1b1be4c8799e2ec4c98d4ed2016da15060735806583594a1a8bb23c20cc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:07:29Z",
+      "checkpointed_at": "2026-10-19T09:19:22Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:08:49Z",
+      "checkpointed_at": "2026-10-19T09:20:42Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:09:42Z",
+      "checkpointed_at": "2026-10-19T09:21:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -34960,21 +34960,91 @@
     {
       "asset_id": "d21a63b7b08e6cf94eb43cfb",
       "asset_sha256": "49a00b7586850458ba6638341e528608150f1a8c5bf48a635019de7ea8374b80",
-      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 33,
       "asset_path": "page-0033.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4c74b92841219db621a04c11ddfaea6b964816788576f9b40ad7c2b9fb94f6b4",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of a plant cell showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids. Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis. In non-green parts, they help in the storage of substances. Plant cells also have a large empty-looking space call",
+          "Fig. 2.5: A schematic drawing of (a) An animal cell and (b) A plant cell. (The colours are to show different parts of the cell)",
+          "We have now understood the basic structure of cell. And we now also understand that plant and animal cells differ in shape and structure.",
+          "Do different animal cells also vary in their shape and structure?",
+          "2.1 Variation in shape and structure of cells",
+          "The muscle cell and the nerve cell of a human are shown in Fig. 2.6a and (b). What are the similarities and differences you see in them?",
+          "A muscle cell (Fig. 2.6a) is shaped like a spindle, while a nerve cell (Fig. 2.6b) is very long and has branches. Similarly, some cells are round in shape, while others are long and thin. The number of cells also varies in different organisms. Why do cells look so different from each other? Does the"
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "chloroplast",
+          "vacuole",
+          "animal cell",
+          "plant cell",
+          "muscle cell",
+          "nerve cell",
+          "shape",
+          "structure",
+          "variation",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "The image is a diagram explaining the structure of plant and animal cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component.",
+          "The image does not show the exact number of cells in different organisms.",
+          "The image does not provide information about the exact number of cells in different organisms."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T09:25:21Z",
+      "effective_analysis": {
+        "visual_summary": "Diagram of a plant cell showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids. Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis. In non-green parts, they help in the storage of substances. Plant cells also have a large empty-looking space call",
+          "Fig. 2.5: A schematic drawing of (a) An animal cell and (b) A plant cell. (The colours are to show different parts of the cell)",
+          "We have now understood the basic structure of cell. And we now also understand that plant and animal cells differ in shape and structure.",
+          "Do different animal cells also vary in their shape and structure?",
+          "2.1 Variation in shape and structure of cells",
+          "The muscle cell and the nerve cell of a human are shown in Fig. 2.6a and (b). What are the similarities and differences you see in them?",
+          "A muscle cell (Fig. 2.6a) is shaped like a spindle, while a nerve cell (Fig. 2.6b) is very long and has branches. Similarly, some cells are round in shape, while others are long and thin. The number of cells also varies in different organisms. Why do cells look so different from each other? Does the"
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "chloroplast",
+          "vacuole",
+          "animal cell",
+          "plant cell",
+          "muscle cell",
+          "nerve cell",
+          "shape",
+          "structure",
+          "variation",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "The image is a diagram explaining the structure of plant and animal cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component.",
+          "The image does not show the exact number of cells in different organisms.",
+          "The image does not provide information about the exact number of cells in different organisms."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -35358,21 +35428,73 @@
     {
       "asset_id": "3d6a051ab8fdf139cd7a371c",
       "asset_sha256": "088a612de2d6bfd2bac79b1cf82c6c9a309def9fd1df5063cc3cd5ad32c296f9",
-      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 34,
       "asset_path": "page-0034.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The unique shape, size, and structure of cells help them carry out their specific functions. How do these cells help in performing various functions in the body?",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them\ncarry out their specific functions. But how do these cells help in\nperforming various functions in the body? Let us find out.",
+          "You observed in Activity 2.3 that inner cheek cells are thin\nand flat. They form a protective lining on the inner surface of the\ncheek. Nerve cells also known as neurons carry messages in our\nbody. The elongated shape and branched structure help them\nreach different parts of the body and pass on mes",
+          "You have already studied the digestive system in Grade 7. Different\nparts of the digestive system are made up of different types of cells.\nA group of muscle cells are present in the food pipe. These cells\ncontract and relax in a wave-like manner, pushing the food down\nto the stomach. This movement i",
+          "2.2 What Are the Levels of Organisation in\nthe Body of a Living Organism?",
+          "The body of a living organism is organised in a complex way. Cell\n(Fig. 2.7a), is the basic unit of life, just like a brick is the basic unit of wall\n(Fig. 2.3d). A group of similar cells forms a type of tissue (Fig. 2.7b).\nDifferent tissues are organised to form an organ (Fig. 2.7c). Several\norgans",
+          "These levels of organisation help us understand how simple\nbuilding blocks like cells come together to form a complex\nliving being.",
+          "The life of complex living organisms begins with a single cell—\n'egg'. The egg of any organism has an amazing ability to divide\nrepeatedly to form a complete living being made up of many cells.\nSuch living beings are called multicellular organisms. Animals,\nincluding humans, and plants are all examp"
+        ],
+        "concepts": [
+          "cell",
+          "tissue",
+          "organ",
+          "organ system",
+          "organism",
+          "multicellular organisms"
+        ],
+        "context_relation": "The text discusses the unique shape, size, and structure of cells and how they help in performing various functions in the body. It also explains the levels of organisation in the body of a living organism.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T09:29:34Z",
+      "effective_analysis": {
+        "visual_summary": "The unique shape, size, and structure of cells help them carry out their specific functions. How do these cells help in performing various functions in the body?",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them\ncarry out their specific functions. But how do these cells help in\nperforming various functions in the body? Let us find out.",
+          "You observed in Activity 2.3 that inner cheek cells are thin\nand flat. They form a protective lining on the inner surface of the\ncheek. Nerve cells also known as neurons carry messages in our\nbody. The elongated shape and branched structure help them\nreach different parts of the body and pass on mes",
+          "You have already studied the digestive system in Grade 7. Different\nparts of the digestive system are made up of different types of cells.\nA group of muscle cells are present in the food pipe. These cells\ncontract and relax in a wave-like manner, pushing the food down\nto the stomach. This movement i",
+          "2.2 What Are the Levels of Organisation in\nthe Body of a Living Organism?",
+          "The body of a living organism is organised in a complex way. Cell\n(Fig. 2.7a), is the basic unit of life, just like a brick is the basic unit of wall\n(Fig. 2.3d). A group of similar cells forms a type of tissue (Fig. 2.7b).\nDifferent tissues are organised to form an organ (Fig. 2.7c). Several\norgans",
+          "These levels of organisation help us understand how simple\nbuilding blocks like cells come together to form a complex\nliving being.",
+          "The life of complex living organisms begins with a single cell—\n'egg'. The egg of any organism has an amazing ability to divide\nrepeatedly to form a complete living being made up of many cells.\nSuch living beings are called multicellular organisms. Animals,\nincluding humans, and plants are all examp"
+        ],
+        "concepts": [
+          "cell",
+          "tissue",
+          "organ",
+          "organ system",
+          "organism",
+          "multicellular organisms"
+        ],
+        "context_relation": "The text discusses the unique shape, size, and structure of cells and how they help in performing various functions in the body. It also explains the levels of organisation in the body of a living organism.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
