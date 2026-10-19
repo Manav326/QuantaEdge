@@ -61,12 +61,12 @@ export default function StudentHome(){
     let active=true;
     (async()=>{
       try {
-        const response=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store'});
+        const response=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json();
         if(!response.ok) throw new Error(body.message||body.error||'Courses could not be loaded.');
         const rows=Array.isArray(body)?body:[];
-        const ownedRows=rows.filter((course:any)=>course.is_enrolled===true||course.paused===true);
+        const ownedRows=rows.filter((course:any)=>course.is_enrolled===true&&!course.paused);
         if(active) {
           setCourses(rows);
           setCourseCatalogReady(true);
@@ -74,7 +74,10 @@ export default function StudentHome(){
             router.replace('/student/marketplace');
             return;
           }
-          const serverActive=ownedRows.find((course:any)=>course.is_enrolled===true);
+          let savedCourseId=0;
+          try { savedCourseId=Number(window.localStorage.getItem('qe:student:activeCourseId')||0); } catch {}
+          const serverActive=ownedRows.find((course:any)=>Number(course.id)===savedCourseId)
+            || ownedRows.find((course:any)=>course.is_enrolled===true);
           const activeId=serverActive?Number(serverActive.id):null;
           setActiveCourseId(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0 ? activeId : null);
           if(activeId !== null && Number.isSafeInteger(activeId) && activeId > 0) {
@@ -85,7 +88,7 @@ export default function StudentHome(){
           const id=Number(course.id);
           if(!Number.isSafeInteger(id)||id<=0)return null;
           try{
-            const progressResponse=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(id)),{credentials:'same-origin',cache:'no-store'});
+            const progressResponse=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(id)),{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
             if(!progressResponse.ok)return {id,error:true};
             return {id,data:await progressResponse.json()};
           }catch{return {id,error:true};}
@@ -115,7 +118,7 @@ export default function StudentHome(){
     (async()=>{
       try {
         const query='courseId='+encodeURIComponent(String(activeCourseId))+'&includeFuture=true&limit=100&offset=0';
-        const response=await fetch('/api/v1/learning/live-classes?'+query,{credentials:'same-origin',cache:'no-store'});
+        const response=await fetch('/api/v1/learning/live-classes?'+query,{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json().catch(()=>({}));
         if(!response.ok) throw new Error('Live classes could not be loaded.');
@@ -134,9 +137,21 @@ export default function StudentHome(){
 
   useEffect(()=>{
     let active=true;
+    if(!courseCatalogReady){
+      return ()=>{active=false;};
+    }
+    if(activeCourseId===null){
+      setTextbookDocuments([]);
+      setTextbooksError('');
+      setTextbooksLoading(false);
+      return ()=>{active=false;};
+    }
+    setTextbooksLoading(true);
     (async()=>{
       try {
-        const response=await fetch('/api/v1/learning/documents',{credentials:'same-origin',cache:'no-store'});
+        const response=await fetch('/api/v1/learning/documents?courseId='+encodeURIComponent(String(activeCourseId)),{
+          credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
+        });
         if(response.status===401||response.status===403){router.replace('/login/student');return}
         const body=await response.json();
         if(!response.ok) throw new Error(body.detail||body.message||body.error||'Textbooks could not be loaded.');
@@ -148,7 +163,7 @@ export default function StudentHome(){
       }
     })();
     return ()=>{active=false};
-  },[router]);
+  },[router,courseCatalogReady,activeCourseId]);
 
 
   useEffect(()=>{
