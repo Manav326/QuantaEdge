@@ -294,7 +294,6 @@ public class RichNotificationService {
     if(courseId!=null && !isAssignedCourse(institutionId,courseId)) {
       throw new SecurityException("The selected course is not actively assigned to this institution.");
     }
-    String courseClause=courseId==null?"":" and spe.program_id=?";
     String sql = """
       select distinct gs.guardian_user_id as recipient_id,m.institution_id
       from guardian_student gs
@@ -399,8 +398,12 @@ public class RichNotificationService {
     String key=requiredText(idempotencyKey,"Idempotency key",180);
     JsonNode document=validator.validate(rawDocument);
     assertScopeAllowed(actor,normalizedScope,institutionId,courseId,filter);
-    if(expiresAt!=null && scheduledAt!=null && !expiresAt.isAfter(scheduledAt)) {
-      throw new IllegalArgumentException("Expiry must be after the scheduled send time.");
+    Instant now=Instant.now();
+    if(scheduledAt!=null && !scheduledAt.isAfter(now.plusSeconds(2))) {
+      throw new IllegalArgumentException("Choose a future time to schedule this notification, or clear the schedule to send now.");
+    }
+    if(expiresAt!=null && !expiresAt.isAfter(scheduledAt==null?now:scheduledAt)) {
+      throw new IllegalArgumentException("Expiry must be in the future and after the scheduled send time.");
     }
     List<Map<String,Object>> duplicate=jdbc.queryForList("""
       select id,public_id,status,resolved_recipient_count,dispatched_at
@@ -415,7 +418,7 @@ public class RichNotificationService {
     String audienceJson=writeJson(filter==null?Map.of():filter);
     List<Recipient> recipients=resolveAudience(normalizedScope,institutionId,courseId,filter==null?Map.of():filter);
     if(recipients.isEmpty()) throw new IllegalArgumentException("No eligible recipients match this notification audience.");
-    if(scheduledAt!=null && scheduledAt.isAfter(Instant.now().plusSeconds(2))) {
+    if(scheduledAt!=null) {
       Long id=jdbc.queryForObject("""
         insert into notification_campaign(
           scope,institution_id,course_id,template_id,template_version,title,summary,content_document,
