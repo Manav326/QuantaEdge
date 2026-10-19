@@ -72,7 +72,7 @@ The first full cross-platform pack must use synthetic, linked personas rather th
 - institution-admin test identities for their own institution;
 - adult learner, parent/guardian and minor child identities with real guardian/consent relationships;
 - normal student and child login pathways with unique accounts and session isolation;
-- institution membership, course release/offer/access, and shared published curriculum referenced read-only;
+- institution membership and course access; shared curriculum is referenced read-only, while the starter pack creates a clearly labelled, run-owned synthetic Class 7 lesson, question and options for progress/answer fixtures. Those curriculum rows are individually manifested and removed by exact ID; they are never seeded into product migrations.
 - varied learning progress, practice answers, assessment attempts/results and certificates created through supported domain flows;
 - teacher/HR employee records, assignments, attendance, leave and payroll in a synthetic organization, with no real payout or statutory side effect;
 - live/recorded class references, messaging, resource and file fixtures using fake/sandbox services;
@@ -99,7 +99,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 ## 7. CI and evidence rules
 
 - API unit tests cover authorization, state machine, idempotency, environment gate, ownership-manifest validation and cleanup ordering.
-- `QaTestPackLifecycleIntegrationTest` now targets the dedicated `quantaedge_qa` database, applies the actual Flyway migrations, installs two distinct runs, checks idempotent replay and starter-pack invariants, uninstalls run A while proving run B remains, checks protected-baseline fingerprints, and then cleans run B. CI provisions this database and opts into the test. The test remains `NOT_EXECUTED` until that exact-head CI job finishes successfully.
+- `QaTestPackLifecycleIntegrationTest` now targets the dedicated `quantaedge_qa` database, applies the actual Flyway migrations, installs two distinct runs against a fresh migrated QA database without relying on pre-published lesson content, checks idempotent replay and starter-pack invariants (including run-owned synthetic lesson/question/options), uninstalls run A while proving run B and its curriculum fixture remain, checks shared protected-baseline fingerprints, and then cleans run B including the run-owned curriculum rows. CI provisions this database and opts into the test. The test remains `NOT_EXECUTED` until that exact-head CI job finishes successfully.
 - Web E2E must exercise QA Center permissions, install confirmation, persona list, scenario runner, dry-run preview, confirmation phrase/run-ID match, interrupted cleanup and report download.
 - Android E2E must use the same installed synthetic personas to exercise the agreed critical learner/parent flows and compare their API-visible state.
 - External adapters run in deterministic fake mode in CI; a test fails if a live credential/environment is detected.
@@ -109,7 +109,7 @@ Add interruption tests for failure after each ownership-producing step, partial 
 ## 8. Current implementation ledger
 
 - QA route inventory, 72 workflow scenarios, 94 UI/state inventory rows, 443 source-derived API mapping rows and role/data cleanup documentation exist. Endpoints remain source-derived and not fully reviewed.
-- The feature branch now implements a tenant/learner starter pack, run/resource/event/check manifest, default-off gate requiring an exact server-configured database target and explicit fixture secret, starter data invariants, manifest-based uninstall, and an HRMS QA Center UI/API. A separate PostgreSQL integration test and CI database-provisioning step are added; they remain unverified until CI passes. This is not yet the full HRMS/payroll/media/provider pack or browser/device scenario runner.
+- The feature branch now implements a self-contained tenant/learner starter pack, run/resource/event/check manifest, exact run ownership for its synthetic Class 7 lesson/question/options, default-off gate requiring an exact server-configured database target and explicit fixture secret, starter data invariants, manifest-based uninstall, and an HRMS QA Center UI/API. A separate PostgreSQL integration test and CI database-provisioning step are added; they remain unverified until CI passes. This is not yet the full HRMS/payroll/media/provider pack or browser/device scenario runner.
 - QA-001, QA-002, QA-004, QA-005 and QA-007 have starter-slice code but remain NOT_EXECUTED; QA-003 scenario runner/coverage report and QA-006 external-provider sandbox isolation remain NOT_IMPLEMENTED.
 - The local-preview isolation fix with regression tests is included on this feature branch. Draft PR #78 still exists separately and had a failing API run because of broader institution-context/mocking failures; do not describe either candidate as merged or passing without exact-head CI evidence.
 - The current-main API run [#39151812977](https://github.com/Manav326/QuantaEdge/actions/runs/39151812977) failed before this feature branch. Keep that baseline regression separate from the new branch's results.
