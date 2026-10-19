@@ -306,7 +306,7 @@ class LearningClassControllerTest {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
         eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
-    when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
@@ -345,7 +345,7 @@ class LearningClassControllerTest {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
         eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
-    when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "storage_key", "afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4",
             "original_filename", "class.mp4", "media_type", "video/mp4",
