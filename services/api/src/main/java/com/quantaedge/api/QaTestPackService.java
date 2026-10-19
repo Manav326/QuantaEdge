@@ -98,9 +98,11 @@ public class QaTestPackService {
     pack.put("summary", "Three synthetic institutions under HRMS; QuantaEdge remains the owner of Classes 6/7/8. HRMS-approved test assignments expose Class 7 to Institutions A/B and Class 6 to C; run-owned lesson/enrolment/outcome fixtures verify tenant isolation.");
     pack.put("minimumInstitutions", 3);
     pack.put("institutionCourseCoverage", List.of("QuantaEdge owns Classes 6/7/8", "HRMS explicitly assigns QuantaEdge Class 7 to QA Institutions A and B", "HRMS explicitly assigns QuantaEdge Class 6 to QA Institution C", "Institution C does not inherit Class 7 without an explicit assignment"));
-    pack.put("personas", List.of("Institution Admin A", "Parent A", "Minor child A", "Institution Admin B", "Parent B", "Minor child B", "Institution Admin C", "Independent adult learner C", "HRMS content reviewer"));
+    pack.put("personas", List.of("QuantaEdge course owner", "Institution Admin A", "Parent A", "Minor child A", "Institution Admin B", "Parent B", "Minor child B", "Institution Admin C", "Independent adult learner C", "HRMS content reviewer"));
     pack.put("createsExternalResources", false);
     pack.put("createsRunOwnedSyntheticCurriculum", true);
+    pack.put("preservesQuantaEdgeClassCourses", List.of("CLASS_6", "CLASS_7", "CLASS_8"));
+    pack.put("createsNoOrphanUsersOrCourseEnrollments", true);
     pack.put("status", "AVAILABLE");
     pack.put("coverageLimit", "This starter pack does not yet seed HRMS/payroll, live-media or provider resources.");
     return List.of(pack);
@@ -450,6 +452,7 @@ public class QaTestPackService {
       join curriculum_program p on p.id=r.program_id and p.code='CLASS_7'
       where a.qa_test_run_id=? and r.qa_test_run_id=?
         and source_tenant.tenant_code='QUANTA-EDGE' and third_tenant.qa_test_run_id=?
+        and right(third_tenant.tenant_code,1)='C'
         and a.status='ASSIGNED' and source_tenant.id<>third_tenant.id
       """, runId, runId, runId);
     addCheck(runId, checks, "THIRD_INSTITUTION_DOES_NOT_INHERIT_COURSE",
