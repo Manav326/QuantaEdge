@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 859,
+    "assets_selected": 861,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 856,
-    "assets_remaining": 1435,
-    "assets_completion_percent": 37.4,
+    "assets_analyzed": 858,
+    "assets_remaining": 1433,
+    "assets_completion_percent": 37.5,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 854,
+    "assets_skipped_from_checkpoint": 856,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:11:07Z"
+      "checkpointed_at": "2026-10-19T12:16:58Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:12:23Z"
+      "checkpointed_at": "2026-10-19T12:18:13Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T12:13:13Z"
+      "checkpointed_at": "2026-10-19T12:19:04Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26902,6 +26902,62 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T12:15:24Z"
+    },
+    {
+      "asset_id": "778acb37d93b5876e978a0b2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:19:18Z"
+    },
+    {
+      "asset_id": "70ab746c6ecdc06f26740afe",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 47,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a74315cad5ac548db0fdb0ab8d310f452db735983236b0c7c84eae9e73be467",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T12:19:31Z"
     }
   ]
 }
