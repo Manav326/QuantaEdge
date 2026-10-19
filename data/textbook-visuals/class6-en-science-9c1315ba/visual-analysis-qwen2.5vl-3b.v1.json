@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1048,
+    "assets_selected": 1050,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1045,
-    "assets_remaining": 1033,
-    "assets_completion_percent": 50.3,
+    "assets_analyzed": 1047,
+    "assets_remaining": 1031,
+    "assets_completion_percent": 50.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1043,
+    "assets_skipped_from_checkpoint": 1045,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:13:11Z"
+      "checkpointed_at": "2026-10-19T16:17:57Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:13:53Z"
+      "checkpointed_at": "2026-10-19T16:18:37Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:14:47Z"
+      "checkpointed_at": "2026-10-19T16:19:29Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -33930,6 +33930,96 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T16:17:09Z"
+    },
+    {
+      "asset_id": "58e3d2367626e6b6691591ef",
+      "asset_sha256": "977d9fd4b8a389f032bbb7b670c59d42829fa460e56814fcfa599276cfd8d287",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/977d9fd4b8a389f032bbb7b670c59d42829fa460e56814fcfa599276cfd8d287.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1064153db0485037f1dc4c648f8a5b4f07f544dcd0a45f236a024e7ef213527",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person sitting at a desk with their hands resting on their face.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a cartoon illustration, possibly used for educational purposes.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:20:04Z"
+    },
+    {
+      "asset_id": "8c63302c77ab400d8fb3d6e3",
+      "asset_sha256": "69c28251516bc4287cc1c6881d6696f65834d4e34485a8d90756a4f1c20940f3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 84,
+      "asset_path": "assets/69c28251516bc4287cc1c6881d6696f65834d4e34485a8d90756a4f1c20940f3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1064153db0485037f1dc4c648f8a5b4f07f544dcd0a45f236a024e7ef213527",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass with cardinal directions marked.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0",
+          "20",
+          "40",
+          "60",
+          "80",
+          "100",
+          "120",
+          "140",
+          "160",
+          "180",
+          "200",
+          "220",
+          "240",
+          "260",
+          "280",
+          "300",
+          "320",
+          "340",
+          "NW",
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "280",
+          "260",
+          "240",
+          "220"
+        ],
+        "concepts": [
+          "compass",
+          "cardinal directions",
+          "north-south direction",
+          "Earth as a giant magnet"
+        ],
+        "context_relation": "The compass is used to demonstrate the concept of Earth's magnetic field.",
+        "limitations": [
+          "The compass is a simplified representation and does not show the Earth's magnetic field in detail."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:20:54Z"
     }
   ]
 }
