@@ -63,7 +63,7 @@ assert(platformApi.includes('"/theme-presets"') && platformApi.includes('Institu
 assert(platformApi.includes('"/theme-preview"') && platformApi.includes('InstitutionThemeTokens.normalize(raw)'), 'Palette preview and save must use the owner-protected canonical normalizer.');
 assert(tenantApi.includes('InstitutionThemeTokens.normalize'), 'Public tenant API must return generated palettes.');
 assert(apiTests.includes('alreadyMaterializedThemeCanBeReadAndNormalizedAgain'), 'Theme round-trip regression test is required.');
-assert(apiTheme.includes('PREVIOUS_PRESETS') && apiTheme.includes('saved curated preset')===false && apiTests.includes('savedCuratedPresetsUpgradeButExplicitCustomColoursRemainUnchanged'), 'Previously saved preset palettes must upgrade while explicit custom colours remain unchanged.');
+assert(apiTheme.includes('PREVIOUS_PRESETS') && apiTheme.includes('previously curated preset') && apiTests.includes('savedCuratedPresetsUpgradeButExplicitCustomColoursRemainUnchanged'), 'Previously saved preset palettes must upgrade while explicit custom colours remain unchanged.');
 
 assert(apiTests.includes('assertAccessible') && apiTests.includes('preset '), 'Palette contrast coverage must include curated presets.');
 assert(tintContrastTests.includes('primaryTextKeepsAccessibleContrastOnLightAndDarkTintedContainers'), 'Tinted-container contrast regression test must remain in CI.');
