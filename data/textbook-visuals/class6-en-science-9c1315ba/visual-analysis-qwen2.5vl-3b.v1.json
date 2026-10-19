@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 839,
+    "assets_selected": 840,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 835,
-    "assets_remaining": 1243,
+    "assets_analyzed": 836,
+    "assets_remaining": 1242,
     "assets_completion_percent": 40.2,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 834,
+    "assets_skipped_from_checkpoint": 835,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:32:24Z"
+      "checkpointed_at": "2026-10-19T01:36:03Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:33:06Z"
+      "checkpointed_at": "2026-10-19T01:36:43Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:33:58Z"
+      "checkpointed_at": "2026-10-19T01:37:36Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:34:38Z"
+      "checkpointed_at": "2026-10-19T01:38:14Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26174,6 +26174,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T01:35:15Z"
+    },
+    {
+      "asset_id": "1e374d18158b9835c650e78f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3597c430f9263a1d92f5d4b86e415b885f9fd63b043344182184531ff5ae7bca",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the variety of plants and animals, their classification based on features, and the concept of grouping.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are surrounded by a large variety of plants and animals.",
+          "Such variety of plants and animals is a part of biodiversity.",
+          "Plants and animals can be grouped on the basis of similarities and differences among them.",
+          "Plants have similarities and differences based on features associated with roots, stems, leaves, flowers, and so on.",
+          "The method of arranging things into groups based on their common features is called grouping."
+        ],
+        "concepts": [
+          "biodiversity",
+          "classification",
+          "grouping",
+          "features"
+        ],
+        "context_relation": "The text discusses the classification of plants and animals based on their features.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:38:32Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 850,
-    "successful_visual_analyses": 839,
-    "missing_visual_analyses": 1228,
+    "raw_analysis_result_rows": 851,
+    "successful_visual_analyses": 840,
+    "missing_visual_analyses": 1227,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1239,
+    "unresolved_count": 1238,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33169,9 +33169,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the variety of plants and animals, their classification based on features, and the concept of grouping.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "We are surrounded by a large variety of plants and animals.",
+          "Such variety of plants and animals is a part of biodiversity.",
+          "Plants and animals can be grouped on the basis of similarities and differences among them.",
+          "Plants have similarities and differences based on features associated with roots, stems, leaves, flowers, and so on.",
+          "The method of arranging things into groups based on their common features is called grouping."
+        ],
+        "concepts": [
+          "biodiversity",
+          "classification",
+          "grouping",
+          "features"
+        ],
+        "context_relation": "The text discusses the classification of plants and animals based on their features.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
