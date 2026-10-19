@@ -474,6 +474,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentProfile by remember { mutableStateOf(JSONObject()) }
     var accountIdentityProfile by remember { mutableStateOf(JSONObject()) }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
+    var selectedChildCourses by remember { mutableStateOf(emptyList<JSONObject>()) }
 
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
     var structuredLessons by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -2935,9 +2936,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         error = ""
     }
 
-    fun createChild(name: String, classCode: String, childLanguage: String, username: String, password: String, tracks: List<String>, consent: Boolean) {
+    fun createChild(name: String, classCode: String, childLanguage: String, username: String, password: String, consent: Boolean) {
         runTask {
-            if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
             ApiClient.postObject("/api/v1/guardians/children",
                 JSONObject()
                     .put("displayName", name.trim())
@@ -2945,7 +2945,6 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     .put("language", childLanguage)
                     .put("username", username.trim())
                     .put("password", password)
-                    .put("trackCodes", JSONArray(tracks))
                     .put("consentAccepted", consent))
             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
@@ -2983,8 +2982,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun openManageChild(child: JSONObject) {
         selectedChild = JSONObject(child.toString())
+        selectedChildCourses = emptyList()
         route = AppRoute.PARENT_CHILD_MANAGE
         error = ""
+        runTask {
+            val childId = child.longAny("id")
+            if (childId <= 0L) throw IOException("Student profile ID is missing.")
+            selectedChildCourses = ApiClient.getArray(
+                "/api/v1/guardians/children/" + childId + "/programs"
+            ).objectItems()
+        }
     }
 
     fun saveChildProfile(displayName: String, classCode: String, childLanguage: String) {
@@ -3014,15 +3021,31 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun saveChildTracks(tracks: List<String>) {
+    fun assignCourseToChild(courseId: Long) {
         runTask {
-            val id = selectedChild.longAny("id")
-            if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
-            ApiClient.putObject("/api/v1/guardians/children/" + id + "/tracks",
-                JSONObject().put("trackCodes", JSONArray(tracks)))
+            val studentId = selectedChild.longAny("id")
+            if (studentId <= 0L || courseId <= 0L) throw IOException("Choose a valid child and institution course.")
+            val course = selectedChildCourses.firstOrNull { it.longAny("id", "course_id") == courseId }
+                ?: throw IOException("This course is not available to this child in the selected institution.")
+            if (course.optBoolean("enrolled") || course.optBoolean("paused")) {
+                status = if (language == "hi") "यह course पहले से assigned है।" else "This course is already assigned."
+                return@runTask
+            }
+            if (!course.optBoolean("free_offer")) {
+                throw IOException(if (language == "hi")
+                    "इस paid course को Family Marketplace से खरीदें या बच्चे को entitlement transfer करें।"
+                    else "Use Family Marketplace to purchase this course for the child or transfer an eligible entitlement.")
+            }
+            ApiClient.postObject(
+                "/api/v1/guardians/children/" + studentId + "/programs/" + courseId + "/enroll",
+                JSONObject()
+            )
+            selectedChildCourses = ApiClient.getArray(
+                "/api/v1/guardians/children/" + studentId + "/programs"
+            ).objectItems()
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
-            selectedChild = parentChildren.firstOrNull { it.longAny("id") == id } ?: selectedChild
-            status = "छात्र के विषय access अपडेट हो गए।"
+            selectedChild = parentChildren.firstOrNull { it.longAny("id") == studentId } ?: selectedChild
+            status = if (language == "hi") "Institution course बच्चे को assign हो गया।" else "Institution course assigned to the child."
         }
     }
 
@@ -3034,6 +3057,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
             selectedChild = JSONObject()
+            selectedChildCourses = emptyList()
             status = "छात्र प्रोफ़ाइल archive हो गई।"
             route = AppRoute.PARENT_HOME
         }
@@ -3861,11 +3885,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     AppRoute.PARENT_CHILD_MANAGE -> ParentChildManageScreen(
                         child = selectedChild,
+                        courses = selectedChildCourses,
                         language = language,
                         busy = busy,
                         onSaveProfile = ::saveChildProfile,
                         onSaveCredentials = ::saveChildCredentials,
-                        onSaveTracks = ::saveChildTracks,
+                        onAssignCourse = ::assignCourseToChild,
+                        onOpenMarketplace = ::openParentCourses,
                         onArchive = ::archiveSelectedChild
                     )
                     AppRoute.PARENT_CHILD_ARCHIVED -> ParentArchivedChildrenScreen(
