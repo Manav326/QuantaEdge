@@ -512,6 +512,7 @@ class AuthServiceTest {
     org.mockito.ArgumentCaptor<Object[]> parameters = org.mockito.ArgumentCaptor.forClass(Object[].class);
     verify(jdbc).queryForObject(sql.capture(), eq(Boolean.class), parameters.capture());
     assertTrue(sql.getValue().contains("ce.institution_id=? and ce.holder_user_id=?"));
+    assertTrue(sql.getValue().contains("holder_profile.user_account_id=ce.holder_user_id"));
     assertTrue(sql.getValue().contains("st.user_account_id=?"));
     assertTrue(sql.getValue().contains("e.status in ('ACTIVE','PAUSED')"));
     assertTrue(sql.getValue().contains("assignment.status='ASSIGNED'"));
