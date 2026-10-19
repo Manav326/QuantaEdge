@@ -239,7 +239,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             {visibleStudentNavGroups.map(group => group.href ? (
               <Link key={group.id} href={group.href} title={collapsed ? itemLabel(group) : undefined}
                 aria-current={routeActive(group.href) ? 'page' : undefined}
-                onClick={event => { setMobileOpenGroup(null); if (routeActive(group.href)) event.preventDefault(); }}
+                onClick={event => { setMobileOpenGroup(null); if (group.href && routeActive(group.href)) event.preventDefault(); }}
                 className={routeActive(group.href) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}>
                 <span className="qe-workspace-icon" aria-hidden="true">{group.icon}</span>
                 <span className="qe-workspace-link-label">{itemLabel(group)}</span>

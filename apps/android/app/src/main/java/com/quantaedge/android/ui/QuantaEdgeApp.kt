@@ -3734,7 +3734,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                     Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
                                 }
                             }
-                            TextButton(onClick = { clipboardManager.setText(AnnotatedString(localizedUiText(error))) }, enabled = !busy) {
+                            TextButton(onClick = { clipboardManager.setText(AnnotatedString(error)) }, enabled = !busy) {
                                 Text(if (language == "hi") "कॉपी" else "Copy")
                             }
                             TextButton(onClick = { error = ""; errorStatusCode = 0 }, enabled = !busy) {
@@ -3752,7 +3752,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         verticalAlignment = Alignment.CenterVertically) {
                         Text(text = localizedUiText(status), modifier = Modifier.weight(1f).padding(vertical = 6.dp),
                             style = MaterialTheme.typography.bodyMedium)
-                        TextButton(onClick = { clipboardManager.setText(AnnotatedString(localizedUiText(status))) }, enabled = !busy) {
+                        TextButton(onClick = { clipboardManager.setText(AnnotatedString(status)) }, enabled = !busy) {
                             Text(if (language == "hi") "कॉपी" else "Copy")
                         }
                         TextButton(onClick = { status = "" }, enabled = !busy) {
