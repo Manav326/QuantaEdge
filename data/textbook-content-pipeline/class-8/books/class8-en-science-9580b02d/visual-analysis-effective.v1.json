@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "edd9c30f2addb048e9200a8ccadcf79d5d500903e9fc8e065628a41602fdf539",
+  "raw_analysis_sha256": "bc8fbf98d724611dee86624b22585032b1af367119044997472c62b2b513358c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:31:47Z",
+      "checkpointed_at": "2026-10-19T01:36:32Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:32:36Z",
+      "checkpointed_at": "2026-10-19T01:37:21Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T01:33:15Z",
+      "checkpointed_at": "2026-10-19T01:38:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -32554,6 +32554,156 @@
         "context_relation": "The image is a question asking about the observation of the invisible world.",
         "limitations": [
           "The image does not provide any visual evidence or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "67b72c0a68c24c99cf055c45",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 28,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d64cb4df7378074905d718bb3d35c44d07a7629d8db203a93b7e7d6dbbfedea6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with a question asking if the invisible world around us could be seen if it were visible.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Invisible Living",
+          "World: Beyond Our Naked Eye",
+          "Probe and ponder",
+          "z Have you ever wondered what you might see if the invisible world around you became visible?",
+          "z How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "z Have you thought how these tiny living beings interact with each other?",
+          "z Share your questions",
+          "8",
+          "Curiosity— Textbook of Science for Grade 8"
+        ],
+        "concepts": [
+          "Invisible world",
+          "Observation",
+          "Size",
+          "Complexity",
+          "Living",
+          "Interaction",
+          "Curiosity"
+        ],
+        "context_relation": "The image is a question asking about the observation of the invisible world.",
+        "limitations": [
+          "The image does not provide any visual or graphical information.",
+          "The image does not show any specific examples or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T01:38:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with a question asking if the invisible world around us could be seen if it were visible.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Invisible Living",
+          "World: Beyond Our Naked Eye",
+          "Probe and ponder",
+          "z Have you ever wondered what you might see if the invisible world around you became visible?",
+          "z How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "z Have you thought how these tiny living beings interact with each other?",
+          "z Share your questions",
+          "8",
+          "Curiosity— Textbook of Science for Grade 8"
+        ],
+        "concepts": [
+          "Invisible world",
+          "Observation",
+          "Size",
+          "Complexity",
+          "Living",
+          "Interaction",
+          "Curiosity"
+        ],
+        "context_relation": "The image is a question asking about the observation of the invisible world.",
+        "limitations": [
+          "The image does not provide any visual or graphical information.",
+          "The image does not show any specific examples or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b49f1836a79574cf19f8aabe",
+      "asset_sha256": "27a89dd0895d32d0480d7b7ff82150698affba4151df3aa674ec9685b226f797",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 28,
+      "asset_path": "page-0028.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d64cb4df7378074905d718bb3d35c44d07a7629d8db203a93b7e7d6dbbfedea6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about the invisible living world beyond the naked eye, featuring illustrations of microorganisms and children playing in the rain.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Invisible Living World: Beyond Our Naked Eye",
+          "2",
+          "Probe and ponder",
+          "Have you ever wondered what you might see if the invisible world around you became visible?",
+          "How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "Have you thought how these tiny living beings interact with each other?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "microorganisms",
+          "observation",
+          "size",
+          "complexity",
+          "living",
+          "interaction",
+          "curiosity"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T01:42:33Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about the invisible living world beyond the naked eye, featuring illustrations of microorganisms and children playing in the rain.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Invisible Living World: Beyond Our Naked Eye",
+          "2",
+          "Probe and ponder",
+          "Have you ever wondered what you might see if the invisible world around you became visible?",
+          "How do you think your observation of this hidden world might change the way you think about size, complexity, or even what counts as 'living'?",
+          "Have you thought how these tiny living beings interact with each other?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "microorganisms",
+          "observation",
+          "size",
+          "complexity",
+          "living",
+          "interaction",
+          "curiosity"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
