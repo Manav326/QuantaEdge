@@ -16,8 +16,8 @@ This is **not** the existing transient UI-toast feature and is **not** a replace
 Supported scopes:
 1. **USER** — explicit individual target(s), validated by server identity and tenant eligibility.
 2. **COURSE** — current eligible learners enrolled in an institution's assigned course offering; optionally notify eligible linked guardians when the sender explicitly selects that audience. Resolve recipients at send time, not from a browser-provided count.
-3. **INSTITUTION** — one active institution and a permitted audience (learners, linked guardians, institution staff, or a permitted combination).
-4. **HRMS_PLATFORM** — explicit target institutions and/or end-user groups, available only to HRMS users with `QE_PLATFORM_OWNER`; global targets require a confirmation and an immutable audience-resolution snapshot/count.
+3. **INSTITUTION** — one active institution and a permitted audience (currently: active learners, consented linked guardians, and institution-admin accounts, individually or in combination). Institution employee/staff recipients are deliberately excluded from this first slice: `hr_employee` and `staff_account` are separate from tenant membership and there is no authoritative institution-to-HR-organization mapping to safely resolve those recipients yet.
+4. **HRMS_PLATFORM** — explicit target institutions and supported end-user groups (currently: learners, consented linked guardians, and institution-admin accounts), available only to HRMS users with `QE_PLATFORM_OWNER`; global targets require a confirmation and an immutable audience-resolution snapshot/count.
 
 Hard rules:
 - Every user/course relationship and learner recipient must be tenant-scoped. No global or orphan users/courses/notifications.
@@ -162,11 +162,22 @@ Do not send real notifications to production users from fixtures or QA automatio
 7. **System-event notifications:** only after core audience/sending is secure; add explicit notification policy for course publication, live-class reminders, purchase/access results and account events.
 8. **Acceptance and rollout:** three-institution isolation tests, asset hardening, usability/a11y, exact-head CI and staged enablement.
 
-## 11. Current status
+## 11. Implementation status (2026-10-20)
 
-Initial source audit confirms:
-- web/admin/People transient global notification hosts exist but are toast/status mechanisms, not the persistent inbox;
-- the durable classroom conversation model and read state exist, but are session-bound and must not be overloaded for general notifications;
-- institution tenancy, learner and user memberships, separate institution-admin sessions, HRMS `QE_PLATFORM_OWNER`, course assignment/release/entitlement models and private media infrastructure already exist and must be reused.
+**Committed to `main` (runtime/CI verification still pending):**
+- additive Flyway persistence for versioned templates, immutable campaign content snapshots, recipient/read state, media metadata, per-channel delivery attempts and audit events;
+- permission-checked Education Admin, HRMS and Institution Admin template/options/recipient/preview/send/campaign APIs, including scheduled dispatch and cancellation;
+- tenant/course/guardian-aware audience resolution, immutable HRMS target-institution snapshots, sender-scoped idempotency keys, and recipient-side institution checks for inbox/read/media;
+- rich-document validation (block allow-list, URL checks, executable-markup rejection, nesting/size limits and alternative-text rules), private media upload/read handling, and unit tests for validator behavior;
+- Canva-like editor with selectable/reorderable elements, appearance inspector, crop/focus controls, phone/web/push-layout preview, template library and campaign history; identical component source is kept across the separate Web, Education Admin and People/HRMS builds;
+- a local vector-based Logo & Graphics Lab with editable concepts, palettes, layouts, PNG export and direct insertion into the notification draft;
+- persistent learner/parent web inbox and Android inbox dialog, unread/read state, sender identity and safe destination handling;
+- a CI contract script for shared surfaces, routes, tenant boundaries and rich-content safety.
 
-Implementation note: the repository is being updated incrementally on `main` as requested. A committed contract is not evidence of runtime completion. Each implementation milestone must record changed files, exact commit, validation executed, and remaining gaps.
+**Not yet delivered/configured:**
+- Android system push transport/token registration (no Firebase/FCM provider is configured in this repository yet). The current send operation persists and delivers into the in-app inbox; the push view in Studio is a layout preview, not evidence of a delivered system push.
+- prompt-to-image generation: the logo tool creates editable local vector concepts and is not labelled AI-generated. An image-generation provider must be selected/configured before that capability can be truthfully enabled.
+- institution employee/staff recipients: the existing schema intentionally separates tenant membership from `hr_employee`/`staff_account`; do not infer membership until HRMS defines and enforces the tenant-to-organization mapping.
+- live database/Flyway tests, application builds and a green GitHub Actions result have not been confirmed from this session. CI now contains a contract check that will run on the main push, but source commits alone do not count as runtime verification.
+
+The next acceptance gate is to run the API/Flyway, all three Next.js builds, Android unit tests/build and the full CI workflow; resolve failures, then add provider-backed Android push only after HRMS owns the required provider configuration.
