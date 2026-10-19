@@ -269,7 +269,7 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
   --qe-color-selected-background: #FEF1E8; --qe-color-selected-text: #111827;
   --qe-color-nav-background: #F5F7FB; --qe-color-nav-text: #334155; --qe-color-nav-active-background: #FEF1E8; --qe-color-nav-active-text: #111827;
   --qe-color-disabled-background: #E5E7EB; --qe-color-disabled-text: #4B5563;
-  --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
+  --ink: var(--qe-color-text); --muted: var(--qe-color-text-muted); --paper: var(--qe-color-background);
   --card: var(--qe-color-surface); --line: var(--qe-color-border-subtle);
   --purple: var(--qe-color-primary-text); --purple-dark: var(--qe-color-accent-text); --purple-soft: var(--qe-color-primary-container);
   --qe-elevation-1: 0 1px 2px rgb(20 32 54 / .04), 0 4px 14px rgb(20 32 54 / .045);
@@ -801,4 +801,11 @@ html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .butt
 }
 html[data-qe-appearance="dark"] .qe-workspace-content :is(.button-primary, .buttonPrimary, .primary-button, .primaryButton, .qe-primary-action, [data-variant="primary"]):hover:not(:disabled) {
   filter: brightness(1.06);
+}
+
+
+/* Keep the canonical QuantaEdge mark distinct from the theme's body-text token. */
+html[data-qe-appearance="dark"] .brand-mark {
+  background: #152038;
+  color: #FFFFFF;
 }
