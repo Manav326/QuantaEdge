@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d2a142d8ad5e910070960beaad56ace1ba33a2332e725379116c0e1fd2285f74",
+  "raw_analysis_sha256": "0591cff57f4d6a54d908e43ceb630566d2dde010e8a9bb611434aa6c466c451b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T09:50:38Z",
+      "checkpointed_at": "2026-10-19T09:53:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T09:51:00Z",
+      "checkpointed_at": "2026-10-19T09:54:15Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -86573,6 +86573,184 @@
         "limitations": [
           "The image does not provide specific instructions or steps for deciding the positive terminal."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8a1f8456312ac5f0d096fef3",
+      "asset_sha256": "eec5a4b8ffa3deb6dbcc31bcea59337d9f1696238e67d3cd2fbaa0a0c4ab6291",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/eec5a4b8ffa3deb6dbcc31bcea59337d9f1696238e67d3cd2fbaa0a0c4ab6291.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cells",
+          "Holder",
+          "Negative terminal",
+          "Positive terminal"
+        ],
+        "context_relation": "The image is a diagram related to the placement of cells in a holder with a battery.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for deciding the positive terminal of the battery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:54:59Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cells",
+          "Holder",
+          "Negative terminal",
+          "Positive terminal"
+        ],
+        "context_relation": "The image is a diagram related to the placement of cells in a holder with a battery.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for deciding the positive terminal of the battery."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eba247f6949516895932c41f",
+      "asset_sha256": "6dbb7d2c0a7c26d97e81ad6b6b7ce088b5431e526d0ee9ce496d2e4a3ca19776",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/6dbb7d2c0a7c26d97e81ad6b6b7ce088b5431e526d0ee9ce496d2e4a3ca19776.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery, emphasizing the negative terminal's orientation relative to the spring side of the holder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+",
+          "–",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cells",
+          "Holder",
+          "Negative terminal",
+          "Spring side",
+          "Orientation"
+        ],
+        "context_relation": "The image provides instructions for inserting cells in a holder, emphasizing the correct orientation of the negative terminal relative to the spring side of the holder.",
+        "limitations": [
+          "The image does not provide a diagram of the holder or the battery."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:55:43Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery, emphasizing the negative terminal's orientation relative to the spring side of the holder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+",
+          "–",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cells",
+          "Holder",
+          "Negative terminal",
+          "Spring side",
+          "Orientation"
+        ],
+        "context_relation": "The image provides instructions for inserting cells in a holder, emphasizing the correct orientation of the negative terminal relative to the spring side of the holder.",
+        "limitations": [
+          "The image does not provide a diagram of the holder or the battery."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a3cd4bd471d72a0df77589bf",
+      "asset_sha256": "50ff574badc08b15b8dc8abfdd2ee02aa46b9a9c2598d3821b1b06f45ac285f8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/50ff574badc08b15b8dc8abfdd2ee02aa46b9a9c2598d3821b1b06f45ac285f8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "657b10ed192b32dfbaa0ca99d09eb9e75fa2d2865f96eb0dc5da9f31df88c02f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black background with a small white text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T09:56:16Z",
+      "effective_analysis": {
+        "visual_summary": "A black background with a small white text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

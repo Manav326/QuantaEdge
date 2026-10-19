@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1471,
-    "successful_visual_analyses": 1450,
-    "missing_visual_analyses": 6017,
+    "raw_analysis_result_rows": 1474,
+    "successful_visual_analyses": 1453,
+    "missing_visual_analyses": 6014,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6038,
+    "unresolved_count": 6035,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -65510,9 +65510,32 @@
       "asset_path": "assets/eec5a4b8ffa3deb6dbcc31bcea59337d9f1696238e67d3cd2fbaa0a0c4ab6291.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cells",
+          "Holder",
+          "Negative terminal",
+          "Positive terminal"
+        ],
+        "context_relation": "The image is a diagram related to the placement of cells in a holder with a battery.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for deciding the positive terminal of the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -65528,9 +65551,35 @@
       "asset_path": "assets/6dbb7d2c0a7c26d97e81ad6b6b7ce088b5431e526d0ee9ce496d2e4a3ca19776.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the placement of cells in a holder with a battery, emphasizing the negative terminal's orientation relative to the spring side of the holder.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "31",
+          "Insert two cells in the holder, taking care",
+          "that for each cell, its negative terminal",
+          "is towards the spring side of the holder",
+          "(Fig. 3.10b) and the battery is ready to use.",
+          "+",
+          "–",
+          "How will you decide which is the positive",
+          "terminal of this battery?"
+        ],
+        "concepts": [
+          "Battery",
+          "Cells",
+          "Holder",
+          "Negative terminal",
+          "Spring side",
+          "Orientation"
+        ],
+        "context_relation": "The image provides instructions for inserting cells in a holder, emphasizing the correct orientation of the negative terminal relative to the spring side of the holder.",
+        "limitations": [
+          "The image does not provide a diagram of the holder or the battery."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -65546,9 +65595,16 @@
       "asset_path": "assets/50ff574badc08b15b8dc8abfdd2ee02aa46b9a9c2598d3821b1b06f45ac285f8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black background with a small white text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
