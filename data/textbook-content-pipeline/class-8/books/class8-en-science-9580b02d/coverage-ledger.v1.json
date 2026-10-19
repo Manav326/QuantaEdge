@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 809,
-    "successful_visual_analyses": 796,
-    "missing_visual_analyses": 1482,
+    "raw_analysis_result_rows": 811,
+    "successful_visual_analyses": 798,
+    "missing_visual_analyses": 1480,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1495,
+    "unresolved_count": 1493,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -31286,9 +31286,39 @@
       "asset_path": "assets/ea6366a677f5f385d0f1d53ac7eacba7737cb60edb4149fd9865808c3a8aee02.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the structure of fungi, specifically bread mould and mould, with two types of filaments: one with a sac-like structure and another with a brush-like structure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "S.No.",
+          "Bread mould",
+          "(Fungi)",
+          "Branched filament without chlorophyll having",
+          "1. sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having",
+          "2. brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll— a green",
+          "3."
+        ],
+        "concepts": [
+          "Fungi",
+          "Bread mould",
+          "Mould",
+          "Filament",
+          "Sac-like structure",
+          "Brush-like structure",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the organisms present in soil suspension, specifically fungi and algae.",
+        "limitations": [
+          "The image does not provide information about the other organisms present in soil suspension."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31304,9 +31334,34 @@
       "asset_path": "assets/5d39bb20634116026fde378b444d13dd073f30ff62da99ce653b9dafc24a0db2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of various fungi and algae.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bread mould (Fungi)",
+          "Branched filament without chlorophyll having sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Fungi",
+          "Algae",
+          "Soil suspension",
+          "Bread mould",
+          "Mould",
+          "Branched filament",
+          "Spherical",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is related to the description of organisms present in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the organisms' appearance or behavior."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

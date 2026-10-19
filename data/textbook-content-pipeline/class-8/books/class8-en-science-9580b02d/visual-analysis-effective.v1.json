@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fb3510a7a71f5c8acc973766a82082b8b1dbabd1644353dfff25bdefbceefdab",
+  "raw_analysis_sha256": "2f612e70b86cc51d06d1907da17221f975343e9332c61464cfbb7e98a24052ed",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:51:52Z",
+      "checkpointed_at": "2026-10-19T04:57:44Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:52:41Z",
+      "checkpointed_at": "2026-10-19T04:58:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:53:20Z",
+      "checkpointed_at": "2026-10-19T04:59:10Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -36123,6 +36123,160 @@
         "concepts": [],
         "context_relation": "The image is related to the description of a flower in Table 2.2 of the textbook.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cf4afa5771ba366887c809e8",
+      "asset_sha256": "ea6366a677f5f385d0f1d53ac7eacba7737cb60edb4149fd9865808c3a8aee02",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/ea6366a677f5f385d0f1d53ac7eacba7737cb60edb4149fd9865808c3a8aee02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the structure of fungi, specifically bread mould and mould, with two types of filaments: one with a sac-like structure and another with a brush-like structure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "S.No.",
+          "Bread mould",
+          "(Fungi)",
+          "Branched filament without chlorophyll having",
+          "1. sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having",
+          "2. brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll— a green",
+          "3."
+        ],
+        "concepts": [
+          "Fungi",
+          "Bread mould",
+          "Mould",
+          "Filament",
+          "Sac-like structure",
+          "Brush-like structure",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the organisms present in soil suspension, specifically fungi and algae.",
+        "limitations": [
+          "The image does not provide information about the other organisms present in soil suspension."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:00:59Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the structure of fungi, specifically bread mould and mould, with two types of filaments: one with a sac-like structure and another with a brush-like structure.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "S.No.",
+          "Bread mould",
+          "(Fungi)",
+          "Branched filament without chlorophyll having",
+          "1. sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having",
+          "2. brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll— a green",
+          "3."
+        ],
+        "concepts": [
+          "Fungi",
+          "Bread mould",
+          "Mould",
+          "Filament",
+          "Sac-like structure",
+          "Brush-like structure",
+          "Algae",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is a part of a textbook page discussing the organisms present in soil suspension, specifically fungi and algae.",
+        "limitations": [
+          "The image does not provide information about the other organisms present in soil suspension."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "84abc7428e6ee7f7b6aa90bd",
+      "asset_sha256": "5d39bb20634116026fde378b444d13dd073f30ff62da99ce653b9dafc24a0db2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/5d39bb20634116026fde378b444d13dd073f30ff62da99ce653b9dafc24a0db2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of various fungi and algae.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bread mould (Fungi)",
+          "Branched filament without chlorophyll having sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Fungi",
+          "Algae",
+          "Soil suspension",
+          "Bread mould",
+          "Mould",
+          "Branched filament",
+          "Spherical",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is related to the description of organisms present in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the organisms' appearance or behavior."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:02:44Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of various fungi and algae.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Bread mould (Fungi)",
+          "Branched filament without chlorophyll having sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll — a green"
+        ],
+        "concepts": [
+          "Fungi",
+          "Algae",
+          "Soil suspension",
+          "Bread mould",
+          "Mould",
+          "Branched filament",
+          "Spherical",
+          "Chlorophyll"
+        ],
+        "context_relation": "The image is related to the description of organisms present in soil suspension.",
+        "limitations": [
+          "The image does not provide specific details about the organisms' appearance or behavior."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
