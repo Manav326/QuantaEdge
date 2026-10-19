@@ -167,7 +167,10 @@ export default function TextbooksClient() {
     setSelected(null);
     setPageError('');
     setCurrentPage(1);
-    router.replace('/student/textbooks?subjectCode=' + encodeURIComponent(selected.subject_code));
+    const nextParams = new URLSearchParams(searchParams.toString());
+    nextParams.set('subjectCode', selected.subject_code);
+    nextParams.delete('documentId');
+    router.replace('/student/textbooks?' + nextParams.toString());
   }, [documentId, selected, loading, documentsLanguage, documents, requestedLanguage, locale, router, searchParams]);
 
   const pageCount = Number(selected?.page_count || 0);
