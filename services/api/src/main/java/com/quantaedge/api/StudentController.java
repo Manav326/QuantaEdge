@@ -23,54 +23,37 @@ public class StudentController {
 
   @GetMapping("/me")
   public Map<String,Object> me(
-      @RequestParam(required=false) Long courseId,
-      @RequestParam(required=false) String programCode,
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant){
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    if(courseId==null && (programCode==null || programCode.isBlank()))
-      return learningMetrics.statsFor(context.studentId(),null,institutionId);
-    List<Map<String,Object>> enrolled;
-    if(courseId!=null) {
-      enrolled=jdbc.queryForList("""
-        select p.id,p.code,p.display_name
-        from curriculum_program p
-        join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
-        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
-        """,context.studentId(),institutionId,courseId);
-    } else {
-      enrolled=jdbc.queryForList("""
-        select p.id,p.code,p.display_name
-        from curriculum_program p
-        join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
-        where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
-        order by p.id
-        """,context.studentId(),institutionId,programCode.trim());
-    }
-    if(enrolled.size()!=1) throw new SecurityException(enrolled.isEmpty()
-        ? "Active enrolment in this course is required."
-        : "This course code is ambiguous; request course metrics by numeric course ID.");
+    if(courseId==null || courseId<=0L)
+      throw new IllegalArgumentException("Select an enrolled course before requesting learning metrics.");
+    List<Map<String,Object>> enrolled=jdbc.queryForList("""
+      select distinct p.id,p.code,p.display_name
+      from curriculum_program p
+      join student_program_enrollment spe on spe.program_id=p.id
+        and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
+      join institution_membership membership
+        on membership.student_id=spe.student_id and membership.institution_id=spe.institution_id
+           and membership.status='ACTIVE'
+      join institution_course_assignment assignment
+        on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release
+        on release.id=assignment.course_release_id and release.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,context.studentId(),institutionId,courseId);
+    if(enrolled.size()!=1)
+      throw new SecurityException("The selected course is not actively enrolled and assigned in this institution.");
     Map<String,Object> course=enrolled.getFirst();
     long stableCourseId=((Number)course.get("id")).longValue();
     Map<String,Object> result=learningMetrics.statsFor(context.studentId(),stableCourseId,institutionId);
     result.put("courseId",stableCourseId);
-    result.put("programId",stableCourseId);
-    result.put("programCode",course.get("code"));
-    result.put("programName",course.get("display_name"));
+    result.put("courseName",course.get("display_name"));
     return result;
   }
-
-  // Source-compatible overload for internal callers and controller tests. This overload is not
-  // mapped as an HTTP route; public calls always carry a resolved institution context.
-  public Map<String,Object> me(AuthContext context) {
-    context=authorization.requireStudent(context);
-    return learningMetrics.statsFor(context.studentId());
-  }
-
 
   @GetMapping("/me/profile")
   public Map<String,Object> myProfile(@RequestAttribute(value="authContext",required=false) AuthContext context) {
