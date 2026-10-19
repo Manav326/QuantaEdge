@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 868,
+    "assets_selected": 869,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 864,
-    "assets_remaining": 1214,
+    "assets_analyzed": 865,
+    "assets_remaining": 1213,
     "assets_completion_percent": 41.6,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 863,
+    "assets_skipped_from_checkpoint": 864,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:20:11Z"
+      "checkpointed_at": "2026-10-19T03:23:23Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:20:52Z"
+      "checkpointed_at": "2026-10-19T03:24:06Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:21:45Z"
+      "checkpointed_at": "2026-10-19T03:25:02Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:22:25Z"
+      "checkpointed_at": "2026-10-19T03:25:46Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27235,6 +27235,57 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T03:22:33Z"
+    },
+    {
+      "asset_id": "cb41ac251bed07822fbd73d2",
+      "asset_sha256": "9fd6e7b9cb43636cb5c5632b820323dec593099af1796c1737d1d4ae4f8751c4",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 53,
+      "asset_path": "page-0053.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "afafcbd8f49615e2fa749dbddaf95d2e719a3847002f6b2ac3ec682201e535d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing mindful eating and healthy eating habits.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3 Mindful Eating: A Path to a Healthy Body",
+          "Chapter",
+          "कोऽरुक्? कोऽरुक्? कोऽरुक्?",
+          "हितभुक् मितभुक् ऋतुभुक्",
+          "(सुभाषित)",
+          "Who is healthy? Who is healthy? Who is healthy? One who eats food that is wholesome, in moderate quantities, and appropriate for the season, time, and place.",
+          "(Wise saying)",
+          "Thought of the day",
+          "अन्‍नेन जातानि जीवन्‍त",
+          "Taittiriya Upanishada",
+          "Medu and Mishti read 'thought of the day' on the school noticeboard every day. Today's thought, 'annena jātāni jīvanti', makes them curious. Mishti tells Medu that it is a Sanskrit saying which means 'food gives life to living beings.'",
+          "Let us try to understand the significance of this saying.",
+          "3.1 What Do We Eat?",
+          "Activity 3.1: Let us record",
+          "All of us eat food every day. Food is an essential component of our daily life. List the food items you have consumed over the week in Table 3.1."
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Eating Habits",
+          "Thought of the Day",
+          "Sanskrit Saying",
+          "Food and Life"
+        ],
+        "context_relation": "The page discusses the importance of mindful eating and healthy eating habits, using a Sanskrit saying as an example.",
+        "limitations": [
+          "The page does not provide specific examples or exercises for students to practice mindful eating.",
+          "The page does not include any interactive elements or multimedia content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:27:40Z"
     }
   ]
 }
