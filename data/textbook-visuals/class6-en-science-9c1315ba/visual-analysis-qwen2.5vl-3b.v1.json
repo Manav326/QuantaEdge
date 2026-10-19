@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1089,
+    "assets_selected": 1091,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1086,
-    "assets_remaining": 992,
-    "assets_completion_percent": 52.3,
+    "assets_analyzed": 1088,
+    "assets_remaining": 990,
+    "assets_completion_percent": 52.4,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1084,
+    "assets_skipped_from_checkpoint": 1086,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:39:53Z"
+      "checkpointed_at": "2026-10-19T17:43:24Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:40:33Z"
+      "checkpointed_at": "2026-10-19T17:44:04Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:41:24Z"
+      "checkpointed_at": "2026-10-19T17:44:58Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35441,6 +35441,60 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:42:36Z"
+    },
+    {
+      "asset_id": "dee97a88c045898830d42c3e",
+      "asset_sha256": "0081e050cf6ba8fa52d166ee8c5f8d09bb9cd826b39d79893ec0d62d521f98b5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/0081e050cf6ba8fa52d166ee8c5f8d09bb9cd826b39d79893ec0d62d521f98b5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c184348ca081ae4c44722ba49a687c97ce5f4ad76b867e3bf4cbd478c1fd9d68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red rectangular object with a face showing surprise or confusion.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration of a red object with a face, possibly representing a character or a symbol.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the object's function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:45:38Z"
+    },
+    {
+      "asset_id": "cfaa91d9e74243837cd553e7",
+      "asset_sha256": "ad8ee06a8fefc591313f409b2c0c7c02cee90a8e17e3e9d03fa79ec848b61299",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/ad8ee06a8fefc591313f409b2c0c7c02cee90a8e17e3e9d03fa79ec848b61299.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c184348ca081ae4c44722ba49a687c97ce5f4ad76b867e3bf4cbd478c1fd9d68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a red block with a smiling face.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about keeping magnets safe.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:46:18Z"
     }
   ]
 }
