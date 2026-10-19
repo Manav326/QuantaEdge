@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 802,
+    "assets_selected": 804,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 799,
-    "assets_remaining": 1492,
-    "assets_completion_percent": 34.9,
+    "assets_analyzed": 801,
+    "assets_remaining": 1490,
+    "assets_completion_percent": 35.0,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 797,
+    "assets_skipped_from_checkpoint": 799,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:09:41Z"
+      "checkpointed_at": "2026-10-19T05:14:30Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:10:30Z"
+      "checkpointed_at": "2026-10-19T05:15:19Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:11:08Z"
+      "checkpointed_at": "2026-10-19T05:15:58Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24767,6 +24767,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T05:13:19Z"
+    },
+    {
+      "asset_id": "b1faaaa8d110c1e3e5e299c7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a table with two columns: 'S.No.' and 'Diagram'. The table lists organisms present in soil suspension, including Bread mould (Fungi) and Mould (Fungi). Each organism is described with specific characteristics.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Organisms present in soil suspension",
+          "S.No.    Diagram                 Remarks",
+          "1. Bread mould (Fungi)",
+          "2. Mould (Fungi)",
+          "3. Algae"
+        ],
+        "concepts": [
+          "Soil suspension",
+          "Bread mould",
+          "Mould",
+          "Algae"
+        ],
+        "context_relation": "The table provides a structured overview of organisms found in soil suspension, categorized by their type.",
+        "limitations": [
+          "The table does not include any specific characteristics or descriptions of the organisms beyond their type."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:16:30Z"
+    },
+    {
+      "asset_id": "14427527f50c4bf0db731bb4",
+      "asset_sha256": "cf4858dd2234440b2a3e47fbf8a5dc61ef22ee763da60f1005ac9b3b22d4cf00",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "page-0037.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing organisms present in soil suspension, including bread mould, mould, algae, and bacteria, with their respective diagrams and remarks.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Organisms present in soil suspension",
+          "S.No.    Diagram                 Remarks",
+          "1. Bread mould (Fungi)",
+          "2. Mould (Fungi)",
+          "3. Algae",
+          "4. Bacteria"
+        ],
+        "concepts": [
+          "Organisms in soil suspension",
+          "Bread mould",
+          "Mould",
+          "Algae",
+          "Bacteria"
+        ],
+        "context_relation": "The table provides information about the organisms present in soil suspension, which is a part of the chapter on the invisible living world.",
+        "limitations": [
+          "The table does not include specific details about the characteristics of each organism."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:20:26Z"
     }
   ]
 }
