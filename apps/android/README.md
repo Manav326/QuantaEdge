@@ -13,7 +13,7 @@ gradle -p apps/android assembleDebug
 gradle -p apps/android testDebugUnitTest
 ~~~
 
-The default debug API URL for a physical Android device on the same Wi-Fi is http://192.168.31.47:8080/, matching the QuantaEdge test PC LAN address configured in mPay. The backend must be running on the PC and reachable over port 8080. For an Android emulator, override this with the emulator host alias:
+The default debug API URL for a physical Android device on the same Wi-Fi is http://192.168.31.47:8080/, matching the QuantaEdge test PC LAN address configured in mPay. The backend must be running on the PC and reachable over port 8080. The installable debug APK uploaded by GitHub Actions is also built against `http://192.168.31.47:8080/` for physical-device testing; the Play Store release workflow uses a separately configured HTTPS endpoint. If the router assigns the PC a different LAN IP, update the debug workflow's `QUANTAEDGE_API_BASE_URL` and rebuild the APK. For an Android emulator, override this with the emulator host alias:
 
 ~~~powershell
 gradle -p apps/android assembleDebug -PquantaedgeApiBaseUrl=http://10.0.2.2:8080/
