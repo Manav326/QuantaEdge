@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d1e71895de37b353761b4265afe786af01f196973e7ff823a2117e1d8af0d01b",
+  "raw_analysis_sha256": "a4ab02b519c871b59450d9e943fd6b43f4eec4a6e56283438888a3184e824f15",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:30:03Z",
+      "checkpointed_at": "2026-10-19T00:34:16Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:30:43Z",
+      "checkpointed_at": "2026-10-19T00:34:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T00:31:35Z",
+      "checkpointed_at": "2026-10-19T00:35:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37600,7 +37600,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149728377",
+      "run_id": "39178082336",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -37902,7 +37902,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
         "visual_type": "uncertain",
         "visible_text": [
           "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
@@ -37916,21 +37916,27 @@
           "Salim Ali",
           "Keoladeo National Park",
           "Ranganathittu Bird Sanctuary",
-          "Padma Vibhushan"
+          "Padma Vibhushan",
+          "terrestrial habitats",
+          "terrestrial",
+          "forest",
+          "desert",
+          "grassland",
+          "mountain"
         ],
-        "context_relation": "The page discusses the adaptations of plants and animals in different regions and their habitats, including the work of Salim Ali and the examples of terrestrial habitats.",
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
         "limitations": [
-          "The page does not provide specific examples of terrestrial habitats beyond forests, deserts, grasslands, and mountains.",
+          "The page does not provide specific examples of adaptations for each region or habitat.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39149728377",
-      "checkpointed_at": "2026-10-18T23:26:42Z",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T00:38:08Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
+        "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and habitats.",
         "visual_type": "uncertain",
         "visible_text": [
           "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
@@ -37944,11 +37950,17 @@
           "Salim Ali",
           "Keoladeo National Park",
           "Ranganathittu Bird Sanctuary",
-          "Padma Vibhushan"
+          "Padma Vibhushan",
+          "terrestrial habitats",
+          "terrestrial",
+          "forest",
+          "desert",
+          "grassland",
+          "mountain"
         ],
-        "context_relation": "The page discusses the adaptations of plants and animals in different regions and their habitats, including the work of Salim Ali and the examples of terrestrial habitats.",
+        "context_relation": "The page discusses the adaptations of plants and animals in different regions and habitats, and provides examples of such adaptations.",
         "limitations": [
-          "The page does not provide specific examples of terrestrial habitats beyond forests, deserts, grasslands, and mountains.",
+          "The page does not provide specific examples of adaptations for each region or habitat.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
