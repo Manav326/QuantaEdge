@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1052,
+    "assets_selected": 1054,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1049,
-    "assets_remaining": 1029,
-    "assets_completion_percent": 50.5,
+    "assets_analyzed": 1051,
+    "assets_remaining": 1027,
+    "assets_completion_percent": 50.6,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1047,
+    "assets_skipped_from_checkpoint": 1049,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:21:43Z"
+      "checkpointed_at": "2026-10-19T16:24:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:22:26Z"
+      "checkpointed_at": "2026-10-19T16:25:34Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T16:23:21Z"
+      "checkpointed_at": "2026-10-19T16:26:29Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -34105,6 +34105,89 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T16:24:01Z"
+    },
+    {
+      "asset_id": "859199a40431aa0677a862b1",
+      "asset_sha256": "cd9e93b4590890361392e6d39e06f86855b328ee6f918c0e4fc49dc8a2e3af41",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 84,
+      "asset_path": "page-0084.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a1064153db0485037f1dc4c648f8a5b4f07f544dcd0a45f236a024e7ef213527",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A freely suspended magnet resting along the north-south direction due to the Earth's magnetic field.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A freely suspended magnet comes to rest along the\nnorth-south direction. The end of the magnet that points\n towards north direction is called the North-seeking pole or\nthe North pole of the magnet. The other end that points\n towards the South direction is called the South-seeking\npole or the South p",
+          "Repeat this activity with a small iron bar in place of\nthe bar magnet. What do you observe? Does it always rest\nalong north-south direction? It does not. It can rest along\nany direction. This implies that only magnets rest along\nnorth-south direction. This activity provides us with a way\nto test whe",
+          "The property of a freely suspended magnet to always rest\nalong the north-south direction is used to find directions.\nBased on this, a small device called a magnetic compass was\ndeveloped in older days for finding directions. It\nhas a magnet in the shape of a needle which can\nrotate freely (Fig. 4.6)",
+          "The compass is kept at the place where we\nwish to know the directions. After some time, the\nneedle comes to rest in the north-south direction.\nThe compass box is then gently rotated until the\nnorth and south marked on the dial are aligned\nwith the needle. Now all directions at that place\nare as indi",
+          "A magnetic compass is usually a small circular box\nwith a transparent cover on it, as shown in Fig. 4.6.\nThe magnet, in the shape of a needle, is mounted\non a pin standing on the bottom of the box. This\nneedle is balanced on the pin in such a\nmanner that it can move around this point\neasily, that is"
+        ],
+        "concepts": [
+          "magnet",
+          "north-seeking pole",
+          "north pole",
+          "south-seeking pole",
+          "south pole",
+          "Earth's magnetic field",
+          "magnetic compass",
+          "north-south direction",
+          "directions",
+          "magnetism"
+        ],
+        "context_relation": "describing",
+        "limitations": [
+          "The image does not show the actual magnetic compass or the experiment being described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:28:27Z"
+    },
+    {
+      "asset_id": "2ea95214b2865fac65415ae2",
+      "asset_sha256": "fda6fe32b2751d2f01ad6016bd0e54d560e51b519504b56b781e822a1b49fd11",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 85,
+      "asset_path": "assets/fda6fe32b2751d2f01ad6016bd0e54d560e51b519504b56b781e822a1b49fd11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ccbeb555e73ced48a04a3e3bad6c26a3009f2b3e6f9ce51bd1f76e410e83c339",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a red iron sewing needle, with arrows indicating the direction of movement.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A hand holding a red iron sewing needle, with arrows indicating the direction of movement."
+        ],
+        "concepts": [
+          "Iron sewing needle",
+          "Permanent bar magnet",
+          "Wooden table",
+          "Glass bowl",
+          "Water",
+          "Magnetism",
+          "Direction of movement"
+        ],
+        "context_relation": "The image is related to the activity of making an iron needle magnet.",
+        "limitations": [
+          "The image does not show the actual process of making a magnet."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T16:29:08Z"
     }
   ]
 }

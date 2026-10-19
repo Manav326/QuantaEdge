@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1063,
-    "successful_visual_analyses": 1052,
-    "missing_visual_analyses": 1015,
+    "raw_analysis_result_rows": 1065,
+    "successful_visual_analyses": 1054,
+    "missing_visual_analyses": 1013,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1026,
+    "unresolved_count": 1024,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40887,9 +40887,35 @@
       "asset_path": "page-0084.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A freely suspended magnet resting along the north-south direction due to the Earth's magnetic field.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A freely suspended magnet comes to rest along the\nnorth-south direction. The end of the magnet that points\n towards north direction is called the North-seeking pole or\nthe North pole of the magnet. The other end that points\n towards the South direction is called the South-seeking\npole or the South p",
+          "Repeat this activity with a small iron bar in place of\nthe bar magnet. What do you observe? Does it always rest\nalong north-south direction? It does not. It can rest along\nany direction. This implies that only magnets rest along\nnorth-south direction. This activity provides us with a way\nto test whe",
+          "The property of a freely suspended magnet to always rest\nalong the north-south direction is used to find directions.\nBased on this, a small device called a magnetic compass was\ndeveloped in older days for finding directions. It\nhas a magnet in the shape of a needle which can\nrotate freely (Fig. 4.6)",
+          "The compass is kept at the place where we\nwish to know the directions. After some time, the\nneedle comes to rest in the north-south direction.\nThe compass box is then gently rotated until the\nnorth and south marked on the dial are aligned\nwith the needle. Now all directions at that place\nare as indi",
+          "A magnetic compass is usually a small circular box\nwith a transparent cover on it, as shown in Fig. 4.6.\nThe magnet, in the shape of a needle, is mounted\non a pin standing on the bottom of the box. This\nneedle is balanced on the pin in such a\nmanner that it can move around this point\neasily, that is"
+        ],
+        "concepts": [
+          "magnet",
+          "north-seeking pole",
+          "north pole",
+          "south-seeking pole",
+          "south pole",
+          "Earth's magnetic field",
+          "magnetic compass",
+          "north-south direction",
+          "directions",
+          "magnetism"
+        ],
+        "context_relation": "describing",
+        "limitations": [
+          "The image does not show the actual magnetic compass or the experiment being described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40905,9 +40931,28 @@
       "asset_path": "assets/fda6fe32b2751d2f01ad6016bd0e54d560e51b519504b56b781e822a1b49fd11.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a red iron sewing needle, with arrows indicating the direction of movement.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A hand holding a red iron sewing needle, with arrows indicating the direction of movement."
+        ],
+        "concepts": [
+          "Iron sewing needle",
+          "Permanent bar magnet",
+          "Wooden table",
+          "Glass bowl",
+          "Water",
+          "Magnetism",
+          "Direction of movement"
+        ],
+        "context_relation": "The image is related to the activity of making an iron needle magnet.",
+        "limitations": [
+          "The image does not show the actual process of making a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
