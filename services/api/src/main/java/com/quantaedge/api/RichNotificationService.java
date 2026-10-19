@@ -253,24 +253,29 @@ public class RichNotificationService {
     if(courseId!=null && !isAssignedCourse(institutionId,courseId)) {
       throw new SecurityException("The selected course is not actively assigned to this institution.");
     }
-    String courseClause=courseId==null?"":" and spe.program_id=?";
-    String sql = """
-      select distinct st.id as recipient_id,m.institution_id
-      from student st
-      join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
-      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-      join student_program_enrollment spe on spe.student_id=st.id
-        and spe.institution_id=m.institution_id and spe.status='ACTIVE'
-      where st.active=true and m.institution_id=?
-      """+(courseId==null?"":"""
-      and spe.program_id=?
-      and exists(select 1 from institution_course_assignment a
+    List<Map<String,Object>> rows;
+    if(courseId==null) {
+      rows=jdbc.queryForList("""
+        select distinct st.id as recipient_id,m.institution_id
+        from student st
+        join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        where st.active=true and m.institution_id=?
+        """,institutionId);
+    } else {
+      rows=jdbc.queryForList("""
+        select distinct st.id as recipient_id,m.institution_id
+        from student st
+        join institution_membership m on m.student_id=st.id and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student_program_enrollment spe on spe.student_id=st.id
+          and spe.institution_id=m.institution_id and spe.status='ACTIVE'
+          and spe.program_id=?
+        join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=spe.program_id
-        where a.institution_id=m.institution_id and a.status='ASSIGNED')
-      """);
-    List<Map<String,Object>> rows=courseId==null
-        ?jdbc.queryForList(sql,institutionId)
-        :jdbc.queryForList(sql,institutionId,courseId);
+        where st.active=true and m.institution_id=?
+        """,courseId,institutionId);
+    }
     for(Map<String,Object> row:rows) putRecipient(target,new Recipient("STUDENT",
         ((Number)row.get("recipient_id")).longValue(),((Number)row.get("institution_id")).longValue()));
   }
@@ -582,6 +587,46 @@ public class RichNotificationService {
       row.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(row.get("state"))));
     }
     return rows;
+  }
+
+  public List<Map<String,Object>> inboxForInstitutionAdmin(
+      long adminId,long institutionId,int requestedLimit,Long beforeId,boolean unreadOnly) {
+    int limit=Math.max(1,Math.min(requestedLimit,100));
+    return jdbc.queryForList("""
+      select r.id as recipient_id,r.state,r.created_at as delivered_at,r.read_at,r.dismissed_at,
+        c.public_id as campaign_public_id,c.scope,c.title,c.summary,c.content_document::text as content_document,
+        c.institution_id as campaign_institution_id,c.course_id,c.expires_at
+      from notification_recipient r join notification_campaign c on c.id=r.campaign_id
+      where r.recipient_kind='INSTITUTION_ADMIN' and r.institution_admin_id=?
+        and r.institution_id=? and c.status='SENT'
+        and (c.expires_at is null or c.expires_at>now())
+        and (?=0 or r.id<?) and (?=false or r.state<>'READ')
+      order by r.created_at desc,r.id desc limit ?
+      """,adminId,institutionId,beforeId==null?0L:beforeId,
+        beforeId==null?Long.MAX_VALUE:beforeId,unreadOnly,limit)
+      .stream().map(row->{
+        Map<String,Object> item=new LinkedHashMap<>(row);
+        item.put("contentDocument",parseJson(String.valueOf(item.remove("content_document"))));
+        item.put("unread",!Set.of("READ","DISMISSED").contains(String.valueOf(item.get("state"))));
+        return item;
+      }).toList();
+  }
+
+  @Transactional
+  public boolean markReadForInstitutionAdmin(long adminId,long institutionId,long recipientId,boolean all) {
+    if(all) {
+      jdbc.update("""
+        update notification_recipient set state='READ',read_at=coalesce(read_at,now())
+        where recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
+          and institution_id=? and state in ('CREATED','QUEUED')
+        """,adminId,institutionId);
+      return true;
+    }
+    return jdbc.update("""
+      update notification_recipient set state='READ',read_at=coalesce(read_at,now())
+      where id=? and recipient_kind='INSTITUTION_ADMIN' and institution_admin_id=?
+        and institution_id=? and state in ('CREATED','QUEUED')
+      """,recipientId,adminId,institutionId)==1;
   }
 
   @Transactional
