@@ -71,8 +71,6 @@ class SourceIngestionControllerTest {
   void verifiedEditionCannotBeUnverifiedBeforeDatabaseUpdate() {
     when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
     InstitutionTenantContext tenant = new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge");
-    when(jdbc.queryForObject(contains("select count(*) from curriculum_program p"), eq(Long.class), eq(1L), eq(100L)))
-        .thenReturn(1L);
     when(jdbc.queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L)))
         .thenReturn(1L);
 
