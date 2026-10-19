@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 875,
-    "successful_visual_analyses": 865,
-    "missing_visual_analyses": 1416,
+    "raw_analysis_result_rows": 876,
+    "successful_visual_analyses": 866,
+    "missing_visual_analyses": 1415,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1426,
+    "unresolved_count": 1425,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33471,28 +33471,26 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A farmer planting wheat crops and another farmer growing bean crops without nitrogen fertiliser.",
+        "visual_summary": "A question about the effects of adding nitrogen-rich fertiliser to soil on crop yield, and a question about a garden experiment involving pits and waste.",
         "visual_type": "uncertain",
         "visible_text": [
-          "3. A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n\n6. Desi",
-          "A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n\n6. Design "
+          "3. A farmer was planting wheat crops in his field. He added\nnitrogen-rich fertiliser to the soil to get a good yield of crops.\nIn the neighbouring field, another farmer was growing bean\n\n4. Snehal dug two pits, A and B, in her garden. In pit A, she\n\n5. Identify the following microorganisms:\n(i) I li",
+          "Why?",
+          "When?",
+          "Where?",
+          "Why not?"
         ],
         "concepts": [
-          "nitrogen-rich fertiliser",
-          "wheat crops",
-          "bean crops",
+          "effects of nitrogen-rich fertiliser on crop yield",
+          "garden experiment with pits and waste",
           "microorganisms",
-          "temperature",
-          "air",
-          "moisture",
-          "curd",
-          "sugar solution",
-          "yeast",
-          "limestone"
+          "optimal conditions for microorganisms",
+          "souring of curd",
+          "yeast fermentation"
         ],
-        "context_relation": "educational",
+        "context_relation": "The image is a page from a textbook that contains questions and answers related to biology and chemistry topics.",
         "limitations": [
-          "The image does not provide specific details about the experiment or the microorganisms.",
+          "The image does not provide specific answers to the questions, only the questions themselves.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -33795,9 +33793,41 @@
       "asset_path": "assets/b17d6ea8996d5f757d1390fb41ef4491de4e6c65010a1702fa09d9f53e9b8cae.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a book with a red ribbon tied around it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast",
+          "11.4% of India’s population is",
+          "food",
+          "More",
+          "than",
+          "100",
+          "million",
+          "Book ID: ncert-c8-english-hecu1",
+          "Source PDF page: 48",
+          "Asset kind: embedded_image",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "Reduction in oil intake",
+          "Fast food consumption",
+          "Population statistics",
+          "India's population",
+          "Book ID",
+          "Source PDF page",
+          "Asset kind",
+          "Nearby extracted page text"
+        ],
+        "context_relation": "The image is a photo of a book with a red ribbon, and the text is related to reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image does not provide specific details about the book or the statistics.",
+          "The text is incomplete and does not provide a full context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
