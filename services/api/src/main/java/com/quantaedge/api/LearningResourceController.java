@@ -390,18 +390,20 @@ public class LearningResourceController {
   @GetMapping("/learning/resources")
   public List<Map<String,Object>> studentResources(@RequestParam(required=false) Long chapterId,
       @RequestParam(required=false) Long lessonId,@RequestParam(required=false) String artifactId,
-      @RequestParam(defaultValue="hi") String language,@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam Long courseId,@RequestParam(defaultValue="hi") String language,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireCourseId(courseId);
     String locale=normalizeLanguage(language);
     int targets=(chapterId==null?0:1)+(lessonId==null?0:1)+(artifactId==null||artifactId.isBlank()?0:1);
     if(targets!=1)throw badRequest("Supply exactly one chapterId, lessonId, or artifactId.");
     long canonicalChapter;String requestedArtifact=null;
     if(chapterId!=null) {
       canonicalChapter=chapterId;Map<String,Object> chapter=chapterRow(canonicalChapter);
-      ensureStudentCanAccessChapter(context.studentId(),chapter,institutionId);ensureChapterPublished(chapter);
+      ensureStudentCanAccessChapterInCourse(context.studentId(),chapter,institutionId,courseId);ensureChapterPublished(chapter);
     } else if(lessonId!=null) {
       List<Map<String,Object>> lessons=jdbc.queryForList("""
         select l.id,l.chapter_id,l.active as lesson_active,l.status as lesson_status
@@ -412,7 +414,7 @@ public class LearningResourceController {
       if(!Boolean.TRUE.equals(lesson.get("lesson_active"))||!"PUBLISHED".equals(String.valueOf(lesson.get("lesson_status"))))
         throw notFound("Published lesson",lessonId);
       canonicalChapter=((Number)lesson.get("chapter_id")).longValue();
-      Map<String,Object> chapter=chapterRow(canonicalChapter);ensureChapterPublished(chapter);ensureStudentCanAccessChapter(context.studentId(),chapter,institutionId);
+      Map<String,Object> chapter=chapterRow(canonicalChapter);ensureChapterPublished(chapter);ensureStudentCanAccessChapterInCourse(context.studentId(),chapter,institutionId,courseId);
     } else {
       requestedArtifact=requiredText(artifactId,"Structured artifact ID",120);
       StructuredLessonArtifactService.PublishedArtifact artifact=artifacts.requirePublished(requestedArtifact);
@@ -466,7 +468,7 @@ public class LearningResourceController {
         item.put("streamUrl","/api/v1/learning/resources/"+id+"/stream?assignmentId="+assignment);
         if(Boolean.TRUE.equals(raw.get("download_allowed")))item.put("downloadUrl","/api/v1/learning/resources/"+id+"/download?assignmentId="+assignment);
       } else if("LEARNING_DOCUMENT".equals(sourceKind)) {
-        item.put("learningDocumentId",raw.get("learning_document_id"));item.put("readerApiUrl","/api/v1/learning/documents/"+raw.get("learning_document_id"));
+        item.put("learningDocumentId",raw.get("learning_document_id"));item.put("readerApiUrl","/api/v1/learning/documents/"+raw.get("learning_document_id")+"?courseId="+courseId);
       } else if("CONTENT_ASSET".equals(sourceKind)) {
         Object url=raw.get("content_asset_url");if(isSafeClientAssetUrl(url==null?null:String.valueOf(url)))item.put("assetUrl",url);
       } else if("EXTERNAL_URL".equals(sourceKind))item.put("externalUrl",raw.get("external_url"));
@@ -482,7 +484,7 @@ public class LearningResourceController {
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    return streamPrivateResource(readableAssignedResource(resourceId,assignmentId,context.studentId(),institutionId),rangeHeader,false);
+    return streamPrivateResource(readableAssignedResource(resourceId,assignmentId,context.studentId(),institutionId,requireCourseId(courseId)),rangeHeader,false);
   }
 
   @GetMapping("/learning/resources/{resourceId}/download")
@@ -492,7 +494,7 @@ public class LearningResourceController {
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String,Object> resource=readableAssignedResource(resourceId,assignmentId,context.studentId(),institutionId);
+    Map<String,Object> resource=readableAssignedResource(resourceId,assignmentId,context.studentId(),institutionId,requireCourseId(courseId));
     if(!Boolean.TRUE.equals(resource.get("download_allowed")))throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Downloads are disabled for this resource.");
     if(!Set.of("PRIVATE_UPLOAD","RECORDED_CLASS").contains(String.valueOf(resource.get("source_kind"))))
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"This resource does not support managed downloads.");
@@ -507,7 +509,7 @@ public class LearningResourceController {
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    Map<String,Object> resource=readableAssignedResource(resourceId,assignmentId,context.studentId(),institutionId);
+    Map<String,Object> resource=readableAssignedResource(resourceId,assignmentId,context.studentId(),institutionId,requireCourseId(courseId));
     if(!Set.of("VIDEO","AUDIO").contains(String.valueOf(resource.get("resource_type"))))throw badRequest("Progress is supported only for video and audio resources.");
     long position=longValue(body.getOrDefault("lastPositionSeconds",0),"Playback position");
     long watched=longValue(body.getOrDefault("watchedSeconds",0),"Watched seconds");
@@ -522,7 +524,7 @@ public class LearningResourceController {
     return Map.of("resourceId",resourceId,"lastPositionSeconds",position,"watchedSeconds",watched,"completed",completed);
   }
 
-  private Map<String,Object> readableAssignedResource(long resourceId,long assignmentId,long studentId,long institutionId) {
+  private Map<String,Object> readableAssignedResource(long resourceId,long assignmentId,long studentId,long institutionId,long courseId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select r.id as resource_id,r.resource_type,r.source_kind,r.storage_key,r.original_filename,r.media_type,r.file_size_bytes,
         r.sha256,r.download_allowed,r.external_url,r.status as resource_status,a.id as assignment_id,a.target_kind,
@@ -548,7 +550,7 @@ public class LearningResourceController {
       if(lessons.isEmpty()||!Boolean.TRUE.equals(lessons.getFirst().get("active"))||!"PUBLISHED".equals(String.valueOf(lessons.getFirst().get("status")))
           ||((Number)lessons.getFirst().get("chapter_id")).longValue()!=chapterId)throw notFound("Published learning resource target",assignmentId);
     }
-    Map<String,Object> chapter=chapterRow(chapterId);ensureChapterPublished(chapter);ensureStudentCanAccessChapter(studentId,chapter,institutionId);
+    Map<String,Object> chapter=chapterRow(chapterId);ensureChapterPublished(chapter);ensureStudentCanAccessChapterInCourse(studentId,chapter,institutionId,courseId);
     if("STRUCTURED_ARTIFACT".equals(row.get("target_kind")))verifyArtifactChapter(artifacts.requirePublished(String.valueOf(row.get("artifact_id"))),chapterId);
     if("PRIVATE_UPLOAD".equals(row.get("source_kind"))) {
       Path path=resourceStorage.resolve(String.valueOf(row.get("storage_key")));
@@ -732,6 +734,35 @@ public class LearningResourceController {
           400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before opening learning resources.");
     }
     return tenant.institutionId();
+  }
+
+  private long requireCourseId(Long courseId) {
+    if (courseId == null || courseId <= 0L) {
+      throw badRequest("Select an active course before accessing this learning resource.");
+    }
+    return courseId;
+  }
+
+  private void ensureStudentCanAccessChapterInCourse(long studentId,Map<String,Object> chapter,
+      long institutionId,long courseId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from curriculum_chapter ch
+        join curriculum_subject s on s.id=ch.subject_id and s.active=true
+        join curriculum_class c on c.id=s.class_id and c.active=true
+        join student st on st.id=? and st.active=true
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+        join curriculum_program selected_course on selected_course.id=? and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+        join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+          and spe.program_id=selected_course.id and spe.status='ACTIVE'
+        join institution_course_assignment assignment on assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
+        join institution_course_release release on release.id=assignment.course_release_id and release.program_id=selected_course.id
+        join curriculum_program_subject cps on cps.program_id=selected_course.id and cps.class_id=s.class_id and cps.subject_id=s.id
+        where ch.id=? and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
+      )
+      """,Boolean.class,studentId,institutionId,courseId,chapter.get("chapter_id"));
+    if(!Boolean.TRUE.equals(allowed))throw notFound("Learning resource in the selected course",((Number)chapter.get("chapter_id")).longValue());
   }
 
   private void ensureStudentCanAccessChapter(long studentId,Map<String,Object> chapter,long institutionId) {
