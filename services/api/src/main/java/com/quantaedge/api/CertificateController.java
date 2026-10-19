@@ -306,11 +306,15 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/assessment-eligibility")
   public Map<String, Object> assessmentCertificateEligibility(
       @RequestParam String attemptIds,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireCourseId(courseId);
+    requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
+
     Set<Long> uniqueIds = new LinkedHashSet<>();
     for (String raw : attemptIds.split(",")) {
       String value = raw.trim();
@@ -326,10 +330,11 @@ public class CertificateController {
         throw new IllegalArgumentException("Check certificate eligibility for at most 100 attempts at a time.");
       }
     }
-    if (uniqueIds.isEmpty()) return Map.of("items", List.of(), "passThresholdPercent", minimumPassPercent);
+    if (uniqueIds.isEmpty()) return Map.of("courseId",courseId,"items", List.of(), "passThresholdPercent", minimumPassPercent);
 
     String placeholders = String.join(",", java.util.Collections.nCopies(uniqueIds.size(), "?"));
     List<Object> args = new ArrayList<>();
+    args.add(courseId);
     args.add(context.studentId());
     args.add(institutionId);
     args.addAll(uniqueIds);
@@ -337,64 +342,56 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.status,att.final_score,att.max_score,att.released_at,s.id AS subject_id,
                s.code AS subject_code,s.display_name AS subject_name,cc.code AS class_code,
-               coalesce(s.program_id,p.id) AS course_id,p.display_name AS course_name,
-               round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
-               EXISTS (
-                 SELECT 1 FROM student_track_enrollment ste
-                 JOIN student active_st ON active_st.id=ste.student_id AND active_st.active=true
-                 JOIN curriculum_subject active_s ON active_s.id=ste.subject_id AND active_s.active=true
-                 JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id AND active_cc.active=true
-                 WHERE ste.student_id=att.student_id AND ste.institution_id=att.institution_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
-                   AND active_st.id=att.student_id AND active_s.id=s.id
-                   AND ((active_s.program_id is null and active_cc.code=active_st.class_code
-                       and (active_cc.code not in ('6','7','8') or exists(
-                         select 1 from curriculum_program active_course
-                         join curriculum_program_subject active_map on active_map.program_id=active_course.id
-                           and active_map.class_id=active_s.class_id and active_map.subject_id=active_s.id
-                         join student_program_enrollment active_spe on active_spe.program_id=active_course.id
-                           and active_spe.student_id=active_st.id and active_spe.institution_id=att.institution_id and active_spe.status='ACTIVE'
-                         where active_course.class_id=active_cc.id and active_course.code='CLASS_' || active_cc.code
-                           and active_course.curriculum_version='CURRENT' and active_course.status='ACTIVE'
-                       )))
-                     or (active_s.program_id is not null and exists(
-                       select 1 from student_program_enrollment active_spe
-                       join curriculum_program active_p on active_p.id=active_spe.program_id and active_p.status='ACTIVE'
-                       where active_spe.student_id=active_st.id and active_spe.institution_id=att.institution_id and active_spe.program_id=active_s.program_id and active_spe.status='ACTIVE'
-                     )))
-               ) AS active_subject_track,
+               selected_course.id AS course_id,selected_course.display_name AS course_name,
+               true AS active_subject_track,
                COALESCE(progress.total_lessons,0) AS published_lessons,
                COALESCE(progress.completed_lessons,0) AS completed_lessons,
                cert.id AS certificate_id,cert.certificate_number,cert.status AS certificate_status
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
-        JOIN curriculum_subject s ON s.id=a.subject_id
-        JOIN curriculum_class cc ON cc.id=s.class_id
-        LEFT JOIN curriculum_program p ON p.id=s.program_id
-        OR (s.program_id IS NULL AND p.class_id=cc.id
-          AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
-          AND EXISTS(select 1 from curriculum_program_subject mapped_subject
-            where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
-              and mapped_subject.subject_id=s.id))
+        JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
+        JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         JOIN student st ON st.id=att.student_id AND st.active=true
+        JOIN institution_membership membership
+          ON membership.student_id=st.id AND membership.institution_id=att.institution_id
+             AND membership.status='ACTIVE'
+        JOIN student_program_enrollment enrollment
+          ON enrollment.student_id=st.id AND enrollment.institution_id=membership.institution_id
+             AND enrollment.program_id=? AND enrollment.status='ACTIVE'
+        JOIN curriculum_program selected_course
+          ON selected_course.id=enrollment.program_id AND selected_course.status='ACTIVE'
+             AND selected_course.code<>'GENERAL'
+        JOIN institution_course_assignment assignment
+          ON assignment.institution_id=membership.institution_id AND assignment.status='ASSIGNED'
+        JOIN institution_course_release release
+          ON release.id=assignment.course_release_id AND release.program_id=selected_course.id
+        JOIN curriculum_program_subject mapped
+          ON mapped.program_id=selected_course.id AND mapped.subject_id=s.id AND mapped.class_id=s.class_id
+          AND (s.program_id=selected_course.id OR s.program_id IS NULL)
         LEFT JOIN LATERAL (
           SELECT COUNT(DISTINCT l.id) AS total_lessons,
-                 COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
+                 COUNT(DISTINCT l.id) FILTER (WHERE lesson_progress.status='COMPLETED') AS completed_lessons
           FROM curriculum_chapter ch
           JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-          LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.institution_id=att.institution_id AND p.lesson_id=l.id
+          LEFT JOIN student_lesson_progress lesson_progress
+            ON lesson_progress.student_id=att.student_id
+               AND lesson_progress.institution_id=att.institution_id
+               AND lesson_progress.lesson_id=l.id
           WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         ) progress ON true
         LEFT JOIN LATERAL (
           SELECT stored.id,stored.certificate_number,stored.status
           FROM student_certificate stored
-          WHERE stored.student_id=att.student_id AND stored.institution_id=att.institution_id AND stored.assessment_attempt_id=att.id
+          WHERE stored.student_id=att.student_id AND stored.institution_id=att.institution_id
+            AND stored.assessment_attempt_id=att.id AND stored.program_id=selected_course.id
             AND stored.achievement_type='ASSESSMENT_PASS'
           ORDER BY stored.issued_at DESC,stored.id DESC LIMIT 1
         ) cert ON true
-        WHERE att.student_id=?
+        WHERE att.student_id=? AND att.institution_id=? AND att.id IN (
+        """ + placeholders + """
+        )
         ORDER BY att.released_at DESC NULLS LAST,att.id DESC
         """;
-    sql = sql.replace("WHERE att.student_id=?", "WHERE att.student_id=? AND att.institution_id=? AND att.id IN (" + placeholders + ")");
     List<Map<String, Object>> rows = jdbc.queryForList(sql, args.toArray());
     List<Map<String, Object>> items = new ArrayList<>();
     for (Map<String, Object> row : rows) {
@@ -405,7 +402,7 @@ public class CertificateController {
       item.put("pass_threshold_percent", minimumPassPercent);
       items.add(item);
     }
-    return Map.of("items", items, "passThresholdPercent", minimumPassPercent);
+    return Map.of("courseId",courseId,"items", items, "passThresholdPercent", minimumPassPercent);
   }
 
   private String assessmentEligibilityReason(Map<String, Object> attempt) {
