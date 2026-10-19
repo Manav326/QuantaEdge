@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b3dac447884db1bda0c6177d1d828cbc37e48feb7d8a1963cda647a64cf3ccb7",
+  "raw_analysis_sha256": "73407036ce1c39d0de6c03910f266ad4e8daa58d78279471284e29302ff2aefb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:56:58Z",
+      "checkpointed_at": "2026-10-19T03:01:50Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:57:40Z",
+      "checkpointed_at": "2026-10-19T03:02:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:58:34Z",
+      "checkpointed_at": "2026-10-19T03:03:24Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:59:15Z",
+      "checkpointed_at": "2026-10-19T03:04:04Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -40052,6 +40052,84 @@
         "context_relation": "instructions for a science project",
         "limitations": [
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a9f027d028f95bbeb3f5ab36",
+      "asset_sha256": "b743f93f6d5a14b8e65fca0ebdcf3d51debc053ce274ecef014e87f6fc8c47ee",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/b743f93f6d5a14b8e65fca0ebdcf3d51debc053ce274ecef014e87f6fc8c47ee.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "afafcbd8f49615e2fa749dbddaf95d2e719a3847002f6b2ac3ec682201e535d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A purple, textured surface with a torn edge, possibly a piece of paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Mindful Eating: A Path",
+          "Chapter       to a Healthy Body 3",
+          "कोऽरुक्? कोऽरुक्? कोऽरुक्?",
+          "हितभुक् मितभुक् ऋतुभुक्",
+          "(सुभाषित)",
+          "Who is healthy? Who is healthy? Who is healthy? One",
+          "who eats food that is wholesome, in moderate quantities,",
+          "and appropriate for the season, time, and place.",
+          "(Wise saying)",
+          "Medu  and  Mishti  read",
+          "‘thought  of the day’ on",
+          "अन्‍   नेन जातानि जीवन्‍त"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The image is a visual representation of a quote or a passage from a book or text about mindful eating and healthy living.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:04:55Z",
+      "effective_analysis": {
+        "visual_summary": "A purple, textured surface with a torn edge, possibly a piece of paper or fabric.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Mindful Eating: A Path",
+          "Chapter       to a Healthy Body 3",
+          "कोऽरुक्? कोऽरुक्? कोऽरुक्?",
+          "हितभुक् मितभुक् ऋतुभुक्",
+          "(सुभाषित)",
+          "Who is healthy? Who is healthy? Who is healthy? One",
+          "who eats food that is wholesome, in moderate quantities,",
+          "and appropriate for the season, time, and place.",
+          "(Wise saying)",
+          "Medu  and  Mishti  read",
+          "‘thought  of the day’ on",
+          "अन्‍   नेन जातानि जीवन्‍त"
+        ],
+        "concepts": [
+          "Mindful Eating",
+          "Healthy Body",
+          "Wholesome Food",
+          "Moderate Quantities",
+          "Season, Time, Place"
+        ],
+        "context_relation": "The image is a visual representation of a quote or a passage from a book or text about mindful eating and healthy living.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
