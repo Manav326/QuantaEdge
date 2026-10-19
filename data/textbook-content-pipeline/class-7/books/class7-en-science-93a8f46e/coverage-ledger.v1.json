@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1740,
-    "successful_visual_analyses": 1723,
-    "missing_visual_analyses": 5748,
+    "raw_analysis_result_rows": 1745,
+    "successful_visual_analyses": 1728,
+    "missing_visual_analyses": 5743,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5765,
+    "unresolved_count": 5760,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -74712,9 +74712,26 @@
       "asset_path": "assets/5dd3e7dfac324542dd615c81d567d857ede7bf74cb75b2d9c8962fe52ed1c0be.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person standing on a series of ice blocks, holding a block above them.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "illustration",
+          "person",
+          "standing",
+          "ice blocks",
+          "holding",
+          "above"
+        ],
+        "context_relation": "The image shows a person standing on a series of ice blocks, holding a block above them.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the person's actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74730,9 +74747,16 @@
       "asset_path": "assets/f8554f0759177299e128917143817f1a8cda83febf700ad45500c3851dcf03a7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74748,9 +74772,27 @@
       "asset_path": "assets/5505a93a5a22fb7d4a4e72881b522e0918262c65ec0f52401929ae3c26d53432.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a spiral drill bit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A close-up of a spiral drill bit.",
+          "The drill bit has a spiral pattern.",
+          "The spiral pattern is used for cutting materials.",
+          "The drill bit is made of metal."
+        ],
+        "concepts": [
+          "Spiral drill bit",
+          "Cutting materials",
+          "Metal construction"
+        ],
+        "context_relation": "The image is a close-up of a spiral drill bit, which is used in construction and manufacturing.",
+        "limitations": [
+          "The image does not provide information about the specific type or size of the drill bit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74766,9 +74808,16 @@
       "asset_path": "assets/6dbd7c9e235ec716339d0874cb5908315b77b2c6297a3702aec35eb1767d1a3f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two intertwined ropes or cables, possibly representing electrical wires.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Electrical components or wiring",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -74784,9 +74833,31 @@
       "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "photo",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a photograph of a textbook page explaining the concept of an electric cell.",
+        "limitations": [
+          "The image does not show the components of an electric cell or an incandescent electric lamp."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

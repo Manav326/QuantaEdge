@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1723,
+    "assets_selected": 1728,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1723,
-    "assets_remaining": 5765,
-    "assets_completion_percent": 23.0,
+    "assets_analyzed": 1728,
+    "assets_remaining": 5760,
+    "assets_completion_percent": 23.1,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1718,
+    "assets_skipped_from_checkpoint": 1723,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -64529,6 +64529,172 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270473891",
       "checkpointed_at": "2026-10-19T16:44:43Z"
+    },
+    {
+      "asset_id": "dc84da3978a1f68092f0f307",
+      "asset_sha256": "5dd3e7dfac324542dd615c81d567d857ede7bf74cb75b2d9c8962fe52ed1c0be",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/5dd3e7dfac324542dd615c81d567d857ede7bf74cb75b2d9c8962fe52ed1c0be.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person standing on a series of ice blocks, holding a block above them.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "illustration",
+          "person",
+          "standing",
+          "ice blocks",
+          "holding",
+          "above"
+        ],
+        "context_relation": "The image shows a person standing on a series of ice blocks, holding a block above them.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the person's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:46:27Z"
+    },
+    {
+      "asset_id": "f8246505934293d87a294276",
+      "asset_sha256": "f8554f0759177299e128917143817f1a8cda83febf700ad45500c3851dcf03a7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/f8554f0759177299e128917143817f1a8cda83febf700ad45500c3851dcf03a7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring attached to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:47:58Z"
+    },
+    {
+      "asset_id": "94789c926e545395f833a17d",
+      "asset_sha256": "5505a93a5a22fb7d4a4e72881b522e0918262c65ec0f52401929ae3c26d53432",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/5505a93a5a22fb7d4a4e72881b522e0918262c65ec0f52401929ae3c26d53432.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a spiral drill bit.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A close-up of a spiral drill bit.",
+          "The drill bit has a spiral pattern.",
+          "The spiral pattern is used for cutting materials.",
+          "The drill bit is made of metal."
+        ],
+        "concepts": [
+          "Spiral drill bit",
+          "Cutting materials",
+          "Metal construction"
+        ],
+        "context_relation": "The image is a close-up of a spiral drill bit, which is used in construction and manufacturing.",
+        "limitations": [
+          "The image does not provide information about the specific type or size of the drill bit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:49:37Z"
+    },
+    {
+      "asset_id": "1aeb80326f42697974c850c9",
+      "asset_sha256": "6dbd7c9e235ec716339d0874cb5908315b77b2c6297a3702aec35eb1767d1a3f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/6dbd7c9e235ec716339d0874cb5908315b77b2c6297a3702aec35eb1767d1a3f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two intertwined ropes or cables, possibly representing electrical wires.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Electrical components or wiring",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:51:07Z"
+    },
+    {
+      "asset_id": "a92346482790c304a4d377a7",
+      "asset_sha256": "6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell is a portable source of electrical energy with two terminals, one positive and one negative.",
+        "visual_type": "photo",
+        "visible_text": [
+          "3737",
+          "In a Nutshell",
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "Components",
+          "In an incandescent electric lamp, ther"
+        ],
+        "concepts": [
+          "electric cell",
+          "electrical energy",
+          "positive terminal",
+          "negative terminal",
+          "incandescent electric lamp"
+        ],
+        "context_relation": "The image is a photograph of a textbook page explaining the concept of an electric cell.",
+        "limitations": [
+          "The image does not show the components of an electric cell or an incandescent electric lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270473891",
+      "checkpointed_at": "2026-10-19T16:51:30Z"
     }
   ]
 }
