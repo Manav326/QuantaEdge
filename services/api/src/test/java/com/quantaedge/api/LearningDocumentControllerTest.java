@@ -76,7 +76,7 @@ class LearningDocumentControllerTest {
     verify(jdbc).queryForList(
         contains("cps.program_id=?"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
     verify(jdbc).queryForList(
-        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
+        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
   }
 
   @Test
@@ -220,9 +220,9 @@ class LearningDocumentControllerTest {
         .thenReturn(List.of(metadata));
     when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
-    var pageOne = controller.studentDocumentPage(88L, 1, "full", student, TEST_TENANT);
-    var pageTwo = controller.studentDocumentPage(88L, 2, "full", student, TEST_TENANT);
-    var thumbnail = controller.studentDocumentPage(88L, 2, "thumbnail", student, TEST_TENANT);
+    var pageOne = controller.studentDocumentPage(88L, 1, "full", 71L, student, TEST_TENANT);
+    var pageTwo = controller.studentDocumentPage(88L, 2, "full", 71L, student, TEST_TENANT);
+    var thumbnail = controller.studentDocumentPage(88L, 2, "thumbnail", 71L, student, TEST_TENANT);
 
     assertEquals(200, pageOne.getStatusCode().value());
     assertEquals(200, pageTwo.getStatusCode().value());
@@ -261,9 +261,9 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
     Map<String, Object> finalBatch =
-        controller.studentDocumentPageBatch(88L, 2, 10, "thumbnail", student, TEST_TENANT);
+        controller.studentDocumentPageBatch(88L, 2, 10, "thumbnail", 71L, student, TEST_TENANT);
     Map<String, Object> afterEnd =
-        controller.studentDocumentPageBatch(88L, 3, 10, "thumbnail", student, TEST_TENANT);
+        controller.studentDocumentPageBatch(88L, 3, 10, "thumbnail", 71L, student, TEST_TENANT);
 
     assertEquals(2, finalBatch.get("pageCount"));
     assertEquals(10, finalBatch.get("requestedLimit"));
