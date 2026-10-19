@@ -61,14 +61,16 @@ class LearningDocumentControllerTest {
   @Test
   void studentCatalogOnlyUsesPublishedDocumentsAndActiveEnrolment() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("from curriculum_program p"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 71L)));
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    List<Map<String, Object>> rows = controller.studentDocumentCatalog(null, "hi", null, null, null, student, TEST_TENANT);
+    List<Map<String, Object>> rows = controller.studentDocumentCatalog(null, "hi", null, 71L, null, student, TEST_TENANT);
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
-        contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
+        contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
     verify(jdbc).queryForList(
         contains("ste.status='ACTIVE'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
@@ -81,9 +83,9 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    assertTrue(controller.studentDocumentCatalog("science", "english", null, null, null, student, TEST_TENANT).isEmpty());
+    assertTrue(controller.studentDocumentCatalog("science", "english", null, 71L, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("en"), eq("science"), eq("science"));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("en"), eq("science"), eq("science"), eq(71L));
   }
 
   @Test
@@ -92,18 +94,18 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    assertTrue(controller.studentDocumentCatalog("science", "hi", "en", null, null, student, TEST_TENANT).isEmpty());
+    assertTrue(controller.studentDocumentCatalog("science", "hi", "en", 71L, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
     verify(jdbc).queryForList(contains("coalesce(ct.display_name,ch.display_name) as chapter_name"),
-        eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"));
+        eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
   }
   @Test
   void studentCatalogRejectsUnsupportedLanguageBeforeQueryingDocuments() {
     when(authorization.requireStudent(student)).thenReturn(student);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.studentDocumentCatalog(null, "fr", null, null, null, student, TEST_TENANT));
+        () -> controller.studentDocumentCatalog(null, "fr", null, 71L, null, student, TEST_TENANT));
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc);
@@ -116,7 +118,7 @@ class LearningDocumentControllerTest {
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.studentDocumentPage(55L, 1, "full", student, TEST_TENANT));
+        () -> controller.studentDocumentPage(55L, 1, "full", 71L, student, TEST_TENANT));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).queryForObject(
