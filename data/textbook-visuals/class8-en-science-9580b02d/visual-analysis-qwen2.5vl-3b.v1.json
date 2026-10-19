@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 816,
+    "assets_selected": 818,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
     "assets_analyzed": 813,
     "assets_remaining": 1478,
     "assets_completion_percent": 35.5,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 811,
+    "assets_skipped_from_checkpoint": 813,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:46:10Z"
+      "checkpointed_at": "2026-10-19T08:55:34Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:47:29Z"
+      "checkpointed_at": "2026-10-19T08:56:53Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20162,9 +20162,9 @@
           "Support",
           "Publication process"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T08:52:25Z"
+      "checkpointed_at": "2026-10-19T08:57:45Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22091,9 +22091,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
+      "run_id": "39219698568",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -22497,7 +22497,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39178085104",
+      "run_id": "39219698568",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

@@ -27003,9 +27003,9 @@
           "Support",
           "Publication process"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
