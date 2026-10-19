@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './marketplace.module.css';
-import { useTenantBranding } from '../../components/TenantBrandingProvider';
+import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 
 type Subject = { subject_code?: string; subject_name?: string; chapters?: number; lessons?: number };
@@ -175,7 +175,7 @@ export default function StudentMarketplacePage() {
         name: brand?.displayName || 'QuantaEdge',
         description: order.description || 'Course access',
         order_id: order.orderId,
-        theme: { color: '#E87524' },
+        theme: { color: tenantPrimaryColor(brand) },
         handler: (response: any) => {
           const draft: VerifyDraft = {
             courseId,
