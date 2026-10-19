@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1135,
+    "assets_selected": 1137,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1132,
-    "assets_remaining": 946,
-    "assets_completion_percent": 54.5,
+    "assets_analyzed": 1134,
+    "assets_remaining": 944,
+    "assets_completion_percent": 54.6,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1130,
+    "assets_skipped_from_checkpoint": 1132,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:29:35Z"
+      "checkpointed_at": "2026-10-19T19:32:59Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:30:17Z"
+      "checkpointed_at": "2026-10-19T19:33:41Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:31:13Z"
+      "checkpointed_at": "2026-10-19T19:34:34Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37261,6 +37261,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T19:32:07Z"
+    },
+    {
+      "asset_id": "e7638c70063cb342a19a9b42",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0fa03c2225be4bf4e54a4bb60a5764e0b1b6df0fc9ccadb98abfbbb76c165f16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:34:40Z"
+    },
+    {
+      "asset_id": "c089ffb6f9c50e4d5523eb7f",
+      "asset_sha256": "8470ba1a561a5024bc09be33d68f717e8e749be7b98dd2ba3f8ccf1fafb32ecd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 98,
+      "asset_path": "page-0098.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0fa03c2225be4bf4e54a4bb60a5764e0b1b6df0fc9ccadb98abfbbb76c165f16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of children are standing in a line, with labels for each person.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Anish        Hardeep    Padma\n\nDeepa                                      Tasneem",
+          "5.1 How do we Measure?",
+          "Hardeep says, “I have seen my grandmother measuring\ncloth by the length of her arm.”",
+          "“Have you ever seen how a farmer measures length to\ndivide his field into beds? He walks and counts the number\nof his strides,” says Padma.",
+          "“Oh, not just the length of the strides—sometimes they\nalso use the length of their feet to measure,” adds Anish.",
+          "Deepa says excitedly, “Measuring length using body parts\nmust be so much fun! Let us also measure something using\na body part.”",
+          "What should we measure? Okay, let us\nmeasure the length of the table in our classroom,”\nsays Tasneem.",
+          "Padma adds, “And which body part should\nwe use to measure it?”",
+          "Deepa says, “Let us use our handspan. I will\nshow you how to use it (Fig. 5.1). I have seen my\nmother using it. She calls it balisht.”",
+          "Hardeep adds, “Okay. Let us also note down\nour measurements.”"
+        ],
+        "concepts": [
+          "measurement",
+          "body parts",
+          "length",
+          "farmers",
+          "grandmother",
+          "classroom",
+          "handspan",
+          "balisht"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing how to measure length using different methods.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:36:23Z"
     }
   ]
 }
