@@ -226,33 +226,51 @@ public class LearningResourceController {
   }
 
   @GetMapping("/admin/learning-resource-targets")
-  public Map<String,Object> resourceTargets(@RequestParam(required=false) String classCode,
-      @RequestParam(required=false) String subjectCode,@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> resourceTargets(@RequestParam Long courseId,
+      @RequestParam(required=false) String subjectCode,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireContentView(context);
-    String cc=optionalText(classCode,30),sc=optionalText(subjectCode,40);
+    requireAdminAssignedCourse(courseId,tenant);
+    String sc=optionalText(subjectCode,40);
     List<Map<String,Object>> chapters=jdbc.queryForList("""
       select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,ch.textbook_chapter_no,
         ch.teaching_order,ch.sort_order,ch.active,ch.content_status,c.code as class_code,c.display_name as class_name,
-        s.code as subject_code,s.display_name as subject_name
+        s.code as subject_code,s.display_name as subject_name,p.id as course_id,p.display_name as course_name
       from curriculum_chapter ch join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE'
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
       where ch.active=true and c.active=true and s.active=true
-        and (?='' or c.code=?) and (?='' or s.code=?)
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+        and (?='' or s.code=?)
       order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),ch.id
-      """,cc==null?"":cc,cc==null?"":cc,sc==null?"":sc,sc==null?"":sc);
+      """,courseId,sc==null?"":sc,sc==null?"":sc);
     List<Map<String,Object>> lessons=jdbc.queryForList("""
       select l.id as lesson_id,l.code as lesson_code,l.title as lesson_title,l.status as lesson_status,
-        l.chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,c.code as class_code,s.code as subject_code
+        l.chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,c.code as class_code,s.code as subject_code,
+        p.id as course_id,p.display_name as course_name
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE'
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
       where l.active=true and ch.active=true and s.active=true and c.active=true
-        and (?='' or c.code=?) and (?='' or s.code=?)
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+        and (?='' or s.code=?)
       order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,cc==null?"":cc,cc==null?"":cc,sc==null?"":sc,sc==null?"":sc);
+      """,courseId,sc==null?"":sc,sc==null?"":sc);
+    String courseClass=jdbc.queryForObject("select c.code from curriculum_program p join curriculum_class c on c.id=p.class_id where p.id=? and p.status='ACTIVE'",String.class,courseId);
+    List<String> mappedSubjects=jdbc.queryForList("""
+      select distinct s.code from curriculum_program_subject cps
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+      join curriculum_program p on p.id=cps.program_id and p.status='ACTIVE'
+      where p.id=? and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """,String.class,courseId);
     List<Map<String,Object>> artifactItems=new ArrayList<>();
     for(StructuredLessonArtifactService.PublishedArtifact artifact:artifacts.listPublishedArtifacts()) {
       int classNumber=artifacts.classNumber(artifact);String subject=artifacts.subjectCode(artifact);
-      if(cc!=null&&!cc.isBlank()&&!String.valueOf(classNumber).equals(cc))continue;
+      if(!String.valueOf(classNumber).equals(courseClass))continue;
+      if(!mappedSubjects.contains(subject))continue;
       if(sc!=null&&!sc.isBlank()&&!subject.equalsIgnoreCase(sc))continue;
       Map<String,Object> item=new LinkedHashMap<>();
       item.put("artifact_id",artifact.artifactId());item.put("class_code",String.valueOf(classNumber));item.put("subject_code",subject);
@@ -262,7 +280,19 @@ public class LearningResourceController {
       List<Map<String,Object>> mapping=jdbc.queryForList("select chapter_id from learning_resource_artifact_scope where artifact_id=?",artifact.artifactId());
       item.put("mapped_chapter_id",mapping.isEmpty()?null:mapping.getFirst().get("chapter_id"));artifactItems.add(item);
     }
-    return Map.of("chapters",chapters,"lessons",lessons,"structuredArtifacts",artifactItems);
+    return Map.of("courseId",courseId,"chapters",chapters,"lessons",lessons,"structuredArtifacts",artifactItems);
+  }
+
+  private void requireAdminAssignedCourse(Long courseId,InstitutionTenantContext tenant) {
+    if(courseId==null||courseId<1L)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Select an active course.");
+    if(tenant==null||tenant.institutionId()<1L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active institution context is required.");
+    Long assigned=jdbc.queryForObject("""
+      select count(*) from institution_course_assignment a
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=?
+      join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      where a.institution_id=? and a.status='ASSIGNED'
+      """,Long.class,courseId,tenant.institutionId());
+    if(assigned==null||assigned==0L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"This course is not assigned to the active institution.");
   }
 
   @GetMapping("/admin/learning-resource-assignments")
