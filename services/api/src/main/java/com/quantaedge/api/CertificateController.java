@@ -551,6 +551,9 @@ public class CertificateController {
         String.valueOf(achievement.get("recipient_name")),title,summary,snapshot,institutionCode,institutionId);
   }
 
+  private Map<String,Object> issueAssessmentPass(long studentId, Map<String,Object> student,
+      Long attemptId, Long requestedCourseId, String template, String language,
+      String institutionCode, long institutionId) {
     if(requestedCourseId==null || requestedCourseId<1L)
       throw new IllegalArgumentException("Select an enrolled course before issuing a certificate.");
     requireActiveCourseEnrollment(studentId,requestedCourseId,institutionId);
