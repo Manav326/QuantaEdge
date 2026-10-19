@@ -91,7 +91,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
         <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
           onQuestionSubmit={submitQuestion} onActivitySave={saveActivity} initialResponses={responses}
           initialResults={results} initialSubmitted={submitted} initialActivityResponses={saved.activities || {}} />
-        <AssignedLearningResources artifactId={artifactId} language={learningLanguage} />
+        <AssignedLearningResources artifactId={artifactId} language={learningLanguage} courseId={courseId} />
       </>}
   </section></div></main>;
 }
