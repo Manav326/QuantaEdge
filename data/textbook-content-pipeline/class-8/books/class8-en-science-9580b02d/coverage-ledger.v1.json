@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 797,
-    "successful_visual_analyses": 784,
-    "missing_visual_analyses": 1494,
+    "raw_analysis_result_rows": 799,
+    "successful_visual_analyses": 786,
+    "missing_visual_analyses": 1492,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1507,
+    "unresolved_count": 1505,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -30858,9 +30858,22 @@
       "asset_path": "assets/dd0807df23c151c1cf7679af8016511a3b5dd586f778a0bab3cc6c38f3637959.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of a microscopic view of soil particles in water.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "soil suspension",
+          "microscope observation",
+          "soil particles"
+        ],
+        "context_relation": "The image is related to the educational content about observing soil particles in water using a microscope.",
+        "limitations": [
+          "The image does not provide specific details about the soil particles or their characteristics."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30876,9 +30889,22 @@
       "asset_path": "assets/a1ddcdcacfbd25d0d7d617dce030a9b4684c378e9932f2981ccb71e488f19f04.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green, oval-shaped object with colorful markings and a blue center, possibly representing a cell or microorganism.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "microorganism",
+          "cell structure"
+        ],
+        "context_relation": "The image is related to the educational content about observing soil suspension under a microscope.",
+        "limitations": [
+          "The image does not provide specific details about the cell or microorganism."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

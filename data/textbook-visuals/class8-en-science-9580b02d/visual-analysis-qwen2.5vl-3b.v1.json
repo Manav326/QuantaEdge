@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 784,
+    "assets_selected": 786,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 781,
-    "assets_remaining": 1510,
-    "assets_completion_percent": 34.1,
+    "assets_analyzed": 783,
+    "assets_remaining": 1508,
+    "assets_completion_percent": 34.2,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 779,
+    "assets_skipped_from_checkpoint": 781,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:13:01Z"
+      "checkpointed_at": "2026-10-19T04:21:53Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:13:50Z"
+      "checkpointed_at": "2026-10-19T04:22:42Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:14:28Z"
+      "checkpointed_at": "2026-10-19T04:23:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24097,6 +24097,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T04:20:41Z"
+    },
+    {
+      "asset_id": "19097cec519558db2a11d934",
+      "asset_sha256": "dd0807df23c151c1cf7679af8016511a3b5dd586f778a0bab3cc6c38f3637959",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/dd0807df23c151c1cf7679af8016511a3b5dd586f778a0bab3cc6c38f3637959.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a microscopic view of soil particles in water.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "soil suspension",
+          "microscope observation",
+          "soil particles"
+        ],
+        "context_relation": "The image is related to the educational content about observing soil particles in water using a microscope.",
+        "limitations": [
+          "The image does not provide specific details about the soil particles or their characteristics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:24:59Z"
+    },
+    {
+      "asset_id": "ccbcea0658cdbc18103ae950",
+      "asset_sha256": "a1ddcdcacfbd25d0d7d617dce030a9b4684c378e9932f2981ccb71e488f19f04",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 36,
+      "asset_path": "assets/a1ddcdcacfbd25d0d7d617dce030a9b4684c378e9932f2981ccb71e488f19f04.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "207c63ea883220042c7800862e43b7e2a7132011842e3d0cb120d65472ad5acc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, oval-shaped object with colorful markings and a blue center, possibly representing a cell or microorganism.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "cell",
+          "microorganism",
+          "cell structure"
+        ],
+        "context_relation": "The image is related to the educational content about observing soil suspension under a microscope.",
+        "limitations": [
+          "The image does not provide specific details about the cell or microorganism."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:26:36Z"
     }
   ]
 }
