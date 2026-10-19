@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1112,
+    "assets_selected": 1114,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1109,
-    "assets_remaining": 969,
-    "assets_completion_percent": 53.4,
+    "assets_analyzed": 1111,
+    "assets_remaining": 967,
+    "assets_completion_percent": 53.5,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 1107,
+    "assets_skipped_from_checkpoint": 1109,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:24:49Z"
+      "checkpointed_at": "2026-10-19T18:28:32Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:25:30Z"
+      "checkpointed_at": "2026-10-19T18:29:13Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:26:24Z"
+      "checkpointed_at": "2026-10-19T18:30:05Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36250,6 +36250,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T18:27:43Z"
+    },
+    {
+      "asset_id": "3a327bafe52ead335a75c2f0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f1615607119b448f9a8c36e07dd2782e4d5a9d499e005df09fbffa11bf804cea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A frog model with a ring magnet and a plastic strip attached to it, used to demonstrate the concept of a Maglev train.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model."
+        ],
+        "concepts": [
+          "Maglev train",
+          "Frog model",
+          "Ring magnet",
+          "Transparent plastic strip"
+        ],
+        "context_relation": "The image is a visual representation of a concept related to the Maglev train, specifically how a frog model can be used to demonstrate the concept.",
+        "limitations": [
+          "The image does not show the actual Maglev train model being made."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:30:28Z"
+    },
+    {
+      "asset_id": "55fb5c4fa80f317c7511e5b6",
+      "asset_sha256": "2a453f0db51eccc75132abe601d52f08ea950bafd4ad8404b2e5d59d46578011",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 95,
+      "asset_path": "page-0095.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f1615607119b448f9a8c36e07dd2782e4d5a9d499e005df09fbffa11bf804cea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for creating a hopping frog model using a plastic strip, frog, and magnets.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "length of a scale using glue (Fig. 4.18a). Paint a frog on paper, cut along the outline and glue a ring magnet at its base. Take a transparent, flexible plastic strip (Fig. 4.18a) of a smaller size and glue it to the ring magnet which is attached to the frog.",
+          "(a)                                             (b)",
+          "Fig. 4.18: My hopping frog",
+          "When you slide the plastic strip (with frog) over the scale (Fig. 4.18b), you can observe the frog hopping.",
+          "Find out about the Maglev Train and try to make its model.",
+          "Try to find out why there is a need to make magnets of different shapes.",
+          "Collect information related to the use of magnets in the field of medicine."
+        ],
+        "concepts": [
+          "hopping frog model",
+          "Maglev Train",
+          "magnets",
+          "field of medicine"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:32:03Z"
     }
   ]
 }
