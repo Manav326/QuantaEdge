@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e980325e771fd7447c565b924b4c6b31d6c6e19857f27a8e6b88de96a41d8fd8",
+  "raw_analysis_sha256": "cd82ddbf090148ab9e984b8c84bbc32ca88b785b459538fff110f34d72176e0d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:40:59Z",
+      "checkpointed_at": "2026-10-19T10:44:07Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T10:41:22Z",
+      "checkpointed_at": "2026-10-19T10:44:29Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -89438,6 +89438,180 @@
         "context_relation": "The image is likely a page border or section divider in a textbook discussing circuit diagrams and their simpler representation.",
         "limitations": [
           "The image does not show any circuit diagrams or symbols, only a frame."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "568e65e052e449cb4237316f",
+      "asset_sha256": "7a495d4c3127c48469c9062fb9b38ae97a9d67ba0f0b35ce5da372db2acdadcd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/7a495d4c3127c48469c9062fb9b38ae97a9d67ba0f0b35ce5da372db2acdadcd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green background with a white and green horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components",
+          "Symbols"
+        ],
+        "context_relation": "The image is a continuation of the text from the previous page, discussing the representation of electrical circuit components using symbols.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is incomplete, missing the continuation of the discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:45:11Z",
+      "effective_analysis": {
+        "visual_summary": "A green background with a white and green horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components",
+          "Symbols"
+        ],
+        "context_relation": "The image is a continuation of the text from the previous page, discussing the representation of electrical circuit components using symbols.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is incomplete, missing the continuation of the discussion."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c020ef611d87abc292946ed3",
+      "asset_sha256": "91ef7ed60f87c82f3455d6524e7d87d826d126f59765b872d4204afda3e8403b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/91ef7ed60f87c82f3455d6524e7d87d826d126f59765b872d4204afda3e8403b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components"
+        ],
+        "context_relation": "The table is a visual representation of the components of an electrical circuit.",
+        "limitations": [
+          "The table is incomplete and does not include all components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:45:47Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components"
+        ],
+        "context_relation": "The table is a visual representation of the components of an electrical circuit.",
+        "limitations": [
+          "The table is incomplete and does not include all components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7e0a2455ef3d8aec4eef62b",
+      "asset_sha256": "dee0df4fd475990454bcb47ba86f05e1bcc3d9722a03099c074701538d86ec6c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/dee0df4fd475990454bcb47ba86f05e1bcc3d9722a03099c074701538d86ec6c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams using symbols.",
+        "limitations": [
+          "The page does not provide specific symbols or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T10:46:27Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the representation of electrical components in circuit diagrams using symbols.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2.",
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "electrical components",
+          "circuit diagrams",
+          "symbols"
+        ],
+        "context_relation": "The page is discussing the representation of electrical components in circuit diagrams using symbols.",
+        "limitations": [
+          "The page does not provide specific symbols or diagrams."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
