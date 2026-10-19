@@ -19,10 +19,16 @@ jobs:
     steps:
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.2
+        env:
+          # Set these as secrets in the GitHub Actions "production" environment.
+          # They are written only to the server's runtime .env, never baked into an image.
+          APP_RAZORPAY_KEY_ID: ${{ secrets.APP_RAZORPAY_KEY_ID }}
+          APP_RAZORPAY_KEY_SECRET: ${{ secrets.APP_RAZORPAY_KEY_SECRET }}
         with:
           host: ${{ secrets.QUANTAEDGE_DEPLOY_HOST }}
           username: ${{ secrets.QUANTAEDGE_DEPLOY_USER }}
           key: ${{ secrets.QUANTAEDGE_DEPLOY_SSH_KEY }}
+          envs: APP_RAZORPAY_KEY_ID,APP_RAZORPAY_KEY_SECRET
           script_stop: true
           script: |
             set -eu
@@ -30,6 +36,59 @@ jobs:
             git fetch --prune origin
             git checkout "${{ inputs.ref }}"
             git reset --hard "origin/${{ inputs.ref }}"
+
+            # Configure payment secrets from the protected GitHub environment if supplied.
+            # If not supplied, retain an already-configured server .env; never print secret values.
+            python3 - <<'PY'
+            import os
+            import pathlib
+            import sys
+
+            env_path = pathlib.Path("/opt/quantaedge/.env")
+            source = env_path.read_text() if env_path.exists() else ""
+            values = {}
+            for line in source.splitlines():
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#") or "=" not in stripped:
+                    continue
+                name, value = stripped.split("=", 1)
+                values[name.strip()] = value.strip().strip("'").strip('"')
+
+            incoming = {
+                "APP_RAZORPAY_KEY_ID": os.environ.get("APP_RAZORPAY_KEY_ID", "").strip(),
+                "APP_RAZORPAY_KEY_SECRET": os.environ.get("APP_RAZORPAY_KEY_SECRET", "").strip(),
+            }
+            has_incoming = any(incoming.values())
+            if has_incoming and not all(incoming.values()):
+                sys.exit("Razorpay configuration incomplete: provide both protected deployment secrets.")
+
+            if has_incoming:
+                def dotenv_quote(value):
+                    return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
+
+                lines = source.splitlines()
+                for name, value in incoming.items():
+                    replacement = f"{name}={dotenv_quote(value)}"
+                    found = False
+                    for index, line in enumerate(lines):
+                        if line.strip().startswith(name + "="):
+                            lines[index] = replacement
+                            found = True
+                            break
+                    if not found:
+                        lines.append(replacement)
+                source = "\\n".join(lines) + "\\n"
+                env_path.write_text(source)
+                os.chmod(env_path, 0o600)
+                values.update(incoming)
+
+            if not values.get("APP_RAZORPAY_KEY_ID") or not values.get("APP_RAZORPAY_KEY_SECRET"):
+                sys.exit("Razorpay is not configured. Add APP_RAZORPAY_KEY_ID and APP_RAZORPAY_KEY_SECRET to the protected production environment secrets or server .env.")
+
+            os.chmod(env_path, 0o600)
+            print("Razorpay runtime configuration is present; secret values are not displayed.")
+            PY
+
             export QUANTAEDGE_IMAGE_TAG="sha-$(git rev-parse HEAD)"
             export QUANTAEDGE_GHCR_OWNER="${{ github.repository_owner }}"
             echo "${{ secrets.QUANTAEDGE_GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
