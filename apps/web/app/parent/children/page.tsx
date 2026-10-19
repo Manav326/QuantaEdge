@@ -4,6 +4,7 @@ import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
+import PasswordField from '../../components/PasswordField';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -233,7 +234,7 @@ export default function ParentChildrenPage(){
               {child.login_username&&<p className="parent-credentials-current"><UiText message="legacy.web.current.username.440d701d" /> <strong>{child.login_username}</strong></p>}
               <div className="parent-child-form parent-credentials-form">
                 <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder={t('parent.children.usernameExample')} autoComplete="off" /></label>
-                <label><UiText message="legacy.web.set.or.reset.password.d599fa87" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password" /></label>
+                <label><UiText message="legacy.web.set.or.reset.password.d599fa87" /><PasswordField value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password" /></label>
               </div>
               <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><UiText message="legacy.web.save.login.details.bcf9bcd7" /></button>
             </div>
@@ -274,7 +275,7 @@ export default function ParentChildrenPage(){
             <label><UiText message="legacy.web.class.9c9232e5" /><select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6"><UiText message="legacy.web.class.6.c917d5d1" /></option><option value="7"><UiText message="legacy.web.class.7.0a63ed61" /></option><option value="8"><UiText message="legacy.web.class.8.ccf4ad25" /></option></select></label>
             <label><UiText message="legacy.web.learning.language.8be9be9d" /><select value={draft.language} onChange={e=>setDraft({...draft,language:e.target.value})}><option value="hi">हिन्दी (Hindi)</option><option value="en">English</option></select></label>
             <label><UiText message="legacy.web.student.username.2552c8f7" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={t('parent.children.usernameExample')} autoComplete="off"/></label>
-            <label><UiText message="legacy.web.student.password.9ba6b0cd" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password"/></label>
+            <label><UiText message="legacy.web.student.password.9ba6b0cd" /><PasswordField value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={t('parent.children.passwordMinimum')} autoComplete="new-password"/></label>
             
             <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span><UiText message="legacy.web.i.am.the.child.s.authorised.guardian.a.45b1acdf" /></span></label>
             <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||!consent} onClick={createChild}>{busy?<UiText message="legacy.web.creating.profile.03f9567c" />:<UiText message="legacy.web.create.student.profile.b50fed07" />}</button>
