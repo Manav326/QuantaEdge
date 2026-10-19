@@ -27,7 +27,7 @@ export type EnrolledCourse = {
   subjects?: EnrolledCourseSubject[];
 };
 
-export function useStudentCourseScope(requestedCourseId: number | null = null) {
+export function useStudentCourseScope(requestedCourseId: string | number | null = null) {
   const [courses, setCourses] = useState<EnrolledCourse[]>([]);
   const [courseId, setCourseId] = useState<number | null>(null);
   const [loadingCourses, setLoadingCourses] = useState(true);
@@ -35,6 +35,16 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
   const [activatingCourseId, setActivatingCourseId] = useState<number | null>(null);
   const coursesRef = useRef<EnrolledCourse[]>([]);
   const courseIdRef = useRef<number | null>(null);
+  // Public course IDs are stable eight-character alphanumeric identities. Numeric database
+  // row IDs remain accepted for older links, but newly generated learning links use public_id.
+  const requestedText = String(requestedCourseId ?? '').trim();
+  const hasRequestedCourse = requestedText.length > 0;
+  const matchesRequestedCourse = useCallback((course: EnrolledCourse) => {
+    if (!hasRequestedCourse) return false;
+    if (/^\\d+$/.test(requestedText)) return Number(course.id || course.course_id) === Number(requestedText);
+    return String(course.public_id || '').toUpperCase() === requestedText.toUpperCase();
+  }, [hasRequestedCourse, requestedText]);
+
   // Reuse the current catalogue when the URL changes only to preserve course/subject selection.
   coursesRef.current = courses;
   courseIdRef.current = courseId;
@@ -44,16 +54,15 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
     const cachedCourses = coursesRef.current;
     if (cachedCourses.length > 0) {
       setCourseError('');
-      const requested = Number(requestedCourseId || 0);
       const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
-      const selected = requested > 0
-        ? cachedCourses.find(course => Number(course.id) === requested) || null
+      const selected = hasRequestedCourse
+        ? cachedCourses.find(matchesRequestedCourse) || null
         : cachedCourses.find(course => Number(course.id) === courseIdRef.current)
           || cachedCourses.find(course => Number(course.id) === saved)
           || cachedCourses.find(course => course.is_enrolled === true || course.enrolled === true)
           || cachedCourses[0]
           || null;
-      if (requested > 0 && !selected) {
+      if (hasRequestedCourse && !selected) {
         setCourseId(null);
         setCourseError('This course is not enrolled in your current institution account.');
         setLoadingCourses(false);
@@ -96,14 +105,13 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       if (!active) return;
       setCourses(enrolled);
       const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
-      const requested = Number(requestedCourseId || 0);
-      const selected = requested > 0
-        ? enrolled.find(course => Number(course.id) === requested) || null
+      const selected = hasRequestedCourse
+        ? enrolled.find(matchesRequestedCourse) || null
         : enrolled.find(course => Number(course.id) === saved)
           || enrolled.find(course => course.is_enrolled === true || course.enrolled === true)
           || enrolled[0]
           || null;
-      if (requested > 0 && !selected) {
+      if (hasRequestedCourse && !selected) {
         setCourseId(null);
         setCourseError('This course is not enrolled in your current institution account.');
         return;
@@ -145,7 +153,7 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       setCourseError(error instanceof Error ? error.message : 'Your courses could not be loaded.');
     }).finally(() => { if (active) setLoadingCourses(false); });
     return () => { active = false; };
-  }, [requestedCourseId]);
+  }, [requestedCourseId, hasRequestedCourse, matchesRequestedCourse]);
 
   const selectCourse = useCallback(async (value: string | number) => {
     const candidate = Number(value);
