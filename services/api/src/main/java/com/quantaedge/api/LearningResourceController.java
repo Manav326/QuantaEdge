@@ -422,7 +422,7 @@ public class LearningResourceController {
       if(mappings.isEmpty())return List.of();
       canonicalChapter=((Number)mappings.getFirst().get("chapter_id")).longValue();
       verifyArtifactChapter(artifact,canonicalChapter);
-      Map<String,Object> chapter=chapterRow(canonicalChapter);ensureChapterPublished(chapter);ensureStudentCanAccessChapter(context.studentId(),chapter,institutionId);
+      Map<String,Object> chapter=chapterRow(canonicalChapter);ensureChapterPublished(chapter);ensureStudentCanAccessChapterInCourse(context.studentId(),chapter,institutionId,courseId);
     }
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select r.id as resource_id,a.id as assignment_id,r.resource_type,r.title,r.description,r.language,r.source_kind,
@@ -479,7 +479,7 @@ public class LearningResourceController {
 
   @GetMapping("/learning/resources/{resourceId}/stream")
   public ResponseEntity<StreamingResponseBody> streamResource(@PathVariable long resourceId,@RequestParam long assignmentId,
-      @RequestHeader(value="Range",required=false) String rangeHeader,@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam Long courseId,@RequestHeader(value="Range",required=false) String rangeHeader,@RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
@@ -489,7 +489,7 @@ public class LearningResourceController {
 
   @GetMapping("/learning/resources/{resourceId}/download")
   public ResponseEntity<StreamingResponseBody> downloadResource(@PathVariable long resourceId,@RequestParam long assignmentId,
-      @RequestHeader(value="Range",required=false) String rangeHeader,@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam Long courseId,@RequestHeader(value="Range",required=false) String rangeHeader,@RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
@@ -504,7 +504,7 @@ public class LearningResourceController {
   @PutMapping("/learning/resources/{resourceId}/progress")
   @Transactional
   public Map<String,Object> saveStudentProgress(@PathVariable long resourceId,@RequestParam long assignmentId,
-      @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam Long courseId,@RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
