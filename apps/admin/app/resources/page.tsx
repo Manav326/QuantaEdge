@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Resources.module.css';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import PremiumPagination from '../components/PremiumPagination';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 
 type PdfAsset = {
   pdf_asset_id: number;
@@ -23,6 +24,8 @@ type Chapter = { chapter_id: number; chapter_code: string; chapter_name: string;
 type Track = { class_code: string; class_name: string; subject_code: string; subject_name: string };
 type Assignment = {
   document_id: number;
+  course_id?: number;
+  course_name?: string;
   pdf_asset_id: number;
   scope: 'SUBJECT_BOOK' | 'CHAPTER_PDF';
   title: string;
@@ -229,7 +232,8 @@ function MultiSelectFilter({
 
 export default function TextbookLibraryPage() {
   const t = useUiTranslation();
-  const [classCode, setClassCode] = useState('6');
+  const { courses, courseId, activeCourse, subjects: courseSubjects, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
+  const [classCode, setClassCode] = useState('');
   const [subjectCode, setSubjectCode] = useState('maths');
   const [viewClassCodes, setViewClassCodes] = useState<string[]>([]);
   const [viewSubjectCodes, setViewSubjectCodes] = useState<string[]>([]);
@@ -391,8 +395,8 @@ export default function TextbookLibraryPage() {
     : 0;
   const firstPreviewThumb = Math.max(1, Math.min(previewPage - 6, previewPageCount - 19));
   const previewThumbnails = Array.from({ length: Math.min(20, previewPageCount) }, (_value, index) => firstPreviewThumb + index);
-  const previewPageUrl = previewDocumentId
-    ? '/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage
+  const previewPageUrl = previewDocumentId && courseId
+    ? '/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage + '?courseId=' + encodeURIComponent(courseId)
     : '';
   const previewPageTitle = previewAssignment?.title || t('admin.resources.title');
 
@@ -549,19 +553,18 @@ export default function TextbookLibraryPage() {
     setLoading(true);
     setError('');
     try {
-      const curriculumRows = await api('/api/v1/curriculum');
-      const trackMap = new Map<string, Track>();
-      (Array.isArray(curriculumRows) ? curriculumRows : []).forEach((row: any) => {
-        if (!row.class_code || !row.subject_code) return;
-        const track: Track = {
-          class_code: String(row.class_code),
-          class_name: String(row.class_name || ('Class ' + row.class_code)),
-          subject_code: String(row.subject_code),
-          subject_name: String(row.subject_name || row.subject_code),
-        };
-        trackMap.set(track.class_code + ':' + track.subject_code, track);
-      });
-      const nextTracks = [...trackMap.values()];
+      if (!courseId || !activeCourse) {
+        setTracks([]); setChapters([]); setAssignments([]); setAssignmentTotal(0); setAssignmentFacets({});
+        setLoading(loadingCourses);
+        setError(loadingCourses ? '' : courseError || 'Select a course assigned to this institution.');
+        return;
+      }
+      const nextTracks: Track[] = courseSubjects.map(subject => ({
+        class_code: String(subject.curriculum_class_code || activeCourse.curriculum_class_code || ''),
+        class_name: String(subject.curriculum_class_name || ('Class ' + (subject.curriculum_class_code || activeCourse.curriculum_class_code || ''))),
+        subject_code: String(subject.subject_code),
+        subject_name: String(subject.subject_name || subject.subject_code),
+      })).filter(track => track.class_code && track.subject_code);
       setTracks(nextTracks);
       const nextClassCode = nextTracks.some(track => track.class_code === classCode)
         ? classCode : (nextTracks[0]?.class_code || '');
@@ -572,14 +575,14 @@ export default function TextbookLibraryPage() {
 
       // Fetch only the requested server-side page. Filter facets are computed by the API
       // across the matching inventory, not inferred from the currently visible page.
-      const params = new URLSearchParams({ status: 'ALL', limit: String(assignmentPageSize), offset: String(assignmentPage * assignmentPageSize) });
+      const params = new URLSearchParams({ courseId, status: 'ALL', limit: String(assignmentPageSize), offset: String(assignmentPage * assignmentPageSize) });
       if (viewClassCodes.length) params.set('classCodes', viewClassCodes.join(','));
       if (viewSubjectCodes.length) params.set('subjectCodes', viewSubjectCodes.join(','));
       if (viewStatuses.length) params.set('statuses', viewStatuses.join(','));
       if (viewLanguages.length) params.set('languages', viewLanguages.join(','));
       if (viewScopes.length) params.set('scopes', viewScopes.join(','));
-      const chapterPromise = canEdit && nextClassCode && nextSubjectCode
-        ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
+      const chapterPromise = canEdit && nextSubjectCode
+        ? api('/api/v1/admin/content?' + new URLSearchParams({ courseId, classCode: nextClassCode, subjectCode: nextSubjectCode }).toString())
         : Promise.resolve([]);
       const intakePromise = canReview
         ? api('/api/v1/admin/source-ingestion/intake?limit=' + intakePageSize + '&offset=' + (intakePage * intakePageSize)).catch(() => ({ items: [], total: 0, summary: {} }))
@@ -622,7 +625,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, assignmentPageSize, intakePage, intakePageSize,
+  }, [courseId, activeCourse, courseSubjects, loadingCourses, courseError, classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, assignmentPageSize, intakePage, intakePageSize,
       viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
@@ -740,11 +743,14 @@ export default function TextbookLibraryPage() {
     if (!/^https:\/\//i.test(sourceUrl.trim())) { setError(t('admin.resources.httpsOnly')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
+      if (!courseId || !tracks.some(track => track.class_code === classCode && track.subject_code === subjectCode)) {
+        throw new Error('Select a course and one of its mapped subjects before attaching a textbook resource.');
+      }
       const resource = await api('/api/v1/admin/learning-documents', {
         method: 'POST',
         body: JSON.stringify({
           pdfAssetId: Number(selectedPdf.pdf_asset_id || selectedPdf.id),
-          scope, classCode, subjectCode, language: resourceLanguage,
+          courseId: Number(courseId), scope, classCode, subjectCode, language: resourceLanguage,
           chapterId: scope === 'CHAPTER_PDF' ? Number(chapterId) : null,
           title: title.trim(), sourceTitle: sourceTitle.trim(),
           sourceUrl: sourceUrl.trim(), edition: edition.trim(),
@@ -766,7 +772,8 @@ export default function TextbookLibraryPage() {
   async function setStatus(row: Assignment, nextStatus: 'PUBLISHED' | 'ARCHIVED' | 'DRAFT') {
     setBusy(true); setError(''); setNotice('');
     try {
-      await api('/api/v1/admin/learning-documents/' + row.document_id + '/status', {
+      if (!courseId) throw new Error('Select a course before changing resource status.');
+      await api('/api/v1/admin/learning-documents/' + row.document_id + '/status?courseId=' + encodeURIComponent(courseId), {
         method: 'PATCH', body: JSON.stringify({ status: nextStatus }),
       });
       setNotice(t('admin.resources.statusUpdated', { title: row.title, status: resourceStatusLabel(nextStatus, t) }));
@@ -803,6 +810,17 @@ export default function TextbookLibraryPage() {
       {notice && <div className={styles.alertSuccess} role="status">{notice}</div>}
 
       <section className={styles.panel + " " + styles.governancePanel}>
+        <div style={{ padding: '16px 20px 0' }}>
+          <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+            label={t('admin.assessments.course')} placeholder={t('admin.assessments.chooseCurriculum')}
+            onChange={value => {
+              selectCourse(value);
+              setClassCode(''); setSubjectCode(''); setChapterId('');
+              setAssignmentPage(0); setPreviewDocumentId(null);
+              setViewClassCodes([]); setViewSubjectCodes([]);
+            }} />
+          {courseError && !loadingCourses && <p role="alert">{courseError}</p>}
+        </div>
         <div className={styles.governanceHeader}>
           <div className={styles.sectionHeading}>
             <div><span>{t('admin.resources.governance')}</span><h2>{t('admin.resources.assignmentsTitle')}</h2><p>{t('admin.resources.assignmentsDescription')}</p></div>
@@ -896,7 +914,7 @@ export default function TextbookLibraryPage() {
             {previewThumbnailsOpen && <aside className={styles.previewThumbnails} aria-label={t('admin.resources.pageThumbnails')}>
               <div className={styles.previewThumbsHeader}><b>{t('admin.resources.pages')}</b><small>{t('admin.resources.totalPages', { count: previewPageCount })}</small></div>
               <div className={styles.previewThumbList}>{previewThumbnails.map(pageNumber=><button type="button" key={pageNumber} className={pageNumber===previewPage?styles.activeThumb:''} onClick={() => changePreviewPage(pageNumber)}>
-                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber} alt="" loading="lazy" draggable={false}/><span>{t('admin.resources.page')} {pageNumber}</span>
+                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber+'?courseId='+encodeURIComponent(courseId)} alt="" loading="lazy" draggable={false}/><span>{t('admin.resources.page')} {pageNumber}</span>
               </button>)}</div>
               <div className={styles.previewThumbsFooter}>{t('admin.resources.showingPages', { start: previewThumbnails[0] || 0, end: previewThumbnails[previewThumbnails.length-1] || 0 })}</div>
             </aside>}
@@ -905,7 +923,7 @@ export default function TextbookLibraryPage() {
               <div className={styles.previewPageViewport+(previewFitWidth?' '+styles.fitWidth:'')+(previewFitPage?' '+styles.fitPage:'')} key={previewDocumentId+'-'+previewPage}>
                 {previewImageLoading&&<div className={styles.previewImageLoading}><span className={styles.previewSpinner}/> {t('admin.resources.renderingPage', { page: previewPage })}</div>}
                 <img ref={previewPageImageRef} className={styles.previewPageImage} src={previewPageUrl} alt={t('admin.resources.previewImageAlt', { page: previewPage, title: previewPageTitle })} draggable={false} onLoad={() => {setPreviewImageLoading(false);setPreviewImageError('');}} onError={() => {setPreviewImageLoading(false);setPreviewImageError(t('admin.resources.renderFailed'));}} style={{width:previewFitPage?'auto':previewFitWidth?'100%':previewZoom+'%'}}/>
-                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=previewPageUrl+'?retry='+Date.now();}}>{t('admin.resources.retryPage')}</button></div>}
+                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=(() => { const url = new URL(previewPageUrl, window.location.origin); url.searchParams.set('retry', String(Date.now())); return url.toString(); })();}}>{t('admin.resources.retryPage')}</button></div>}
               </div>
               <div className={styles.previewCanvasBottom}><span>{t('admin.resources.privatePagePreview', { page: previewPage })}</span><span>{t('admin.resources.keyboardHelp')}</span></div>
             </div>
