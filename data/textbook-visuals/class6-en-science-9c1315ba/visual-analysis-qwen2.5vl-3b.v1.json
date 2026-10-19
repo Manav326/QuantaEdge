@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 853,
+    "assets_selected": 854,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 849,
-    "assets_remaining": 1229,
+    "assets_analyzed": 850,
+    "assets_remaining": 1228,
     "assets_completion_percent": 40.9,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 848,
+    "assets_skipped_from_checkpoint": 849,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:23:48Z"
+      "checkpointed_at": "2026-10-19T02:28:34Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:24:29Z"
+      "checkpointed_at": "2026-10-19T02:29:14Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:25:23Z"
+      "checkpointed_at": "2026-10-19T02:30:07Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:26:03Z"
+      "checkpointed_at": "2026-10-19T02:30:46Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26709,6 +26709,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T02:27:46Z"
+    },
+    {
+      "asset_id": "660bd86bc2c5be61850df883",
+      "asset_sha256": "fb95b4075f52d24c53520c79f2098cda032bcc74321a049f0420fc9237d57e5f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 51,
+      "asset_path": "assets/fb95b4075f52d24c53520c79f2098cda032bcc74321a049f0420fc9237d57e5f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9a67501b2187d6cc5eea9bd4fbb6370435d19710f5b23017fab7a4a1a1dd821",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a blue background with a dashed line.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:31:23Z"
     }
   ]
 }
