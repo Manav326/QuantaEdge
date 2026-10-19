@@ -66,7 +66,8 @@ export function canSeeAdminItem(item: AdminNavItem, role: string, permissions: s
   if (!role) return true;
   if (item.key === 'overview') return role === 'ADMIN';
   if (item.key === 'certificates' || item.key === 'marketplace') return role === 'ADMIN';
-  if (item.key === 'notifications') return role === 'ADMIN' || ['NOTIFICATION_TEMPLATE_MANAGE','NOTIFICATION_COURSE_SEND','NOTIFICATION_INSTITUTION_SEND','NOTIFICATION_CAMPAIGN_VIEW'].some(permission => permissions.includes(permission));
+  // This destination is the full creation/send studio; campaign-view-only access does not grant send authority.
+  if (item.key === 'notifications') return role === 'ADMIN' || ['NOTIFICATION_TEMPLATE_MANAGE','NOTIFICATION_COURSE_SEND','NOTIFICATION_INSTITUTION_SEND'].some(permission => permissions.includes(permission));
   if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
   if (item.key === 'lifecycle') return role === 'ADMIN' || permissions.includes('ACCOUNT_LIFECYCLE_REVIEW');
   if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
