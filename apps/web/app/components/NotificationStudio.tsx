@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 import { apiFetch } from './apiClient';
 import RichNotificationRenderer from './RichNotificationRenderer';
+import LogoGraphicsLab from './LogoGraphicsLab';
 import styles from './NotificationStudio.module.css';
 
 type Surface = 'admin' | 'hrms' | 'institution';
@@ -102,7 +103,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   const [document, setDocument] = useState<Document>(() => clone(DEFAULT_DOCUMENT));
   const [selectedBlock, setSelectedBlock] = useState(0);
   const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop' | 'push'>('mobile');
-  const [workspaceTab, setWorkspaceTab] = useState<'studio' | 'templates' | 'campaigns'>('studio');
+  const [workspaceTab, setWorkspaceTab] = useState<'studio' | 'logo' | 'templates' | 'campaigns'>('studio');
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [campaignLoading, setCampaignLoading] = useState(false);
   const [campaignError, setCampaignError] = useState('');
@@ -156,6 +157,31 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
   useEffect(() => {
     if (workspaceTab === 'campaigns') void loadCampaigns();
   }, [workspaceTab, loadCampaigns]);
+
+  function useLogoInNotification(assetId: string, fileName: string) {
+    const current = document.blocks[selectedBlock];
+    const accessibleName = fileName.replace(/-logo\\.png$/i, '').replace(/[-_]+/g, ' ').trim() || 'Brand logo';
+    if (current && ['hero','image','animation'].includes(current.type)) {
+      updateBlock('assetId', assetId);
+      if (current.type === 'image' || current.type === 'animation') {
+        updateBlock('alt', accessibleName + ' logo');
+        updateBlock('decorative', false);
+        updateBlock('fit', 'contain');
+        updateBlock('aspectRatio', 'auto');
+      }
+    } else {
+      const blocks = [...document.blocks, {
+        type: 'image', assetId, alt: accessibleName + ' logo', caption: '',
+        decorative: false, fit: 'contain', aspectRatio: 'auto', focalPoint: 'center'
+      } as Block];
+      setDocument({ ...document, blocks });
+      setSelectedBlock(blocks.length - 1);
+    }
+    setWorkspaceTab('studio');
+    setPreviewed(false);
+    setPreviewCount(null);
+    setNotice('Logo asset added to the notification design. Preview and validate again before sending.');
+  }
 
   function chooseTemplate(id: string) {
     setTemplateId(id); setPreviewed(false); setPreviewCount(null); setError(''); setNotice('');
@@ -390,6 +416,7 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
 
     <nav className={styles.studioNav} aria-label="Notification workspace">
       <button type="button" className={workspaceTab==='studio'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('studio')}>Design Studio</button>
+      <button type="button" className={workspaceTab==='logo'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('logo')}>Logo & Graphics</button>
       <button type="button" className={workspaceTab==='templates'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('templates')}>Templates <span>{templates.length}</span></button>
       <button type="button" className={workspaceTab==='campaigns'?styles.studioNavActive:styles.studioNavItem} onClick={()=>setWorkspaceTab('campaigns')}>Campaigns & Delivery</button>
     </nav>
@@ -564,5 +591,40 @@ export default function NotificationStudio({ surface }: { surface: Surface }) {
         </div>
       </aside>
     </div>
+    {workspaceTab==='logo' ? <section className={styles.libraryPanel}>
+      <LogoGraphicsLab surface={surface} onUseInNotification={useLogoInNotification}/>
+    </section> : null}
+    {workspaceTab==='templates' ? <section className={styles.libraryPanel}>
+      <div className={styles.libraryHeading}>
+        <div><p className={styles.eyebrow}>REUSABLE DESIGNS</p><h2>Template library</h2><p>Each edit creates a new version. Sent campaigns retain the content they were sent with.</p></div>
+        <button type="button" className={styles.sendButton} onClick={()=>{
+          setTemplateId('');setTemplateVersion(null);setTemplateName('New notification template');setTemplateDescription('');
+          setDocument(clone(DEFAULT_DOCUMENT));setSelectedBlock(0);setPreviewed(false);setWorkspaceTab('studio');
+        }}>+ Create a template</button>
+      </div>
+      {templates.length===0 ? <div className={styles.campaignEmpty}><h3>No saved templates yet</h3><p>Create a design in Design Studio and save it as a reusable template.</p></div> :
+      <div className={styles.templateGallery}>{templates.map(template=>{
+        const version=Number(field(template,'content_version','contentVersion')??1);
+        const name=String(field(template,'template_name','templateName')??'Untitled template');
+        const doc=asDocument(field(template,'content_document','contentDocument'))??DEFAULT_DOCUMENT;
+        return <article className={styles.templateTile} key={template.id}>
+          <div className={styles.templateTilePreview}><RichNotificationRenderer surface={surface} contentDocument={doc}/></div>
+          <div className={styles.templateTileMeta}><div><h3>{name}</h3><p>{template.description||'Reusable notification design'}</p></div><span>v{version}</span></div>
+          <button type="button" className={styles.previewButton} onClick={()=>{chooseTemplate(String(template.id));setWorkspaceTab('studio');}}>Open and edit</button>
+        </article>;
+      })}</div>}
+    </section> : null}
+    {workspaceTab==='campaigns' ? <section className={styles.libraryPanel}>
+      <div className={styles.libraryHeading}>
+        <div><p className={styles.eyebrow}>DELIVERY HISTORY</p><h2>Campaigns & delivery</h2><p>Campaign status and audience counts. Per-channel delivery attempts remain distinct from recipient read state.</p></div>
+        <button type="button" className={styles.ghostButton} onClick={()=>void loadCampaigns()} disabled={campaignLoading}>{campaignLoading?'Refreshing…':'Refresh history'}</button>
+      </div>
+      {campaignError ? <div className={styles.error} role="alert">{campaignError}</div> : null}
+      {campaignLoading ? <div className={styles.campaignEmpty}>Loading campaign history…</div> :
+        campaigns.length===0 ? <div className={styles.campaignEmpty}><h3>No campaigns found</h3><p>Sent and scheduled notifications will appear here.</p></div> :
+        <div className={styles.campaignTableWrap}><table className={styles.campaignTable}><thead><tr><th>Notification</th><th>Scope</th><th>Status</th><th>Recipients</th><th>Schedule / sent</th><th>Created</th></tr></thead><tbody>
+          {campaigns.map(campaign=><tr key={campaign.id}><td><strong>{campaign.title||'Untitled campaign'}</strong><small>{campaign.summary||''}</small></td><td>{campaign.scope||'—'}</td><td><span className={styles.campaignStatus} data-status={String(campaign.status||'').toLowerCase()}>{campaign.status||'—'}</span></td><td>{Number(campaign.resolved_recipient_count||0).toLocaleString('en-IN')}</td><td>{campaign.scheduled_at?new Date(campaign.scheduled_at).toLocaleString('en-IN'):campaign.dispatched_at?new Date(campaign.dispatched_at).toLocaleString('en-IN'):'—'}</td><td>{campaign.created_at?new Date(campaign.created_at).toLocaleString('en-IN'):'—'}</td></tr>)}
+        </tbody></table></div>}
+    </section> : null}
   </main>;
 }
