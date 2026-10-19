@@ -75,7 +75,12 @@ public class NotificationMediaController {
       @RequestPart("file") MultipartFile file) throws IOException {
     UploadOwner owner=uploadOwner(request,context,institutionCode);
     if(file==null||file.isEmpty())throw new IllegalArgumentException("Choose an image, graphic or video first.");
+    long reportedSize=file.getSize();
+    if(reportedSize<=0)throw new IllegalArgumentException("The selected media file is empty or invalid.");
+    if(reportedSize>MAX_VIDEO_BYTES)throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+        "Media assets must be 100 MiB or smaller.");
     byte[] bytes=file.getBytes();
+    if(bytes.length!=reportedSize)throw new IllegalArgumentException("The uploaded media length could not be verified.");
     MediaInfo info=inspect(bytes,file.getOriginalFilename());
     long size=bytes.length;
     long maximum=info.contentType().startsWith("video/")?MAX_VIDEO_BYTES:MAX_IMAGE_BYTES;
