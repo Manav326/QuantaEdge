@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1570,
-    "successful_visual_analyses": 1548,
-    "missing_visual_analyses": 5918,
+    "raw_analysis_result_rows": 1573,
+    "successful_visual_analyses": 1551,
+    "missing_visual_analyses": 5915,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5940,
+    "unresolved_count": 5937,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -68984,9 +68984,28 @@
       "asset_path": "assets/b967d0a7715bce8f709ca5d9eb1b905d166116380777999b1df1181315799a6d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a circuit diagram with a yellow wire and a component symbol.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2."
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Electrical Components",
+          "Symbols"
+        ],
+        "context_relation": "The image is a visual representation of the text in the textbook, specifically related to the section on circuit diagrams.",
+        "limitations": [
+          "The image does not show the actual components or symbols used in a circuit diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69002,9 +69021,30 @@
       "asset_path": "assets/b654a5d50f68cd31d6936eb8e9518660d34f680f1d81f793d8f740c3d9f147ee.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a circuit diagram with a yellow wire and a brown component.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "3.3 Circuit Diagrams",
+          "Can we represent",
+          "the circuits in a",
+          "simpler manner?",
+          "The various components of an electrical",
+          "circuit can be represented by symbols",
+          "shown in Table 3.2."
+        ],
+        "concepts": [
+          "Circuit Diagrams",
+          "Components of an Electrical Circuit",
+          "Symbols for Components"
+        ],
+        "context_relation": "The image is a visual representation of the text in the textbook, specifically related to the section on circuit diagrams.",
+        "limitations": [
+          "The image does not provide specific details about the components or symbols used in the circuit diagram."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69020,9 +69060,20 @@
       "asset_path": "assets/625eafe68ff7d1c7f2dc2fb6ff32caceee4618bbeb4a8bc6d65d5268e1823b75.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple circuit diagram with two nodes connected by a line.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "circuit diagram",
+          "nodes",
+          "connection"
+        ],
+        "context_relation": "The image represents a basic electrical circuit diagram.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
