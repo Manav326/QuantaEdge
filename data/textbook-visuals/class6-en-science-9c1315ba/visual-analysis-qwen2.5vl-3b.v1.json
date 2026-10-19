@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1033,
+    "assets_selected": 1035,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1030,
-    "assets_remaining": 1048,
-    "assets_completion_percent": 49.6,
+    "assets_analyzed": 1032,
+    "assets_remaining": 1046,
+    "assets_completion_percent": 49.7,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1028,
+    "assets_skipped_from_checkpoint": 1030,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:44:46Z"
+      "checkpointed_at": "2026-10-19T15:48:18Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:45:25Z"
+      "checkpointed_at": "2026-10-19T15:48:59Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T15:46:16Z"
+      "checkpointed_at": "2026-10-19T15:49:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -33365,6 +33365,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T15:47:31Z"
+    },
+    {
+      "asset_id": "7e7f24f5f216b1d2d9e458b0",
+      "asset_sha256": "96543fdc8f8eeb8812d0c82ea1f9555b5cf393d032bb50f5b254f86365adf717",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/96543fdc8f8eeb8812d0c82ea1f9555b5cf393d032bb50f5b254f86365adf717.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink pencil with a black eraser at the top.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The image is a visual representation of the materials attracted by a magnet, used in the context of Table 4.1.",
+        "limitations": [
+          "The image does not show the actual observation or prediction process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:50:33Z"
+    },
+    {
+      "asset_id": "2a061414fbf27c497e9267df",
+      "asset_sha256": "3bd13460cf096b7010000544a5c730788c92efead19087589cd469d1bab33ffb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 81,
+      "asset_path": "assets/3bd13460cf096b7010000544a5c730788c92efead19087589cd469d1bab33ffb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "850020e53b6fae120df887cfa9122de36de0c6b0d5f9501def449e4583f91e38",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table summarizing the materials attracted by a magnet.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The table is used to record observations about materials attracted by a magnet.",
+        "limitations": [
+          "The table does not include predictions for all materials."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T15:51:12Z"
     }
   ]
 }

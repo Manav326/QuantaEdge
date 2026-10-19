@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1043,
-    "successful_visual_analyses": 1033,
-    "missing_visual_analyses": 1035,
+    "raw_analysis_result_rows": 1045,
+    "successful_visual_analyses": 1035,
+    "missing_visual_analyses": 1033,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1045,
+    "unresolved_count": 1043,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40165,9 +40165,34 @@
       "asset_path": "assets/96543fdc8f8eeb8812d0c82ea1f9555b5cf393d032bb50f5b254f86365adf717.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pink pencil with a black eraser at the top.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The image is a visual representation of the materials attracted by a magnet, used in the context of Table 4.1.",
+        "limitations": [
+          "The image does not show the actual observation or prediction process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40183,9 +40208,32 @@
       "asset_path": "assets/3bd13460cf096b7010000544a5c730788c92efead19087589cd469d1bab33ffb.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table summarizing the materials attracted by a magnet.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The table is used to record observations about materials attracted by a magnet.",
+        "limitations": [
+          "The table does not include predictions for all materials."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
