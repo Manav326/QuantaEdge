@@ -402,7 +402,7 @@ public class RichNotificationService {
     String normalizedScope=scope==null?"":scope.trim().toUpperCase(Locale.ROOT);
     String checkedTitle=requiredText(title,"Notification title",180);
     String checkedSummary=requiredText(summary,"Notification summary",400);
-    String key=requiredText(idempotencyKey,"Idempotency key",180);
+    String key=scopedIdempotencyKey(actor,requiredText(idempotencyKey,"Idempotency key",180));
     JsonNode document=validator.validate(rawDocument);
     assertScopeAllowed(actor,normalizedScope,institutionId,courseId,filter);
     Instant now=Instant.now();
@@ -835,6 +835,19 @@ public class RichNotificationService {
       catch(RuntimeException ex){throw new IllegalArgumentException("An institution selection is invalid.");}
     }
     return List.copyOf(result);
+  }
+
+  private static String scopedIdempotencyKey(Actor actor,String requestKey) {
+    String identity=actor.staffId()!=null?"staff:"+actor.staffId()
+        :actor.institutionAdminId()!=null?"institution-admin:"+actor.institutionAdminId()
+        :"institution:"+(actor.institutionId()==null?"platform":actor.institutionId());
+    String input=actor.workspace()+"|"+identity+"|"+requestKey;
+    try {
+      return java.util.HexFormat.of().formatHex(
+          java.security.MessageDigest.getInstance("SHA-256").digest(input.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+    } catch(java.security.NoSuchAlgorithmException impossible) {
+      throw new IllegalStateException("SHA-256 is required for notification idempotency.",impossible);
+    }
   }
 
   private static Instant asInstant(Object raw) {
