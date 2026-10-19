@@ -22,7 +22,7 @@ assert.ok(clients.every(source => source === clients[0]), 'Apps must share the s
 const client = clients[0];
 assert.ok(client.includes('export async function apiFetch('), 'Central apiFetch helper is required');
 assert.ok(client.includes('response.clone().text()') && client.includes('if (!response.ok) {'), 'Responses must be inspected without consuming caller bodies');
-assert.ok(client.includes("notifyUser(message, 'error')"), 'API errors must reach the host');
+assert.ok(client.includes('if (!response.ok) {') && client.includes('notifyUser(explicit?.message ?? messageFromPayload(payload) ??') && client.includes("fallbackApiError(response.status), 'error')"), 'API errors must reach the host using explicit API messages or a safe status fallback');
 assert.ok(client.includes('record.warning') && client.includes("'warning'"), 'Explicit API warnings must reach the host');
 assert.ok(client.includes("notifyUser(networkErrorMessage(), 'error')"), 'Network errors must reach the host');
 for (const path of ['apps/web/app/layout.tsx','apps/admin/app/layout.tsx','apps/people/app/layout.tsx']) {
