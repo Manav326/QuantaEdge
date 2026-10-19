@@ -22,6 +22,7 @@ export type EnrolledCourse = {
   is_enrolled: boolean;
   paused?: boolean;
   purchased?: boolean;
+  has_access?: boolean;
   subjects?: EnrolledCourseSubject[];
 };
 
@@ -30,6 +31,7 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
   const [courseId, setCourseId] = useState<number | null>(null);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [courseError, setCourseError] = useState('');
+  const [activatingCourseId, setActivatingCourseId] = useState<number | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -48,9 +50,11 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       }
       if (!response.ok) throw new Error(body.detail || body.message || body.error || 'Your courses could not be loaded.');
       const rows: EnrolledCourse[] = Array.isArray(body) ? body : [];
-      // A catalogue/marketplace offer is not an entitlement. Only an active enrollment
-      // can establish the selected learning context for resources.
-      const enrolled = rows.filter(course => course.is_enrolled === true && course.paused !== true && Number.isSafeInteger(Number(course.id)) && Number(course.id) > 0);
+      // Marketplace visibility is not entitlement. A course already owned or paused remains
+      // selectable, but the server must activate it before its subjects/resources can be read.
+      const enrolled = rows.filter(course =>
+        (course.is_enrolled === true || course.paused === true || course.purchased === true || course.has_access === true) &&
+        Number.isSafeInteger(Number(course.id)) && Number(course.id) > 0);
       if (!active) return;
       setCourses(enrolled);
       const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
@@ -77,16 +81,40 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
     return () => { active = false; };
   }, [requestedCourseId]);
 
-  const selectCourse = useCallback((value: string | number) => {
+  const selectCourse = useCallback(async (value: string | number) => {
     const candidate = Number(value);
     if (!Number.isSafeInteger(candidate) || candidate <= 0 ||
-        !courses.some(course => Number(course.id) === candidate)) return;
-    setCourseId(candidate);
-    try { window.localStorage.setItem('qe:student:activeCourseId', String(candidate)); } catch {}
-  }, [courses]);
+        !courses.some(course => Number(course.id) === candidate) || activatingCourseId !== null) return;
+    if (candidate === courseId) return;
+    setActivatingCourseId(candidate);
+    setCourseError('');
+    try {
+      const response = await fetch('/api/v1/students/me/programs/id/' + candidate + '/enroll', {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+        body: '{}',
+      });
+      const raw = await response.text();
+      let body: any = {};
+      try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
+      if (response.status === 401 || response.status === 403) {
+        window.location.assign('/login/student');
+        return;
+      }
+      if (!response.ok) throw new Error(body.detail || body.message || body.error || 'This course could not be activated.');
+      setCourseId(candidate);
+      try { window.localStorage.setItem('qe:student:activeCourseId', String(candidate)); } catch {}
+    } catch (error) {
+      setCourseError(error instanceof Error ? error.message : 'This course could not be activated.');
+    } finally {
+      setActivatingCourseId(null);
+    }
+  }, [courses, courseId, activatingCourseId]);
 
   const activeCourse = courses.find(course => Number(course.id) === courseId) || null;
-  return { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError };
+  return { courses, activeCourse, courseId, selectCourse, loadingCourses: loadingCourses || activatingCourseId !== null, courseError };
 }
 
 export function PrimaryCoursePicker({
@@ -101,7 +129,7 @@ export function PrimaryCoursePicker({
   if (loading) return <div className="qe-primary-course-scope" role="status">{label}: loading…</div>;
   if (!courses.length) return (
     <div className="qe-primary-course-scope" role="status">
-      <span>No active course is available for learning resources.</span>
+      <span>No owned course is available for learning resources.</span>
       <Link href="/student/courses">Review All Courses</Link>
       <Link href="/student/marketplace">Browse Marketplace</Link>
     </div>
