@@ -55,6 +55,19 @@ Builder requirements:
 - Use institution brand tokens for institution/course notices and approved platform styling for HRMS platform notices. Do not hard-code QuantaEdge branding into white-label tenant experiences.
 - Responsive, calm surfaces, readable contrast, keyboard/screen-reader support and reduced-motion handling are required.
 
+## 3A. Logo & Graphics Lab (part of the same Canva-like Studio)
+
+The sender Studio also includes a **Logo & Graphics** workspace. This is not a separate top-level application. It can create original logo/brand-mark compositions and notification graphics, then pass the resulting asset directly into the current notification design.
+
+Initial capabilities:
+- Editable brand name and optional tagline; symbol/mark selection (book, star/spark, shield, leaf, circle/abstract geometric), logo type (wordmark, monogram, emblem, icon), horizontal/stacked/icon-only layouts and spacing.
+- Brand color palettes plus user-selected primary/secondary/background colors; light/dark surface preview; transparent and solid-background export.
+- Generate multiple controlled concept variations, revise text/symbol/palette/layout, inspect at app-icon, small header and notification-hero sizes, then export high-resolution PNG.
+- Upload the exported raster asset into the same scoped media library and choose **Use in notification** to insert it into the selected hero/image block without downloading and re-uploading.
+- Institution admins can create designs only for their own tenant; HRMS platform owners can create platform-owned assets. Do not silently replace an institution's canonical HRMS-managed brand/logo. Explicitly distinguish a campaign graphic from an institution's persistent logo and record asset ownership/provenance.
+- Initial implementation must use deterministic, editable vector primitives rendered locally to raster; it must not pretend to be AI-generated. The interface can expose prompt-to-image generation only when a server-configured provider capable of image generation is verified and enabled. AI generation is an optional provider adapter with rate limits, cost/consent controls, asset validation and review; never expose provider credentials to browsers.
+- Do not upload SVG/scriptable documents. Export a validated PNG through the existing private media endpoint. Keep generated assets tenant-scoped and keep the original editable composition as validated JSON if that persistence is implemented.
+
 ## 4. Surface and channel contract
 
 ### In-app inbox — first-class source of truth
