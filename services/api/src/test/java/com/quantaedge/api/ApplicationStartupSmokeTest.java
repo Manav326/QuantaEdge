@@ -50,7 +50,7 @@ class ApplicationStartupSmokeTest {
         studentId, institutionId, "PHONE_SIGNUP", null);
 
     assertTrue(jdbc.queryForObject("""
-      select details ? 'actorUserId' and details->>'actorUserId' is null
+      select jsonb_exists(details, 'actorUserId') and details->>'actorUserId' is null
       from institution_membership_event
       where institution_id=? and student_id=? and event_type='MEMBERSHIP_CREATED'
       order by id desc limit 1
