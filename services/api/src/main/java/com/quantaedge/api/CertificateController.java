@@ -175,45 +175,67 @@ public class CertificateController {
 
   @GetMapping("/guardians/children/{studentId}/certificates")
   public Map<String, Object> childCertificates(@PathVariable long studentId,
+      @RequestParam Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
     long institutionId=requireInstitution(tenant);
     requireGuardianChild(context, studentId,institutionId);
+    requireChildCourseEnrollment(studentId,courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
         SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
-        WHERE c.student_id=? AND c.institution_id=?
+        WHERE c.student_id=? AND c.institution_id=? AND c.program_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
-        """, studentId,institutionId);
-    return Map.of("items", items, "studentId", studentId);
+        """, studentId,institutionId,courseId);
+    return Map.of("items", items, "studentId", studentId, "courseId",courseId);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/view")
   @Transactional
   public ResponseEntity<byte[]> viewChildCertificate(@PathVariable long studentId,
-      @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
+      @PathVariable long certificateId, @RequestParam Long courseId, @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
     long institutionId=requireInstitution(tenant);
     requireGuardianChild(context, studentId,institutionId);
-    return certificateArtifact(certificateId, studentId, format, true,institutionId);
+    requireChildCourseEnrollment(studentId,courseId,institutionId);
+    return certificateArtifact(certificateId, studentId, format, true,institutionId,courseId);
   }
 
   @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/download")
   @Transactional
   public ResponseEntity<byte[]> downloadChildCertificate(@PathVariable long studentId,
-      @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
+      @PathVariable long certificateId, @RequestParam Long courseId, @RequestParam(defaultValue = "pdf") String format,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context = authorization.requireParent(context);
     long institutionId=requireInstitution(tenant);
     requireGuardianChild(context, studentId,institutionId);
-    return certificateArtifact(certificateId, studentId, format, false,institutionId);
+    requireChildCourseEnrollment(studentId,courseId,institutionId);
+    return certificateArtifact(certificateId, studentId, format, false,institutionId,courseId);
+  }
+
+  private void requireChildCourseEnrollment(long studentId,Long courseId,long institutionId) {
+    if(courseId==null || courseId<1L)
+      throw new IllegalArgumentException("Choose an enrolled course before viewing this child certificate.");
+    Long active=jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join institution_membership m on m.student_id=spe.student_id
+        and m.institution_id=spe.institution_id and m.status='ACTIVE'
+      join institution_tenant t on t.id=spe.institution_id and t.status='ACTIVE'
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status in ('ACTIVE','PAUSED')
+      """,Long.class,studentId,institutionId,courseId);
+    if(active==null || active==0L)
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Child course not found in this institution.");
   }
 
   private void requireGuardianChild(AuthContext context,long studentId,long institutionId) {
