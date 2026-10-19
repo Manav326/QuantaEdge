@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 775,
+    "assets_selected": 777,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 772,
-    "assets_remaining": 1519,
-    "assets_completion_percent": 33.7,
+    "assets_analyzed": 774,
+    "assets_remaining": 1517,
+    "assets_completion_percent": 33.8,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 770,
+    "assets_skipped_from_checkpoint": 772,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:46:33Z"
+      "checkpointed_at": "2026-10-19T03:52:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:47:21Z"
+      "checkpointed_at": "2026-10-19T03:53:08Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:47:59Z"
+      "checkpointed_at": "2026-10-19T03:53:46Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -23771,6 +23771,69 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T03:51:11Z"
+    },
+    {
+      "asset_id": "e30c380cdec2d561494a586d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "cells",
+          "functions",
+          "body",
+          "inner cheek cells",
+          "protective lining",
+          "nerve cells",
+          "messages",
+          "body functions"
+        ],
+        "context_relation": "The text discusses the unique characteristics of cells and their roles in the body.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:54:06Z"
+    },
+    {
+      "asset_id": "80f217c5784f9ca6317da0c0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:54:18Z"
     }
   ]
 }
