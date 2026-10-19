@@ -346,10 +346,8 @@ public class LearningResourceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
-    Long requestedCourseId=optionalLong(body.get("courseId"),"courseId");
-    if(requestedCourseId==null)throw badRequest("Select an assigned course before placing a resource.");
-    requireAdminAssignedCourse(requestedCourseId,tenant);
-    long courseId=requestedCourseId;
+    long courseId=positiveLong(body.get("courseId"),"Course");
+    requireAdminAssignedCourse(courseId,tenant);
     long resourceId=positiveLong(body.get("resourceId"),"Resource");
     String targetKind=requiredEnum(body.get("targetKind"),"Target kind",TARGET_KINDS);
     int sortOrder=integerValue(body.getOrDefault("sortOrder",0),"Sort order",0,1_000_000);
