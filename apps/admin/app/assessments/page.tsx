@@ -204,7 +204,7 @@ export default function AssessmentsPage(){
     setReviewCertificateLoading(true);
     setReviewCertificateLookupFailed(false);
     try{
-      const data=await api('/api/v1/admin/certificates/for-attempt/'+attemptId);
+      const data=await api('/api/v1/admin/certificates/for-attempt/'+attemptId+'?courseId='+encodeURIComponent(String(courseId)));
       setReviewCertificate(data?.issued?data.certificate:null);
     }catch{
       setReviewCertificate(null);
