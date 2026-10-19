@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 773,
+    "assets_selected": 775,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 770,
-    "assets_remaining": 1521,
-    "assets_completion_percent": 33.6,
+    "assets_analyzed": 772,
+    "assets_remaining": 1519,
+    "assets_completion_percent": 33.7,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 768,
+    "assets_skipped_from_checkpoint": 770,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:40:22Z"
+      "checkpointed_at": "2026-10-19T03:46:33Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:41:11Z"
+      "checkpointed_at": "2026-10-19T03:47:21Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T03:41:50Z"
+      "checkpointed_at": "2026-10-19T03:47:59Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -23707,6 +23707,70 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T03:45:24Z"
+    },
+    {
+      "asset_id": "354eac18987598d240fc4ed0",
+      "asset_sha256": "c3f916d69853d7a989dd4bd06c759b740fcf0566881a531b36507705fa990d88",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/c3f916d69853d7a989dd4bd06c759b740fcf0566881a531b36507705fa990d88.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of the human digestive system, highlighting the esophagus and stomach in pink.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "digestive system",
+          "esophagus",
+          "stomach"
+        ],
+        "context_relation": "The image is related to the digestive system, specifically focusing on the esophagus and stomach.",
+        "limitations": [
+          "The image does not provide detailed information about the functions of the esophagus and stomach."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:49:36Z"
+    },
+    {
+      "asset_id": "76f23ee6f7bc83214d5be766",
+      "asset_sha256": "3c3e331ccc66636d0633b3e0b6fc4f4e0b9a17566bf1a71a471791d10f3ecdf9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 34,
+      "asset_path": "assets/3c3e331ccc66636d0633b3e0b6fc4f4e0b9a17566bf1a71a471791d10f3ecdf9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbace84eab6a4e9a8c00f9681f58c8e6bbf4dbd9189643963ef3b8ae5822e4ef",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pink crescent-shaped object with a tree-like structure on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "tree-like structure",
+          "crescent shape",
+          "pink color"
+        ],
+        "context_relation": "The image is related to the discussion of cell structures and their functions in the body.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T03:51:11Z"
     }
   ]
 }
