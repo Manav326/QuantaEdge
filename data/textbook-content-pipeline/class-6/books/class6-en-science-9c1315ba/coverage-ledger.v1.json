@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1027,
-    "successful_visual_analyses": 1013,
-    "missing_visual_analyses": 1051,
+    "raw_analysis_result_rows": 1030,
+    "successful_visual_analyses": 1016,
+    "missing_visual_analyses": 1048,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1065,
+    "unresolved_count": 1062,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39477,9 +39477,16 @@
       "asset_path": "assets/5be3c6349d133a2b14c69b8316abc49b6de4f36317b1db1b4504549829efee50.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pair of blue-handled scissors with a metallic blade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39495,9 +39502,34 @@
       "asset_path": "assets/24f9fc9b1f5ddfc4da4b280cf9cc2c9ee54e62bfc0f616a3dddce6028632c31b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a pencil and an eraser, both made of wood, and a prediction and observation column.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Record your observations in Table 4.1.",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and observation"
+        ],
+        "context_relation": "The image is a visual representation of a table for recording observations about materials attracted by a magnet.",
+        "limitations": [
+          "The image does not show the actual attraction of materials by a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -39513,9 +39545,30 @@
       "asset_path": "assets/7850b298ce14a90a4e0d1bace2ebff05c4d8dbe75806791877132187afdc2b40.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two screws, one brown and one green, against a white background.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.3: Identifying the materials attracted by a magnet",
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "plastic/wood/glass/iron/any other",
+          "Prediction",
+          "Observation"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide specific details about the materials attracted by a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
