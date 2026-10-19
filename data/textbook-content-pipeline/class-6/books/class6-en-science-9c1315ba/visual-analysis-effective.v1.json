@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "00e8314fde89a5378e83b6b7445790d05e2238b7793c75e295850aaad340501d",
+  "raw_analysis_sha256": "7ada7bb8eb5d0fbd41c0d04984bca67d205a6c05fd6c9f71f971964c780abbf3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:21:00Z",
+      "checkpointed_at": "2026-10-19T19:24:47Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:21:41Z",
+      "checkpointed_at": "2026-10-19T19:25:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T19:22:32Z",
+      "checkpointed_at": "2026-10-19T19:26:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -55752,6 +55752,162 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "097a294bf1c055a419b938e0",
+      "asset_sha256": "c65504dec6744a313e4926dfbeece2e912784bd5d0cb62bb84d4b69757b718f7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 97,
+      "asset_path": "page-0097.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c6c1bb75c9a381cd810f80ef6c209e6aa2b790727f5c32f099ad6cd25b346a1c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook about measurement of length and motion, featuring a story about Deepa and her mother's experience with measuring cloth and tape.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Measurement of Length",
+          "and Motion",
+          "Deepa, a curious eleven-year old girl, lives in a",
+          "town in the state of Haryana. The new school",
+          "year has started. Deepa needs a new uniform",
+          "since she has grown taller. Her mother takes",
+          "her to a cloth shop. She asks for a two-metre",
+          "cloth piece. The shopkeeper measures the",
+          "cloth using a metal measuring rod.",
+          "Then, the tailor takes her measurements",
+          "using a flexible measuring tape. Her mother",
+          "instructs the tailor to increase the length of her",
+          "uniform by char angula (four fingers width).",
+          "Are",
+          "the tape and rod",
+          "similar to the scale that the",
+          "elder sister has in her geometry",
+          "box? What did mother mean",
+          "by char angula?",
+          "Deepa shares her experience with her school friends",
+          "Anish, Hardeep, Padma, Tasneem and this leads to a",
+          "discussion amongst them."
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Motion",
+          "Cloth",
+          "Measuring Rod",
+          "Flexible Measuring Tape",
+          "Uniform",
+          "Geometry Box",
+          "Scale",
+          "Four Fingers Width"
+        ],
+        "context_relation": "The story is about the measurement of length and motion, using different tools like a metal measuring rod and a flexible measuring tape.",
+        "limitations": [
+          "The story is based on a specific scenario and does not generalize to all situations.",
+          "The concept of 'char angula' is specific to the culture and context of the story."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:28:07Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook about measurement of length and motion, featuring a story about Deepa and her mother's experience with measuring cloth and tape.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Measurement of Length",
+          "and Motion",
+          "Deepa, a curious eleven-year old girl, lives in a",
+          "town in the state of Haryana. The new school",
+          "year has started. Deepa needs a new uniform",
+          "since she has grown taller. Her mother takes",
+          "her to a cloth shop. She asks for a two-metre",
+          "cloth piece. The shopkeeper measures the",
+          "cloth using a metal measuring rod.",
+          "Then, the tailor takes her measurements",
+          "using a flexible measuring tape. Her mother",
+          "instructs the tailor to increase the length of her",
+          "uniform by char angula (four fingers width).",
+          "Are",
+          "the tape and rod",
+          "similar to the scale that the",
+          "elder sister has in her geometry",
+          "box? What did mother mean",
+          "by char angula?",
+          "Deepa shares her experience with her school friends",
+          "Anish, Hardeep, Padma, Tasneem and this leads to a",
+          "discussion amongst them."
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Motion",
+          "Cloth",
+          "Measuring Rod",
+          "Flexible Measuring Tape",
+          "Uniform",
+          "Geometry Box",
+          "Scale",
+          "Four Fingers Width"
+        ],
+        "context_relation": "The story is about the measurement of length and motion, using different tools like a metal measuring rod and a flexible measuring tape.",
+        "limitations": [
+          "The story is based on a specific scenario and does not generalize to all situations.",
+          "The concept of 'char angula' is specific to the culture and context of the story."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e0f40859430b90033b8fd05d",
+      "asset_sha256": "fa93c809309f41ef9d3259a01890b7d9422fddd5f492b316ad76e3b8f846e12a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/fa93c809309f41ef9d3259a01890b7d9422fddd5f492b316ad76e3b8f846e12a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0fa03c2225be4bf4e54a4bb60a5764e0b1b6df0fc9ccadb98abfbbb76c165f16",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand touching a wooden surface, possibly to measure length.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "measurement",
+          "length",
+          "wooden surface"
+        ],
+        "context_relation": "The image illustrates a method of measuring length using a wooden surface.",
+        "limitations": [
+          "The image does not provide specific details about the measurement technique."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T19:28:44Z",
+      "effective_analysis": {
+        "visual_summary": "A hand touching a wooden surface, possibly to measure length.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "measurement",
+          "length",
+          "wooden surface"
+        ],
+        "context_relation": "The image illustrates a method of measuring length using a wooden surface.",
+        "limitations": [
+          "The image does not provide specific details about the measurement technique."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
