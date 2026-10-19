@@ -32,10 +32,8 @@ class AuthServiceRegistrationTest {
   void newVisitorCanRequestSignupOtp() {
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(false);
-    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class),
-        eq(NORMALIZED_MOBILE), eq(60))).thenReturn(0L);
-    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"),
-        eq(Long.class), eq(NORMALIZED_MOBILE))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-"), eq(Long.class), eq(NORMALIZED_MOBILE), eq(60))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(NORMALIZED_MOBILE))).thenReturn(0L);
 
     assertEquals("123456", auth.requestOtp(MOBILE, "SIGNUP", 1L));
     verify(jdbc).update(contains("insert into otp_challenge"), eq(NORMALIZED_MOBILE),
@@ -46,14 +44,12 @@ class AuthServiceRegistrationTest {
   void customerCanRequestLoginOtpWhenSameMobileAlsoHasStaffIdentity() {
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(true);
-    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class),
-        eq(NORMALIZED_MOBILE), eq(60))).thenReturn(0L);
-    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"),
-        eq(Long.class), eq(NORMALIZED_MOBILE))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-"), eq(Long.class), eq(NORMALIZED_MOBILE), eq(60))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(NORMALIZED_MOBILE))).thenReturn(0L);
 
     assertEquals("123456", auth.requestOtp(MOBILE, "LOGIN"));
     verify(jdbc).update(contains("insert into otp_challenge"), eq(NORMALIZED_MOBILE),
-        eq("LOGIN"), org.mockito.ArgumentMatchers.anyString());
+        eq("LOGIN"), org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.isNull());
   }
 
   @Test
@@ -71,7 +67,7 @@ class AuthServiceRegistrationTest {
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(true);
 
-    assertThrows(IllegalStateException.class, () -> auth.requestOtp(MOBILE, "SIGNUP"));
+    assertThrows(IllegalStateException.class, () -> auth.requestOtp(MOBILE, "SIGNUP", 1L));
     verify(jdbc, never()).update(contains("insert into otp_challenge"),
         org.mockito.ArgumentMatchers.<Object[]>any());
   }

@@ -24,7 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
 class AssessmentLifecycleIntegrationTest {
-  @Autowired private JdbcTemplate jdbc;
+  
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
+@Autowired private JdbcTemplate jdbc;
   @Autowired private AssessmentController controller;
 
   @Test
@@ -68,7 +71,7 @@ class AssessmentLifecycleIntegrationTest {
       update assessment set status='ARCHIVED',is_current=false,updated_at=now() where id=?
       """, fixture.assessmentId());
     Map<String,Object> catalogue = controller.studentAssessmentCatalog(
-        null, "hi", 24, 0, fixture.student());
+        null, null, "hi", 24, 0, fixture.student(), fixture.tenant());
     List<Map<String,Object>> visible = (List<Map<String,Object>>) catalogue.get("items");
     assertTrue(visible.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()));
@@ -95,12 +98,12 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(new BigDecimal("1.00"), new BigDecimal(savedAnswer.get("awarded_marks").toString()));
 
     List<Map<String,Object>> afterSubmit = (List<Map<String,Object>>) controller
-        .studentAssessmentCatalog(null, "hi", 24, 0, fixture.student()).get("items");
+        .studentAssessmentCatalog(null, null, "hi", 24, 0, fixture.student(), fixture.tenant()).get("items");
     assertFalse(afterSubmit.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()),
         "An archived test must no longer appear as an actionable test after its attempt is submitted.");
 
-    Map<String,Object> results = controller.studentResults("hi", 25, 0, fixture.student());
+    Map<String,Object> results = controller.studentResults("hi", null, 25, 0, fixture.student(), fixture.tenant());
     List<Map<String,Object>> resultItems = (List<Map<String,Object>>) results.get("items");
     assertEquals(1, resultItems.size());
     assertEquals(fixture.assessmentId(),

@@ -239,9 +239,14 @@ jobs:
           sudo apt-get install -y --no-install-recommends fontconfig fonts-noto-core
           fc-cache -f
           fc-match --format='%{family}\n' 'Noto Sans Devanagari' | grep -qi 'Noto Sans Devanagari'
+      - name: Create isolated QA lifecycle database
+        env:
+          PGPASSWORD: quantaedge-test
+        run: createdb -h localhost -U quantaedge quantaedge_qa
+
       - name: Run API tests and verification
         working-directory: services/api
-        run: mvn -B -ntp verify
+        run: mvn -B -ntp verify -Dqe.qa.lifecycle.integration=true
 
   build-api:
     name: Build API image

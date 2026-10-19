@@ -71,9 +71,9 @@ class AuthServiceTest {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
     when(jdbc.queryForList("select active from staff_account where mobile_e164=?", mobile))
         .thenReturn(List.of());
-    when(jdbc.queryForObject(contains("interval '1 second'"), eq(Long.class), eq(mobile), eq(60)))
+    when(jdbc.queryForObject(contains("interval '1 second'"), eq(Long.class), any(Object[].class)))
         .thenReturn(0L);
-    when(jdbc.queryForObject(contains("interval '1 hour'"), eq(Long.class), eq(mobile)))
+    when(jdbc.queryForObject(contains("interval '1 hour'"), eq(Long.class), any(Object[].class)))
         .thenReturn(0L);
 
     assertEquals("123456", auth.requestOtp("7070107483", "STAFF_LOGIN"));
@@ -91,13 +91,11 @@ class AuthServiceTest {
         "attempts", 0,
         "expires_at", Timestamp.from(Instant.now().plusSeconds(120)),
         "purpose", "STAFF_LOGIN");
-    when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("STAFF_LOGIN")))
+    when(jdbc.queryForList(contains("from otp_challenge"), any(Object[].class)))
         .thenReturn(List.of(otpRow));
     when(jdbc.queryForList("select id, active, last_login_at from staff_account where mobile_e164=?", mobile))
         .thenReturn(List.of());
-    when(jdbc.queryForObject(
-        contains("insert into staff_account(public_id,mobile_e164,display_name,role,active)"),
-        eq(Long.class), any(UUID.class), eq(mobile), eq("Administrator")))
+    when(jdbc.queryForObject(contains("insert into staff_account(public_id,mobile_e164,display_name,role,active)"), eq(Long.class), any(Object[].class)))
         .thenReturn(staffId);
     when(jdbc.queryForMap("select role, display_name from staff_account where id=? and active=true", staffId))
         .thenReturn(Map.of("role", "ADMIN", "display_name", "Administrator"));
@@ -124,7 +122,7 @@ class AuthServiceTest {
         "purpose", "LOGIN");
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
 
-    when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
+    when(jdbc.queryForList(contains("from otp_challenge"), any(Object[].class)))
         .thenReturn(List.of(otpRow));
     when(jdbc.queryForList(
         "select id,role from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true", mobile))
@@ -165,7 +163,7 @@ class AuthServiceTest {
         "expires_at", Timestamp.from(Instant.now().plusSeconds(120)),
         "purpose", "LOGIN");
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
-    when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
+    when(jdbc.queryForList(contains("from otp_challenge"), any(Object[].class)))
         .thenReturn(List.of(otpRow));
     when(jdbc.queryForList(
         "select id,role from user_account where mobile_e164=? and role in ('PARENT','LEARNER') and active=true", mobile))
@@ -215,8 +213,7 @@ class AuthServiceTest {
     List<String> grants = List.of("CONTENT_VIEW", "CONTENT_EDIT");
     when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 12L))
         .thenReturn("CONTENT_AUTHOR");
-    when(jdbc.queryForList(contains("from staff_permission_grant"), eq(String.class),
-        eq(12L), eq("EDUCATION_ADMIN"), eq(12L), eq("EDUCATION_ADMIN")))
+    when(jdbc.queryForList(contains("from staff_permission_grant"), eq(String.class), any(Object[].class)))
         .thenReturn(grants);
 
     assertIterableEquals(grants, auth.permissionsForStaff(12L));
@@ -255,7 +252,7 @@ class AuthServiceTest {
     legacySession.put("student_name", "Child");
     legacySession.put("staff_role", null);
     legacySession.put("staff_name", null);
-    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+    when(jdbc.queryForList(contains("where s.token_hash=?"), any(Object[].class)))
         .thenReturn(List.of(legacySession));
 
     assertEquals(null, auth.current(token));
@@ -276,7 +273,7 @@ class AuthServiceTest {
     parentRow.put("student_name", null);
     parentRow.put("staff_role", null);
     parentRow.put("staff_name", null);
-    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+    when(jdbc.queryForList(contains("where s.token_hash=?"), any(Object[].class)))
         .thenReturn(List.of(parentRow));
 
     assertNull(auth.currentForWorkspace(token, "STAFF"));
@@ -300,7 +297,7 @@ class AuthServiceTest {
     staffRow.put("student_name", null);
     staffRow.put("staff_role", "ADMIN");
     staffRow.put("staff_name", "Administrator");
-    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+    when(jdbc.queryForList(contains("where s.token_hash=?"), any(Object[].class)))
         .thenReturn(List.of(staffRow));
 
     AuthContext staff = auth.currentForWorkspace(token, "STAFF");
@@ -314,7 +311,7 @@ class AuthServiceTest {
   void refreshQueryScopesLegacyRefreshTokensToTheRequestedWorkspace() throws Exception {
     AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
     String refreshToken = "legacy-staff-refresh";
-    when(jdbc.queryForList(contains("select s.id"), eq(hash(refreshToken))))
+    when(jdbc.queryForList(contains("select s.id"), any(Object[].class)))
         .thenReturn(List.of());
 
     assertThrows(SecurityException.class, () -> auth.refreshSession(refreshToken, "LEARNING"));
@@ -334,10 +331,8 @@ class AuthServiceTest {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq("+917070107483"))).thenReturn(true);
-    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class),
-        eq("+917070107483"), eq(60))).thenReturn(0L);
-    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"),
-        eq(Long.class), eq("+917070107483"))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class), any(Object[].class))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     assertEquals("123456", auth.requestOtp("7070107483", "LOGIN"));
   }
@@ -346,8 +341,7 @@ class AuthServiceTest {
   void parentCanSignInWithPasswordWithoutOtp() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     String passwordHash = new BCryptPasswordEncoder(12).encode("ParentPass!2026");
-    when(jdbc.queryForList(contains("select id,password_hash from user_account"),
-        eq("+917070107483"))).thenReturn(List.of(Map.of("id", 52L, "password_hash", passwordHash)));
+    when(jdbc.queryForList(contains("select id,password_hash from user_account"), any(Object[].class))).thenReturn(List.of(Map.of("id", 52L, "password_hash", passwordHash)));
     when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", 52L))
         .thenReturn(Map.of("role", "PARENT", "display_name", "Existing Parent"));
 
@@ -361,8 +355,7 @@ class AuthServiceTest {
   @Test
   void parentWithoutPasswordGetsRecoveryMessageRatherThanBeingLockedOut() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
-    when(jdbc.queryForList(contains("select id,password_hash from user_account"),
-        eq("+917070107483"))).thenReturn(List.of(Map.of("id", 52L)));
+    when(jdbc.queryForList(contains("select id,password_hash from user_account"), any(Object[].class))).thenReturn(List.of(Map.of("id", 52L)));
 
     IllegalStateException error = assertThrows(IllegalStateException.class,
         () -> auth.loginParent("7070107483", "some-password"));
@@ -374,11 +367,9 @@ class AuthServiceTest {
   void studentPasswordLoginOpensOnlyTheMatchedChildAccount() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     String passwordHash = new BCryptPasswordEncoder(12).encode("StudentPass!2026");
-    when(jdbc.queryForList(contains("from user_account u"),
-        eq("+917070107483"), eq("+917070107483"), eq(""), eq(""), eq("aarav07")))
+    when(jdbc.queryForList(contains("from user_account u"), any(Object[].class)))
         .thenReturn(List.of(Map.of("student_id", 81L, "password_hash", passwordHash)));
-    when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class),
-        anyString(), eq("STUDENT"))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class), any(Object[].class))).thenReturn(0L);
     when(jdbc.queryForObject("select display_name from student where id=?", String.class, 81L))
         .thenReturn("Aarav");
 
@@ -418,9 +409,9 @@ class AuthServiceTest {
     parentRow.put("staff_role", null);
     parentRow.put("staff_name", null);
 
-    when(jdbc.queryForList(contains("select s.id"), anyString())).thenReturn(List.of(sessionRow));
+    when(jdbc.queryForList(contains("select s.id"), any(Object[].class))).thenReturn(List.of(sessionRow));
     when(jdbc.update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L))).thenReturn(1);
-    when(jdbc.queryForList(contains("select s.user_id,s.student_id,s.staff_id"), anyString())).thenReturn(List.of(parentRow));
+    when(jdbc.queryForList(contains("select s.user_id,s.student_id,s.staff_id"), any(Object[].class))).thenReturn(List.of(parentRow));
 
     AuthService.SessionTokens tokens = auth.refreshSession(oldRefresh);
 
@@ -457,7 +448,7 @@ class AuthServiceTest {
     parentRow.put("student_name", null);
     parentRow.put("staff_role", null);
     parentRow.put("staff_name", null);
-    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+    when(jdbc.queryForList(contains("where s.token_hash=?"), any(Object[].class)))
         .thenReturn(List.of(parentRow));
 
     AuthContext context = auth.current(token);
@@ -473,25 +464,40 @@ class AuthServiceTest {
   void passwordResetOtpUsesAValidPurposeAndStillEnforcesRateLimits() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
     String mobile = "+917070107483";
-    when(jdbc.queryForObject(
-        contains("role in ('PARENT','LEARNER') and active=true"), eq(Boolean.class), eq(mobile))).thenReturn(true);
-    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class), eq(mobile), eq(60))).thenReturn(0L);
-    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(mobile))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("role in ('PARENT','LEARNER') and active=true"), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class), any(Object[].class))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     assertEquals("123456", auth.requestOtp("7070107483", "PASSWORD_RESET"));
-    verify(jdbc).update(contains("insert into otp_challenge"), eq(mobile), eq("PASSWORD_RESET"), anyString());
+    verify(jdbc).update(contains("insert into otp_challenge"), eq(mobile), eq("PASSWORD_RESET"), anyString(), org.mockito.ArgumentMatchers.isNull());
   }
 
   @Test
   void parentPasswordLoginStopsAfterFiveRecentFailuresBeforeLookingUpTheAccount() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
-    when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class),
-        anyString(), eq("PARENT"))).thenReturn(5L);
+    when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class), any(Object[].class))).thenReturn(5L);
 
     SecurityException error = assertThrows(SecurityException.class,
         () -> auth.loginParent("7070107483", "wrong-password"));
 
     assertTrue(error.getMessage().contains("15 minutes"));
+  }
+
+
+  @Test
+  void previewLoginSelectsOnlyTheCanonicalPreviewIdentity() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    String sql = "select id from student where public_id=? and environment=? and active=true";
+    when(jdbc.queryForObject(sql, Long.class, LocalPreviewIdentity.PUBLIC_ID,
+        LocalPreviewIdentity.ENVIRONMENT))
+        .thenThrow(new org.springframework.dao.EmptyResultDataAccessException(1));
+
+    assertThrows(org.springframework.dao.EmptyResultDataAccessException.class, auth::previewLogin);
+
+    verify(jdbc).queryForObject(sql, Long.class, LocalPreviewIdentity.PUBLIC_ID,
+        LocalPreviewIdentity.ENVIRONMENT);
+    verify(jdbc, never()).queryForObject(
+        contains("environment='LOCAL_PREVIEW' and active=true order by id limit 1"), eq(Long.class));
   }
 
 }

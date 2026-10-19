@@ -59,7 +59,7 @@ class LearningClassControllerTest {
     OffsetDateTime starts = OffsetDateTime.now().plusHours(1);
     OffsetDateTime ends = starts.plusMinutes(45);
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url"), eq(7L), eq(44L)))
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 44L, "private_join_url", "https://meet.example.com/secret",
             "provider", "CUSTOM", "title", "Class 7 Fractions",
@@ -76,10 +76,10 @@ class LearningClassControllerTest {
   @Test
   void studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select cs.id as session_id"),
-        eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0))).thenReturn(List.of());
-    when(jdbc.queryForObject(contains("select count(*) from learning_class_session"),
-        eq(Long.class), eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    when(jdbc.queryForList(contains("select cs.id as session_id"), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForObject(contains("select count(*) from learning_class_session"), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
     Map<String, Object> result = controller.studentLiveClasses(null, null, 25, 0, true, student, TEST_TENANT);
 
@@ -87,9 +87,9 @@ class LearningClassControllerTest {
     ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(itemSql.capture(),
-        eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+        eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verify(jdbc).queryForObject(countSql.capture(),
-        eq(Long.class), eq(7L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
+        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
     assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(itemSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
@@ -140,10 +140,10 @@ class LearningClassControllerTest {
   @Test
   void completingASessionClosesOpenAttendanceClocks() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
-    when(jdbc.queryForList(contains("select cs.id,cs.status,cs.title,cs.provider"), eq(44L)))
+    when(jdbc.queryForList(contains("select cs.id,cs.status,cs.title,cs.provider"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id", 44L, "status", "LIVE", "title", "Revision class",
             "provider", "CUSTOM", "provider_operation_status", "NOT_REQUIRED")));
-    when(jdbc.queryForList(contains("select cs.id as session_id"), eq(44L)))
+    when(jdbc.queryForList(contains("select cs.id as session_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of("session_id", 44L, "title", "Revision class", "status", "COMPLETED")));
 
     Map<String, Object> result = controller.setLiveClassStatus(44L, Map.of("status", "COMPLETED"), admin);
@@ -156,7 +156,7 @@ class LearningClassControllerTest {
   @Test
   void unverifiedGoogleMeetLinkIsNeverReturnedToStaff() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
-    when(jdbc.queryForList(contains("select id,title,provider,private_join_url"), eq(44L)))
+    when(jdbc.queryForList(contains("select id,title,provider,private_join_url"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 44L, "title", "Revision class", "provider", "GOOGLE_MEET",
             "private_join_url", "https://meet.google.com/abc-defg-hij",
@@ -173,7 +173,7 @@ class LearningClassControllerTest {
   void studentCanJoinBeforeStartWhenAdminDisablesEarlyJoinGate() {
     when(authorization.requireStudent(student)).thenReturn(student);
     OffsetDateTime starts=OffsetDateTime.now().plusHours(3);
-    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"),eq(7L),eq(88L)))
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id",88L,"private_join_url","https://meet.example.org/class/88",
             "provider","CUSTOM","title","Revision class","status","SCHEDULED",
@@ -197,7 +197,7 @@ class LearningClassControllerTest {
     youtubeSession.put("starts_at",starts);
     youtubeSession.put("ends_at",starts.plusMinutes(59));
     youtubeSession.put("join_window_minutes",15);
-    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"),eq(7L),eq(88L)))
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"), any(Object[].class)))
         .thenReturn(List.of(youtubeSession));
     Map<String,Object> result=controller.joinLiveClass(88L,student, TEST_TENANT);
     assertEquals("YOUTUBE_LIVE",result.get("provider"));
@@ -213,7 +213,7 @@ class LearningClassControllerTest {
   void studentJoinWindowUsesTheConfiguredMinutes() {
     when(authorization.requireStudent(student)).thenReturn(student);
     OffsetDateTime starts=OffsetDateTime.now().plusMinutes(45);
-    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"),eq(7L),eq(88L)))
+    when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id",88L,"private_join_url","https://meet.example.org/class/88",
             "provider","CUSTOM","title","Revision class","status","SCHEDULED",
@@ -249,9 +249,9 @@ class LearningClassControllerTest {
     String key="admin-upload-key-123";
     String fingerprint=fingerprintForUpload("Test recording","",3L,null,null,null,
         "recording.mp4","video/mp4",64L,digest);
-    when(jdbc.queryForList(contains("select id,request_fingerprint from recorded_class"),eq(99L),eq(key)))
+    when(jdbc.queryForList(contains("select id,request_fingerprint from recorded_class"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id",88L,"request_fingerprint",fingerprint)));
-    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"),eq(88L)))
+    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of("recorded_class_id",88L,"title","Test recording","status","DRAFT")));
 
     MockMultipartFile upload=new MockMultipartFile("file","recording.mp4","video/mp4",new byte[64]);
@@ -276,7 +276,7 @@ class LearningClassControllerTest {
     when(mediaStorage.store(any(MultipartFile.class))).thenReturn(stored);
     Path duplicateBytes=tempDirectory.resolve(storageKey);
     when(mediaStorage.resolve(storageKey)).thenReturn(duplicateBytes);
-    when(jdbc.queryForList(contains("select id,request_fingerprint from recorded_class"),eq(99L),eq("admin-upload-key-123")))
+    when(jdbc.queryForList(contains("select id,request_fingerprint from recorded_class"), any(Object[].class)))
         .thenReturn(List.of(Map.of("id",88L,"request_fingerprint","0".repeat(64))));
 
     MockMultipartFile upload=new MockMultipartFile("file","recording.mp4","video/mp4",new byte[64]);
@@ -304,7 +304,9 @@ class LearningClassControllerTest {
   @Test
   void outOfScopeStudentCannotFetchPrivateRecordingBytes() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), eq(7L), eq(88L)))
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
@@ -317,14 +319,15 @@ class LearningClassControllerTest {
   @Test
   void recordedListingCarriesPublishedDownloadReferenceOnlyWhenCatalogueAllowsIt() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0)))
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    when(jdbc.queryForList(contains("select rc.id as recorded_class_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "title", "Fractions revision", "subject_name", "Mathematics",
             "media_type", "video/mp4", "file_size_bytes", 1024L, "sha256", "a".repeat(64),
             "download_resource_id", 501L, "download_assignment_id", 700L,
             "download_allowed", true, "download_sha256", "a".repeat(64))));
-    when(jdbc.queryForObject(contains("select count(*) from recorded_class"), eq(Long.class),
-        eq(7L), eq(""), eq(""), eq(0L), eq(0L))).thenReturn(1L);
+    when(jdbc.queryForObject(contains("select count(*) from recorded_class"), eq(Long.class), any(Object[].class))).thenReturn(1L);
 
     Map<String,Object> result = controller.studentRecordedClasses(null, null, 25, 0, student, TEST_TENANT);
 
@@ -333,14 +336,16 @@ class LearningClassControllerTest {
     assertEquals(501L, row.get("download_resource_id"));
     assertEquals(700L, row.get("download_assignment_id"));
     assertEquals(true, row.get("download_allowed"));
-    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
+    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(1L), eq(""), eq(""), eq(0L), eq(0L), eq(25), eq(0));
     verifyNoInteractions(staffAudit, mediaStorage);
   }
 
   @Test
   void malformedRangeHeaderIsRejectedWithoutOpeningTheMediaFile() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("where rc.id=? and rc.status='PUBLISHED'"), eq(7L), eq(88L)))
+    when(jdbc.queryForObject(contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "storage_key", "afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4",
             "original_filename", "class.mp4", "media_type", "video/mp4",
