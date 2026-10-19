@@ -401,8 +401,8 @@ public class LearningMetricsService {
         ) as minutes_30d
       """;
     Object[] scopedArgs = new Object[]{
-        studentId,courseId, studentId,courseId, studentId,courseId,
-        studentId,courseId, studentId,courseId, studentId,courseId
+        studentId,courseId, studentId,courseId, courseId,studentId,
+        studentId,courseId, studentId,courseId, courseId,studentId
     };
     return jdbc.queryForMap(tenantSql(courseSql,institutionId),tenantArgs(institutionId,scopedArgs));
   }
