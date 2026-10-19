@@ -157,7 +157,7 @@ class AssessmentLifecycleIntegrationTest {
         fixture.assessmentId());
 
     Map<String,Object> started=controller.startOrResumeAttempt(
-        fixture.assessmentId(),"hi",true,fixture.student(), fixture.tenant());
+        fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String originalToken=String.valueOf(started.get("offlinePackageToken"));
     String originalHash=jdbc.queryForObject(
@@ -165,7 +165,7 @@ class AssessmentLifecycleIntegrationTest {
         String.class,attemptId);
 
     Map<String,Object> resumed=controller.startOrResumeAttempt(
-        fixture.assessmentId(),"hi",true,fixture.student(), fixture.tenant());
+        fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     assertEquals(attemptId,((Number)resumed.get("attempt_id")).longValue());
     assertEquals(originalHash,jdbc.queryForObject(
         "select offline_package_token_hash from student_assessment_attempt where id=?",
