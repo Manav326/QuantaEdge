@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b5b0d727b0f94773049a314d76b4a63e97285a3baa6e134176e942c3989dd910",
+  "raw_analysis_sha256": "9d02d60b9df97897e7da271f221f74d564a9f59d29fb45ff01f43c3ce91221fa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:13:05Z",
+      "checkpointed_at": "2026-10-19T12:14:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:13:26Z",
+      "checkpointed_at": "2026-10-19T12:14:38Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -94381,6 +94381,126 @@
         "concepts": [],
         "context_relation": "The image is not related to the text provided.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "40732d9dc27ae80004d5d863",
+      "asset_sha256": "8bb0c17ef87d1f4765d51bea357c48fece86acf978614f12957efbb31e047455",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/8bb0c17ef87d1f4765d51bea357c48fece86acf978614f12957efbb31e047455.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow and black twisted rope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:14:42Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow and black twisted rope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1154cc61abec78278912e0ab",
+      "asset_sha256": "5145f25eff2882912f590f6c808f5a9700ccb275cc1947b752ff95746591db81",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/5145f25eff2882912f590f6c808f5a9700ccb275cc1947b752ff95746591db81.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green speech bubble with a pointed tail, possibly representing a thought or message.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a thought or message, possibly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the context it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:15:18Z",
+      "effective_analysis": {
+        "visual_summary": "A green speech bubble with a pointed tail, possibly representing a thought or message.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a thought or message, possibly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the context it is related to."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "21232be6d5c74a0b64cb48cb",
+      "asset_sha256": "8862333e786875ca5e0bb089f7c90339671b2032486f6ac3ac70817f99eea3cb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/8862333e786875ca5e0bb089f7c90339671b2032486f6ac3ac70817f99eea3cb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02671682b57caf8bdaef50e95a0d9d1f2421b2fb6354aa4db68717f14d62ab77",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a vest and a checkered shirt, with one hand open and the other hand slightly raised.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read.",
+          "The image is a single figure and does not represent a page from a textbook.",
+          "The image does not depict any specific educational content or concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:15:56Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a vest and a checkered shirt, with one hand open and the other hand slightly raised.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read.",
+          "The image is a single figure and does not represent a page from a textbook.",
+          "The image does not depict any specific educational content or concept."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
