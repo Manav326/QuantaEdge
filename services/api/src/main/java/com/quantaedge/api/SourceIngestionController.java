@@ -1116,15 +1116,8 @@ public class SourceIngestionController {
     if (sourceUrl == null || !sourceUrl.toLowerCase(Locale.ROOT).startsWith("https://")) {
       throw badRequest("Enter an official HTTPS source page or direct PDF URL.");
     }
-    if (requestedSourceId != null) {
-      if (hasText(body.get("sourceUrl"))) {
-        jdbc.update("update content_source set source_url=?,updated_at=now() where id=?", sourceUrl, sourceId);
-      }
-      if (hasText(body.get("sourceTitle")) || hasText(body.get("edition")) || hasText(body.get("language"))) {
-        jdbc.update("update content_source set title=?,edition=?,language=?,updated_at=now() where id=?",
-            sourceTitle, edition, language, sourceId);
-      }
-    }
+    // Registered source metadata is shared catalogue data. Overrides supplied for this
+    // ingestion are stored only on the institution/course-owned job below.
     Long activeJobId = jdbc.query("""
       select id from source_ingestion_job
       where institution_id=? and course_id=? and source_id=? and subject_id=? and status='DOWNLOADING'
@@ -1327,7 +1320,8 @@ public class SourceIngestionController {
       @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
           InstitutionTenantContext tenant) {
     context = requireReviewer(context);
-    requireJobCourse(jobId,courseId,requireInstitution(tenant));
+    long institutionId=requireInstitution(tenant);
+    requireJobCourse(jobId,courseId,institutionId);
     Map<String, Object> job = jobRow(jobId);
     if ("APPROVED".equals(String.valueOf(job.get("status")))) return jobDetails(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) throw badRequest("Only a downloaded book in review can be approved.");
@@ -1360,7 +1354,7 @@ public class SourceIngestionController {
         update learning_pdf_asset set review_status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now()
         where id=? and review_status in ('DRAFT','REVIEW')
         """, staffId, bookId);
-      jdbc.queryForObject("""
+      Long bookDocumentId = jdbc.queryForObject("""
         insert into learning_document(
           pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
           page_start,page_end,status,version_no,created_by_staff_id
@@ -1369,6 +1363,11 @@ public class SourceIngestionController {
         """, Long.class, bookId, subjectId, truncate(String.valueOf(job.get("source_title")), 240),
         job.get("source_title"), job.get("source_url"), job.get("edition"), documentLanguage,
         job.get("page_count"), staffId);
+      jdbc.update("""
+        insert into learning_document_course_assignment(
+          institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+        ) values(?,?,?,?,'DRAFT',?)
+        """,institutionId,courseId,bookDocumentId,subjectId,staffId);
     }
     for (Map<String, Object> chapter : chapters) {
       long chapterId = ((Number) chapter.get("chapter_id")).longValue();
@@ -1387,6 +1386,11 @@ public class SourceIngestionController {
         returning id
         """, Long.class, assetId, subjectId, chapterId, chapter.get("chapter_title"), job.get("source_title"),
         job.get("source_url"), job.get("edition"), documentLanguage, chapter.get("page_count"), staffId);
+      jdbc.update("""
+        insert into learning_document_course_assignment(
+          institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+        ) values(?,?,?,?,'DRAFT',?)
+        """,institutionId,courseId,documentId,subjectId,staffId);
       jdbc.update("update source_ingestion_chapter set learning_document_id=?,updated_at=now() where id=?",
           documentId, chapter.get("id"));
       jdbc.update("""
@@ -1400,18 +1404,8 @@ public class SourceIngestionController {
         "Source PDF pages " + start + "–" + end,
         "Reviewed source PDF; chapter PDF stored as learning document " + documentId + ".");
     }
-    if (bookId != null) {
-      jdbc.update("""
-        update content_source set learning_pdf_asset_id=?,status='APPROVED',updated_at=now()
-        where id=?
-        """, bookId, sourceId);
-    } else {
-      // The complete book remains in the GHCR cache; only the explicitly reviewed chapter
-      // PDFs are copied to PostgreSQL and made available for individual library publication.
-      jdbc.update("""
-        update content_source set status='APPROVED',updated_at=now() where id=?
-        """, sourceId);
-    }
+    // Keep shared content_source status/asset linkage unchanged. Job approval and
+    // document availability are now tracked on this exact course's records.
     jdbc.update("""
       update source_ingestion_job set status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now()
       where id=?
@@ -1446,7 +1440,7 @@ public class SourceIngestionController {
         where id=? and book_asset_id is not null
       ) and review_status in ('DRAFT','REVIEW')
       """, context.staffId(), jobId, jobId);
-    jdbc.update("update content_source set status='REJECTED',updated_at=now() where id=?", job.get("source_id"));
+    // Reject this course's ingestion job only; the shared source registry is not rejected globally.
     jdbc.update("""
       update source_ingestion_job set status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now()
       where id=?
