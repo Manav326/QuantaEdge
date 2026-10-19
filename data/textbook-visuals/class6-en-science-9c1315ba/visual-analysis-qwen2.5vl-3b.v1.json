@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1146,
+    "assets_selected": 1147,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1142,
-    "assets_remaining": 936,
+    "assets_analyzed": 1143,
+    "assets_remaining": 935,
     "assets_completion_percent": 55.0,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 1141,
+    "assets_skipped_from_checkpoint": 1142,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:11:39Z"
+      "checkpointed_at": "2026-10-19T20:14:51Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:12:19Z"
+      "checkpointed_at": "2026-10-19T20:15:32Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:13:11Z"
+      "checkpointed_at": "2026-10-19T20:16:26Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37467,7 +37467,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:13:43Z"
+      "checkpointed_at": "2026-10-19T20:16:59Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37767,6 +37767,50 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T20:14:02Z"
+    },
+    {
+      "asset_id": "cc7044fb7f749d80c89f0296",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 101,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A 15 cm scale divided into 10 equal parts, with one part being 1 mm.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 5.3: A 15-cm scale",
+          "of 1 cm length are further divided",
+          "into 10 equal parts. The length of",
+          "one of these smaller parts is called",
+          "the unit metre to measure larger lengths, such as the",
+          "length of a railway track",
+          "1 mm is the smallest value of length that you",
+          "can measure using this scale. 1 mm",
+          "is equal to one-tenth of a centimeter"
+        ],
+        "concepts": [
+          "scale",
+          "length",
+          "unit metre",
+          "railway track",
+          "millimetre (mm)"
+        ],
+        "context_relation": "The image is a visual representation of a textbook page explaining the concept of a millimetre scale.",
+        "limitations": [
+          "The image does not show the actual scale or the railway track."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T20:17:19Z"
     }
   ]
 }
