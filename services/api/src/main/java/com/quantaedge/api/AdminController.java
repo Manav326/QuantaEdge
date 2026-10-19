@@ -203,6 +203,7 @@ public class AdminController {
           InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
     long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=query==null?"":query.trim();
