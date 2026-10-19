@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 946,
-    "successful_visual_analyses": 932,
-    "missing_visual_analyses": 1345,
+    "raw_analysis_result_rows": 948,
+    "successful_visual_analyses": 934,
+    "missing_visual_analyses": 1343,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1359,
+    "unresolved_count": 1357,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36192,9 +36192,24 @@
       "asset_path": "assets/6e86407fdbcc387e481532ed8638d127d9dfbd3e3a3e452bcb2a3dbd66112fb9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person lying in bed with a thermometer in their mouth, suggesting they are sick.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "fever",
+          "bed rest",
+          "symptoms",
+          "illness prevention"
+        ],
+        "context_relation": "The image is related to the topic of health and diseases, specifically focusing on illnesses transmitted by insects.",
+        "limitations": [
+          "The image does not provide specific details about the illness or the symptoms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36210,9 +36225,24 @@
       "asset_path": "assets/c378150266b3883ba8fc2537d32a91ffa67347be600fc1b9988262550234d2e5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person lying in bed with a thermometer in their mouth, wearing a blue shirt and a headband.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "illness symptoms",
+          "illness treatment",
+          "illness prevention"
+        ],
+        "context_relation": "The image represents a person experiencing symptoms of an illness, possibly malaria, and is using a thermometer to check their temperature.",
+        "limitations": [
+          "The image does not provide specific details about the illness or its symptoms.",
+          "The image does not show the person's condition or the cause of the illness."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

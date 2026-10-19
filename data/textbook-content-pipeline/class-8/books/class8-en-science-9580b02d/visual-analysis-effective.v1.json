@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "aa028489fc93deb6dc68b71dd490770124063130a8704264ffa879b4a55b8f7e",
+  "raw_analysis_sha256": "e2ca38efaf0a64194e2b17627e25df1cebe233e51bd5b24bcdc096285857ddae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:07:20Z",
+      "checkpointed_at": "2026-10-19T18:13:56Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:08:05Z",
+      "checkpointed_at": "2026-10-19T18:14:42Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:08:43Z",
+      "checkpointed_at": "2026-10-19T18:15:18Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -44014,6 +44014,110 @@
         "context_relation": "The table provides information on the symptoms and prevention measures for Tuberculosis, which is spread through TB-infected people, covering the mouth and nose, maintaining good hygiene, and getting vaccinated.",
         "limitations": [
           "The table does not provide information on other diseases spread through contaminated water and food."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fb9c11f02ff81680c63986c7",
+      "asset_sha256": "6e86407fdbcc387e481532ed8638d127d9dfbd3e3a3e452bcb2a3dbd66112fb9",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/6e86407fdbcc387e481532ed8638d127d9dfbd3e3a3e452bcb2a3dbd66112fb9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9433a7d9440d427f4e9c7df34edca5c372517dbe66cabb5e292e0663404e4cda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person lying in bed with a thermometer in their mouth, suggesting they are sick.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "fever",
+          "bed rest",
+          "symptoms",
+          "illness prevention"
+        ],
+        "context_relation": "The image is related to the topic of health and diseases, specifically focusing on illnesses transmitted by insects.",
+        "limitations": [
+          "The image does not provide specific details about the illness or the symptoms."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:16:51Z",
+      "effective_analysis": {
+        "visual_summary": "A person lying in bed with a thermometer in their mouth, suggesting they are sick.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "fever",
+          "bed rest",
+          "symptoms",
+          "illness prevention"
+        ],
+        "context_relation": "The image is related to the topic of health and diseases, specifically focusing on illnesses transmitted by insects.",
+        "limitations": [
+          "The image does not provide specific details about the illness or the symptoms."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b8fb6cece31d617593afca14",
+      "asset_sha256": "c378150266b3883ba8fc2537d32a91ffa67347be600fc1b9988262550234d2e5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/c378150266b3883ba8fc2537d32a91ffa67347be600fc1b9988262550234d2e5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9433a7d9440d427f4e9c7df34edca5c372517dbe66cabb5e292e0663404e4cda",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person lying in bed with a thermometer in their mouth, wearing a blue shirt and a headband.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "illness symptoms",
+          "illness treatment",
+          "illness prevention"
+        ],
+        "context_relation": "The image represents a person experiencing symptoms of an illness, possibly malaria, and is using a thermometer to check their temperature.",
+        "limitations": [
+          "The image does not provide specific details about the illness or its symptoms.",
+          "The image does not show the person's condition or the cause of the illness."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:18:26Z",
+      "effective_analysis": {
+        "visual_summary": "A person lying in bed with a thermometer in their mouth, wearing a blue shirt and a headband.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "illness",
+          "illness symptoms",
+          "illness treatment",
+          "illness prevention"
+        ],
+        "context_relation": "The image represents a person experiencing symptoms of an illness, possibly malaria, and is using a thermometer to check their temperature.",
+        "limitations": [
+          "The image does not provide specific details about the illness or its symptoms.",
+          "The image does not show the person's condition or the cause of the illness."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
