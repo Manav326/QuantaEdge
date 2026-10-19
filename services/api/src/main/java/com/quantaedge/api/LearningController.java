@@ -198,18 +198,20 @@ public class LearningController {
 
   @PostMapping("/lessons/{lessonId}/start")
   public Map<String,Object> start(@PathVariable long lessonId,
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId);
+    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId,courseId);
     state.startLesson(context.studentId(),lessonId,institutionId);
     return Map.of("started",true,"lessonId",lessonId);
   }
 
   @GetMapping("/lessons/{lessonId}")
   public Map<String,Object> lesson(@PathVariable long lessonId,
+      @RequestParam Long courseId,
       @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -217,7 +219,7 @@ public class LearningController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
-    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId);
+    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId,courseId);
     List<Map<String,Object>> lessons=jdbc.queryForList("""
       select l.id,l.code,coalesce(lt.title,l.title) as title,coalesce(lt.summary,l.summary) as summary,
              l.estimated_minutes,l.status,
@@ -270,17 +272,15 @@ public class LearningController {
       ) ot on true
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
-        and (
-          (s.program_id is null and c.code=(select class_code from student where id=? and active=true))
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=ste.student_id and spe.institution_id=ste.institution_id
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
+        and exists(
+          select 1 from curriculum_program_subject cps
+          join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+            and (s.program_id=cps.program_id or
+                 (s.program_id is null and selected_course.class_id=s.class_id))
         )
       """,context.studentId(),institutionId,context.studentId(),institutionId,
-        language,language,language,language,language,lessonId,context.studentId());
+        language,language,language,language,language,lessonId,courseId);
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
     result.put("requested_language",language);
@@ -329,6 +329,7 @@ public class LearningController {
 
   @GetMapping("/lessons/{lessonId}/questions")
   public List<Map<String,Object>> questions(@PathVariable long lessonId,
+      @RequestParam Long courseId,
       @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -336,13 +337,14 @@ public class LearningController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     language=normalizeLanguage(language);
-    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId);
+    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId,courseId);
     return publicQuestions(lessonId,context.studentId(),language,institutionId);
   }
 
   @PostMapping("/questions/{questionId}/answer")
   @Transactional
   public Map<String,Object> answer(@PathVariable long questionId,
+      @RequestParam Long courseId,
       @RequestParam(required=false,defaultValue="hi") String language,
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
@@ -388,7 +390,7 @@ public class LearningController {
     if(rows.isEmpty()) throw new IllegalArgumentException("Question not found or no longer eligible for student practice.");
     var q=rows.getFirst();
     long lessonId=((Number)q.get("lesson_id")).longValue();
-    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId);
+    ensureStudentLessonAccess(context.studentId(),lessonId,institutionId,courseId);
     Object submittedObject=body.get("answer");
     if(submittedObject==null)submittedObject="";
     String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : answerService.serializeForPersistence(submittedObject);
@@ -502,58 +504,29 @@ public class LearningController {
     throw new IllegalArgumentException("Language must be 'hi' or 'en'.");
   }
 
-  private void ensureStudentLessonAccess(long studentId,long lessonId,long institutionId){
+  private void ensureStudentLessonAccess(long studentId,long lessonId,long institutionId,long courseId){
+    if(courseId<=0L)throw new IllegalArgumentException("Select an active course before accessing a lesson.");
     Long count=jdbc.queryForObject("""
-      select count(*) from lesson l
-      join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id
-      join curriculum_class c on c.id=s.class_id
-      join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
-      where l.id=? and l.active=true and l.status='PUBLISHED'
-        and ch.active=true and ch.content_status='PUBLISHED'
-        and c.active=true and s.active=true
-        and (
-          (s.program_id is null and c.code=st.class_code
-            and (c.code not in ('6','7','8') or exists(
-              select 1
-              from curriculum_program class_course
-              join student_program_enrollment spe on spe.program_id=class_course.id
-                and spe.student_id=st.id and spe.institution_id=ste.institution_id and spe.status='ACTIVE'
-              join curriculum_program_subject cps on cps.program_id=class_course.id
-                and cps.class_id=c.id and cps.subject_id=s.id
-              where class_course.class_id=c.id
-                and class_course.code='CLASS_' || c.code
-                and class_course.curriculum_version='CURRENT'
-                and class_course.status='ACTIVE'
-            )))
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=ste.institution_id
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          ))
-        )
-      """,Long.class,studentId,institutionId,lessonId);
-    if(count==null||count==0) throw new SecurityException("Lesson access denied");
-    Long programId=jdbc.queryForObject("""
-      select coalesce(s.program_id,(
-        select class_course.id
-        from curriculum_program class_course
-        where class_course.class_id=c.id
-          and class_course.code='CLASS_' || c.code
-          and class_course.curriculum_version='CURRENT'
-          and class_course.status='ACTIVE'
-          and c.code in ('6','7','8')
-        limit 1
-      ))
+      select count(*)
       from lesson l
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      where l.id=?
-      """,Long.class,lessonId);
-    if(programId!=null) assertInstitutionCourseEntitlement(studentId,programId,institutionId);
+      join curriculum_program_subject cps on cps.program_id=?
+        and cps.subject_id=s.id and cps.class_id=s.class_id
+      join curriculum_program p on p.id=cps.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join student_program_enrollment spe on spe.program_id=p.id
+        and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=? and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      where l.id=? and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED'
+        and c.active=true and s.active=true
+        and (s.program_id=cps.program_id or
+             (s.program_id is null and p.class_id=s.class_id))
+      """,Long.class,courseId,studentId,institutionId,institutionId,lessonId);
+    if(count==null||count==0)throw new SecurityException("Lesson is not available in the selected institution course.");
+    assertInstitutionCourseEntitlement(studentId,courseId,institutionId);
   }
 
   /**
