@@ -201,9 +201,15 @@ public class GuardianController {
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
              slc.username as login_username,gs.relationship,gs.consent_status,
-             coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
-               join curriculum_subject s on s.id=ste.subject_id
-               where ste.student_id=st.id and ste.institution_id=? and ste.status='ACTIVE'),'') as track_codes
+             coalesce((select string_agg(distinct s.code,',' order by s.code)
+                from student_program_enrollment spe
+                join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+                join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+                join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+                join curriculum_program_subject cps on cps.program_id=p.id
+                join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+                  and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id and cps.class_id=s.class_id))
+                where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
@@ -427,9 +433,6 @@ public class GuardianController {
       // part of that same transaction, never as an unaffiliated/global account.
       memberships.ensureUserMembership(context.userId(),institutionId,"PARENT_JOIN_CODE_FOR_CHILD",null);
     }
-    List<String> trackCodes=body.get("trackCodes") instanceof List<?> values
-        ? values.stream().map(String::valueOf).toList() : List.of("maths","science");
-    if(!trackCodes.isEmpty()) auth.updateStudentTracks(child.studentId(),trackCodes,institutionId);
     jdbc.update("""
       insert into guardian_child_creation_request(guardian_user_id,request_key,student_id,institution_id)
       values (?,?,?,?)
@@ -446,9 +449,15 @@ public class GuardianController {
   private Map<String,Object> childProfileResponse(long studentId,long institutionId) {
     return jdbc.queryForMap("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
-        coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
-          join curriculum_subject s on s.id=ste.subject_id
-          where ste.student_id=st.id and ste.institution_id=? and ste.status='ACTIVE'),'') as track_codes
+        coalesce((select string_agg(distinct s.code,',' order by s.code)
+                from student_program_enrollment spe
+                join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+                join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+                join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+                join curriculum_program_subject cps on cps.program_id=p.id
+                join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+                  and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id and cps.class_id=s.class_id))
+                where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as track_codes
       from student st join institution_membership m on m.student_id=st.id
         and m.institution_id=? and m.status='ACTIVE'
       where st.id=?
@@ -627,13 +636,6 @@ public class GuardianController {
           then student_program_enrollment.enrolled_at else now() end,
         ended_at=null,updated_at=now()
       """,studentId,courseId,institutionId);
-    for(Map<String,Object> subject:subjects) {
-      jdbc.update("""
-        insert into student_track_enrollment(student_id,subject_id,institution_id,status)
-        values(?,?,?,'ACTIVE')
-        on conflict(institution_id,student_id,subject_id) do update set status='ACTIVE',updated_at=now()
-        """,studentId,((Number)subject.get("id")).longValue(),institutionId);
-    }
     auth.auditChildEvent(context.userId(),studentId,"COURSE_ENROLLED",
         "{\"courseId\":"+courseId+",\"institutionId\":"+institutionId+",\"subjectCount\":"+subjects.size()+"}");
     Map<String,Object> result=new LinkedHashMap<>();
