@@ -4,6 +4,7 @@ import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
+import PasswordField from '../../components/PasswordField';
 import { LanguageSwitcher, useLocale } from '../../components/LanguageProvider';
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
 
@@ -65,7 +66,7 @@ export default function StudentLoginPage() {
             <input value={username} onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 32))} placeholder={t('student.login.usernamePlaceholder')} autoComplete="username" required />
           </label>
           <label><UiText message="legacy.web.your.password.8a50627d" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('student.login.passwordPlaceholder')} autoComplete="current-password" required />
+            <PasswordField value={password} onChange={e => setPassword(e.target.value)} placeholder={t('student.login.passwordPlaceholder')} autoComplete="current-password" required />
           </label>
           <button type="submit" className="button button-dark full" disabled={busy || parentIdentifier.trim().length < 5 || username.length < 3 || !password}>{busy ? <UiText message="legacy.web.opening.your.learning.space.74d347a2" /> : <UiText message="legacy.web.sign.in.as.student.d481cb79" />}</button>
         </form>
