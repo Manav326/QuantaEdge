@@ -2,6 +2,7 @@
 
 import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -49,6 +50,7 @@ export default function QuestionReviewPage(){
   const t=useUiTranslation();
   const tRef=useRef(t);
   const { locale }=useContext(AdminWorkspaceContext);
+  const { courses, courseId, activeCourse, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
   useEffect(()=>{tRef.current=t;},[t]);
   const requestFailed=(statusCode:number)=>tRef.current('admin.questions.requestFailed',{status:statusCode});
   const statusLabel=(value:string)=>{
@@ -84,20 +86,22 @@ export default function QuestionReviewPage(){
   const [permissionLoading,setPermissionLoading]=useState(true);
 
   const load=useCallback(async()=>{
+    if(loadingCourses)return;
+    if(!courseId){setRows([]);setTotalMatching(0);setReviewSummary(null);setLoading(false);setError(courseError||'Select a course assigned to this institution.');return;}
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({status,limit:String(pageSize),offset:String(page*pageSize)});
+      const params=new URLSearchParams({status,courseId,limit:String(pageSize),offset:String(page*pageSize)});
       if(query.trim())params.set('query',query.trim());
       const [data,summary]=await Promise.all([
         api('/api/v1/admin/content/questions/review-queue?'+params.toString(),{},requestFailed),
-        api('/api/v1/admin/content/questions/review-summary',{},requestFailed)
+        api('/api/v1/admin/content/questions/review-summary?'+new URLSearchParams({courseId}).toString(),{},requestFailed)
       ]);
       setRows(Array.isArray(data.items)?data.items:[]);
       setTotalMatching(Number(data.total||0));
       setReviewSummary(summary);
     }catch(e:any){setError(e.message||tRef.current('admin.questions.queueLoadFailed'));}
     finally{setLoading(false);}
-  },[status,query,page,pageSize]);
+  },[status,query,page,pageSize,courseId,loadingCourses,courseError]);
 
   useEffect(()=>{void load();},[load]);
 
@@ -139,7 +143,8 @@ export default function QuestionReviewPage(){
     }
     setBusyId(row.question_id);setError('');setNotice('');
     try{
-      await api('/api/v1/admin/content/lessons/'+row.lesson_id+'/questions/'+row.question_id+'/review',{
+      if(!courseId)throw new Error('Select a course first.');
+      await api('/api/v1/admin/content/lessons/'+row.lesson_id+'/questions/'+row.question_id+'/review?'+new URLSearchParams({courseId}).toString(),{
         method:'POST',body:JSON.stringify({status:nextStatus,reviewNotes:notes})
       });
       setNotice(t('admin.questions.reviewNotice',{questionId:row.question_id,status:statusLabel(nextStatus)}));
@@ -152,7 +157,8 @@ export default function QuestionReviewPage(){
   async function showHistory(questionId:number,nextPage=0,nextPageSize=historyPageSize){
     setHistoryFor(questionId);setHistoryPage(nextPage);setHistoryLoading(true);setError('');
     try{
-      const params=new URLSearchParams({limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
+      if(!courseId)throw new Error('Select a course first.');
+      const params=new URLSearchParams({courseId,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
       const data=await api('/api/v1/admin/content/questions/'+questionId+'/history?'+params.toString(),{},requestFailed);
       setHistory(Array.isArray(data.history)?data.history:[]);
       setHistoryTotal(Number(data.total??(Array.isArray(data.history)?data.history.length:0)));
@@ -189,6 +195,9 @@ export default function QuestionReviewPage(){
       <section className="admin-panel" style={{marginTop:20}}>
         <div className="admin-section-title"><div><span className="admin-kicker">{t('admin.questions.reviewQueue')}</span><h2>{t('admin.questions.allQuestions')}</h2><p style={{fontSize:12,color:"#6f7b90",marginTop:5}}>{t('admin.questions.totalSummary',{total:totalQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN'),active:activeQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN'),inactive:inactiveQuestions.toLocaleString(locale==='english'?'en-IN':'hi-IN')})}</p></div><span className="admin-live-label">{t('admin.questions.matchingCount',{count:totalMatching.toLocaleString(locale==='english'?'en-IN':'hi-IN')})}</span></div>
         <div style={{display:'flex',gap:12,flexWrap:'wrap',alignItems:'center',margin:'16px 0'}}>
+          <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+            label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.course')}
+            onChange={value=>{if(selectCourse(value)){setPage(0);setHistoryFor(null);setHistory([]);setError('');setNotice('');}}} />
           <label style={{display:'flex',flexDirection:'column',gap:5,fontSize:13,fontWeight:600}}>{t('admin.questions.filterStatus')}
             <select value={status} onChange={e=>{setPage(0);setStatus(e.target.value)}} style={{minWidth:180,padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',background:'#fff'}}>
               {statuses.map(x=><option key={x} value={x}>{statusLabel(x)}</option>)}
@@ -212,7 +221,7 @@ export default function QuestionReviewPage(){
               return <article key={row.question_id} style={{border:'1px solid #e1e5ed',borderRadius:14,padding:16,background:'#fff'}}>
                 <div style={{display:'flex',gap:10,justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap'}}>
                   <div><div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}><strong>{t('admin.questions.questionNumber',{questionId:row.question_id})}</strong><span className="admin-live-label">{statusLabel(row.review_status)}</span>{!row.active&&<span className="admin-live-label">{t('admin.questions.statusInactive')}</span>}</div>
-                    <p style={{margin:'7px 0 3px',fontSize:13,color:'#647084'}}>{row.class_name} · {row.subject_name} · {row.chapter_name} · {row.lesson_title}</p>
+                    <p style={{margin:'7px 0 3px',fontSize:13,color:'#647084'}}>{activeCourse?.display_name || t('admin.contentStudio.course')} · {row.subject_name} · {row.chapter_name} · {row.lesson_title}</p>
                     <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.microTopicStatus')}: <b>{statusLabel(row.lesson_status)}</b>{row.topic?' · '+t('admin.questions.topicLabel')+': '+row.topic:''}{row.subtopic?' / '+row.subtopic:''}</p>
                     <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.questionTypeLabel')}: {row.question_type} · {t('admin.questions.difficultyLabel')}: {row.difficulty||'—'}{row.marks?' · '+t('admin.questions.marksLabel',{marks:row.marks}):''}{row.exam_format?' · '+row.exam_format:''}</p>
                     {(row.source_title||row.source_ref||row.board||row.source_year)&&<p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>{t('admin.questions.sourceLabel')}:  {[row.source_title,row.board,row.source_year,row.source_ref].filter(Boolean).join(' · ')}</p>}
