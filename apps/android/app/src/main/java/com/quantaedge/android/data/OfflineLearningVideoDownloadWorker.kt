@@ -34,10 +34,11 @@ class OfflineLearningVideoDownloadWorker(appContext: Context, parameters: Worker
         val recordingId = inputData.getLong(KEY_RECORDING_ID, 0L)
         val resourceId = inputData.getLong(KEY_RESOURCE_ID, 0L)
         val assignmentId = inputData.getLong(KEY_ASSIGNMENT_ID, 0L)
+        val courseId = inputData.getLong(KEY_COURSE_ID, 0L)
         val expectedSize = inputData.getLong(KEY_EXPECTED_SIZE, 0L)
         val expectedSha = inputData.getString(KEY_SHA256).orEmpty().lowercase()
         val mediaType = inputData.getString(KEY_MEDIA_TYPE).orEmpty()
-        if (ownerKey == "guest" || recordingId <= 0L || resourceId <= 0L || assignmentId <= 0L ||
+        if (ownerKey == "guest" || recordingId <= 0L || resourceId <= 0L || assignmentId <= 0L || courseId <= 0L ||
             !OfflineLearningVideoContract.isValidSize(expectedSize) ||
             !OfflineLearningVideoContract.isValidSha256(expectedSha) ||
             OfflineLearningVideoContract.extensionFor(mediaType) == null) return Result.failure()
@@ -81,7 +82,7 @@ class OfflineLearningVideoDownloadWorker(appContext: Context, parameters: Worker
                     existing = 0L
                 }
 
-                val path = "/api/v1/learning/resources/" + resourceId + "/download?assignmentId=" + assignmentId
+                val path = "/api/v1/learning/resources/" + resourceId + "/download?assignmentId=" + assignmentId + "&courseId=" + courseId
                 val requestBuilder = Request.Builder()
                     .url(ApiClient.absoluteUrl(path))
                     .get()
@@ -228,6 +229,7 @@ class OfflineLearningVideoDownloadWorker(appContext: Context, parameters: Worker
         private const val KEY_RECORDING_ID = "recorded_class_id"
         private const val KEY_RESOURCE_ID = "resource_id"
         private const val KEY_ASSIGNMENT_ID = "assignment_id"
+        private const val KEY_COURSE_ID = "course_id"
         private const val KEY_SHA256 = "sha256"
         private const val KEY_EXPECTED_SIZE = "expected_size_bytes"
         private const val KEY_MEDIA_TYPE = "media_type"
@@ -245,10 +247,11 @@ class OfflineLearningVideoDownloadWorker(appContext: Context, parameters: Worker
             val recordingId = recording.optLongAny("recorded_class_id", "recordingId", "id")
             val resourceId = recording.optLongAny("download_resource_id", "downloadResourceId")
             val assignmentId = recording.optLongAny("download_assignment_id", "downloadAssignmentId")
+            val courseId = recording.optLongAny("course_id", "courseId")
             val expectedSize = recording.optLongAny("file_size_bytes", "fileSizeBytes")
             val sha = recording.optString("download_sha256", recording.optString("downloadSha256"))
             val mediaType = recording.optString("media_type", recording.optString("mediaType"))
-            if (recordingId <= 0L || resourceId <= 0L || assignmentId <= 0L ||
+            if (recordingId <= 0L || resourceId <= 0L || assignmentId <= 0L || courseId <= 0L ||
                 !recording.optBoolean("download_allowed") ||
                 !OfflineLearningVideoContract.isValidSize(expectedSize) ||
                 !OfflineLearningVideoContract.isValidSha256(sha) ||
@@ -264,6 +267,7 @@ class OfflineLearningVideoDownloadWorker(appContext: Context, parameters: Worker
                     .putLong(KEY_RECORDING_ID, recordingId)
                     .putLong(KEY_RESOURCE_ID, resourceId)
                     .putLong(KEY_ASSIGNMENT_ID, assignmentId)
+                    .putLong(KEY_COURSE_ID, courseId)
                     .putString(KEY_SHA256, sha.lowercase())
                     .putLong(KEY_EXPECTED_SIZE, expectedSize)
                     .putString(KEY_MEDIA_TYPE, mediaType)
