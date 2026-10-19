@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 846,
+    "assets_selected": 848,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 843,
-    "assets_remaining": 1448,
-    "assets_completion_percent": 36.8,
+    "assets_analyzed": 845,
+    "assets_remaining": 1446,
+    "assets_completion_percent": 36.9,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 841,
+    "assets_skipped_from_checkpoint": 843,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:25:59Z"
+      "checkpointed_at": "2026-10-19T11:32:40Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:27:18Z"
+      "checkpointed_at": "2026-10-19T11:34:00Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T11:28:10Z"
+      "checkpointed_at": "2026-10-19T11:34:55Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26433,6 +26433,121 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
       "checkpointed_at": "2026-10-19T11:31:01Z"
+    },
+    {
+      "asset_id": "cc2cfd4afbe9a4e90cb7c3f8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e048cf4453162f1b423feea8696bf8182017138ad42d261078f1c697e80fc6cd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the benefits and harm of microorganisms, including their role in decomposing waste and improving soil fertility, and their use in food production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "25",
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeast are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus"
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial",
+          "Harmful",
+          "Decomposition",
+          "Waste",
+          "Simple substances",
+          "Environment",
+          "Root nodules",
+          "Legumes",
+          "Nitrogen",
+          "Soil fertility",
+          "Yeast",
+          "Fungi",
+          "Bread",
+          "Cakes",
+          "Pastries",
+          "Idlis",
+          "Dosas",
+          "Bhaturas",
+          "Lactobacillus"
+        ],
+        "context_relation": "The page discusses the role and impact of microorganisms in various aspects of life, including their beneficial and harmful effects, their role in decomposing waste and improving soil fertility, and their use in food production.",
+        "limitations": [
+          "The page does not provide specific examples or details about the microorganisms discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:36:07Z"
+    },
+    {
+      "asset_id": "3e4fb7766dac641fe5dcbc0d",
+      "asset_sha256": "3ae08e9af3e03e8ebb23e785ad33fb314977af6bbad2bcfbca90e587c8406b08",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 45,
+      "asset_path": "page-0045.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e048cf4453162f1b423feea8696bf8182017138ad42d261078f1c697e80fc6cd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing microorganisms and their effects on the environment and food production.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "25",
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeasts are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus is used in the curd formation at home and fermentation process in food industry."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial effects",
+          "Harmful effects",
+          "Decomposition",
+          "Simple substances",
+          "Cleaning environment",
+          "Root nodules",
+          "Legumes",
+          "Soil fertility",
+          "Yeasts",
+          "Fungi",
+          "Bread production",
+          "Cakes production",
+          "Pastries production",
+          "Idlis production",
+          "Dosas production",
+          "Bhaturas",
+          "Lactobacillus",
+          "Curd formation",
+          "Fermentation process"
+        ],
+        "context_relation": "The page discusses the various roles and effects of microorganisms in the environment and food production.",
+        "limitations": [
+          "The page does not provide specific examples or details for each concept.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T11:39:17Z"
     }
   ]
 }
