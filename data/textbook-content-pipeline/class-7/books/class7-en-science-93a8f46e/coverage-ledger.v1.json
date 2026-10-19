@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1585,
-    "successful_visual_analyses": 1563,
-    "missing_visual_analyses": 5903,
+    "raw_analysis_result_rows": 1588,
+    "successful_visual_analyses": 1566,
+    "missing_visual_analyses": 5900,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5925,
+    "unresolved_count": 5922,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -69506,9 +69506,23 @@
       "asset_path": "assets/f36aa9670d6178b6cd0a1a880c730d8d8807ddd0fa4240adc24bef9ad5fc2e38.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table displaying components of an electrical circuit represented by symbols.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components",
+          "Symbols for electrical components"
+        ],
+        "context_relation": "The table provides a visual representation of the components of an electrical circuit using symbols.",
+        "limitations": [
+          "The table does not provide specific details about each component or its function."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69524,9 +69538,18 @@
       "asset_path": "assets/305a214c3a208b0d85824814421908b31686c60c38d54a6e491709469715b572.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red wire with a metal tip is shown against a green background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an electrical component, likely a wire or a probe.",
+        "limitations": [
+          "The image does not provide specific details about the component's function or context within an electrical circuit."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -69542,9 +69565,22 @@
       "asset_path": "assets/4cc3cd8a3451d6eb3d37fef725ee4ab4183c59e1324ccb3c8d680c0a4af57569.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components"
+        ],
+        "context_relation": "The table is a visual representation of the components of an electrical circuit.",
+        "limitations": [
+          "The table does not provide specific details about each component."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

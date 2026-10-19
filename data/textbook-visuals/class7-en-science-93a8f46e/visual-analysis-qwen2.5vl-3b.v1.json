@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1563,
+    "assets_selected": 1566,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1561,
-    "assets_remaining": 5927,
-    "assets_completion_percent": 20.8,
+    "assets_analyzed": 1564,
+    "assets_remaining": 5924,
+    "assets_completion_percent": 20.9,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1558,
+    "assets_skipped_from_checkpoint": 1561,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:44:50Z"
+      "checkpointed_at": "2026-10-19T11:47:50Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T11:45:11Z"
+      "checkpointed_at": "2026-10-19T11:48:10Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -59158,6 +59158,99 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
       "checkpointed_at": "2026-10-19T11:47:07Z"
+    },
+    {
+      "asset_id": "9247ed36d004c72671f89ee3",
+      "asset_sha256": "f36aa9670d6178b6cd0a1a880c730d8d8807ddd0fa4240adc24bef9ad5fc2e38",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/f36aa9670d6178b6cd0a1a880c730d8d8807ddd0fa4240adc24bef9ad5fc2e38.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table displaying components of an electrical circuit represented by symbols.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components",
+          "Symbols for electrical components"
+        ],
+        "context_relation": "The table provides a visual representation of the components of an electrical circuit using symbols.",
+        "limitations": [
+          "The table does not provide specific details about each component or its function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:48:46Z"
+    },
+    {
+      "asset_id": "87b4643bf87bb4fd3a55fd78",
+      "asset_sha256": "305a214c3a208b0d85824814421908b31686c60c38d54a6e491709469715b572",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/305a214c3a208b0d85824814421908b31686c60c38d54a6e491709469715b572.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red wire with a metal tip is shown against a green background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an electrical component, likely a wire or a probe.",
+        "limitations": [
+          "The image does not provide specific details about the component's function or context within an electrical circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:49:21Z"
+    },
+    {
+      "asset_id": "61194a1c2f44edf2d532e267",
+      "asset_sha256": "4cc3cd8a3451d6eb3d37fef725ee4ab4183c59e1324ccb3c8d680c0a4af57569",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/4cc3cd8a3451d6eb3d37fef725ee4ab4183c59e1324ccb3c8d680c0a4af57569.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d4ca1f0c97fb5ffcb8c1bf407a13a0bfe60ce8fc74548933d7aa180eb29c5dfe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing components of an electrical circuit.",
+        "visual_type": "table",
+        "visible_text": [
+          "Components Table 3.2:"
+        ],
+        "concepts": [
+          "Electrical circuit components"
+        ],
+        "context_relation": "The table is a visual representation of the components of an electrical circuit.",
+        "limitations": [
+          "The table does not provide specific details about each component."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T11:49:58Z"
     }
   ]
 }
