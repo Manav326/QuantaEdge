@@ -105,7 +105,7 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
       <Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) : '')} className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
       {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}
     </header>
-    {error ? <><p role="alert" className="error-message">{error}</p><Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')} className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
+    {error ? <><p role="alert" className="error-message">{error}</p><Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(activeCourse?.public_id || courseId)) : '')} className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
       busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
       <>
         <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"
