@@ -29,11 +29,14 @@ public class RichNotificationService {
   private final JdbcTemplate jdbc;
   private final ObjectMapper mapper;
   private final NotificationContentValidator validator;
+  private final AuthorizationService authorization;
 
-  public RichNotificationService(JdbcTemplate jdbc, ObjectMapper mapper, NotificationContentValidator validator) {
+  public RichNotificationService(JdbcTemplate jdbc, ObjectMapper mapper, NotificationContentValidator validator,
+      AuthorizationService authorization) {
     this.jdbc = jdbc;
     this.mapper = mapper;
     this.validator = validator;
+    this.authorization = authorization;
   }
 
   public JsonNode validateDocument(Object raw) {
@@ -45,7 +48,7 @@ public class RichNotificationService {
     Object[] args;
     if ("HRMS".equals(actor.workspace())) {
       sql = """
-        select id,public_id,template_family_id,template_name,description,content_version,
+        select id,public_id,template_family_id,owner_scope,institution_id,template_name,description,content_version,
           content_document::text as content_document,status,created_at,updated_at
         from notification_template where owner_scope='PLATFORM' and status<>'ARCHIVED'
         order by lower(template_name),content_version desc
@@ -53,7 +56,7 @@ public class RichNotificationService {
       args = new Object[0];
     } else {
       sql = """
-        select id,public_id,template_family_id,template_name,description,content_version,
+        select id,public_id,template_family_id,owner_scope,institution_id,template_name,description,content_version,
           content_document::text as content_document,status,created_at,updated_at
         from notification_template
         where status<>'ARCHIVED' and
@@ -415,7 +418,7 @@ public class RichNotificationService {
       """,campaignId);
     if(rows.isEmpty())return;
     Map<String,Object> row=rows.getFirst();
-    if(row.get("expires_at")!=null && ((java.sql.Timestamp)row.get("expires_at")).toInstant().isBefore(Instant.now())) {
+    if(row.get("expires_at")!=null && asInstant(row.get("expires_at")).isBefore(Instant.now())) {
       jdbc.update("update notification_campaign set status='EXPIRED',updated_at=now() where id=?",campaignId);
       return;
     }
@@ -447,7 +450,7 @@ public class RichNotificationService {
           "Scheduled notification sender",workspace);
       String needed="HRMS".equals(workspace)?"QE_PLATFORM_OWNER":
           ("COURSE".equals(row.get("scope"))?"NOTIFICATION_COURSE_SEND":"NOTIFICATION_INSTITUTION_SEND");
-      if(!new AuthorizationService(jdbc).hasPermission(context,needed)) {
+      if(!authorization.hasPermission(context,needed)) {
         jdbc.update("update notification_campaign set status='CANCELLED',updated_at=now() where id=?",campaignId);
         audit(actor,institutionId,campaignId,null,"SCHEDULE_CANCELLED_PERMISSION_REVOKED",Map.of());
         return;
@@ -514,9 +517,16 @@ public class RichNotificationService {
       select id,'IN_APP',1,'SENT',now(),now() from notification_recipient
       where campaign_id=? on conflict(recipient_id,channel,attempt_number) do nothing
       """,campaignId);
+    Map<String,Object> snapshot=new LinkedHashMap<>();
+    snapshot.put("recipientCount",recipients.size());
+    snapshot.put("recipientCounts",countByKind(recipients));
+    snapshot.put("resolvedAt",Instant.now().toString());
+    snapshot.put("institutionIds",recipients.stream().map(Recipient::institutionId)
+        .filter(java.util.Objects::nonNull).distinct().sorted().toList());
     jdbc.update("""
-      update notification_campaign set status='SENT',dispatched_at=now(),updated_at=now() where id=?
-      """,campaignId);
+      update notification_campaign set status='SENT',dispatched_at=now(),updated_at=now(),
+        resolved_recipient_count=?,audience_snapshot=?::jsonb where id=?
+      """,recipients.size(),writeJson(snapshot),campaignId);
   }
 
   public Map<String,Object> campaignResult(long id,boolean idempotent) {
@@ -668,6 +678,14 @@ public class RichNotificationService {
       catch(RuntimeException ex){throw new IllegalArgumentException("An institution selection is invalid.");}
     }
     return List.copyOf(result);
+  }
+
+  private static Instant asInstant(Object raw) {
+    if(raw instanceof Instant value)return value;
+    if(raw instanceof java.sql.Timestamp value)return value.toInstant();
+    if(raw instanceof java.time.OffsetDateTime value)return value.toInstant();
+    if(raw instanceof java.util.Date value)return value.toInstant();
+    throw new IllegalStateException("Stored notification expiry timestamp has an unsupported type.");
   }
 
   private Map<String,Object> parseObject(String raw) {
