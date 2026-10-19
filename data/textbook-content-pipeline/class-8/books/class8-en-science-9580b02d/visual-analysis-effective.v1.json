@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "74f0857f111227ad2937e3f6b318651a6997ff1e62e3c0f53b735ddca2a3a3a0",
+  "raw_analysis_sha256": "af8d62c0e499c372cb73343508ba9df5eddd257ccf9470ad94fa1721ee1f02f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:11:00Z",
+      "checkpointed_at": "2026-10-19T15:16:45Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:11:49Z",
+      "checkpointed_at": "2026-10-19T15:17:34Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T15:12:27Z",
+      "checkpointed_at": "2026-10-19T15:18:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -40428,6 +40428,126 @@
         "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
         "limitations": [
           "The image does not provide specific details about the book or the person holding it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cc859191a16735cc70bf8997",
+      "asset_sha256": "cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a book with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast 11.4% of India’s population is",
+          "food is",
+          "More than",
+          "100 million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "population statistics"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image is blurred and not clear enough to provide specific details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:18:25Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a book with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast 11.4% of India’s population is",
+          "food is",
+          "More than",
+          "100 million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "population statistics"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image is blurred and not clear enough to provide specific details."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6659ee666f36966ee1c439cc",
+      "asset_sha256": "cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 48,
+      "asset_path": "assets/cd3d6ef6f5cd3d73174df850506474ac6ea38554d86ea7780824fd1bfcf1de2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08469ccf891809216d9744942640681606152e3e16a773638a76d12f1830ddf1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a book with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast 11.4% of India’s population is",
+          "food is",
+          "More than",
+          "100 million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "population statistics"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image is blurred and not clear enough to provide specific details."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T15:18:38Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a book with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Reduce oil in diet by 10%",
+          "Fast 11.4% of India’s population is",
+          "food is",
+          "More than",
+          "100 million"
+        ],
+        "concepts": [
+          "reducing oil intake",
+          "fast food consumption",
+          "population statistics"
+        ],
+        "context_relation": "The image is related to the text about reducing oil intake and fast food consumption in India.",
+        "limitations": [
+          "The image is blurred and not clear enough to provide specific details."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
