@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d8ddc77a3a46e5ee2c24d6923f716c1e00c2fc286116602159403cc552c7b848",
+  "raw_analysis_sha256": "8f7cb928213f3d937079fefc13c4ec6af9e37e3d1ddf7ae2f4d65941b231dcd1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:07:21Z",
+      "checkpointed_at": "2026-10-19T20:11:39Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:08:00Z",
+      "checkpointed_at": "2026-10-19T20:12:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:08:53Z",
+      "checkpointed_at": "2026-10-19T20:13:11Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56326,7 +56326,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T20:09:24Z",
+      "checkpointed_at": "2026-10-19T20:13:43Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -56747,6 +56747,76 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "365a209ce45eddf9fcff46cc",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 101,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A 15 cm scale divided into 10 equal parts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 5.3: A 15-cm scale",
+          "of 1 cm length are further divided",
+          "into 10 equal parts. The length of",
+          "one of these smaller parts is called",
+          "the unit metre to measure larger lengths, such as the",
+          "length of a railway track",
+          "1 mm is the smallest value of length that you can measure using this scale. 1 mm",
+          "is equal to one-tenth of a centimeter"
+        ],
+        "concepts": [
+          "scale",
+          "division",
+          "unit",
+          "length",
+          "railway track"
+        ],
+        "context_relation": "The image is a visual representation of a textbook page discussing the measurement of length using a scale.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T20:14:02Z",
+      "effective_analysis": {
+        "visual_summary": "A 15 cm scale divided into 10 equal parts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 5.3: A 15-cm scale",
+          "of 1 cm length are further divided",
+          "into 10 equal parts. The length of",
+          "one of these smaller parts is called",
+          "the unit metre to measure larger lengths, such as the",
+          "length of a railway track",
+          "1 mm is the smallest value of length that you can measure using this scale. 1 mm",
+          "is equal to one-tenth of a centimeter"
+        ],
+        "concepts": [
+          "scale",
+          "division",
+          "unit",
+          "length",
+          "railway track"
+        ],
+        "context_relation": "The image is a visual representation of a textbook page discussing the measurement of length using a scale.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
