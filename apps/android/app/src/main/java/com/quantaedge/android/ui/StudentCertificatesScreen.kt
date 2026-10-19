@@ -135,8 +135,20 @@ fun StudentCertificatesScreen(
     suspend fun reload() {
         loading = true
         error = ""
+        if (courseId <= 0L) {
+            subjectTracks = emptyList()
+            certificates = emptyList()
+            eligibleAssessments = emptyList()
+            selectedTrackKey = ""
+            selectedAttemptId = ""
+            error = if (language == "hi") "प्रमाणपत्र देखने के लिए पहले enrolled course चुनें।"
+                else "Choose an enrolled course before viewing certificates."
+            loading = false
+            return
+        }
         try {
-            // Load each section independently: a failed progress/track request must not
+            // All certificate data in this screen belongs to the focused course.
+            // Load each section independently: a failed request must not hide saved records.
             // prevent issued certificates or the assessment picker from appearing.
             val tracksResult = runCatching {
                 ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks?courseId=" + courseId)
@@ -263,14 +275,17 @@ fun StudentCertificatesScreen(
                 )
                 // Ask the API for the canonical, student-scoped issued record instead of
                 // trusting a cached picker row to carry all certificate metadata.
+                val attemptCourseId = attempt.optLongValue("course_id", "courseId", "program_id", "programId")
+                if (attemptCourseId != courseId) throw IOException(
+                    if (language == "hi") "यह परिणाम चुने गए course का नहीं है।" else "This result does not belong to the focused course."
+                )
                 val body = JSONObject()
                     .put("achievementType", "ASSESSMENT_PASS")
                     .put("assessmentAttemptId", attemptId)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
+                    .put("courseId", courseId)
                 institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
-                val courseId = attempt.optLongValue("course_id", "courseId", "program_id", "programId")
-                if (courseId > 0L) body.put("courseId", courseId)
                 val knownId = attempt.optLongValue("certificate_id", "certificateId")
                 val canonical = if (knownId > 0L) runCatching {
                     ApiClient.getObject("/api/v1/students/me/certificates/" + knownId)
@@ -348,6 +363,7 @@ fun StudentCertificatesScreen(
                     .put("achievementType", selectedAchievement)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
+                    .put("courseId", courseId)
                 institutionBrand?.institutionCode?.let { body.put("institutionCode", it) }
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
                     val selectedTrack = subjectTracks.firstOrNull {
@@ -356,8 +372,8 @@ fun StudentCertificatesScreen(
                         if (language == "hi") "पहले विषय ट्रैक चुनें।" else "Choose a subject track first."
                     )
                     body.put("subjectCode", selectedTrack.optString("subject_code"))
-                    val courseId = selectedTrack.optLongValue("course_id", "courseId", "program_id", "programId")
-                    if (courseId > 0L) body.put("courseId", courseId)
+                    val trackCourseId = selectedTrack.optLongValue("course_id", "courseId", "program_id", "programId")
+                    if (trackCourseId != courseId) throw IOException("Select a subject belonging to the focused course.")
                 } else {
                     val attemptId = selectedAttemptId.toLongOrNull()
                         ?: throw IOException(
@@ -368,8 +384,8 @@ fun StudentCertificatesScreen(
                     val selectedAttempt = eligibleAssessments.firstOrNull {
                         it.optLongValue("attempt_id", "attemptId", "id") == attemptId
                     }
-                    val courseId = selectedAttempt?.optLongValue("course_id", "courseId", "program_id", "programId") ?: 0L
-                    if (courseId > 0L) body.put("courseId", courseId)
+                    val attemptCourseId = selectedAttempt?.optLongValue("course_id", "courseId", "program_id", "programId") ?: 0L
+                    if (attemptCourseId != courseId) throw IOException("Select a test result belonging to the focused course.")
                 }
                 val issued = withContext(Dispatchers.IO) {
                     ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
@@ -495,8 +511,8 @@ fun StudentCertificatesScreen(
                     Text((if (language == "hi") "उपलब्धि: " else "Achievement: ") +
                         result.optString("achievementTitle"))
                     val classCode = result.optString("classCode")
-                    Text((if (language == "hi") "कक्षा: " else "Class: ") +
-                        if (classCode.isNotBlank()) "Class $classCode" else "—")
+                    Text((if (language == "hi") "कोर्स: " else "Course: ") +
+                        result.optString("courseName", "—"))
                     Text((if (language == "hi") "विषय ट्रैक: " else "Subject track: ") +
                         result.optString("subjectTrack", "—"))
                     val issuedAt = result.optString("issuedAt").substringBefore("T")
@@ -580,7 +596,7 @@ fun StudentCertificatesScreen(
                         val courseId = track.optLongValue("course_id", "courseId", "program_id", "programId")
                         val scopeLabel = if (courseId > 0L) track.optString("course_name").ifBlank {
                             if (language == "hi") "कोर्स" else "Course"
-                        } else (if (language == "hi") "कक्षा " else "Class ") + track.optString("class_code")
+                        } else if (language == "hi") "कोर्स" else "Course"
                         val subject = localizedCertificateSubject(track.optString("subject_code"), track.optString("subject_name"), language)
                         val completed = track.optInt("completed")
                         val lessons = track.optInt("lessons")
@@ -686,11 +702,11 @@ fun StudentCertificatesScreen(
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(certificate.optString("achievement_title", certificate.optString("achievementTitle",
                         if (institutionBrand != null || institutionBrandResolving) "Achievement certificate" else "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
-                    val certificateClass = certificate.optString("class_code")
+                    val certificateCourse = certificate.optString("course_name", certificate.optString("courseName"))
                     val subject = localizedCertificateSubject(
                         certificate.optString("subject_code"), certificate.optString("subject_name"), language)
-                    if (certificateClass.isNotBlank() && subject.isNotBlank()) {
-                        Text((if (language == "hi") "कक्षा " else "Class ") + certificateClass + " · " + subject,
+                    if (certificateCourse.isNotBlank() && subject.isNotBlank()) {
+                        Text(certificateCourse + " · " + subject,
                             style = MaterialTheme.typography.bodyMedium)
                     }
                     Text(certificate.optString("certificate_number", certificate.optString("certificateNumber", "")), style = MaterialTheme.typography.bodySmall)
