@@ -101,7 +101,10 @@ export default function ParentProfilePage() {
   const t = useUiTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
+  const [savedDraft, setSavedDraft] = useState<ParentProfileDraft>(emptyProfile);
   const [identity, setIdentity] = useState<ParentIdentity>({ mobile: '', publicUserId: '', profileImageUrl: null });
+  const [protectedPhotoUrl, setProtectedPhotoUrl] = useState('');
+  const [editingCard, setEditingCard] = useState<'photo' | 'personal' | 'about' | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
@@ -143,8 +146,7 @@ export default function ParentProfilePage() {
         if (!response.ok) throw new Error(body.message || 'Unable to load the parent profile.');
         if (!active) return;
         const url = body.profile_image_url || null;
-        setIdentity({ mobile: body.mobile_e164 || '', publicUserId: body.public_user_id || body.publicUserId || '', profileImageUrl: url });
-        setDraft({
+        const loadedDraft: ParentProfileDraft = {
           displayName: body.display_name || '',
           email: body.email || '',
           city: body.city || '',
@@ -153,7 +155,10 @@ export default function ParentProfilePage() {
           organization: body.organization || '',
           preferredLanguage: body.preferred_language || 'English',
           profileImageDataUrl: '',
-        });
+        };
+        setIdentity({ mobile: body.mobile_e164 || '', publicUserId: body.public_user_id || body.publicUserId || '', profileImageUrl: url });
+        setDraft(loadedDraft);
+        setSavedDraft(loadedDraft);
       } catch (loadError) {
         if (active) setError(loadError instanceof Error ? loadError.message : 'Unable to load your profile.');
       } finally {
@@ -163,6 +168,46 @@ export default function ParentProfilePage() {
     void loadProfile();
     return () => { active = false; };
   }, [router]);
+
+  useEffect(() => {
+    let active = true;
+    let objectUrl = '';
+    const imageUrl = identity.profileImageUrl;
+    setProtectedPhotoUrl('');
+    if (!imageUrl) return () => { active = false; };
+    // An img src cannot attach the workspace header. Fetch through the shared request
+    // wrapper so the parent workspace/session is included, then render a temporary blob URL.
+    void fetch(imageUrl, { cache: 'no-store' })
+      .then(response => {
+        if (!response.ok) throw new Error('Profile photo is unavailable.');
+        return response.blob();
+      })
+      .then(blob => {
+        objectUrl = URL.createObjectURL(blob);
+        if (active) setProtectedPhotoUrl(objectUrl);
+        else URL.revokeObjectURL(objectUrl);
+      })
+      .catch(() => { if (active) setProtectedPhotoUrl(''); });
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [identity.profileImageUrl]);
+
+  function beginEditingCard(card: 'photo' | 'personal' | 'about') {
+    if (editingCard !== null) return;
+    setEditingCard(card);
+    setError('');
+    setNotice('');
+  }
+
+  function cancelEditingCard() {
+    setDraft(savedDraft);
+    setEditingCard(null);
+    setPhotoName('');
+    setError('');
+    setNotice('');
+  }
 
   async function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -181,8 +226,10 @@ export default function ParentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
       setIdentity(current => ({ ...current, profileImageUrl: body.profile_image_url || null }));
       setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+      setSavedDraft(current => ({ ...current, profileImageDataUrl: '' }));
       setPhotoChanged(false);
       setPhotoName(file.name);
+      setEditingCard(null);
       setNotice(t('parent.profile.photoSaved'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
@@ -217,7 +264,7 @@ export default function ParentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your profile could not be saved.');
       const url = body.profile_image_url || null;
       setIdentity({ mobile: body.mobile_e164 || '', publicUserId: body.public_user_id || body.publicUserId || '', profileImageUrl: url });
-      setDraft({
+      const saved: ParentProfileDraft = {
         displayName: body.display_name || '',
         email: body.email || '',
         city: body.city || '',
@@ -226,7 +273,10 @@ export default function ParentProfilePage() {
         organization: body.organization || '',
         preferredLanguage: body.preferred_language || 'English',
         profileImageDataUrl: '',
-      });
+      };
+      setDraft(saved);
+      setSavedDraft(saved);
+      setEditingCard(null);
       if (body.preferred_language === 'English') setLocale('english');
       else if (body.preferred_language === 'Hindi' || body.preferred_language === 'Hindi & English') setLocale('hinglish');
       setNotice(t('parent.profile.saved'));
@@ -254,8 +304,10 @@ export default function ParentProfilePage() {
       if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
       setIdentity(current => ({ ...current, profileImageUrl: body.profile_image_url || null }));
       setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+      setSavedDraft(current => ({ ...current, profileImageDataUrl: '' }));
       setPhotoChanged(false);
       setPhotoName('');
+      setEditingCard(null);
       setNotice(t('parent.profile.photoRemoved'));
       window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
@@ -287,51 +339,70 @@ export default function ParentProfilePage() {
         {loading ? <div className="parent-profile-page__loading"><span className="parent-profile-page__spinner" /> <UiText message="legacy.web.loading.your.profile.81ab5bfd" /></div> : (
           <form className="parent-profile-form" onSubmit={saveProfile}>
             <section className="parent-profile-card parent-profile-photo-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2><UiText message="legacy.web.your.profile.photo.feca3523" /></h2><p><UiText message="legacy.web.a.familiar.photo.for.your.family.accou.409a3461" /></p></div></div>
+              <div className="parent-profile-card__topline">
+                <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2><UiText message="legacy.web.your.profile.photo.feca3523" /></h2><p><UiText message="legacy.web.a.familiar.photo.for.your.family.accou.409a3461" /></p></div></div>
+                {editingCard === 'photo'
+                  ? <button type="button" className="parent-profile-card__edit-button" aria-label="Cancel photo editing" title="Cancel" onClick={cancelEditingCard}>×</button>
+                  : <button type="button" className="parent-profile-card__edit-button" aria-label="Edit profile photo" title="Edit" disabled={editingCard !== null} onClick={() => beginEditingCard('photo')}>✎</button>}
+              </div>
               <div className="parent-profile-photo-editor">
                 <div className="parent-profile-photo-editor__preview">
-                  <img src={(photoChanged ? draft.profileImageDataUrl : (identity.profileImageUrl || draft.profileImageDataUrl)) || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
+                  <img src={(photoChanged ? draft.profileImageDataUrl : (protectedPhotoUrl || draft.profileImageDataUrl)) || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
                   <span className="parent-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="parent-profile-photo-editor__copy">
                   <strong>{((photoChanged && draft.profileImageDataUrl) || (!photoChanged && identity.profileImageUrl)) ? <UiText message="legacy.web.your.photo.is.set.6e00a1b6" /> : <UiText message="legacy.web.add.your.photo.4ad345e3" />}</strong>
                   <p><UiText message="legacy.web.choose.a.clear.photo.it.will.be.resize.846a62f4" /></p>
                   {photoName && <small className="parent-profile-photo-editor__filename">{photoName}</small>}
-                  <div className="parent-profile-photo-editor__actions">
+                  {editingCard === 'photo' && <div className="parent-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="parent-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <UiText message="legacy.web.preparing.photo.75f074e6" /> : (photoChanged ? Boolean(draft.profileImageDataUrl) : Boolean(identity.profileImageUrl)) ? <UiText message="legacy.web.change.photo.5b1bc1d0" /> : <UiText message="legacy.web.choose.photo.de5a3f02" />}</button>
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <UiText message="legacy.web.preparing.photo.75f074e6" /> : identity.profileImageUrl ? <UiText message="legacy.web.change.photo.5b1bc1d0" /> : <UiText message="legacy.web.choose.photo.de5a3f02" />}</button>
                     {identity.profileImageUrl && <button className="parent-profile-quiet-button" type="button" disabled={photoBusy} onClick={removePhoto}><UiText message="legacy.web.remove.photo.89a3c097" /></button>}
-                  </div>
+                  </div>}
+                  {editingCard === 'photo' && <p className="parent-profile-privacy-note">Selecting a photo saves it to this parent account.</p>}
                 </div>
               </div>
             </section>
 
             <section className="parent-profile-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2><UiText message="legacy.web.personal.details.2c540009" /></h2><p><UiText message="legacy.web.your.parent.account.details.32242915" /></p></div></div>
+              <div className="parent-profile-card__topline">
+                <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2><UiText message="legacy.web.personal.details.2c540009" /></h2><p><UiText message="legacy.web.your.parent.account.details.32242915" /></p></div></div>
+                {editingCard === 'personal'
+                  ? <button type="button" className="parent-profile-card__edit-button" aria-label="Cancel personal details editing" title="Cancel" onClick={cancelEditingCard}>×</button>
+                  : <button type="button" className="parent-profile-card__edit-button" aria-label="Edit personal details" title="Edit" disabled={editingCard !== null} onClick={() => beginEditingCard('personal')}>✎</button>}
+              </div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.full.name.f7576097" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={t('parent.profile.namePlaceholder')} autoComplete="name" /></label>
-                <label className="parent-profile-field">{locale === 'english' ? 'Contact email (separate from verified Gmail)' : 'संपर्क ईमेल (सत्यापित Gmail से अलग)'} <span className="parent-profile-field__optional"><UiText message="legacy.web.optional.7371513d" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
+                <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.full.name.f7576097" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={t('parent.profile.namePlaceholder')} autoComplete="name" disabled={editingCard !== 'personal'} /></label>
+                <label className="parent-profile-field">{locale === 'english' ? 'Contact email (separate from verified Gmail)' : 'संपर्क ईमेल (सत्यापित Gmail से अलग)'} <span className="parent-profile-field__optional"><UiText message="legacy.web.optional.7371513d" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" disabled={editingCard !== 'personal'} /></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.mobile.number.678acd99" /><input value={identity.mobile} readOnly aria-readonly="true"/><small><UiText message="legacy.web.used.for.otp.sign.in.contact.support.i.c11e2aed" /></small></label>
                 <label className="parent-profile-field"><UiText message="legacy.web.your.user.id.fc35660b" /><input value={identity.publicUserId} readOnly aria-readonly="true" /><small><UiText message="legacy.web.this.12.character.id.is.permanent.and..17b68e20" /></small></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={t('parent.profile.cityPlaceholder')} autoComplete="address-level2" /></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={t('parent.profile.statePlaceholder')} autoComplete="address-level1" /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.city.or.town.70475d4d" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={t('parent.profile.cityPlaceholder')} autoComplete="address-level2" disabled={editingCard !== 'personal'} /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.state.a0c7035d" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={t('parent.profile.statePlaceholder')} autoComplete="address-level1" disabled={editingCard !== 'personal'} /></label>
               </div>
               <p className="parent-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <UiText message="legacy.web.city.and.state.are.enough.please.do.no.8802cd0a" /></p>
+              {editingCard === 'personal' && <div className="parent-profile-card__actions">
+                <button type="button" className="parent-profile-quiet-button" onClick={cancelEditingCard} disabled={saving}>Cancel</button>
+                <button type="submit" className="button button-dark button-small" disabled={saving || photoBusy}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button>
+              </div>}
             </section>
 
             <section className="parent-profile-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.optional.details.to.personalise.your.a.31049107" /></p></div></div>
-              <div className="parent-profile-fields">
-                <label className="parent-profile-field"><UiText message="legacy.web.what.is.your.occupation.d860ed36" /><input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder={t('parent.profile.occupationPlaceholder')} autoComplete="organization-title" /></label>
-                <label className="parent-profile-field"><UiText message="legacy.web.organisation.or.workplace.2ab67251" /><input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder={t('parent.profile.optionalPlaceholder')} autoComplete="organization" /></label>
-                <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.preferred.learning.language.7005a1e9" /><select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English"><UiText message="common.language.english" /></option><option value="Hindi">हिन्दी</option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other"><UiText message="legacy.web.other.affe01d9" /></option></select></label>
+              <div className="parent-profile-card__topline">
+                <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2><UiText message="legacy.web.about.you.fdc8ac97" /></h2><p><UiText message="legacy.web.optional.details.to.personalise.your.a.31049107" /></p></div></div>
+                {editingCard === 'about'
+                  ? <button type="button" className="parent-profile-card__edit-button" aria-label="Cancel about you editing" title="Cancel" onClick={cancelEditingCard}>×</button>
+                  : <button type="button" className="parent-profile-card__edit-button" aria-label="Edit about you" title="Edit" disabled={editingCard !== null} onClick={() => beginEditingCard('about')}>✎</button>}
               </div>
+              <div className="parent-profile-fields">
+                <label className="parent-profile-field"><UiText message="legacy.web.what.is.your.occupation.d860ed36" /><input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder={t('parent.profile.occupationPlaceholder')} autoComplete="organization-title" disabled={editingCard !== 'about'} /></label>
+                <label className="parent-profile-field"><UiText message="legacy.web.organisation.or.workplace.2ab67251" /><input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder={t('parent.profile.optionalPlaceholder')} autoComplete="organization" disabled={editingCard !== 'about'} /></label>
+                <label className="parent-profile-field parent-profile-field--wide"><UiText message="legacy.web.preferred.learning.language.7005a1e9" /><select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })} disabled={editingCard !== 'about'}><option value="English"><UiText message="common.language.english" /></option><option value="Hindi">हिन्दी</option><option value="Hindi & English"><UiText message="legacy.web.hinglish.hindi.english.d8cec8ba" /></option><option value="Other"><UiText message="legacy.web.other.affe01d9" /></option></select></label>
+              </div>
+              {editingCard === 'about' && <div className="parent-profile-card__actions">
+                <button type="button" className="parent-profile-quiet-button" onClick={cancelEditingCard} disabled={saving}>Cancel</button>
+                <button type="submit" className="button button-dark button-small" disabled={saving || photoBusy}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button>
+              </div>}
             </section>
-
-            <div className="parent-profile-form__footer">
-              <p><UiText message="legacy.web.these.updates.will.not.change.your.chi.70c5c76e" /></p>
-              <div><Link href="/parent" className="parent-profile-quiet-button"><UiText message="legacy.web.cancel.843e86d4" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? <UiText message="legacy.web.saving.changes.b6c09973" /> : <UiText message="legacy.web.save.changes.a38830f7" />}</button></div>
-            </div>
           </form>
         )}
         <AccountIdentitySettings />
