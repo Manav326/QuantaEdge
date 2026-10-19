@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 898,
+    "assets_selected": 899,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 894,
-    "assets_remaining": 1184,
-    "assets_completion_percent": 43.0,
+    "assets_analyzed": 895,
+    "assets_remaining": 1183,
+    "assets_completion_percent": 43.1,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 893,
+    "assets_skipped_from_checkpoint": 894,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:23:03Z"
+      "checkpointed_at": "2026-10-19T05:26:17Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:23:43Z"
+      "checkpointed_at": "2026-10-19T05:26:59Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:24:33Z"
+      "checkpointed_at": "2026-10-19T05:27:52Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:25:11Z"
+      "checkpointed_at": "2026-10-19T05:28:30Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28446,6 +28446,77 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T05:25:28Z"
+    },
+    {
+      "asset_id": "277ecea8bdf06eba887026ba",
+      "asset_sha256": "65994972c8cb26ce1ca08d90cefa1fcb2853b3932a8896d5cfee6ff44fce6ab0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "page-0059.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing various sources of fats.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Butter",
+          "Pistachios",
+          "Sunflower",
+          "seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing",
+          "various activities. Therefore, they are called energy-giving",
+          "foods. Identify more food items that are rich sources of",
+          "carbohydrates and fats.",
+          "Polar bears accumulate a lot of fat under",
+          "their skin. This fat serves as an energy",
+          "source. It supports them during their months-long winter sleep (hibernation), enabling them",
+          "to survive without eating.",
+          "Proteins are also an important part of our food.",
+          "Milk products and pulses are good sources of protein.",
+          "Sportspersons need proteins in larger quantities to build their",
+          "muscles. People get proteins from plants as well as animals.",
+          "Some excellent plant sources of protein are pulses, beans,",
+          "peas and nuts (Fig. 3.4a). Animal sources of protein are milk,",
+          "paneer, egg, fish and meat (Fig. 3.4b). Protein-rich foods help",
+          "in growth and repair of our body. These are, therefore, called",
+          "body-building foods.",
+          "(a) Plant sources"
+        ],
+        "concepts": [
+          "sources of fats",
+          "energy-giving foods",
+          "carbohydrates",
+          "fats",
+          "polar bears",
+          "energy source",
+          "hibernation",
+          "protein sources",
+          "plant proteins",
+          "animal proteins",
+          "body-building foods"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the sources of fats, carbohydrates, and proteins in the diet.",
+        "limitations": [
+          "The image does not provide specific nutritional information or details about the quantities of each food item."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:30:19Z"
     }
   ]
 }
