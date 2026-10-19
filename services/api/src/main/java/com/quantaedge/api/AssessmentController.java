@@ -100,12 +100,14 @@ public class AssessmentController {
       @RequestParam String classCode,
       @RequestParam String subjectCode,
       @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant,
       @RequestParam(required = false) Long chapterId,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="40") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireContentView(context);
+    requireAssignedCourse(courseId, tenant);
     int rowLimit=Math.max(1,Math.min(limit==null?40:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=safeText(query,160);
@@ -148,11 +150,13 @@ public class AssessmentController {
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
-      @RequestParam(required = false) Long courseId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireContentView(context);
+    requireAssignedCourse(courseId, tenant);
     String classFilter=safeText(classCode,30);
     String subjectFilter=safeText(subjectCode,40);
     if(!classFilter.isBlank() && courseId==null)assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
@@ -215,13 +219,15 @@ public class AssessmentController {
   @Transactional
   public Map<String, Object> createAssessment(
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requirePermission(context, "CONTENT_CREATE");
     String title = requiredText(body.get("title"), "Assessment title", 240);
     String description = safeText(body.get("description"), 1200);
     String classCode = requiredText(body.get("classCode"), "Class", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
     Long courseId = optionalLong(body.get("courseId"), "courseId");
+    requireAssignedCourse(courseId, tenant);
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
@@ -1775,6 +1781,24 @@ public class AssessmentController {
     String normalized=language==null?"hi":language.trim().toLowerCase(Locale.ROOT);
     if("hi".equals(normalized)||"en".equals(normalized))return normalized;
     throw badRequest("Language must be 'hi' or 'en'.");
+  }
+
+  private void requireAssignedCourse(Long courseId, InstitutionTenantContext tenant) {
+    if (courseId == null || courseId < 1L) throw badRequest("Select an active course.");
+    if (tenant == null || tenant.institutionId() < 1L) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "An active institution context is required.");
+    }
+    Long assigned = jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_release release on release.program_id=p.id
+      join institution_course_assignment assignment
+        on assignment.course_release_id=release.id and assignment.institution_id=?
+           and assignment.status='ASSIGNED'
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """, Long.class, tenant.institutionId(), courseId);
+    if (assigned == null || assigned == 0L) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This course is not assigned to the active institution.");
+    }
   }
 
   private void requireContentView(AuthContext context) {
