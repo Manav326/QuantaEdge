@@ -13,6 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.time.OffsetDateTime;
 import java.nio.file.Files;
@@ -52,6 +53,12 @@ class LearningClassControllerTest {
   @BeforeEach
   void setUp() {
     controller = new LearningClassController(jdbc, authorization, staffAudit, mediaStorage);
+    lenient().when(jdbc.queryForObject(
+        contains("select exists(select 1 from institution_membership m"),
+        eq(Boolean.class), eq(7L), eq(1L))).thenReturn(true);
+    lenient().when(jdbc.queryForObject(
+        contains("from student_program_enrollment e"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
   }
 
   @Test
@@ -91,7 +98,7 @@ class LearningClassControllerTest {
     verify(jdbc).queryForList(itemSql.capture(),
         eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
     verify(jdbc).queryForObject(countSql.capture(),
-        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(0L), eq(0L));
+        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L));
     assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(itemSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
@@ -201,7 +208,7 @@ class LearningClassControllerTest {
     youtubeSession.put("join_window_minutes",15);
     when(jdbc.queryForList(contains("select cs.id,cs.private_join_url,cs.youtube_video_id"), any(Object[].class)))
         .thenReturn(List.of(youtubeSession));
-    Map<String,Object> result=controller.joinLiveClass(88L,student, TEST_TENANT);
+    Map<String,Object> result=controller.joinLiveClass(88L,71L,student, TEST_TENANT);
     assertEquals("YOUTUBE_LIVE",result.get("provider"));
     assertEquals("abcdefghijk",result.get("youtubeVideoId"));
     assertEquals(null,result.get("joinUrl"));
