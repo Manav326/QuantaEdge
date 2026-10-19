@@ -147,7 +147,6 @@ CREATE INDEX idx_qa_question_run ON question(qa_test_run_id) WHERE qa_test_run_i
 CREATE INDEX idx_qa_question_option_run ON question_option(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_institution_admin_run ON institution_admin_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_staff_account_run ON staff_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
-CREATE INDEX idx_qa_institution_admin_run ON institution_admin_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_tenant_run ON institution_tenant(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_user_run ON user_account(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
 CREATE INDEX idx_qa_student_run ON student(qa_test_run_id) WHERE qa_test_run_id IS NOT NULL;
