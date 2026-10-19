@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1286,
-    "successful_visual_analyses": 1269,
-    "missing_visual_analyses": 6202,
+    "raw_analysis_result_rows": 1289,
+    "successful_visual_analyses": 1272,
+    "missing_visual_analyses": 6199,
     "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6219,
+    "unresolved_count": 6216,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58802,9 +58802,19 @@
       "asset_path": "assets/6fddf5821c16567d237a4fbe61daff9d931e314dcbde246c136d47c3c21c9036.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "limitations": [
+          "The image is partially obscured and not fully visible.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58820,9 +58830,19 @@
       "asset_path": "assets/1c6ec891ca7155a1a30796a5f9319b3904f84869f851fb46a393d95e4800727d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a battery, focusing on its terminals and connections.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a battery, likely used to illustrate the terminals and connections in the context of the text.",
+        "limitations": [
+          "The image is blurry and lacks context for the full page.",
+          "The visible text is incomplete and does not provide a full understanding of the image's context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58838,9 +58858,18 @@
       "asset_path": "assets/dea337923ec713453a628699577e7c1e1195ba054338ff28baf8de1fa410bda4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a stack of batteries, possibly for educational purposes.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of connecting multiple batteries to provide energy for a longer time or more energy.",
+        "limitations": [
+          "The image is a close-up of batteries, so the context is limited to the specific topic of batteries and their use in circuits."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

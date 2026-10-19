@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d877adb5170f7d8a718980da406d746b2fe14a6c1ea2138c3bf5ff95838b5f8e",
+  "raw_analysis_sha256": "3a37f36a1a3b2a338408ec7cb2839f0d787ce01ea77c6d0cb038b024dc24c51a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:11:11Z",
+      "checkpointed_at": "2026-10-19T02:16:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:11:39Z",
+      "checkpointed_at": "2026-10-19T02:16:40Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -75754,6 +75754,130 @@
         "context_relation": "The image is related to the text discussing the use of multiple cells to provide energy for longer periods or more energy.",
         "limitations": [
           "The image is blurry and not fully visible, making it difficult to discern all details."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b5d7da1cc55e94b7e4d27698",
+      "asset_sha256": "6fddf5821c16567d237a4fbe61daff9d931e314dcbde246c136d47c3c21c9036",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/6fddf5821c16567d237a4fbe61daff9d931e314dcbde246c136d47c3c21c9036.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "limitations": [
+          "The image is partially obscured and not fully visible.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:17:49Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "limitations": [
+          "The image is partially obscured and not fully visible.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ee0ebb10a1f925d606a41fe8",
+      "asset_sha256": "1c6ec891ca7155a1a30796a5f9319b3904f84869f851fb46a393d95e4800727d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/1c6ec891ca7155a1a30796a5f9319b3904f84869f851fb46a393d95e4800727d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a battery, focusing on its terminals and connections.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a battery, likely used to illustrate the terminals and connections in the context of the text.",
+        "limitations": [
+          "The image is blurry and lacks context for the full page.",
+          "The visible text is incomplete and does not provide a full understanding of the image's context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:18:58Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a battery, focusing on its terminals and connections.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a battery, likely used to illustrate the terminals and connections in the context of the text.",
+        "limitations": [
+          "The image is blurry and lacks context for the full page.",
+          "The visible text is incomplete and does not provide a full understanding of the image's context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "15bef976815403bb6aa5824e",
+      "asset_sha256": "dea337923ec713453a628699577e7c1e1195ba054338ff28baf8de1fa410bda4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/dea337923ec713453a628699577e7c1e1195ba054338ff28baf8de1fa410bda4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a stack of batteries, possibly for educational purposes.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of connecting multiple batteries to provide energy for a longer time or more energy.",
+        "limitations": [
+          "The image is a close-up of batteries, so the context is limited to the specific topic of batteries and their use in circuits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:20:07Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a stack of batteries, possibly for educational purposes.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of connecting multiple batteries to provide energy for a longer time or more energy.",
+        "limitations": [
+          "The image is a close-up of batteries, so the context is limited to the specific topic of batteries and their use in circuits."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

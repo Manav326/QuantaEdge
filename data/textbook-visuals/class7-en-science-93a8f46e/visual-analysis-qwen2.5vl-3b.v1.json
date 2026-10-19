@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1269,
+    "assets_selected": 1272,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1267,
-    "assets_remaining": 6221,
-    "assets_completion_percent": 16.9,
+    "assets_analyzed": 1270,
+    "assets_remaining": 6218,
+    "assets_completion_percent": 17.0,
     "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1264,
+    "assets_skipped_from_checkpoint": 1267,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:11:11Z"
+      "checkpointed_at": "2026-10-19T02:16:12Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T02:11:39Z"
+      "checkpointed_at": "2026-10-19T02:16:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -48165,6 +48165,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T02:15:18Z"
+    },
+    {
+      "asset_id": "b5d7da1cc55e94b7e4d27698",
+      "asset_sha256": "6fddf5821c16567d237a4fbe61daff9d931e314dcbde246c136d47c3c21c9036",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/6fddf5821c16567d237a4fbe61daff9d931e314dcbde246c136d47c3c21c9036.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a book with a globe on top, partially obscured by a blurred object.",
+        "limitations": [
+          "The image is partially obscured and not fully visible.",
+          "The visible text is incomplete and not fully readable."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:17:49Z"
+    },
+    {
+      "asset_id": "ee0ebb10a1f925d606a41fe8",
+      "asset_sha256": "1c6ec891ca7155a1a30796a5f9319b3904f84869f851fb46a393d95e4800727d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/1c6ec891ca7155a1a30796a5f9319b3904f84869f851fb46a393d95e4800727d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a battery, focusing on its terminals and connections.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a battery, likely used to illustrate the terminals and connections in the context of the text.",
+        "limitations": [
+          "The image is blurry and lacks context for the full page.",
+          "The visible text is incomplete and does not provide a full understanding of the image's context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:18:58Z"
+    },
+    {
+      "asset_id": "15bef976815403bb6aa5824e",
+      "asset_sha256": "dea337923ec713453a628699577e7c1e1195ba054338ff28baf8de1fa410bda4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 46,
+      "asset_path": "assets/dea337923ec713453a628699577e7c1e1195ba054338ff28baf8de1fa410bda4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a83fba775d7a53e0a372ea9cea667c62c3609ddadd235a77a0a9bd04a31fad27",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a stack of batteries, possibly for educational purposes.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of connecting multiple batteries to provide energy for a longer time or more energy.",
+        "limitations": [
+          "The image is a close-up of batteries, so the context is limited to the specific topic of batteries and their use in circuits."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T02:20:07Z"
     }
   ]
 }
