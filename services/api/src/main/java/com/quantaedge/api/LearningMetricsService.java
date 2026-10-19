@@ -188,7 +188,7 @@ public class LearningMetricsService {
     return sessionStatsForUnscoped(studentId, institutionId);
   }
 
-  /** Course-scoped activity totals; legacy sessions without a lesson/course binding are excluded. */
+  /** Course-scoped activity totals; old generic sessions cannot be safely attributed to a course. */
   Map<String,Object> sessionStatsFor(long studentId, Long institutionId, Long courseId) {
     if (courseId == null || courseId < 1L) {
       return sessionStatsForUnscoped(studentId, institutionId);
@@ -200,9 +200,11 @@ public class LearningMetricsService {
            where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
              and ps.created_at>=now()-interval '30 days'
              and exists (
-               select 1 from jsonb_array_elements(ps.topic_selections) topic
-               join lesson l on l.id=CASE WHEN (topic->>'sourceLessonId') ~ '^[0-9]+$'
-                                          THEN (topic->>'sourceLessonId')::bigint ELSE NULL END
+               select 1
+               from jsonb_array_elements(coalesce(ps.topic_selections,'[]'::jsonb)) topic
+               join lesson l on l.id=case
+                 when (topic->>'sourceLessonId') ~ '^[0-9]+$' then (topic->>'sourceLessonId')::bigint
+                 else null end
                join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
                  and ch.content_status='PUBLISHED'
                join curriculum_subject s on s.id=ch.subject_id and s.active=true
@@ -210,8 +212,8 @@ public class LearningMetricsService {
                  and mapped.class_id=s.class_id
                join curriculum_program selected_course on selected_course.id=mapped.program_id
                  and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-               where (s.program_id=selected_course.id
-                 or (s.program_id is null and selected_course.class_id=s.class_id))
+               where s.program_id=selected_course.id
+                 or (s.program_id is null and selected_course.class_id=s.class_id)
              ))
           +(select count(*) from student_diagnostic_attempt da
             where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
@@ -245,14 +247,16 @@ public class LearningMetricsService {
           )
         ) as sessions_30d,
         (
-          (select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int)))),0)
+          (select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
            from student_practice_session ps
            where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
              and ps.completed_at is not null and ps.created_at>=now()-interval '30 days'
              and exists (
-               select 1 from jsonb_array_elements(ps.topic_selections) topic
-               join lesson l on l.id=CASE WHEN (topic->>'sourceLessonId') ~ '^[0-9]+$'
-                                          THEN (topic->>'sourceLessonId')::bigint ELSE NULL END
+               select 1
+               from jsonb_array_elements(coalesce(ps.topic_selections,'[]'::jsonb)) topic
+               join lesson l on l.id=case
+                 when (topic->>'sourceLessonId') ~ '^[0-9]+$' then (topic->>'sourceLessonId')::bigint
+                 else null end
                join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
                  and ch.content_status='PUBLISHED'
                join curriculum_subject s on s.id=ch.subject_id and s.active=true
@@ -260,10 +264,10 @@ public class LearningMetricsService {
                  and mapped.class_id=s.class_id
                join curriculum_program selected_course on selected_course.id=mapped.program_id
                  and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
-               where (s.program_id=selected_course.id
-                 or (s.program_id is null and selected_course.class_id=s.class_id))
+               where s.program_id=selected_course.id
+                 or (s.program_id is null and selected_course.class_id=s.class_id)
              ))
-          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at)/60)::int)))),0)
+          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
             from student_diagnostic_attempt da
             where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
               and da.submitted_at is not null and da.started_at>=now()-interval '30 days'
@@ -281,7 +285,7 @@ public class LearningMetricsService {
                   and (s.program_id=selected_course.id
                     or (s.program_id is null and selected_course.class_id=s.class_id))
               ))
-          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at)/60)::int)))),0)
+          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
             from student_assessment_attempt att
             join assessment a on a.id=att.assessment_id
             join curriculum_subject s on s.id=a.subject_id and s.active=true
@@ -304,6 +308,14 @@ public class LearningMetricsService {
     return jdbc.queryForMap(tenantSql(courseSql, institutionId), tenantArgs(institutionId, scopedArgs));
   }
 
+  Map<String,Object> sessionStatsFor(long studentId) {
+    return sessionStatsForUnscoped(studentId, null);
+  }
+
+  Map<String,Object> sessionStatsFor(long studentId, Long institutionId) {
+    return sessionStatsForUnscoped(studentId, institutionId);
+  }
+
   private Map<String,Object> sessionStatsForUnscoped(long studentId, Long institutionId) {
     String sql = """
       select
@@ -312,13 +324,13 @@ public class LearningMetricsService {
          +(select count(*) from student_diagnostic_attempt da where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED' and da.started_at>=now()-interval '30 days')
          +(select count(*) from student_assessment_attempt att where att.student_id=? __TENANT_ATT__ and att.status in ('AWAITING_REVIEW','GRADED','RELEASED') and att.started_at>=now()-interval '30 days')) as sessions_30d,
         ((select coalesce(sum(ls.minutes),0) from learning_session ls where ls.student_id=? __TENANT_LS__ and ls.started_at>=now()-interval '30 days')
-         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int)))),0)
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
            from student_practice_session ps where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED' and ps.completed_at is not null
              and ps.created_at>=now()-interval '30 days')
-         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at)/60)::int)))),0)
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
            from student_diagnostic_attempt da where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED' and da.submitted_at is not null
              and da.started_at>=now()-interval '30 days')
-         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at)/60)::int)))),0)
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
            from student_assessment_attempt att where att.student_id=? __TENANT_ATT__ and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
              and att.submitted_at is not null and att.started_at>=now()-interval '30 days')) as minutes_30d
       """;
