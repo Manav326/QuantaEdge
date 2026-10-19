@@ -508,8 +508,9 @@ public class SourceIngestionController {
     requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.*,a.pdf_bytes,a.page_count,a.sha256 from learning_book_intake i
-      join learning_pdf_asset a on a.id=i.pdf_asset_id where i.pdf_asset_id=?
-      """, assetId);
+      join learning_pdf_asset a on a.id=i.pdf_asset_id
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
     if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
     Map<String,Object> intake = intakeRows.getFirst();
     byte[] bytes = (byte[]) intake.get("pdf_bytes");
