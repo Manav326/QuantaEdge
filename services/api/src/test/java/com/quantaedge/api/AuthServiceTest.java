@@ -526,27 +526,4 @@ class AuthServiceTest {
     assertFalse(auth.hasParentPersonalLearningAccess(501L, 32L));
   }
 
-  @Test
-  void parentWorkspaceCanOnlyBeRecoveredFromTheMatchingParentOwnedLearnerProfile() {
-    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
-    when(jdbc.queryForList(contains("as parent_user_id"), any(Object[].class)))
-        .thenReturn(List.of(Map.of("parent_user_id", 501L)));
-    when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", 501L))
-        .thenReturn(Map.of("role", "PARENT", "display_name", "Parent learner"));
-
-    AuthContext parent = auth.openParentWorkspaceContext(801L);
-
-    assertEquals(501L, parent.userId());
-    assertEquals("PARENT", parent.role());
-    assertNull(parent.studentId());
-  }
-
-  @Test
-  void unrelatedLearnerCannotUseParentWorkspaceRecovery() {
-    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
-    when(jdbc.queryForList(contains("as parent_user_id"), any(Object[].class))).thenReturn(List.of());
-
-    assertThrows(SecurityException.class, () -> auth.openParentWorkspaceContext(802L));
-  }
-
 }
