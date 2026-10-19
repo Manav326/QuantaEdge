@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5223205595afa9798d17a2a762db7a8dfa8dba3da2021d452c15bef3438f3e40",
+  "raw_analysis_sha256": "819ab0adedc7ea301ee356584bb76d480adda5b5e13e887e5bb54840253672a2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:59:33Z",
+      "checkpointed_at": "2026-10-19T13:02:40Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:59:54Z",
+      "checkpointed_at": "2026-10-19T13:03:01Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -97186,6 +97186,164 @@
         "limitations": [
           "The image does not provide any numerical data or specific examples.",
           "The image does not show any physical objects or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ad1405d7a21894f57db651f4",
+      "asset_sha256": "8373b64804b3926b8295ab33a9f61170b2bc86fb156942980364b7db5be6bf9e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/8373b64804b3926b8295ab33a9f61170b2bc86fb156942980364b7db5be6bf9e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials in terms of their ability to conduct electricity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Electric current",
+          "Good conductors",
+          "Insulators",
+          "Electricity"
+        ],
+        "context_relation": "The page explains the difference between good conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The page does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:03:43Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials in terms of their ability to conduct electricity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Electric current",
+          "Good conductors",
+          "Insulators",
+          "Electricity"
+        ],
+        "context_relation": "The page explains the difference between good conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The page does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7c6faec61a819f931e82ec59",
+      "asset_sha256": "7e50dcd2810e6a8d9530847163d9b8600ee878df6850695d0277c0808c03c53c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/7e50dcd2810e6a8d9530847163d9b8600ee878df6850695d0277c0808c03c53c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "good conductors",
+          "insulators",
+          "electric current",
+          "conductors of electricity",
+          "poor conductors"
+        ],
+        "context_relation": "The image illustrates the difference between good conductors and insulators, explaining that electric current can pass easily through some materials but not through others.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:04:26Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "good conductors",
+          "insulators",
+          "electric current",
+          "conductors of electricity",
+          "poor conductors"
+        ],
+        "context_relation": "The image illustrates the difference between good conductors and insulators, explaining that electric current can pass easily through some materials but not through others.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2d5d2915a05f8f3f1d0d8532",
+      "asset_sha256": "145c2d0d050647aa1e3bef36cc5e016b815fa7ad2b318c82b588ec51067bfd2c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/145c2d0d050647aa1e3bef36cc5e016b815fa7ad2b318c82b588ec51067bfd2c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A curved line on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a concept related to electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the concept being illustrated."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:05:02Z",
+      "effective_analysis": {
+        "visual_summary": "A curved line on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a concept related to electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the concept being illustrated."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1666,
-    "successful_visual_analyses": 1644,
-    "missing_visual_analyses": 5822,
+    "raw_analysis_result_rows": 1669,
+    "successful_visual_analyses": 1647,
+    "missing_visual_analyses": 5819,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5844,
+    "unresolved_count": 5841,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -72183,9 +72183,27 @@
       "asset_path": "assets/8373b64804b3926b8295ab33a9f61170b2bc86fb156942980364b7db5be6bf9e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of materials in terms of their ability to conduct electricity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "Electric current",
+          "Good conductors",
+          "Insulators",
+          "Electricity"
+        ],
+        "context_relation": "The page explains the difference between good conductors and insulators based on their ability to allow electric current to flow.",
+        "limitations": [
+          "The page does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72201,9 +72219,28 @@
       "asset_path": "assets/7e50dcd2810e6a8d9530847163d9b8600ee878df6850695d0277c0808c03c53c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the difference between good conductors and insulators.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows for some materials only. This means that electric current can pass easily through some materials but not through others.",
+          "The materials through which electric current can flow easily are called good conductors, or conductors of electricity.",
+          "The materials through which current cannot pass through are called insulators, or poor conductors."
+        ],
+        "concepts": [
+          "good conductors",
+          "insulators",
+          "electric current",
+          "conductors of electricity",
+          "poor conductors"
+        ],
+        "context_relation": "The image illustrates the difference between good conductors and insulators, explaining that electric current can pass easily through some materials but not through others.",
+        "limitations": [
+          "The image does not provide specific examples of materials that are good conductors or insulators."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -72219,9 +72256,18 @@
       "asset_path": "assets/145c2d0d050647aa1e3bef36cc5e016b815fa7ad2b318c82b588ec51067bfd2c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A curved line on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a concept related to electricity and materials.",
+        "limitations": [
+          "The image does not provide specific details about the concept being illustrated."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
