@@ -228,7 +228,7 @@ assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('"/api/v1/learning/structured-lessons?courseId=" + courseId'),
   'Android course cards must route into the structured catalogue bound to that course ID.');
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
-  parentPage.includes('childCourses.length>1') && parentPage.includes('Choose an enrolled course'),
+  parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),
   'Parent reports must require explicit course selection for multi-course children.');
 
 const textbooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
