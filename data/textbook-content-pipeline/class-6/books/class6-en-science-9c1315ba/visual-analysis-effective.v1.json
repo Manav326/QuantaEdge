@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1faee608c51854a427b3e9bd1860abaffbeade6d9ecb0c6481e0ae4fa45fdbee",
+  "raw_analysis_sha256": "84e9da87f084f8e8d92f96f6b7e91d175975f627b39d1d9044378d2d2a64e552",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:42:05Z",
+      "checkpointed_at": "2026-10-19T05:45:38Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:42:46Z",
+      "checkpointed_at": "2026-10-19T05:46:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:43:38Z",
+      "checkpointed_at": "2026-10-19T05:47:08Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:44:17Z",
+      "checkpointed_at": "2026-10-19T05:47:46Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -42603,6 +42603,56 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d4ce9f28c34d93c85e416aff",
+      "asset_sha256": "043fb11f58446d7737d06a387adb209774974d3fcbe4934f4ff34e380a5b5294",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/043fb11f58446d7737d06a387adb209774974d3fcbe4934f4ff34e380a5b5294.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "03f400d89d89592a4468f46a9846ab19d9f6880c015e4c333c4a8b36b43a028b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pile of white mushrooms.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "mushrooms",
+          "protein",
+          "diet",
+          "plant-based foods"
+        ],
+        "context_relation": "The image is related to the discussion about protein sources in the diet, specifically mentioning mushrooms as a good source.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of the mushrooms."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:48:22Z",
+      "effective_analysis": {
+        "visual_summary": "A pile of white mushrooms.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "mushrooms",
+          "protein",
+          "diet",
+          "plant-based foods"
+        ],
+        "context_relation": "The image is related to the discussion about protein sources in the diet, specifically mentioning mushrooms as a good source.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of the mushrooms."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

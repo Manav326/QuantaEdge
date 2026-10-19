@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 916,
-    "successful_visual_analyses": 903,
-    "missing_visual_analyses": 1162,
+    "raw_analysis_result_rows": 917,
+    "successful_visual_analyses": 904,
+    "missing_visual_analyses": 1161,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1175,
+    "unresolved_count": 1174,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -35566,9 +35566,23 @@
       "asset_path": "assets/043fb11f58446d7737d06a387adb209774974d3fcbe4934f4ff34e380a5b5294.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pile of white mushrooms.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "mushrooms",
+          "protein",
+          "diet",
+          "plant-based foods"
+        ],
+        "context_relation": "The image is related to the discussion about protein sources in the diet, specifically mentioning mushrooms as a good source.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of the mushrooms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
