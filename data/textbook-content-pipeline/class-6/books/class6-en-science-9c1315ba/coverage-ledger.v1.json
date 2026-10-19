@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 911,
-    "successful_visual_analyses": 898,
-    "missing_visual_analyses": 1167,
+    "raw_analysis_result_rows": 979,
+    "successful_visual_analyses": 966,
+    "missing_visual_analyses": 1099,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1180,
+    "unresolved_count": 1112,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8771,45 +8771,9 @@
       "asset_path": "page-0006.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "reflect on learning. These activities are inclusive in nature. Some\nactivities require both the teacher and learners to prepare in\nadvance.\n\nChapter 1, titled ‘The Wonderful World of Science’, provides a\nholistic view of the new topic of Science introduced in the Middle\nStage. It showcases, through ",
-          "In order to sustain the interest of the readers, some of the\nchallenging ideas, additional information, poems, stories, strange\nfacts and other interesting materials are also presented as add on\nnon-evaluative content in the boxes labelled ‘Do you know?’, ‘More\nto know!’, ‘Think it over!’ and ‘More ",
-          "Reprint 2026-27"
-        ],
-        "concepts": [
-          "learning",
-          "activities",
-          "inclusive",
-          "preparation",
-          "essence of Science",
-          "thinking",
-          "observing",
-          "doing",
-          "asking questions",
-          "world of science",
-          "curriculum",
-          "non-evaluative",
-          "challenging ideas",
-          "additional information",
-          "poems",
-          "stories",
-          "strange facts",
-          "interesting materials",
-          "non-evaluative content",
-          "boxes"
-        ],
-        "context_relation": "The page discusses the importance of learning, activities, and preparation for learning, as well as the content and structure of a textbook chapter on science.",
-        "limitations": [
-          "The page does not provide specific details about the textbook or its content.",
-          "The page does not include any visual elements or illustrations.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -27197,46 +27161,9 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "Acknowledgements section of a textbook.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
-          "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
-          "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
-          "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhingra, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrativ",
-          "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
-        ],
-        "concepts": [
-          "Acknowledgements",
-          "Professor",
-          "National Institute of Advanced Studies",
-          "Hutti Gold Mines Company Limited",
-          "Indian Astronomical Observatory",
-          "HBCSE",
-          "TIFR",
-          "NCERT",
-          "DES",
-          "Coimbatore",
-          "Amrita Vishwa Vidyapeetham",
-          "DTP Cell",
-          "Publication Division",
-          "Freelance Editor",
-          "Proofreader",
-          "Contractual",
-          "In-charge",
-          "Illustrations",
-          "Planetarium",
-          "Beyond Earth"
-        ],
-        "context_relation": "acknowledgements",
-        "limitations": [
-          "No specific limitations provided.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30682,9 +30609,55 @@
       "asset_path": "page-0033.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing different criteria for grouping plants and animals.",
+        "visual_type": "table",
+        "visible_text": [
+          "Presence/",
+          "absence of",
+          "flowers",
+          "Fig. 2.2: Some possible criteria of groupings of plants and animals",
+          "You may have grouped animals based on varied features, such as what they eat, where they live, what colour they are and how they move.",
+          "What is the importance of grouping? Grouping makes it easier to understand and study plants and animals on the basis of their similarities and differences.",
+          "You will learn more about the importance of grouping in our daily lives in the chapter, 'Materials Around Us'.",
+          "2.2.1 How to group plants?",
+          "You must have noticed that plants show variation in the features related to stems, leaves, flowers, and more. The stems of different plants vary in thickness, height, and hardness, while the leaves vary in shape, colour, size and arrangement. You might have tried grouping the plants in Activity 2.3 ",
+          "You might have also learnt in earlier classes that plants can be grouped into herbs, shrubs, and trees based on their height and types of stem. Let us study the features of plants in more detail and group them on that basis.",
+          "Activity 2.4: Let us group",
+          "Let us go on a nature walk again for some more interesting observations.",
+          "Look closely at the height of different plants. Are these plants shorter than you, as tall as you, or taller than you?",
+          "Is the stem brown or green? Touch and feel the stems and try to bend them gently. Can you bend the stem easily, or is it stiff? Take care that the stems do not break.",
+          "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
+        ],
+        "concepts": [
+          "grouping",
+          "plants",
+          "animals",
+          "features",
+          "stems",
+          "leaves",
+          "flowers",
+          "height",
+          "hardness",
+          "shape",
+          "colour",
+          "size",
+          "arrangement",
+          "height",
+          "types of stem",
+          "herbs",
+          "shrubs",
+          "trees",
+          "nature walk",
+          "observations"
+        ],
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "limitations": [
+          "The image does not provide specific details about the criteria for grouping plants and animals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31553,9 +31526,36 @@
       "asset_path": "assets/5e8c141a1427a81a4c3be46d6322074364a9279fe484f63d3880b4286b877cc2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of various animals and their movement patterns.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ant",
+          "Butterfly",
+          "Cockroach",
+          "Cow",
+          "Frog",
+          "Fish",
+          "Grasshopper",
+          "Hare",
+          "Insect",
+          "Moth",
+          "Snake",
+          "Turtle",
+          "Worm",
+          "Yak"
+        ],
+        "concepts": [
+          "Animal Movement",
+          "Variety of Animals"
+        ],
+        "context_relation": "Observing and recording animal movement patterns",
+        "limitations": [
+          "No specific question or task is provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32444,9 +32444,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32643,9 +32650,11 @@
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
         "visible_text": [
-          "We have learnt that the plants and animals living in a\nparticular region have special features that make them fit\nto survive there. The special features that enable plants\nand animals to survive in a particular region are called\nadaptations.\n\nThe shape of the deodar tree and the height of the\nrhodod",
-          "Salim Ali (1896–1987) travelled across India\n    to observe diversity in birds. He prepared a list\n    of birds and documented their travel routes\n    and habitats. He recorded the regions with\n    high diversity of birds and took measures to\n    conserve these regions. Keoladeo National Park\n    in",
-          "What are the different ways in which you can group\n    plants and animals based on their habitats? One way is to\n    group them into those 'that live on land' and those 'that live\n    in water'.\n    The plants and animals that live on land are said to live in\n    terrestrial habitats. Some examples "
+          "We have learnt that the plants and animals living in a particular region have special features that make them fit to survive there. The special features that enable plants and animals to survive in a particular region are called adaptations.",
+          "The shape of the deodar tree and the height of the rhododendron are adaptations that enable them to survive in the mountainous regions.",
+          "The place where plants and animals live is called their habitat. For example, the habitat of sea turtles is the sea or the ocean. The habitat of a camel is the hot or the cold desert, and the habitat of a rhododendron is the mountains. The habitat of plants and animals provides them food, water, air",
+          "Salim Ali (1896–1987) travelled across India to observe diversity in birds. He prepared a list of birds and documented their travel routes and habitats. He recorded the regions with high diversity of birds and took measures to conserve these regions. Keoladeo National Park in Bharatpur, Rajasthan an",
+          "What are the different ways in which you can group plants and animals based on their habitats? One way is to group them into those 'that live on land' and those 'that live in water'. The plants and animals that live on land are said to live in terrestrial habitats. Some examples of terrestrial habit"
         ],
         "concepts": [
           "adaptations",
@@ -32656,9 +32665,9 @@
           "Ranganathittu Bird Sanctuary",
           "Padma Vibhushan"
         ],
-        "context_relation": "The page discusses the adaptations of plants and animals in different regions and their habitats, including the work of Salim Ali and the examples of terrestrial habitats.",
+        "context_relation": "The text discusses the adaptations of plants and animals in different regions and their habitats, providing examples and information about a specific scientist, Salim Ali.",
         "limitations": [
-          "The page does not provide specific examples of terrestrial habitats beyond forests, deserts, grasslands, and mountains.",
+          "The text does not provide specific details about the adaptations of the deodar tree or the rhododendron.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -32715,9 +32724,25 @@
       "asset_path": "assets/ef5ffbf0e1d7b1fcaf6a5aebc4463d4683009d4f0cf8828511e435a627fb5994.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A tiger lying on the ground in a grassy area.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "tiger",
+          "grass",
+          "ground",
+          "habitat"
+        ],
+        "context_relation": "The image shows a tiger in its natural habitat, which is a grassy area.",
+        "limitations": [
+          "The image does not provide specific information about the habitat of the tiger.",
+          "The image does not show any other animals or plants.",
+          "The image does not show any signs of habitat damage or lack of food for the tiger."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34526,9 +34551,24 @@
       "asset_path": "assets/3bc09b73571298b0d6d282c3ef299b3d7b5f91aa43ba7f63be622d93a469edf0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding a flatbread over a fire in a traditional cooking setup.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "cooking practices",
+          "traditional cooking",
+          "fire",
+          "flatbread",
+          "fire setup"
+        ],
+        "context_relation": "The image shows a traditional cooking method, likely from a rural or historical context, which may be relevant to the discussion of how cooking practices have changed over time.",
+        "limitations": [
+          "The image does not provide specific details about the region or time period."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -34894,9 +34934,18 @@
       "asset_path": "assets/91ce010df3d05d0ad72d7152c4c41aa646e651d55b873efb0093bf33fad76169.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person drinking from a bottle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image illustrates the act of drinking from a bottle, which is relevant to the discussion about hydration and energy during physical activities.",
+        "limitations": [
+          "The image does not provide specific details about the type of drink or the context of the activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35384,9 +35433,61 @@
       "asset_path": "page-0059.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing various sources of fats.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Butter",
+          "Pistachios",
+          "Sunflower",
+          "seeds",
+          "Curd",
+          "Almonds",
+          "Walnut",
+          "Cashew nut",
+          "Groundnut",
+          "Sesame seeds",
+          "Soya bean",
+          "Fig. 3.3: Some sources of fats",
+          "Carbohydrates and fats provide us energy for performing",
+          "various activities. Therefore, they are called energy-giving",
+          "foods. Identify more food items that are rich sources of",
+          "carbohydrates and fats.",
+          "Polar bears accumulate a lot of fat under",
+          "their skin. This fat serves as an energy",
+          "source. It supports them during their months-long winter sleep (hibernation), enabling them",
+          "to survive without eating.",
+          "Proteins are also an important part of our food.",
+          "Milk products and pulses are good sources of protein.",
+          "Sportspersons need proteins in larger quantities to build their",
+          "muscles. People get proteins from plants as well as animals.",
+          "Some excellent plant sources of protein are pulses, beans,",
+          "peas and nuts (Fig. 3.4a). Animal sources of protein are milk,",
+          "paneer, egg, fish and meat (Fig. 3.4b). Protein-rich foods help",
+          "in growth and repair of our body. These are, therefore, called",
+          "body-building foods.",
+          "(a) Plant sources"
+        ],
+        "concepts": [
+          "sources of fats",
+          "energy-giving foods",
+          "carbohydrates",
+          "fats",
+          "polar bears",
+          "energy source",
+          "hibernation",
+          "protein sources",
+          "plant proteins",
+          "animal proteins",
+          "body-building foods"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the sources of fats, carbohydrates, and proteins in the diet.",
+        "limitations": [
+          "The image does not provide specific nutritional information or details about the quantities of each food item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35402,9 +35503,16 @@
       "asset_path": "assets/90bad22c081594e582258061d533fd9e574c6c201504c1334bf3d216b1a9e26d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A large, solid yellow rectangle with a torn edge effect.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35420,9 +35528,18 @@
       "asset_path": "assets/0a96c5f8711fd95067f118fc9b31c516cfa3cb793cb71a8c6399cde9cc0d4fba.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rectangular, textured yellow background with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for text.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the content of the textbook page. It is a simple, abstract illustration used as a visual separator or background for the text on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35438,9 +35555,26 @@
       "asset_path": "assets/0073935a0a8f047da2b3dbc3aab9cab6cf7644e61974978c8c3d22f69e8de4d1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a pink shirt and a blue hair tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "protein",
+          "diet",
+          "growth",
+          "development",
+          "protein sources",
+          "plant-based foods",
+          "mushrooms"
+        ],
+        "context_relation": "The image is related to the topic of protein sources in the diet, specifically mentioning mushrooms as a good source of protein.",
+        "limitations": [
+          "The image does not provide specific details about the diet or protein sources."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35456,9 +35590,16 @@
       "asset_path": "assets/20e139feacad0720ed2420feef19dbd7a1a381a33f5c1cb2579877e9164df65b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long, horizontal yellow brushstroke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35474,9 +35615,23 @@
       "asset_path": "assets/043fb11f58446d7737d06a387adb209774974d3fcbe4934f4ff34e380a5b5294.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pile of white mushrooms.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "mushrooms",
+          "protein",
+          "diet",
+          "plant-based foods"
+        ],
+        "context_relation": "The image is related to the discussion about protein sources in the diet, specifically mentioning mushrooms as a good source.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of the mushrooms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35492,9 +35647,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35510,9 +35674,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35528,9 +35701,62 @@
       "asset_path": "page-0060.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of protein in children's diets and the benefits of mushrooms as a protein source.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The right amount of protein must be included in the diet of",
+          "growing children for their proper growth and development.",
+          "Which of these food components are part of your daily diet?",
+          "Have you ever seen mushrooms? They grow",
+          "mostly in dark and moist places. Edible",
+          "mushrooms are good sources of protein.",
+          "Why do you think we are advised to include servings of",
+          "fruits, vegetables and other plant-based foods in our daily",
+          "diet? Let us understand the importance of some other food",
+          "components by reading the following two cases—",
+          "Case 1",
+          "In earlier times, during long voyages, sailors often suffered",
+          "from bleeding and swollen gums. During a voyage in 1746,",
+          "Scottish physician James Lind observed that sailors who",
+          "consumed lemons and oranges recovered from these",
+          "symptoms. Bleeding and swollen gums are symptoms of a",
+          "disease called scurvy.",
+          "What do you interpret by reading Case 1? What cures",
+          "scurvy? Lemons and oranges help in curing scurvy. Scurvy",
+          "is caused due to deficiency of Vitamin C. Vitamin C present",
+          "in citrus fruits like lemons and oranges helps in curing this",
+          "disease.",
+          "Case 2",
+          "In the 1960s, Indian scientists found that among the",
+          "human population in the Himalayan region and",
+          "the Northern plains of India, symptoms of swelling",
+          "at the front of the neck were prevalent. As per",
+          "norms of the Government of India, an effort was",
+          "made to supplement common salt with iodine for",
+          "preparing iodised salt. Consumption of iodised"
+        ],
+        "concepts": [
+          "protein",
+          "diet",
+          "mushrooms",
+          "fruits",
+          "vegetables",
+          "plant-based foods",
+          "scurvy",
+          "vitamin C",
+          "iodine",
+          "goitre"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific questions or answers.",
+          "The text is a part of a larger educational content, possibly a textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35546,9 +35772,31 @@
       "asset_path": "assets/e46f1e2cc88abdb3a9cf3bb493371bc6dc6ebe17378e7fd0a92ade997841d8d4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing iodised salt and salt farming by the Agariyas community in Gujarat.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "What do you infer from Case 2?",
+          "You may have learnt about iodised salt through newspapers, advertisements or by reading about it on a salt packet. What does it mean? Iodised salt is simply common salt mixed with required quantities of salts of iodine.",
+          "Salt farming is a traditional practice of a tribal community named Agariyas. They practice salt farming in the Little Rann of Kutch and other parts of Gujarat. For eight months, they live in the extreme heat of the desert and work very hard.",
+          "Salt farming is a traditional practice of a tribal community named Agariyas. They practice salt farming in the Little Rann of Kutch and other parts of Gujarat. For eight months, they live in the extreme heat of the desert and work very hard."
+        ],
+        "concepts": [
+          "iodised salt",
+          "salt farming",
+          "Agariyas community",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "extreme heat",
+          "traditional practice"
+        ],
+        "context_relation": "The text discusses the traditional practice of salt farming by the Agariyas community in Gujarat, including the use of iodised salt.",
+        "limitations": [
+          "The text does not provide specific details about the iodised salt or the salt farming process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35564,9 +35812,16 @@
       "asset_path": "assets/6664baff0e5e307e8e0533b69b0d55d5ef821485348ccea6422775840bc86d70.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long, horizontal mustard yellow rectangular shape with a textured border.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a mustard yellow rectangular shape with a textured border.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35582,9 +35837,27 @@
       "asset_path": "assets/b883475fcb17bfea3997820a0c84539337337808a64eceed9d6800b7cbc39589.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person standing on a salt pan, using a long tool to spread salt.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "salt farming",
+          "Agariyas",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "traditional practice",
+          "extreme heat",
+          "salt pan",
+          "tool for spreading salt"
+        ],
+        "context_relation": "The image illustrates the traditional practice of salt farming by the Agariyas community in Gujarat, emphasizing the harsh conditions and the tools used in this practice.",
+        "limitations": [
+          "The image does not provide specific details about the iodine content in the salt."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35600,9 +35873,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35618,9 +35900,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35636,9 +35927,31 @@
       "asset_path": "page-0061.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing iodised salt and salt farming in Gujarat, India.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "What do you infer from Case 2?",
+          "You may have learnt about iodised salt through\nnewspapers, advertisements or by reading about it on a\nsalt packet. What does it mean? Iodised salt is simply\ncommon salt mixed with required quantities of salts\nof iodine.",
+          "Salt farming is a traditional practice of a tribal\ncommunity named Agariyas. They practice salt\nfarming in the Little Rann of Kutch and other\nparts of Gujarat. For eight months, they live in\nthe extreme heat of the desert and work very\nhard to get salt from seawater."
+        ],
+        "concepts": [
+          "iodised salt",
+          "salt farming",
+          "Agariyas",
+          "Little Rann of Kutch",
+          "Gujarat",
+          "extreme heat",
+          "seawater"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The page does not provide specific details about the iodised salt or its effects.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35654,9 +35967,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35672,9 +35995,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35690,9 +36020,56 @@
       "asset_path": "page-0062.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "visual_type": "table",
+        "visible_text": [
+          "Food",
+          "component",
+          "(Vitamin/",
+          "Mineral)",
+          "Functions",
+          "Some sources",
+          "Deficiency",
+          "disease/",
+          "disorder",
+          "Symptoms",
+          "Vitamin A",
+          "Keeps eyes",
+          "and skin",
+          "healthy",
+          "Papaya, carrot,",
+          "mango, milk",
+          "Loss of",
+          "vision",
+          "Poor vision,",
+          "loss of vision",
+          "in darkness",
+          "(night",
+          "blindness),",
+          "sometimes",
+          "complete loss",
+          "of vision",
+          "Vitamin B1",
+          "Keeps heart",
+          "healthy and",
+          "supports"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "functions",
+          "sources",
+          "deficiency diseases",
+          "symptoms"
+        ],
+        "context_relation": "The table provides a comprehensive overview of various vitamins and minerals, their functions, sources, and related deficiency symptoms.",
+        "limitations": [
+          "The table does not include specific quantities or ratios of vitamins and minerals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35708,9 +36085,26 @@
       "asset_path": "assets/a594be5978f71356e72f36f88ab842e9f26c6d12ed37e68b70a80103e5476d63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a bottle of milk, a mango, and several carrots.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Mango",
+          "Carrot"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "food components"
+        ],
+        "context_relation": "The image illustrates the importance of consuming milk, fruits, and vegetables for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35726,9 +36120,32 @@
       "asset_path": "assets/38e5d6a1b7c901ee4c421e7a774cc808eb4ba4c9599a0724711da40d11bb5b46.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of various food items including milk, rice, wheat, flax seeds, paneer, and other vegetables.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "disease prevention"
+        ],
+        "context_relation": "exploring food sources for vitamins and minerals",
+        "limitations": [
+          "no specific quantities or relationships"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35744,9 +36161,25 @@
       "asset_path": "assets/72d250286e96c7a5c7dcfbded709019d7edeadc5bc326d4eceb21dc1653ea896.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A variety of fruits and vegetables, including tomatoes, oranges, mangoes, and bell peppers, arranged together.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "fruits",
+          "vegetables",
+          "tomatoes",
+          "oranges",
+          "mangoes",
+          "bell peppers"
+        ],
+        "context_relation": "The image represents a variety of fruits and vegetables, which are important for a balanced diet.",
+        "limitations": [
+          "The image does not provide specific details about the nutritional content of each item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35762,9 +36195,33 @@
       "asset_path": "assets/8fabcb2021a3091158485af2212518efefc8a4c74a341a221b76c9a2e6988fa6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image shows a bottle of milk, a pot of rice, two fish, two eggs, and some mushrooms.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Milk",
+          "Rice",
+          "Papaya",
+          "Wheat",
+          "Flax seeds",
+          "Mango",
+          "Paneer",
+          "Carrot",
+          "Pumpkin seeds"
+        ],
+        "concepts": [
+          "food components",
+          "vitamins",
+          "minerals",
+          "diseases"
+        ],
+        "context_relation": "The image illustrates the nutritional value of different food items.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of each item."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35780,9 +36237,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of vitamins and minerals in protecting the body from diseases.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "From Fig. 3.5, you have learnt that vitamins (A, B1, C and D) and minerals (calcium, iodine, and iron) are two groups of food components that protect our body from various diseases.",
+          "But, how can we overcome vitamin and mineral deficiency diseases or disorders?"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "protecting the body",
+          "diseases",
+          "overcoming deficiency diseases"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any diagrams, charts, or tables.",
+          "The image does not show any illustrations or cartoons.",
+          "The image does not show any equations or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35798,9 +36275,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35816,9 +36300,36 @@
       "asset_path": "page-0063.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustrations of various food sources for vitamins and minerals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "From Fig. 3.5, you have learnt that vitamins (A, B1, C and D) and minerals (calcium, iodine, and iron) are two groups of food components that protect our body from various diseases. But, how can we overcome vitamin and mineral deficiency diseases or disorders?",
+          "(a) Some sources of Vitamin A",
+          "(b) Some sources of Vitamin B1",
+          "(c) Some sources of Vitamin C",
+          "(d) Some sources of different vitamins",
+          "Food components that provide energy, support growth, help repair and protect our body from diseases, and maintain various bodily functions are called nutrients. The major nutrients in our food include carbohydrates, proteins, fats, vitamins and minerals.",
+          "Vitamins and minerals are also called protective nutrients. These nutrients protect our body from diseases and keep us healthy. Your parents may have advised you to have",
+          "Fig. 3.6: Some sources of different vitamins"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "food components",
+          "protective nutrients",
+          "vitamin deficiency diseases",
+          "mineral deficiency diseases"
+        ],
+        "context_relation": "illustrative",
+        "limitations": [
+          "The image does not provide specific information about the sources of vitamins and minerals.",
+          "The image does not show the exact quantities or amounts of vitamins and minerals in the foods.",
+          "The image does not provide information on how to overcome vitamin and mineral deficiency diseases."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35834,9 +36345,18 @@
       "asset_path": "assets/ab115c313773e35abfa4c78962ba5bd5c0efba7bb0e2a73e97b4c3b815875360.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a child with a bright, glowing sun in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used to illustrate the concept of sunlight and its benefits, possibly in relation to vitamin D production.",
+        "limitations": [
+          "The image does not provide specific details about the child or the context in which it is used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35852,9 +36372,18 @@
       "asset_path": "assets/ba488e70a781987aac36276d8bfa5507fc12ecf5b8d1d69a974a7b5d18589d57.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt and blue pants, with one hand on their chin, appearing to be in thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person thinking, possibly related to the educational content about vitamins and minerals in food.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the differences between raw and cooked vegetables."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35870,9 +36399,19 @@
       "asset_path": "assets/64a6214ec1d9ba00ecbfe2bc02a29972231f2c03b9d9f57e015c01156ee803d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt, with one hand open and the other hand slightly raised.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of vitamins and minerals in food, specifically discussing the differences between raw and cooked vegetables.",
+        "limitations": [
+          "The image does not provide specific details about the differences between raw and cooked vegetables.",
+          "The image does not show any specific examples or data points related to the topic."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35888,9 +36427,20 @@
       "asset_path": "assets/34a8456bcadeacf4eb0d5fd23073100f27e7aae8b1ec30705c349f92277005e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a white shirt with their arms outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of vitamins and minerals in food.",
+        "limitations": [
+          "The image does not provide specific details about the food items or their nutritional benefits.",
+          "The image does not show any differences between raw and cooked vegetables.",
+          "The image does not include any specific examples of vitamins and minerals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35906,9 +36456,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35924,9 +36483,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35942,9 +36510,58 @@
       "asset_path": "page-0064.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the benefits of vegetables and fruits.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "milk, green vegetables, fruits and wholegrains regularly.",
+          "These food items are some sources of vitamins (Fig. 3.6) and",
+          "minerals. Although vitamins and minerals are required in",
+          "small amounts, they are essential to keep our body healthy.",
+          "What differences do you observe in raw and cooked",
+          "vegetables? Have you ever noticed that vegetables",
+          "sometimes lose their bright colour, or become softer and",
+          "less crisp when cooked? Some nutrients like vitamin C and",
+          "others are lost during cooking due to high heat. Would it",
+          "not be wise to include fruits and uncooked vegetables into",
+          "our diet? Washing cut or peeled vegetables and fruits may",
+          "also result in the loss of some vitamins. However, it is highly",
+          "recommended that all fruits and vegetables be thoroughly",
+          "washed before consumption.",
+          "Do we obtain all",
+          "nutrients from",
+          "plants and animals?",
+          "No, Medu. Nutrients like",
+          "salt can be obtained from",
+          "seawater or from rocks.",
+          "Also, Vitamin D can be",
+          "naturally produced by our",
+          "body upon exposure to",
+          "sunlight.",
+          "Fruits and vegetables are rich in dietary fibres. Let us see",
+          "how dietary fibres are beneficial for us.",
+          "In addition to the essential nutrients, our body needs dietary",
+          "fibres and water. Dietary fibres, also known as roughage, do",
+          "not provide any nutrients to our body. However, they are an",
+          "essential component of our food. They help our body get rid of"
+        ],
+        "concepts": [
+          "vitamins",
+          "minerals",
+          "vegetables",
+          "fruits",
+          "dietary fibres",
+          "dietary fibres",
+          "roughage",
+          "unsuitable plant products"
+        ],
+        "context_relation": "The image is a visual representation of the text.",
+        "limitations": [
+          "The image does not provide specific details about the vitamins and minerals mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35960,9 +36577,18 @@
       "asset_path": "assets/b83644be40ff53e3c028bebcf7498c1e264ffdf6e210fa9536c550059d210fb0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a white shirt and blue pants, with arms crossed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35978,9 +36604,19 @@
       "asset_path": "assets/47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A wooden plank with a smooth surface and visible grain patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a wooden plank, likely used as a background or part of a design.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single object and does not depict any specific scene or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -35996,9 +36632,18 @@
       "asset_path": "assets/b9357f07d1f68e45ca83abbd95e36ed058758e93ce024b1b9ac2144f51882515.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a man in a suit and tie.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a portrait of a man in formal attire.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the visual content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36014,9 +36659,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36032,9 +36686,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36050,7 +36713,7 @@
       "asset_path": "page-0065.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -36068,9 +36731,43 @@
       "asset_path": "assets/f95473dd7fbe1fbf124df050639e80e6235c317143a1df87d62f8c5744ba54f4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two individuals in lab coats are conducting a test on food items, with iodine solution and a knife present on the table.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Iodine",
+          "3.3 How to Test Different Components",
+          "of Food?",
+          "Let us find out which nutrients are present in various",
+          "food items.",
+          "Some nutrients like starch (a type of carbohydrate), fat",
+          "and protein can be detected using fairly simple tests, while",
+          "others can be detected only in a well-equipped laboratory.",
+          "Let us explore how we can detect the presence of starch",
+          "fat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5:"
+        ],
+        "concepts": [
+          "starch",
+          "carbohydrate",
+          "fat",
+          "protein",
+          "simple tests",
+          "well-equipped laboratory",
+          "nutrients",
+          "carbohydrates",
+          "fat",
+          "protein"
+        ],
+        "context_relation": "The image is a visual representation of an activity related to the textbook content about testing different components of food.",
+        "limitations": [
+          "The image does not show the actual test being conducted, only the setup.",
+          "The image does not show the results of the test."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36086,9 +36783,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36104,9 +36810,38 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about testing different components of food, specifically focusing on starch, fat, and protein.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "3.3 How to Test Different Components",
+          "of Food?",
+          "Let us find out which nutrients are present in various",
+          "food items.",
+          "Some nutrients like starch (a type of carbohydrate), fat",
+          "and protein can be detected using fairly simple tests, while",
+          "others can be detected only in a well-equipped laboratory.",
+          "Let us explore how we can detect the presence of starch,",
+          "fat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5:"
+        ],
+        "concepts": [
+          "testing food components",
+          "starch",
+          "fat",
+          "protein",
+          "simple tests",
+          "well-equipped laboratory",
+          "detecting nutrients"
+        ],
+        "context_relation": "Introduction to testing food components",
+        "limitations": [
+          "No specific image or diagram is provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36122,9 +36857,39 @@
       "asset_path": "page-0066.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for testing different components of food, including starch, fat, and protein, with a focus on testing starch in various food items.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3.3 How to Test Different Components\nof Food?",
+          "Let us find out which nutrients are present in various\nfood items.",
+          "Some nutrients like starch (a type of carbohydrate), fat\nand protein can be detected using fairly simple tests, while\nothers can be detected only in a well-equipped laboratory.\nLet us explore how we can detect the presence of starch,\nfat and protein in some food items.",
+          "3.3.1 Test for starch",
+          "Activity 3.5: Let us investigate",
+          "Take a small quantity of the food items such as a slice of\npotato, cucumber, bread, some boiled rice, boiled gram,\ncrushed peanuts, oil, butter and crushed coconut. You\ncan take other food items too for testing.",
+          "Fig. 3.7: Testing for the presence of starch in various food items",
+          "Place a small piece of each item on a separate dish.",
+          "With the help of a dropper, put 2–3 drops of diluted\niodine solution on each food item (Fig. 3.7).",
+          "Observe if there are any changes in the colour of the\nfood items. Have they turned blue-black? Record your\nobservations in Table 3.3.",
+          "A blue-black colour indicates the presence of starch."
+        ],
+        "concepts": [
+          "starch",
+          "carbohydrate",
+          "fat",
+          "protein",
+          "iodine",
+          "iodine solution",
+          "blue-black",
+          "Table 3.3"
+        ],
+        "context_relation": "instruction",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36140,7 +36905,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -36158,7 +36923,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -36176,9 +36941,55 @@
       "asset_path": "page-0067.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for testing fats in food items using paper and starch.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "3.3.2 Test for fats",
+          "Activity 3.6: Let us investigate",
+          "   Take a small part of the food items that you tested for",
+          "the presence of starch in Activity 3.5.",
+          "   Place each food item on a separate piece of paper.",
+          "  Wrap the paper around the food and press it. Be careful",
+          "not to tear the paper.",
+          "    If a food item contains a little water, allow the paper",
+          "to dry.",
+          "Does the paper develop an oily patch? What do you think",
+          "is the reason for this patch? If oil or butter is present in the",
+          "food item, it leaves an oily patch on the paper. Now, hold",
+          "the paper against light. Can you see the light faintly shining",
+          "through this patch? An oily patch on the paper shows that",
+          "the food item contains fat. Which of these items contain fats?",
+          "Record your observations in Table 3.3.",
+          "3.3.3 Test for proteins",
+          "Activity 3.7: Let us investigate",
+          "This activity may be demonstrated by the teacher.",
+          "   Take the food items tested in previous activities.",
+          "   Make a paste or powder of the food item using pestle",
+          "and mortar (Fig. 3.8).",
+          "   Put about half teaspoon of each food item in a separate",
+          "clean test tube.",
+          "Precautions",
+          "   These chemicals are harmful and need to be handled with",
+          "care. Do not touch any of these chemicals unless asked",
+          "to do so.",
+          "   If any chemical gets spilled on your body, immediately wash",
+          "the affected area with water."
+        ],
+        "concepts": [
+          "testing fats in food items",
+          "paper and starch",
+          "oil or butter",
+          "precautions for handling chemicals"
+        ],
+        "context_relation": "instructional",
+        "limitations": [
+          "no specific limitations provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36194,9 +37005,29 @@
       "asset_path": "assets/99e5d0a782beb38f06fb9bc0ca278412cb5987ff3275da3143425d7f981ec8b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A teacher and two students in a laboratory setting, conducting an experiment involving test tubes and chemicals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Copper Sulfate",
+          "Caustic Soda",
+          "Soya bean",
+          "Fig. 3.8"
+        ],
+        "concepts": [
+          "Laboratory experiment",
+          "Chemical reactions",
+          "Experimentation",
+          "Chemical solutions",
+          "Observation"
+        ],
+        "context_relation": "The image is related to the educational content of conducting a chemical experiment in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the experiment's outcome or results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36212,9 +37043,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a chemical experiment involving adding water, copper sulfate, and caustic soda to test tubes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Add 2–3 teaspoons of water to each test tube and shake them well.",
+          "Add two drops of copper sulfate solution to each test tube using a dropper.",
+          "Now, take another dropper and add 10 drops of caustic soda solution to each tube (Fig. 3.8).",
+          "Shake well and leave the test tubes undisturbed for a few minutes."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Test tubes",
+          "Copper sulfate",
+          "Caustic soda",
+          "Shaking",
+          "Leaving undisturbed"
+        ],
+        "context_relation": "The image is a continuation of a chemical experiment described in the visible text.",
+        "limitations": [
+          "The image does not show the actual experiment setup or results."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36230,9 +37082,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for a chemical experiment involving adding water, copper sulfate, and caustic soda to test tubes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Add 2–3 teaspoons of water to each test tube and shake them well.",
+          "Add two drops of copper sulfate solution to each test tube using a dropper.",
+          "Now, take another dropper and add 10 drops of caustic soda solution to each tube (Fig. 3.8).",
+          "Shake well and leave the test tubes undisturbed for a few minutes."
+        ],
+        "concepts": [
+          "Chemical reaction",
+          "Test tubes",
+          "Copper sulfate",
+          "Caustic soda",
+          "Shaking",
+          "Leaving undisturbed"
+        ],
+        "context_relation": "Experimental procedure",
+        "limitations": [
+          "No specific image is provided, only text instructions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36248,9 +37121,39 @@
       "asset_path": "page-0068.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the steps for testing for the presence of protein in various food items.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.8: Testing for the presence of protein in various food items",
+          "What did you observe? Did the content of some test tubes",
+          "turn violet? This violet colour indicates the presence",
+          "of proteins in the food item. Write your observations in",
+          "Table 3.3.",
+          "What conclusions can you draw from Table 3.3? Which",
+          "food items show the presence of more than one nutrient?",
+          "Which food items show the presence of both proteins and",
+          "fats? Peanuts show the presence of both proteins and fats.",
+          "This indicates that any food which we eat may contain",
+          "multiple nutrients. Is there a food item that lacks any of",
+          "these nutrients? Which of these foods do you consume",
+          "daily? Try to find out other foods that are good sources of",
+          "starch, fats, and proteins."
+        ],
+        "concepts": [
+          "protein testing",
+          "food items",
+          "violet color",
+          "multiple nutrients",
+          "good sources of starch, fats, and proteins"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "unclear if the image is a cropped figure or a full page"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36266,9 +37169,37 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing the nutrients present in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Name of the nutrient present",
+          "Colour of the food item",
+          "Oily patch for fat test",
+          "Colour of the food item",
+          "Test for protein",
+          "(Yes/No)"
+        ],
+        "concepts": [
+          "Nutrients in food",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Food item",
+          "Oily patch test",
+          "Protein test"
+        ],
+        "context_relation": "The table provides information on the presence of specific nutrients in different food items.",
+        "limitations": [
+          "The table does not provide specific examples or details about the food items."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36284,9 +37215,29 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing the presence of nutrients in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch    Fat    Protein  Name of    Colour of the",
+          "Oily patch for fat    Colour of the food item   present  present  present  the food    food item for",
+          "test               for protein test         (Yes/     (Yes/     (Yes/    item        starch test                                                                      No)     No)     No)"
+        ],
+        "concepts": [
+          "Nutrients in food",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Food items"
+        ],
+        "context_relation": "The table provides information about the presence of specific nutrients in different food items.",
+        "limitations": [
+          "The table does not specify the types of food items."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36302,9 +37253,61 @@
       "asset_path": "page-0069.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table listing nutrients present in various food items.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Exploring nutrients present in various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Name of",
+          "the food",
+          "item",
+          "Colour of the",
+          "food item for",
+          "starch test",
+          "Oily patch for fat",
+          "test",
+          "Colour of the food item",
+          "for protein test",
+          "Starch",
+          "present",
+          "(Yes/No)",
+          "Fat",
+          "present",
+          "(Yes/No)",
+          "Protein",
+          "present",
+          "(Yes/No)",
+          "Potato",
+          "Before",
+          "iodine",
+          "test",
+          "After",
+          "iodine",
+          "test"
+        ],
+        "concepts": [
+          "Exploring nutrients",
+          "Various food items",
+          "Starch",
+          "Fat",
+          "Protein",
+          "Nutritional requirements",
+          "Balanced diet",
+          "Essential nutrients",
+          "Roughage",
+          "Water",
+          "Growth and development"
+        ],
+        "context_relation": "Exploring nutrients in food items",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36320,9 +37323,35 @@
       "asset_path": "assets/be7ccd4caa8e3f9ec98404d5a2595f7593651156b0db509116fc48101d59a928.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A packet of potato wafers and a packet of roasted chana.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "Potato wafers",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information",
+        "limitations": [
+          "No specific nutritional values are provided for the potato wafers and roasted chana."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36338,9 +37367,34 @@
       "asset_path": "assets/32fc5de96fc588efa7409d0f4922755ae8e159e1508d7725b246ad65083442e3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bag of roasted chana, a snack.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "per 100 g",
+          "Roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional information between potato wafers and roasted chana",
+        "limitations": [
+          "No specific details about the nutritional content of potato wafers are provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36356,9 +37410,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "355 kcal",
+          "(a) Potato wafers",
+          "(b) Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Energy",
+          "Comparison"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36374,9 +37452,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Nutritional information comparison of potato wafers and roasted chana.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 3.9: Let us compare",
+          "Read the nutritional information given below for a packet",
+          "of potato wafers and a packet of roasted chana shown here.",
+          "Nutritional Information",
+          "per 100 g",
+          "536 kcal",
+          "Energy",
+          "per 100 g",
+          "355 kcal",
+          "Roasted chana"
+        ],
+        "concepts": [
+          "Nutritional information",
+          "Comparison",
+          "Energy",
+          "Per 100 g"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "No specific nutritional values are provided for the roasted chana packet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36392,9 +37495,45 @@
       "asset_path": "page-0070.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Nutritional comparison between potato wafers and roasted chana.",
+        "visual_type": "table",
+        "visible_text": [
+          "(a) Potato wafers",
+          "(b) Roasted chana",
+          "Nutritional Information (per 100 g)",
+          "Energy",
+          "Fats",
+          "Carbohydrates",
+          "Proteins",
+          "Dietary Fibre",
+          "536 kcal",
+          "35.0 g",
+          "53.0 g",
+          "7.0 g",
+          "4.8 g",
+          "355 kcal",
+          "6.26 g",
+          "58.58 g",
+          "18.64 g",
+          "16.8 g"
+        ],
+        "concepts": [
+          "Nutritional Information",
+          "Energy",
+          "Fats",
+          "Carbohydrates",
+          "Proteins",
+          "Dietary Fibre",
+          "Comparison between potato wafers and roasted chana"
+        ],
+        "context_relation": "Comparison of nutritional values",
+        "limitations": [
+          "The image does not provide the actual nutritional values for the foods."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36410,9 +37549,16 @@
       "asset_path": "assets/c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A large, textured, yellow rectangular shape with a torn edge.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36428,9 +37574,23 @@
       "asset_path": "assets/bd9a485825a14a86d3002c63ebd08385bbf65d7879873eab74b1afa303dd3c3b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Logo of FSSAI with colorful text and a leaf symbol.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "FSSAI"
+        ],
+        "concepts": [
+          "Food Safety and Standard Authority of India"
+        ],
+        "context_relation": "The logo represents the organization responsible for food safety standards in India.",
+        "limitations": [
+          "No specific details about the logo's design or meaning are provided in the text. The text is focused on the organization's role in food safety and does not describe the logo's appearance or significance.",
+          "Unrecognized model visual_type 'logo'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36446,9 +37606,24 @@
       "asset_path": "assets/f9b6160c6918a1e4138e60bf3e4ca306145f03d9035bf4aa81ad46a07999907a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of green plants with tall, slender leaves and small, yellowish-green flower clusters.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "plants",
+          "greenery",
+          "vegetation",
+          "crop",
+          "agriculture"
+        ],
+        "context_relation": "The image likely represents a natural setting or a cultivated area, possibly related to agriculture or botany.",
+        "limitations": [
+          "The image does not provide specific details about the type of plants or their context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36464,9 +37639,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36482,9 +37666,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36500,7 +37693,7 @@
       "asset_path": "page-0071.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -36518,9 +37711,29 @@
       "asset_path": "assets/f9cea0b0a7bd67782088f56ca07fbbe4c88327582b77522a6f26ec33fd6e7177.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand holding wheat seeds next to a row of growing wheat plants.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "seeds",
+          "growing",
+          "farmer",
+          "food",
+          "process",
+          "time",
+          "effort",
+          "chapati"
+        ],
+        "context_relation": "The image illustrates the process of growing wheat from seeds to the point where it can be used to make chapati.",
+        "limitations": [
+          "The image does not show the entire process from farm to plate, only the initial step of growing wheat.",
+          "The image does not show the steps involved in the process, only the initial step."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36536,9 +37749,22 @@
       "asset_path": "assets/97ac2c1e023ca58e277860b20f5ff51cf267a3d64f1408f1b8f5194e20b609d2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three people working in a wheat field, with one person planting seeds and the other two walking through the field.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat farming",
+          "agriculture",
+          "crop cultivation"
+        ],
+        "context_relation": "The image illustrates the process of wheat farming, showing the initial step of planting seeds in a field.",
+        "limitations": [
+          "The image does not provide specific details about the farming process or the steps involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36554,9 +37780,24 @@
       "asset_path": "assets/9fb2021ac2954802f07108b913f9ddf55138f1689b55dbde4cd635b1546f3fce.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a wheat farm and a machine processing wheat.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Farmer growing wheat",
+          "Food on"
+        ],
+        "concepts": [
+          "Wheat farming",
+          "Wheat processing"
+        ],
+        "context_relation": "The image illustrates the process of wheat farming and processing, which is related to the topic of food miles and the steps involved in getting wheat flour from the farm to the plate.",
+        "limitations": [
+          "The image does not provide specific details about the machinery or the exact steps involved in the process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36572,9 +37813,30 @@
       "asset_path": "assets/7a816d0a8a68d248b78b67135b23f8fafebae31e0479c4a68f1c07f8f8cede67.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a sack filled with wheat grains.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "wheat",
+          "sack",
+          "grains",
+          "farmer",
+          "food",
+          "process",
+          "steps",
+          "people",
+          "time",
+          "effort",
+          "chapati"
+        ],
+        "context_relation": "The image is related to the educational content about the process of making chapati from wheat grains.",
+        "limitations": [
+          "The image does not provide specific details about the steps involved in the process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36590,9 +37852,22 @@
       "asset_path": "assets/b30597f1e334348c5855c93f33543b6b0265e90ae37d70f24b8ac139cdd18c65.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A colorful grocery store shelf with various products.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "grocery store",
+          "shelf",
+          "products"
+        ],
+        "context_relation": "The image represents a grocery store shelf with various products, which is related to the topic of food production and distribution.",
+        "limitations": [
+          "The image does not provide specific details about the products or their origin."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

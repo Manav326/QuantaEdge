@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 819,
-    "successful_visual_analyses": 806,
-    "missing_visual_analyses": 1472,
-    "failed_visual_analyses": 13,
+    "raw_analysis_result_rows": 863,
+    "successful_visual_analyses": 852,
+    "missing_visual_analyses": 1428,
+    "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1485,
+    "unresolved_count": 1439,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8669,12 +8669,11 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "Safety first",
           "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
           "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
           "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
@@ -8684,26 +8683,27 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive",
+          "inclusive nature",
           "safety precautions",
           "peer interactions",
           "assessing understanding",
+          "reflecting on ideas",
           "analyzing concepts",
-          "safety first",
           "challenging ideas",
           "additional information",
           "interesting facts",
           "engaging materials",
-          "Ever heard of",
+          "Ever heard of boxes",
           "fascinating facts",
           "interesting observations",
           "curiosity-driven questions",
           "advanced concepts",
           "scientific principles"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
+        "context_relation": "The image is a page from a textbook discussing the benefits of open-ended questions in encouraging critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or details about the activities or questions."
+          "The image does not provide specific examples or details about the open-ended questions or activities discussed.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -9207,7 +9207,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "applications, showing how science has contributed to societal development.",
@@ -9223,13 +9223,18 @@
           "Be a scientist",
           "Snapshots",
           "Keep the curiosity alive",
+          "Indian and international scientists",
           "NEP 2020",
-          "Keywords",
-          "scientific activities"
+          "keywords",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "competencies",
+          "evaluation"
         ],
-        "context_relation": "The page discusses various sections of a textbook designed to educate readers about scientific heritage, encourage critical thinking, and assess learning competencies.",
+        "context_relation": "The page is part of a textbook designed for science education, focusing on the contributions of scientists, the scientific process, and the development of scientific temper.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or questions in the 'Keep the curiosity alive' section."
+          "The page does not provide specific examples or details about the exercises or questions mentioned."
         ]
       },
       "chapter_id": null,
@@ -26223,9 +26228,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26241,9 +26255,34 @@
       "asset_path": "page-0010.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The Constitution of India's Preamble.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "THE CONSTITUTION OF INDIA",
+          "PREAMBLE",
+          "WE, THE PEOPLE OF INDIA, having solemnly resolved to constitute India into a [SOVEREIGN SOCIALIST SECULAR DEMOCRATIC REPUBLIC] and to secure to all its citizens:",
+          "JUSTICE, social, economic and political;",
+          "LIBERTY of thought, expression, belief, faith and worship;",
+          "EQUALITY of status and of opportunity; and to promote among them all",
+          "FRATERNITY assuring the dignity of the individual and the [unity and integrity of the Nation];",
+          "IN OUR CONSTITUENT ASSEMBLY this twenty-sixth day of November, 1949 do HEREBY ADOPT, ENACT AND GIVE TO OURSELVES THIS CONSTITUTION.",
+          "1. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2, for \"Sovereign Democratic Republic\" (w.e.f. 3.1.1977)",
+          "2. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2, for \"Unity of the Nation\" (w.e.f. 3.1.1977)"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Preamble",
+          "Sovereign Democratic Republic",
+          "Unity of the Nation"
+        ],
+        "context_relation": "The Preamble of the Constitution of India",
+        "limitations": [
+          "The text is a full page and not a cropped figure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26286,9 +26325,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26304,9 +26352,56 @@
       "asset_path": "page-0011.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "List of contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science Education (HBCSE), Tata Institute of Fundamental Research (TIFR), Mumbai; Professor, Department of Condensed Matter Physics and Material Science, TIFR, Mumbai (Team Leader and Leader, Physics Sub-group)",
+          "Saroj Ghaskadbi, Former Senior Professor, Savitribai Phule Pune University, Pune (Leader, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian Institute of Science, Bengaluru (Leader, Chemistry Sub-group)",
+          "R. Shankar, Adviser, International Geoscience Education Organisation, Coordinator, International Earth Science Olympiad and Former Professor, Mangalore University, Mangaluru (Leader, Earth Science Sub-group)",
+          "Abhay Kumar, Associate Professor, Central Institute of Educational Technology, NCERT, New Delhi",
+          "Adithi Muralidhar, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Anand Arya, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Animesh Kumar Mohapatra, Former Professor, Department of Education in Science and Mathematics, RIE, Bhubaneswar",
+          "Arun Pratap Sikarwar, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ashish Kumar Srivastava, Assistant Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "B.K. Tripathi, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram, Haryana",
+          "C.V. Shimray, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Dinesh Kumar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Faniendra Sharma, Educator and Consultant, Programme Office, NSTC, NCERT, New Delhi",
+          "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Saroj Ghaskadbi",
+          "Uday Maitra",
+          "R. Shankar",
+          "Abhay Kumar",
+          "Adithi Muralidhar",
+          "Anand Arya",
+          "Animesh Kumar Mohapatra",
+          "Arun Pratap Sikarwar",
+          "Ashish Kumar Srivastava",
+          "B.K. Tripathi",
+          "Charu Maini",
+          "C.V. Shimray",
+          "Dinesh Kumar",
+          "Faniendra Sharma",
+          "Gagan Gupta"
+        ],
+        "context_relation": "The image is a page from a textbook development team document.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26789,9 +26884,37 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Acknowledgements page for a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Acknowledgements",
+          "The National Council of Educational Research and Training (NCERT)\nacknowledges the guidance and support of the esteemed Chairperson\nand members of the National Curriculum Framework Oversight\nCommittee for their invaluable contributions in overseeing the\ntranslation of NCF-SE 2023 perspectives into t",
+          "The Council gratefully acknowledges Sridhar Srivastava, Former\nJoint Director, NCERT; P.C. Agarwal, Joint Director, NCERT; Aman\nSharma, Secretary, NCERT and Joint Director, CIET, NCERT; Amarendra\nP. Behera, Professor and Head, PRD, CIET, NCERT; Ranjana Arora,\nProfessor and Head, DCS&D, NCERT; Sunita",
+          "Special thanks are due to Aniket Sule, Associate Professor,\nHBCSE, TIFR, Mumbai, for his valuable inputs on tribal astronomy;\nRuchi Shukla, Assistant Professor, Department of Educational\nPsychology and Foundations of Education, NCERT, New Delhi, for her\ncontribution to Chapter 3; Linto Alappat, Assi",
+          "NCERT appreciates the contributions of Suparna Diwakar, Educator\nand Chief Consultant, Programme Office, NSTC; M. Pramod Kumar,\nSenior Consultant; Vaishali Sukhija, Consultant; Yadunath Deshpande,\nMember; and other members of the Programme Office, NSTC, NCERT,\nNew Delhi, for their valuable inputs."
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "National Curriculum Framework Oversight Committee",
+          "National Syllabus and Teaching Learning Material Committee",
+          "Sub-Group: Science",
+          "HBCSE, TIFR, Mumbai",
+          "Department of Educational Psychology and Foundations of Education",
+          "Indian Space Research Organisation (ISRO)",
+          "Suparna Diwakar",
+          "M. Pramod Kumar",
+          "Vaishali Sukhija",
+          "Yadunath Deshpande"
+        ],
+        "context_relation": "acknowledgements",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26865,7 +26988,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -26874,17 +26997,15 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Freelance Language Editor",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Acknowledgments",
+          "Book contributors",
+          "Editors",
+          "Support",
+          "Publication process"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and staff involved in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's contributors and editors",
         "limitations": [
-          "The page does not contain any visual elements.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -26953,9 +27074,40 @@
       "asset_path": "assets/a26646eccdc689139277b27b29151dd655aa5870656e8ccdd1f829ed02a4402a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text describing the duties of citizens of India.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Constitution of India",
+          "Part IV A (Article 51 A)",
+          "Fundamental Duties",
+          "It shall be the duty of every citizen of India —",
+          "(a)  to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem;",
+          "(b)  to cherish and follow the noble ideals which inspired our national struggle for freedom;",
+          "(c)  to uphold and protect the sovereignty, unity and integrity of India;",
+          "(d)  to defend the country and render national service when called upon to do so;",
+          "(e)  to promote harmony and the spirit of common brotherhood among the people;"
+        ],
+        "concepts": [
+          "Constitution of India",
+          "Fundamental Duties",
+          "Citizenship",
+          "National Flag",
+          "National Anthem",
+          "Sovereignty",
+          "Unity",
+          "Integrity",
+          "National Service",
+          "Harmony",
+          "Brotherhood"
+        ],
+        "context_relation": "The text describes the duties of citizens of India as outlined in the Constitution.",
+        "limitations": [
+          "The text is a direct quote from the Constitution of India."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30345,9 +30497,43 @@
       "asset_path": "page-0033.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram of a plant cell showing its components.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Cells in all parts of a plant have tiny rod-shaped structures called plastids. Some plastids, like chloroplasts, contain chlorophyll, which makes them green and helps in photosynthesis. In non-green parts, they help in the storage of substances. Plant cells also have a large empty-looking space call",
+          "Fig. 2.5: A schematic drawing of (a) An animal cell and (b) A plant cell. (The colours are to show different parts of the cell)",
+          "We have now understood the basic structure of cell. And we now also understand that plant and animal cells differ in shape and structure.",
+          "Do different animal cells also vary in their shape and structure?",
+          "2.1 Variation in shape and structure of cells",
+          "The muscle cell and the nerve cell of a human are shown in Fig. 2.6a and (b). What are the similarities and differences you see in them?",
+          "A muscle cell (Fig. 2.6a) is shaped like a spindle, while a nerve cell (Fig. 2.6b) is very long and has branches. Similarly, some cells are round in shape, while others are long and thin. The number of cells also varies in different organisms. Why do cells look so different from each other? Does the"
+        ],
+        "concepts": [
+          "cell",
+          "nucleus",
+          "cell wall",
+          "chloroplast",
+          "vacuole",
+          "animal cell",
+          "plant cell",
+          "muscle cell",
+          "nerve cell",
+          "shape",
+          "structure",
+          "variation",
+          "similarity",
+          "difference"
+        ],
+        "context_relation": "The image is a diagram explaining the structure of plant and animal cells.",
+        "limitations": [
+          "The image does not provide specific details about the functions of each component.",
+          "The image does not show the exact number of cells in different organisms.",
+          "The image does not provide information about the exact number of cells in different organisms."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30601,9 +30787,34 @@
       "asset_path": "page-0034.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The unique shape, size, and structure of cells help them carry out their specific functions. How do these cells help in performing various functions in the body?",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The unique shape, size, and structure of cells help them\ncarry out their specific functions. But how do these cells help in\nperforming various functions in the body? Let us find out.",
+          "You observed in Activity 2.3 that inner cheek cells are thin\nand flat. They form a protective lining on the inner surface of the\ncheek. Nerve cells also known as neurons carry messages in our\nbody. The elongated shape and branched structure help them\nreach different parts of the body and pass on mes",
+          "You have already studied the digestive system in Grade 7. Different\nparts of the digestive system are made up of different types of cells.\nA group of muscle cells are present in the food pipe. These cells\ncontract and relax in a wave-like manner, pushing the food down\nto the stomach. This movement i",
+          "2.2 What Are the Levels of Organisation in\nthe Body of a Living Organism?",
+          "The body of a living organism is organised in a complex way. Cell\n(Fig. 2.7a), is the basic unit of life, just like a brick is the basic unit of wall\n(Fig. 2.3d). A group of similar cells forms a type of tissue (Fig. 2.7b).\nDifferent tissues are organised to form an organ (Fig. 2.7c). Several\norgans",
+          "These levels of organisation help us understand how simple\nbuilding blocks like cells come together to form a complex\nliving being.",
+          "The life of complex living organisms begins with a single cell—\n'egg'. The egg of any organism has an amazing ability to divide\nrepeatedly to form a complete living being made up of many cells.\nSuch living beings are called multicellular organisms. Animals,\nincluding humans, and plants are all examp"
+        ],
+        "concepts": [
+          "cell",
+          "tissue",
+          "organ",
+          "organ system",
+          "organism",
+          "multicellular organisms"
+        ],
+        "context_relation": "The text discusses the unique shape, size, and structure of cells and how they help in performing various functions in the body. It also explains the levels of organisation in the body of a living organism.",
+        "limitations": [
+          "The text does not provide specific examples or diagrams to illustrate the concepts.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31647,9 +31858,31 @@
       "asset_path": "assets/04f4083a3b78b61edabd7960e49f6211a294decea8f85f30633211c9226639a1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rotting fruit with a powdery or cotton-like growth on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "rotting",
+          "powdery",
+          "cotton-like",
+          "growth",
+          "infected",
+          "microbes",
+          "lemon",
+          "tomato",
+          "orange",
+          "food item",
+          "outside",
+          "discussion"
+        ],
+        "context_relation": "The image is related to the discussion about microorganisms in food items.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31665,9 +31898,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits and their associated powdery or cotton-like growth.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Food items",
+          "Rotting",
+          "Powdery or cotton-like growth",
+          "Discussion"
+        ],
+        "context_relation": "The image is a continuation of a discussion about microorganisms in food items, specifically focusing on rotting fruits and their associated growth.",
+        "limitations": [
+          "The image does not show any visual representation of the discussion, only text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31683,9 +31936,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Food items",
+          "Rotting",
+          "Infected",
+          "Powdery or cotton-like growth"
+        ],
+        "context_relation": "Discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits.",
+        "limitations": [
+          "The image does not show any visual representation of the discussion.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31701,9 +31975,60 @@
       "asset_path": "page-0038.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the connection between microorganisms and food items, including a diagram of a rotting fruit and a discussion on microorganisms in different environments.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any",
+          "other food item rot after being left outside for some",
+          "time? If yes, you may have noticed a powdery or",
+          "cotton-like growth on them (Fig. 2.9). This happens",
+          "because they have been infected by microbes. But",
+          "where did these microbes come from? How did they",
+          "come in contact with the food?",
+          "This happens because microorganisms can be found",
+          "everywhere, be it in water, soil, air, or even in some food items.",
+          "But why do microorganisms",
+          "not infect the pickles and",
+          "murabbas?",
+          "This is because you add many spices",
+          "with salt or sugar to it which act as",
+          "preservatives. High concentration",
+          "of salt or sugar do not allow these",
+          "organisms to grow on them.",
+          "You can use a",
+          "microscope to explore",
+          "surfaces of leaves, stems,",
+          "roots, or any other part to",
+          "see them. Like plants and",
+          "animals, microorganisms",
+          "also show great diversity.",
+          "Some of them can even be",
+          "found in extreme climatic",
+          "conditions, such as hot"
+        ],
+        "concepts": [
+          "microorganisms",
+          "food items",
+          "microbes",
+          "surfaces of leaves, stems, roots",
+          "extreme climatic conditions",
+          "digestion",
+          "microorganisms",
+          "daily life",
+          "cleaning the environment",
+          "activity"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "no specific limitations provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31719,9 +32044,24 @@
       "asset_path": "assets/a28bbaea43d6c109a2c124ab3734193be30c94cdff6fbace8b5726653200725d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is climbing a ladder to reach a bookshelf filled with books.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "climbing",
+          "ladder",
+          "bookshelf",
+          "books"
+        ],
+        "context_relation": "The image is related to the theme of reading and learning, as it shows a character engaging in an activity that involves books.",
+        "limitations": [
+          "The image does not provide specific details about the books or the character's actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31737,9 +32077,25 @@
       "asset_path": "assets/30bbdc0d572774ca6d45828be637e43a13932633ebe643f760fe60e26429ea68.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two people are engaged in composting, with one person adding organic waste to a compost bin and the other using a tool to mix the contents.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "composting",
+          "organic waste",
+          "soil microorganisms",
+          "manure",
+          "nutrients",
+          "soil fertility"
+        ],
+        "context_relation": "The image illustrates the process of composting, which is a method of recycling organic waste into a nutrient-rich material for soil fertility.",
+        "limitations": [
+          "The image does not provide specific details about the composting process or the microorganisms involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31755,9 +32111,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31773,9 +32138,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31791,7 +32166,7 @@
       "asset_path": "page-0039.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -31809,9 +32184,19 @@
       "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a set of stairs.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear context",
+          "No visible text"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31827,9 +32212,28 @@
       "asset_path": "assets/53fc9b973b14e61e6c7973d848aa1daf11c2e56dfd43630ce7739236e34071ff.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a scientist using a microscope.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "microscope",
+          "scientist",
+          "microorganisms",
+          "biogas",
+          "oxygen-free environment",
+          "decomposition",
+          "plant and animal waste",
+          "household wastewater",
+          "biogas mixture"
+        ],
+        "context_relation": "The image is related to the text about microorganisms and their role in biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of microorganisms or the process of biogas production."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31845,9 +32249,16 @@
       "asset_path": "assets/ea8d0870e09c90fb6d9fc13aa30a7d595903e9bbeebbd01a6bd70eb333493864.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a person wearing glasses and a suit.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a black and white illustration of a person wearing glasses and a suit.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31863,9 +32274,26 @@
       "asset_path": "assets/9971212780366fe7a8276b645da71db6dfec2d1f694e75bf010369a8bd797d7d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bowl of liquid with a metal rim, possibly containing a mixture of gases.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "biogas",
+          "microorganisms",
+          "decomposition",
+          "oxygen-free environment",
+          "plant and animal waste",
+          "household wastewater",
+          "gases"
+        ],
+        "context_relation": "The image represents a mixture of gases released by microorganisms during decomposition, which is a concept related to biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of gases or the microorganisms involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31881,9 +32309,32 @@
       "asset_path": "assets/fb935dbca5ea6c1e9776af22a58b1d1e0284c89337646c21227e2d529d38cd69.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass bowl with a piece of cabbage inside.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily comp",
+          "A glass bowl with a piece of cabbage inside."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Biogas",
+          "Oxygen-free environment",
+          "Decomposition",
+          "Plant and animal waste",
+          "Household wastewater",
+          "Gases"
+        ],
+        "context_relation": "The image is not directly related to the text, but it could be used to illustrate the concept of biogas production by microorganisms in an oxygen-free environment.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or the process of biogas production."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31899,9 +32350,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images",
+          "no visible text or images to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31917,9 +32378,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An image of a black page with no visible text or content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31935,7 +32406,7 @@
       "asset_path": "page-0040.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -31953,9 +32424,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31971,9 +32451,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -31989,7 +32478,7 @@
       "asset_path": "page-0041.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -32007,9 +32496,22 @@
       "asset_path": "assets/f9ccf89734bf40ab8c87b15789a7d0369f7ee857a442cb0778ba9c9841e2715a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a plant with roots and leaves.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "plant",
+          "roots",
+          "leaves"
+        ],
+        "context_relation": "The image is an illustration of a plant, focusing on its roots and leaves.",
+        "limitations": [
+          "The image does not provide any specific information about the plant's species or the environment it is in."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32025,7 +32527,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -32043,7 +32545,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -32061,7 +32563,7 @@
       "asset_path": "page-0042.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -32079,9 +32581,20 @@
       "asset_path": "assets/637a03b7588123ce04e8712b0ee16660b350ac7fb0987c215702e159fac872df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards with one finger and holding their hand to their ear, possibly indicating a whisper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the steps for growing Spirulina as mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32097,9 +32610,16 @@
       "asset_path": "assets/9292c716701588b2541621998fedf46b0a6d41087f70b3424e389091c68f44f6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green chalkboard on a wooden desk.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32115,9 +32635,39 @@
       "asset_path": "assets/5becbe8e7a48f1eb200d6d5d5fe68e295bacfb21fbeed29183ead6e016318983.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green spiral structure with dots, possibly representing a microalga.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Spirulina, a microalga, is called a superfood",
+          "because of its health benefits. Spirulina is also",
+          "a good source of vitamin B12, which is essential",
+          "for our body. It is rich in protein—more than",
+          "60 per cent of its body weight—and only a",
+          "small amount of fat and sugar.",
+          "Nowadays, farming of Spirulina is becoming a feasible livelihood",
+          "opportunity. You can grow Spirulina easily by following these steps:"
+        ],
+        "concepts": [
+          "Spirulina",
+          "microalga",
+          "superfood",
+          "vitamin B12",
+          "protein",
+          "health benefits",
+          "farming",
+          "Spirulina farming",
+          "protein content",
+          "vitamin B12 content",
+          "farming steps"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the health benefits and farming of Spirulina.",
+        "limitations": [
+          "The image does not provide specific details about the farming steps."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32133,9 +32683,18 @@
       "asset_path": "assets/8f708d258e124440ee1728a2a967079347fad2d626bc88ac8d8685cfc5650d96.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black, elongated shape resembling a worm or caterpillar on a white, oval-shaped background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about Spirulina and its benefits.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about Spirulina and its benefits."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32151,9 +32710,56 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the health benefits and cultivation of Spirulina, a microalga.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "23",
+          "Ever heard of...",
+          "Spirulina, a microalga, is called a superfood",
+          "because of its health benefits. Spirulina is also",
+          "a good source of vitamin B12, which is essential",
+          "for our body. It is rich in protein—more than",
+          "60 per cent of its body weight—and only a",
+          "small amount of fat and sugar.",
+          "Nowadays, farming of Spirulina is becoming a feasible livelihood",
+          "opportunity. You can grow Spirulina easily by following these steps:",
+          "1. Set a clear glass tank in a bright place away from direc",
+          "2. Fill the tank with water and add a small amount of",
+          "3. Add a small amount of Spirulina powder to the water",
+          "4. Place the tank in a warm place and keep it in a",
+          "5. Check the water regularly and add more Spirulina",
+          "6. Harvest the Spirulina when it is ready to be used",
+          "7. Store the Spirulina in a cool, dry place",
+          "8. Enjoy the benefits of Spirulina in your diet"
+        ],
+        "concepts": [
+          "Spirulina",
+          "Microalga",
+          "Superfood",
+          "Vitamin B12",
+          "Protein",
+          "Fat",
+          "Sugar",
+          "Farming",
+          "Health benefits",
+          "Cultivation",
+          "Glass tank",
+          "Water",
+          "Spirulina powder",
+          "Warm place",
+          "Cool, dry place",
+          "Diet"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the health benefits and cultivation of Spirulina, a microalga.",
+        "limitations": [
+          "The image does not show any visual representation of Spirulina or the cultivation process.",
+          "The image does not provide any visual evidence of the health benefits of Spirulina."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32169,9 +32775,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32187,9 +32802,41 @@
       "asset_path": "page-0043.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing Spirulina, a microalgae, and its benefits.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "Spirulina, a microalga, is called a superfood because of its health benefits. Spirulina is also a good source of vitamin B12, which is essential for our body. It is rich in protein—more than 60 per cent of its body weight—and only a small amount of fat and sugar.",
+          "Nowadays, farming of Spirulina is becoming a feasible livelihood opportunity. You can grow Spirulina easily by following these steps:",
+          "1. Set a clear glass tank in a bright place away from direct sunlight.",
+          "2. Cover the tank with a shade net, or keep the tank at a place with moderate temperature conditions.",
+          "3. Fill the tank with pond water.",
+          "4. Add living Spirulina collected from a pond.",
+          "5. Stir the growing Spirulina twice a week.",
+          "6. After 3–6 weeks, Spirulina may be harvested from the tank by filtering it through a fine cloth.",
+          "Conservation of microalgae is a good practice for ensuring food security and livelihood development."
+        ],
+        "concepts": [
+          "Spirulina",
+          "microalgae",
+          "superfood",
+          "vitamin B12",
+          "protein",
+          "fat",
+          "sugar",
+          "livelihood",
+          "microalgae conservation",
+          "food security",
+          "livelihood development"
+        ],
+        "context_relation": "The page discusses the benefits and cultivation of Spirulina, a microalgae, in relation to health and livelihood.",
+        "limitations": [
+          "The page does not provide specific details about the cultivation process or the nutritional benefits of Spirulina."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32205,9 +32852,19 @@
       "asset_path": "assets/88f1d5d30616d3c95186818746b86fe639579f23a5ee1aac8a06496a29b6920b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text.",
+          "The image is a cartoon illustration and may not accurately represent the content of the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32223,9 +32880,23 @@
       "asset_path": "assets/9ae013d1d2b92c20bb86fb2e28c3723225d11fd227ff206b070c6a2a7269d8df.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green backpack with a brown handle and a pen sticking out of it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "backpack",
+          "pen",
+          "green color",
+          "brown handle"
+        ],
+        "context_relation": "The image is unrelated to the text about cell structures.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32241,9 +32912,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32259,9 +32939,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32277,9 +32966,45 @@
       "asset_path": "page-0044.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Cells of microorganisms are surrounded by a cell membrane, have a cell wall, and lack chloroplasts and a well-defined nucleus.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Like animal and plant cells, the cells of microorganisms are\nalso surrounded by a cell membrane. Cells of fungi additionally\nhave a cell wall, but they do not have chloroplasts, so they cannot\nmake their own food through photosynthesis. Bacteria do not\nhave a well-defined nucleus and a nuclear membr",
+          "We have only looked at a few basic cell structures here. The cell\nhas other components about which you will learn in higher classes.\nFor observing subcellular components, we need microscopes\nwith high magnification. An electron microscope magnifies the\ncell about 10,00,000 times, where we can see mo",
+          "By now, you must have understood that all living beings,\nincluding microorganisms, are made up of one or more cells.\nTheir cells differ in size, shape, and structure. Plant and animal\ncells also have some differences. Understanding these differences\nhelps us learn how these organisms function differ",
+          "In this chapter, we have learnt about the beneficial\nmicroorganisms. However, there are some microbes that cause\ndiseases in plants and animals including humans. We will learn\nabout some of the diseases caused by microbes in the next chapter."
+        ],
+        "concepts": [
+          "microorganisms",
+          "cell structures",
+          "cell membrane",
+          "cell wall",
+          "chloroplasts",
+          "nucleus",
+          "nuclear membrane",
+          "nucleoid",
+          "subcellular components",
+          "microscopes",
+          "electron microscope",
+          "magnification",
+          "plant cells",
+          "animal cells",
+          "differences in cells",
+          "function of cells",
+          "beneficial microorganisms",
+          "diseases caused by microbes",
+          "next chapter"
+        ],
+        "context_relation": "The text discusses the basic structure and components of cells in microorganisms, including fungi, bacteria, and other microorganisms, and how they differ from animal and plant cells.",
+        "limitations": [
+          "The text does not provide specific examples or details about the differences between microorganisms and other cells.",
+          "The text does not discuss the specific functions of the components mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32295,9 +33020,45 @@
       "asset_path": "assets/e19f57eeb0c5d60aee81c6531e5321da004c23dce8c2ab64be122bd2156e4781.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two test tubes with different colored liquids and a balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeast are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus"
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial",
+          "Harmful",
+          "Decomposition",
+          "Plant and animal waste",
+          "Simple substances",
+          "Environment",
+          "Root nodules",
+          "Legumes",
+          "Nitrogen",
+          "Soil fertility",
+          "Yeast",
+          "Fungi",
+          "Bread",
+          "Cakes",
+          "Pastries",
+          "Idlis",
+          "Dosas",
+          "Bhaturas",
+          "Lactobacillus"
+        ],
+        "context_relation": "The image does not directly relate to the text.",
+        "limitations": [
+          "The image does not show any direct relationship to the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32313,9 +33074,47 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the benefits and harm of microorganisms, including their role in decomposing waste and improving soil fertility, as well as their use in food production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "25",
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeast are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus"
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial",
+          "Harmful",
+          "Decompose",
+          "Waste",
+          "Simple substances",
+          "Clean up",
+          "Environment",
+          "Root nodules",
+          "Legumes",
+          "Peas",
+          "Beans",
+          "Lentils",
+          "Trapping nitrogen",
+          "Soil fertility",
+          "Yeast",
+          "Fungi",
+          "Process of making",
+          "Breads",
+          "Cakes"
+        ],
+        "context_relation": "The page discusses the role of microorganisms in decomposing waste and improving soil fertility, as well as their use in food production.",
+        "limitations": [
+          "The page does not provide specific examples or details about the microorganisms or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32331,9 +33130,47 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the benefits and harm of microorganisms, including their role in decomposing waste and improving soil fertility, and their use in food production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "25",
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeast are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus"
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial",
+          "Harmful",
+          "Decomposition",
+          "Waste",
+          "Simple substances",
+          "Environment",
+          "Root nodules",
+          "Legumes",
+          "Nitrogen",
+          "Soil fertility",
+          "Yeast",
+          "Fungi",
+          "Bread",
+          "Cakes",
+          "Pastries",
+          "Idlis",
+          "Dosas",
+          "Bhaturas",
+          "Lactobacillus"
+        ],
+        "context_relation": "The page discusses the role and impact of microorganisms in various aspects of life, including their beneficial and harmful effects, their role in decomposing waste and improving soil fertility, and their use in food production.",
+        "limitations": [
+          "The page does not provide specific examples or details about the microorganisms discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32349,9 +33186,48 @@
       "asset_path": "page-0045.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing microorganisms and their effects on the environment and food production.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Chapter 2 — The Invisible Living World: Beyond Our Naked Eye",
+          "25",
+          "Microorganisms can be beneficial or harmful to us.",
+          "Some microorganisms decompose the plant and animal waste into simple substances and clean up the environment.",
+          "Some microorganisms reside in the root nodules of legumes, such as peas, beans, and lentils. They trap nitrogen from the air and increase the soil fertility.",
+          "Yeasts are fungi which are used in the process of making breads, cakes, pastries, idlis, dosas, and bhaturas.",
+          "Lactobacillus is used in the curd formation at home and fermentation process in food industry."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Beneficial effects",
+          "Harmful effects",
+          "Decomposition",
+          "Simple substances",
+          "Cleaning environment",
+          "Root nodules",
+          "Legumes",
+          "Soil fertility",
+          "Yeasts",
+          "Fungi",
+          "Bread production",
+          "Cakes production",
+          "Pastries production",
+          "Idlis production",
+          "Dosas production",
+          "Bhaturas",
+          "Lactobacillus",
+          "Curd formation",
+          "Fermentation process"
+        ],
+        "context_relation": "The page discusses the various roles and effects of microorganisms in the environment and food production.",
+        "limitations": [
+          "The page does not provide specific examples or details for each concept.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32367,9 +33243,24 @@
       "asset_path": "assets/e04bb22b1e056f49c491d78d6ca381dfb412c4b2cc612cfa75214577ce1e0fbf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A laboratory setup with a conical flask containing a yellow liquid and a burette with a clear liquid inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "laboratory setup",
+          "conical flask",
+          "burette",
+          "yellow liquid",
+          "clear liquid"
+        ],
+        "context_relation": "The image represents a laboratory setup used for chemical experiments or demonstrations.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the chemicals involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32385,9 +33276,16 @@
       "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy raising his hand, holding a notebook and a pen.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32403,9 +33301,19 @@
       "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a man holding a pen and a notepad, possibly taking notes or explaining something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a cartoon and may not accurately represent the content of the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32421,9 +33329,19 @@
       "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl holding a book and a pencil, wearing a school uniform.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image is a cartoon and may not represent the actual scenario described in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
