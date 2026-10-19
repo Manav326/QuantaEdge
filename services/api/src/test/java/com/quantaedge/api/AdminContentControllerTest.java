@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -25,6 +27,8 @@ import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 class AdminContentControllerTest {
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   @Mock private JdbcTemplate jdbc;
   @Mock private ObjectMapper mapper;
   @Mock private AuthorizationService authorization;
@@ -101,7 +105,7 @@ class AdminContentControllerTest {
         new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertThrows(SecurityException.class,
-        () -> controller.reviewQuestion(7L, 9L, java.util.Map.of("status", "APPROVED"), author));
+        () -> controller.reviewQuestion(7L, 9L, 71L, java.util.Map.<String,Object>of("status", "APPROVED"), author, TEST_TENANT));
 
     verify(authorization).requirePermission(author, "CONTENT_REVIEW");
     verifyNoInteractions(jdbc, questionHistory, staffAudit);
@@ -112,7 +116,8 @@ class AdminContentControllerTest {
     AuthContext reviewer = new AuthContext(100L, null, 42L, "CONTENT_AUTHOR", "Content author");
     when(authorization.requireAuth(reviewer)).thenReturn(reviewer);
     when(authorization.hasPermission(reviewer, "CONTENT_VIEW")).thenReturn(true);
-    when(jdbc.queryForList(anyString())).thenReturn(java.util.List.of(
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(java.util.List.of(
         Map.of("review_status", "DRAFT", "active", true, "count", 4L),
         Map.of("review_status", "REVIEW", "active", true, "count", 3L),
         Map.of("review_status", "REJECTED", "active", true, "count", 2L),
@@ -123,7 +128,7 @@ class AdminContentControllerTest {
     AdminContentController controller =
         new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
-    Map<String,Object> summary = controller.questionReviewSummary(reviewer);
+    Map<String,Object> summary = controller.questionReviewSummary(71L, reviewer, TEST_TENANT);
 
     assertEquals(28L, summary.get("totalQuestions"));
     assertEquals(22L, summary.get("activeQuestions"));
