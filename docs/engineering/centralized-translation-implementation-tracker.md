@@ -498,3 +498,12 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 - Failed API responses are inspected through a cloned response, preserving the response for existing callers. Explicit user-facing API messages take priority; localized HTTP-status and network messages are used as fallbacks. Aborted requests are ignored.
 - Up to three notifications remain visible; additional notices queue rather than overwriting prior API failures. Copy, dismiss, auto-dismiss and accessible alert/status semantics are retained.
 - Centralized keys added: `common.notifications.copy`, `common.notifications.dismiss`, `common.notifications.label`, `common.notifications.networkError`, and `common.notifications.requestFailed`. Web, Admin and People catalog copies are synchronized from `localization/catalogs`.
+
+
+## Global API error notification mount-order correction (2026-10-19)
+
+- Root cause: the global notification host installed its `fetch` interceptor inside a React effect. API requests from page effects could start before that interceptor was installed, so not every API failure reached the toast host.
+- Fix: install the interceptor when the notification module initializes, before page effects execute. Buffer early notices until the root host subscribes, then drain them into the same fixed `document.body` portal.
+- All non-2xx API responses and non-aborted API network failures now route through the central host. Response inspection still uses `response.clone()`, so existing API callers can read the original response.
+- Added `scripts/check-global-notification-contract.mjs` to require identical Web/Admin/People hosts, module-scope interception, pending-notice draining, fixed viewport rendering, root mounting and CI wiring.
+- CI note: run #4460 failed only in `ApplicationStartupSmokeTest.signupMembershipAuditPersistsNullActorAsJsonNull` because PostgreSQL's JSONB `?` operator collided with JDBC placeholders. Follow-up commit `9f7d0be` replaced that test predicate with `jsonb_exists`; run #4461 was in progress when this notification follow-up began. This notification change still requires its own full CI result.

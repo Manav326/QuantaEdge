@@ -87,6 +87,9 @@ jobs:
       - name: Verify cross-app UI and brand contract
         run: node scripts/check-ui-brand-contract.mjs
 
+      - name: Verify global notification reliability contract
+        run: node scripts/check-global-notification-contract.mjs
+
       - name: Verify white-label colour theme contract
         run: node scripts/check-color-theme-contract.mjs
 

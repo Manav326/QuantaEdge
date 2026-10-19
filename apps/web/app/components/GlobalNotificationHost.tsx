@@ -11,10 +11,18 @@ const EVENT = 'qe:notification';
 const MAX_VISIBLE = 3;
 const AUTO_DISMISS_MS = 8000;
 
+let notificationHostReady = false;
+const queuedNotifications: Array<{ message: string; tone: Tone }> = [];
+
 export function notifyUser(message: string, tone: Tone = 'info') {
   if (typeof window === 'undefined') return;
   const clean = cleanMessage(message);
-  if (clean) window.dispatchEvent(new CustomEvent<Detail>(EVENT, { detail: { message: clean, tone } }));
+  if (!clean) return;
+  if (!notificationHostReady) {
+    queuedNotifications.push({ message: clean, tone });
+    return;
+  }
+  window.dispatchEvent(new CustomEvent<Detail>(EVENT, { detail: { message: clean, tone } }));
 }
 
 function cleanMessage(value: unknown): string | null {
@@ -105,6 +113,55 @@ function plainTextError(value: string, contentType: string | null): string | nul
   return cleanMessage(value);
 }
 
+async function inspectApiResponse(response: Response) {
+  const length = Number(response.headers.get('content-length') || 0);
+  if (response.ok && (!isJsonContentType(response.headers.get('content-type')) || length > 512 * 1024)) return;
+  if (!response.ok && length > 1024 * 1024) {
+    notifyUser(fallbackApiError(response.status), 'error');
+    return;
+  }
+  let body = '';
+  try { body = await response.clone().text(); } catch { /* Keep the HTTP-status fallback. */ }
+  let payload: unknown = null;
+  if (body.trim()) {
+    try { payload = JSON.parse(body); } catch { /* Plain-text errors are handled below. */ }
+  }
+  const explicit = explicitApiNotice(payload);
+  if (!response.ok) {
+    const message = explicit?.message ?? messageFromPayload(payload) ??
+      plainTextError(body, response.headers.get('content-type')) ?? fallbackApiError(response.status);
+    notifyUser(message, 'error');
+  } else if (explicit) {
+    notifyUser(explicit.message, explicit.tone);
+  }
+}
+
+
+
+function installGlobalFetchInterceptor() {
+  if (typeof window === 'undefined') return;
+  const state = window as Window & { __qeGlobalNotificationFetchInterceptorInstalled?: boolean };
+  if (state.__qeGlobalNotificationFetchInterceptorInstalled) return;
+
+  const originalFetch = window.fetch;
+  const wrappedFetch: typeof window.fetch = async (input, init) => {
+    const isApi = isApiRequest(input);
+    try {
+      const response = await originalFetch.call(window, input, init);
+      if (isApi) void inspectApiResponse(response);
+      return response;
+    } catch (error) {
+      const isAbort = Boolean(error && typeof error === 'object' && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
+      if (isApi && !isAbort) notifyUser(networkErrorMessage(), 'error');
+      throw error;
+    }
+  };
+  window.fetch = wrappedFetch;
+  state.__qeGlobalNotificationFetchInterceptorInstalled = true;
+}
+
+installGlobalFetchInterceptor();
+
 export default function GlobalNotificationHost() {
   const [notices, setNotices] = useState<Active[]>([]);
   const [copiedId, setCopiedId] = useState<number | null>(null);
@@ -158,46 +215,12 @@ export default function GlobalNotificationHost() {
       }
     };
 
-    async function inspectApiResponse(response: Response) {
-      const length = Number(response.headers.get('content-length') || 0);
-      if (response.ok && (!isJsonContentType(response.headers.get('content-type')) || length > 512 * 1024)) return;
-      if (!response.ok && length > 1024 * 1024) {
-        notifyUser(fallbackApiError(response.status), 'error');
-        return;
-      }
-      let body = '';
-      try { body = await response.clone().text(); } catch { /* Keep the HTTP-status fallback. */ }
-      let payload: unknown = null;
-      if (body.trim()) {
-        try { payload = JSON.parse(body); } catch { /* Plain-text errors are handled below. */ }
-      }
-      const explicit = explicitApiNotice(payload);
-      if (!response.ok) {
-        const message = explicit?.message ?? messageFromPayload(payload) ??
-          plainTextError(body, response.headers.get('content-type')) ?? fallbackApiError(response.status);
-        notifyUser(message, 'error');
-      } else if (explicit) {
-        notifyUser(explicit.message, explicit.tone);
-      }
-    }
-
-    const originalFetch = window.fetch;
-    const wrappedFetch: typeof window.fetch = async (input, init) => {
-      const isApi = isApiRequest(input);
-      try {
-        const response = await originalFetch.call(window, input, init);
-        if (isApi) void inspectApiResponse(response);
-        return response;
-      } catch (error) {
-        const isAbort = Boolean(error && typeof error === 'object' && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
-        if (isApi && !isAbort) notifyUser(networkErrorMessage(), 'error');
-        throw error;
-      }
-    };
 
     window.addEventListener(EVENT, onNotification);
-    window.fetch = wrappedFetch;
+    notificationHostReady = true;
+    queuedNotifications.splice(0).forEach(notice => publish(notice.message, notice.tone));
     return () => {
+      notificationHostReady = false;
       window.removeEventListener(EVENT, onNotification);
       if (window.fetch === wrappedFetch) window.fetch = originalFetch;
       timersRef.current.forEach(timer => window.clearTimeout(timer));
