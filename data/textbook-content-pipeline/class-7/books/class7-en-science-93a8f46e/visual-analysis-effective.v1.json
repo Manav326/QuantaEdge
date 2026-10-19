@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8d55efeecccc2dcf51c566b09ced640d65b457421ccc859c45878ef9d9469136",
+  "raw_analysis_sha256": "21a298c0fd84fd6d6693d699bfd9706fc4bbbf8593c3df74f379f2af6a6415b3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:21:51Z",
+      "checkpointed_at": "2026-10-19T12:23:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:22:11Z",
+      "checkpointed_at": "2026-10-19T12:24:14Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -95025,6 +95025,134 @@
         "limitations": [
           "The image does not provide any visual evidence or diagram to support the question."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8b0556b2399107d45ce946d1",
+      "asset_sha256": "b903d959e55569ae3698bd8bad084a5d52ebca6f79b49b3b70fd044e60ecff9c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/b903d959e55569ae3698bd8bad084a5d52ebca6f79b49b3b70fd044e60ecff9c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a flag-like object at the top, possibly representing a historical or educational document.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than metal and use them for making the electrical circuit. Do you think the electric current will pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "electrical circuit"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:24:50Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a flag-like object at the top, possibly representing a historical or educational document.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "35",
+          "Suppose, we make wires of materials other than metal and use them for making the electrical circuit. Do you think the electric current will pass through those materials in such a circuit?",
+          "Activity 3.11: Let us identify"
+        ],
+        "concepts": [
+          "electric current",
+          "materials",
+          "electrical circuit"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "unclear if the image is a full page or cropped figure"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2830879cccb8cbad23e185e2",
+      "asset_sha256": "bf040cac974143a36cc0e73dbb423748b4513bd51b9b9b127a345e25a82a7e86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/bf040cac974143a36cc0e73dbb423748b4513bd51b9b9b127a345e25a82a7e86.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a scroll with a quill pen, possibly representing a historical or literary context.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image may be a full page, not a cropped figure.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:25:24Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a scroll with a quill pen, possibly representing a historical or literary context.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image may be a full page, not a cropped figure.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2a2fa4a0b05b069d2289c019",
+      "asset_sha256": "8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/8890423eb05678fca7068470864e3ad389cd7daca1156cdde881b511fbf4aeef.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a pen tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:25:28Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a pen tip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
