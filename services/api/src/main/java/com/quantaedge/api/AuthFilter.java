@@ -20,10 +20,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthFilter extends OncePerRequestFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
   private static final long MAX_BRANDING_ASSET_REQUEST_BYTES = 2_250_000L;
+  private static final long MAX_NOTIFICATION_MEDIA_REQUEST_BYTES = 101L * 1024L * 1024L;
   private final AuthService auth;
   private final StaffAuditService staffAudit;
   private final AuthorizationService authorization;
   private final InstitutionTenantContextService institutionTenantContextService;
+  private final InstitutionAuthService institutionAuth;
 
   @Value("${app.auth.workspace-origins.education-admin:http://localhost:3001}")
   private String educationAdminOrigins = "http://localhost:3001";
@@ -100,16 +102,23 @@ public class AuthFilter extends OncePerRequestFilter {
 
   @Autowired
   public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization,
-      InstitutionTenantContextService institutionTenantContextService) {
+      InstitutionTenantContextService institutionTenantContextService, InstitutionAuthService institutionAuth) {
     this.auth = auth;
     this.staffAudit = staffAudit;
     this.authorization = authorization;
     this.institutionTenantContextService = institutionTenantContextService;
+    this.institutionAuth = institutionAuth;
+  }
+
+  /** Compatibility constructor for tests that do not exercise institution-admin sessions. */
+  public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization,
+      InstitutionTenantContextService institutionTenantContextService) {
+    this(auth,staffAudit,authorization,institutionTenantContextService,null);
   }
 
   /** Compatibility constructor for focused tests that do not exercise tenant resolution. */
   public AuthFilter(AuthService auth, StaffAuditService staffAudit, AuthorizationService authorization) {
-    this(auth, staffAudit, authorization, null);
+    this(auth, staffAudit, authorization, null, null);
   }
 
   /** Compatibility constructor for isolated tests that do not exercise branding uploads. */
@@ -143,6 +152,12 @@ public class AuthFilter extends OncePerRequestFilter {
     return "POST".equalsIgnoreCase(request.getMethod())
         && request.getRequestURI().matches(
             "^/api/v1/hrms/platform/institutions/[0-9]+/branding/assets/(logo|app-icon)$");
+  }
+
+  private static boolean isNotificationMediaUpload(HttpServletRequest request) {
+    return "POST".equalsIgnoreCase(request.getMethod())
+        && request.getRequestURI().matches(
+            "^/api/v1/(admin|hrms|institution)/notifications/media$");
   }
 
   private static void writeJsonError(HttpServletResponse response, int status, String code, String message)
@@ -345,6 +360,33 @@ public class AuthFilter extends OncePerRequestFilter {
             || !authorization.hasPermission(context, "QE_PLATFORM_OWNER")) {
           writeJsonError(response, HttpServletResponse.SC_FORBIDDEN,
               "PLATFORM_OWNER_REQUIRED", "Platform owner access is required to upload institution branding.");
+          return;
+        }
+      }
+
+      if (isNotificationMediaUpload(request) && !preflight) {
+        long contentLength=request.getContentLengthLong();
+        if(contentLength>MAX_NOTIFICATION_MEDIA_REQUEST_BYTES) {
+          writeJsonError(response,HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE,
+              "NOTIFICATION_MEDIA_TOO_LARGE","Notification media requests must be 100 MiB plus multipart overhead or smaller.");
+          return;
+        }
+        boolean allowed=false;
+        if(uri.startsWith("/api/v1/hrms/")) {
+          allowed=context!=null && authorization!=null
+              && authorization.hasPermission(context,"QE_PLATFORM_OWNER")
+              && "HRMS".equals(AuthService.normalizeWorkspace(context.workspace()));
+        } else if(uri.startsWith("/api/v1/admin/")) {
+          allowed=context!=null && authorization!=null
+              && authorization.hasPermission(context,"NOTIFICATION_TEMPLATE_MANAGE");
+        } else if(uri.startsWith("/api/v1/institution/")) {
+          InstitutionAuthService.InstitutionPrincipal principal= institutionAuth==null?null
+              : institutionAuth.current(cookieValue(request,AuthService.INSTITUTION_COOKIE));
+          allowed=principal!=null&&!principal.mustChangePassword();
+        }
+        if(!allowed) {
+          writeJsonError(response,HttpServletResponse.SC_FORBIDDEN,
+              "NOTIFICATION_MEDIA_FORBIDDEN","An authorized notification-template editor is required to upload media.");
           return;
         }
       }
