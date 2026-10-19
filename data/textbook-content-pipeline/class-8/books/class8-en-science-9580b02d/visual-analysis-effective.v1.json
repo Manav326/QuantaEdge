@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fcde57989e5f3b9dc5e57697ab762672d48161da6ae61cb9a38e5752a8176e7d",
+  "raw_analysis_sha256": "acd009248307c19f527e85d37b4fd9d28c3ddcb8977b321b259c1d339199b726",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:10:39Z",
+      "checkpointed_at": "2026-10-19T02:15:04Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:11:28Z",
+      "checkpointed_at": "2026-10-19T02:15:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29111,7 +29111,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:12:06Z",
+      "checkpointed_at": "2026-10-19T02:16:31Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -33178,6 +33178,162 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible text or images to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b068c197b09af2a01d31accd",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 30,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7aeb17d90d308e69c7b1163022773d7252433762ffd0e51a3a697f06f8a245dd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:16:44Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d41bd2d73f568c11f51295f0",
+      "asset_sha256": "0c2a85c2a95e91a458f45d2717252ee06c66553a15822f9fdb9cab2d03cb1205",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 30,
+      "asset_path": "page-0030.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7aeb17d90d308e69c7b1163022773d7252433762ffd0e51a3a697f06f8a245dd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the history of microscopes and the concept of cells.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "In 1665, a scientist named Robert Hooke",
+          "published a book called Micrographia. He",
+          "was a careful observer, and a skilled artist.",
+          "In this book, he showed detailed drawings",
+          "of tiny things that people had never seen",
+          "before — things he saw using a tool we now",
+          "call a microscope.",
+          "His microscope made things look 200",
+          "to 300 times bigger, than what one could",
+          "see with the unaided eye. One day, he",
+          "looked at a thin slice of cork and saw it",
+          "was made of many small, empty spaces.",
+          "These compartments reminded him of a",
+          "honeycomb. He drew what he saw and",
+          "called each small space a cell. This was the",
+          "first time the word cell was used in science",
+          "to describe the basic unit of life.",
+          "Around the same time in 1660s, Antonie",
+          "van Leeuwenhoek, a Dutch scientist, made",
+          "better lenses that allowed him to build more",
+          "useful microscopes. He was the first person",
+          "to clearly see and describe tiny living things",
+          "like bacteria and blood cells. Because of this",
+          "he is known as the Father of Microbiology.",
+          "Fig. 2.2: (a) Micrographia book; (b) Microscope of Robert Hooke;",
+          "(c) Cork cells as published in the Micrographia",
+          "2.1 What is a Cell?",
+          "All living beings are made up of cells. You might wonder what",
+          "cells actually look like. Let us take a closer look at the basic"
+        ],
+        "concepts": [
+          "Micrographia",
+          "Robert Hooke",
+          "Microscope",
+          "Cells",
+          "Antonie van Leeuwenhoek",
+          "Microscopy"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the history of microscopes and the concept of cells.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook or the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:21:15Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the history of microscopes and the concept of cells.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "In 1665, a scientist named Robert Hooke",
+          "published a book called Micrographia. He",
+          "was a careful observer, and a skilled artist.",
+          "In this book, he showed detailed drawings",
+          "of tiny things that people had never seen",
+          "before — things he saw using a tool we now",
+          "call a microscope.",
+          "His microscope made things look 200",
+          "to 300 times bigger, than what one could",
+          "see with the unaided eye. One day, he",
+          "looked at a thin slice of cork and saw it",
+          "was made of many small, empty spaces.",
+          "These compartments reminded him of a",
+          "honeycomb. He drew what he saw and",
+          "called each small space a cell. This was the",
+          "first time the word cell was used in science",
+          "to describe the basic unit of life.",
+          "Around the same time in 1660s, Antonie",
+          "van Leeuwenhoek, a Dutch scientist, made",
+          "better lenses that allowed him to build more",
+          "useful microscopes. He was the first person",
+          "to clearly see and describe tiny living things",
+          "like bacteria and blood cells. Because of this",
+          "he is known as the Father of Microbiology.",
+          "Fig. 2.2: (a) Micrographia book; (b) Microscope of Robert Hooke;",
+          "(c) Cork cells as published in the Micrographia",
+          "2.1 What is a Cell?",
+          "All living beings are made up of cells. You might wonder what",
+          "cells actually look like. Let us take a closer look at the basic"
+        ],
+        "concepts": [
+          "Micrographia",
+          "Robert Hooke",
+          "Microscope",
+          "Cells",
+          "Antonie van Leeuwenhoek",
+          "Microscopy"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the history of microscopes and the concept of cells.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook or the page."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
