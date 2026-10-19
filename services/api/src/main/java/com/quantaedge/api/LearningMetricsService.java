@@ -185,22 +185,6 @@ public class LearningMetricsService {
   }
 
   Map<String,Object> sessionStatsFor(long studentId, Long institutionId) {
-    return sessionStatsFor(studentId,institutionId,null);
-  }
-
-  /** Course-specific session totals exclude generic sessions lacking a reliable course/lesson binding. */
-  Map<String,Object> sessionStatsFor(long studentId, Long institutionId, Long courseId) {
-    if(courseId==null) return sessionStatsForUnscoped(studentId,institutionId);
-    String courseSql = """
-      select
-        (
-          (select count(*) from student_practice_session ps
-           where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
-             and ps.created_at>=now()-interval '30 days'
-             and exists (
-               select 1
-               from jsonb_array_elements(ps.topic_selections) topic
-               join lesson l on l.id=CASE WHEN (topic->>'sourceLessonId') ~ '^[0-9]+
     String sql = """
       select
         ((select count(*) from learning_session ls where ls.student_id=? __TENANT_LS__ and ls.started_at>=now()-interval '30 days')
@@ -220,6 +204,11 @@ public class LearningMetricsService {
     return jdbc.queryForMap(tenantSql(sql,institutionId),
         tenantArgs(institutionId,studentId,studentId,studentId,studentId,
             studentId,studentId,studentId,studentId));
+  }
+
+  /** Session-duration data has no persisted course key in older session rows, so keep it explicitly learner-wide. */
+  Map<String,Object> sessionStatsFor(long studentId, Long institutionId, Long courseId) {
+    return sessionStatsFor(studentId,institutionId);
   }
 
   private String tenantSql(String sql, Long institutionId) {
