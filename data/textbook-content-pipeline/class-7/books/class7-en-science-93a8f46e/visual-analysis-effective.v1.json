@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "93e0a7f371175644c9fc7fa15a1d1bc6829af89a9b955d846bf4f483954e671a",
+  "raw_analysis_sha256": "3445effa9c5365e0774d8507c013de9ac8cc1fb1cd0b9b4bf138dcea183cced8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T01:21:44Z",
+      "checkpointed_at": "2026-10-19T01:26:27Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T01:22:11Z",
+      "checkpointed_at": "2026-10-19T01:26:55Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -74576,6 +74576,146 @@
         "context_relation": "The page is discussing the components of a torch, specifically focusing on the electrical circuit.",
         "limitations": [
           "The image does not show the actual components or the electrical circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cdac70edd86027cd6b2c29c4",
+      "asset_sha256": "2b0554fc09626672fcc1378018078f468c6d8758a52bb70b9cc3d2bbb288821f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/2b0554fc09626672fcc1378018078f468c6d8758a52bb70b9cc3d2bbb288821f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:27:58Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "07fa8976e1fa2fdf7a951c8e",
+      "asset_sha256": "3798d35f30ede1bf857108b7fbd25368fe317e3917521ba23de2faaf46755333",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/3798d35f30ede1bf857108b7fbd25368fe317e3917521ba23de2faaf46755333.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A foot wearing a colorful slipper, with a green arrow pointing to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the components of a torch or the electrical circuit.",
+          "The image is a simple illustration and does not represent a full page or a diagram of the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:29:07Z",
+      "effective_analysis": {
+        "visual_summary": "A foot wearing a colorful slipper, with a green arrow pointing to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the components of a torch or the electrical circuit.",
+          "The image is a simple illustration and does not represent a full page or a diagram of the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2d1e6b0b14c8098de6a1d271",
+      "asset_sha256": "f6eef9fb2cd8e03657bf642f40fcb43bc9e5a8221d682fd83274bfe248c7a76c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 45,
+      "asset_path": "assets/f6eef9fb2cd8e03657bf642f40fcb43bc9e5a8221d682fd83274bfe248c7a76c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "33568996ed3c182b76cc5e60bfeecc3759fbaeef9ef067159299fdf8c400bd4f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the components of a simple electrical circuit, including a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a simple electrical circuit",
+          "torch"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and the components of a torch.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T01:30:20Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a simple electrical circuit, including a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a simple electrical circuit",
+          "torch"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and the components of a torch.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

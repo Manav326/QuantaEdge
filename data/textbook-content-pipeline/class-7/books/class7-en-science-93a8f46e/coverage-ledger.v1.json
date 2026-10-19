@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1262,
-    "successful_visual_analyses": 1247,
-    "missing_visual_analyses": 6226,
+    "raw_analysis_result_rows": 1265,
+    "successful_visual_analyses": 1250,
+    "missing_visual_analyses": 6223,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6241,
+    "unresolved_count": 6238,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -58043,9 +58043,16 @@
       "asset_path": "assets/2b0554fc09626672fcc1378018078f468c6d8758a52bb70b9cc3d2bbb288821f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58061,9 +58068,19 @@
       "asset_path": "assets/3798d35f30ede1bf857108b7fbd25368fe317e3917521ba23de2faaf46755333.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A foot wearing a colorful slipper, with a green arrow pointing to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the components of a torch or the electrical circuit.",
+          "The image is a simple illustration and does not represent a full page or a diagram of the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -58079,9 +58096,29 @@
       "asset_path": "assets/f6eef9fb2cd8e03657bf642f40fcb43bc9e5a8221d682fd83274bfe248c7a76c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the components of a simple electrical circuit, including a torch.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "3.2 A Simplep Electrical Circuit",
+          "To understand how a torch works, let us ﬁrst ﬁnd out about its components.",
+          "3.2.1 Electric cell",
+          "Components",
+          "Activity 3.2: Let us observe",
+          "Negative"
+        ],
+        "concepts": [
+          "electric cell",
+          "components of a simple electrical circuit",
+          "torch"
+        ],
+        "context_relation": "The image is related to the topic of electrical circuits and the components of a torch.",
+        "limitations": [
+          "The image does not provide specific details about the components or their functions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
