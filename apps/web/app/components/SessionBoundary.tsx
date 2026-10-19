@@ -73,7 +73,8 @@ function institutionCodeForRequest(): string | null {
 
   const routeCookies = [
     { path: '/login/student', name: 'qe-tenant-login-student' },
-    { path: '/parent/learning', name: 'qe-tenant-student' },
+    { path: '/parent/learning', name: 'qe-tenant-parent' },
+    { path: '/parent', name: 'qe-tenant-parent' },
     { path: '/student', name: 'qe-tenant-student' },
     { path: '/signup', name: 'qe-tenant-signup' },
     { path: '/session', name: 'qe-tenant-session' },
