@@ -254,6 +254,39 @@ class AuthFilterTest {
   }
 
   @Test
+  void parentPersonalLearningAccessLookupIsAllowedOnlyInParentWorkspace() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest parentRequest = new MockHttpServletRequest(
+        "GET", "/api/v1/auth/my-learning-access");
+    parentRequest.addHeader(AuthService.WORKSPACE_HEADER, "PARENT");
+    parentRequest.addHeader("Origin", "http://localhost:3000");
+    MockHttpServletResponse parentResponse = new MockHttpServletResponse();
+    MockFilterChain parentChain = new MockFilterChain();
+
+    filter.doFilter(parentRequest, parentResponse, parentChain);
+
+    assertEquals(200, parentResponse.getStatus());
+    assertEquals(parentRequest, parentChain.getRequest());
+    verifyNoInteractions(auth);
+
+    MockHttpServletRequest studentRequest = new MockHttpServletRequest(
+        "GET", "/api/v1/auth/my-learning-access");
+    studentRequest.addHeader(AuthService.WORKSPACE_HEADER, "STUDENT");
+    studentRequest.addHeader("Origin", "http://localhost:3000");
+    MockHttpServletResponse studentResponse = new MockHttpServletResponse();
+    MockFilterChain studentChain = new MockFilterChain();
+
+    filter.doFilter(studentRequest, studentResponse, studentChain);
+
+    assertEquals(403, studentResponse.getStatus());
+    assertTrue(studentResponse.getContentAsString().contains("AUTH_OPERATION_SCOPE_MISMATCH"));
+    assertNull(studentChain.getRequest());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
   void parentPersonalLearningSessionCannotBeInvokedFromStudentWorkspace() throws Exception {
     AuthService auth = mock(AuthService.class);
     StaffAuditService audit = mock(StaffAuditService.class);
