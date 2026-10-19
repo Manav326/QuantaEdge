@@ -159,9 +159,8 @@ public final class InstitutionThemeTokens {
     // Navigation stays neutral in both appearances; only the active item receives a subtle brand tint.
     String navActiveBackground = primaryContainer;
     String navActiveText = bestContrastText(navActiveBackground);
-    String selectedBackground = mix(background, brandPrimary, 0.10);
-    String selectedText = ensureContrast(ensureContrast(brandPrimary, surface, 4.5, !darkMode),
-        selectedBackground, 4.5, !darkMode);
+    String selectedBackground = primaryContainer;
+    String selectedText = bestContrastText(selectedBackground);
     String onPrimary = bestContrastText(brandPrimary);
     String onAccent = bestContrastText(brandAccent);
 
