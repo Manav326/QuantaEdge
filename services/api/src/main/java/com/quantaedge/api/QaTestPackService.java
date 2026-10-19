@@ -1297,7 +1297,7 @@ public class QaTestPackService {
   }
 
   private boolean baselineSnapshotsMatch(Map<String,Object> before, Map<String,Object> after) {
-    List<String> protectedTables = List.of("institution_tenant", "institution_branding", "institution_admin_account", "staff_account", "institution_course_release", "institution_course_assignment", "institution_course_entitlement", "student_program_enrollment", "user_account", "student", "guardian_student", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
+    List<String> protectedTables = List.of("curriculum_program", "curriculum_subject", "curriculum_program_subject", "curriculum_chapter", "institution_marketplace_offer", "institution_tenant", "institution_branding", "institution_admin_account", "staff_account", "institution_course_release", "institution_course_assignment", "institution_course_entitlement", "student_program_enrollment", "user_account", "student", "guardian_student", "student_login_credential", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
     if (before == null || after == null || before.size() != protectedTables.size()
         || after.size() != protectedTables.size()) return false;
     for (String table : protectedTables) {
@@ -1313,6 +1313,11 @@ public class QaTestPackService {
   private Map<String,Object> baselineSnapshot() {
     Map<String,Object> snapshot = new LinkedHashMap<>();
     Map<String,String> primaryKeys = Map.ofEntries(
+        Map.entry("curriculum_program", "id"),
+        Map.entry("curriculum_subject", "id"),
+        Map.entry("curriculum_program_subject", "id"),
+        Map.entry("curriculum_chapter", "id"),
+        Map.entry("institution_marketplace_offer", "id"),
         Map.entry("institution_tenant", "id"),
         Map.entry("institution_branding", "institution_id"),
         Map.entry("institution_admin_account", "id"),
@@ -1321,6 +1326,7 @@ public class QaTestPackService {
         Map.entry("institution_course_assignment", "id"),
         Map.entry("institution_course_entitlement", "id"),
         Map.entry("student_program_enrollment", "id"),
+        Map.entry("student_login_credential", "id"),
         Map.entry("user_account", "id"),
         Map.entry("student", "id"),
         Map.entry("guardian_student", "id"),
