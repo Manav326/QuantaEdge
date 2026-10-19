@@ -443,7 +443,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var certificateLanguage by rememberSaveable {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
     }
-    var currentSubject by rememberSaveable { mutableStateOf("maths") }
+    var currentSubject by rememberSaveable { mutableStateOf("") }
     var resourceSubjectFilter by rememberSaveable { mutableStateOf("ALL") }
     var currentCourseId by rememberSaveable { mutableStateOf(preferences.getLong("activeCourseId", 0L)) }
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
@@ -474,10 +474,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentProfile by remember { mutableStateOf(JSONObject()) }
     var accountIdentityProfile by remember { mutableStateOf(JSONObject()) }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
+    var selectedChildCourses by remember { mutableStateOf(emptyList<JSONObject>()) }
 
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
     var structuredLessons by remember { mutableStateOf(emptyList<JSONObject>()) }
-    var structuredLessonMode by rememberSaveable { mutableStateOf(false) }
+    var structuredLessonMode by rememberSaveable { mutableStateOf(true) }
+    var structuredSubjectFilter by rememberSaveable { mutableStateOf("") }
     var structuredLessonArtifactId by rememberSaveable { mutableStateOf("") }
     var structuredLessonSavedResponses by remember { mutableStateOf(JSONObject()) }
     var structuredLessonPendingQuestionIds by remember { mutableStateOf(emptySet<String>()) }
@@ -751,42 +753,60 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.getArray("/api/v1/students/me/programs").objectItems()
         }
         studentProgramsLoadFailed = response.isFailure
-        val programs = response.getOrDefault(emptyList())
-        studentPrograms = programs
-        val ownedPrograms = programs.filter {
-            it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
+        // A network/server error is not an empty catalogue. Keep the persisted focused course
+        // and last known course cards so a temporary outage cannot erase the learner's context.
+        if (response.isFailure) return
+
+        var programs = response.getOrThrow()
+        fun isActive(course: JSONObject): Boolean =
+            course.optBoolean("is_enrolled") || course.optBoolean("enrolled")
+        fun isAvailable(course: JSONObject): Boolean = isActive(course) || course.optBoolean("paused")
+        var ownedPrograms = programs.filter {
+            isAvailable(it) && it.longAny("id", "course_id") > 0L
         }
-        if (currentCourseId <= 0L || ownedPrograms.none { it.longAny("id", "course_id") == currentCourseId }) {
-            currentCourseId = ownedPrograms.firstOrNull {
-                it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
-            }?.longAny("id", "course_id") ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
-        }
-        val progress = linkedMapOf<Long, JSONObject>()
-        ownedPrograms.forEach { program ->
-            val id = program.longAny("id", "course_id")
-            if (id > 0L) runCatching {
-                ApiClient.getObject("/api/v1/students/me?courseId=" + id)
-            }.getOrNull()?.let { progress[id] = it }
-        }
-        courseProgress = progress
-        val serverActive = programs.firstOrNull {
-            it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
-        }
-        if (serverActive != null) {
-            val serverActiveId = serverActive.longAny("id", "course_id")
-            if (serverActiveId > 0L) {
-                currentCourseId = serverActiveId
-                preferences.edit().putLong("activeCourseId", serverActiveId).apply()
-            }
-        } else if (currentCourseId > 0L && programs.none {
-                it.longAny("id", "course_id") == currentCourseId &&
-                    (it.optBoolean("paused") || it.optBoolean("is_enrolled", it.optBoolean("enrolled")))
+
+        if (currentCourseId <= 0L || ownedPrograms.none {
+                it.longAny("id", "course_id") == currentCourseId
             }) {
+            currentCourseId = ownedPrograms.firstOrNull { isActive(it) }?.longAny("id", "course_id")
+                ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
+        }
+
+        // Pre-migration paused rows are legacy state, not a primary-course feature. Re-activate
+        // only the focused row, using the same audited course-enrolment endpoint as the web picker.
+        val focused = ownedPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }
+        if (focused != null && !isActive(focused) && focused.optBoolean("paused")) {
+            val normalized = runCatching {
+                ApiClient.postObject("/api/v1/students/me/programs/id/" + currentCourseId + "/enroll", JSONObject())
+                ApiClient.getArray("/api/v1/students/me/programs").objectItems()
+            }
+            if (normalized.isFailure) {
+                studentPrograms = programs
+                studentProgramsLoadFailed = true
+                return
+            }
+            programs = normalized.getOrThrow()
+            ownedPrograms = programs.filter { isAvailable(it) && it.longAny("id", "course_id") > 0L }
+            studentProgramsLoadFailed = false
+        }
+
+        studentPrograms = programs
+        if (currentCourseId > 0L && ownedPrograms.any { it.longAny("id", "course_id") == currentCourseId }) {
+            preferences.edit().putLong("activeCourseId", currentCourseId).apply()
+        } else {
             currentCourseId = 0L
             preferences.edit().remove("activeCourseId").apply()
         }
-    }
 
+        val progress = linkedMapOf<Long, JSONObject>()
+        // The course-metrics API intentionally rejects paused rows; report only active courses.
+        ownedPrograms.filter { isActive(it) }.forEach { program ->
+            val id = program.longAny("id", "course_id")
+            runCatching { ApiClient.getObject("/api/v1/students/me?courseId=" + id) }
+                .getOrNull()?.let { progress[id] = it }
+        }
+        courseProgress = progress
+    }
     suspend fun refreshStudentTextbookDocuments() {
         if (currentCourseId <= 0L) {
             studentTextbookDocuments = emptyList()
@@ -853,7 +873,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT") || role.contains("LEARNER")) {
-            studentProfile = ApiClient.getObject("/api/v1/students/me")
+            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
             // Keep content language independent from the app interface language.
             val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }
@@ -862,6 +882,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 preferences.edit().putString("contentLanguage", savedLearningLanguage).apply()
             }
             refreshStudentPrograms()
+            if (studentProgramsLoadFailed) {
+                // Do not clear the saved course or route the learner to Marketplace during an outage.
+                recommendation = JSONObject()
+                status = if (language == "hi")
+                    "कोर्स की जानकारी अभी अपडेट नहीं हो सकी। आपका चुना हुआ कोर्स सुरक्षित है; फिर प्रयास करें।"
+                else "Course data could not be refreshed. Your selected course is preserved; please retry."
+                route = AppRoute.STUDENT_HOME
+                return
+            }
             val hasCourseAccess = studentPrograms.any {
                 it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused")
             }
@@ -889,7 +918,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
                 }
                 refreshStudentTextbookDocuments()
-                recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
+                recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId) }.getOrDefault(JSONObject())
                 route = AppRoute.STUDENT_HOME
             }
         } else {
@@ -989,7 +1018,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (auth.textAny("role").contains("PARENT", true)) {
                 parentAccount = runCatching { ApiClient.getObject("/api/v1/guardians/account") }.getOrDefault(parentAccount)
             } else {
-                studentProfile = runCatching { ApiClient.getObject("/api/v1/students/me") }.getOrDefault(studentProfile)
+                studentProfile = runCatching { ApiClient.getObject("/api/v1/students/me/profile") }.getOrDefault(studentProfile)
             }
             status = if (language == "hi") "खाते की प्रोफ़ाइल सुरक्षित हो गई।" else "Account profile saved."
         }
@@ -1100,9 +1129,19 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             if (courseId <= 0L) throw IOException("Choose a valid course.")
             ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            currentCourseId = courseId
+            preferences.edit().putLong("activeCourseId", courseId).apply()
             refreshStudentPrograms()
-            studentProfile = ApiClient.getObject("/api/v1/students/me")
-            status = if (language == "hi") "Course join हो गया।" else "Course joined."
+            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
+            refreshStudentTextbookDocuments()
+            structuredSubjectFilter = ""
+            currentSubject = ""
+            structuredLessonMode = true
+            val params = "courseId=" + courseId + "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val lessonsArray = ApiClient.getArray("/api/v1/learning/structured-lessons?" + params)
+            structuredLessons = (0 until lessonsArray.length()).mapNotNull { lessonsArray.optJSONObject(it) }
+            route = AppRoute.SUBJECT_LESSONS
+            status = if (language == "hi") "Course join होकर खुल गया।" else "Course joined and opened."
         }
     }
 
@@ -1117,16 +1156,24 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             return
         }
         runTask {
-            // The server owns the active-course transition. This also pauses the
-            // previous course while preserving its enrollment and learning history.
-            ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
-            refreshStudentPrograms()
+            // Focus only selects which course the learner is viewing. It never changes
+            // enrollment for other courses and opens this exact course's structured catalogue.
+            if (!course.optBoolean("is_enrolled", course.optBoolean("enrolled"))) {
+                ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            }
             currentCourseId = courseId
             preferences.edit().putLong("activeCourseId", courseId).apply()
+            refreshStudentPrograms()
             studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
             refreshStudentTextbookDocuments()
-            route = AppRoute.STUDENT_HOME
-            status = if (language == "hi") "सीखने का course बदल गया।" else "Learning course changed."
+            structuredSubjectFilter = ""
+            currentSubject = ""
+            structuredLessonMode = true
+            val params = "courseId=" + courseId + "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val array = ApiClient.getArray("/api/v1/learning/structured-lessons?" + params)
+            structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
+            route = AppRoute.SUBJECT_LESSONS
+            status = if (language == "hi") "चुना गया course खुल गया।" else "Selected structured course opened."
         }
     }
 
@@ -1356,65 +1403,87 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
-        structuredLessonMode = false
-        currentSubject = subjectCode
-        val previousCourseId = currentCourseId
         val targetCourseId = courseId.takeIf { it > 0L } ?: currentCourseId
-        val shouldActivateCourse = targetCourseId > 0L && previousCourseId != targetCourseId
-        currentCourseId = targetCourseId.coerceAtLeast(0L)
+        if (targetCourseId <= 0L) {
+            error = if (language == "hi") "पहले एक उपलब्ध course चुनें।" else "Choose an available course first."
+            route = AppRoute.ALL_COURSES
+            return
+        }
+        val targetCourse = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == targetCourseId &&
+                (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+        }
+        if (targetCourse == null) {
+            error = if (language == "hi") "यह course आपके खाते में नामांकित नहीं है।" else "This course is not enrolled in your account."
+            route = AppRoute.ALL_COURSES
+            return
+        }
+        val shouldReactivate = !targetCourse.optBoolean("is_enrolled", targetCourse.optBoolean("enrolled"))
+        currentCourseId = targetCourseId
+        preferences.edit().putLong("activeCourseId", targetCourseId).apply()
+        currentSubject = subjectCode
+        structuredSubjectFilter = subjectCode
+        structuredLessonMode = true
+        structuredLessons = emptyList()
         lessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
-            if (shouldActivateCourse) {
+            if (shouldReactivate) {
                 ApiClient.postObject("/api/v1/students/me/programs/id/" + targetCourseId + "/enroll", JSONObject())
                 refreshStudentPrograms()
-                preferences.edit().putLong("activeCourseId", targetCourseId).apply()
             }
-            if (targetCourseId > 0L) {
-                studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + targetCourseId)
-            } else if (studentProfile.length() == 0) {
-                studentProfile = ApiClient.getObject("/api/v1/students/me")
-            }
-            var classCode = studentProfile.textAny("class_code", "classCode")
-            if (classCode.isBlank()) {
-                val profile = ApiClient.getObject("/api/v1/students/me/profile")
-                classCode = profile.textAny("class_code", "classCode")
-            }
-            if (classCode.isBlank()) throw IOException("आपकी कक्षा API से नहीं मिली। अपने खाते की जानकारी जाँचें।")
-            val path = if (targetCourseId > 0L) {
-                "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode) +
-                    "&language=" + learningContentLanguage + "&courseId=" + targetCourseId
-            } else {
-                "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
-                    "&subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
-            }
-            lessons = ApiClient.getArray(path).objectItems()
+            studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + targetCourseId)
+            val path = "/api/v1/learning/structured-lessons?courseId=" + targetCourseId +
+                "&subjectCode=" + ApiClient.encodeQuery(subjectCode) +
+                "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val array = ApiClient.getArray(path)
+            structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
             route = AppRoute.SUBJECT_LESSONS
         }
     }
 
-    fun openStructuredLessons() {
+    fun openStructuredLessons(subjectCode: String? = null) {
         structuredLessonMode = true
+        subjectCode?.let {
+            structuredSubjectFilter = it
+            if (it.isNotBlank()) currentSubject = it
+        }
         structuredLessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
-            val profile = if (studentProfile.length() == 0) {
-                ApiClient.getObject("/api/v1/students/me")
-            } else studentProfile
-            val classCode = profile.textAny("class_code", "classCode")
-            val classNumber = classCode.filter(Char::isDigit)
+            if (currentCourseId <= 0L) {
+                refreshStudentPrograms()
+            }
+            if (currentCourseId <= 0L) throw IOException(
+                if (language == "hi") "पाठ देखने के लिए पहले एक enrolled course चुनें।"
+                else "Choose an enrolled course before opening lessons."
+            )
+            val course = studentPrograms.firstOrNull {
+                it.longAny("id", "course_id") == currentCourseId &&
+                    (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+            } ?: throw IOException("This course is not available to the signed-in institution account.")
             val params = mutableListOf(
                 "language=" + ApiClient.encodeQuery(learningLanguage),
-                "subjectCode=" + ApiClient.encodeQuery(currentSubject)
+                "courseId=" + currentCourseId
             )
-            if (classNumber.isNotBlank()) params += "classNumber=" + classNumber
-            if (currentCourseId > 0L) params += "courseId=" + currentCourseId
+            if (structuredSubjectFilter.isNotBlank()) {
+                val courseSubjects = course.optJSONArray("subjects")
+                val subjectBelongsToCourse = courseSubjects != null && (0 until courseSubjects.length()).any { index ->
+                    val subject = courseSubjects.optJSONObject(index) ?: return@any false
+                    subject.textAny("subject_code", "code") == structuredSubjectFilter
+                }
+                if (!subjectBelongsToCourse) structuredSubjectFilter = ""
+            }
+            if (structuredSubjectFilter.isNotBlank()) {
+                params += "subjectCode=" + ApiClient.encodeQuery(structuredSubjectFilter)
+            }
             val array = ApiClient.getArray(
                 "/api/v1/learning/structured-lessons?" + params.joinToString("&")
             )
             structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
         }
     }
+
 
     fun openStructuredLesson(item: JSONObject) {
         val artifactId = item.optString("artifactId")
@@ -1446,8 +1515,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             val id = lessonRow.longAny("id", "lesson_id")
             if (id <= 0L) throw IOException("यह पाठ पहचान में नहीं आया।")
-            ApiClient.postObject("/api/v1/learning/lessons/" + id + "/start")
-            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?language=" + learningContentLanguage)
+            ApiClient.postObject("/api/v1/learning/lessons/" + id + "/start?courseId=" + currentCourseId)
+            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
             answers.clear()
             feedbacks.clear()
             lessonAnswerLocks.clear()
@@ -1485,10 +1554,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun openDiagnostic() {
+        if (currentCourseId <= 0L || studentPrograms.none { it.longAny("id", "course_id") == currentCourseId && it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }) {
+            error = if (language == "hi") "पहले अपना enrolled course चुनें।" else "Choose an enrolled course first."
+            route = AppRoute.ALL_COURSES
+            return
+        }
         diagnostic = JSONObject()
         route = AppRoute.DIAGNOSTIC
         runTask {
-            diagnostic = ApiClient.getObject("/api/v1/diagnostic")
+            diagnostic = ApiClient.getObject("/api/v1/diagnostic?courseId=" + currentCourseId)
             feedbacks.clear()
             route = AppRoute.DIAGNOSTIC
         }
@@ -1514,8 +1588,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val onlineResponse = runCatching {
                 val filterQuery = if (subjectCode.isBlank()) "" else
                     "&subjectCode=" + ApiClient.encodeQuery(subjectCode)
-                val path = "/api/v1/learning/assessments?language=" + learningContentLanguage +
-                    filterQuery + "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
+                val path = "/api/v1/learning/assessments?courseId=" + currentCourseId +
+                    "&language=" + learningContentLanguage + filterQuery +
+                    "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
                 ApiClient.getObject(path)
             }.getOrNull()
             val onlinePage = onlineResponse?.optJSONArray("items")?.objectItems().orEmpty()
@@ -1611,8 +1686,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 route = AppRoute.ASSESSMENT_ATTEMPT
                 return@runTask
             }
+            val attemptCourseId = item.longAny("course_id", "courseId", "program_id").takeIf { it > 0L } ?: currentCourseId
+            if (attemptCourseId < 1L) throw IOException("टेस्ट शुरू करने से पहले एक enrolled course चुनें।")
             assessmentAttempt = ApiClient.postObject(
-                "/api/v1/learning/assessments/" + assessmentId + "/attempts?language=" + learningContentLanguage
+                "/api/v1/learning/assessments/" + assessmentId + "/attempts?courseId=" + attemptCourseId +
+                    "&language=" + learningContentLanguage
             )
             answers.clear()
             val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
@@ -1639,9 +1717,11 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val assessmentId = item.longAny("assessment_id", "assessmentId", "id")
             if (assessmentId <= 0L) throw IOException("इस टेस्ट की पहचान नहीं मिली।")
             if (!item.optBoolean("offline_enabled")) throw IOException("यह test offline उपयोग के लिए अनुमत नहीं है।")
+            val attemptCourseId = item.longAny("course_id", "courseId", "program_id").takeIf { it > 0L } ?: currentCourseId
+            if (attemptCourseId < 1L) throw IOException("ऑफलाइन टेस्ट तैयार करने से पहले एक enrolled course चुनें।")
             val attempt = ApiClient.postObject(
                 "/api/v1/learning/assessments/" + assessmentId +
-                    "/attempts?language=" + learningContentLanguage + "&offlineMode=true"
+                    "/attempts?courseId=" + attemptCourseId + "&language=" + learningContentLanguage + "&offlineMode=true"
             )
             if (!attempt.optBoolean("offlineMode") ||
                 attempt.textAny("offlinePackageToken").isBlank()) {
@@ -1666,7 +1746,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (attemptIds.isNotEmpty()) {
             runCatching {
                 ApiClient.getObject(
-                    "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" +
+                    "/api/v1/students/me/certificates/assessment-eligibility?courseId=" + currentCourseId + "&attemptIds=" +
                         attemptIds.joinToString(",")
                 ).optJSONArray("items").objectItems()
             }.getOrDefault(emptyList()).forEach { item ->
@@ -1676,7 +1756,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
         // The issued-certificate catalogue is authoritative for the existing View/PDF/PNG actions.
         runCatching {
-            ApiClient.getObject("/api/v1/students/me/certificates")
+            ApiClient.getObject("/api/v1/students/me/certificates?courseId=" + currentCourseId)
                 .optJSONArray("items").objectItems()
         }.getOrDefault(emptyList()).forEach { certificate ->
             val attemptId = certificate.longAny("assessment_attempt_id", "assessmentAttemptId", "attempt_id", "attemptId")
@@ -1694,9 +1774,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     suspend fun loadAssessmentResultsData() {
+        if (currentCourseId <= 0L) throw IOException("Choose an enrolled course to view its results.")
         val resultResponse = ApiClient.getObject(
             "/api/v1/learning/assessment-results?language=" + learningContentLanguage +
-                "&limit=" + resultsPageSize + "&offset=" + resultsPageOffset
+                "&courseId=" + currentCourseId + "&limit=" + resultsPageSize + "&offset=" + resultsPageOffset
         )
         val loaded = resultResponse.optJSONArray("items").objectItems()
         assessmentResults = loaded
@@ -1708,7 +1789,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             .filter { it > 0L }.distinct().take(100)
         assessmentCertificateEligibility = if (attemptIds.isEmpty()) emptyMap() else try {
             ApiClient.getObject(
-                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptIds.joinToString(",")
+                "/api/v1/students/me/certificates/assessment-eligibility?courseId=" + currentCourseId + "&attemptIds=" + attemptIds.joinToString(",")
             ).optJSONArray("items").objectItems().mapNotNull { item ->
                 val id = item.optLongAny("attempt_id", "attemptId")
                 if (id > 0L) id to item else null
@@ -1744,7 +1825,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         if (attemptId <= 0L) return
         runCatching {
             ApiClient.getObject(
-                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptId
+                "/api/v1/students/me/certificates/assessment-eligibility?courseId=" + currentCourseId + "&attemptIds=" + attemptId
             ).optJSONArray("items").objectItems()
                 .firstOrNull { it.longAny("attempt_id", "attemptId") == attemptId }
         }.getOrNull()?.let { refreshed ->
@@ -1760,6 +1841,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 JSONObject()
                     .put("achievementType", "ASSESSMENT_PASS")
                     .put("assessmentAttemptId", attemptId)
+                    .put("courseId", currentCourseId)
                     .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
                     .put("institutionCode", institutionBrandIdentity?.institutionCode.orEmpty())
@@ -1797,7 +1879,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
             val bytes = withContext(Dispatchers.IO) {
-                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/view?format=pdf")
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/view?courseId=" + currentCourseId + "&format=pdf")
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val directory = java.io.File(context.cacheDir, "certificates")
@@ -1818,7 +1900,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
             if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
             val bytes = withContext(Dispatchers.IO) {
-                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/download?format=" + format)
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/download?courseId=" + currentCourseId + "&format=" + format)
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val certificateNumber = assessmentCertificateEligibility.values
@@ -1860,12 +1942,23 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         offlineRecordingIds = offlineVideoStore.downloadedRecordingIds()
         route = AppRoute.CLASSES
         runTask {
-            val courseQuery = "&courseId=" + currentCourseId
+            val selectedCourse = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }
+                ?: throw IOException("Select an available course before loading classes.")
+            val subjectBelongsToCourse = subjectCode.isBlank() || selectedCourse.optJSONArray("subjects")?.let { array ->
+                (0 until array.length()).any { index ->
+                    val item = array.optJSONObject(index) ?: return@any false
+                    item.textAny("subject_code", "code") == subjectCode
+                }
+            } == true
+            val scopedSubject = subjectCode.takeIf { subjectBelongsToCourse } ?: ""
+            currentSubject = scopedSubject
+            val courseQuery = "courseId=" + currentCourseId +
+                if (scopedSubject.isNotBlank()) "&subjectCode=" + ApiClient.encodeQuery(scopedSubject) else ""
             liveClasses = ApiClient.getObject(
-                "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
+                "/api/v1/learning/live-classes?" + courseQuery
             ).optJSONArray("items").objectItems()
             val onlineRows = ApiClient.getObject(
-                "/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode) + courseQuery
+                "/api/v1/learning/recorded-classes?" + courseQuery
             ).optJSONArray("items").objectItems()
             val localRows = offlineVideoStore.downloadedRecordings()
             val localById = localRows.associateBy { it.longAny("recorded_class_id", "recordingId", "id") }
@@ -2499,7 +2592,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val id = question.longAny("id", "questionId", "question_id")
             if (id <= 0L) throw IOException("प्रश्न की पहचान नहीं मिली।")
             val result = ApiClient.postObject(
-                "/api/v1/learning/questions/" + id + "/answer?language=" + learningContentLanguage,
+                "/api/v1/learning/questions/" + id + "/answer?courseId=" + currentCourseId + "&language=" + learningContentLanguage,
                 JSONObject().put("answer", answer)
             )
             val feedback = result.textAny("feedback").ifBlank {
@@ -2516,7 +2609,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             feedbacks[answerKey] = if (explanation.isNotBlank()) {
                 feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
             } else feedback
-            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + learningContentLanguage)
+            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?courseId=" + currentCourseId + "&language=" + learningContentLanguage)
         }
     }
 
@@ -2526,7 +2619,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val sessionId = practice.longAny("sessionId", "session_id")
             if (questionId <= 0L || sessionId <= 0L) throw IOException("Practice session की जानकारी अधूरी है।")
             val response = ApiClient.postObject(
-                "/api/v1/learning/questions/" + questionId + "/answer?language=" + learningContentLanguage,
+                "/api/v1/learning/questions/" + questionId + "/answer?courseId=" + currentCourseId + "&language=" + learningContentLanguage,
                 JSONObject().put("answer", answer).put("practiceSessionId", sessionId)
             )
             val feedback = response.textAny("feedback").ifBlank {
@@ -2554,7 +2647,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val attemptId = diagnostic.longAny("attemptId", "attempt_id")
             val questionId = question.longAny("id", "questionId", "question_id")
             val response = ApiClient.postObject(
-                "/api/v1/diagnostic/attempts/" + attemptId + "/answers/" + questionId,
+                "/api/v1/diagnostic/attempts/" + attemptId + "/answers/" + questionId + "?courseId=" + currentCourseId,
                 JSONObject().put("answer", answer)
             )
             val feedback = response.textAny("feedback").ifBlank { "उत्तर सुरक्षित हुआ।" }
@@ -2562,16 +2655,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             feedbacks[questionId.toString()] = if (explanation.isNotBlank()) {
                 feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
             } else feedback
-            diagnostic = ApiClient.getObject("/api/v1/diagnostic")
+            diagnostic = ApiClient.getObject("/api/v1/diagnostic?courseId=" + currentCourseId)
         }
     }
 
     fun submitDiagnostic() {
         runTask {
             val id = diagnostic.longAny("attemptId", "attempt_id")
-            ApiClient.postObject("/api/v1/diagnostic/attempts/" + id + "/submit")
+            ApiClient.postObject("/api/v1/diagnostic/attempts/" + id + "/submit?courseId=" + currentCourseId)
             diagnostic = ApiClient.getObject("/api/v1/diagnostic")
-            recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
+            recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId) }.getOrDefault(JSONObject())
             status = "Diagnostic पूरा हुआ। आपकी अगली सीख सर्वर के डेटा के आधार पर दिखाई जाएगी।"
         }
     }
@@ -2788,7 +2881,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun openProgress() {
         route = AppRoute.PROGRESS
         runTask {
-            progressData = ApiClient.getObject("/api/v1/students/me")
+            if (currentCourseId <= 0L) refreshStudentPrograms()
+            if (currentCourseId <= 0L) throw IOException("Choose an enrolled course to view its report.")
+            progressData = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
             loadProgressCertificateData(progressData)
             route = AppRoute.PROGRESS
         }
@@ -2828,12 +2923,12 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun viewParentCertificate(childId: Long, certificateId: Long) {
+    fun viewParentCertificate(childId: Long, courseId: Long, certificateId: Long) {
         runTask {
-            if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (childId <= 0L || courseId <= 0L || certificateId <= 0L) throw IOException("Choose the child's course before opening a certificate.")
             val bytes = withContext(Dispatchers.IO) {
                 ApiClient.getBytes("/api/v1/guardians/children/" + childId + "/certificates/" +
-                    certificateId + "/view?format=pdf")
+                    certificateId + "/view?courseId=" + courseId + "&format=pdf")
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             val directory = java.io.File(context.cacheDir, "certificates")
@@ -2852,13 +2947,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun downloadParentCertificate(childId: Long, certificateId: Long, format: String) {
+    fun downloadParentCertificate(childId: Long, courseId: Long, certificateId: Long, format: String) {
         runTask {
-            if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (childId <= 0L || courseId <= 0L || certificateId <= 0L) throw IOException("Choose the child's course before downloading a certificate.")
             if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
             val bytes = withContext(Dispatchers.IO) {
                 ApiClient.getBytes("/api/v1/guardians/children/" + childId + "/certificates/" +
-                    certificateId + "/download?format=" + format)
+                    certificateId + "/download?courseId=" + courseId + "&format=" + format)
             }
             if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
             pendingCertificateBytes = bytes
@@ -2873,9 +2968,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         error = ""
     }
 
-    fun createChild(name: String, classCode: String, childLanguage: String, username: String, password: String, tracks: List<String>, consent: Boolean) {
+    fun createChild(name: String, classCode: String, childLanguage: String, username: String, password: String, consent: Boolean) {
         runTask {
-            if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
             ApiClient.postObject("/api/v1/guardians/children",
                 JSONObject()
                     .put("displayName", name.trim())
@@ -2883,7 +2977,6 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     .put("language", childLanguage)
                     .put("username", username.trim())
                     .put("password", password)
-                    .put("trackCodes", JSONArray(tracks))
                     .put("consentAccepted", consent))
             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
@@ -2921,8 +3014,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
 
     fun openManageChild(child: JSONObject) {
         selectedChild = JSONObject(child.toString())
+        selectedChildCourses = emptyList()
         route = AppRoute.PARENT_CHILD_MANAGE
         error = ""
+        runTask {
+            val childId = child.longAny("id")
+            if (childId <= 0L) throw IOException("Student profile ID is missing.")
+            selectedChildCourses = ApiClient.getArray(
+                "/api/v1/guardians/children/" + childId + "/programs"
+            ).objectItems()
+        }
     }
 
     fun saveChildProfile(displayName: String, classCode: String, childLanguage: String) {
@@ -2952,15 +3053,31 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
-    fun saveChildTracks(tracks: List<String>) {
+    fun assignCourseToChild(courseId: Long) {
         runTask {
-            val id = selectedChild.longAny("id")
-            if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
-            ApiClient.putObject("/api/v1/guardians/children/" + id + "/tracks",
-                JSONObject().put("trackCodes", JSONArray(tracks)))
+            val studentId = selectedChild.longAny("id")
+            if (studentId <= 0L || courseId <= 0L) throw IOException("Choose a valid child and institution course.")
+            val course = selectedChildCourses.firstOrNull { it.longAny("id", "course_id") == courseId }
+                ?: throw IOException("This course is not available to this child in the selected institution.")
+            if (course.optBoolean("enrolled") || course.optBoolean("paused")) {
+                status = if (language == "hi") "यह course पहले से assigned है।" else "This course is already assigned."
+                return@runTask
+            }
+            if (!course.optBoolean("free_offer")) {
+                throw IOException(if (language == "hi")
+                    "इस paid course को Family Marketplace से खरीदें या बच्चे को entitlement transfer करें।"
+                    else "Use Family Marketplace to purchase this course for the child or transfer an eligible entitlement.")
+            }
+            ApiClient.postObject(
+                "/api/v1/guardians/children/" + studentId + "/programs/" + courseId + "/enroll",
+                JSONObject()
+            )
+            selectedChildCourses = ApiClient.getArray(
+                "/api/v1/guardians/children/" + studentId + "/programs"
+            ).objectItems()
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
-            selectedChild = parentChildren.firstOrNull { it.longAny("id") == id } ?: selectedChild
-            status = "छात्र के विषय access अपडेट हो गए।"
+            selectedChild = parentChildren.firstOrNull { it.longAny("id") == studentId } ?: selectedChild
+            status = if (language == "hi") "Institution course बच्चे को assign हो गया।" else "Institution course assigned to the child."
         }
     }
 
@@ -2972,24 +3089,56 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
             selectedChild = JSONObject()
+            selectedChildCourses = emptyList()
             status = "छात्र प्रोफ़ाइल archive हो गई।"
             route = AppRoute.PARENT_HOME
         }
     }
 
-    fun openParentReport(child: JSONObject) {
+    fun openParentReport(child: JSONObject, requestedCourseId: Long? = null) {
         val childId = child.longAny("id")
+        selectedChild = JSONObject(child.toString())
         parentReport = JSONObject().put("_childId", childId)
             .put("_childName", child.textAny("display_name", "displayName"))
         parentCertificates = emptyList()
         route = AppRoute.PARENT_REPORT
         runTask {
-            val id = child.longAny("id")
-            parentReport = ApiClient.getObject("/api/v1/guardians/children/" + id + "/report")
+            val programs = ApiClient.getArray("/api/v1/guardians/children/" + childId + "/programs").objectItems()
+            val enrolledCourses = programs.filter {
+                it.optBoolean("enrolled") || it.optBoolean("paused")
+            }
+            val selectedCourse = when {
+                requestedCourseId != null -> enrolledCourses.firstOrNull {
+                    it.longAny("id", "course_id") == requestedCourseId
+                } ?: throw IOException("That course is not enrolled for this child in the selected institution.")
+                enrolledCourses.size == 1 -> enrolledCourses.first()
+                else -> null
+            }
+            if (enrolledCourses.isEmpty() || selectedCourse == null) {
+                val options = org.json.JSONArray()
+                enrolledCourses.forEach { options.put(JSONObject(it.toString())) }
+                parentReport = JSONObject()
+                    .put("_childId", childId)
+                    .put("_childName", child.textAny("display_name", "displayName"))
+                    .put("_requiresCourseSelection", enrolledCourses.size > 1)
+                    .put("_noEnrolledCourse", enrolledCourses.isEmpty())
+                    .put("_courses", options)
+                parentCertificates = emptyList()
+                route = AppRoute.PARENT_REPORT
+                return@runTask
+            }
+            val courseId = selectedCourse.longAny("id", "course_id")
+            val courseName = selectedCourse.textAny("display_name", "course_name", "code")
+            parentReport = ApiClient.getObject(
+                "/api/v1/guardians/children/" + childId + "/report?courseId=" + courseId
+            )
             parentReport.put("_childName", child.textAny("display_name", "displayName"))
-            parentReport.put("_childId", id)
+            parentReport.put("_childId", childId)
+            parentReport.put("_courseId", courseId)
+            parentReport.put("_courseName", courseName)
+            parentReport.put("_requiresCourseSelection", false)
             parentCertificates = runCatching {
-                ApiClient.getObject("/api/v1/guardians/children/" + id + "/certificates")
+                ApiClient.getObject("/api/v1/guardians/children/" + childId + "/certificates?courseId=" + courseId)
                     .optJSONArray("items").objectItems()
             }.getOrDefault(emptyList())
             route = AppRoute.PARENT_REPORT
@@ -3109,9 +3258,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         errorStatusCode = 0
         when (route) {
             AppRoute.STUDENT_HOME -> runTask {
-                studentProfile = ApiClient.getObject("/api/v1/students/me")
-                recommendation = ApiClient.getObject("/api/v1/recommendations/next")
+                studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
                 refreshStudentPrograms()
+                if (currentCourseId <= 0L) throw IOException("Choose an enrolled course before opening learning reports.")
+                recommendation = ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId)
                 refreshStudentTextbookDocuments()
             }
             AppRoute.PARENT_HOME -> refreshParentData()
@@ -3126,7 +3276,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             AppRoute.PROFILE -> openStudentProfile()
             AppRoute.ACCOUNT_LIFECYCLE -> refreshAccountLifecycle()
             AppRoute.PROGRESS -> openProgress()
-            AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) openStructuredLessons() else openSubject(currentSubject, currentCourseId)
+            AppRoute.SUBJECT_LESSONS -> openStructuredLessons()
             AppRoute.DIAGNOSTIC -> openDiagnostic()
             AppRoute.ASSESSMENTS -> openAssessments(assessmentSubjectFilter)
             AppRoute.ASSESSMENT_RESULTS -> loadAssessmentResults()
@@ -3643,9 +3793,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onProfile = ::openStudentProfile,
                         onProgress = ::openProgress,
                         onRefresh = { runTask {
-                            studentProfile = ApiClient.getObject("/api/v1/students/me")
-                            recommendation = ApiClient.getObject("/api/v1/recommendations/next")
+                            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
                             refreshStudentPrograms()
+                            if (currentCourseId <= 0L) throw IOException("Choose an enrolled course before opening learning reports.")
+                            recommendation = ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId)
                             refreshStudentTextbookDocuments()
                         } },
                         onOpenRecommendation = { recommended -> openLesson(recommended) },
@@ -3745,7 +3896,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         language = language,
                         busy = busy,
                         certificates = parentCertificates,
-                        onSelectChild = ::openParentReport,
+                        onSelectChild = { child -> openParentReport(child) },
+                        onSelectCourse = { courseId -> openParentReport(selectedChild, courseId) },
                         onViewCertificate = ::viewParentCertificate,
                         onDownloadCertificate = ::downloadParentCertificate
                     )
@@ -3765,11 +3917,13 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     AppRoute.PARENT_CHILD_MANAGE -> ParentChildManageScreen(
                         child = selectedChild,
+                        courses = selectedChildCourses,
                         language = language,
                         busy = busy,
                         onSaveProfile = ::saveChildProfile,
                         onSaveCredentials = ::saveChildCredentials,
-                        onSaveTracks = ::saveChildTracks,
+                        onAssignCourse = ::assignCourseToChild,
+                        onOpenMarketplace = ::openParentCourses,
                         onArchive = ::archiveSelectedChild
                     )
                     AppRoute.PARENT_CHILD_ARCHIVED -> ParentArchivedChildrenScreen(
@@ -3779,21 +3933,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
-                    AppRoute.SUBJECT_LESSONS -> if (structuredLessonMode) StructuredLessonCatalogueScreen(
+                    AppRoute.SUBJECT_LESSONS -> StructuredLessonCatalogueScreen(
                         items = structuredLessons,
+                        courseName = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optString("display_name").orEmpty(),
+                        subjects = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optJSONArray("subjects")?.let { arr ->
+                            (0 until arr.length()).mapNotNull { index -> arr.optJSONObject(index) }
+                        }.orEmpty(),
+                        selectedSubjectCode = structuredSubjectFilter,
                         language = language,
                         busy = busy,
-                        onRefresh = ::openStructuredLessons,
-                        onOpenLesson = ::openStructuredLesson,
-                        onOpenLegacyLessons = { structuredLessonMode = false; openSubject(currentSubject, currentCourseId) }
-                    ) else LessonListScreen(
-                        subject = currentSubject,
-                        lessons = lessons,
-                        language = language,
-                        busy = busy,
-                        onRefresh = { openSubject(currentSubject, currentCourseId) },
-                        onOpenLesson = ::openLesson,
-                        onOpenStructuredLessons = ::openStructuredLessons
+                        onRefresh = { openStructuredLessons(structuredSubjectFilter) },
+                        onSelectSubject = { code -> openStructuredLessons(code) },
+                        onOpenLesson = ::openStructuredLesson
                     )
                     AppRoute.LESSON -> if (structuredLessonMode) Column(modifier = Modifier.fillMaxSize()) {
                         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
@@ -4053,6 +4204,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
+                        courseId = currentCourseId,
                         certificateLanguage = certificateLanguage,
                         onCertificateLanguageChange = { next ->
                             if (next == "hi" || next == "en") {
@@ -4102,7 +4254,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             }
                         )
                     } else LearningClassesScreen(
-                        subject = currentSubject,
+                        subjects = studentPrograms.firstOrNull { it.longAny("id", "course_id") == currentCourseId }?.optJSONArray("subjects")?.let { array ->
+                            (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
+                        }.orEmpty(),
+                        selectedSubjectCode = currentSubject,
                         liveItems = liveClasses,
                         recordedItems = recordedClasses,
                         busy = busy,
@@ -5130,11 +5285,14 @@ private fun LessonListScreen(
 @Composable
 private fun StructuredLessonCatalogueScreen(
     items: List<JSONObject>,
+    courseName: String,
+    subjects: List<JSONObject>,
+    selectedSubjectCode: String,
     language: String,
     busy: Boolean,
     onRefresh: () -> Unit,
-    onOpenLesson: (JSONObject) -> Unit,
-    onOpenLegacyLessons: () -> Unit
+    onSelectSubject: (String) -> Unit,
+    onOpenLesson: (JSONObject) -> Unit
 ) {
     fun completed(item: JSONObject): Boolean =
         item.optBoolean("completed") || item.optBoolean("isCompleted") ||
@@ -5151,14 +5309,38 @@ private fun StructuredLessonCatalogueScreen(
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(if (language == "hi") "संरचित पाठ" else "Structured lessons", style = MaterialTheme.typography.headlineSmall)
-                Text(if (language == "hi") "एक topic पर ध्यान दें और क्रम से आगे बढ़ें" else "Focus on one topic and move through the sequence",
+                Text((if (language == "hi") "कोर्स: " else "Course: ") + courseName.ifBlank {
+                    if (language == "hi") "चुना गया कोर्स" else "Selected course"
+                }, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                Text(if (language == "hi") "कोर्स चुनें, फिर उसी कोर्स का विषय चुनें" else "Choose a subject within this course",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
             TextButton(onClick = onRefresh, enabled = !busy) { Text(if (language == "hi") "रिफ्रेश" else "Refresh") }
         }
-        OutlinedButton(onClick = onOpenLegacyLessons, enabled = !busy,
-            modifier = Modifier.fillMaxWidth().height(40.dp)) {
-            Text(if (language == "hi") "Existing lessons पर लौटें" else "Return to existing lessons")
+        Row(
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (selectedSubjectCode.isBlank()) {
+                Button(onClick = { onSelectSubject("") }, enabled = !busy) {
+                    Text(if (language == "hi") "सभी विषय" else "All subjects")
+                }
+            } else {
+                TextButton(onClick = { onSelectSubject("") }, enabled = !busy) {
+                    Text(if (language == "hi") "सभी विषय" else "All subjects")
+                }
+            }
+            subjects.forEach { subject ->
+                val code = subject.textAny("subject_code", "code")
+                if (code.isBlank()) return@forEach
+                val label = subject.textAny("subject_name", "display_name").ifBlank { code }
+                if (code == selectedSubjectCode) {
+                    Button(onClick = { onSelectSubject(code) }, enabled = !busy) { Text(label) }
+                } else {
+                    TextButton(onClick = { onSelectSubject(code) }, enabled = !busy) { Text(label) }
+                }
+            }
         }
         when {
             busy && items.isEmpty() -> Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
@@ -5174,8 +5356,11 @@ private fun StructuredLessonCatalogueScreen(
                     modifier = Modifier.fillMaxWidth()) {
                     Text(if (language == "hi") "Topic ${safeIndex + 1} / ${items.size}" else "Topic ${safeIndex + 1} of ${items.size}",
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                    Text(active.optString("subjectCode").uppercase() + " · " +
-                        (if (language == "hi") "कक्षा " else "Class ") + active.optInt("classNumber"),
+                    val code = active.optString("subjectCode")
+                    val subjectName = subjects.firstOrNull {
+                        it.textAny("subject_code", "code") == code
+                    }?.textAny("subject_name", "display_name").orEmpty().ifBlank { code }
+                    Text(courseName + " · " + subjectName,
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
                 }
                 LinearProgressIndicator(progress = { (safeIndex + 1).toFloat() / items.size.coerceAtLeast(1) },
@@ -6962,8 +7147,15 @@ private fun ParentHomeScreen(
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(child.textAny("display_name", "displayName").ifBlank { "छात्र" }, style = MaterialTheme.typography.titleMedium)
-                        Text(localizedUiText("कक्षा ") + child.textAny("class_code", "class_name") + " • " + child.textAny("track_codes"),
-                            style = MaterialTheme.typography.bodySmall)
+                        val assignedCourses = child.textAny("course_names")
+                        val noCourse = if (language == "hi") "कोई कोर्स assign नहीं" else "No course assigned"
+                        Text(
+                            (if (language == "hi") "कक्षा " else "Grade ") +
+                                child.textAny("class_code", "class_name") + " • " +
+                                (if (language == "hi") "कोर्स: " else "Courses: ") +
+                                assignedCourses.ifBlank { noCourse },
+                            style = MaterialTheme.typography.bodySmall
+                        )
                         if (section == "children") {
                             Text(
                                 (if (language == "hi") "यूज़रनेम: " else "Username: ") +
@@ -6979,7 +7171,7 @@ private fun ParentHomeScreen(
                             if (section == "children") {
                                 TextButton(onClick = { onManageChild(child) }, enabled = !busy,
                                     modifier = Modifier.weight(1f)) {
-                                    Text(if (language == "hi") "Login / विषय" else "Login / subjects")
+                                    Text(if (language == "hi") "Login / कोर्स" else "Login / courses")
                                 }
                             }
                         }
@@ -6998,10 +7190,17 @@ private fun ParentReportScreen(
     busy: Boolean,
     certificates: List<JSONObject>,
     onSelectChild: (JSONObject) -> Unit,
-    onViewCertificate: (Long, Long) -> Unit,
-    onDownloadCertificate: (Long, Long, String) -> Unit
+    onSelectCourse: (Long) -> Unit,
+    onViewCertificate: (Long, Long, Long) -> Unit,
+    onDownloadCertificate: (Long, Long, Long, String) -> Unit
 ) {
     val childId = report.optLong("_childId", 0L)
+    val selectedCourseId = report.optLong("_courseId", report.optLong("courseId", 0L))
+    val needsCourseSelection = report.optBoolean("_requiresCourseSelection")
+    val noEnrolledCourse = report.optBoolean("_noEnrolledCourse")
+    val availableCourses = report.optJSONArray("_courses")?.objectItems()?.filter {
+        it.optBoolean("enrolled") || it.optBoolean("paused")
+    } ?: emptyList()
     val otherChildren = children.filter { it.longAny("id") > 0L && it.longAny("id") != childId }
     val compact = LocalConfiguration.current.screenWidthDp < 390
     val lessons = report.optJSONObject("lessonStats") ?: JSONObject()
@@ -7019,8 +7218,10 @@ private fun ParentReportScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(report.textAny("_childName", "display_name").ifBlank { t("Student report", "छात्र की रिपोर्ट") },
             style = MaterialTheme.typography.headlineSmall)
-        Text(t("Class", "कक्षा") + " " + report.textAny("class_code", "classCode"),
-            color = MaterialTheme.colorScheme.secondary)
+        if (!needsCourseSelection && !noEnrolledCourse) {
+            Text(t("Course: ", "कोर्स: ") + report.textAny("_courseName", "courseName", "course_name"),
+                color = MaterialTheme.colorScheme.secondary)
+        }
         if (otherChildren.isNotEmpty()) {
             Text(t("Switch child report", "दूसरे बच्चे की रिपोर्ट देखें"), style = MaterialTheme.typography.titleMedium)
             otherChildren.forEach { child ->
@@ -7034,7 +7235,36 @@ private fun ParentReportScreen(
                 }
             }
         }
-        if (compact) {
+        if (needsCourseSelection || noEnrolledCourse) {
+            if (noEnrolledCourse || availableCourses.isEmpty()) {
+                EmptyState(
+                    t("No enrolled course is available", "कोई नामांकित कोर्स उपलब्ध नहीं है"),
+                    t("Ask the institution to enrol this child in a course before opening the report.",
+                        "रिपोर्ट खोलने से पहले संस्थान से बच्चे को किसी कोर्स में नामांकित करने के लिए कहें।")
+                )
+            } else {
+                Text(t("Choose which course report to view", "जिस कोर्स की रिपोर्ट देखनी है, उसे चुनें"),
+                    style = MaterialTheme.typography.titleMedium)
+                Text(t("Each report contains only that course's subjects, lessons, practice and tests.",
+                    "हर रिपोर्ट में केवल उसी कोर्स के विषय, पाठ, अभ्यास और टेस्ट शामिल हैं।"),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                availableCourses.forEach { course ->
+                    val courseId = course.longAny("id", "course_id")
+                    if (courseId > 0L) {
+                        OutlinedButton(
+                            onClick = { onSelectCourse(courseId) },
+                            enabled = !busy,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(course.textAny("display_name", "course_name", "code").ifBlank {
+                                t("Course ", "कोर्स ") + courseId
+                            })
+                        }
+                    }
+                }
+            }
+        } else {
+                if (compact) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                 ParentReportMetric(t("Lessons", "पाठ"), lessons.optString("completed_lessons","0")+" / "+lessons.optString("total_lessons","0"),
                     lessons.optString("completion_percent","0")+"% "+t("complete","पूरे"), Modifier.fillMaxWidth())
@@ -7094,33 +7324,33 @@ private fun ParentReportScreen(
                     "ISSUED" -> {
                         Text(t("Certificate available","प्रमाणपत्र उपलब्ध है"), color=MaterialTheme.colorScheme.primary)
                         val certificateId = cert.optLong("id", 0L)
-                        val canAccess = !busy && childId > 0L && certificateId > 0L
+                        val canAccess = !busy && childId > 0L && selectedCourseId > 0L && certificateId > 0L
                         if (compact) {
                             Column(verticalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.fillMaxWidth()) {
-                                OutlinedButton(onClick = { onViewCertificate(childId, certificateId) },
+                                OutlinedButton(onClick = { onViewCertificate(childId, selectedCourseId, certificateId) },
                                     enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
                                     Text(t("View certificate", "प्रमाणपत्र देखें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "pdf") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "pdf") },
                                     enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
                                     Text(t("Save PDF", "PDF सेव करें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "png") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "png") },
                                     enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
                                     Text(t("Save PNG", "PNG सेव करें"))
                                 }
                             }
                         } else {
                             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                                OutlinedButton(onClick = { onViewCertificate(childId, certificateId) },
+                                OutlinedButton(onClick = { onViewCertificate(childId, selectedCourseId, certificateId) },
                                     enabled = canAccess, modifier = Modifier.weight(1f)) {
                                     Text(t("View", "देखें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "pdf") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "pdf") },
                                     enabled = canAccess, modifier = Modifier.weight(1f)) {
                                     Text(t("Save PDF", "PDF सेव करें"))
                                 }
-                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "png") },
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, selectedCourseId, certificateId, "png") },
                                     enabled = canAccess, modifier = Modifier.weight(1f)) {
                                     Text(t("Save PNG", "PNG सेव करें"))
                                 }
@@ -7155,6 +7385,7 @@ private fun ParentReportScreen(
         Text(t("Parent view is read-only. The child must sign in with their own credentials to learn and take assessments.",
             "अभिभावक दृश्य केवल देखने के लिए है। पढ़ाई और टेस्ट के लिए बच्चे को अपने लॉगिन से प्रवेश करना होगा।"),
             style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.secondary)
+        }
     }
 }
 @Composable private fun ParentReportMetric(title:String,value:String,detail:String,modifier:Modifier) {

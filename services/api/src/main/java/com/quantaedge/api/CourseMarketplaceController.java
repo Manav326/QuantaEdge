@@ -77,9 +77,7 @@ public class CourseMarketplaceController {
           (exists(select 1 from student_program_enrollment e
             where e.institution_id=? and e.student_id=? and e.program_id=p.id
               and e.status in ('ACTIVE','PAUSED'))
-            or exists(select 1 from student_course_access_grant legacy_grant
-              where legacy_grant.institution_id=? and legacy_grant.student_id=?
-                and legacy_grant.course_id=p.id and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')) as has_access,
+            ) as has_access,
           exists(select 1 from course_purchase cp
             where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id) as purchased,
           exists(select 1 from student_login_credential c
@@ -103,7 +101,7 @@ public class CourseMarketplaceController {
         ) parent_request on true
         where o.institution_id=? and o.status='PUBLISHED'
         order by p.display_name,p.id
-        """, institutionId, context.studentId(), institutionId, context.studentId(),
+        """, institutionId, context.studentId(),
         institutionId, context.studentId(), context.studentId(), context.studentId(), institutionId);
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
@@ -270,10 +268,7 @@ public class CourseMarketplaceController {
       """, courseId);
     if (subjects.isEmpty()) throw new IllegalStateException("This course has no active subject tracks yet.");
 
-    jdbc.update("""
-      update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-      """, studentId, institutionId, courseId);
+    // A new course enrollment is additive; focused-course selection is independent of enrollment.
     jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
@@ -414,10 +409,7 @@ public class CourseMarketplaceController {
         where student_id=? and institution_id=? and program_id=? and status in ('ACTIVE','PAUSED')
         """, currentStudentId, institutionId, courseId);
     }
-    jdbc.update("""
-      update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-      """, targetStudentId, institutionId, courseId);
+    // Purchase/transfer activates access to this course without changing other enrollments.
     jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
@@ -887,10 +879,7 @@ public class CourseMarketplaceController {
 
     // Course membership is switched server-side. A parent's self-purchase stays owned
     // by that parent and is assigned to their personal learning profile until transferred.
-    jdbc.update("""
-        update student_program_enrollment set status='PAUSED',updated_at=now()
-        where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-        """, targetStudentId, institutionId, courseId);
+    // Purchase/transfer activates access to this course without changing other enrollments.
     jdbc.update("""
         insert into student_program_enrollment(student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at)
         values(?,?,?,'ACTIVE',now(),null,now(),now())

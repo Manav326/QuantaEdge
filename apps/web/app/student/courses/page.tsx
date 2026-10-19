@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTenantBranding } from '../../components/TenantBrandingProvider';
 import styles from './courses.module.css';
 
 type Subject = {
@@ -34,6 +35,7 @@ async function responseJson(response: Response): Promise<any> {
 
 export default function StudentCoursesPage() {
   const router = useRouter();
+  const { brand } = useTenantBranding();
   const [courses, setCourses] = useState<Course[]>([]);
   const [progress, setProgress] = useState<Record<number, Metric>>({});
   const [activeCourseId, setActiveCourseId] = useState<number | null>(null);
@@ -52,13 +54,15 @@ export default function StudentCoursesPage() {
       setCourses(all);
       const owned = all.filter(course => course.is_enrolled === true || course.enrolled === true || course.paused === true);
       const serverActive = owned.find(course => course.is_enrolled === true || course.enrolled === true);
+      let savedFocus = 0;
+      try { savedFocus = Number(window.localStorage.getItem('qe:student:activeCourseId') || 0); } catch {}
       const requestedFocus = typeof window !== 'undefined'
         ? Number(new URLSearchParams(window.location.search).get('focus') || 0) : 0;
       const requested = owned.find(course =>
-        Number(course.id || course.course_id) === requestedFocus &&
-        (course.is_enrolled === true || course.enrolled === true)
+        Number(course.id || course.course_id) === requestedFocus
       );
-      const selected = requested || serverActive || owned[0] || null;
+      const saved = owned.find(course => Number(course.id || course.course_id) === savedFocus);
+      const selected = requested || saved || serverActive || owned[0] || null;
       const selectedId = selected ? Number(selected.id || selected.course_id) : null;
       setActiveCourseId(selectedId && Number.isSafeInteger(selectedId) ? selectedId : null);
 
@@ -103,14 +107,20 @@ export default function StudentCoursesPage() {
     setBusyCourseId(courseId);
     setError('');
     try {
-      await responseJson(await fetch('/api/v1/students/me/programs/id/' + encodeURIComponent(String(courseId)) + '/enroll', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }, body: '{}',
-      }));
+      const selected = courses.find(course => Number(course.id || course.course_id) === courseId);
+      if (!selected) throw new Error('That course is not included in your account.');
+      // Focus changes independently of enrollment. Only reactivate a legacy paused row.
+      if (!(selected.is_enrolled === true || selected.enrolled === true)) {
+        await responseJson(await fetch('/api/v1/students/me/programs/id/' + encodeURIComponent(String(courseId)) + '/enroll', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' }, body: '{}',
+        }));
+        setCourses(previous => previous.map(course => Number(course.id || course.course_id) === courseId
+          ? { ...course, is_enrolled: true, enrolled: true, paused: false } : course));
+      }
       setActiveCourseId(courseId);
       try { window.localStorage.setItem('qe:student:activeCourseId', String(courseId)); } catch { /* storage is optional */ }
-      await loadCourses();
-      if (navigate) router.push('/student');
+      if (navigate) router.push('/student/structured-lessons?courseId=' + encodeURIComponent(String(courseId)));
     } catch (e: any) {
       setError(e?.message || 'The selected course could not be opened.');
     } finally {
@@ -125,7 +135,7 @@ export default function StudentCoursesPage() {
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
-        <div className={styles.eyebrow}>YOUR LEARNING SPACE</div>
+        <div className={styles.eyebrow}>{brand?.displayName || "YOUR INSTITUTION"} · YOUR COURSES</div>
         <h1>All Courses</h1>
         <p>Your courses in one place. Select a course to focus your subjects, lessons and progress on that learning path.</p>
         <div className={styles.actions}>
@@ -172,17 +182,16 @@ export default function StudentCoursesPage() {
                   <div className={styles.subjectHeading}>Subjects</div>
                   {(course.subjects || []).length === 0 ? <p className={styles.meta}>Subjects will appear when available.</p> :
                     (course.subjects || []).map(subject => (
-                      <Link key={subject.subject_code} href={'/student/learn?courseId=' + encodeURIComponent(String(id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
+                      <Link key={subject.subject_code} href={'/student/structured-lessons?courseId=' + encodeURIComponent(String(id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
                         <span><strong>{subject.subject_name || subject.subject_code}</strong><small>{Number(subject.chapters || 0)} chapters · {Number(subject.lessons || 0)} lessons</small></span>
                         <span aria-hidden="true">→</span>
                       </Link>
                     ))}
                 </div>
-                {!active && (
-                  <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null} onClick={() => void activateCourse(id)}>
-                    {busyCourseId === id ? 'Switching course…' : 'Focus on this course'}
-                  </button>
-                )}
+                <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
+                  onClick={() => void activateCourse(id)}>
+                  {busyCourseId === id ? 'Opening course…' : active ? 'Open structured course' : 'Focus and open course'}
+                </button>
               </article>
             );
           })}

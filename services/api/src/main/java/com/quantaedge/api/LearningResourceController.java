@@ -89,7 +89,8 @@ public class LearningResourceController {
   @PostMapping("/admin/learning-resources")
   @Transactional
   public Map<String,Object> createResource(@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
     String title=requiredText(body.get("title"),"Resource title",240);
     String description=optionalText(body.get("description"),1600);
@@ -117,6 +118,10 @@ public class LearningResourceController {
         List<Map<String,Object>> rows=jdbc.queryForList("select id,title,language from learning_document where id=?",learningDocumentId);
         if(rows.isEmpty())throw notFound("Learning document",learningDocumentId);
         if(!"PDF".equals(resourceType))throw badRequest("An existing textbook document must be catalogued as PDF.");
+        long courseId=positiveLong(body.get("courseId"),"Course");
+        long institutionId=requireInstitution(tenant);
+        requireAdminAssignedCourse(courseId,tenant);
+        requireCourseDocumentAssignment(learningDocumentId,institutionId,courseId);
         if(body.get("language")==null)language=normalizeLanguage(rows.getFirst().get("language"));
         if(sourceReference==null)sourceReference="learning_document:"+learningDocumentId;
       }
@@ -188,15 +193,19 @@ public class LearningResourceController {
 
   @PatchMapping("/admin/learning-resources/{resourceId}/status")
   @Transactional
-  public Map<String,Object> setResourceStatus(@PathVariable long resourceId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> setResourceStatus(@PathVariable long resourceId,@RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    long institutionId=requireInstitution(tenant);
+    requireAdminAssignedCourse(courseId,tenant);
     String next=requiredEnum(body.get("status"),"Resource status",RESOURCE_STATUSES);
     if(Set.of("PUBLISHED","ARCHIVED").contains(next))authorization.requirePermission(context,"CONTENT_PUBLISH");
     else authorization.requirePermission(context,"CONTENT_EDIT");
     Map<String,Object> row=resourceRow(resourceId);
     String previous=String.valueOf(row.get("status"));
-    if("PUBLISHED".equals(next))requireResourceReady(row);
+    if("PUBLISHED".equals(next))requireResourceReady(row,institutionId,courseId);
     jdbc.update("""
       update learning_resource set status=?,updated_at=now(),
         published_by_staff_id=case when ?='PUBLISHED' then ? when ?='DRAFT' then null else published_by_staff_id end,
@@ -226,33 +235,51 @@ public class LearningResourceController {
   }
 
   @GetMapping("/admin/learning-resource-targets")
-  public Map<String,Object> resourceTargets(@RequestParam(required=false) String classCode,
-      @RequestParam(required=false) String subjectCode,@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> resourceTargets(@RequestParam Long courseId,
+      @RequestParam(required=false) String subjectCode,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireContentView(context);
-    String cc=optionalText(classCode,30),sc=optionalText(subjectCode,40);
+    requireAdminAssignedCourse(courseId,tenant);
+    String sc=optionalText(subjectCode,40);
     List<Map<String,Object>> chapters=jdbc.queryForList("""
       select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,ch.textbook_chapter_no,
         ch.teaching_order,ch.sort_order,ch.active,ch.content_status,c.code as class_code,c.display_name as class_name,
-        s.code as subject_code,s.display_name as subject_name
+        s.code as subject_code,s.display_name as subject_name,p.id as course_id,p.display_name as course_name
       from curriculum_chapter ch join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE'
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
       where ch.active=true and c.active=true and s.active=true
-        and (?='' or c.code=?) and (?='' or s.code=?)
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+        and (?='' or s.code=?)
       order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),ch.id
-      """,cc==null?"":cc,cc==null?"":cc,sc==null?"":sc,sc==null?"":sc);
+      """,courseId,sc==null?"":sc,sc==null?"":sc);
     List<Map<String,Object>> lessons=jdbc.queryForList("""
       select l.id as lesson_id,l.code as lesson_code,l.title as lesson_title,l.status as lesson_status,
-        l.chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,c.code as class_code,s.code as subject_code
+        l.chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,c.code as class_code,s.code as subject_code,
+        p.id as course_id,p.display_name as course_name
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE'
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
       where l.active=true and ch.active=true and s.active=true and c.active=true
-        and (?='' or c.code=?) and (?='' or s.code=?)
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+        and (?='' or s.code=?)
       order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,cc==null?"":cc,cc==null?"":cc,sc==null?"":sc,sc==null?"":sc);
+      """,courseId,sc==null?"":sc,sc==null?"":sc);
+    String courseClass=jdbc.queryForObject("select c.code from curriculum_program p join curriculum_class c on c.id=p.class_id where p.id=? and p.status='ACTIVE'",String.class,courseId);
+    List<String> mappedSubjects=jdbc.queryForList("""
+      select distinct s.code from curriculum_program_subject cps
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+      join curriculum_program p on p.id=cps.program_id and p.status='ACTIVE'
+      where p.id=? and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """,String.class,courseId);
     List<Map<String,Object>> artifactItems=new ArrayList<>();
     for(StructuredLessonArtifactService.PublishedArtifact artifact:artifacts.listPublishedArtifacts()) {
       int classNumber=artifacts.classNumber(artifact);String subject=artifacts.subjectCode(artifact);
-      if(cc!=null&&!cc.isBlank()&&!String.valueOf(classNumber).equals(cc))continue;
+      if(!String.valueOf(classNumber).equals(courseClass))continue;
+      if(!mappedSubjects.contains(subject))continue;
       if(sc!=null&&!sc.isBlank()&&!subject.equalsIgnoreCase(sc))continue;
       Map<String,Object> item=new LinkedHashMap<>();
       item.put("artifact_id",artifact.artifactId());item.put("class_code",String.valueOf(classNumber));item.put("subject_code",subject);
@@ -262,14 +289,41 @@ public class LearningResourceController {
       List<Map<String,Object>> mapping=jdbc.queryForList("select chapter_id from learning_resource_artifact_scope where artifact_id=?",artifact.artifactId());
       item.put("mapped_chapter_id",mapping.isEmpty()?null:mapping.getFirst().get("chapter_id"));artifactItems.add(item);
     }
-    return Map.of("chapters",chapters,"lessons",lessons,"structuredArtifacts",artifactItems);
+    return Map.of("courseId",courseId,"chapters",chapters,"lessons",lessons,"structuredArtifacts",artifactItems);
+  }
+
+  private void requireChapterMappedToCourse(long chapterId,long courseId) {
+    Boolean mapped=jdbc.queryForObject("""
+      select exists(
+        select 1 from curriculum_chapter ch
+        join curriculum_subject s on s.id=ch.subject_id and s.active=true
+        join curriculum_program_subject cps on cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+        where ch.id=? and ch.active=true)
+      """,Boolean.class,courseId,chapterId);
+    if(!Boolean.TRUE.equals(mapped))throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "The selected chapter is not mapped to this course.");
+  }
+
+  private void requireAdminAssignedCourse(Long courseId,InstitutionTenantContext tenant) {
+    if(courseId==null||courseId<1L)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Select an active course.");
+    if(tenant==null||tenant.institutionId()<1L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active institution context is required.");
+    Long assigned=jdbc.queryForObject("""
+      select count(*) from institution_course_assignment a
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=?
+      join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      where a.institution_id=? and a.status='ASSIGNED'
+      """,Long.class,courseId,tenant.institutionId());
+    if(assigned==null||assigned==0L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"This course is not assigned to the active institution.");
   }
 
   @GetMapping("/admin/learning-resource-assignments")
-  public Map<String,Object> adminAssignments(@RequestParam(required=false) Long resourceId,@RequestParam(required=false) String status,
+  public Map<String,Object> adminAssignments(@RequestParam Long courseId,
+      @RequestParam(required=false) Long resourceId,@RequestParam(required=false) String status,
       @RequestParam(defaultValue="100") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireContentView(context);
+    requireAdminAssignedCourse(courseId,tenant);
     String statusFilter=normalizeFilter(status,ASSIGNMENT_STATUSES);
     int rowLimit=Math.max(1,Math.min(limit==null?100:limit,200)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
@@ -280,28 +334,41 @@ public class LearningResourceController {
       from learning_resource_assignment a join learning_resource r on r.id=a.resource_id
       join curriculum_chapter ch on ch.id=a.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      join curriculum_program_subject cps on cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
       left join lesson l on l.id=a.lesson_id
       where (?::bigint is null or a.resource_id=?) and (?='' or a.status=?)
       order by a.chapter_id,a.sort_order,a.id limit ? offset ?
-      """,resourceId,resourceId,statusFilter,statusFilter,rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from learning_resource_assignment a where (?::bigint is null or a.resource_id=?) and (?='' or a.status=?)",
-        Long.class,resourceId,resourceId,statusFilter,statusFilter);
-    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+      """,courseId,resourceId,resourceId,statusFilter,statusFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from learning_resource_assignment a
+      join curriculum_chapter ch on ch.id=a.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_program_subject cps on cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+      where (?::bigint is null or a.resource_id=?) and (?='' or a.status=?)
+      """,Long.class,courseId,resourceId,resourceId,statusFilter,statusFilter);
+    return Map.of("courseId",courseId,"items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/admin/learning-resource-assignments")
   @Transactional
   public Map<String,Object> createAssignment(@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
+    long courseId=positiveLong(body.get("courseId"),"Course");
+    long institutionId=requireInstitution(tenant);
+    requireAdminAssignedCourse(courseId,tenant);
     long resourceId=positiveLong(body.get("resourceId"),"Resource");
     String targetKind=requiredEnum(body.get("targetKind"),"Target kind",TARGET_KINDS);
     int sortOrder=integerValue(body.getOrDefault("sortOrder",0),"Sort order",0,1_000_000);
     Map<String,Object> resource=resourceRow(resourceId);
+    if("LEARNING_DOCUMENT".equals(String.valueOf(resource.get("source_kind")))) {
+      requireCourseDocumentAssignment(((Number)resource.get("learning_document_id")).longValue(),institutionId,courseId);
+    }
     long chapterId;Long lessonId=null;String artifactId=null;
     if("CHAPTER".equals(targetKind)) {
       if(body.get("lessonId")!=null||body.get("artifactId")!=null)throw badRequest("A chapter assignment cannot also name a lesson or structured artifact.");
-      chapterId=positiveLong(body.get("chapterId"),"Chapter");chapterRow(chapterId);
+      chapterId=positiveLong(body.get("chapterId"),"Chapter");chapterRow(chapterId);requireChapterMappedToCourse(chapterId,courseId);
     } else if("LESSON".equals(targetKind)) {
       if(body.get("artifactId")!=null)throw badRequest("A lesson assignment cannot also name a structured artifact.");
       lessonId=positiveLong(body.get("lessonId"),"Lesson");
@@ -311,7 +378,7 @@ public class LearningResourceController {
       if(!Boolean.TRUE.equals(lesson.get("active"))||"ARCHIVED".equals(String.valueOf(lesson.get("status"))))throw badRequest("Choose an active, non-archived lesson.");
       chapterId=((Number)lesson.get("chapter_id")).longValue();
       if(body.get("chapterId")!=null&&positiveLong(body.get("chapterId"),"Chapter")!=chapterId)throw badRequest("The selected lesson does not belong to the selected chapter.");
-      chapterRow(chapterId);
+      chapterRow(chapterId);requireChapterMappedToCourse(chapterId,courseId);
     } else {
       if(body.get("lessonId")!=null)throw badRequest("A structured-artifact assignment cannot also name a legacy lesson.");
       artifactId=requiredText(body.get("artifactId"),"Structured artifact ID",120);
@@ -336,6 +403,7 @@ public class LearningResourceController {
           throw conflict("This structured artifact was mapped to a different canonical chapter concurrently.");
       }
     }
+    requireChapterMappedToCourse(chapterId,courseId);
     validateResourceTargetScope(resource,chapterId);
     try {
       Long id=jdbc.queryForObject("""
@@ -352,17 +420,21 @@ public class LearningResourceController {
 
   @PatchMapping("/admin/learning-resource-assignments/{assignmentId}/status")
   @Transactional
-  public Map<String,Object> setAssignmentStatus(@PathVariable long assignmentId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> setAssignmentStatus(@PathVariable long assignmentId,@RequestParam Long courseId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    requireAdminAssignedCourse(courseId,tenant);
     String next=requiredEnum(body.get("status"),"Assignment status",ASSIGNMENT_STATUSES);
     if(Set.of("PUBLISHED","ARCHIVED").contains(next))authorization.requirePermission(context,"CONTENT_PUBLISH");
     else authorization.requirePermission(context,"CONTENT_EDIT");
-    Map<String,Object> row=assignmentRow(assignmentId);String previous=String.valueOf(row.get("status"));
+    Map<String,Object> row=assignmentRow(assignmentId);
+    requireChapterMappedToCourse(((Number)row.get("chapter_id")).longValue(),courseId);
+    String previous=String.valueOf(row.get("status"));
     if("PUBLISHED".equals(next)) {
       Map<String,Object> resource=resourceRow(((Number)row.get("resource_id")).longValue());
       if(!"PUBLISHED".equals(String.valueOf(resource.get("status"))))throw conflict("Publish the resource before publishing its assignment.");
-      requireResourceReady(resource);validateAssignmentTarget(row,true);
+      requireResourceReady(resource,requireInstitution(tenant),courseId);validateAssignmentTarget(row,true);
     }
     jdbc.update("""
       update learning_resource_assignment set status=?,updated_at=now(),
@@ -376,11 +448,14 @@ public class LearningResourceController {
 
   @PutMapping("/admin/learning-resource-assignments/{assignmentId}/order")
   @Transactional
-  public Map<String,Object> reorderAssignment(@PathVariable long assignmentId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> reorderAssignment(@PathVariable long assignmentId,@RequestParam Long courseId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
+    requireAdminAssignedCourse(courseId,tenant);
     int order=integerValue(body.get("sortOrder"),"Sort order",0,1_000_000);
     Map<String,Object> row=assignmentRow(assignmentId);
+    requireChapterMappedToCourse(((Number)row.get("chapter_id")).longValue(),courseId);
     if("ARCHIVED".equals(String.valueOf(row.get("status"))))throw conflict("Archived assignments cannot be reordered.");
     jdbc.update("update learning_resource_assignment set sort_order=?,updated_at=now() where id=?",order,assignmentId);
     staffAudit.recordAction(context,"/api/v1/admin/learning-resource-assignments/"+assignmentId+"/order","Changed resource assignment order to "+order+".");
@@ -432,10 +507,12 @@ public class LearningResourceController {
         coalesce(progress.last_position_seconds,0) as last_position_seconds,
         coalesce(progress.watched_seconds,0) as watched_seconds,coalesce(progress.completed,false) as completed,
         rc.status as recording_status,rc.media_type as recording_media_type,rc.file_size_bytes as recording_file_size_bytes,
-        ld.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status,ca.url as content_asset_url
+        ldca.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status,ca.url as content_asset_url
       from learning_resource_assignment a join learning_resource r on r.id=a.resource_id
       left join recorded_class rc on rc.id=r.recorded_class_id and rc.institution_id=?
       left join learning_document ld on ld.id=r.learning_document_id
+      left join learning_document_course_assignment ldca
+        on ldca.learning_document_id=ld.id and ldca.institution_id=? and ldca.course_id=?
       left join learning_pdf_asset pa on pa.id=ld.pdf_asset_id
       left join content_asset ca on ca.id=r.content_asset_id
       left join student_learning_resource_progress progress on progress.resource_id=r.id and progress.student_id=? and progress.institution_id=?
@@ -447,12 +524,12 @@ public class LearningResourceController {
         )
         and (
           (r.source_kind='RECORDED_CLASS' and rc.status='PUBLISHED')
-          or (r.source_kind='LEARNING_DOCUMENT' and ld.status='PUBLISHED' and pa.review_status='APPROVED')
+          or (r.source_kind='LEARNING_DOCUMENT' and ldca.status='PUBLISHED' and pa.review_status='APPROVED')
           or (r.source_kind='CONTENT_ASSET' and ca.status='PUBLISHED')
           or r.source_kind in ('PRIVATE_UPLOAD','EXTERNAL_URL')
         )
       order by case when a.target_kind='CHAPTER' then 0 else 1 end,a.sort_order,a.id
-      """,institutionId,context.studentId(),institutionId,canonicalChapter,locale,lessonId,lessonId,requestedArtifact,requestedArtifact);
+      """,institutionId,institutionId,courseId,context.studentId(),institutionId,canonicalChapter,locale,lessonId,lessonId,requestedArtifact,requestedArtifact);
     List<Map<String,Object>> result=new ArrayList<>();
     for(Map<String,Object> raw:rows) {
       Map<String,Object> item=new LinkedHashMap<>();
@@ -532,17 +609,19 @@ public class LearningResourceController {
         a.chapter_id,a.lesson_id,a.artifact_id,a.status as assignment_status,
         rc.status as recording_status,rc.storage_key as recording_storage_key,rc.original_filename as recording_filename,
         rc.media_type as recording_media_type,rc.file_size_bytes as recording_file_size_bytes,rc.sha256 as recording_sha256,
-        ld.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status
+        ldca.status as document_status,pa.review_status as pdf_review_status,ca.status as content_asset_status
       from learning_resource_assignment a join learning_resource r on r.id=a.resource_id
       left join recorded_class rc on rc.id=r.recorded_class_id and rc.institution_id=?
       left join learning_document ld on ld.id=r.learning_document_id
+      left join learning_document_course_assignment ldca
+        on ldca.learning_document_id=ld.id and ldca.institution_id=? and ldca.course_id=?
       left join learning_pdf_asset pa on pa.id=ld.pdf_asset_id
       left join content_asset ca on ca.id=r.content_asset_id
       where r.id=? and a.id=? and r.status='PUBLISHED' and a.status='PUBLISHED'
         and ((r.source_kind='RECORDED_CLASS' and rc.status='PUBLISHED')
-          or (r.source_kind='LEARNING_DOCUMENT' and ld.status='PUBLISHED' and pa.review_status='APPROVED')
+          or (r.source_kind='LEARNING_DOCUMENT' and ldca.status='PUBLISHED' and pa.review_status='APPROVED')
           or (r.source_kind='CONTENT_ASSET' and ca.status='PUBLISHED') or r.source_kind in ('PRIVATE_UPLOAD','EXTERNAL_URL'))
-      """,institutionId,resourceId,assignmentId);
+      """,institutionId,institutionId,courseId,resourceId,assignmentId);
     if(rows.isEmpty())throw notFound("Assigned learning resource",resourceId);
     Map<String,Object> row=new LinkedHashMap<>(rows.getFirst());
     long chapterId=((Number)row.get("chapter_id")).longValue();
@@ -625,12 +704,14 @@ public class LearningResourceController {
     item.put("assignment_count",count==null?0L:count);item.remove("storage_key");return item;
   }
 
-  private void requireResourceReady(Map<String,Object> resource) {
+  private void requireResourceReady(Map<String,Object> resource,long institutionId,long courseId) {
     switch(String.valueOf(resource.get("source_kind"))) {
       case "RECORDED_CLASS" -> {if(!"PUBLISHED".equals(String.valueOf(resource.get("recording_status"))) )throw conflict("Publish the linked recorded class before publishing this resource.");}
       case "LEARNING_DOCUMENT" -> {
-        if(!"PUBLISHED".equals(String.valueOf(resource.get("document_status")))||!"APPROVED".equals(String.valueOf(resource.get("pdf_review_status"))))
-          throw conflict("Publish the linked textbook document and approve its PDF asset first.");
+        long documentId=((Number)resource.get("learning_document_id")).longValue();
+        String assignmentStatus=learningDocumentAssignmentStatus(documentId,institutionId,courseId);
+        if(!"PUBLISHED".equals(assignmentStatus)||!"APPROVED".equals(String.valueOf(resource.get("pdf_review_status"))))
+          throw conflict("Publish the textbook document for the selected institution and course and approve its PDF asset first.");
       }
       case "CONTENT_ASSET" -> {
         if(!"PUBLISHED".equals(String.valueOf(resource.get("content_asset_status")))||!isSafeClientAssetUrl(String.valueOf(resource.get("content_asset_url"))))
@@ -742,6 +823,22 @@ public class LearningResourceController {
       throw badRequest("Select an active course before accessing this learning resource.");
     }
     return courseId;
+  }
+
+  private String learningDocumentAssignmentStatus(long documentId,long institutionId,long courseId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select status from learning_document_course_assignment
+      where learning_document_id=? and institution_id=? and course_id=?
+      """,documentId,institutionId,courseId);
+    return rows.isEmpty()?null:String.valueOf(rows.getFirst().get("status"));
+  }
+
+  private void requireCourseDocumentAssignment(long documentId,long institutionId,long courseId) {
+    String status=learningDocumentAssignmentStatus(documentId,institutionId,courseId);
+    if(status==null||"ARCHIVED".equals(status)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "The PDF has not been assigned to the selected institution and course. Assign it in Textbook Resources first.");
+    }
   }
 
   private void ensureStudentHasActiveCourse(long studentId,long institutionId,long courseId) {

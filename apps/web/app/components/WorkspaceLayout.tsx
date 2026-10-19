@@ -102,10 +102,24 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       return;
     }
     let active = true;
-    fetch('/api/v1/recommendations/next', { credentials: 'same-origin', cache: 'no-store' })
-      .then(response => response.ok ? response.json() : null)
-      .then(data => { if (active) setDiagnosticAvailable(data?.kind === 'DIAGNOSTIC'); })
-      .catch(() => { if (active) setDiagnosticAvailable(false); });
+    (async()=>{
+      try {
+        const catalogue=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}});
+        if(!catalogue.ok){if(active)setDiagnosticAvailable(false);return;}
+        const rows=await catalogue.json();
+        const enrolled=(Array.isArray(rows)?rows:[]).filter((course:any)=>course.is_enrolled===true&&!course.paused);
+        let saved=0;try{saved=Number(window.localStorage.getItem('qe:student:activeCourseId')||0);}catch{}
+        const selected=enrolled.find((course:any)=>Number(course.id)===saved)||enrolled[0];
+        if(!selected){if(active)setDiagnosticAvailable(false);return;}
+        const response=await fetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(selected.id)),{
+          credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
+        });
+        const data=response.ok?await response.json():null;
+        if(active)setDiagnosticAvailable(data?.kind==='DIAGNOSTIC');
+      } catch {
+        if(active)setDiagnosticAvailable(false);
+      }
+    })();
     return () => { active = false; };
   }, [role]);
 

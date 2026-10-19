@@ -100,12 +100,14 @@ public class AssessmentController {
       @RequestParam String classCode,
       @RequestParam String subjectCode,
       @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant,
       @RequestParam(required = false) Long chapterId,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="40") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireContentView(context);
+    requireAssignedCourse(courseId, tenant);
     int rowLimit=Math.max(1,Math.min(limit==null?40:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=safeText(query,160);
@@ -148,11 +150,13 @@ public class AssessmentController {
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
-      @RequestParam(required = false) Long courseId,
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireContentView(context);
+    requireAssignedCourse(courseId, tenant);
     String classFilter=safeText(classCode,30);
     String subjectFilter=safeText(subjectCode,40);
     if(!classFilter.isBlank() && courseId==null)assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
@@ -167,11 +171,11 @@ public class AssessmentController {
     if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))throw badRequest("Choose a valid assessment status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-    String courseFilter=courseId==null?"s.program_id is null":"exists (select 1 from curriculum_program_subject cps join curriculum_program scope_program on scope_program.id=cps.program_id and scope_program.status='ACTIVE' where cps.program_id=? and cps.subject_id=s.id and (s.program_id=cps.program_id or (s.program_id is null and scope_program.class_id=s.class_id and cps.class_id=s.class_id)))";
+    String courseFilter="a.course_id=?";
     String fromJoins="""
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
-      left join curriculum_program p on p.id=s.program_id
+      left join curriculum_program p on p.id=a.course_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       """;
     String fromWhere="""
@@ -215,13 +219,18 @@ public class AssessmentController {
   @Transactional
   public Map<String, Object> createAssessment(
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requirePermission(context, "CONTENT_CREATE");
     String title = requiredText(body.get("title"), "Assessment title", 240);
     String description = safeText(body.get("description"), 1200);
     String classCode = requiredText(body.get("classCode"), "Class", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
     Long courseId = optionalLong(body.get("courseId"), "courseId");
+    if (courseId == null || courseId < 1L) {
+      throw badRequest("Select an institution-assigned course before creating an assessment.");
+    }
+    requireAssignedCourse(courseId, tenant);
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
@@ -236,21 +245,14 @@ public class AssessmentController {
       questionIds.add(id);
     }
 
-    Long subjectId;
-    if(courseId==null) {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
-        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
-        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
-    } else {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
-        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
-        """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
-    }
+    Long subjectId = jdbc.query("""
+      select s.id from curriculum_subject s
+      join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
     if (subjectId == null) throw badRequest("Choose a valid active class and subject.");
     if (chapterId != null) {
       Long validChapter = jdbc.queryForObject("""
@@ -289,9 +291,9 @@ public class AssessmentController {
     }
 
     Long assessmentId = jdbc.queryForObject("""
-      insert into assessment(title,description,subject_id,chapter_id,duration_minutes,max_attempts,status,created_by_staff_id)
-      values(?,?,?,?,?,?,'DRAFT',?) returning id
-      """, Long.class, title, description.isBlank() ? null : description, subjectId, chapterId,
+      insert into assessment(course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,status,created_by_staff_id)
+      values(?,?,?,?,?,?,?,'DRAFT',?) returning id
+      """, Long.class, courseId, title, description.isBlank() ? null : description, subjectId, chapterId,
         duration, maxAttempts, context.staffId());
 
     BigDecimal maxScore = BigDecimal.ZERO;
@@ -324,8 +326,11 @@ public class AssessmentController {
   public Map<String, Object> changeAssessmentStatus(
       @PathVariable long assessmentId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
+    requireAssessmentInCourse(assessmentId,courseId,tenant);
     String next = requiredText(body.get("status"), "Status", 20).toUpperCase(Locale.ROOT);
     if (!Set.of("DRAFT", "PUBLISHED", "ARCHIVED").contains(next)) throw badRequest("Choose DRAFT, PUBLISHED, or ARCHIVED.");
     if ("PUBLISHED".equals(next) || "ARCHIVED".equals(next)) authorization.requirePermission(context, "CONTENT_PUBLISH");
@@ -337,8 +342,8 @@ public class AssessmentController {
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       left join assessment_question aq on aq.assessment_id=a.id
-      where a.id=? group by a.id,s.code,c.code
-      """, assessmentId);
+      where a.id=? and a.course_id=? group by a.id,s.code,c.code
+      """, assessmentId,courseId);
     if (rows.isEmpty()) throw notFound("Assessment", assessmentId);
     Map<String, Object> row = rows.getFirst();
     String before = String.valueOf(row.get("status"));
@@ -377,16 +382,19 @@ public class AssessmentController {
   public Map<String,Object> updateOfflinePolicy(
       @PathVariable long assessmentId,
       @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    requireAssessmentInCourse(assessmentId,courseId,tenant);
     authorization.requirePermission(context,"CONTENT_EDIT");
     Object raw=body.get("offlineEnabled");
     if(!(raw instanceof Boolean enabled)) throw badRequest("offlineEnabled must be true or false.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,title,status,is_generated,offline_enabled
-      from assessment where id=?
+      from assessment where id=? and course_id=?
       for update
-      """,assessmentId);
+      """,assessmentId,courseId);
     if(rows.isEmpty()) throw notFound("Assessment",assessmentId);
     Map<String,Object> row=rows.getFirst();
     boolean previous=Boolean.TRUE.equals(row.get("offline_enabled"));
@@ -394,7 +402,7 @@ public class AssessmentController {
       throw badRequest("System-generated topic/chapter tests stay online-only. Only manually authored assessments can be approved for offline use.");
     }
     if(previous==enabled) return assessmentDetails(assessmentId,true);
-    jdbc.update("update assessment set offline_enabled=?,updated_at=now() where id=?",enabled,assessmentId);
+    jdbc.update("update assessment set offline_enabled=?,updated_at=now() where id=? and course_id=?",enabled,assessmentId,courseId);
     String next=enabled?"ENABLED":"DISABLED";
     audit(assessmentId,null,context,null,null,"OFFLINE_POLICY_CHANGED",
         previous?"ENABLED":"DISABLED",next,
@@ -410,8 +418,11 @@ public class AssessmentController {
   public Map<String, Object> assignGrader(
       @PathVariable long assessmentId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requirePermission(context, "CONTENT_EDIT");
+    requireAssessmentInCourse(assessmentId,courseId,tenant);
     long staffId = longValue(body.get("staffId"), "Staff ID");
     Long valid = jdbc.queryForObject("""
       select count(*) from staff_account s
@@ -419,7 +430,7 @@ public class AssessmentController {
       where s.id=? and s.active=true
       """, Long.class, staffId);
     if (valid == null || valid == 0) throw badRequest("Choose an active staff member with the assessment grading permission.");
-    Long assessmentCount = jdbc.queryForObject("select count(*) from assessment where id=?", Long.class, assessmentId);
+    Long assessmentCount = jdbc.queryForObject("select count(*) from assessment where id=? and course_id=?", Long.class, assessmentId,courseId);
     if (assessmentCount == null || assessmentCount == 0) throw notFound("Assessment", assessmentId);
     jdbc.update("""
       insert into assessment_staff_assignment(assessment_id,staff_id,assigned_by_staff_id,active,assigned_at)
@@ -450,12 +461,15 @@ public class AssessmentController {
 
   @GetMapping("/admin/assessment-reviews")
   public Map<String,Object> assessmentReviews(
+      @RequestParam Long courseId,
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireGrader(context);
+    requireAssignedCourse(courseId, tenant);
     String statusFilter=safeText(status,24).toUpperCase(Locale.ROOT);
     if(statusFilter.isEmpty())statusFilter="AWAITING_REVIEW";
     if(!Set.of("ALL","AWAITING_REVIEW","GRADED","RELEASED").contains(statusFilter))throw badRequest("Choose a valid test review status.");
@@ -463,12 +477,18 @@ public class AssessmentController {
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String filterSql="""
-      where (?='ALL' or att.status=?)
+      where a.course_id=? and att.institution_id=?
+        and exists(select 1 from curriculum_program_subject cps
+          join curriculum_program scope_program on scope_program.id=cps.program_id
+          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+            and scope_program.status='ACTIVE' and scope_program.code<>'GENERAL'
+            and (s.program_id=scope_program.id or (s.program_id is null and scope_program.class_id=s.class_id)))
+        and (?='ALL' or att.status=?)
         and (?='' or a.title ilike ? or st.display_name ilike ? or ch.display_name ilike ?)
         and (?=true or exists(select 1 from assessment_staff_assignment asa
           where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
       """;
-    Object[] filterArgs={statusFilter,statusFilter,term,"%"+term+"%","%"+term+"%","%"+term+"%",context.isAdmin(),context.staffId()};
+    Object[] filterArgs={courseId,tenant.institutionId(),courseId,statusFilter,statusFilter,term,"%"+term+"%","%"+term+"%","%"+term+"%",context.isAdmin(),context.staffId()};
     List<Object> pageArgs=new ArrayList<>();pageArgs.add(context.isAdmin());pageArgs.addAll(Arrays.asList(filterArgs));pageArgs.add(rowLimit);pageArgs.add(rowOffset);
     String fromJoins="""
       from student_assessment_attempt att
@@ -502,8 +522,11 @@ public class AssessmentController {
   @GetMapping("/admin/assessment-attempts/{attemptId}")
   public Map<String, Object> reviewAttempt(
       @PathVariable long attemptId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireGrader(context);
+    requireAttemptInCourse(attemptId,courseId,tenant);
     Map<String, Object> attempt = attemptDetails(attemptId, context, true);
     attempt.put("audit", auditHistory(((Number) attempt.get("assessment_id")).longValue(), attemptId));
     return attempt;
@@ -514,12 +537,15 @@ public class AssessmentController {
   public Map<String, Object> gradeAttempt(
       @PathVariable long attemptId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = requireGrader(context);
+    requireAttemptInCourse(attemptId,courseId,tenant);
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select id,assessment_id,status,auto_score,max_score
-      from student_assessment_attempt where id=? for update
-      """, attemptId);
+      from student_assessment_attempt where id=? and institution_id=? for update
+      """, attemptId,tenant.institutionId());
     if (attempts.isEmpty()) throw notFound("Assessment attempt", attemptId);
     Map<String, Object> attempt = attempts.getFirst();
     long assessmentId = ((Number) attempt.get("assessment_id")).longValue();
@@ -609,8 +635,11 @@ public class AssessmentController {
   @GetMapping("/admin/assessments/{assessmentId}/audit")
   public List<Map<String, Object>> assessmentAudit(
       @PathVariable long assessmentId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestParam Long courseId,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
+    requireAssessmentInCourse(assessmentId,courseId,tenant);
     if (context.isEmployee()) {
       if (!context.isAdmin()) requireAssignment(context, assessmentId);
     } else {
@@ -688,7 +717,7 @@ public class AssessmentController {
                 and att.status='IN_PROGRESS' order by att.started_at desc,att.id desc limit 1) as in_progress_offline_mode
       from assessment a join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      left join curriculum_program p on p.id=s.program_id
+      left join curriculum_program p on p.id=a.course_id
       join student st on st.id=? and st.active=true
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
@@ -718,6 +747,7 @@ public class AssessmentController {
              ))
         and (?='' or s.code=?)
         and __COURSE_SCOPE__
+        and a.course_id=?
         and (
           exists(select 1 from student_assessment_attempt resumable
                  where resumable.assessment_id=a.id and resumable.student_id=st.id
@@ -733,8 +763,8 @@ public class AssessmentController {
       limit ? offset ?
       """).replace("__COURSE_SCOPE__",courseScope);
     List<Object> args=new ArrayList<>(List.of(institutionId,context.studentId(),language,language,language,subjectFilter,subjectFilter));
-    args.add(courseId);args.add(courseId);
-    args.add(rowLimit+1);args.add(rowOffset);
+    args.add(courseId);args.add(courseId);args.add(courseId);
+     args.add(rowLimit+1);args.add(rowOffset);
     List<Map<String,Object>> items=jdbc.queryForList(sql,args.toArray());
     boolean hasMore=items.size()>rowLimit;
     if(hasMore)items.remove(items.size()-1);
@@ -754,6 +784,7 @@ public class AssessmentController {
   @GetMapping("/learning/assessments/{assessmentId}/leaderboard")
   public Map<String, Object> assessmentLeaderboard(
       @PathVariable long assessmentId,
+      @RequestParam Long courseId,
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
@@ -761,10 +792,19 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
+    if(courseId==null || courseId<1L) throw badRequest("Select an enrolled course before opening this leaderboard.");
+    Long activeCourse=jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_membership m on m.student_id=spe.student_id and m.institution_id=spe.institution_id and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE'
+    """,Long.class,context.studentId(),institutionId,courseId);
+    if(activeCourse==null || activeCourse==0L) throw new SecurityException("Active enrolment in the selected course is required.");
 
-    // Keep the leaderboard behind the same class/subject enrollment and lesson-completion gate
-    // as the student test catalogue. Students with a saved attempt may still inspect its standings
-    // after the assessment is archived, consistent with the durable released-results history.
+    // Leaderboards are scoped to the selected course and its published assessments.
     Long eligible = jdbc.queryForObject("""
       with tenant_scope as (select ?::bigint as institution_id)
       select count(*)
@@ -772,18 +812,13 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id
-        and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       left join curriculum_chapter ch on ch.id=a.chapter_id
-      where a.id=?
-        and ((s.program_id is null and st.class_code=c.code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          )))
+      where a.id=? and a.course_id=?
+         and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
         and (a.status='PUBLISHED' or exists(
           select 1 from student_assessment_attempt resumable
           where resumable.assessment_id=a.id and resumable.student_id=st.id
@@ -799,7 +834,7 @@ public class AssessmentController {
       """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
           )
         )
-      """, Long.class, institutionId,context.studentId(), assessmentId);
+      """, Long.class, institutionId,context.studentId(),courseId,assessmentId,courseId);
     if (eligible == null || eligible == 0) {
       // Do not reveal whether another class's assessment exists.
       throw notFound("Assessment", assessmentId);
@@ -833,8 +868,15 @@ public class AssessmentController {
                  as time_taken_seconds,
                att.submitted_at
         from student_assessment_attempt att
-        join student st on st.id=att.student_id and st.active=true
-        where att.assessment_id=? and att.institution_id=(select institution_id from tenant_scope)
+         join student st on st.id=att.student_id and st.active=true
+         join student_program_enrollment spe on spe.student_id=att.student_id
+           and spe.institution_id=(select institution_id from tenant_scope)
+           and spe.program_id=? and spe.status='ACTIVE'
+         join institution_course_assignment course_assignment
+           on course_assignment.institution_id=spe.institution_id and course_assignment.status='ASSIGNED'
+         join institution_course_release course_release
+           on course_release.id=course_assignment.course_release_id and course_release.program_id=spe.program_id
+         where att.assessment_id=? and att.institution_id=(select institution_id from tenant_scope)
           and att.status='RELEASED'
           and att.final_score is not null
           and att.submitted_at is not null
@@ -867,7 +909,7 @@ public class AssessmentController {
       from ranked
       where leaderboard_rank<=20 or student_id=?
       order by leaderboard_rank
-      """, institutionId,assessmentId, context.studentId());
+      """, institutionId,courseId,assessmentId, context.studentId());
 
     List<Map<String, Object>> items = new ArrayList<>();
     Map<String, Object> currentStudent = null;
@@ -906,12 +948,13 @@ public class AssessmentController {
   @Transactional
   public Map<String, Object> startOrResumeAttempt(
       @PathVariable long assessmentId,
+      @RequestParam Long courseId,
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(defaultValue = "false") boolean offlineMode,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    return startOrResumeAttemptInternal(assessmentId,language,offlineMode,context,requireInstitution(tenant));
+    return startOrResumeAttemptInternal(assessmentId,courseId,language,offlineMode,context,requireInstitution(tenant));
   }
 
   Map<String,Object> startOrResumeAttempt(long assessmentId,String language,AuthContext context) {
@@ -919,13 +962,34 @@ public class AssessmentController {
   }
 
   private Map<String,Object> startOrResumeAttemptInternal(
-      long assessmentId,String language,boolean offlineMode,AuthContext context,long institutionId) {
+      long assessmentId,Long courseId,String language,boolean offlineMode,AuthContext context,long institutionId) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
+    if(courseId==null || courseId<1L) throw badRequest("Select an enrolled course before starting this test.");
+    List<Map<String,Object>> scopedCourse=jdbc.queryForList("""
+      select p.id,p.display_name
+      from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_membership m on m.student_id=spe.student_id and m.institution_id=spe.institution_id and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE'
+    """,context.studentId(),institutionId,courseId);
+    if(scopedCourse.isEmpty()) throw new SecurityException("Active enrolment in the selected institution course is required.");
+    Long assessmentInCourse=jdbc.queryForObject("""
+      select count(*)
+      from assessment a
+      join curriculum_subject s on s.id=a.subject_id and s.active=true
+      join curriculum_program_subject cps on cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+      join curriculum_program p on p.id=cps.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      where a.id=? and a.course_id=? and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+    """,Long.class,courseId,assessmentId,courseId);
+    if(assessmentInCourse==null || assessmentInCourse==0L) throw notFound("Available assessment in the selected course",assessmentId);
     List<Map<String, Object>> assessmentLock = jdbc.queryForList("""
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id from assessment a
-      where a.id=? and (
+      where a.id=? and a.course_id=? and (
         a.status='PUBLISHED'
         or exists(select 1 from student_assessment_attempt resumable
                   where resumable.assessment_id=a.id and resumable.student_id=?
@@ -933,7 +997,7 @@ public class AssessmentController {
                     and resumable.status='IN_PROGRESS')
       )
       for update
-      """, institutionId,assessmentId,context.studentId());
+      """, institutionId,assessmentId,courseId,context.studentId());
     if (assessmentLock.isEmpty()) throw notFound("Available assessment", assessmentId);
     List<Map<String, Object>> assessmentRows = jdbc.queryForList("""
       with tenant_scope as (select ?::bigint as institution_id)
@@ -942,12 +1006,15 @@ public class AssessmentController {
              a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,
              s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
+             selected_course.id as course_id,selected_course.code as course_code,selected_course.display_name as course_name,
              count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -969,13 +1036,7 @@ public class AssessmentController {
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
       where a.id=?
-        and ((s.program_id is null and st.class_code=c.code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          )))
+        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
         and (
           a.status='PUBLISHED'
           or exists(select 1 from student_assessment_attempt resumable
@@ -983,8 +1044,8 @@ public class AssessmentController {
                       and resumable.institution_id=(select institution_id from tenant_scope)
                       and resumable.status='IN_PROGRESS')
         )
-      group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
-      """, institutionId,context.studentId(), language, language, language, assessmentId);
+      group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name,selected_course.id,selected_course.code,selected_course.display_name
+      """, institutionId,context.studentId(),courseId, language, language, language, assessmentId);
     if (assessmentRows.isEmpty()) throw notFound("Available assessment", assessmentId);
     Map<String, Object> assessment = assessmentRows.getFirst();
 
@@ -1018,20 +1079,15 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true
-      join student_track_enrollment ste on ste.student_id=st.id
-        and ste.institution_id=(select institution_id from tenant_scope)
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+      join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
+      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
-        and ((s.program_id is null and st.class_code=c.code)
-          or (s.program_id is not null and exists(
-            select 1 from student_program_enrollment spe
-            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-            where spe.student_id=st.id and spe.institution_id=(select institution_id from tenant_scope)
-              and spe.program_id=s.program_id and spe.status='ACTIVE'
-          )))
+        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
         and a.status='PUBLISHED' and
-      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, institutionId,context.studentId(), assessmentId);
+      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, institutionId,context.studentId(),courseId, assessmentId);
     if (eligibleForNewAttempt.isEmpty()) {
       throw conflict("Complete the required published lesson content before starting this test.");
     }
@@ -1048,6 +1104,8 @@ public class AssessmentController {
     int attemptNumber = (used == null ? 0 : used) + 1;
     Map<String, Object> assessmentSnapshot = new LinkedHashMap<>();
     assessmentSnapshot.put("assessmentId", assessmentId);
+    assessmentSnapshot.put("courseId", courseId);
+    assessmentSnapshot.put("courseName", scopedCourse.getFirst().get("display_name"));
     assessmentSnapshot.put("language", language);
     assessmentSnapshot.put("title", assessment.get("title"));
     assessmentSnapshot.put("description", assessment.get("description"));
@@ -1375,6 +1433,7 @@ public class AssessmentController {
   public Map<String,Object> studentResults(
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(required = false) Long courseId,
+      @RequestParam(required = false) String subjectCode,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
@@ -1394,8 +1453,11 @@ public class AssessmentController {
     if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String selectedSubject = safeText(subjectCode,40);
+    if(selectedSubject.isBlank()) selectedSubject=null;
     String resultScope="""
-        exists(select 1 from curriculum_program_subject cps
+         a.course_id=?
+         and exists(select 1 from curriculum_program_subject cps
           join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
           join institution_course_assignment course_assignment
             on course_assignment.institution_id=(select institution_id from tenant_scope)
@@ -1407,6 +1469,7 @@ public class AssessmentController {
         and exists(select 1 from student_program_enrollment spe
           where spe.student_id=att.student_id and spe.institution_id=(select institution_id from tenant_scope)
             and spe.program_id=? and spe.status='ACTIVE')
+        and (?::text is null or lower(s.code)=lower(?))
         """;
     String sql="""
       with tenant_scope as (select ?::bigint as institution_id),
@@ -1467,7 +1530,8 @@ public class AssessmentController {
       limit ? offset ?
       """.replace("__RESULT_SCOPE__",resultScope);
     List<Object> args=new ArrayList<>(List.of(institutionId,language,language,language,context.studentId()));
-    args.add(courseId);args.add(courseId);
+    args.add(courseId);args.add(courseId);args.add(courseId);
+     args.add(selectedSubject);args.add(selectedSubject);
     args.add(rowLimit);args.add(rowOffset);
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args.toArray());
     List<Map<String,Object>> items=new ArrayList<>();
@@ -1488,9 +1552,14 @@ public class AssessmentController {
       where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
         and att.status='RELEASED' and __RESULT_SCOPE__
       """.replace("__RESULT_SCOPE__",resultScope);
-    Object[] totalArgs=new Object[]{institutionId,context.studentId(),courseId,courseId};
+    Object[] totalArgs=new Object[]{institutionId,context.studentId(),courseId,courseId,courseId,selectedSubject,selectedSubject};
     Long total=jdbc.queryForObject(totalSql,Long.class,totalArgs);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+  }
+
+  public Map<String,Object> studentResults(String language,Long courseId,Integer limit,Integer offset,
+      AuthContext context,InstitutionTenantContext tenant) {
+    return studentResults(language,courseId,null,limit,offset,context,tenant);
   }
 
   public Map<String,Object> studentResults(String language,Integer limit,Integer offset,AuthContext context) {
@@ -1728,6 +1797,43 @@ public class AssessmentController {
     String normalized=language==null?"hi":language.trim().toLowerCase(Locale.ROOT);
     if("hi".equals(normalized)||"en".equals(normalized))return normalized;
     throw badRequest("Language must be 'hi' or 'en'.");
+  }
+
+  private void requireAssignedCourse(Long courseId, InstitutionTenantContext tenant) {
+    if (courseId == null || courseId < 1L) throw badRequest("Select an active course.");
+    if (tenant == null || tenant.institutionId() < 1L) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "An active institution context is required.");
+    }
+    Long assigned = jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_release release on release.program_id=p.id
+      join institution_course_assignment assignment
+        on assignment.course_release_id=release.id and assignment.institution_id=?
+           and assignment.status='ASSIGNED'
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """, Long.class, tenant.institutionId(), courseId);
+    if (assigned == null || assigned == 0L) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This course is not assigned to the active institution.");
+    }
+  }
+
+  private void requireAssessmentInCourse(long assessmentId,Long courseId,InstitutionTenantContext tenant) {
+    requireAssignedCourse(courseId,tenant);
+    Long visible=jdbc.queryForObject("""
+      select count(*) from assessment a where a.id=? and a.course_id=?
+      """,Long.class,assessmentId,courseId);
+    if(visible==null||visible==0L) throw notFound("Assessment in selected course",assessmentId);
+  }
+
+  private void requireAttemptInCourse(long attemptId,Long courseId,InstitutionTenantContext tenant) {
+    requireAssignedCourse(courseId,tenant);
+    if(tenant==null||tenant.institutionId()<1L) throw new SecurityException("Active institution context required.");
+    Long visible=jdbc.queryForObject("""
+      select count(*) from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      where att.id=? and a.course_id=? and att.institution_id=?
+      """,Long.class,attemptId,courseId,tenant.institutionId());
+    if(visible==null||visible==0L) throw notFound("Assessment attempt in selected course",attemptId);
   }
 
   private void requireContentView(AuthContext context) {

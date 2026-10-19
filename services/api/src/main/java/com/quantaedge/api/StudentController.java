@@ -23,54 +23,37 @@ public class StudentController {
 
   @GetMapping("/me")
   public Map<String,Object> me(
-      @RequestParam(required=false) Long courseId,
-      @RequestParam(required=false) String programCode,
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant){
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
-    if(courseId==null && (programCode==null || programCode.isBlank()))
-      return learningMetrics.statsFor(context.studentId(),null,institutionId);
-    List<Map<String,Object>> enrolled;
-    if(courseId!=null) {
-      enrolled=jdbc.queryForList("""
-        select p.id,p.code,p.display_name
-        from curriculum_program p
-        join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
-        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
-        """,context.studentId(),institutionId,courseId);
-    } else {
-      enrolled=jdbc.queryForList("""
-        select p.id,p.code,p.display_name
-        from curriculum_program p
-        join student_program_enrollment spe on spe.program_id=p.id
-          and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
-        where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
-        order by p.id
-        """,context.studentId(),institutionId,programCode.trim());
-    }
-    if(enrolled.size()!=1) throw new SecurityException(enrolled.isEmpty()
-        ? "Active enrolment in this course is required."
-        : "This course code is ambiguous; request course metrics by numeric course ID.");
+    if(courseId==null || courseId<=0L)
+      throw new IllegalArgumentException("Select an enrolled course before requesting learning metrics.");
+    List<Map<String,Object>> enrolled=jdbc.queryForList("""
+      select distinct p.id,p.code,p.display_name
+      from curriculum_program p
+      join student_program_enrollment spe on spe.program_id=p.id
+        and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
+      join institution_membership membership
+        on membership.student_id=spe.student_id and membership.institution_id=spe.institution_id
+           and membership.status='ACTIVE'
+      join institution_course_assignment assignment
+        on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release
+        on release.id=assignment.course_release_id and release.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,context.studentId(),institutionId,courseId);
+    if(enrolled.size()!=1)
+      throw new SecurityException("The selected course is not actively enrolled and assigned in this institution.");
     Map<String,Object> course=enrolled.getFirst();
     long stableCourseId=((Number)course.get("id")).longValue();
     Map<String,Object> result=learningMetrics.statsFor(context.studentId(),stableCourseId,institutionId);
     result.put("courseId",stableCourseId);
-    result.put("programId",stableCourseId);
-    result.put("programCode",course.get("code"));
-    result.put("programName",course.get("display_name"));
+    result.put("courseName",course.get("display_name"));
     return result;
   }
-
-  // Source-compatible overload for internal callers and controller tests. This overload is not
-  // mapped as an HTTP route; public calls always carry a resolved institution context.
-  public Map<String,Object> me(AuthContext context) {
-    context=authorization.requireStudent(context);
-    return learningMetrics.statsFor(context.studentId());
-  }
-
 
   @GetMapping("/me/profile")
   public Map<String,Object> myProfile(@RequestAttribute(value="authContext",required=false) AuthContext context) {
@@ -241,6 +224,7 @@ public class StudentController {
 
   @GetMapping("/{studentId}/lessons")
   public List<Map<String,Object>> lessons(@PathVariable long studentId,
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant){
@@ -248,20 +232,43 @@ public class StudentController {
     long institutionId=requireInstitution(tenant);
     if(context.studentId()==null || !context.studentId().equals(studentId))
       throw new SecurityException("Student access denied");
+    if(courseId==null || courseId<=0L)
+      throw new IllegalArgumentException("Select an enrolled course before loading lessons.");
     return jdbc.queryForList("""
-      select l.id,c.code as class_code,s.code as subject_code,s.display_name as subject_name,
+      select l.id,selected_course.id as course_id,selected_course.code as course_code,
+             selected_course.display_name as course_name,c.code as source_class_code,
+             s.code as subject_code,s.display_name as subject_name,
              ch.code as chapter_code,ch.display_name as chapter_name,l.code,l.title,l.summary,l.estimated_minutes,
-             l.sort_order,coalesce(p.status,'NOT_STARTED') as progress_status,coalesce(p.progress_percent,0) as progress_percent
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? and p.institution_id=?
-      join student_track_enrollment ste on ste.student_id=? and ste.institution_id=?
-        and ste.subject_id=s.id and ste.status='ACTIVE'
+             l.sort_order,coalesce(progress.status,'NOT_STARTED') as progress_status,
+             coalesce(progress.progress_percent,0) as progress_percent
+      from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student st on st.id=? and st.active=true
+      join institution_membership membership
+        on membership.student_id=st.id and membership.institution_id=? and membership.status='ACTIVE'
+      join institution_tenant tenant_scope on tenant_scope.id=membership.institution_id and tenant_scope.status='ACTIVE'
+      join student_program_enrollment enrollment
+        on enrollment.student_id=st.id and enrollment.institution_id=membership.institution_id
+          and enrollment.program_id=? and enrollment.status='ACTIVE'
+      join curriculum_program selected_course
+        on selected_course.id=enrollment.program_id and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+      join institution_course_assignment assignment
+        on assignment.institution_id=membership.institution_id and assignment.status='ASSIGNED'
+      join institution_course_release release
+        on release.id=assignment.course_release_id and release.program_id=selected_course.id
+      join curriculum_program_subject mapped
+        on mapped.program_id=selected_course.id and mapped.subject_id=s.id and mapped.class_id=s.class_id
+      left join student_lesson_progress progress
+        on progress.lesson_id=l.id and progress.student_id=st.id and progress.institution_id=membership.institution_id
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
-        and c.active=true and s.active=true and s.program_id is null
-        and c.code=(select class_code from student where id=?)
-      order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,studentId,institutionId,studentId,institutionId,studentId);
+        and c.active=true and s.active=true
+        and (s.program_id=selected_course.id
+          or (s.program_id is null and selected_course.class_id=s.class_id))
+      order by mapped.sort_order,c.sort_order,s.sort_order,
+        coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
+      """,studentId,institutionId,courseId);
   }
 
   private long requireInstitution(InstitutionTenantContext tenant) {

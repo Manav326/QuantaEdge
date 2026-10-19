@@ -22,7 +22,13 @@ public class LearningStateService {
 
   @Transactional
   public void startLesson(long studentId,long lessonId,Long institutionId){
-    ensureStudentLessonAccess(studentId,lessonId,institutionId);
+    startLesson(studentId,lessonId,institutionId,null);
+  }
+
+  @Transactional
+  public void startLesson(long studentId,long lessonId,Long institutionId,Long courseId){
+    if(courseId==null) ensureStudentLessonAccess(studentId,lessonId,institutionId);
+    else ensureStudentLessonAccess(studentId,lessonId,institutionId,courseId);
     if(institutionId==null){
       jdbc.update("""
         insert into student_lesson_progress(student_id,lesson_id,status,progress_percent,started_at,last_opened_at)
@@ -60,11 +66,23 @@ public class LearningStateService {
     recordAttempt(studentId,questionId,lessonId,answer,autoGraded,correct,practiceSessionId,activityKind,null);
   }
 
-  /** Tenant-stamped answer, session, progress and mastery write path used by authenticated HTTP routes. */
+  /** Tenant-stamped compatibility path for non-course internal callers. Public course routes pass courseId. */
   @Transactional
   public void recordAttempt(long studentId,long questionId,long lessonId,String answer,boolean autoGraded,
       Boolean correct,Long practiceSessionId,String activityKind,Long institutionId){
-    ensureStudentCanAnswer(studentId,questionId,lessonId,institutionId);
+    recordAttemptInternal(studentId,questionId,lessonId,answer,autoGraded,correct,practiceSessionId,activityKind,institutionId,null);
+  }
+
+  @Transactional
+  public void recordAttempt(long studentId,long questionId,long lessonId,String answer,boolean autoGraded,
+      Boolean correct,Long practiceSessionId,String activityKind,Long institutionId,Long courseId){
+    recordAttemptInternal(studentId,questionId,lessonId,answer,autoGraded,correct,practiceSessionId,activityKind,institutionId,courseId);
+  }
+
+  private void recordAttemptInternal(long studentId,long questionId,long lessonId,String answer,boolean autoGraded,
+      Boolean correct,Long practiceSessionId,String activityKind,Long institutionId,Long courseId){
+    if(courseId==null) ensureStudentCanAnswer(studentId,questionId,lessonId,institutionId);
+    else ensureStudentCanAnswer(studentId,questionId,lessonId,institutionId,courseId);
     if(answer!=null && answer.length()>5000) throw new IllegalArgumentException("Answer is too long");
     String source=activityKind==null?"LESSON_INLINE":activityKind.trim().toUpperCase(java.util.Locale.ROOT);
     if(!List.of("LESSON_INLINE","PRACTICE","DIAGNOSTIC").contains(source))
@@ -150,7 +168,7 @@ public class LearningStateService {
 
     // Completion, session lineage and mastery are all read and written within the same institution.
     if(!"DIAGNOSTIC".equals(source)) {
-      syncLessonProgress(studentId,lessonId,institutionId);
+      syncLessonProgress(studentId,lessonId,institutionId,courseId);
       if(practiceSessionId!=null) {
         List<Map<String,Object>> sourceLessons;
         if(institutionId==null){
@@ -171,7 +189,7 @@ public class LearningStateService {
         }
         for(Map<String,Object> row:sourceLessons) {
           Object sourceLesson=row.get("lesson_id");
-          if(sourceLesson instanceof Number n) syncLessonProgress(studentId,n.longValue(),institutionId);
+          if(sourceLesson instanceof Number n) syncLessonProgress(studentId,n.longValue(),institutionId,courseId);
         }
       }
     }
@@ -183,9 +201,35 @@ public class LearningStateService {
   }
 
   private void syncLessonProgress(long studentId,long lessonId,Long institutionId){
+    syncLessonProgress(studentId,lessonId,institutionId,null);
+  }
+
+  private void syncLessonProgress(long studentId,long lessonId,Long institutionId,Long courseId){
     String visibleSql;
     Object[] visibleArgs;
-    if(institutionId==null){
+    if(courseId!=null){
+      visibleSql="""
+        select l.id
+        from lesson l
+        join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_class c on c.id=s.class_id
+        join student st on st.id=? and st.active=true
+        join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+          and spe.program_id=? and spe.status='ACTIVE'
+        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+          and assignment.status='ASSIGNED'
+        join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+        join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
+        where l.id=? and l.active=true and l.status='PUBLISHED'
+          and ch.active=true and ch.content_status='PUBLISHED' and s.active=true and c.active=true
+          and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+        """;
+      visibleArgs=new Object[]{studentId,institutionId,courseId,lessonId};
+    } else if(institutionId==null){
       visibleSql="""
         select l.id
         from lesson l
@@ -386,6 +430,33 @@ public class LearningStateService {
       """,studentId,institutionId);
   }
 
+  private void ensureStudentLessonAccess(long studentId,long lessonId,Long institutionId,Long courseId){
+    if(institutionId==null || courseId==null || courseId<1L)
+      throw new SecurityException("An active institution course is required for lesson access.");
+    Long count=jdbc.queryForObject("""
+      select count(*)
+      from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+        and spe.program_id=? and spe.status='ACTIVE'
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
+      where l.id=? and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED' and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+    """,Long.class,studentId,institutionId,courseId,lessonId);
+    if(count==null || count==0) throw new SecurityException("Lesson is not available in the selected institution course.");
+    assertInstitutionCourseEntitlement(studentId,courseId,institutionId);
+  }
+
   private void ensureStudentLessonAccess(long studentId,long lessonId,Long institutionId){
     Long count;
     if(institutionId==null){
@@ -452,6 +523,34 @@ public class LearningStateService {
       where l.id=? and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
       """,Long.class,lessonId);
     if(count==0) throw new IllegalArgumentException("Lesson not found");
+  }
+
+  private void ensureStudentCanAnswer(long studentId,long questionId,long lessonId,Long institutionId,Long courseId){
+    if(institutionId==null || courseId==null || courseId<1L)
+      throw new SecurityException("An active institution course is required to answer this question.");
+    Long count=jdbc.queryForObject("""
+      select count(*)
+      from question q
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true
+      join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
+      join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+      join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
+        and spe.program_id=? and spe.status='ACTIVE'
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment assignment on assignment.institution_id=m.institution_id
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id and cps.subject_id=s.id and cps.class_id=s.class_id
+      where q.id=? and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+        and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
+        and s.active=true and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+    """,Long.class,studentId,institutionId,courseId,questionId,lessonId);
+    if(count==null || count==0) throw new SecurityException("Question is not available in the selected institution course.");
+    assertInstitutionCourseEntitlement(studentId,courseId,institutionId);
   }
 
   private void ensureStudentCanAnswer(long studentId,long questionId,long lessonId,Long institutionId){

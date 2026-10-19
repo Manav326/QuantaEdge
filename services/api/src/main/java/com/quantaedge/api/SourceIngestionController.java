@@ -70,13 +70,18 @@ public class SourceIngestionController {
    */
   @GetMapping("/intake")
   public Map<String,Object> listBookIntake(
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="10") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?10:limit,50));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select i.pdf_asset_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
+      select i.pdf_asset_id,i.institution_id,i.course_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
              a.review_status as asset_review_status,i.category,i.class_id,c.code as class_code,
              c.display_name as class_name,i.subject_id,s.code as subject_code,s.display_name as subject_name,
              i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.chapter_ranges,
@@ -86,17 +91,19 @@ public class SourceIngestionController {
       join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id
       join curriculum_subject s on s.id=i.subject_id
+      where i.institution_id=? and i.course_id=?
       order by i.updated_at desc,i.pdf_asset_id desc limit ? offset ?
-      """,rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from learning_book_intake",Long.class);
+      """,institutionId,courseId,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from learning_book_intake where institution_id=? and course_id=?",
+        Long.class,institutionId,courseId);
     Map<String,Object> summary=jdbc.queryForMap("""
       select count(*) as total,
              count(*) filter(where upper(coalesce(status,''))='PENDING') as pending,
              count(*) filter(where upper(coalesce(status,''))='REVIEW') as in_review,
              count(*) filter(where upper(coalesce(status,''))='APPROVED') as approved,
              count(*) filter(where upper(coalesce(status,''))='REJECTED') as rejected
-      from learning_book_intake
-      """);
+      from learning_book_intake where institution_id=? and course_id=?
+      """,institutionId,courseId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,"summary",summary);
   }
 
@@ -104,9 +111,13 @@ public class SourceIngestionController {
   @org.springframework.web.bind.annotation.PutMapping("/intake/{assetId}")
   @Transactional
   public Map<String, Object> classifyBookIntake(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String category = requiredText(body.get("category"), "category", 32).toUpperCase(Locale.ROOT);
     if (!List.of("MAIN_TEXTBOOK","PART","SUPPLEMENTARY","WORKBOOK","TEACHER_GUIDE","REFERENCE","OTHER").contains(category)) {
       throw badRequest("Choose a supported book category.");
@@ -115,26 +126,22 @@ public class SourceIngestionController {
     if (!List.of("hi","en").contains(language)) throw badRequest("Book language must be Hindi or English.");
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    List<Map<String,Object>> tracks = jdbc.queryForList("""
-      select c.id as class_id,s.id as subject_id from curriculum_class c
-      join curriculum_subject s on s.class_id=c.id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, classCode, subjectCode);
-    if (tracks.isEmpty()) throw badRequest("Choose a valid active class and subject combination.");
-    long classId = ((Number) tracks.getFirst().get("class_id")).longValue();
-    long subjectId = ((Number) tracks.getFirst().get("subject_id")).longValue();
+    Map<String,Object> selectedTrack=resolveCourseSubject(courseId,institutionId,classCode,subjectCode);
+    long classId=((Number)selectedTrack.get("class_id")).longValue();
+    long subjectId=((Number)selectedTrack.get("subject_id")).longValue();
     List<Map<String,Object>> assets = jdbc.queryForList(
         "select id,sha256 from learning_pdf_asset where id=?", assetId);
     if (assets.isEmpty()) throw notFound("PDF asset", assetId);
     String partLabel = optionalText(body.get("partLabel"), 80);
     String notes = optionalText(body.get("reviewNotes"), 2000);
     jdbc.update("""
-      insert into learning_book_intake(pdf_asset_id,category,class_id,subject_id,language,part_label,
+      insert into learning_book_intake(pdf_asset_id,institution_id,course_id,category,class_id,subject_id,language,part_label,
         status,inventory,reconciliation,analysis_error,review_notes,created_by_staff_id,created_at,updated_at)
-      values(?,?,?,?,?,?,'PENDING','{"chapters":[],"other_sections":[],"warnings":[]}'::jsonb,
+      values(?,?,?,?,?,?,?,?,'PENDING','{"chapters":[],"other_sections":[],"warnings":[]}'::jsonb,
         '{"missing_from_book":[],"extra_in_book":[],"ambiguous":[],"page_boundary_warnings":[]}'::jsonb,
         null,?,?,now(),now())
-      on conflict(pdf_asset_id) do update set category=excluded.category,class_id=excluded.class_id,
+      on conflict (pdf_asset_id,institution_id,course_id) where course_id is not null
+      do update set category=excluded.category,class_id=excluded.class_id,
         subject_id=excluded.subject_id,language=excluded.language,part_label=excluded.part_label,
         status=case when learning_book_intake.class_id<>excluded.class_id
           or learning_book_intake.subject_id<>excluded.subject_id
@@ -199,7 +206,7 @@ public class SourceIngestionController {
           or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
           then null else learning_book_intake.ranges_review_notes end,
         review_notes=excluded.review_notes,updated_at=now()
-      """, assetId, category, classId, subjectId, language, partLabel, notes, context.staffId());
+      """, assetId, institutionId, courseId, category, classId, subjectId, language, partLabel, notes, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId,
         "Classified uploaded complete-book PDF for inventory reconciliation.");
     return jdbc.queryForMap("""
@@ -207,19 +214,24 @@ public class SourceIngestionController {
         i.subject_id,s.code as subject_code,i.language,i.part_label,i.status,i.inventory,i.reconciliation
       from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id join curriculum_subject s on s.id=i.subject_id
-      where i.pdf_asset_id=?
-      """, assetId);
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
   }
 
   /** Record a human review decision without publishing or approving any chapter boundaries. */
   @PatchMapping("/intake/{assetId}/review")
   @Transactional
   public Map<String, Object> reviewBookIntake(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> rows = jdbc.queryForList(
-        "select status,reconciliation from learning_book_intake where pdf_asset_id=?", assetId);
+        "select status,reconciliation from learning_book_intake where pdf_asset_id=? and institution_id=? and course_id=?",
+        assetId,institutionId,courseId);
     if (rows.isEmpty()) throw notFound("Classified book intake", assetId);
     String current = String.valueOf(rows.getFirst().get("status"));
     if ("PENDING".equals(current) || "BLOCKED".equals(current)) {
@@ -243,14 +255,14 @@ public class SourceIngestionController {
     }
     jdbc.update("""
       update learning_book_intake set status='REVIEWED',reviewed_by_staff_id=?,
-        reviewed_at=now(),review_notes=?,updated_at=now() where pdf_asset_id=?
-      """, context.staffId(), notes, assetId);
+        reviewed_at=now(),review_notes=?,updated_at=now() where pdf_asset_id=? and institution_id=? and course_id=?
+      """, context.staffId(), notes, assetId,institutionId,courseId);
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/review",
         "Recorded human review of book inventory; no chapter ranges were auto-approved and no content was published.");
     return jdbc.queryForMap("""
       select pdf_asset_id,status,reviewed_by_staff_id,reviewed_at,review_notes,reconciliation
-      from learning_book_intake where pdf_asset_id=?
-      """, assetId);
+      from learning_book_intake where pdf_asset_id=? and institution_id=? and course_id=?
+      """, assetId,institutionId,courseId);
   }
 
   /**
@@ -264,14 +276,18 @@ public class SourceIngestionController {
   @PatchMapping("/intake/{assetId}/chapter-ranges")
   @Transactional
   public Map<String, Object> saveIntakeChapterRanges(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.subject_id,a.page_count,i.status
       from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
-      where i.pdf_asset_id=?
-      """, assetId);
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
     if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
     Map<String,Object> intake = intakeRows.getFirst();
     int pageCount = ((Number) intake.get("page_count")).intValue();
@@ -313,15 +329,15 @@ public class SourceIngestionController {
       update learning_book_intake set chapter_ranges=?::jsonb,
         ranges_reviewed_by_staff_id=?,ranges_reviewed_at=now(),
         ranges_review_notes=?,updated_at=now()
-      where pdf_asset_id=?
-      """, rangesJson, context.staffId(), optionalText(body.get("notes"), 2000), assetId);
+      where pdf_asset_id=? and institution_id=? and course_id=?
+      """, rangesJson, context.staffId(), optionalText(body.get("notes"), 2000), assetId,institutionId,courseId);
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/chapter-ranges",
         "Saved manually reviewed chapter page ranges. Ranges remain draft-only and do not publish content.");
     return jdbc.queryForMap("""
       select pdf_asset_id,chapter_ranges,ranges_reviewed_by_staff_id,ranges_reviewed_at,
              ranges_review_notes
-      from learning_book_intake where pdf_asset_id=?
-      """, assetId);
+      from learning_book_intake where pdf_asset_id=? and institution_id=? and course_id=?
+      """, assetId,institutionId,courseId);
   }
 
   /**
@@ -331,10 +347,14 @@ public class SourceIngestionController {
   @PostMapping("/intake/{assetId}/draft-resources")
   @Transactional
   public Map<String, Object> createDraftResourcesFromReviewedRanges(
-      @PathVariable long assetId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long assetId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
     context = authorization.requirePermission(context, "CONTENT_EDIT");
+    long institutionId=requireInstitution(tenant);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
 
     String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
     String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
@@ -362,8 +382,8 @@ public class SourceIngestionController {
       join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id
       join curriculum_subject s on s.id=i.subject_id
-      where i.pdf_asset_id=?
-      """, assetId);
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
     if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
     Map<String,Object> intake = intakeRows.getFirst();
     if (intake.get("ranges_reviewed_at") == null
@@ -380,9 +400,9 @@ public class SourceIngestionController {
       cross join lateral jsonb_to_recordset(i.chapter_ranges)
         as r(chapter_id bigint,title text,page_start integer,page_end integer)
       join curriculum_chapter ch on ch.id=r.chapter_id and ch.subject_id=i.subject_id and ch.active=true
-      where i.pdf_asset_id=?
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
       order by r.page_start,r.chapter_id
-      """, assetId);
+      """, assetId,institutionId,courseId);
     if (ranges.size() != ((Number) intake.get("range_count")).intValue()) {
       throw badRequest("One or more saved chapter ranges no longer match active curriculum chapters. Reopen the book, correct the ranges, and save them again.");
     }
@@ -406,12 +426,17 @@ public class SourceIngestionController {
       previousEnd = end;
 
       List<Map<String,Object>> existingRows = jdbc.queryForList("""
-        select id as document_id,title,status,page_start,page_end
-        from learning_document
-        where pdf_asset_id=? and scope='CHAPTER_PDF' and chapter_id=? and language=?
-          and status<>'ARCHIVED'
-        order by id desc
-        """, assetId, chapterId, language);
+        select d.id as document_id,d.title,
+               coalesce(dca.status,'DRAFT') as status,dca.id as assignment_id,
+               d.page_start,d.page_end
+        from learning_document d
+        left join learning_document_course_assignment dca
+          on dca.learning_document_id=d.id and dca.institution_id=? and dca.course_id=?
+            and dca.subject_id=d.subject_id
+        where d.pdf_asset_id=? and d.scope='CHAPTER_PDF' and d.chapter_id=? and d.language=?
+          and (dca.id is null or dca.status<>'ARCHIVED')
+        order by d.updated_at desc,d.id desc
+        """, institutionId,courseId,assetId,chapterId,language);
       if (!existingRows.isEmpty()) {
         Map<String,Object> existing = existingRows.getFirst();
         boolean sameRange = ((Number) existing.get("page_start")).intValue() == start
@@ -420,7 +445,18 @@ public class SourceIngestionController {
           throw badRequest("An active resource already exists for chapter " + range.get("chapter_title")
               + " from this PDF with different page bounds. Review or archive that resource before creating another.");
         }
+        Long existingDocumentId=((Number)existing.get("document_id")).longValue();
+        if(existing.get("assignment_id")==null) {
+          // Reuse the shared PDF/document metadata, but create a distinct publication
+          // assignment for this exact institution and course.
+          jdbc.update("""
+            insert into learning_document_course_assignment(
+              institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+            ) values(?,?,?,?,'DRAFT',?)
+            """,institutionId,courseId,existingDocumentId,subjectId,context.staffId());
+        }
         Map<String,Object> output = new LinkedHashMap<>(existing);
+        output.put("status",existing.get("assignment_id")==null?"DRAFT":existing.get("status"));
         output.put("created", false);
         drafts.add(output);
         existingCount++;
@@ -436,6 +472,11 @@ public class SourceIngestionController {
         returning id
         """, Long.class, assetId, subjectId, chapterId, draftTitle, sourceTitle,
           sourceUrl, edition, language, start, end, context.staffId());
+      jdbc.update("""
+        insert into learning_document_course_assignment(
+          institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+        ) values(?,?,?,?,'DRAFT',?)
+        """,institutionId,courseId,documentId,subjectId,context.staffId());
       Map<String,Object> output = new LinkedHashMap<>();
       output.put("document_id", documentId);
       output.put("chapter_id", chapterId);
@@ -465,26 +506,32 @@ public class SourceIngestionController {
 
   @PostMapping("/intake/{assetId}/analyze")
   public Map<String, Object> analyzeBookIntake(
-      @PathVariable long assetId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return runBookIntakeAnalysis(assetId, context, false);
+      @PathVariable long assetId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    return runBookIntakeAnalysis(assetId, courseId, requireInstitution(tenant), context, false);
   }
 
   /** OCR-assisted analysis is an explicit admin action; extracted text remains a review candidate. */
   @PostMapping("/intake/{assetId}/analyze-ocr")
   public Map<String, Object> analyzeBookIntakeWithOcr(
-      @PathVariable long assetId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    return runBookIntakeAnalysis(assetId, context, true);
+      @PathVariable long assetId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    return runBookIntakeAnalysis(assetId, courseId, requireInstitution(tenant), context, true);
   }
 
   private Map<String, Object> runBookIntakeAnalysis(
-      long assetId, AuthContext context, boolean useOcr) {
+      long assetId, long courseId, long institutionId, AuthContext context, boolean useOcr) {
     context = requireReviewer(context);
+    requireBookIntakeCourse(assetId,courseId,institutionId);
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.*,a.pdf_bytes,a.page_count,a.sha256 from learning_book_intake i
-      join learning_pdf_asset a on a.id=i.pdf_asset_id where i.pdf_asset_id=?
-      """, assetId);
+      join learning_pdf_asset a on a.id=i.pdf_asset_id
+      where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?
+      """, assetId,institutionId,courseId);
     if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
     Map<String,Object> intake = intakeRows.getFirst();
     byte[] bytes = (byte[]) intake.get("pdf_bytes");
@@ -827,18 +874,17 @@ public class SourceIngestionController {
   @PostMapping("/registry-books/{medium}/{bookId}/jobs")
   public Map<String, Object> startCachedBookJob(
       @PathVariable String medium, @PathVariable String bookId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId = requireInstitution(tenant);
+    Long selectedCourseId = optionalLong(body.get("courseId"), "courseId");
+    if (selectedCourseId == null) throw badRequest("Select an institution-assigned course before ingesting a book.");
+    requireAssignedCourse(selectedCourseId, institutionId);
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    List<Map<String, Object>> tracks = jdbc.queryForList("""
-      select c.id as class_id,c.code as class_code,c.display_name as class_name,
-             s.id as subject_id,s.code as subject_code,s.display_name as subject_name
-      from curriculum_class c join curriculum_subject s on s.class_id=c.id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, classCode, subjectCode);
-    if (tracks.isEmpty()) throw badRequest("Select an active class and subject from the curriculum.");
-    Map<String, Object> track = tracks.getFirst();
+    Map<String, Object> track = resolveCourseSubject(selectedCourseId, institutionId, classCode, subjectCode);
     int grade = textbookCache.classNumber(
         String.valueOf(track.get("class_code")), String.valueOf(track.get("class_name")));
     final TextbookCacheService.CachedBook cached;
@@ -886,9 +932,10 @@ public class SourceIngestionController {
 
     List<Map<String, Object>> recent = jdbc.queryForList("""
       select id,status from source_ingestion_job
-      where source_id=? and subject_id=? and cache_medium=? and cache_book_id=?
+      where institution_id=? and course_id=? and source_id=? and subject_id=?
+        and cache_medium=? and cache_book_id=?
       order by created_at desc,id desc limit 1
-      """, sourceId, track.get("subject_id"), cached.medium(), cached.bookId());
+      """, institutionId, selectedCourseId, sourceId, track.get("subject_id"), cached.medium(), cached.bookId());
     if (!recent.isEmpty()) {
       String priorStatus = String.valueOf(recent.getFirst().get("status"));
       if (!List.of("FAILED", "REJECTED").contains(priorStatus)) {
@@ -898,12 +945,12 @@ public class SourceIngestionController {
 
     Long jobId = jdbc.queryForObject("""
       insert into source_ingestion_job(
-        source_id,subject_id,source_title,source_url,edition,language,book_asset_id,
+        institution_id,course_id,source_id,subject_id,source_title,source_url,edition,language,book_asset_id,
         cache_medium,cache_book_id,cache_sha256,cache_class_no,status,created_by_staff_id
-      ) values(?,?,?,?,?,?,null,?,?,?,?,'DOWNLOADING',?)
+      ) values(?,?,?,?,?,?,?,?,null,?,?,?,?,'DOWNLOADING',?)
       returning id
-      """, Long.class, sourceId, track.get("subject_id"), title, sourceUrl, edition, language,
-      cached.medium(), cached.bookId(), cached.sha256(), grade, context.staffId());
+      """, Long.class, institutionId, selectedCourseId, sourceId, track.get("subject_id"),
+      title, sourceUrl, edition, language, cached.medium(), cached.bookId(), cached.sha256(), grade, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/registry-books/" + cached.medium()
         + "/" + cached.bookId() + "/jobs",
         "Started source-ingestion review from a SHA-256-verified complete book in the persistent GHCR cache.");
@@ -914,8 +961,13 @@ public class SourceIngestionController {
   @GetMapping("/sources/{sourceId}/chapter-mappings")
   public List<Map<String, Object>> listExistingChapterMappings(
       @PathVariable long sourceId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     return jdbc.queryForList("""
       select cs.id as chapter_source_id,cs.chapter_id,ch.code as chapter_code,
              ch.display_name as chapter_name,cs.source_chapter_no,cs.source_chapter_title,
@@ -926,14 +978,18 @@ public class SourceIngestionController {
       join content_source src on src.id=cs.source_id
       join curriculum_chapter ch on ch.id=cs.chapter_id
       left join lateral (
-        select ld.id as document_id,ld.title as document_title,ld.status as document_status,
+        select ld.id as document_id,ld.title as document_title,ldca.status as document_status,
                ld.source_title as document_source_title,ld.source_url as document_source_url,
                a.id as pdf_asset_id,a.title as pdf_title,a.page_count as pdf_page_count,
                a.review_status as pdf_review_status,a.sha256 as pdf_sha256
         from learning_document ld
         join learning_pdf_asset a on a.id=ld.pdf_asset_id
+        join learning_document_course_assignment ldca
+          on ldca.learning_document_id=ld.id and ldca.subject_id=ld.subject_id
+            and ldca.institution_id=? and ldca.course_id=?
         where ld.chapter_id=cs.chapter_id and ld.scope='CHAPTER_PDF'
           and ld.language=case when lower(coalesce(src.language,'')) in ('en','english') then 'en' else 'hi' end
+          and ldca.status<>'ARCHIVED'
           and (
             (src.source_url is not null and ld.source_url=src.source_url)
             or ld.source_title=src.title
@@ -943,24 +999,41 @@ public class SourceIngestionController {
         order by case when a.source_content_id=src.id then 0
                       when src.source_url is not null and ld.source_url=src.source_url then 1
                       else 2 end,
-                 case when ld.status='PUBLISHED' then 0 when ld.status='DRAFT' then 1 else 2 end,
+                 case when ldca.status='PUBLISHED' then 0 when ldca.status='DRAFT' then 1 else 2 end,
                  ld.updated_at desc,ld.id desc
         limit 1
       ) d on true
       where cs.source_id=?
+        and exists (
+          select 1
+          from curriculum_program_subject scoped_mapping
+          join curriculum_program selected_course on selected_course.id=scoped_mapping.program_id
+            and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+          join curriculum_subject mapped_subject on mapped_subject.id=scoped_mapping.subject_id
+            and mapped_subject.class_id=scoped_mapping.class_id and mapped_subject.active=true
+          where scoped_mapping.program_id=? and scoped_mapping.subject_id=ch.subject_id
+            and (mapped_subject.program_id=selected_course.id
+              or (mapped_subject.program_id is null and selected_course.class_id=mapped_subject.class_id))
+        )
       order by ch.sort_order,ch.teaching_order,ch.id,cs.id
-      """, sourceId);
+      """, institutionId,courseId,sourceId,courseId);
   }
 
   @GetMapping("/jobs")
   public Map<String,Object> listJobs(
+      @RequestParam Long courseId,
       @RequestParam(defaultValue="20") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?20:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select j.id as job_id,j.source_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,j.language,
+      select j.id as job_id,j.institution_id,j.course_id,p.code as course_code,p.display_name as course_name,
+             j.source_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,j.language,
              j.status,j.error_message,j.book_asset_id,j.page_count,j.created_at,j.updated_at,j.reviewed_at,
              c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id) as chapter_count,
@@ -968,9 +1041,11 @@ public class SourceIngestionController {
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='REJECTED') as rejected_chapter_count
       from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
       join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=j.course_id
+      where j.institution_id=? and j.course_id=?
       order by j.created_at desc,j.id desc limit ? offset ?
-      """,rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from source_ingestion_job",Long.class);
+      """,institutionId,courseId,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from source_ingestion_job where institution_id=? and course_id=?",Long.class,institutionId,courseId);
     Map<String,Object> summary=jdbc.queryForMap("""
       select count(*) as total,
              count(*) filter(where upper(coalesce(status,''))='DOWNLOADING') as downloading,
@@ -978,31 +1053,38 @@ public class SourceIngestionController {
              count(*) filter(where upper(coalesce(status,''))='APPROVED') as approved,
              count(*) filter(where upper(coalesce(status,''))='FAILED') as failed,
              count(*) filter(where upper(coalesce(status,''))='REJECTED') as rejected
-      from source_ingestion_job
-      """);
+      from source_ingestion_job where institution_id=? and course_id=?
+      """,institutionId,courseId);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,"summary",summary);
   }
 
   @GetMapping("/jobs/{jobId}")
   public Map<String, Object> getJob(
       @PathVariable long jobId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     return jobDetails(jobId);
   }
 
   @PostMapping("/jobs")
   public Map<String, Object> startJob(
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId = requireInstitution(tenant);
+    Long selectedCourseId = optionalLong(body.get("courseId"), "courseId");
+    if (selectedCourseId == null) throw badRequest("Select an institution-assigned course before ingesting a source.");
+    requireAssignedCourse(selectedCourseId, institutionId);
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    Long subjectId = jdbc.query("""
-      select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
-    if (subjectId == null) throw badRequest("Select an active class and subject from the curriculum.");
+    Map<String,Object> courseSubject = resolveCourseSubject(selectedCourseId, institutionId, classCode, subjectCode);
+    Long subjectId = ((Number)courseSubject.get("subject_id")).longValue();
 
     Long requestedSourceId = optionalLong(body.get("sourceId"), "sourceId");
     Long sourceId;
@@ -1046,34 +1128,32 @@ public class SourceIngestionController {
       if (sourceKind == null) sourceKind = "BOARD_TEXTBOOK";
       String provider = optionalText(body.get("provider"), 200);
       if (provider == null) provider = "Admin registered source";
-      sourceId = jdbc.queryForObject("""
+      sourceId = jdbc.query("""
         insert into content_source(source_kind,title,provider,source_url,edition,language,status)
         values(?,?,?,?,?,?,'REGISTERED')
-        on conflict(source_kind,title,edition) do update set
-          provider=excluded.provider,source_url=excluded.source_url,language=excluded.language,updated_at=now()
+        on conflict(source_kind,title,edition) do nothing
         returning id
-        """, Long.class, sourceKind, sourceTitle, provider, sourceUrl, edition, language);
+        """, rs -> rs.next() ? rs.getLong(1) : null,
+        sourceKind, sourceTitle, provider, sourceUrl, edition, language);
+      if (sourceId == null) {
+        sourceId = jdbc.queryForObject("""
+          select id from content_source where source_kind=? and title=? and edition=?
+          """, Long.class, sourceKind, sourceTitle, edition);
+      }
       checksum = null;
       linkedAsset = null;
     }
     if (sourceUrl == null || !sourceUrl.toLowerCase(Locale.ROOT).startsWith("https://")) {
       throw badRequest("Enter an official HTTPS source page or direct PDF URL.");
     }
-    if (requestedSourceId != null) {
-      if (hasText(body.get("sourceUrl"))) {
-        jdbc.update("update content_source set source_url=?,updated_at=now() where id=?", sourceUrl, sourceId);
-      }
-      if (hasText(body.get("sourceTitle")) || hasText(body.get("edition")) || hasText(body.get("language"))) {
-        jdbc.update("update content_source set title=?,edition=?,language=?,updated_at=now() where id=?",
-            sourceTitle, edition, language, sourceId);
-      }
-    }
+    // Registered source metadata is shared catalogue data. Overrides supplied for this
+    // ingestion are stored only on the institution/course-owned job below.
     Long activeJobId = jdbc.query("""
       select id from source_ingestion_job
-      where source_id=? and subject_id=? and status='DOWNLOADING'
+      where institution_id=? and course_id=? and source_id=? and subject_id=? and status='DOWNLOADING'
         and created_at > now() - interval '15 minutes'
       order by created_at desc,id desc limit 1
-      """, rs -> rs.next() ? rs.getLong(1) : null, sourceId, subjectId);
+      """, rs -> rs.next() ? rs.getLong(1) : null, institutionId, selectedCourseId, sourceId, subjectId);
     if (activeJobId != null) {
       return jobDetails(activeJobId);
     }
@@ -1090,12 +1170,13 @@ public class SourceIngestionController {
         linkedAsset == null ? null : ((Number) linkedAsset).longValue());
     Long jobId = jdbc.queryForObject("""
       insert into source_ingestion_job(
-        source_id,subject_id,source_title,source_url,edition,language,book_asset_id,status,created_by_staff_id
-      ) values(?,?,?,?,?,?,?,'DOWNLOADING',?)
+        institution_id,course_id,source_id,subject_id,source_title,source_url,edition,language,book_asset_id,status,created_by_staff_id
+      ) values(?,?,?,?,?,?,?,?,?,'DOWNLOADING',?)
       returning id
-      """, Long.class, sourceId, subjectId, sourceTitle, sourceUrl, edition, language, assetId, context.staffId());
+      """, Long.class, institutionId, selectedCourseId, sourceId, subjectId,
+      sourceTitle, sourceUrl, edition, language, assetId, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/jobs/" + jobId,
-        "Started a textbook source ingestion job for class " + classCode + " and subject " + subjectCode + ".");
+        "Started a textbook source ingestion job for course " + selectedCourseId + ", subject " + subjectCode + ".");
     worker.process(jobId);
     return jobDetails(jobId);
   }
@@ -1103,9 +1184,12 @@ public class SourceIngestionController {
   @PatchMapping("/jobs/{jobId}/metadata")
   @Transactional
   public Map<String, Object> updateJobMetadata(
-      @PathVariable long jobId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
     String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
     if (!sourceUrl.regionMatches(true, 0, "https://", 0, 8)) {
@@ -1138,9 +1222,12 @@ public class SourceIngestionController {
   @PostMapping("/jobs/{jobId}/chapters")
   @Transactional
   public Map<String, Object> splitIntoChapters(
-      @PathVariable long jobId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) {
       throw badRequest("The source book must finish downloading before chapter ranges can be prepared.");
@@ -1231,9 +1318,13 @@ public class SourceIngestionController {
   @PatchMapping("/jobs/{jobId}/chapters/{chapterRowId}")
   @Transactional
   public Map<String, Object> reviewChapter(
-      @PathVariable long jobId, @PathVariable long chapterRowId, @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @PathVariable long chapterRowId, @RequestParam Long courseId,
+      @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) throw badRequest("This ingestion job is not open for review.");
     String status = requiredText(body.get("status"), "status", 20).toUpperCase(Locale.ROOT);
@@ -1254,9 +1345,13 @@ public class SourceIngestionController {
   @PostMapping("/jobs/{jobId}/approve")
   @Transactional
   public Map<String, Object> approveJob(
-      @PathVariable long jobId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    long institutionId=requireInstitution(tenant);
+    requireJobCourse(jobId,courseId,institutionId);
     Map<String, Object> job = jobRow(jobId);
     if ("APPROVED".equals(String.valueOf(job.get("status")))) return jobDetails(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) throw badRequest("Only a downloaded book in review can be approved.");
@@ -1289,7 +1384,7 @@ public class SourceIngestionController {
         update learning_pdf_asset set review_status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now()
         where id=? and review_status in ('DRAFT','REVIEW')
         """, staffId, bookId);
-      jdbc.queryForObject("""
+      Long bookDocumentId = jdbc.queryForObject("""
         insert into learning_document(
           pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
           page_start,page_end,status,version_no,created_by_staff_id
@@ -1298,6 +1393,11 @@ public class SourceIngestionController {
         """, Long.class, bookId, subjectId, truncate(String.valueOf(job.get("source_title")), 240),
         job.get("source_title"), job.get("source_url"), job.get("edition"), documentLanguage,
         job.get("page_count"), staffId);
+      jdbc.update("""
+        insert into learning_document_course_assignment(
+          institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+        ) values(?,?,?,?,'DRAFT',?)
+        """,institutionId,courseId,bookDocumentId,subjectId,staffId);
     }
     for (Map<String, Object> chapter : chapters) {
       long chapterId = ((Number) chapter.get("chapter_id")).longValue();
@@ -1316,6 +1416,11 @@ public class SourceIngestionController {
         returning id
         """, Long.class, assetId, subjectId, chapterId, chapter.get("chapter_title"), job.get("source_title"),
         job.get("source_url"), job.get("edition"), documentLanguage, chapter.get("page_count"), staffId);
+      jdbc.update("""
+        insert into learning_document_course_assignment(
+          institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+        ) values(?,?,?,?,'DRAFT',?)
+        """,institutionId,courseId,documentId,subjectId,staffId);
       jdbc.update("update source_ingestion_chapter set learning_document_id=?,updated_at=now() where id=?",
           documentId, chapter.get("id"));
       jdbc.update("""
@@ -1329,18 +1434,8 @@ public class SourceIngestionController {
         "Source PDF pages " + start + "–" + end,
         "Reviewed source PDF; chapter PDF stored as learning document " + documentId + ".");
     }
-    if (bookId != null) {
-      jdbc.update("""
-        update content_source set learning_pdf_asset_id=?,status='APPROVED',updated_at=now()
-        where id=?
-        """, bookId, sourceId);
-    } else {
-      // The complete book remains in the GHCR cache; only the explicitly reviewed chapter
-      // PDFs are copied to PostgreSQL and made available for individual library publication.
-      jdbc.update("""
-        update content_source set status='APPROVED',updated_at=now() where id=?
-        """, sourceId);
-    }
+    // Keep shared content_source status/asset linkage unchanged. Job approval and
+    // document availability are now tracked on this exact course's records.
     jdbc.update("""
       update source_ingestion_job set status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now()
       where id=?
@@ -1355,9 +1450,12 @@ public class SourceIngestionController {
   @PostMapping("/jobs/{jobId}/reject")
   @Transactional
   public Map<String, Object> rejectJob(
-      @PathVariable long jobId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @PathVariable long jobId, @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     context = requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     if ("APPROVED".equals(String.valueOf(job.get("status")))) throw badRequest("An approved ingestion is immutable; archive its learning documents instead.");
     if (!List.of("REVIEW", "FAILED").contains(String.valueOf(job.get("status")))) {
@@ -1372,7 +1470,7 @@ public class SourceIngestionController {
         where id=? and book_asset_id is not null
       ) and review_status in ('DRAFT','REVIEW')
       """, context.staffId(), jobId, jobId);
-    jdbc.update("update content_source set status='REJECTED',updated_at=now() where id=?", job.get("source_id"));
+    // Reject this course's ingestion job only; the shared source registry is not rejected globally.
     jdbc.update("""
       update source_ingestion_job set status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now()
       where id=?
@@ -1385,9 +1483,12 @@ public class SourceIngestionController {
   @GetMapping(value = "/jobs/{jobId}/pages/{pageNumber}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> previewSourcePage(
       @PathVariable long jobId, @PathVariable int pageNumber,
-      @RequestParam(required = false) Long chapterRowId,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId, @RequestParam(required = false) Long chapterRowId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
     requireReviewer(context);
+    requireJobCourse(jobId,courseId,requireInstitution(tenant));
     Map<String, Object> job = jobRow(jobId);
     Long assetId = null;
     int pageCount;
@@ -1464,7 +1565,8 @@ public class SourceIngestionController {
 
   private Map<String, Object> jobDetails(long jobId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select j.id as job_id,j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
+      select j.id as job_id,j.institution_id,j.course_id,p.code as course_code,p.display_name as course_name,
+             j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
              j.language,j.book_asset_id,j.cache_medium,j.cache_book_id,j.cache_sha256,j.cache_class_no,
              j.page_count,j.detected_outline::text as detected_outline,j.status,j.error_message,
              j.created_at,j.updated_at,j.reviewed_at,c.code as class_code,c.display_name as class_name,
@@ -1472,6 +1574,7 @@ public class SourceIngestionController {
              a.original_filename,a.file_size_bytes,a.sha256,a.review_status as book_review_status
       from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
       join curriculum_class c on c.id=s.class_id
+      left join curriculum_program p on p.id=j.course_id
       left join learning_pdf_asset a on a.id=j.book_asset_id where j.id=?
       """, jobId);
     if (rows.isEmpty()) throw notFound("Source ingestion job", jobId);
@@ -1570,6 +1673,72 @@ public class SourceIngestionController {
   private String sha256(byte[] bytes) {
     try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
     catch (NoSuchAlgorithmException ex) { throw new IllegalStateException("SHA-256 unavailable.", ex); }
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if (tenant==null || tenant.institutionId()<1L) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing source ingestion.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireBookIntakeCourse(long assetId,long courseId,long institutionId) {
+    requireAssignedCourse(courseId,institutionId);
+    Boolean inScope=jdbc.queryForObject("""
+      select exists(select 1 from learning_book_intake i
+        where i.pdf_asset_id=? and i.institution_id=? and i.course_id=?)
+      """,Boolean.class,assetId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(inScope)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Uploaded-book intake is not available in the selected institution course.");
+    }
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Selected course is not assigned and released to this institution.");
+    }
+  }
+
+  private Map<String,Object> resolveCourseSubject(long courseId,long institutionId,String classCode,String subjectCode) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select p.id as course_id,p.code as course_code,p.display_name as course_name,
+             c.id as class_id,c.code as class_code,c.display_name as class_name,
+             s.id as subject_id,s.code as subject_code,s.display_name as subject_name
+      from curriculum_program p
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        and c.code=? and s.code=?
+      """,institutionId,courseId,classCode,subjectCode);
+    if(rows.isEmpty()) throw badRequest("Choose a subject mapped to the selected institution course.");
+    return rows.getFirst();
+  }
+
+  private void requireJobCourse(long jobId,long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from source_ingestion_job j
+      join curriculum_program p on p.id=j.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_assignment a on a.institution_id=j.institution_id and a.status='ASSIGNED'
+      join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
+      where j.id=? and j.institution_id=? and j.course_id=?
+      """,Long.class,jobId,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Source-ingestion job is not part of the selected course in this institution.");
+    }
   }
 
   private AuthContext requireReviewer(AuthContext context) {

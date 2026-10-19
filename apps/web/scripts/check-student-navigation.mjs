@@ -210,8 +210,67 @@ assert.ok(languageProvider.slice(learningSetterStart).includes('/api/v1/students
 assert.ok(languageProvider.includes("'qe-learning-language'") && languageProvider.includes("'qe-certificate-language'"), 'Learning and certificate language preferences must have independent persistence keys.');
 assert.ok(testsClient.includes('const language=learningLanguage;') && testsClient.includes('language:certificateLanguage'), 'Tests must use learning language for content and certificate language for issuance.');
 assert.ok(testsClient.includes("const uiLanguage=locale==='english'?'en':'hi';") && testsClient.includes('certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)'), 'Test-result labels must follow app language independently of content language.');
-assert.ok(practiceClient.includes("'/api/v1/learning/practice/sessions/'+requestedSessionId+'?language='+learningLanguage"), 'Reopening practice must use learning-content language, not app UI language.');
-assert.ok(learnClient.includes('textbookChapterTitle(item, learningLanguage)'), 'Lesson PDF titles must follow selected content language.');
+assert.ok(practiceClient.includes('InstitutionCourseSubjectScope') && practiceClient.includes('/api/v1/learning/structured-lessons?') && practiceClient.includes('courseId'), 'Practice entry must be institution/course scoped and open published structured lessons, not a class/program fallback.');
+assert.ok(learnClient.includes("from '../structured-lessons/StructuredLessonsClient'") && !learnClient.includes('classCode=') && !learnClient.includes('programCode='), 'Learning entry must route to the course-scoped structured lesson catalogue.');
+
+const coursesPage = read('../app/student/courses/page.tsx');
+const courseScope = read('../app/student/CourseScope.tsx');
+const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
+const parentPage = read('../app/parent/page.tsx');
+assert.ok(coursesPage.includes("'/student/structured-lessons?courseId=' + encodeURIComponent(String(courseId))") &&
+  coursesPage.includes('Open structured course'), 'Course focus must open the exact selected course structured catalogue.');
+assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
+  courseScope.includes('This course is not enrolled in your current institution account.') &&
+  courseScope.includes('qe:student:activeCourseId'), 'Course scope must normalize IDs, reject unavailable explicit IDs and persist primary course focus.');
+assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
+  androidApp.includes('Selected structured course opened.') &&
+  androidApp.includes('"/api/v1/learning/structured-lessons?" + params') &&
+  androidApp.includes('"courseId=" + courseId + "&language="'),
+  'Android course cards must route into the structured catalogue with the selected course ID.');
+assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
+  parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),
+  'Parent reports must require explicit course selection for multi-course children.');
+// Re-audited parent-child lifecycle must use course entitlements, not legacy subject tracks.
+const parentChildrenPage = read('../app/parent/children/page.tsx');
+const androidChildCreate = read('../../android/app/src/main/java/com/quantaedge/android/ui/ParentChildCreateScreen.kt');
+const androidChildManage = read('../../android/app/src/main/java/com/quantaedge/android/ui/ParentChildManageScreen.kt');
+const guardianApi = read('../../../services/api/src/main/java/com/quantaedge/api/GuardianController.java');
+const tenantContextService = read('../../../services/api/src/main/java/com/quantaedge/api/InstitutionTenantContextService.java');
+const authFilter = read('../../../services/api/src/main/java/com/quantaedge/api/AuthFilter.java');
+const authService = read('../../../services/api/src/main/java/com/quantaedge/api/AuthService.java');
+assert.ok(parentPage.includes('/certificates?courseId=') && parentPage.includes('/view?courseId=') && parentPage.includes('/download?courseId='),
+  'Parent certificate history, preview and downloads must be scoped to the selected child course.');
+assert.ok(androidApp.includes('/certificates?courseId=\" + courseId') && androidApp.includes('/view?courseId=\" + courseId') && androidApp.includes('/download?courseId=\" + courseId'),
+  'Android parent certificate history and artifacts must use the selected child course.');
+assert.ok(parentChildrenPage.includes('course.free_offer') && parentChildrenPage.includes('/parent/courses'),
+  'Web child management must directly assign only free institution courses and route paid offers to Family Marketplace.');
+assert.ok(androidApp.includes('onAssignCourse = ::assignCourseToChild') && androidApp.includes('courses = selectedChildCourses'),
+  'Android child management must pass the child course catalogue to its course-assignment UI.');
+assert.ok(androidChildCreate.includes('onCreate: (String, String, String, String, String, Boolean) -> Unit') && !androidChildCreate.includes('trackCodes'),
+  'Child creation must not require legacy subject-only access selection.');
+assert.ok(androidChildManage.includes('free_offer') && androidChildManage.includes('onAssignCourse') && androidChildManage.includes('Family Marketplace') && !androidChildManage.includes('onSaveTracks') && !androidChildManage.includes('trackCodes'),
+  'Android child management must assign institution courses rather than edit Maths/Science tracks.');
+assert.ok(guardianApi.includes('as course_names') && !guardianApi.includes('as track_codes'),
+  'Parent child summaries must expose assigned course names, not legacy subject-track summaries.');
+assert.ok(authFilter.includes('assertArchivedGuardianChildMembership') && authFilter.includes('restoringArchivedChild') &&
+  tenantContextService.includes('gs.active=false') && tenantContextService.includes('assertArchivedGuardianChildMembership'),
+  'Archived-child restoration must have its own selected-tenant authorization path without weakening active-child routes.');
+assert.ok(authService.includes('LEARNER_ACCOUNT_CONVERSION') && authService.includes('ON CONFLICT(institution_id,user_id) DO NOTHING'),
+  'Independent learner conversion must mirror active institution memberships without reactivating removed memberships.');
+assert.ok(androidApp.includes('Course data could not be refreshed. Your selected course is preserved; please retry.') &&
+  androidApp.includes('if (studentProgramsLoadFailed) {'),
+  'Android startup must preserve primary course focus during a temporary course-catalogue outage.');
+
+const textbooksClient = read('../app/student/textbooks/TextbooksClient.tsx');
+assert.ok(textbooksClient.includes('displayChapterTitle(item, learningLanguage === \'en\')'), 'Textbook chapter titles must follow selected content language.');
+const scopeComponent = read('../app/student/InstitutionCourseSubjectScope.tsx');
+assert.ok(scopeComponent.includes('useTenantBranding') && scopeComponent.includes('activeCourse?.subjects') && scopeComponent.includes('brand?.displayName'), 'Shared learner scope must display the validated institution and derive subjects from the selected course.');
+assert.ok(testsClient.includes('InstitutionCourseSubjectScope') && testsClient.includes('resultsParams.set(\'subjectCode\',subjectFilter)'), 'Tests and results must carry selected course and subject scope.');
+const studentClassesScope = read('../app/student/classes/ClassesClient.tsx');
+assert.ok(studentClassesScope.includes('InstitutionCourseSubjectScope') && studentClassesScope.includes('params.set(\'courseId\',String(activeCourseId))'), 'Live and recorded classes must be scoped to the selected course and its subjects.');
+assert.ok(textbooksClient.includes('qe:student:textbooks:open:\' + libraryStorageScope') && !textbooksClient.includes('qe:student:textbooks:open:\' + classCode'), 'Textbook expansion state must be namespaced by course, not legacy class.');
+const androidLearningClassesScreen = read('../../android/app/src/main/java/com/quantaedge/android/ui/LearningClassesScreen.kt');
+assert.ok(androidLearningClassesScreen.includes('subjects: List<JSONObject>') && !androidLearningClassesScreen.includes('if (subject == "maths")') && !androidLearningClassesScreen.includes('if (subject == "science")'), 'Android live classes must derive the subject filter from the selected course rather than hardcoded subject codes.');
 assert.ok(certificatesPage.includes('certificateLanguage') && certificatesPage.includes('setCertificateLanguage'), 'The certificate centre must expose an independent certificate-language preference.');
 assert.ok(androidApp.includes('mutableStateOf(preferences.getString("certificateLanguage"') && androidApp.includes('.put("language", certificateLanguage)'), 'Android certificate issuance must use its separately persisted certificate language.');
 assert.ok(androidCertificates.includes('onCertificateLanguageChange("hi")') && androidCertificates.includes('onCertificateLanguageChange("en")'), 'Android certificate centre must expose Hindi/English certificate-language choices.');

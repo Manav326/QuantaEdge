@@ -11,8 +11,7 @@ import { useUiTranslation } from '../i18n/useUiTranslation';
 import {useRouter} from 'next/navigation';
 
 type ParentRow={id:number;display_name:string;mobile_e164:string|null;contact_email?:string|null;google_email?:string|null;gmail_verified:boolean;mobile_verified:boolean;username?:string|null;active:boolean;created_at:string;active_children:number;linked_children:number};
-type ChildRow={id:number;display_name:string;class_code:string;board:string;language:string;student_active:boolean;relationship_active:boolean;consent_status:string;track_codes:string;public_id:string};
-const tracks=[{code:'maths'},{code:'science'}];
+type ChildRow={id:number;display_name:string;board:string;language:string;student_account_active:boolean;student_active:boolean;membership_status:string;relationship_active:boolean;consent_status:string;course_names:string;public_id:string};
 
 async function json(response:Response):Promise<any>{
   const raw=await response.text();
@@ -26,7 +25,6 @@ export default function AdminParents(){
   const [parents,setParents]=useState<ParentRow[]>([]);
   const [expanded,setExpanded]=useState<number|null>(null);
   const [children,setChildren]=useState<Record<number,ChildRow[]>>({});
-  const [trackDraft,setTrackDraft]=useState<Record<number,string[]>>({});
   const [search,setSearch]=useState('');
   const [page,setPage]=useState(0);
   const [total,setTotal]=useState(0);
@@ -51,18 +49,6 @@ export default function AdminParents(){
 
   useEffect(()=>{loadParents().catch((e:any)=>setError(e.message||t('admin.parents.loadFailed')));},[router,search,page,pageSize,t]);
 
-  async function toggleParent(row:ParentRow){
-    const active=!row.active;
-    if(!active&&!window.confirm(t('admin.parents.confirmSuspendParent',{name:String(row.display_name||row.mobile_e164||'')})))return;
-    setBusy(`parent-${row.id}`);setError('');setNotice('');
-    try{
-      const r=await fetch(`/api/v1/admin/parents/${row.id}/status`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active})});
-      const b=await json(r);if(!r.ok)throw new Error(b.message||t('admin.parents.updateStatusFailed'));
-      await loadParents();setNotice(active?t('admin.parents.parentReactivated'):t('admin.parents.parentSuspended'));
-    }catch(e:any){setError(e.message||t('admin.parents.updateStatusFailed'));}
-    finally{setBusy(null);}
-  }
-
   async function toggleExpand(parentId:number){
     if(expanded===parentId){setExpanded(null);return;}
     setExpanded(parentId);setError('');
@@ -70,28 +56,7 @@ export default function AdminParents(){
       const r=await fetch(`/api/v1/admin/parents/${parentId}/children`);
       const b=await json(r);if(!r.ok)throw new Error(b.message||t('admin.parents.loadChildrenFailed'));
       setChildren(current=>({...current,[parentId]:b}));
-      setTrackDraft(current=>({...current,...Object.fromEntries(b.map((c:ChildRow)=>[c.id,(c.track_codes||'').split(',').filter(Boolean)]))}));
     }catch(e:any){setError(e.message||t('admin.parents.loadChildrenFailed'));}
-  }
-
-  function toggleTrack(studentId:number,code:string,checked:boolean){
-    setTrackDraft(current=>{
-      const next=new Set(current[studentId]||[]);
-      checked?next.add(code):next.delete(code);
-      return {...current,[studentId]:[...next]};
-    });
-  }
-
-  async function saveTracks(child:ChildRow){
-    const trackCodes=trackDraft[child.id]||[];
-    setBusy(`tracks-${child.id}`);setError('');setNotice('');
-    try{
-      const r=await fetch(`/api/v1/admin/students/${child.id}/tracks`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({trackCodes})});
-      const b=await json(r);if(!r.ok)throw new Error(b.message||t('admin.parents.saveTracksFailed'));
-      setChildren(current=>({...current,...Object.fromEntries(Object.entries(current).map(([parentId,rows])=>[parentId,rows.map(c=>c.id===child.id?{...c,track_codes:trackCodes.join(',')}:c)]))}));
-      setNotice(t('admin.parents.subjectAccessUpdated',{name:child.display_name}));
-    }catch(e:any){setError(e.message||t('admin.parents.saveTracksFailed'));}
-    finally{setBusy(null);}
   }
 
   async function toggleStudent(child:ChildRow){
@@ -145,17 +110,15 @@ export default function AdminParents(){
                 <div className="parent-admin-count"><strong>{parent.active_children}</strong><span>{t('admin.parents.activeChildren')}</span></div>
                 <span className={`admin-status-pill ${parent.active?'active':'inactive'}`}>{parent.active?t('admin.parents.active'):t('admin.parents.suspended')}</span>
                 <button className="parent-secondary-button" onClick={()=>toggleExpand(parent.id)}>{expanded===parent.id?t('admin.parents.hideChildren'):t('admin.parents.viewChildren')} <span>{expanded===parent.id?'↑':'↓'}</span></button>
-                <button className={`admin-status-button ${parent.active?'suspend':'activate'}`} disabled={busy===`parent-${parent.id}`} onClick={()=>toggleParent(parent)}>{busy===`parent-${parent.id}`?t('admin.parents.saving'):parent.active?t('admin.parents.suspend'):t('admin.parents.reactivate')}</button>
+                <small>{locale==='english'?'Parent account access is managed by HRMS.':'Parent account access HRMS से नियंत्रित होता है।'}</small>
               </div>
               {expanded===parent.id&&<div className="parent-admin-children">
                 <div className="child-admin-heading"><div><strong>{t('admin.parents.linkedChildren')}</strong><span>{t('admin.parents.accessEnforcedByApi')}</span></div><span className="count">{t('admin.parents.linkedCount',{count:(children[parent.id]||[]).length})}</span></div>
                 {!(children[parent.id]||[]).length?<p className="child-admin-empty">{t('admin.parents.noChildProfile')}</p>:
                   (children[parent.id]||[]).map(child=><div className="child-admin-row" key={child.id}>
-                    <div className="child-admin-meta"><strong>{child.display_name}</strong><span>{t('admin.parents.classCode',{code:child.class_code})} · {child.board}</span><small>{!child.relationship_active?t('admin.parents.archivedRelationship'):!child.student_active?t('admin.parents.studentAccessSuspended'):t('admin.parents.consentStatus',{status:(child.consent_status||'unknown').toLowerCase()})}</small></div>
-                    <div className="child-admin-tracks"><span>{t('admin.parents.learningTracks')}</span>{tracks.map(track=><label key={track.code}><input type="checkbox" checked={(trackDraft[child.id]||[]).includes(track.code)} disabled={!child.student_active||!child.relationship_active||!parent.active} onChange={e=>toggleTrack(child.id,track.code,e.target.checked)}/>{track.code==='maths'?t('admin.parents.maths'):t('admin.parents.science')}</label>)}
-                      <button className="parent-secondary-button" disabled={!child.student_active||!child.relationship_active||!parent.active||busy===`tracks-${child.id}`||(trackDraft[child.id]||[]).length===0} onClick={()=>saveTracks(child)}>{busy===`tracks-${child.id}`?t('admin.parents.saving'):t('admin.parents.saveTracks')}</button>
-                    </div>
-                    <button className={`admin-status-button ${child.student_active?'suspend':'activate'}`} disabled={!child.relationship_active||busy===`student-${child.id}`} onClick={()=>toggleStudent(child)}>{busy===`student-${child.id}`?t('admin.parents.saving'):child.student_active?t('admin.parents.suspendStudent'):t('admin.parents.reactivateStudent')}</button>
+                    <div className="child-admin-meta"><strong>{child.display_name}</strong><span>{child.board} · {child.language}</span><small>{!child.relationship_active?t('admin.parents.archivedRelationship'):(!child.student_account_active||!child.student_active)?t('admin.parents.studentAccessSuspended'):t('admin.parents.consentStatus',{status:(child.consent_status||'unknown').toLowerCase()})}</small></div>
+                    <div className="child-admin-courses"><span>{t('admin.assessments.course')}</span><div>{child.course_names|| (locale==='english'?'No active course enrolment':'कोई सक्रिय कोर्स नामांकन नहीं')}</div></div>
+                    <button className={`admin-status-button ${child.student_active?'suspend':'activate'}`} disabled={!child.relationship_active||!child.student_account_active||busy===`student-${child.id}`} onClick={()=>toggleStudent(child)}>{busy===`student-${child.id}`?t('admin.parents.saving'):child.student_active?t('admin.parents.suspendStudent'):t('admin.parents.reactivateStudent')}</button>
                   </div>)}
               </div>}
             </article>)}

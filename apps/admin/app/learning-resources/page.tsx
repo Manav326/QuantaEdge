@@ -8,6 +8,7 @@ import {useCallback,useEffect,useMemo,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import styles from './LearningResources.module.css';
 
+type CourseOption={id:number;course_id:number;code:string;display_name:string;curriculum_class_code:string};
 type Resource={resource_id:number;resource_type:string;title:string;description?:string|null;language:string;source_kind:string;source_reference?:string|null;file_size_bytes?:number|null;download_allowed:boolean;status:string;version_no:number;assignment_count:number;created_at?:string|null;};
 type Chapter={chapter_id:number;chapter_code:string;chapter_name:string;class_code:string;class_name:string;subject_code:string;subject_name:string;content_status?:string;};
 type Lesson={lesson_id:number;lesson_code:string;lesson_title:string;lesson_status:string;chapter_id:number;chapter_code:string;chapter_name:string;class_code:string;subject_code:string;};
@@ -31,11 +32,12 @@ export default function LearningResourcesPage(){
  const router=useRouter();
  const [resources,setResources]=useState<Resource[]>([]),[total,setTotal]=useState(0),[selectedId,setSelectedId]=useState('');
  const [targets,setTargets]=useState<Targets>({chapters:[],lessons:[],structuredArtifacts:[]}),[assignments,setAssignments]=useState<Assignment[]>([]);
+  const [courses,setCourses]=useState<CourseOption[]>([]),[courseId,setCourseId]=useState('');
  const [busy,setBusy]=useState(false),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [statusFilter,setStatusFilter]=useState('ALL'),[typeFilter,setTypeFilter]=useState('ALL');
  const [title,setTitle]=useState(''),[description,setDescription]=useState(''),[resourceType,setResourceType]=useState('VIDEO'),[language,setLanguage]=useState('mul');
  const [sourceKind,setSourceKind]=useState('PRIVATE_UPLOAD'),[sourceId,setSourceId]=useState(''),[externalUrl,setExternalUrl]=useState(''),[downloadAllowed,setDownloadAllowed]=useState(false),[file,setFile]=useState<File|null>(null);
- const [classFilter,setClassFilter]=useState('ALL'),[subjectFilter,setSubjectFilter]=useState('ALL'),[targetKind,setTargetKind]=useState('CHAPTER');
+ const [subjectFilter,setSubjectFilter]=useState('ALL'),[targetKind,setTargetKind]=useState('CHAPTER');
  const [chapterId,setChapterId]=useState(''),[lessonId,setLessonId]=useState(''),[artifactId,setArtifactId]=useState(''),[sortOrder,setSortOrder]=useState('0');
 
  const loadResources=useCallback(async()=>{
@@ -48,15 +50,15 @@ export default function LearningResourcesPage(){
   finally{setLoading(false);}
  },[statusFilter,typeFilter,router]);
  useEffect(()=>{void loadResources();},[loadResources]);
- useEffect(()=>{let active=true;api('/api/v1/admin/learning-resource-targets').then(d=>{if(active)setTargets({chapters:d.chapters||[],lessons:d.lessons||[],structuredArtifacts:d.structuredArtifacts||[]});}).catch((e:any)=>{if(active)setError(e.message||'Curriculum targets could not be loaded.');});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;api('/api/v1/admin/content/programs').then((data:any)=>{if(!active)return;const rows=Array.isArray(data)?data:[];setCourses(rows);setCourseId(current=>rows.some((row:CourseOption)=>String(row.course_id||row.id)===current)?current:String(rows[0]?.course_id||rows[0]?.id||''));}).catch((e:any)=>{if(active)setError(e.message||'Assigned courses could not be loaded.');});return()=>{active=false;};},[]);
+ useEffect(()=>{if(!courseId){setTargets({chapters:[],lessons:[],structuredArtifacts:[]});return;}let active=true;api('/api/v1/admin/learning-resource-targets?'+new URLSearchParams({courseId})).then(d=>{if(active)setTargets({chapters:d.chapters||[],lessons:d.lessons||[],structuredArtifacts:d.structuredArtifacts||[]});}).catch((e:any)=>{if(active)setError(e.message||'Curriculum targets could not be loaded.');});return()=>{active=false;};},[courseId]);
  const selected=resources.find(r=>String(r.resource_id)===selectedId);
- const chapters=useMemo(()=>targets.chapters.filter(x=>(classFilter==='ALL'||x.class_code===classFilter)&&(subjectFilter==='ALL'||x.subject_code===subjectFilter)),[targets,classFilter,subjectFilter]);
- const lessons=useMemo(()=>targets.lessons.filter(x=>(classFilter==='ALL'||x.class_code===classFilter)&&(subjectFilter==='ALL'||x.subject_code===subjectFilter)),[targets,classFilter,subjectFilter]);
- const artifacts=useMemo(()=>targets.structuredArtifacts.filter(x=>(classFilter==='ALL'||x.class_code===classFilter)&&(subjectFilter==='ALL'||x.subject_code===subjectFilter)),[targets,classFilter,subjectFilter]);
- const classCodes=[...new Set(targets.chapters.map(x=>x.class_code))].sort((a,b)=>Number(a)-Number(b));
- const subjectCodes=[...new Set(targets.chapters.filter(x=>classFilter==='ALL'||x.class_code===classFilter).map(x=>x.subject_code))].sort();
+ const chapters=useMemo(()=>targets.chapters.filter(x=>subjectFilter==='ALL'||x.subject_code===subjectFilter),[targets,subjectFilter]);
+ const lessons=useMemo(()=>targets.lessons.filter(x=>subjectFilter==='ALL'||x.subject_code===subjectFilter),[targets,subjectFilter]);
+ const artifacts=useMemo(()=>targets.structuredArtifacts.filter(x=>subjectFilter==='ALL'||x.subject_code===subjectFilter),[targets,subjectFilter]);
+ const subjectCodes=[...new Set(targets.chapters.map(x=>x.subject_code))].sort();
 
- const loadAssignments=useCallback(async(id:string)=>{if(!id){setAssignments([]);return;}try{const d=await api('/api/v1/admin/learning-resource-assignments?'+new URLSearchParams({resourceId:id,limit:'200',offset:'0'}));setAssignments(Array.isArray(d?.items)?d.items:[]);}catch(e:any){setError(e.message||'Assignments could not be loaded.');}},[]);
+ const loadAssignments=useCallback(async(id:string)=>{if(!id||!courseId){setAssignments([]);return;}try{const d=await api('/api/v1/admin/learning-resource-assignments?'+new URLSearchParams({resourceId:id,courseId,limit:'200',offset:'0'}));setAssignments(Array.isArray(d?.items)?d.items:[]);}catch(e:any){setError(e.message||'Assignments could not be loaded.');}},[courseId]);
  useEffect(()=>{void loadAssignments(selectedId);},[selectedId,loadAssignments]);
 
  async function createResource(){
@@ -76,7 +78,7 @@ export default function LearningResourcesPage(){
     const body:any={title:title.trim(),description:description.trim(),resourceType,language,sourceKind,downloadAllowed};
     if(sourceKind==='EXTERNAL_URL')body.externalUrl=externalUrl.trim();
     if(sourceKind==='RECORDED_CLASS')body.recordedClassId=Number(sourceId);
-    if(sourceKind==='LEARNING_DOCUMENT')body.learningDocumentId=Number(sourceId);
+    if(sourceKind==='LEARNING_DOCUMENT'){if(!courseId){setError('Select a course first.');return;}body.learningDocumentId=Number(sourceId);body.courseId=Number(courseId);}
     if(sourceKind==='CONTENT_ASSET')body.contentAssetId=Number(sourceId);
     out=await api('/api/v1/admin/learning-resources',{method:'POST',body:JSON.stringify(body)});
    }
@@ -88,7 +90,8 @@ export default function LearningResourcesPage(){
  }
  async function setResourceStatus(r:Resource,next:string){
   setBusy(true);setError('');setNotice('');
-  try{await api('/api/v1/admin/learning-resources/'+r.resource_id+'/status',{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Resource status changed to '+next+'.');await loadResources();await loadAssignments(String(r.resource_id));}
+  if(!courseId){setError('Select a course first.');return;}
+  try{await api('/api/v1/admin/learning-resources/'+r.resource_id+'/status?courseId='+encodeURIComponent(courseId),{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Resource status changed to '+next+'.');await loadResources();await loadAssignments(String(r.resource_id));}
   catch(e:any){setError(e.message||'Resource status could not be changed.');}finally{setBusy(false);}
  }
  async function setDownload(r:Resource,next:boolean){
@@ -97,7 +100,7 @@ export default function LearningResourcesPage(){
   catch(e:any){setError(e.message||'Download policy could not be changed.');}finally{setBusy(false);}
  }
  async function createAssignment(){
-  if(!selected){setError('Select a resource first.');return;}const body:any={resourceId:selected.resource_id,targetKind,sortOrder:Math.max(0,Number(sortOrder)||0)};
+  if(!selected){setError('Select a resource first.');return;}if(!courseId){setError('Select a course first.');return;}const body:any={resourceId:selected.resource_id,courseId:Number(courseId),targetKind,sortOrder:Math.max(0,Number(sortOrder)||0)};
   if(targetKind==='CHAPTER'){if(!Number(chapterId)){setError('Choose a chapter.');return;}body.chapterId=Number(chapterId);}
   else if(targetKind==='LESSON'){const l=targets.lessons.find(x=>String(x.lesson_id)===lessonId);if(!l){setError('Choose a lesson.');return;}body.lessonId=l.lesson_id;body.chapterId=l.chapter_id;}
   else {const a=targets.structuredArtifacts.find(x=>x.artifact_id===artifactId);if(!a){setError('Choose a published structured lesson.');return;}body.artifactId=a.artifact_id;body.chapterId=Number(a.mapped_chapter_id)||Number(chapterId);if(!body.chapterId){setError('Select the canonical chapter mapping.');return;}}
@@ -107,11 +110,11 @@ export default function LearningResourcesPage(){
  }
  async function setAssignmentStatus(a:Assignment,next:string){
   setBusy(true);setError('');setNotice('');
-  try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/status',{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Placement status changed to '+next+'.');await loadAssignments(String(a.resource_id));}
+  try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/status?courseId='+encodeURIComponent(courseId),{method:'PATCH',body:JSON.stringify({status:next})});setNotice('Placement status changed to '+next+'.');await loadAssignments(String(a.resource_id));}
   catch(e:any){setError(e.message||'Placement status could not be changed.');}finally{setBusy(false);}
  }
  async function reorder(a:Assignment,n:number){
-  setBusy(true);setError('');try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/order',{method:'PUT',body:JSON.stringify({sortOrder:Math.max(0,n)})});await loadAssignments(String(a.resource_id));}
+  setBusy(true);setError('');try{await api('/api/v1/admin/learning-resource-assignments/'+a.assignment_id+'/order?courseId='+encodeURIComponent(courseId),{method:'PUT',body:JSON.stringify({sortOrder:Math.max(0,n)})});await loadAssignments(String(a.resource_id));}
   catch(e:any){setError(e.message||'Placement order could not be changed.');}finally{setBusy(false);}
  }
  return <main className="admin-shell"><AdminSidebar active="resources" variant="content"/><section className={'admin-main '+styles.page}>
@@ -143,7 +146,7 @@ export default function LearningResourcesPage(){
    {!selected?<div className={styles.empty}>Select a resource above to manage assignments.</div>:<>
     <div className={styles.selected}><b>{selected.title}</b><small>Resource #{selected.resource_id} · {selected.status}</small></div>
     <div className={styles.grid}>
-     <label className={styles.field}>Class<select value={classFilter} onChange={e=>{setClassFilter(e.target.value);setChapterId('');setLessonId('');setArtifactId('');}}><option value="ALL">All classes</option>{classCodes.map(x=><option key={x} value={x}>{x}</option>)}</select></label>
+     <label className={styles.field}>Course<select value={courseId} disabled={!courses.length} onChange={e=>{setCourseId(e.target.value);setSubjectFilter('ALL');setChapterId('');setLessonId('');setArtifactId('');}}><option value="">{courses.length?'Select a course':'No courses assigned'}</option>{courses.map(course=><option key={course.course_id||course.id} value={course.course_id||course.id}>{course.display_name} · {course.code}</option>)}</select></label>
      <label className={styles.field}>Subject<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setChapterId('');setLessonId('');setArtifactId('');}}><option value="ALL">All subjects</option>{subjectCodes.map(x=><option key={x} value={x}>{label(x)}</option>)}</select></label>
      <label className={styles.field}>Target<select value={targetKind} onChange={e=>{setTargetKind(e.target.value);setChapterId('');setLessonId('');setArtifactId('');}}><option value="CHAPTER">Chapter</option><option value="LESSON">Legacy lesson</option><option value="STRUCTURED_ARTIFACT">Published structured lesson</option></select></label>
      {targetKind==='CHAPTER'&&<label className={styles.field+' '+styles.wide}>Chapter<select value={chapterId} onChange={e=>setChapterId(e.target.value)}><option value="">Choose chapter…</option>{chapters.map(c=><option key={c.chapter_id} value={c.chapter_id}>{c.class_code} · {c.subject_code} · {c.chapter_code} — {c.chapter_name}</option>)}</select></label>}

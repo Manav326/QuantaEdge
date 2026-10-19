@@ -36,7 +36,7 @@ class AssessmentLifecycleIntegrationTest {
     Fixture fixture = fixture("IN_PROGRESS");
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.startOrResumeAttempt(fixture.assessmentId(), "hi", false, fixture.student(), fixture.tenant()));
+        () -> controller.startOrResumeAttempt(fixture.assessmentId(), fixture.courseId(), "hi", false, fixture.student(), fixture.tenant()));
 
     assertEquals(409, error.getStatusCode().value());
     assertEquals(0L, jdbc.queryForObject(
@@ -49,7 +49,7 @@ class AssessmentLifecycleIntegrationTest {
   void completedStudentCanStartSaveArchiveResumeSubmitAndFetchReleasedResult() {
     Fixture fixture = fixture("COMPLETED");
 
-    Map<String,Object> started = controller.startOrResumeAttempt(fixture.assessmentId(), "hi", false, fixture.student(), fixture.tenant());
+    Map<String,Object> started = controller.startOrResumeAttempt(fixture.assessmentId(), fixture.courseId(), "hi", false, fixture.student(), fixture.tenant());
     long attemptId = ((Number) started.get("attempt_id")).longValue();
     List<Map<String,Object>> activeQuestions=(List<Map<String,Object>>)started.get("questions");
     assertFalse(activeQuestions.getFirst().containsKey("explanation"),
@@ -77,7 +77,7 @@ class AssessmentLifecycleIntegrationTest {
     assertTrue(visible.stream().anyMatch(row ->
         ((Number) row.get("assessment_id")).longValue() == fixture.assessmentId()));
 
-    Map<String,Object> resumed = controller.startOrResumeAttempt(fixture.assessmentId(), "hi", false, fixture.student(), fixture.tenant());
+    Map<String,Object> resumed = controller.startOrResumeAttempt(fixture.assessmentId(), fixture.courseId(), "hi", false, fixture.student(), fixture.tenant());
     assertEquals(attemptId, ((Number) resumed.get("attempt_id")).longValue());
     assertEquals("IN_PROGRESS", resumed.get("status"));
 
@@ -118,7 +118,7 @@ class AssessmentLifecycleIntegrationTest {
   void explicitlyEnabledOfflineAttemptStoresNoAnswerKeyAndCanSyncAfterItsTimerWithinGrace() {
     Fixture fixture=fixture("COMPLETED");
     jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",fixture.assessmentId());
-    Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student(), fixture.tenant());
+    Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String packageToken=String.valueOf(started.get("offlinePackageToken"));
     assertFalse(packageToken.isBlank());
@@ -142,7 +142,7 @@ class AssessmentLifecycleIntegrationTest {
   void offlineAttemptCannotStartUnlessEditorExplicitlyEnabledIt() {
     Fixture fixture=fixture("COMPLETED");
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
-        ()->controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student(), fixture.tenant()));
+        ()->controller.startOrResumeAttempt(fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant()));
     assertEquals(409,error.getStatusCode().value());
     assertEquals(0L,jdbc.queryForObject(
         "select count(*) from student_assessment_attempt where assessment_id=? and student_id=?",
@@ -157,7 +157,7 @@ class AssessmentLifecycleIntegrationTest {
         fixture.assessmentId());
 
     Map<String,Object> started=controller.startOrResumeAttempt(
-        fixture.assessmentId(),"hi",true,fixture.student(), fixture.tenant());
+        fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String originalToken=String.valueOf(started.get("offlinePackageToken"));
     String originalHash=jdbc.queryForObject(
@@ -165,7 +165,7 @@ class AssessmentLifecycleIntegrationTest {
         String.class,attemptId);
 
     Map<String,Object> resumed=controller.startOrResumeAttempt(
-        fixture.assessmentId(),"hi",true,fixture.student(), fixture.tenant());
+        fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     assertEquals(attemptId,((Number)resumed.get("attempt_id")).longValue());
     assertEquals(originalHash,jdbc.queryForObject(
         "select offline_package_token_hash from student_assessment_attempt where id=?",

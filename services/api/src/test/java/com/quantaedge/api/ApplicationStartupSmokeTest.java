@@ -110,17 +110,31 @@ class ApplicationStartupSmokeTest {
       where version='51' and success=true
       """, Integer.class));
 
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+    Long courseId = jdbc.queryForObject("""
+      select p.id
+      from curriculum_program p
+      join institution_course_release release on release.program_id=p.id
+      join institution_course_assignment assignment
+        on assignment.course_release_id=release.id and assignment.institution_id=?
+          and assignment.status='ASSIGNED'
+      where p.code='CLASS_6' and p.status='ACTIVE' and p.curriculum_version='CURRENT'
+      order by p.id limit 1
+      """, Long.class, institutionId);
+    InstitutionTenantContext tenant = new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge");
     AuthContext admin = new AuthContext(null, null, 999L, "ADMIN", "CI admin");
-    Map<String,Object> result = contentTranslationController.list(null, null, "ALL", "ALL", "ALL", 20, 0, admin);
+    Map<String,Object> result = contentTranslationController.list(courseId, null, null, "ALL", "ALL", "ALL", 20, 0, admin, tenant);
     assertTrue(result.get("items") instanceof List<?>);
     assertTrue(result.get("total") instanceof Number);
-    Map<String,Object> sourceInventory = contentTranslationController.inventory("", "", "ALL", "ALL", 20, 0, admin);
+    Map<String,Object> sourceInventory = contentTranslationController.inventory(courseId, "ALL", "ALL", "ALL", "ALL", 20, 0, admin, tenant);
     assertTrue(sourceInventory.get("items") instanceof List<?>);
     assertTrue(sourceInventory.get("total") instanceof Number);
-    assertTrue(((Number) sourceInventory.get("total")).longValue() > 0, "Untranslated source inventory should include current class/subject content.");
+    assertTrue(((Number) sourceInventory.get("total")).longValue() > 0, "Untranslated source inventory should include content mapped to the selected course.");
     @SuppressWarnings("unchecked")
     List<Map<String,Object>> filteredItems = (List<Map<String,Object>>) contentTranslationController
-        .inventory("6", "maths", "en", "ALL", 20, 0, admin).get("items");
+        .inventory(courseId, "6", "maths", "en", "ALL", 20, 0, admin, tenant).get("items");
     assertTrue(!filteredItems.isEmpty(), "Class 6 Mathematics source should be filterable for English.");
     assertTrue(filteredItems.stream().allMatch(row -> "6".equals(String.valueOf(row.get("class_code")))
         && "maths".equals(String.valueOf(row.get("subject_code")))

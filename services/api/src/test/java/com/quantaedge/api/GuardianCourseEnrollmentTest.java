@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -45,9 +46,7 @@ class GuardianCourseEnrollmentTest {
         .thenReturn(List.of(Map.of("id", 91L, "public_id", "NAV-A7K2Q", "code", "NAVODAYA_BATCH", "display_name", "Navodaya Batch")));
     when(jdbc.queryForList(contains("from curriculum_program_subject ps"), eq(91L)))
         .thenReturn(List.of(Map.of("id", 901L, "code", "maths")));
-    when(jdbc.update(contains("update student_program_enrollment set status='PAUSED'"), any(Object[].class))).thenReturn(1);
     when(jdbc.update(contains("insert into student_program_enrollment"), any(Object[].class))).thenReturn(1);
-    when(jdbc.update(contains("insert into student_track_enrollment"), any(Object[].class))).thenReturn(1);
 
     Map<String,Object> result = controller.enrollChildInProgram(70L, 91L, parent, tenant);
 
@@ -58,5 +57,7 @@ class GuardianCourseEnrollmentTest {
     assertEquals("NAV-A7K2Q", result.get("publicId"));
     assertEquals(1, result.get("subjectCount"));
     verify(auth).auditChildEvent(90L, 70L, "COURSE_ENROLLED", "{\"courseId\":91,\"institutionId\":17,\"subjectCount\":1}");
+    verify(jdbc, never()).update(contains("update student_program_enrollment set status='PAUSED'"), any(Object[].class));
+    verify(jdbc, never()).update(contains("insert into student_track_enrollment"), any(Object[].class));
   }
 }

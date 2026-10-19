@@ -261,6 +261,32 @@ public class InstitutionTenantContextService {
     }
   }
 
+  /** Separate restore-only proof: this parent previously held consent for the archived child in this tenant. */
+  public void assertArchivedGuardianChildMembership(
+      AuthContext caller, InstitutionTenantContext tenant, long studentId) {
+    if (caller == null || tenant == null || !caller.isParent() || studentId < 1) {
+      throw new InvalidInstitutionContextException(
+          403, "GUARDIAN_CHILD_ACCESS_REQUIRED",
+          "A valid parent session and selected child are required.");
+    }
+    Boolean allowed = jdbc.queryForObject("""
+        select exists(
+          select 1
+          from guardian_student gs
+          join student st on st.id=gs.student_id and st.environment='PRODUCTION'
+          join institution_membership m on m.student_id=st.id
+            and m.institution_id=? and m.status='ACTIVE'
+          join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+          where gs.guardian_user_id=? and gs.student_id=?
+            and gs.active=false and gs.consent_status='REVOKED'
+        )
+        """, Boolean.class, tenant.institutionId(), caller.userId(), studentId);
+    if (!Boolean.TRUE.equals(allowed)) {
+      throw new InvalidInstitutionContextException(
+          403, "ARCHIVED_GUARDIAN_CHILD_ACCESS_REQUIRED",
+          "This archived child is not available to this parent in the selected institution.");
+    }
+  }
   public static final class InvalidInstitutionContextException extends RuntimeException {
     private final int statusCode;
     private final String errorCode;

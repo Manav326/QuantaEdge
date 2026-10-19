@@ -42,13 +42,7 @@ public class StudentProgramController {
             and spe.status='ACTIVE') as enrolled,
         (exists(select 1 from student_program_enrollment spe
           where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
-            and spe.status='PAUSED')
-          or exists(select 1 from student_course_access_grant grant_row
-            where grant_row.institution_id=? and grant_row.student_id=st.id
-              and grant_row.course_id=p.id and grant_row.grant_reason='LEGACY_CLASS_ENROLLMENT'
-            and not exists(select 1 from student_program_enrollment existing
-              where existing.institution_id=? and existing.student_id=st.id
-                and existing.program_id=p.id and existing.status='ACTIVE'))) as paused,
+            and spe.status='PAUSED')) as paused,
         exists(select 1 from course_purchase purchase
           where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id) as purchased,
         (exists(select 1 from student_program_enrollment access_enrollment
@@ -56,9 +50,7 @@ public class StudentProgramController {
               and access_enrollment.program_id=p.id and access_enrollment.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase access_purchase
             where access_purchase.institution_id=? and access_purchase.student_id=st.id and access_purchase.course_id=p.id)
-          or exists(select 1 from student_course_access_grant access_grant
-            where access_grant.institution_id=? and access_grant.student_id=st.id
-              and access_grant.course_id=p.id and access_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+
           or exists(select 1 from course_entitlement access_entitlement
             where access_entitlement.institution_id=? and access_entitlement.course_id=p.id
               and (access_entitlement.holder_student_id=st.id or access_entitlement.holder_user_id=st.user_account_id))
@@ -91,17 +83,14 @@ public class StudentProgramController {
               and spe.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase purchase
             where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id)
-          or exists(select 1 from student_course_access_grant legacy_grant
-            where legacy_grant.institution_id=? and legacy_grant.student_id=st.id
-              and legacy_grant.course_id=p.id and legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT')
+
           or exists(select 1 from course_entitlement ce
             where ce.institution_id=? and ce.course_id=p.id
               and (ce.holder_student_id=st.id or ce.holder_user_id=st.user_account_id))
         )
       order by p.display_name,p.id
-      """, institutionId, institutionId, institutionId, institutionId, institutionId,
-          institutionId, institutionId, institutionId, institutionId, context.studentId(),
-          institutionId, institutionId, institutionId, institutionId, institutionId, institutionId);
+      """, institutionId, institutionId, institutionId, institutionId, institutionId, institutionId,
+          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId);
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();
@@ -204,9 +193,7 @@ public class StudentProgramController {
             and e.status in ('ACTIVE','PAUSED'))
         or exists(select 1 from course_purchase cp
           where cp.student_id=? and cp.course_id=? and cp.institution_id=?)
-        or exists(select 1 from student_course_access_grant g
-          where g.student_id=? and g.course_id=? and g.institution_id=?
-            and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
+
         or exists(select 1 from course_entitlement ce
           where ce.institution_id=? and ce.course_id=?
             and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
@@ -222,7 +209,6 @@ public class StudentProgramController {
             and offer.price_paise=0 and offer.currency='INR'
         )
       """, Boolean.class, context.studentId(), courseId, institutionId,
-          context.studentId(), courseId, institutionId,
           context.studentId(), courseId, institutionId,
           institutionId, courseId, context.studentId(), context.studentId(),
           institutionId, courseId);
@@ -252,11 +238,9 @@ public class StudentProgramController {
           "A matching subject track already exists under another institution. Cross-institution learning history will not be reused.");
     }
 
-    // Pause only this institution's other courses; never alter a different tenant's enrollment.
-    jdbc.update("""
-      update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-      """, context.studentId(), institutionId, courseId);
+    // Enrollment is independent of the learner's primary/focused course. Keep other
+    // institution-scoped enrollments active so reports can be switched without altering
+    // eligibility or historical progress for any other course.
     jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at

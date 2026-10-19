@@ -59,6 +59,13 @@ class LearningClassControllerTest {
     lenient().when(jdbc.queryForObject(
         contains("from student_program_enrollment e"),
         eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    lenient().when(jdbc.queryForObject(
+        contains("select count(*) from institution_course_assignment a"),
+        eq(Long.class), any(Object[].class))).thenReturn(1L);
+    lenient().doReturn(71L).when(jdbc).query(
+        contains("select cs.course_id from learning_class_session cs"),
+        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(),
+        org.mockito.ArgumentMatchers.anyLong(), eq(1L));
   }
 
   @Test
@@ -116,7 +123,7 @@ class LearningClassControllerTest {
             "provider", "CUSTOM",
             "joinUrl", "http://meet.example.com/private",
             "startsAt", OffsetDateTime.now().plusHours(1).toString(),
-            "endsAt", OffsetDateTime.now().plusHours(2).toString()), admin));
+            "endsAt", OffsetDateTime.now().plusHours(2).toString()), admin, TEST_TENANT));
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc, staffAudit, mediaStorage);
@@ -130,7 +137,7 @@ class LearningClassControllerTest {
             "title", "Live science lesson", "classCode", "7", "subjectCode", "science",
             "provider", "YOUTUBE_LIVE", "broadcastUrl", "https://attacker.example/watch?v=abcdefghijk",
             "startsAt", OffsetDateTime.now().plusHours(1).toString(),
-            "endsAt", OffsetDateTime.now().plusHours(2).toString()), admin));
+            "endsAt", OffsetDateTime.now().plusHours(2).toString()), admin, TEST_TENANT));
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc, staffAudit, mediaStorage);
   }
@@ -141,7 +148,7 @@ class LearningClassControllerTest {
     when(authorization.requirePermission(author, "CLASS_MANAGE"))
         .thenThrow(new SecurityException("Class management permission required"));
 
-    assertThrows(SecurityException.class, () -> controller.revealLiveClassMeetingLink(44L, author));
+    assertThrows(SecurityException.class, () -> controller.revealLiveClassMeetingLink(44L, author, TEST_TENANT));
 
     verifyNoInteractions(jdbc, staffAudit, mediaStorage);
   }
@@ -155,7 +162,7 @@ class LearningClassControllerTest {
     when(jdbc.queryForList(contains("select cs.id as session_id"), any(Object[].class)))
         .thenReturn(List.of(Map.of("session_id", 44L, "title", "Revision class", "status", "COMPLETED")));
 
-    Map<String, Object> result = controller.setLiveClassStatus(44L, Map.of("status", "COMPLETED"), admin);
+    Map<String, Object> result = controller.setLiveClassStatus(44L, Map.of("status", "COMPLETED"), admin, TEST_TENANT);
 
     assertEquals("COMPLETED", result.get("status"));
     verify(jdbc).update(contains("update learning_class_attendance att set"), eq(44L));
@@ -172,7 +179,7 @@ class LearningClassControllerTest {
             "provider_operation_status", "FAILED",
             "provider_error_message", "Google permission denied")));
 
-    Map<String, Object> result = controller.revealLiveClassMeetingLink(44L, admin);
+    Map<String, Object> result = controller.revealLiveClassMeetingLink(44L, admin, TEST_TENANT);
 
     assertEquals("FAILED", result.get("integrationStatus"));
     assertEquals(null, result.get("joinUrl"));
@@ -237,7 +244,7 @@ class LearningClassControllerTest {
   void adminCannotSetJoinWindowOutsideAllowedRange() {
     when(authorization.requirePermission(admin,"CLASS_MANAGE")).thenReturn(admin);
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
-        ()->controller.setLiveClassJoinWindow(88L,Map.of("joinWindowMinutes",1441),admin));
+        ()->controller.setLiveClassJoinWindow(88L,Map.of("joinWindowMinutes",1441),admin,TEST_TENANT));
     assertEquals(400,error.getStatusCode().value());
     verifyNoInteractions(jdbc,staffAudit,mediaStorage);
   }
@@ -246,8 +253,8 @@ class LearningClassControllerTest {
   void identicalRecordingUploadRetryReturnsTheExistingDraftAndDeletesDuplicateBytes() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
     org.mockito.Mockito.doReturn(3L).when(jdbc).query(
-        contains("select s.id from curriculum_subject"),
-        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(), eq("6"), eq("maths"));
+        contains("from curriculum_program p"),
+        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(), eq(1L), eq(71L), eq("maths"));
     String storageKey="afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4";
     String digest="a".repeat(64);
     PrivateMediaStorageService.StoredMedia stored=
@@ -265,7 +272,7 @@ class LearningClassControllerTest {
 
     MockMultipartFile upload=new MockMultipartFile("file","recording.mp4","video/mp4",new byte[64]);
     Map<String,Object> result=controller.uploadRecordedClass(
-        upload,"Test recording","6","maths",null,null,null,null,key,admin);
+        upload,"Test recording",71L,"maths",null,null,null,null,key,admin,TEST_TENANT);
 
     assertEquals(88L,result.get("recorded_class_id"));
     assertEquals("DRAFT",result.get("status"));
@@ -277,8 +284,8 @@ class LearningClassControllerTest {
   void reusingRecordingUploadKeyForDifferentContentConflictsAndCleansDuplicateFile() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
     org.mockito.Mockito.doReturn(3L).when(jdbc).query(
-        contains("select s.id from curriculum_subject"),
-        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(), eq("6"), eq("maths"));
+        contains("from curriculum_program p"),
+        org.mockito.ArgumentMatchers.<ResultSetExtractor<Long>>any(), eq(1L), eq(71L), eq("maths"));
     String storageKey="afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4";
     PrivateMediaStorageService.StoredMedia stored=
         new PrivateMediaStorageService.StoredMedia(storageKey,"recording.mp4","video/mp4",64L,"a".repeat(64));
@@ -290,7 +297,7 @@ class LearningClassControllerTest {
 
     MockMultipartFile upload=new MockMultipartFile("file","recording.mp4","video/mp4",new byte[64]);
     ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.uploadRecordedClass(
-        upload,"Test recording","6","maths",null,null,null,null,"admin-upload-key-123",admin));
+        upload,"Test recording",71L,"maths",null,null,null,null,"admin-upload-key-123",admin,TEST_TENANT));
 
     assertEquals(409,error.getStatusCode().value());
     verify(mediaStorage,times(2)).deleteQuietly(duplicateBytes);

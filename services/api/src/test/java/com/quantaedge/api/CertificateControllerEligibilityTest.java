@@ -36,6 +36,9 @@ class CertificateControllerEligibilityTest {
   @BeforeEach
   void authorizeStudentContext() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    org.mockito.Mockito.lenient().when(jdbc.queryForObject(
+        org.mockito.ArgumentMatchers.contains("select count(*) from student_program_enrollment spe"),
+        eq(Long.class), any(Object[].class))).thenReturn(1L);
   }
 
   @Test
@@ -50,12 +53,13 @@ class CertificateControllerEligibilityTest {
   void issuedCertificateListUsesAuthenticatedStudentScopeAndHasNoLiveEligibilityGate() {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("id", 3001L);
+    row.put("course_id", 12L);
     row.put("certificate_number", "QE-2026-ABCDEF1234567890");
     row.put("achievement_type", "ASSESSMENT_PASS");
     row.put("status", "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.myCertificates(student, TEST_TENANT);
+    Map<String, Object> response = controller.myCertificates(12L, student, TEST_TENANT);
 
     assertEquals(List.of(row), response.get("items"));
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
@@ -71,12 +75,13 @@ class CertificateControllerEligibilityTest {
   void certificateDetailLookupUsesStudentScopeAndDoesNotDependOnHistoryPageLimit() {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("id", 3001L);
+    row.put("course_id", 12L);
     row.put("certificate_number", "QE-2026-ABCDEF1234567890");
     row.put("achievement_type", "ASSESSMENT_PASS");
     row.put("status", "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.myCertificate(3001L, student, TEST_TENANT);
+    Map<String, Object> response = controller.myCertificate(3001L, 12L, student, TEST_TENANT);
 
     assertEquals(row, response);
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
@@ -100,20 +105,21 @@ class CertificateControllerEligibilityTest {
     row.put("completed", 4L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.subjectTracks(student, TEST_TENANT);
+    Map<String, Object> response = controller.subjectTracks(12L, student, TEST_TENANT);
 
     assertEquals(List.of(row), response.get("items"));
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), any(Object[].class));
-    assertTrue(sql.getValue().contains("student_track_enrollment"));
+    assertTrue(sql.getValue().contains("curriculum_program_subject"));
     assertTrue(sql.getValue().contains("curriculum_subject"));
     assertTrue(sql.getValue().contains("student_program_enrollment"));
+    org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("student_track_enrollment"));
   }
 
   @Test
   void issuedAssessmentCertificatesBypassLiveEligibilityInTheCertificatePicker() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
-    controller.eligibleAssessments(student, TEST_TENANT);
+    controller.eligibleAssessments(12L, student, TEST_TENANT);
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), any(Object[].class));
     assertTrue(sql.getValue().contains("existing.id IS NOT NULL"));
@@ -125,7 +131,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(attemptRow(
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6L, 0L, true, null)));
 
-    Map<String, Object> response = controller.assessmentCertificateEligibility("9001", student, TEST_TENANT);
+    Map<String, Object> response = controller.assessmentCertificateEligibility("9001", 12L, student, TEST_TENANT);
     Map<String, Object> item = firstItem(response);
 
     assertEquals(true, item.get("eligible"));
@@ -139,7 +145,7 @@ class CertificateControllerEligibilityTest {
       when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
           attemptRow(type, true, "RELEASED", "95", "100", 6L, 6L, true, null)));
 
-      Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9002", student, TEST_TENANT));
+      Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9002", 12L, student, TEST_TENANT));
 
       assertEquals(false, item.get("eligible"));
       assertEquals("ADMIN_CREATED_TEST_ONLY", item.get("eligibility_reason"));
@@ -151,7 +157,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "79.999", "100", 6L, 6L, true, null)));
 
-    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9003", student, TEST_TENANT));
+    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9003", 12L, student, TEST_TENANT));
 
     assertEquals(false, item.get("eligible"));
     assertEquals("PASS_THRESHOLD_NOT_MET", item.get("eligibility_reason"));
@@ -162,7 +168,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "90", "100", 6L, 1L, true, null)));
 
-    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9004", student, TEST_TENANT));
+    Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9004", 12L, student, TEST_TENANT));
 
     assertEquals(true, item.get("eligible"));
     assertEquals(null, item.get("eligibility_reason"));
@@ -173,13 +179,13 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "95", "100", 6L, 6L, true, "ISSUED")));
 
-    Map<String, Object> issued = firstItem(controller.assessmentCertificateEligibility("9005", student, TEST_TENANT));
+    Map<String, Object> issued = firstItem(controller.assessmentCertificateEligibility("9005", 12L, student, TEST_TENANT));
     assertEquals(false, issued.get("eligible"));
     assertEquals("ALREADY_ISSUED", issued.get("eligibility_reason"));
 
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
         attemptRow("ADMIN_CREATED", false, "RELEASED", "95", "100", 6L, 6L, true, "REVOKED")));
-    Map<String, Object> revoked = firstItem(controller.assessmentCertificateEligibility("9006", student, TEST_TENANT));
+    Map<String, Object> revoked = firstItem(controller.assessmentCertificateEligibility("9006", 12L, student, TEST_TENANT));
     assertEquals(false, revoked.get("eligible"));
     assertEquals("CERTIFICATE_REVOKED", revoked.get("eligibility_reason"));
   }
@@ -196,6 +202,7 @@ class CertificateControllerEligibilityTest {
     keyRow.put("status", "ISSUED");
     Map<String, Object> publicCertificate = new LinkedHashMap<>();
     publicCertificate.put("id", 3009L);
+    publicCertificate.put("course_id", 12L);
     publicCertificate.put("student_id", 81L);
     publicCertificate.put("certificate_number", "QE-2026-ABCDEF1234567890");
     publicCertificate.put("achievement_type", "ASSESSMENT_PASS");
@@ -212,7 +219,7 @@ class CertificateControllerEligibilityTest {
     });
 
     Map<String, Object> response = controller.issueCertificate(
-        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9009L, "CLASSIC", "en"), student, TEST_TENANT);
+        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9009L, "CLASSIC", "en", 12L), student, TEST_TENANT);
     assertEquals("QE-2026-ABCDEF1234567890", response.get("certificate_number"));
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc, org.mockito.Mockito.atLeastOnce()).queryForList(sql.capture(), any(Object[].class));
@@ -232,6 +239,7 @@ class CertificateControllerEligibilityTest {
     legacyCertificateId.put("id", 3011L);
     Map<String, Object> publicCertificate = new LinkedHashMap<>();
     publicCertificate.put("id", 3011L);
+    publicCertificate.put("course_id", 12L);
     publicCertificate.put("certificate_number", "QE-2026-ABCDEF1234567890");
     publicCertificate.put("achievement_type", "ASSESSMENT_PASS");
     publicCertificate.put("status", "ISSUED");
@@ -247,7 +255,7 @@ class CertificateControllerEligibilityTest {
     });
 
     Map<String, Object> response = controller.issueCertificate(
-        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9011L, "CLASSIC", "en"), student, TEST_TENANT);
+        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9011L, "CLASSIC", "en", 12L), student, TEST_TENANT);
     assertEquals(3011L, ((Number) response.get("id")).longValue());
     assertEquals("QE-2026-ABCDEF1234567890", response.get("certificate_number"));
   }
@@ -289,7 +297,7 @@ class CertificateControllerEligibilityTest {
     org.springframework.web.server.ResponseStatusException error = assertThrows(
         org.springframework.web.server.ResponseStatusException.class,
         () -> controller.issueCertificate(
-            new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9001L, "CLASSIC", "en"),
+            new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9001L, "CLASSIC", "en", 12L),
             student, TEST_TENANT));
 
     assertEquals(409, error.getStatusCode().value());
@@ -322,7 +330,7 @@ class CertificateControllerEligibilityTest {
     org.springframework.web.server.ResponseStatusException error = assertThrows(
         org.springframework.web.server.ResponseStatusException.class,
         () -> controller.issueCertificate(
-            new CertificateController.IssueRequest("SUBJECT_COMPLETION", "science", null, "CLASSIC", "hi"),
+            new CertificateController.IssueRequest("SUBJECT_COMPLETION", "science", null, "CLASSIC", "hi", 12L),
             student, TEST_TENANT));
     assertEquals(409, error.getStatusCode().value());
     assertTrue(error.getReason().contains("पहले इस विषय के सभी 8 प्रकाशित पाठ पूरे करें"));
@@ -345,6 +353,7 @@ class CertificateControllerEligibilityTest {
     attempt.put("subject_name", "Science");
     attempt.put("assessment_id", 4107L);
     attempt.put("assessment_title", "Perfect admin-created test");
+    attempt.put("course_name", "Sample course");
     attempt.put("assessment_type", "ADMIN_CREATED");
     attempt.put("is_generated", false);
     attempt.put("assessment_attempt_id", 9007L);
@@ -381,14 +390,14 @@ class CertificateControllerEligibilityTest {
         .thenReturn(new CertificateRenderer.RenderedCertificate(new byte[] {1, 2, 3}, new byte[] {4, 5, 6}));
 
     Map<String, Object> issued = controller.issueCertificate(
-        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9007L, "CLASSIC", "en"), student, TEST_TENANT);
+        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9007L, "CLASSIC", "en", 12L), student, TEST_TENANT);
 
     assertEquals("ASSESSMENT_PASS", issued.get("achievement_type"));
     assertEquals("QE-2026-ABCDEF1234567890", issued.get("certificate_number"));
     ArgumentCaptor<CertificateRenderer.CertificateDetails> detailsCaptor =
         ArgumentCaptor.forClass(CertificateRenderer.CertificateDetails.class);
     verify(renderer).render(eq("CLASSIC"), eq("en"), eq("Test Learner"),
-        eq("Class 6 · Science"),
+        eq("Sample course · Science"),
         org.mockito.ArgumentMatchers.contains("Perfect admin-created test"),
         anyString(), any(java.time.OffsetDateTime.class), detailsCaptor.capture(), eq(false));
     assertEquals("4107", detailsCaptor.getValue().examId(),
@@ -399,7 +408,7 @@ class CertificateControllerEligibilityTest {
   void eligibleAssessmentPickerUsesReleasedPassingAdminCreatedTestsWithoutCourseCompletionGate() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
-    controller.eligibleAssessments(student, TEST_TENANT);
+    controller.eligibleAssessments(12L, student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), any(Object[].class));
@@ -418,7 +427,7 @@ class CertificateControllerEligibilityTest {
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6, 0, true, "ISSUED");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
 
-    Map<String, Object> response = controller.eligibleAssessments(student, TEST_TENANT);
+    Map<String, Object> response = controller.eligibleAssessments(12L, student, TEST_TENANT);
     Map<String, Object> item = firstItem(response);
 
     assertEquals(3001L, item.get("certificate_id"));
@@ -500,9 +509,10 @@ class CertificateControllerEligibilityTest {
   void adminRegisterWiresStatusAchievementTypeAndLanguageFiltersIntoBothRowsAndCount() {
     when(authorization.requireAdmin(student)).thenReturn(student);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(12L), eq(1L))).thenReturn(true);
     when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
-    controller.adminCertificates("ISSUED", "ASSESSMENT_PASS", "en", 50, 0, student);
+    controller.adminCertificates(12L, "ISSUED", "ASSESSMENT_PASS", "en", 50, 0, student, TEST_TENANT);
 
     ArgumentCaptor<String> rowSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<Object[]> rowArgs = ArgumentCaptor.forClass(Object[].class);
@@ -510,7 +520,9 @@ class CertificateControllerEligibilityTest {
     assertTrue(rowSql.getValue().contains("c.status=?"));
     assertTrue(rowSql.getValue().contains("c.achievement_type=?"));
     assertTrue(rowSql.getValue().contains("c.language=?"));
-    assertEquals(List.of("ISSUED", "ASSESSMENT_PASS", "en", 50, 0), List.of(rowArgs.getValue()));
+    assertTrue(rowSql.getValue().contains("c.institution_id=?"));
+    assertTrue(rowSql.getValue().contains("c.program_id=?"));
+    assertEquals(List.of(1L, 12L, "ISSUED", "ASSESSMENT_PASS", "en", 50, 0), List.of(rowArgs.getValue()));
 
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<Object[]> countArgs = ArgumentCaptor.forClass(Object[].class);
@@ -518,7 +530,9 @@ class CertificateControllerEligibilityTest {
     assertTrue(countSql.getValue().contains("c.status=?"));
     assertTrue(countSql.getValue().contains("c.achievement_type=?"));
     assertTrue(countSql.getValue().contains("c.language=?"));
-    assertEquals(List.of("ISSUED", "ASSESSMENT_PASS", "en"), List.of(countArgs.getValue()));
+    assertTrue(countSql.getValue().contains("c.institution_id=?"));
+    assertTrue(countSql.getValue().contains("c.program_id=?"));
+    assertEquals(List.of(1L, 12L, "ISSUED", "ASSESSMENT_PASS", "en"), List.of(countArgs.getValue()));
   }
 
   @SuppressWarnings("unchecked")
@@ -531,6 +545,8 @@ class CertificateControllerEligibilityTest {
       boolean activeSubjectTrack, String certificateStatus) {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("attempt_id", 9001L);
+    row.put("course_id", 12L);
+    row.put("course_name", "Sample course");
     row.put("assessment_title", "Admin assessment");
     row.put("assessment_type", type);
     row.put("is_generated", generated);

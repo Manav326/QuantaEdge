@@ -33,7 +33,7 @@ class LearningResourceControllerTest {
   void externalResourcesMustUseHttpsAndCannotContainEmbeddedCredentials() {
     when(authorization.requirePermission(admin,"CONTENT_EDIT")).thenReturn(admin);
     ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.createResource(
-      Map.of("title","External study link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","http://example.org/resource"),admin));
+      Map.of("title","External study link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","http://example.org/resource"),admin,null));
     assertEquals(400,error.getStatusCode().value());
     verifyNoInteractions(jdbc,staffAudit,resourceStorage,recordingStorage,artifacts);
   }
@@ -42,7 +42,7 @@ class LearningResourceControllerTest {
   void externalResourcesCannotUseLocalHostsEvenWithHttps() {
     when(authorization.requirePermission(admin,"CONTENT_EDIT")).thenReturn(admin);
     ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.createResource(
-      Map.of("title","Private local link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","https://localhost/resource"),admin));
+      Map.of("title","Private local link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","https://localhost/resource"),admin,null));
     assertEquals(400,error.getStatusCode().value());
     verifyNoInteractions(jdbc,staffAudit,resourceStorage,recordingStorage,artifacts);
   }
@@ -52,7 +52,7 @@ class LearningResourceControllerTest {
     when(authorization.requirePermission(admin,"CONTENT_EDIT")).thenReturn(admin);
     when(authorization.requirePermission(admin,"CONTENT_PUBLISH")).thenThrow(new SecurityException("publish required"));
     assertThrows(SecurityException.class,()->controller.createResource(
-      Map.of("title","Restricted video","resourceType","VIDEO","sourceKind","RECORDED_CLASS","recordedClassId",55,"downloadAllowed",true),admin));
+      Map.of("title","Restricted video","resourceType","VIDEO","sourceKind","RECORDED_CLASS","recordedClassId",55,"downloadAllowed",true),admin,null));
     verifyNoInteractions(jdbc,staffAudit,resourceStorage,recordingStorage,artifacts);
   }
 }

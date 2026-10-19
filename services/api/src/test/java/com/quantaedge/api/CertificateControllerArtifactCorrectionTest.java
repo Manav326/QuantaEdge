@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -47,6 +48,7 @@ class CertificateControllerArtifactCorrectionTest {
     legacy.put("achievement_type", "ASSESSMENT_PASS");
     legacy.put("class_code", "6");
     legacy.put("subject_id", 5L);
+    legacy.put("program_id", 91L);
     legacy.put("assessment_attempt_id", 9001L);
     legacy.put("subject_code", "science");
     legacy.put("subject_name", "Science");
@@ -86,6 +88,7 @@ class CertificateControllerArtifactCorrectionTest {
       if (sql.contains("FROM student_assessment_attempt att")) return List.of(assessmentFacts);
       return List.of();
     });
+    when(jdbc.queryForObject(contains("select count(*) from student_program_enrollment spe"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1);
     when(renderer.render(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
         any(OffsetDateTime.class), any(CertificateRenderer.CertificateDetails.class), eq(false)))
@@ -94,7 +97,7 @@ class CertificateControllerArtifactCorrectionTest {
     CertificateController controller = new CertificateController(
         jdbc, authorization, renderer, storage, new ObjectMapper(), java.math.BigDecimal.valueOf(80));
 
-    ResponseEntity<byte[]> response = controller.downloadMyCertificate(3001L, "pdf", student, TEST_TENANT);
+    ResponseEntity<byte[]> response = controller.downloadMyCertificate(3001L, 91L, "pdf", student, TEST_TENANT);
 
     assertEquals(200, response.getStatusCode().value());
     assertArrayEquals(new byte[] {9, 8, 7}, response.getBody());

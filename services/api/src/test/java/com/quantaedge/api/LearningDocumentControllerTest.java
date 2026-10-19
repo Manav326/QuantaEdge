@@ -44,6 +44,12 @@ class LearningDocumentControllerTest {
   @BeforeEach
   void setUp() {
     controller = new LearningDocumentController(jdbc, authorization, staffAudit);
+    lenient().when(jdbc.queryForObject(
+        contains("select exists(select 1 from institution_course_assignment"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    lenient().when(jdbc.queryForObject(
+        contains("select exists(select 1 from learning_document d"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
   }
 
   @Test
@@ -71,7 +77,7 @@ class LearningDocumentControllerTest {
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
-        contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
+        contains("dca.status='PUBLISHED'"), eq(7L), eq(1L), eq(71L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
   }
 
   @Test
@@ -84,7 +90,7 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "english", null, 71L, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("en"), eq("science"), eq("science"), eq(71L));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq(71L), eq("en"), eq("en"), eq("science"), eq("science"), eq(71L));
   }
 
   @Test
@@ -97,9 +103,9 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "hi", "en", 71L, null, student, TEST_TENANT).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq(1L), eq(71L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
     verify(jdbc).queryForList(contains("coalesce(ct.display_name,ch.display_name) as chapter_name"),
-        eq(7L), eq(1L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
+        eq(7L), eq(1L), eq(71L), eq("en"), eq("hi"), eq("science"), eq("science"), eq(71L));
   }
   @Test
   void studentCatalogRejectsUnsupportedLanguageBeforeQueryingDocuments() {
@@ -151,12 +157,12 @@ class LearningDocumentControllerTest {
         )
     ));
 
-    Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
+    Map<String, Object> result = controller.setAssignmentStatus(88L, 71L, Map.of("status", "PUBLISHED"), author, TEST_TENANT);
 
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
-        contains("where scope=? and subject_id=? and language=?"),
-        eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(88L));
+        contains("update learning_document_course_assignment other_assignment"),
+        eq(1L), eq(71L), eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(88L));
   }
 
   @Test
@@ -177,12 +183,12 @@ class LearningDocumentControllerTest {
         )
     ));
 
-    Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
+    Map<String, Object> result = controller.setAssignmentStatus(88L, 71L, Map.of("status", "PUBLISHED"), author, TEST_TENANT);
 
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
-        contains("and (book_part is null or book_part=?)"),
-        eq("SUBJECT_BOOK"), eq(3L), eq("en"), isNull(), eq(88L), eq(1));
+        contains("and (other_document.book_part is null or other_document.book_part=?)"),
+        eq(1L), eq(71L), eq("SUBJECT_BOOK"), eq(3L), eq("en"), isNull(), eq(88L), eq(1));
   }
 
   @Test
@@ -193,7 +199,7 @@ class LearningDocumentControllerTest {
     when(authorization.hasPermission(author, "CONTENT_PUBLISH")).thenReturn(true);
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of());
 
-    Map<String,Object> response=controller.listAssignments(null,null,null,null,null,null,null,null,null,null,25,0,author);
+    Map<String,Object> response=controller.listAssignments(71L,null,null,null,null,null,null,null,null,null,25,0,author,TEST_TENANT);
     assertTrue(((List<?>)response.get("items")).isEmpty());
   }
 
@@ -224,7 +230,7 @@ class LearningDocumentControllerTest {
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
-    when(jdbc.queryForList(contains("where d.id=? and d.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where d.id=?"), any(Object[].class)))
         .thenReturn(List.of(metadata));
     when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 
@@ -264,7 +270,7 @@ class LearningDocumentControllerTest {
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
-    when(jdbc.queryForList(contains("where d.id=? and d.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where d.id=?"), any(Object[].class)))
         .thenReturn(List.of(metadata));
     when(jdbc.queryForObject(contains("select pdf_bytes from learning_pdf_asset where id=?"), eq(byte[].class), any(Object[].class))).thenReturn(sourcePdf);
 

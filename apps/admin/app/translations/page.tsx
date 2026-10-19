@@ -6,6 +6,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import styles from './Translations.module.css';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 
 type Row = {
   entity_type: string;
@@ -122,13 +123,13 @@ function badgeClass(status: string) {
 export default function TranslationsPage() {
   const { locale } = useContext(AdminWorkspaceContext);
   const t = useUiTranslation();
+  const { courses, courseId, activeCourse, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [items, setItems] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
   const [language, setLanguage] = useState('ALL');
   const [status, setStatus] = useState('ALL');
   const [entityType, setEntityType] = useState('ALL');
-  const [classCode, setClassCode] = useState('ALL');
   const [subjectCode, setSubjectCode] = useState('ALL');
   const [offset, setOffset] = useState(0);
   const [selectedKey, setSelectedKey] = useState('');
@@ -154,6 +155,12 @@ export default function TranslationsPage() {
     const sequence = ++loadSequence.current;
     setLoading(true);
     setError('');
+    if (loadingCourses) return [];
+    if (!courseId) {
+      setItems([]); setTotal(0); setSelectedKey(''); setLoading(false);
+      setError(courseError || 'Select an institution-assigned course before reviewing translations.');
+      return [];
+    }
     if (clearSelection) {
       setItems([]);
       setTotal(0);
@@ -163,8 +170,7 @@ export default function TranslationsPage() {
     }
     try {
       const params = new URLSearchParams({
-        language, status, entityType,
-        classCode: classCode === 'ALL' ? '' : classCode,
+        courseId, language, status, entityType,
         subjectCode: subjectCode === 'ALL' ? '' : subjectCode,
         limit: String(pageSize), offset: String(nextOffset)
       });
@@ -181,8 +187,7 @@ export default function TranslationsPage() {
         const inventoryLimit = Math.max(1, pageSize - existingItems.length);
         const inventoryOffset = Math.max(0, nextOffset + existingItems.length - existingTotal);
         const inventoryParams = new URLSearchParams({
-          language, entityType,
-          classCode: classCode === 'ALL' ? '' : classCode,
+          courseId, language, entityType,
           subjectCode: subjectCode === 'ALL' ? '' : subjectCode,
           limit: String(inventoryLimit), offset: String(inventoryOffset)
         });
@@ -210,7 +215,7 @@ export default function TranslationsPage() {
     } finally {
       if (sequence === loadSequence.current) setLoading(false);
     }
-  }, [language, status, entityType, classCode, subjectCode, t]);
+  }, [courseId, loadingCourses, courseError, language, status, entityType, subjectCode, t]);
 
   useEffect(() => {
     let active = true;
@@ -234,9 +239,10 @@ export default function TranslationsPage() {
   }, [t]);
 
   useEffect(() => {
-    if (!identity) return;
+    if (!identity || loadingCourses || !courseId) return;
+    setSelectedKey('');
     void load(0, true);
-  }, [identity, language, status, entityType, classCode, subjectCode, load]);
+  }, [identity, courseId, loadingCourses, language, status, entityType, subjectCode, load]);
 
   function selectRow(row: Row) {
     setSelectedKey(rowKey(row));
@@ -253,9 +259,10 @@ export default function TranslationsPage() {
     setSaving(true); setError(''); setNotice('');
     try {
       const isNewSource = selected.translation_id == null;
+      const scopeQuery = '?courseId=' + encodeURIComponent(courseId);
       const draftUrl = isNewSource
-        ? '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.entity_id + '/draft?language=' + encodeURIComponent(selected.language)
-        : '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/draft';
+        ? '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.entity_id + '/draft?language=' + encodeURIComponent(selected.language) + '&courseId=' + encodeURIComponent(courseId)
+        : '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/draft' + scopeQuery;
       const result = await api<{ translationId: number; translationStatus: string; createdNewVersion: boolean; versionNo?: number }>(
         draftUrl,
         { method: isNewSource ? 'POST' : 'PATCH', body: JSON.stringify({ translatedContent, qualityNotes }) }
@@ -287,7 +294,7 @@ export default function TranslationsPage() {
     if (!selected || saving) return;
     setSaving(true); setError(''); setNotice('');
     try {
-      await api('/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/status',
+      await api('/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/status?courseId=' + encodeURIComponent(courseId),
         { method: 'PATCH', body: JSON.stringify({ status: next, qualityNotes }) });
       setNotice(next === 'PUBLISHED'
         ? t('admin.translations.published')
@@ -325,12 +332,15 @@ export default function TranslationsPage() {
       </div>
 
       <section className={styles.filters} aria-label={t('admin.translations.filters')}>
+        <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+          label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.noCoursesAssigned')}
+          onChange={value => { if (selectCourse(value)) { setOffset(0); setSelectedKey(''); setSubjectCode('ALL'); } }}
+          disabled={Boolean(courseError)} />
         <label>{t('admin.translations.targetLanguage')}<select value={language} onChange={e => {setLanguage(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allLanguages')}</option><option value="hi">{t('admin.translations.hindiDevanagari')}</option><option value="en">{t('common.language.english')}</option></select></label>
         <label>{t('admin.translations.workflowStatus')}<select value={status} onChange={e => {setStatus(e.target.value);setOffset(0);setSelectedKey('');}}>{STATUS_OPTIONS.map(value => <option value={value} key={value}>{value === 'ALL' ? t('admin.translations.status.ALL') : statusLabel(value, t)}</option>)}</select></label>
         <label>{t('admin.translations.contentType')}<select value={entityType} onChange={e => {setEntityType(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allContentTypes')}</option>{ENTITY_OPTIONS.map(value => <option value={value} key={value}>{entityLabel(value, t)}</option>)}</select></label>
-        <label>{t('admin.translations.class')}<select value={classCode} onChange={e => {setClassCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allClasses')}</option><option value="6">{t('admin.translations.classCode', { code: 6 })}</option><option value="7">{t('admin.translations.classCode', { code: 7 })}</option><option value="8">{t('admin.translations.classCode', { code: 8 })}</option></select></label>
-        <label>{t('admin.translations.subject')}<select value={subjectCode} onChange={e => {setSubjectCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allSubjects')}</option><option value="maths">{t('admin.translations.subject.maths')}</option><option value="science">{t('admin.translations.subject.science')}</option></select></label>
-        <button type="button" className={styles.reset} onClick={() => {setLanguage('ALL');setStatus('ALL');setEntityType('ALL');setClassCode('ALL');setSubjectCode('ALL');setOffset(0);setSelectedKey('');setNotice('');}}>{t('admin.translations.resetFilters')}</button>
+        <label>{t('admin.translations.subject')}<select value={subjectCode} onChange={e => {setSubjectCode(e.target.value);setOffset(0);setSelectedKey('');}}><option value="ALL">{t('admin.translations.allSubjects')}</option>{(activeCourse?.subjects || []).map(subject => <option value={subject.subject_code} key={subject.subject_code}>{subject.subject_name}</option>)}</select></label>
+        <button type="button" className={styles.reset} onClick={() => {setLanguage('ALL');setStatus('ALL');setEntityType('ALL');setSubjectCode('ALL');setOffset(0);setSelectedKey('');setNotice('');}}>{t('admin.translations.resetFilters')}</button>
         <button type="button" className={styles.refresh} onClick={() => void load(0, false)} disabled={loading}>{t('admin.translations.refreshList')}</button>
       </section>
 

@@ -492,6 +492,27 @@ public class AuthService {
           normalized,displayName,passwordEncoder.encode(password));
     int linked=jdbc.update("update student set user_account_id=? where id=? and user_account_id is null",userId,studentId);
     if(linked!=1) throw new IllegalStateException("Learner account link changed during conversion; retry sign-in.");
+    // Mirror active institution memberships to the newly linked account without
+    // reactivating any membership that an institution previously suspended.
+    jdbc.update("""
+      WITH created_memberships AS (
+        INSERT INTO institution_user_membership(
+          institution_id,user_id,status,joined_at,left_at,created_at,updated_at
+        )
+        SELECT im.institution_id,?,'ACTIVE',now(),null,now(),now()
+        FROM institution_membership im
+        JOIN institution_tenant tenant ON tenant.id=im.institution_id AND tenant.status='ACTIVE'
+        WHERE im.student_id=? AND im.status='ACTIVE'
+        ON CONFLICT(institution_id,user_id) DO NOTHING
+        RETURNING id,institution_id,user_id
+      )
+      INSERT INTO institution_user_membership_event(
+        institution_id,membership_id,user_id,event_type,actor_user_id,details
+      )
+      SELECT institution_id,id,user_id,'USER_MEMBERSHIP_CREATED',user_id,
+        jsonb_build_object('source','LEARNER_ACCOUNT_CONVERSION')
+      FROM created_memberships
+      """,userId,studentId);
     int limited=jdbc.update("""
       update guardian_student set access_level='LIMITED'
       where student_id=? and active=true and consent_status='CONSENTED' and access_level='FULL'
@@ -838,13 +859,20 @@ public class AuthService {
 
   @Transactional
   public AuthContext createChild(long userId,String name,String classCode,String language,String username,String password,
-      boolean consentAccepted,List<String> trackCodes) {
+      boolean consentAccepted) {
     String cleanUsername=validateUsername(username);
     validatePassword(password,8,"Student password");
     String legacyPin=String.format(java.util.Locale.ROOT,"%06d",random.nextInt(1_000_000));
-    AuthContext created=createChild(userId,name,classCode,language,legacyPin,consentAccepted,trackCodes);
+    AuthContext created=createChild(userId,name,classCode,language,legacyPin,consentAccepted,List.of());
     setChildCredentials(userId,created.studentId(),cleanUsername,password);
     return created;
+  }
+
+  /** Compatibility overload: subject tracks no longer create learner entitlements. */
+  @Transactional
+  public AuthContext createChild(long userId,String name,String classCode,String language,String username,String password,
+      boolean consentAccepted,List<String> ignoredTrackCodes) {
+    return createChild(userId,name,classCode,language,username,password,consentAccepted);
   }
 
   private String validateUsername(String username) {
@@ -950,27 +978,9 @@ public class AuthService {
     if(board.isBlank() || "null".equalsIgnoreCase(board))
       throw new IllegalArgumentException("This class is not currently available.");
 
-    if(classChanged) {
-      // Class is part of the learner's shared identity, but subject-track enrolments are per
-      // institution. Preserve/validate tracks independently for each active institution; never
-      // create a new NULL-scoped track row as a side effect of a profile edit.
-      List<Long> institutionIds=jdbc.queryForList("""
-        select m.institution_id from institution_membership m
-        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
-        where m.student_id=? and m.status='ACTIVE' order by m.institution_id
-        """,Long.class,studentId);
-      for(Long institutionId:institutionIds) {
-        List<String> activeTracks=jdbc.queryForList("""
-          select s.code from student_track_enrollment ste
-          join curriculum_subject s on s.id=ste.subject_id
-          where ste.student_id=? and ste.institution_id=? and ste.status='ACTIVE'
-          order by s.sort_order
-          """,String.class,studentId,institutionId);
-        if(!activeTracks.isEmpty()) {
-          applyStudentTracks(studentId,nextClass,activeTracks,institutionId);
-        }
-      }
-    }
+    // A class promotion changes the learner's grade identity only. The selected institution
+    // courses own subject mapping and learning access; never recalculate legacy subject tracks
+    // as a side effect of editing the child profile. Existing course enrollments/history remain intact.
     int changed=jdbc.update("""
       update student set display_name=?,class_code=?,board=?,language=?,profile_updated_at=now()
       where id=? and active=true and environment='PRODUCTION'

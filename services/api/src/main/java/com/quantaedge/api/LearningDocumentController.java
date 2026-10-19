@@ -187,15 +187,19 @@ public class LearningDocumentController {
 
   @GetMapping("/admin/learning-documents")
   public Map<String,Object> listAssignments(
+      @RequestParam Long courseId,
       @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
       @RequestParam(required=false) String status,@RequestParam(required=false) String classCodes,
       @RequestParam(required=false) String subjectCodes,@RequestParam(required=false) String statuses,
       @RequestParam(required=false) String languages,@RequestParam(required=false) String scopes,
       @RequestParam(required=false) String programCode,
-      @RequestParam(required=false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     requireContentView(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String classQuery=classCodes!=null&&!classCodes.isBlank()?classCodes:classCode;
     String subjectQuery=subjectCodes!=null&&!subjectCodes.isBlank()?subjectCodes:subjectCode;
     String statusQuery=statuses!=null&&!statuses.isBlank()?statuses:status;
@@ -209,37 +213,37 @@ public class LearningDocumentController {
     String from="""
       from learning_document d
       join learning_pdf_asset a on a.id=d.pdf_asset_id
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.subject_id=d.subject_id
       join curriculum_subject s on s.id=d.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join curriculum_program p on p.id=s.program_id
       """;
-    StringBuilder where=new StringBuilder(" where 1=1");List<Object> filterArgs=new ArrayList<>();
-    if (courseId != null) {
-      where.append("""
+    StringBuilder where=new StringBuilder("""
+      where dca.institution_id=? and dca.course_id=?
         and exists(select 1 from curriculum_program scope_program
-          join curriculum_program_subject cps on cps.program_id=scope_program.id
-          join curriculum_subject scope_subject on scope_subject.id=cps.subject_id
-            and scope_subject.class_id=cps.class_id and scope_subject.active=true
-          where scope_program.id=? and scope_program.status='ACTIVE'
-            and scope_subject.id=s.id
-            and (scope_subject.program_id=scope_program.id or
-              (scope_subject.program_id is null and scope_program.class_id=scope_subject.class_id and cps.class_id=scope_subject.class_id)))
-        """);
-      filterArgs.add(courseId);
-    } else if (programCode != null && !programCode.isBlank()) {
-      where.append(" and upper(p.code)=upper(?) and p.status='ACTIVE'");
-      filterArgs.add(programCode.trim());
-    }
+        join curriculum_program_subject cps on cps.program_id=scope_program.id
+        join curriculum_subject scope_subject on scope_subject.id=cps.subject_id
+          and scope_subject.class_id=cps.class_id and scope_subject.active=true
+        where scope_program.id=? and scope_program.status='ACTIVE'
+          and scope_subject.id=s.id
+          and (scope_subject.program_id=scope_program.id or
+            (scope_subject.program_id is null and scope_program.class_id=scope_subject.class_id and cps.class_id=scope_subject.class_id)))
+      """);
+    List<Object> filterArgs=new ArrayList<>();
+    filterArgs.add(institutionId);
+    filterArgs.add(courseId);
+    filterArgs.add(courseId);
     appendDocumentFilter(where,filterArgs,"c.code",classFilter);
     appendDocumentFilter(where,filterArgs,"s.code",subjectFilter);
-    appendDocumentFilter(where,filterArgs,"d.status",statusFilter);
+    appendDocumentFilter(where,filterArgs,"dca.status",statusFilter);
     appendDocumentFilter(where,filterArgs,"d.language",languageFilter);
     appendDocumentFilter(where,filterArgs,"d.scope",scopeFilter);
     List<Object> pageArgs=new ArrayList<>(filterArgs);pageArgs.add(rowLimit);pageArgs.add(rowOffset);
     String selectSql="""
       select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
-             d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
+             d.page_start,d.page_end,d.language,dca.status as status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,p.id as course_id,p.code as program_code,p.display_name as program_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -250,11 +254,11 @@ public class LearningDocumentController {
     List<Map<String,Object>> items=jdbc.queryForList(selectSql+from+where+orderLimit,pageArgs.toArray());
     Long total=jdbc.queryForObject("select count(*) "+from+where,Long.class,filterArgs.toArray());
     Map<String,Object> facets=new LinkedHashMap<>();
-    facets.put("class",documentFacetCounts(from,"c.code","class",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("subject",documentFacetCounts(from,"s.code","subject",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("status",documentFacetCounts(from,"d.status","status",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("language",documentFacetCounts(from,"d.language","language",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
-    facets.put("scope",documentFacetCounts(from,"d.scope","scope",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("class",documentFacetCounts(from,"c.code","class",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("subject",documentFacetCounts(from,"s.code","subject",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("status",documentFacetCounts(from,"dca.status","status",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("language",documentFacetCounts(from,"d.language","language",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("scope",documentFacetCounts(from,"d.scope","scope",institutionId,courseId,classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
     Map<String,Object> result=new LinkedHashMap<>();result.put("items",items);result.put("total",total==null?0L:total);
     result.put("limit",rowLimit);result.put("offset",rowOffset);result.put("facets",facets);return result;
   }
@@ -276,12 +280,23 @@ public class LearningDocumentController {
     where.append(')');args.addAll(values);
   }
 
-  private Map<String,Long> documentFacetCounts(String from,String column,String excluded,
+  private Map<String,Long> documentFacetCounts(String from,String column,String excluded,Long institutionId,Long courseId,
       List<String> classes,List<String> subjects,List<String> statuses,List<String> languages,List<String> scopes) {
-    StringBuilder where=new StringBuilder(" where 1=1");List<Object> args=new ArrayList<>();
+    StringBuilder where=new StringBuilder("""
+      where dca.institution_id=? and dca.course_id=?
+        and exists(select 1 from curriculum_program scope_program
+        join curriculum_program_subject cps on cps.program_id=scope_program.id
+        join curriculum_subject scope_subject on scope_subject.id=cps.subject_id
+          and scope_subject.class_id=cps.class_id and scope_subject.active=true
+        where scope_program.id=? and scope_program.status='ACTIVE'
+          and scope_subject.id=s.id
+          and (scope_subject.program_id=scope_program.id or
+            (scope_subject.program_id is null and scope_program.class_id=scope_subject.class_id and cps.class_id=scope_subject.class_id)))
+      """);
+    List<Object> args=new ArrayList<>(List.of(institutionId,courseId,courseId));
     if(!"class".equals(excluded))appendDocumentFilter(where,args,"c.code",classes);
     if(!"subject".equals(excluded))appendDocumentFilter(where,args,"s.code",subjects);
-    if(!"status".equals(excluded))appendDocumentFilter(where,args,"d.status",statuses);
+    if(!"status".equals(excluded))appendDocumentFilter(where,args,"dca.status",statuses);
     if(!"language".equals(excluded))appendDocumentFilter(where,args,"d.language",languages);
     if(!"scope".equals(excluded))appendDocumentFilter(where,args,"d.scope",scopes);
     List<Map<String,Object>> rows=jdbc.queryForList("select "+column+" as facet_value,count(*) as facet_count "+from+where+" group by "+column,args.toArray());
@@ -295,8 +310,11 @@ public class LearningDocumentController {
   @Transactional
   public Map<String, Object> createAssignment(
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requirePermission(context, "CONTENT_EDIT");
+    long institutionId=requireInstitution(tenant);
     long assetId = longValue(body.get("pdfAssetId"), "pdfAssetId");
     String scope = requiredText(body.get("scope"), "scope", 24).toUpperCase(Locale.ROOT);
     if (!List.of("SUBJECT_BOOK", "CHAPTER_PDF").contains(scope)) {
@@ -304,32 +322,16 @@ public class LearningDocumentController {
     }
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    Long courseId = optionalLong(body.get("courseId"), "courseId");
-    String programCode = optionalText(body.get("programCode"), 60);
-    Long subjectId;
-    if (courseId != null) {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
-        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
-        """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
-    } else if (programCode == null || programCode.isBlank()) {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
-        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
-    } else {
-      subjectId = jdbc.query("""
-        select s.id from curriculum_subject s
-        join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
-        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where c.code=? and s.code=? and upper(p.code)=upper(?) and c.active=true and s.active=true
-        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode, programCode);
-    }
+    long courseId = longValue(body.get("courseId"), "courseId");
+    requireAssignedCourse(courseId,institutionId);
+    Long subjectId = jdbc.query("""
+      select s.id from curriculum_subject s
+      join curriculum_class c on c.id=s.class_id
+      join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
     if (subjectId == null) throw badRequest("The selected active class, course, and subject do not exist.");
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
     Integer bookPart = body.get("bookPart") == null
@@ -371,20 +373,31 @@ public class LearningDocumentController {
       returning id
       """, Long.class, assetId, scope, subjectId, chapterId, bookPart, title, sourceTitle, sourceUrl,
       edition, language, start, end, context.staffId());
+    jdbc.update("""
+      insert into learning_document_course_assignment(
+        institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+      ) values(?,?,?,?,'DRAFT',?)
+      """,institutionId,courseId,documentId,subjectId,context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/learning-documents/" + documentId + "/created",
         "Attached a private PDF to " + scope + " for class " + classCode + ", subject " + subjectCode
             + (chapterId == null ? "" : ", chapter " + chapterId)
             + (bookPart == null ? "" : ", textbook part " + bookPart) + ".");
-    return assignmentById(documentId);
+    return assignmentById(documentId,institutionId,courseId);
   }
 
   @PatchMapping("/admin/learning-documents/{documentId}/status")
   @Transactional
   public Map<String, Object> setAssignmentStatus(
       @PathVariable long documentId,
+      @RequestParam Long courseId,
       @RequestBody Map<String, Object> body,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    requireDocumentInCourse(documentId,courseId,institutionId);
     String nextStatus = requiredText(body.get("status"), "status", 20).toUpperCase(Locale.ROOT);
     if (!List.of("DRAFT", "PUBLISHED", "ARCHIVED").contains(nextStatus)) {
       throw badRequest("Choose DRAFT, PUBLISHED, or ARCHIVED.");
@@ -395,13 +408,17 @@ public class LearningDocumentController {
       authorization.requirePermission(context, "CONTENT_EDIT");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id,d.scope,d.subject_id,d.chapter_id,d.book_part,d.language,d.status,d.source_title,d.source_url,d.edition,
-             d.title,d.page_start,d.page_end,a.page_count,a.id as asset_id,a.review_status as asset_review_status,
+      select d.id,d.scope,d.subject_id,d.chapter_id,d.book_part,d.language,d.source_title,d.source_url,d.edition,
+             d.title,d.page_start,d.page_end,dca.status as status,
+             a.page_count,a.id as asset_id,a.review_status as asset_review_status,
              ch.active as chapter_active,ch.content_status as chapter_content_status
-      from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
+      from learning_document d
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.institution_id=? and dca.course_id=? and dca.subject_id=d.subject_id
+      join learning_pdf_asset a on a.id=d.pdf_asset_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=?
-      """, documentId);
+      """, institutionId,courseId,documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     Map<String, Object> current = rows.getFirst();
     if ("PUBLISHED".equals(nextStatus)) {
@@ -423,41 +440,50 @@ public class LearningDocumentController {
         throw badRequest("The assigned PDF page range is invalid.");
       }
       if (current.get("book_part") == null) {
-        // A whole-book or chapter replacement supersedes the full existing publication slot.
+        // Replace only this institution/course's publication slot. Do not archive
+        // another tenant's or another course's publication for a shared subject.
         jdbc.update("""
-          update learning_document set status='ARCHIVED',updated_at=now()
-          where scope=? and subject_id=? and language=?
-            and chapter_id is not distinct from ?
-            and status='PUBLISHED' and id<>?
-          """, current.get("scope"), current.get("subject_id"), current.get("language"),
-          current.get("chapter_id"), documentId);
+          update learning_document_course_assignment other_assignment
+          set status='ARCHIVED',updated_at=now()
+          from learning_document other_document
+          where other_document.id=other_assignment.learning_document_id
+            and other_assignment.institution_id=? and other_assignment.course_id=?
+            and other_document.scope=? and other_document.subject_id=? and other_document.language=?
+            and other_document.chapter_id is not distinct from ?
+            and other_assignment.status='PUBLISHED' and other_assignment.learning_document_id<>?
+          """, institutionId,courseId,current.get("scope"),current.get("subject_id"),current.get("language"),
+          current.get("chapter_id"),documentId);
       } else {
-        // Publishing Part I must preserve Part II, and vice versa; only archive the same part
-        // plus any legacy whole-book row that occupied the slot before the migration.
+        // Textbook parts have independent publication slots; preserve the opposite part.
         jdbc.update("""
-          update learning_document set status='ARCHIVED',updated_at=now()
-          where scope=? and subject_id=? and language=?
-            and chapter_id is not distinct from ?
-            and status='PUBLISHED' and id<>?
-            and (book_part is null or book_part=?)
-          """, current.get("scope"), current.get("subject_id"), current.get("language"),
-          current.get("chapter_id"), documentId, current.get("book_part"));
+          update learning_document_course_assignment other_assignment
+          set status='ARCHIVED',updated_at=now()
+          from learning_document other_document
+          where other_document.id=other_assignment.learning_document_id
+            and other_assignment.institution_id=? and other_assignment.course_id=?
+            and other_document.scope=? and other_document.subject_id=? and other_document.language=?
+            and other_document.chapter_id is not distinct from ?
+            and other_assignment.status='PUBLISHED' and other_assignment.learning_document_id<>?
+            and (other_document.book_part is null or other_document.book_part=?)
+          """, institutionId,courseId,current.get("scope"),current.get("subject_id"),current.get("language"),
+          current.get("chapter_id"),documentId,current.get("book_part"));
       }
       jdbc.update("""
-        update learning_document set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
-        where id=?
-        """, context.staffId(), documentId);
+        update learning_document_course_assignment
+        set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
+        where institution_id=? and course_id=? and learning_document_id=?
+        """, context.staffId(),institutionId,courseId,documentId);
     } else {
       jdbc.update("""
-        update learning_document set status=?,updated_at=now(),
+        update learning_document_course_assignment set status=?,updated_at=now(),
           published_by_staff_id=case when ?='DRAFT' then null else published_by_staff_id end,
           published_at=case when ?='DRAFT' then null else published_at end
-        where id=?
-        """, nextStatus, nextStatus, nextStatus, documentId);
+        where institution_id=? and course_id=? and learning_document_id=?
+        """, nextStatus,nextStatus,nextStatus,institutionId,courseId,documentId);
     }
     staffAudit.recordAction(context, "/api/v1/admin/learning-documents/" + documentId + "/status",
-        "Changed learning document status to " + nextStatus + ".");
-    return assignmentById(documentId);
+        "Changed learning document status to " + nextStatus + " for course " + courseId + ".");
+    return assignmentById(documentId,institutionId,courseId);
   }
 
 
@@ -465,13 +491,19 @@ public class LearningDocumentController {
   public ResponseEntity<byte[]> previewLearningDocumentPage(
       @PathVariable long documentId,
       @PathVariable int pageNumber,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
     if (!authorization.hasPermission(context, "CONTENT_VIEW")
         && !authorization.hasPermission(context, "CONTENT_EDIT")
         && !authorization.hasPermission(context, "CONTENT_PUBLISH")) {
       throw new SecurityException("Learning document preview permission required.");
     }
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    requireDocumentInCourse(documentId,courseId,institutionId);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.pdf_asset_id,d.page_start,d.page_end,a.review_status,a.sha256,a.file_size_bytes
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
@@ -576,6 +608,9 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.subject_id=s.id
+          and dca.institution_id=m.institution_id and dca.course_id=? and dca.status='PUBLISHED'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join lateral (
         select t.id,t.display_name
@@ -586,7 +621,7 @@ public class LearningDocumentController {
       ) ct on true
       left join student_learning_document_progress p
         on p.learning_document_id=d.id and p.student_id=st.id and p.institution_id=m.institution_id
-      where d.status='PUBLISHED'
+      where dca.status='PUBLISHED'
         and d.language=?
         and (?='' or s.code=?)
         and __LEARNER_SCOPE__
@@ -596,7 +631,7 @@ public class LearningDocumentController {
       order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
       """.replace("__LEARNER_SCOPE__",learnerScope).replace("__PROGRAM_SCOPE__",programScope);
-    return jdbc.queryForList(sql, context.studentId(),institutionId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter,programId);
+    return jdbc.queryForList(sql, context.studentId(),institutionId,programId,chapterDisplayLanguage,languageFilter,subjectFilter,subjectFilter,programId);
   }
 
   /** Source-compatible overloads for existing Java callers. */
@@ -775,11 +810,13 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true
       join institution_membership m on m.student_id=st.id and m.institution_id=? and m.status='ACTIVE'
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.subject_id=s.id
+          and dca.institution_id=m.institution_id and dca.course_id=? and dca.status='PUBLISHED'
       left join curriculum_chapter ch on ch.id=d.chapter_id
-      where d.id=? and d.status='PUBLISHED'
+      where d.id=?
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
-        and c.code=st.class_code
         and exists(
           select 1 from curriculum_program ep
           join curriculum_program_subject cps on cps.program_id=ep.id and cps.subject_id=s.id
@@ -793,27 +830,69 @@ public class LearningDocumentController {
           where ep.id=? and ep.status='ACTIVE' and ep.code<>'GENERAL'
             and (s.program_id=ep.id or (s.program_id is null and ep.class_id=s.class_id))
         )
-      """,studentId,institutionId,documentId,courseId);
+      """,studentId,institutionId,courseId,documentId,courseId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
   }
 
-  private Map<String, Object> assignmentById(long documentId) {
+  private Map<String, Object> assignmentById(long documentId,long institutionId,long courseId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.source_title,d.source_url,d.edition,d.language,
-             d.page_start,d.page_end,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
+             d.page_start,d.page_end,d.version_no,dca.status as status,dca.institution_id,dca.course_id,
+             dca.created_at,dca.updated_at,dca.published_at,dca.published_by_staff_id,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
-      from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
+      from learning_document d
+      join learning_document_course_assignment dca
+        on dca.learning_document_id=d.id and dca.institution_id=? and dca.course_id=? and dca.subject_id=d.subject_id
+      join learning_pdf_asset a on a.id=d.pdf_asset_id
       join curriculum_subject s on s.id=d.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=?
-      """, documentId);
+      """, institutionId,courseId,documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null||tenant.institutionId()<1L) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before managing learning documents.");
+    }
+    return tenant.institutionId();
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Boolean assigned=jdbc.queryForObject("""
+      select exists(select 1 from institution_course_assignment a
+        join institution_course_release r on r.id=a.course_release_id and r.program_id=?
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        where a.institution_id=? and a.status='ASSIGNED')
+      """,Boolean.class,courseId,institutionId);
+    if(!Boolean.TRUE.equals(assigned)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The selected course is not assigned to the active institution.");
+    }
+  }
+
+  private void requireDocumentInCourse(long documentId,long courseId,long institutionId) {
+    Boolean belongs=jdbc.queryForObject("""
+      select exists(select 1 from learning_document d
+        join learning_document_course_assignment dca
+          on dca.learning_document_id=d.id and dca.subject_id=d.subject_id
+            and dca.institution_id=? and dca.course_id=?
+        join curriculum_subject s on s.id=d.subject_id and s.active=true
+        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        join curriculum_program_subject cps on cps.program_id=p.id
+          and cps.subject_id=s.id and cps.class_id=s.class_id
+        where d.id=? and (s.program_id=p.id or
+          (s.program_id is null and p.class_id=s.class_id)))
+      """,Boolean.class,institutionId,courseId,courseId,documentId);
+    if(!Boolean.TRUE.equals(belongs))throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "The learning document is not assigned to the selected institution and course.");
   }
 
   private AuthContext requireContentView(AuthContext context) {
@@ -1006,13 +1085,6 @@ public class LearningDocumentController {
     }
   }
 
-  private long requireInstitution(InstitutionTenantContext tenant) {
-    if(tenant==null||tenant.institutionId()<1) {
-      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
-          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before opening a textbook.");
-    }
-    return tenant.institutionId();
-  }
 
   private InstitutionTenantContextService.InvalidInstitutionContextException missingInstitutionContext() {
     return new InstitutionTenantContextService.InvalidInstitutionContextException(

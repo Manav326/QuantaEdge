@@ -4,7 +4,7 @@ import AdminWorkspaceLayout from './components/AdminWorkspaceLayout';
 
 export const metadata = {
   title: { default: 'QuantaEdge Admin', template: '%s | QuantaEdge' },
-  description: 'QuantaEdge learning platform administration and curriculum operations.',
+  description: 'QuantaEdge learning platform administration and course content management.',
   applicationName: 'QuantaEdge',
   icons: {
     icon: [

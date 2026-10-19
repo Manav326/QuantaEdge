@@ -42,7 +42,6 @@ object ApiClient {
     private fun currentInstitutionCode(): String? =
         normalizeInstitutionCode(BuildConfig.INSTITUTION_CODE)
             ?: activeInstitutionCode
-            ?: "QUANTA-EDGE"
 
     fun initialize(context: Context) {
         if (client != null) return

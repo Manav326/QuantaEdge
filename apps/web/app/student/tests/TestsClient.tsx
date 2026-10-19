@@ -10,7 +10,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 import styles from './Tests.module.css';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type AssessmentCard = {
   assessment_id:number;test_id?:string|null;title:string;description?:string;duration_minutes:number;max_attempts:number;
@@ -32,6 +33,7 @@ type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;subm
 type Result = {attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
 type CertificateEligibility = {
   attempt_id:number;eligible:boolean;eligibility_reason?:string|null;certificate_id?:number|null;
+  course_id?:number|null;course_name?:string|null;program_id?:number|null;
   certificate_number?:string|null;certificate_status?:string|null;pass_threshold_percent?:number|string;
   class_code?:string;subject_code?:string;subject_name?:string;
 };
@@ -212,6 +214,7 @@ export default function TestsClient(){
       catalogParams.set('courseId',String(courseId));
       const resultsParams=new URLSearchParams({language,limit:String(resultsPageSize),offset:String(resultsPage*resultsPageSize)});
       resultsParams.set('courseId',String(courseId));
+      if(subjectFilter!=='ALL')resultsParams.set('subjectCode',subjectFilter);
       const [catalog,studentResults]=await Promise.all([
         api('/api/v1/learning/assessments?'+catalogParams.toString()),
         api('/api/v1/learning/assessment-results?'+resultsParams.toString())
@@ -229,7 +232,7 @@ export default function TestsClient(){
       const eligibilityMap:Record<number,CertificateEligibility>={};
       if(attemptIds.length){
         try{
-          const eligibility=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+attemptIds.join(','));
+          const eligibility=await api('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+attemptIds.join(','));
           for(const item of Array.isArray(eligibility?.items)?eligibility.items:[]){
             const id=Number(item.attempt_id);
             if(Number.isSafeInteger(id)&&id>0)eligibilityMap[id]=item as CertificateEligibility;
@@ -243,7 +246,26 @@ export default function TestsClient(){
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
   },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize,courseId]);
-  useEffect(()=>{setSubjectFilter('ALL');setTestsPage(0);setResultsPage(0);},[courseId]);
+  useEffect(()=>{setTestsPage(0);setResultsPage(0);},[courseId]);
+  useEffect(()=>{
+    if(subjectFilter==='ALL')return;
+    if(!(activeCourse?.subjects||[]).some(subject=>String(subject.subject_code||subject.code||'')===subjectFilter))setSubjectFilter('ALL');
+  },[courseId,activeCourse,subjectFilter]);
+
+  async function changeCourse(value:string){
+    await selectCourse(value);
+    const params=new URLSearchParams(searchParams.toString());
+    params.set('courseId',value);params.delete('subjectCode');
+    router.replace('/student/tests?'+params.toString());
+    setSubjectFilter('ALL');setTestsPage(0);setResultsPage(0);
+  }
+  function changeSubject(value:string){
+    setSubjectFilter(value);setTestsPage(0);setResultsPage(0);
+    const params=new URLSearchParams(searchParams.toString());
+    if(courseId!==null)params.set('courseId',String(courseId));
+    if(value==='ALL')params.delete('subjectCode');else params.set('subjectCode',value);
+    router.replace('/student/tests?'+params.toString());
+  }
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
@@ -350,7 +372,7 @@ export default function TestsClient(){
     const ids=[...new Set(attemptIds.filter(id=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
     if(!ids.length)return;
     try{
-      const response=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+ids.join(','));
+      const response=await api('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+ids.join(','));
       const updates:Record<number,CertificateEligibility>={};
       for(const item of Array.isArray(response?.items)?response.items:[]){
         const id=Number(item.attempt_id);
@@ -365,7 +387,8 @@ export default function TestsClient(){
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
     try{
-      const data=await api('/api/v1/learning/assessments/'+testId+'/attempts?language='+language,{method:'POST'});
+      if(courseId===null)throw new Error('Select an enrolled course before starting this test.');
+      const data=await api('/api/v1/learning/assessments/'+testId+'/attempts?courseId='+encodeURIComponent(String(courseId))+'&language='+encodeURIComponent(language),{method:'POST'});
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('tests');
@@ -390,7 +413,8 @@ export default function TestsClient(){
     const requestId=++leaderboardRequestRef.current;
     setLeaderboardTest(test);setLeaderboardData(null);setLeaderboardError('');setLeaderboardLoading(true);
     try{
-      const data=await api('/api/v1/learning/assessments/'+test.assessment_id+'/leaderboard?language='+encodeURIComponent(language));
+      if(courseId===null)throw new Error('Select an enrolled course before viewing this leaderboard.');
+      const data=await api('/api/v1/learning/assessments/'+test.assessment_id+'/leaderboard?courseId='+encodeURIComponent(String(courseId))+'&language='+encodeURIComponent(language));
       if(leaderboardRequestRef.current===requestId)setLeaderboardData(data as LeaderboardData);
     }catch(e:any){
       if(leaderboardRequestRef.current!==requestId)return;
@@ -482,8 +506,12 @@ export default function TestsClient(){
       {courseError&&<div className={styles.error} role="alert">{courseError}</div>}{!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
         <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{translateUi(locale, 'legacy.web.available.tests.83298a6c')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{translateUi(locale, 'legacy.web.my.results.f7fbefd3')} <span>{resultsTotal}</span></button></div>
+        <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
+          onCourseChange={value=>void changeCourse(value)} subjectCode={subjectFilter} onSubjectChange={changeSubject}
+          loading={loadingCourses} language={locale} courseLabel={t('Course','कोर्स')} subjectLabel={t('Subject','विषय')}
+          allSubjectsLabel={t('All subjects','सभी विषय')} />
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={selectCourse} loading={loadingCourses} label={locale==='english'?'Primary course':'मुख्य कोर्स'}/><label>{translateUi(locale, 'legacy.web.subject.0af41287')}<select value={subjectFilter} disabled={courseId===null} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{translateUi(locale, 'legacy.web.all.subjects.7895d918')}</option>{(activeCourse?.subjects||[]).map(subject=>{const code=String(subject.subject_code||subject.code||'');return code?<option key={code} value={code}>{String(subject.subject_name||subject.display_name||code)}</option>:null;})}</select></label></div>
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div></div>
           {loading?<div className={styles.empty}>{translateUi(locale, 'legacy.web.loading.your.tests.ff94a584')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{translateUi(locale, 'legacy.web.no.published.tests.yet.04ce394c')}</b><small>{translateUi(locale, 'legacy.web.your.teacher.s.published.tests.will.ap.450888e9')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
@@ -525,7 +553,7 @@ export default function TestsClient(){
                      </button>
                      {certificate?.certificate_status==='ISSUED'&&certificateId>0?(
                        <div className={styles.certificateActionLinks}>
-                         <Link href={'/student/certificates?certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
+                         <Link href={'/student/certificates?courseId='+encodeURIComponent(String(courseId || ''))+'&certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
                          
                          
                          <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale, 'legacy.web.verify.status.8146b8bf')}</a>
@@ -588,11 +616,11 @@ export default function TestsClient(){
             return <section className={styles.certificateResultPanel} aria-live="polite">
               <div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.certificate.ea04cb7f')}</span><h3>{translateUi(locale, 'legacy.web.certificate.for.this.result.3136e16b')}</h3>
                 <p>{translateUi(locale, 'legacy.web.test.certificates.require.an.admin.cre.07390e4d')}</p>
-                {cert?.subject_name && <small>{uiLanguage === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {uiLanguage === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)}</small>}
+                {cert?.subject_name && <small>{uiLanguage === 'hi' ? 'प्रमाणपत्र कोर्स:' : 'Certificate course:'} {cert.course_name || activeCourse?.display_name || (uiLanguage === 'hi' ? 'चुना गया कोर्स' : 'Selected course')} · {certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)}</small>}
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
-                  <Link href={'/student/certificates?certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
+                  <Link href={'/student/certificates?courseId='+encodeURIComponent(String(courseId || ''))+'&certificateId='+certificateId}>{translateUi(locale, 'legacy.web.view.certificate.07663aac')}</Link>
                   
                   
                   <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{translateUi(locale, 'legacy.web.verify.status.8146b8bf')}</a>

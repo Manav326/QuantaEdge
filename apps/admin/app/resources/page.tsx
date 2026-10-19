@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Resources.module.css';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import PremiumPagination from '../components/PremiumPagination';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 
 type PdfAsset = {
   pdf_asset_id: number;
@@ -23,6 +24,8 @@ type Chapter = { chapter_id: number; chapter_code: string; chapter_name: string;
 type Track = { class_code: string; class_name: string; subject_code: string; subject_name: string };
 type Assignment = {
   document_id: number;
+  course_id?: number;
+  course_name?: string;
   pdf_asset_id: number;
   scope: 'SUBJECT_BOOK' | 'CHAPTER_PDF';
   title: string;
@@ -229,7 +232,8 @@ function MultiSelectFilter({
 
 export default function TextbookLibraryPage() {
   const t = useUiTranslation();
-  const [classCode, setClassCode] = useState('6');
+  const { courses, courseId, activeCourse, subjects: courseSubjects, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
+  const [classCode, setClassCode] = useState('');
   const [subjectCode, setSubjectCode] = useState('maths');
   const [viewClassCodes, setViewClassCodes] = useState<string[]>([]);
   const [viewSubjectCodes, setViewSubjectCodes] = useState<string[]>([]);
@@ -391,8 +395,8 @@ export default function TextbookLibraryPage() {
     : 0;
   const firstPreviewThumb = Math.max(1, Math.min(previewPage - 6, previewPageCount - 19));
   const previewThumbnails = Array.from({ length: Math.min(20, previewPageCount) }, (_value, index) => firstPreviewThumb + index);
-  const previewPageUrl = previewDocumentId
-    ? '/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage
+  const previewPageUrl = previewDocumentId && courseId
+    ? '/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage + '?courseId=' + encodeURIComponent(courseId)
     : '';
   const previewPageTitle = previewAssignment?.title || t('admin.resources.title');
 
@@ -549,19 +553,18 @@ export default function TextbookLibraryPage() {
     setLoading(true);
     setError('');
     try {
-      const curriculumRows = await api('/api/v1/curriculum');
-      const trackMap = new Map<string, Track>();
-      (Array.isArray(curriculumRows) ? curriculumRows : []).forEach((row: any) => {
-        if (!row.class_code || !row.subject_code) return;
-        const track: Track = {
-          class_code: String(row.class_code),
-          class_name: String(row.class_name || ('Class ' + row.class_code)),
-          subject_code: String(row.subject_code),
-          subject_name: String(row.subject_name || row.subject_code),
-        };
-        trackMap.set(track.class_code + ':' + track.subject_code, track);
-      });
-      const nextTracks = [...trackMap.values()];
+      if (!courseId || !activeCourse) {
+        setTracks([]); setChapters([]); setAssignments([]); setAssignmentTotal(0); setAssignmentFacets({});
+        setLoading(loadingCourses);
+        setError(loadingCourses ? '' : courseError || 'Select a course assigned to this institution.');
+        return;
+      }
+      const nextTracks: Track[] = courseSubjects.map(subject => ({
+        class_code: String(subject.curriculum_class_code || activeCourse.curriculum_class_code || ''),
+        class_name: String(subject.curriculum_class_name || ('Class ' + (subject.curriculum_class_code || activeCourse.curriculum_class_code || ''))),
+        subject_code: String(subject.subject_code),
+        subject_name: String(subject.subject_name || subject.subject_code),
+      })).filter(track => track.class_code && track.subject_code);
       setTracks(nextTracks);
       const nextClassCode = nextTracks.some(track => track.class_code === classCode)
         ? classCode : (nextTracks[0]?.class_code || '');
@@ -569,20 +572,24 @@ export default function TextbookLibraryPage() {
         ? subjectCode : (nextTracks.find(track => track.class_code === nextClassCode)?.subject_code || '');
       if (nextClassCode !== classCode) setClassCode(nextClassCode);
       if (nextSubjectCode !== subjectCode) setSubjectCode(nextSubjectCode);
+      // Reset upload scope when switching courses; don't retain Class 6 / Maths defaults.
+      setUploadClassCode(current => nextTracks.some(track => track.class_code === current) ? current : nextClassCode);
+      setUploadSubjectCode(current => nextTracks.some(track => track.class_code === nextClassCode && track.subject_code === current)
+        ? current : nextSubjectCode);
 
       // Fetch only the requested server-side page. Filter facets are computed by the API
       // across the matching inventory, not inferred from the currently visible page.
-      const params = new URLSearchParams({ status: 'ALL', limit: String(assignmentPageSize), offset: String(assignmentPage * assignmentPageSize) });
+      const params = new URLSearchParams({ courseId, status: 'ALL', limit: String(assignmentPageSize), offset: String(assignmentPage * assignmentPageSize) });
       if (viewClassCodes.length) params.set('classCodes', viewClassCodes.join(','));
       if (viewSubjectCodes.length) params.set('subjectCodes', viewSubjectCodes.join(','));
       if (viewStatuses.length) params.set('statuses', viewStatuses.join(','));
       if (viewLanguages.length) params.set('languages', viewLanguages.join(','));
       if (viewScopes.length) params.set('scopes', viewScopes.join(','));
-      const chapterPromise = canEdit && nextClassCode && nextSubjectCode
-        ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
+      const chapterPromise = canEdit && nextSubjectCode
+        ? api('/api/v1/admin/content?' + new URLSearchParams({ courseId, classCode: nextClassCode, subjectCode: nextSubjectCode }).toString())
         : Promise.resolve([]);
       const intakePromise = canReview
-        ? api('/api/v1/admin/source-ingestion/intake?limit=' + intakePageSize + '&offset=' + (intakePage * intakePageSize)).catch(() => ({ items: [], total: 0, summary: {} }))
+        ? api('/api/v1/admin/source-ingestion/intake?' + new URLSearchParams({courseId,limit:String(intakePageSize),offset:String(intakePage*intakePageSize)}).toString()).catch(() => ({ items: [], total: 0, summary: {} }))
         : Promise.resolve({ items: [], total: 0, summary: {} });
       const [contentRows, resourceRows, intakeData] = await Promise.all([
         chapterPromise,
@@ -622,7 +629,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, assignmentPageSize, intakePage, intakePageSize,
+  }, [courseId, activeCourse, courseSubjects, loadingCourses, courseError, classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, assignmentPageSize, intakePage, intakePageSize,
       viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
@@ -685,7 +692,7 @@ export default function TextbookLibraryPage() {
       }
       setIntakeAssetId(id);
       // Classification is stored in a dedicated table, never hidden in source-reference text.
-      await api('/api/v1/admin/source-ingestion/intake/' + id, {
+      await api('/api/v1/admin/source-ingestion/intake/' + id + '?courseId=' + encodeURIComponent(courseId), {
         method: 'PUT',
         body: JSON.stringify({
           category: uploadCategory,
@@ -698,7 +705,7 @@ export default function TextbookLibraryPage() {
       });
       let analysis: any = null;
       try {
-        analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze', { method: 'POST' });
+        analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
         setIntakeReport(normalizeIntakeReport(analysis));
       } catch (analysisError) {
         setIntakeReport(null);
@@ -740,11 +747,14 @@ export default function TextbookLibraryPage() {
     if (!/^https:\/\//i.test(sourceUrl.trim())) { setError(t('admin.resources.httpsOnly')); return; }
     setBusy(true); setError(''); setNotice('');
     try {
+      if (!courseId || !tracks.some(track => track.class_code === classCode && track.subject_code === subjectCode)) {
+        throw new Error('Select a course and one of its mapped subjects before attaching a textbook resource.');
+      }
       const resource = await api('/api/v1/admin/learning-documents', {
         method: 'POST',
         body: JSON.stringify({
           pdfAssetId: Number(selectedPdf.pdf_asset_id || selectedPdf.id),
-          scope, classCode, subjectCode, language: resourceLanguage,
+          courseId: Number(courseId), scope, classCode, subjectCode, language: resourceLanguage,
           chapterId: scope === 'CHAPTER_PDF' ? Number(chapterId) : null,
           title: title.trim(), sourceTitle: sourceTitle.trim(),
           sourceUrl: sourceUrl.trim(), edition: edition.trim(),
@@ -766,7 +776,8 @@ export default function TextbookLibraryPage() {
   async function setStatus(row: Assignment, nextStatus: 'PUBLISHED' | 'ARCHIVED' | 'DRAFT') {
     setBusy(true); setError(''); setNotice('');
     try {
-      await api('/api/v1/admin/learning-documents/' + row.document_id + '/status', {
+      if (!courseId) throw new Error('Select a course before changing resource status.');
+      await api('/api/v1/admin/learning-documents/' + row.document_id + '/status?courseId=' + encodeURIComponent(courseId), {
         method: 'PATCH', body: JSON.stringify({ status: nextStatus }),
       });
       setNotice(t('admin.resources.statusUpdated', { title: row.title, status: resourceStatusLabel(nextStatus, t) }));
@@ -803,6 +814,17 @@ export default function TextbookLibraryPage() {
       {notice && <div className={styles.alertSuccess} role="status">{notice}</div>}
 
       <section className={styles.panel + " " + styles.governancePanel}>
+        <div style={{ padding: '16px 20px 0' }}>
+          <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+            label={t('admin.assessments.course')} placeholder={t('admin.assessments.chooseCurriculum')}
+            onChange={value => {
+              selectCourse(value);
+              setClassCode(''); setSubjectCode(''); setChapterId('');
+              setAssignmentPage(0); setPreviewDocumentId(null);
+              setViewClassCodes([]); setViewSubjectCodes([]);
+            }} />
+          {courseError && !loadingCourses && <p role="alert">{courseError}</p>}
+        </div>
         <div className={styles.governanceHeader}>
           <div className={styles.sectionHeading}>
             <div><span>{t('admin.resources.governance')}</span><h2>{t('admin.resources.assignmentsTitle')}</h2><p>{t('admin.resources.assignmentsDescription')}</p></div>
@@ -843,7 +865,7 @@ export default function TextbookLibraryPage() {
                 <p>{row.scope === 'SUBJECT_BOOK' ? t('admin.resources.completeSubjectBook') : t('admin.resources.chapterPdf')} · {row.language === 'en' ? t('admin.resources.english') : t('admin.resources.hindi')} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
                 <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || t('admin.resources.sourceTitleNotSet')} · {row.edition || t('admin.resources.editionNotSet')}</small>
                 <small>{row.source_url || t('admin.resources.sourceUrlNotSet')}</small>
-                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
+                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This course chapter is inactive. Reactivate it before publishing its PDF.</small>}
               </div>
               <div className={styles.rowActions}>
                 <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>{t('admin.resources.preview')}</button>
@@ -896,7 +918,7 @@ export default function TextbookLibraryPage() {
             {previewThumbnailsOpen && <aside className={styles.previewThumbnails} aria-label={t('admin.resources.pageThumbnails')}>
               <div className={styles.previewThumbsHeader}><b>{t('admin.resources.pages')}</b><small>{t('admin.resources.totalPages', { count: previewPageCount })}</small></div>
               <div className={styles.previewThumbList}>{previewThumbnails.map(pageNumber=><button type="button" key={pageNumber} className={pageNumber===previewPage?styles.activeThumb:''} onClick={() => changePreviewPage(pageNumber)}>
-                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber} alt="" loading="lazy" draggable={false}/><span>{t('admin.resources.page')} {pageNumber}</span>
+                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber+'?courseId='+encodeURIComponent(courseId)} alt="" loading="lazy" draggable={false}/><span>{t('admin.resources.page')} {pageNumber}</span>
               </button>)}</div>
               <div className={styles.previewThumbsFooter}>{t('admin.resources.showingPages', { start: previewThumbnails[0] || 0, end: previewThumbnails[previewThumbnails.length-1] || 0 })}</div>
             </aside>}
@@ -905,7 +927,7 @@ export default function TextbookLibraryPage() {
               <div className={styles.previewPageViewport+(previewFitWidth?' '+styles.fitWidth:'')+(previewFitPage?' '+styles.fitPage:'')} key={previewDocumentId+'-'+previewPage}>
                 {previewImageLoading&&<div className={styles.previewImageLoading}><span className={styles.previewSpinner}/> {t('admin.resources.renderingPage', { page: previewPage })}</div>}
                 <img ref={previewPageImageRef} className={styles.previewPageImage} src={previewPageUrl} alt={t('admin.resources.previewImageAlt', { page: previewPage, title: previewPageTitle })} draggable={false} onLoad={() => {setPreviewImageLoading(false);setPreviewImageError('');}} onError={() => {setPreviewImageLoading(false);setPreviewImageError(t('admin.resources.renderFailed'));}} style={{width:previewFitPage?'auto':previewFitWidth?'100%':previewZoom+'%'}}/>
-                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=previewPageUrl+'?retry='+Date.now();}}>{t('admin.resources.retryPage')}</button></div>}
+                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=(() => { const url = new URL(previewPageUrl, window.location.origin); url.searchParams.set('retry', String(Date.now())); return url.toString(); })();}}>{t('admin.resources.retryPage')}</button></div>}
               </div>
               <div className={styles.previewCanvasBottom}><span>{t('admin.resources.privatePagePreview', { page: previewPage })}</span><span>{t('admin.resources.keyboardHelp')}</span></div>
             </div>
@@ -981,7 +1003,7 @@ export default function TextbookLibraryPage() {
               <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
                 setBusy(true); setError(''); setNotice('');
                 try {
-                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
+                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
                   setIntakeReport(normalizeIntakeReport(result));
                   const report = result.reconciliation || {};
                   setNotice(t('admin.resources.inventoryScanComplete', { missingCount: report.missing_from_book?.length || 0, extraCount: report.extra_in_book?.length || 0, ambiguousCount: report.ambiguous?.length || 0 }));
@@ -992,7 +1014,7 @@ export default function TextbookLibraryPage() {
               <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
                 setBusy(true); setError(''); setNotice('');
                 try {
-                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze-ocr', { method: 'POST' });
+                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze-ocr?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
                   const normalized = normalizeIntakeReport(result);
                   setIntakeReport(normalized);
                   await load();
@@ -1008,7 +1030,7 @@ export default function TextbookLibraryPage() {
             <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
               setBusy(true); setError(''); setNotice('');
               try {
-                await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId, {
+                await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '?courseId=' + encodeURIComponent(courseId), {
                   method: 'PUT',
                   body: JSON.stringify({
                     category: uploadCategory, classCode: uploadClassCode,
@@ -1016,7 +1038,7 @@ export default function TextbookLibraryPage() {
                     partLabel: uploadPartLabel.trim() || null, reviewNotes: reviewNotes.trim() || null,
                   }),
                 });
-                const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
+                const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze?courseId=' + encodeURIComponent(courseId), { method: 'POST' });
                 setIntakeReport(normalizeIntakeReport(result));
                 await load();
                 setNotice(t('admin.resources.classificationScanSaved'));
@@ -1089,7 +1111,7 @@ export default function TextbookLibraryPage() {
                   onClick={async () => {
                     setBusy(true); setError(''); setNotice('');
                     try {
-                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/review', {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/review?courseId=' + encodeURIComponent(courseId), {
                         method: 'PATCH',
                         body: JSON.stringify({ acknowledgeDiscrepancies: reviewAcknowledged, reviewNotes: reviewNotes.trim() || null }),
                       });
@@ -1147,7 +1169,7 @@ export default function TextbookLibraryPage() {
                       .map((row: any) => ({chapterId:row.chapterId,title:row.title,pageStart:Number(row.pageStart),pageEnd:Number(row.pageEnd)}));
                     setBusy(true); setError(''); setNotice('');
                     try {
-                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/chapter-ranges', {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/chapter-ranges?courseId=' + encodeURIComponent(courseId), {
                         method: 'PATCH', body: JSON.stringify({chapterRanges,notes:rangeReviewNotes.trim() || null}),
                       });
                       const normalized = normalizeIntakeReport({ ...(intakeReport || {}), ...result });
@@ -1183,7 +1205,7 @@ export default function TextbookLibraryPage() {
                     onClick={async () => {
                       setBusy(true); setError(''); setNotice('');
                       try {
-                        const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/draft-resources', {
+                        const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/draft-resources?courseId=' + encodeURIComponent(courseId), {
                           method: 'POST',
                           body: JSON.stringify({
                             sourceTitle: rangeDraftSourceTitle.trim(),

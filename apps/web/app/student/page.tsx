@@ -2,6 +2,7 @@
 
 import { UiText } from '../i18n/useUiTranslation';
 import { LocaleText } from '../components/LanguageProvider';
+import { useTenantBranding } from '../components/TenantBrandingProvider';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import { formatUserTimestamp } from '../components/formatUserTimestamp';
@@ -34,6 +35,7 @@ type DashboardLiveClass = {
 
 export default function StudentHome(){
   const router=useRouter();
+  const {brand}=useTenantBranding();
   const [data,setData]=useState<any>(null);
   const [rec,setRec]=useState<any>(null);
   const [error,setError]=useState('');
@@ -51,11 +53,25 @@ export default function StudentHome(){
   const [dashboardClassesRefreshToken,setDashboardClassesRefreshToken]=useState(0);
 
   useEffect(()=>{(async()=>{try{
-    const r=await fetch('/api/v1/students/me'); if(r.status===401||r.status===403){router.replace('/login/student');return}
-    const b=await r.json(); if(!r.ok) throw new Error(b.message||'Unable to load student');
+    const r=await fetch('/api/v1/students/me/profile',{credentials:'same-origin',cache:'no-store'});
+    if(r.status===401||r.status===403){router.replace('/login/student');return}
+    const b=await r.json(); if(!r.ok) throw new Error(b.message||b.detail||'Unable to load student profile');
     setData(b);
-    const rr=await fetch('/api/v1/recommendations/next'); if(rr.ok) setRec(await rr.json());
-  }catch(e:any){setError(e.message||'Student data unavailable')}})()},[router]);
+  }catch(e:any){setError(e.message||'Student profile unavailable')}})()},[router]);
+
+  useEffect(()=>{
+    if(!courseCatalogReady||activeCourseId===null||activeCourseId<=0){setRec(null);return;}
+    let active=true;
+    fetch('/api/v1/recommendations/next?courseId='+encodeURIComponent(String(activeCourseId)),{
+      credentials:'same-origin',cache:'no-store',headers:{'X-QE-Workspace':'STUDENT'}
+    }).then(async response=>{
+      const body=await response.json().catch(()=>({}));
+      if(response.status===401||response.status===403){router.replace('/login/student');return;}
+      if(!response.ok)throw new Error(body.message||body.detail||'Course recommendation unavailable.');
+      if(active)setRec(body);
+    }).catch(()=>{if(active)setRec(null);});
+    return()=>{active=false;};
+  },[activeCourseId,courseCatalogReady,router]);
 
   useEffect(()=>{
     let active=true;
@@ -222,7 +238,7 @@ export default function StudentHome(){
   return <main className="app-shell">
     <div className="app-layout">
       <section className="app-content">
-        <div className="welcome-row"><div><span className="eyebrow"><UiText message="legacy.web.your.learning.journey.class.c0b78f63" /> {data.class_code}</span><h1><UiText message="legacy.web.hello.f2b6fddd" />, {data.display_name} 👋</h1><p><UiText message="legacy.web.your.learning.plan.adapts.to.your.prog.73e0d599" /></p></div><div className="streak-card">✓ <strong>{completionLabel}</strong><span><UiText message="legacy.web.curriculum.complete.a2805a20" /></span></div></div>
+        <div className="welcome-row"><div><span className="eyebrow">{brand?.displayName || <LocaleText hinglish="आपका संस्थान" english="Your institution" />} · {activeCourse?.display_name || <LocaleText hinglish="कोर्स चुनें" english="Choose a course" />}</span><h1><UiText message="legacy.web.hello.f2b6fddd" />, {data.display_name} 👋</h1><p><UiText message="legacy.web.your.learning.plan.adapts.to.your.prog.73e0d599" /></p></div><div className="streak-card">✓ <strong>{completionLabel}</strong><span><UiText message="legacy.web.curriculum.complete.a2805a20" /></span></div></div>
         <div className="goal-card"><div><span><UiText message="legacy.web.learning.progress.4ff8d239" /></span><strong>{displayCount(lessons.completed)} / {displayCount(lessons.total)} <UiText message="legacy.web.lessons.19bb9b3d" /></strong><small>{attemptsLabel} <UiText message="legacy.web.attempts.17be8a41" /> · {accuracyLabel} <UiText message="legacy.web.graded.accuracy.fd9d43e1" /></small></div><div className="goal-ring">{completionLabel}</div></div>
         <section className="qe-active-course-section" aria-label="Active course">
           <div className="content-heading">
@@ -267,11 +283,11 @@ export default function StudentHome(){
                   const subjectBook=textbookDocuments.find(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===subjectCode);
                   const chapterPdfCount=textbookDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&item.subject_code===subjectCode).length;
                   const saveHomeScroll=()=>localStorage.setItem('qe:student:home:scrollY',String(window.scrollY));
-                  const subjectHref='/student/learn?courseId='+encodeURIComponent(String(activeCourse.id))+'&subjectCode='+encodeURIComponent(subjectCode);
+                  const subjectHref='/student/structured-lessons?courseId='+encodeURIComponent(String(activeCourse.id))+'&subjectCode='+encodeURIComponent(subjectCode);
                   const bookHref=subjectBook?'/student/textbooks?documentId='+subjectBook.document_id+'&courseId='+encodeURIComponent(String(activeCourse.id))+'&returnTo='+encodeURIComponent('/student'):'#';
                   return <article key={subjectCode} className="app-task subject-track-card">
                     <Link href={subjectHref} className="subject-track-main">
-                      <span className="task-icon">{subjectCode==='maths'?'∑':subjectCode==='science'?'⚗':'✦'}</span>
+                      <span className="task-icon">✦</span>
                       <span className="subject-track-copy"><strong>{subject.subject_name||subject.subject_code||subjectCode}</strong>
                         <small>{Number(subject.chapters||0)} <LocaleText hinglish="अध्याय" english="chapters" /> · {Number(subject.lessons||0)} <LocaleText hinglish="पाठ" english="lessons" /></small>
                         <small><LocaleText hinglish="संरचित पाठ खोलें" english="Open structured lessons" /></small>
@@ -345,8 +361,8 @@ export default function StudentHome(){
 
         <div className="content-heading"><h2><UiText message="legacy.web.what.should.you.do.today.e962abaa" /></h2><span><UiText message="legacy.web.mastery.driven.6ffd2e51" /></span></div>
         <div className="task-list">
-          {rec?.kind==='DIAGNOSTIC' ? <Link href="/student/diagnostic" className="app-task next"><span className="task-icon">◎</span><div><strong><UiText message="legacy.web.first.learning.diagnostic.dfd9c4b8" /></strong><small><UiText message="legacy.web.a.short.assessment.your.starting.recom.5d7cf83d" /></small></div><span className="task-action">→</span></Link> : rec?.lesson ? <Link href={activeCourse?'/student/learn?courseId='+encodeURIComponent(String(activeCourse.id))+'&lessonId='+encodeURIComponent(String(rec.lesson.id)):'/student/learn?lessonId='+encodeURIComponent(String(rec.lesson.id))} className="app-task next"><span className="task-icon">◎</span><div><strong>{rec.lesson.title}</strong><small><UiText message="legacy.web.recommended.based.on.your.progress.and.3725823f" /></small></div><span className="task-action">→</span></Link> : rec?.available===false ? <div className="app-task next complete"><span className="task-icon">✓</span><div><strong><UiText message="legacy.web.you.ve.completed.the.curriculum.631eb02d" /></strong><small><UiText message="legacy.web.you.can.repeat.practice.or.review.your.73ce60f3" /></small></div></div> : null}
-          <Link href={activeCourse?'/student/learn?courseId='+encodeURIComponent(String(activeCourse.id)):'/student/learn'} className="app-task"><span className="task-icon">∑</span><div><strong><UiText message="legacy.web.learning.9e92d931" /></strong><small><UiText message="legacy.web.explanation.worked.example.guided.prac.1661421d" /></small></div><span className="task-action">→</span></Link>
+          {rec?.kind==='DIAGNOSTIC' && activeCourse ? <Link href={'/student/diagnostic?courseId='+encodeURIComponent(String(activeCourse.id))} className="app-task next"><span className="task-icon">◎</span><div><strong><UiText message="legacy.web.first.learning.diagnostic.dfd9c4b8" /></strong><small><UiText message="legacy.web.a.short.assessment.your.starting.recom.5d7cf83d" /></small></div><span className="task-action">→</span></Link> : rec?.lesson && activeCourse ? <Link href={'/student/structured-lessons?courseId='+encodeURIComponent(String(activeCourse.id))+'&subjectCode='+encodeURIComponent(String(rec.lesson.subject_code || activeCourse.subjects?.[0]?.subject_code || activeCourse.subjects?.[0]?.code || ''))} className="app-task next"><span className="task-icon">◎</span><div><strong>{rec.lesson.title}</strong><small><UiText message="legacy.web.recommended.based.on.your.progress.and.3725823f" /></small></div><span className="task-action">→</span></Link> : rec?.available===false ? <div className="app-task next complete"><span className="task-icon">✓</span><div><strong><UiText message="legacy.web.you.ve.completed.the.curriculum.631eb02d" /></strong><small><UiText message="legacy.web.you.can.repeat.practice.or.review.your.73ce60f3" /></small></div></div> : null}
+          <Link href={activeCourse?'/student/structured-lessons?courseId='+encodeURIComponent(String(activeCourse.id)):'/student/courses'} className="app-task"><span className="task-icon">✦</span><div><strong><UiText message="legacy.web.learning.9e92d931" /></strong><small><UiText message="legacy.web.explanation.worked.example.guided.prac.1661421d" /></small></div><span className="task-action">→</span></Link>
           <Link href={activeCourse?'/student/practice?courseId='+encodeURIComponent(String(activeCourse.id)):'/student/practice'} className="app-task"><span className="task-icon">✦</span><div><strong><UiText message="web.navigation.student.mobilePractice" /></strong><small><UiText message="legacy.web.answers.are.saved.and.mastery.is.updat.085d71fd" /></small></div><span className="task-action">→</span></Link>
           <Link href={activeCourse?'/student/tests?courseId='+encodeURIComponent(String(activeCourse.id)):'/student/tests'} className="app-task"><span className="task-icon">✓</span><div><strong><UiText message="legacy.web.topic.chapter.and.other.tests.959db31f" /></strong><small><UiText message="legacy.web.saved.attempts.teacher.review.and.rele.210e3fce" /></small></div><span className="task-action">→</span></Link>
           <Link href={activeCourse?'/student/progress?courseId='+encodeURIComponent(String(activeCourse.id)):'/student/progress'} className="app-task"><span className="task-icon">↗</span><div><strong><UiText message="web.navigation.student.myProgress" /></strong><small><UiText message="legacy.web.lessons.mastery.and.test.results.07c3bf88" /></small></div><span className="task-action">→</span></Link>

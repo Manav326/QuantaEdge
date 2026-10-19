@@ -20,6 +20,7 @@ export type EnrolledCourse = {
   display_name: string;
   curriculum_version?: string;
   is_enrolled: boolean;
+  enrolled?: boolean;
   paused?: boolean;
   purchased?: boolean;
   has_access?: boolean;
@@ -50,22 +51,36 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
       }
       if (!response.ok) throw new Error(body.detail || body.message || body.error || 'Your courses could not be loaded.');
       const rows: EnrolledCourse[] = Array.isArray(body) ? body : [];
-      // Marketplace visibility is not entitlement. A course already owned or paused remains
-      // selectable, but the server must activate it before its subjects/resources can be read.
-      const enrolled = rows.filter(course =>
-        (course.is_enrolled === true || course.paused === true || course.purchased === true || course.has_access === true) &&
+      // Normalize the course identity once. Every downstream route and API call uses
+      // the numeric course ID, never a class code or subject-derived guess.
+      const normalized = rows.map(course => ({
+        ...course,
+        id: Number(course.id || course.course_id),
+      }));
+      // Focus is not enrollment. Only courses actually enrolled (or pre-migration paused)
+      // for this authenticated institution are valid report/lesson destinations.
+      const enrolled = normalized.filter(course =>
+        (course.is_enrolled === true || course.paused === true) &&
         Number.isSafeInteger(Number(course.id)) && Number(course.id) > 0);
       if (!active) return;
       setCourses(enrolled);
       const saved = typeof window === 'undefined' ? 0 : Number(window.localStorage.getItem('qe:student:activeCourseId') || 0);
       const requested = Number(requestedCourseId || 0);
-      const selected = enrolled.find(course => Number(course.id) === requested)
-        || enrolled.find(course => Number(course.id) === saved)
-        || enrolled.find(course => course.is_enrolled === true)
-        || enrolled[0]
-        || null;
+      const selected = requested > 0
+        ? enrolled.find(course => Number(course.id) === requested) || null
+        : enrolled.find(course => Number(course.id) === saved)
+          || enrolled.find(course => course.is_enrolled === true || course.enrolled === true)
+          || enrolled[0]
+          || null;
+      if (requested > 0 && !selected) {
+        setCourseId(null);
+        setCourseError('This course is not enrolled in your current institution account.');
+        return;
+      }
       const selectedId = selected ? Number(selected.id) : null;
       if (selected && selectedId !== null && selected.is_enrolled !== true) {
+        // Legacy paused enrollment rows need one transition to ACTIVE. The server no
+        // longer pauses other courses, so this does not change the user's primary focus.
         const activateResponse = await fetch('/api/v1/students/me/programs/id/' + selectedId + '/enroll', {
           method: 'POST',
           credentials: 'same-origin',
@@ -80,6 +95,9 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
           throw Object.assign(new Error('Student sign-in is required.'), { auth: true });
         }
         if (!activateResponse.ok) throw new Error(activateBody.detail || activateBody.message || activateBody.error || 'The selected course could not be activated.');
+        setCourses(previous => previous.map(course => Number(course.id) === selectedId
+          ? { ...course, is_enrolled: true, enrolled: true, paused: false }
+          : course));
       }
       setCourseId(selectedId);
       if (selectedId !== null) {
@@ -100,27 +118,34 @@ export function useStudentCourseScope(requestedCourseId: number | null = null) {
 
   const selectCourse = useCallback(async (value: string | number) => {
     const candidate = Number(value);
-    if (!Number.isSafeInteger(candidate) || candidate <= 0 ||
-        !courses.some(course => Number(course.id) === candidate) || activatingCourseId !== null) return;
+    const course = courses.find(item => Number(item.id) === candidate);
+    if (!Number.isSafeInteger(candidate) || candidate <= 0 || !course || activatingCourseId !== null) return;
     if (candidate === courseId) return;
     setActivatingCourseId(candidate);
     setCourseError('');
     try {
-      const response = await fetch('/api/v1/students/me/programs/id/' + candidate + '/enroll', {
-        method: 'POST',
-        credentials: 'same-origin',
-        cache: 'no-store',
-        headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
-        body: '{}',
-      });
-      const raw = await response.text();
-      let body: any = {};
-      try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-      if (response.status === 401 || response.status === 403) {
-        window.location.assign('/login/student');
-        return;
+      // Switching the primary/focused course must never enrol the learner again or
+      // pause another course. Only reactivate a pre-migration paused enrollment.
+      if (course.is_enrolled !== true) {
+        const response = await fetch('/api/v1/students/me/programs/id/' + candidate + '/enroll', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+          body: '{}',
+        });
+        const raw = await response.text();
+        let body: any = {};
+        try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
+        if (response.status === 401 || response.status === 403) {
+          window.location.assign('/login/student');
+          return;
+        }
+        if (!response.ok) throw new Error(body.detail || body.message || body.error || 'This course could not be activated.');
+        setCourses(previous => previous.map(item => Number(item.id) === candidate
+          ? { ...item, is_enrolled: true, paused: false }
+          : item));
       }
-      if (!response.ok) throw new Error(body.detail || body.message || body.error || 'This course could not be activated.');
       setCourseId(candidate);
       try { window.localStorage.setItem('qe:student:activeCourseId', String(candidate)); } catch {}
     } catch (error) {

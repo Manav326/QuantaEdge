@@ -5,6 +5,7 @@ import PremiumPagination from '../components/PremiumPagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './SourceIngestion.module.css';
 import { useUiTranslation } from '../i18n/useUiTranslation';
+import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
 
 type Source = {
   source_id: number; source_kind: string; title: string; provider?: string | null;
@@ -46,7 +47,8 @@ type ExtractionStatus = {
   ocr_pages?: number; failed_pages?: number; last_error?: string | null;
 };
 type Job = {
-  job_id: number; source_id: number; source_title: string; source_url: string; final_pdf_url?: string;
+  job_id: number; source_id: number; institution_id: number; course_id: number;
+  course_code?: string; course_name?: string; source_title: string; source_url: string; final_pdf_url?: string;
   cache_medium?: string | null; cache_book_id?: string | null; cache_sha256?: string | null;
   edition: string; language: string; status: string; error_message?: string | null;
   chapter_count?: number; approved_chapter_count?: number; rejected_chapter_count?: number;
@@ -91,6 +93,7 @@ function normalized(value: string) {
 
 export default function SourceIngestionPage() {
   const t = useUiTranslation();
+  const { courses, courseId, activeCourse, subjects: courseSubjects, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
   const [sources, setSources] = useState<Source[]>([]);
   const [sourceSearchDraft, setSourceSearchDraft] = useState('');
   const [sourceQuery, setSourceQuery] = useState('');
@@ -111,7 +114,6 @@ export default function SourceIngestionPage() {
   const [jobSummary, setJobSummary] = useState<Record<string, number>>({});
   const [jobPageSize, setJobPageSize] = useState(10);
   const [selectedSource, setSelectedSource] = useState('');
-  const [classCode, setClassCode] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
   const [sourceTitle, setSourceTitle] = useState('');
   const [sourceUrl, setSourceUrl] = useState('');
@@ -130,10 +132,11 @@ export default function SourceIngestionPage() {
   const [notice, setNotice] = useState('');
   const [extractionStatus, setExtractionStatus] = useState<ExtractionStatus | null>(null);
 
-  const tracksByClass = useMemo(() => [...new Map(tracks.map(t => [t.class_code, t])).values()], [tracks]);
-  const subjects = useMemo(() => [...new Map(tracks.filter(t => t.class_code === classCode).map(t => [t.subject_code, t])).values()], [tracks, classCode]);
+  const subjects = tracks;
+  const classCode = tracks.find(track => track.subject_code === subjectCode)?.class_code
+    || activeCourse?.curriculum_class_code || '';
+  const activeTrack = tracks.find(track => track.subject_code === subjectCode);
   const latestReviewJobs = jobs.filter(item => ['DOWNLOADING', 'REVIEW', 'FAILED'].includes(item.status));
-  const activeTrack = tracks.find(track => track.class_code === classCode);
   const gradeMatches = (classCode + ' ' + (activeTrack?.class_name || '')).match(/\d+/g) || [];
   const selectedGrade = gradeMatches.length ? Number(gradeMatches[gradeMatches.length - 1]) : 0;
   const registryBookOptions = registryBooks.filter(book =>
@@ -145,15 +148,35 @@ export default function SourceIngestionPage() {
 
   const loadBase = useCallback(async () => {
     setLoading(true); setError('');
+    if (loadingCourses) return;
+    if (!courseId) {
+      setTracks([]); setJobs([]); setJobsTotal(0); setJobSummary({});
+      setError(courseError || 'Select a course assigned to this institution before ingesting learning content.');
+      setLoading(false);
+      return;
+    }
+    const nextTracks = (courseSubjects || []).flatMap((subject: any) => {
+      const subjectCode = String(subject?.subject_code || '').trim();
+      if (!subjectCode) return [];
+      const canonicalClassCode = String(subject?.curriculum_class_code || activeCourse?.curriculum_class_code || '').trim();
+      if (!canonicalClassCode) return [];
+      return [{
+        class_code: canonicalClassCode,
+        class_name: String(subject?.curriculum_class_name || ('Class ' + canonicalClassCode)),
+        subject_code: subjectCode,
+        subject_name: String(subject?.subject_name || subjectCode),
+      }];
+    }) as Track[];
     try {
-      const [sourceRows, jobRows, curriculumRows, registryRows, registryGapRows] = await Promise.all([
+      const [sourceRows, jobRows, registryRows, registryGapRows] = await Promise.all([
         api('/api/v1/admin/source-ingestion/sources?' + new URLSearchParams({
           query: sourceQuery,
           limit: String(sourcePageSize),
           offset: String(sourcePage * sourcePageSize),
         }).toString()),
-        api('/api/v1/admin/source-ingestion/jobs?limit=' + jobPageSize + '&offset=' + (jobPage * jobPageSize)),
-        api('/api/v1/curriculum'),
+        api('/api/v1/admin/source-ingestion/jobs?' + new URLSearchParams({
+          courseId, limit: String(jobPageSize), offset: String(jobPage * jobPageSize),
+        }).toString()),
         api('/api/v1/admin/source-ingestion/registry-books?medium=both').catch(() => []),
         api('/api/v1/admin/source-ingestion/registry-book-gaps?medium=both').catch(() => []),
       ]);
@@ -162,24 +185,14 @@ export default function SourceIngestionPage() {
       const jobData = Array.isArray(jobRows?.items) ? jobRows.items : (Array.isArray(jobRows) ? jobRows : []);
       setJobsTotal(Number(jobRows?.total ?? jobData.length));
       setJobSummary(jobRows?.summary && typeof jobRows.summary === 'object' ? jobRows.summary : {});
-      const curriculum = Array.isArray(curriculumRows) ? curriculumRows : [];
-      const nextTracks = [...new Map(curriculum.map((r: any) => [String(r.class_code) + ':' + String(r.subject_code), {
-        class_code: String(r.class_code), class_name: String(r.class_name),
-        subject_code: String(r.subject_code), subject_name: String(r.subject_name),
-      }])).values()] as Track[];
       setSources(sourceData);
-      setJobs(jobData);
+      setJobs(jobData.map(normalizeJob));
       setTracks(nextTracks);
       setRegistryBooks(Array.isArray(registryRows) ? registryRows as RegistryBook[] : []);
       setRegistryBookGaps(Array.isArray(registryGapRows) ? registryGapRows as RegistryBookGap[] : []);
-      if (!classCode && nextTracks.length) {
-        setClassCode(nextTracks[0].class_code);
-        setSubjectCode(nextTracks[0].subject_code);
-      } else if (!nextTracks.some(t => t.class_code === classCode)) {
-        setClassCode(nextTracks[0]?.class_code || '');
+      if (!nextTracks.some(t => t.subject_code === subjectCode)) {
         setSubjectCode(nextTracks[0]?.subject_code || '');
-      } else if (!nextTracks.some(t => t.class_code === classCode && t.subject_code === subjectCode)) {
-        setSubjectCode(nextTracks.find(t => t.class_code === classCode)?.subject_code || '');
+        setConfirmSubjectMapping(false);
       }
       if (!selectedSource && sourceData.length) {
         setSelectedSource(String(sourceData[0].source_id));
@@ -195,10 +208,15 @@ export default function SourceIngestionPage() {
     } catch (e) {
       setError(localizedError(e, t, 'admin.sourceIngestion.dataLoadFailed'));
     } finally { setLoading(false); }
-  }, [classCode, subjectCode, selectedSource, jobPage, jobPageSize, sourceQuery, sourcePage, sourcePageSize]);
+  }, [courseId, loadingCourses, courseError, courseSubjects, activeCourse, subjectCode,
+      selectedSource, jobPage, jobPageSize, sourceQuery, sourcePage, sourcePageSize]);
 
   const loadJob = useCallback(async (id: number) => {
-    const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
+    if (!courseId) throw new Error('Select a course before opening source-ingestion review.');
+    const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id + '?courseId=' + encodeURIComponent(courseId)));
+    if (Number(item.course_id) !== Number(courseId)) {
+      throw new Error('This source-ingestion job belongs to a different course. Select the matching course before reviewing it.');
+    }
     setJob(item);
     if (item.book_asset_id) {
       try {
@@ -212,8 +230,11 @@ export default function SourceIngestionPage() {
     setLanguage(item.language || 'hi');
     setPreviewPage('1');
     setPreviewChapterRow('');
-    const rows = await api('/api/v1/admin/content?classCode=' + encodeURIComponent(item.class_code)
-      + '&subjectCode=' + encodeURIComponent(item.subject_code));
+    const rows = await api('/api/v1/admin/content?'+new URLSearchParams({
+      courseId: String(courseId),
+      classCode: String(item.class_code),
+      subjectCode: String(item.subject_code),
+    }).toString());
     const distinct = new Map<number, Chapter>();
     (Array.isArray(rows) ? rows : []).forEach((r: any) => {
       const chapterId = Number(r.chapter_id);
@@ -250,7 +271,7 @@ export default function SourceIngestionPage() {
         })));
       }
     }
-  }, []);
+  }, [courseId]);
 
   useEffect(() => { void loadBase(); }, [loadBase]);
 
@@ -261,13 +282,18 @@ export default function SourceIngestionPage() {
       setExistingMappings([]);
       return () => { active = false; };
     }
-    api('/api/v1/admin/source-ingestion/sources/' + encodeURIComponent(selectedSource) + '/chapter-mappings')
+    if (!courseId) {
+      setExistingMappings([]);
+      return () => { active = false; };
+    }
+    api('/api/v1/admin/source-ingestion/sources/' + encodeURIComponent(selectedSource)
+      + '/chapter-mappings?courseId=' + encodeURIComponent(courseId))
       .then(rows => { if (active) setExistingMappings(Array.isArray(rows) ? rows : []); })
       .catch(e => {
         if (active) setMappingError(localizedError(e, t, 'admin.sourceIngestion.mappingLoadFailed'));
       });
     return () => { active = false; };
-  }, [selectedSource]);
+  }, [selectedSource, courseId]);
 
   async function startJob() {
     if (!classCode || !subjectCode) { setError(t('admin.sourceIngestion.chooseClassSubject')); return; }
@@ -279,7 +305,7 @@ export default function SourceIngestionPage() {
         method: 'POST',
         body: JSON.stringify({
           sourceId: selectedSource === 'new' ? null : Number(selectedSource),
-          classCode, subjectCode, sourceTitle: sourceTitle.trim(), sourceUrl: sourceUrl.trim(),
+          courseId: Number(courseId), classCode, subjectCode, sourceTitle: sourceTitle.trim(), sourceUrl: sourceUrl.trim(),
           edition: edition.trim() || 'UNVERIFIED', language: language.trim() || 'hi',
           provider: provider.trim(), sourceKind: sourceKind.trim() || 'BOARD_TEXTBOOK',
         }),
@@ -303,7 +329,7 @@ export default function SourceIngestionPage() {
       const created = normalizeJob(await api(
         '/api/v1/admin/source-ingestion/registry-books/' + encodeURIComponent(registryMedium)
           + '/' + encodeURIComponent(selectedRegistryBookRow.book_id) + '/jobs',
-        { method: 'POST', body: JSON.stringify({ classCode, subjectCode, confirmSubjectMapping }) },
+        { method: 'POST', body: JSON.stringify({ courseId: Number(courseId), classCode, subjectCode, confirmSubjectMapping }) },
       ));
       setJob(created);
       await loadBase();
@@ -392,7 +418,7 @@ export default function SourceIngestionPage() {
     }
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/metadata', {
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/metadata' + '?courseId=' + encodeURIComponent(courseId), {
         method: 'PATCH',
         body: JSON.stringify({
           sourceTitle: sourceTitle.trim(),
@@ -420,7 +446,7 @@ export default function SourceIngestionPage() {
     }
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters', {
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters' + '?courseId=' + encodeURIComponent(courseId), {
         method: 'POST',
         body: JSON.stringify({ chapters: selected.map(row => ({
           chapterId: Number(row.chapterId), title: row.title, pageStart: Number(row.start), pageEnd: Number(row.end),
@@ -438,7 +464,7 @@ export default function SourceIngestionPage() {
     if (!job) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters/' + row.chapter_row_id, {
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters/' + row.chapter_row_id + '?courseId=' + encodeURIComponent(courseId), {
         method: 'PATCH', body: JSON.stringify({ status }),
       }));
       setJob(updated);
@@ -452,7 +478,7 @@ export default function SourceIngestionPage() {
     if (!job) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/approve', { method: 'POST', body: '{}' }));
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/approve' + '?courseId=' + encodeURIComponent(courseId), { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
       setNotice(t('admin.sourceIngestion.bookApproved'));
@@ -464,7 +490,7 @@ export default function SourceIngestionPage() {
     if (!job || !window.confirm(t('admin.sourceIngestion.rejectConfirm'))) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/reject', { method: 'POST', body: '{}' }));
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/reject' + '?courseId=' + encodeURIComponent(courseId), { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
       setNotice(t('admin.sourceIngestion.ingestionRejected'));
@@ -474,7 +500,8 @@ export default function SourceIngestionPage() {
 
   const previewUrl = job
     ? '/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/pages/' + encodeURIComponent(previewPage)
-      + (previewChapterRow ? '?chapterRowId=' + encodeURIComponent(previewChapterRow) : '')
+      + '?courseId=' + encodeURIComponent(courseId)
+      + (previewChapterRow ? '&chapterRowId=' + encodeURIComponent(previewChapterRow) : '')
     : '';
 
   return <main className="admin-shell">
@@ -533,20 +560,21 @@ export default function SourceIngestionPage() {
               onPageChange={setSourcePage} onPageSizeChange={size=>{setSourcePageSize(size);setSourcePage(0);}}
               itemLabel={t('admin.sourceIngestion.registeredSourcesPlural')} loading={loading} />
           </div>
-          <label>{t('admin.sourceIngestion.class')}
-            <select value={classCode} onChange={e => {
-              const value = e.target.value; setClassCode(value);
-              setSubjectCode(tracks.find(t => t.class_code === value)?.subject_code || '');
-              setConfirmSubjectMapping(false);
-            }}>
-              {tracksByClass.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name} ({track.class_code})</option>)}
-            </select>
-          </label>
+          <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses}
+            label={t('admin.contentStudio.course')} placeholder={t('admin.contentStudio.noCoursesAssigned')}
+            onChange={value => {
+              if (selectCourse(value)) {
+                setJob(null); setChapterOptions([]); setMapping([]);
+                setSubjectCode(''); setConfirmSubjectMapping(false); setJobPage(0);
+              }
+            }} disabled={Boolean(courseError)} />
           <label>{t('admin.sourceIngestion.subject')}
-            <select value={subjectCode} onChange={e => { setSubjectCode(e.target.value); setConfirmSubjectMapping(false); }}>
+            <select value={subjectCode} onChange={e => { setSubjectCode(e.target.value); setConfirmSubjectMapping(false); }}
+              disabled={!tracks.length || loadingCourses}>
               {subjects.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
             </select>
           </label>
+
           <label>{t('admin.sourceIngestion.sourceTitle')}
             <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={t('admin.sourceIngestion.bookTitlePlaceholder')} />
           </label>

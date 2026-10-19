@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -31,8 +33,11 @@ public class AdminController {
       @RequestParam(required=false) String query,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=query==null?"":query.trim();
@@ -44,128 +49,213 @@ public class AdminController {
         (u.email_verified_at is not null and u.google_subject is not null) as gmail_verified,
         (u.mobile_verified_at is not null and u.mobile_e164 is not null) as mobile_verified,
         u.username,u.active,u.created_at,u.updated_at,
-        count(distinct case when gs.active=true and gs.consent_status='CONSENTED' and st.active=true then st.id end) as active_children,
+        count(distinct case when gs.active=true and gs.consent_status='CONSENTED'
+          and st.active=true and im.status='ACTIVE' then st.id end) as active_children,
         count(distinct case when gs.active=true and gs.consent_status='CONSENTED' then st.id end) as linked_children
       from user_account u
-      left join guardian_student gs on gs.guardian_user_id=u.id
-      left join student st on st.id=gs.student_id and st.environment='PRODUCTION'
+      join guardian_student gs on gs.guardian_user_id=u.id
+      join student st on st.id=gs.student_id and st.environment='PRODUCTION'
+      join institution_membership im on im.student_id=st.id and im.institution_id=?
+        and im.status in ('ACTIVE','SUSPENDED')
       where u.role='PARENT'
         and (?='' or coalesce(u.display_name,'') ilike ? or coalesce(u.mobile_e164,'') ilike ?
           or coalesce(u.email,'') ilike ? or coalesce(u.contact_email,'') ilike ? or coalesce(u.username,'') ilike ?)
       group by u.id,u.display_name,u.mobile_e164,u.contact_email,u.email,u.email_verified_at,u.google_subject,
         u.mobile_verified_at,u.username,u.active,u.created_at,u.updated_at
       order by u.created_at desc,u.id desc limit ? offset ?
-      """,term,pattern,pattern,pattern,pattern,pattern,rowLimit,rowOffset);
+      """,institutionId,term,pattern,pattern,pattern,pattern,pattern,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
-      select count(*) from user_account
-      where role='PARENT' and (?='' or coalesce(display_name,'') ilike ? or coalesce(mobile_e164,'') ilike ?
-        or coalesce(email,'') ilike ? or coalesce(contact_email,'') ilike ? or coalesce(username,'') ilike ?)
-      """,Long.class,term,pattern,pattern,pattern,pattern,pattern);
-    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+      select count(distinct u.id) from user_account u
+      join guardian_student gs on gs.guardian_user_id=u.id
+      join student st on st.id=gs.student_id and st.environment='PRODUCTION'
+      join institution_membership im on im.student_id=st.id and im.institution_id=?
+        and im.status in ('ACTIVE','SUSPENDED')
+      where u.role='PARENT' and (?='' or coalesce(u.display_name,'') ilike ? or coalesce(u.mobile_e164,'') ilike ?
+        or coalesce(u.email,'') ilike ? or coalesce(u.contact_email,'') ilike ? or coalesce(u.username,'') ilike ?)
+      """,Long.class,institutionId,term,pattern,pattern,pattern,pattern,pattern);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,
+        "institutionId",institutionId);
   }
 
   @GetMapping("/parents/{parentId}/children")
   public List<Map<String,Object>> parentChildren(@PathVariable long parentId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
     return jdbc.queryForList("""
-      select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,st.active as student_active,
+      select st.id,st.public_id,st.display_name,st.board,st.language,st.active as student_account_active,
+        (im.status='ACTIVE') as student_active,im.status as membership_status,
         st.created_at,gs.active as relationship_active,gs.consent_status,
-        coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
-          join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
+        coalesce((select string_agg(distinct cp.display_name,' · ' order by cp.display_name)
+          from student_program_enrollment spe
+          join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
+          join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
+          join institution_course_release r on r.id=a.course_release_id and r.program_id=cp.id
+          where spe.student_id=st.id and spe.institution_id=im.institution_id and spe.status='ACTIVE'),'') as course_names
       from guardian_student gs join student st on st.id=gs.student_id
+      join institution_membership im on im.student_id=st.id and im.institution_id=?
+        and im.status in ('ACTIVE','SUSPENDED')
       where gs.guardian_user_id=? and st.environment='PRODUCTION'
       order by st.created_at desc
-      """,parentId);
+      """,institutionId,parentId);
   }
 
   @PutMapping("/parents/{parentId}/status")
   @Transactional
   public Map<String,Object> updateParentStatus(@PathVariable long parentId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
-    AuthContext admin=authorization.requireAdmin(context);
-    if(!(body.get("active") instanceof Boolean active)) throw new IllegalArgumentException("active must be true or false");
-    int changed=jdbc.update("""
-      update user_account u set active=?,updated_at=now()
-      where u.id=? and u.role='PARENT'
-      """,active,parentId);
-    if(changed==0) throw new IllegalArgumentException("Parent account not found");
-    if(!active) jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null",parentId);
-    log(admin,active?"PARENT_REACTIVATE":"PARENT_SUSPEND",String.valueOf(parentId),"active="+active);
-    return Map.of("updated",true,"parentId",parentId,"active",active);
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
+    authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    // A tenant administrator must not deactivate a shared parent identity in every institution.
+    Long linked=jdbc.queryForObject("""
+      select count(distinct st.id) from guardian_student gs
+      join student st on st.id=gs.student_id
+      join institution_membership im on im.student_id=st.id and im.institution_id=?
+        and im.status in ('ACTIVE','SUSPENDED')
+      where gs.guardian_user_id=? and st.environment='PRODUCTION'
+      """,Long.class,institutionId,parentId);
+    if(linked==null||linked==0L)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Parent is not linked to a learner in this institution.");
+    throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+        "Parent identity activation is HRMS-managed; an institution administrator cannot suspend the shared account.");
   }
 
   @PutMapping("/students/{studentId}/status")
   @Transactional
   public Map<String,Object> updateProductionStudentStatus(@PathVariable long studentId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     AuthContext admin=authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
     if(!(body.get("active") instanceof Boolean active)) throw new IllegalArgumentException("active must be true or false");
-    int changed=jdbc.update("update student set active=? where id=? and environment='PRODUCTION'",active,studentId);
-    if(changed==0) throw new IllegalArgumentException("Production student not found");
-    if(!active) jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
-    log(admin,active?"STUDENT_REACTIVATE":"STUDENT_SUSPEND",String.valueOf(studentId),"active="+active);
-    return Map.of("updated",true,"studentId",studentId,"active",active);
+    int changed=jdbc.update("""
+      update institution_membership m set status=?,left_at=case when ? then null else coalesce(left_at,now()) end,updated_at=now()
+      from student st where m.student_id=st.id and st.id=? and st.environment='PRODUCTION'
+        and m.institution_id=? and m.status in ('ACTIVE','SUSPENDED')
+      """,active?"ACTIVE":"SUSPENDED",active,studentId,institutionId);
+    if(changed==0) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Student has no membership in the active institution.");
+    log(admin,active?"STUDENT_INSTITUTION_REACTIVATE":"STUDENT_INSTITUTION_SUSPEND",
+        String.valueOf(studentId),"institutionId="+institutionId+"; active="+active);
+    return Map.of("updated",true,"studentId",studentId,"institutionId",institutionId,"active",active);
   }
 
   @PutMapping("/students/{studentId}/tracks")
-  @Transactional
   public Map<String,Object> updateStudentTracks(@PathVariable long studentId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
-    AuthContext admin=authorization.requireAdmin(context);
-    List<String> tracks=body.get("trackCodes") instanceof List<?> values
-        ? values.stream().map(String::valueOf).toList() : List.of();
-    List<String> activeTracks=auth.updateStudentTracks(studentId,tracks);
-    log(admin,"STUDENT_TRACKS",String.valueOf(studentId),String.join(",",activeTracks));
-    return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
+    authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    Long linked=jdbc.queryForObject("""
+      select count(*) from institution_membership where student_id=? and institution_id=?
+        and status in ('ACTIVE','SUSPENDED')
+      """,Long.class,studentId,institutionId);
+    if(linked==null||linked==0L)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Student has no membership in the active institution.");
+    throw new ResponseStatusException(HttpStatus.GONE,
+        "Legacy subject-track assignment is retired. Learner access is governed by institution-assigned course enrollment.");
   }
 
   @GetMapping("/lessons")
-  public List<Map<String,Object>> lessons(@RequestParam(required=false) String classCode,
+  public List<Map<String,Object>> lessons(
+      @RequestParam Long courseId,
       @RequestParam(required=false) String subjectCode,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
-    if(classCode==null || subjectCode==null) return jdbc.queryForList("""
-      select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
-             c.code as class_code,s.code as subject_code
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.active=true order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    String selectedSubject=subjectCode==null?"":subjectCode.trim();
     return jdbc.queryForList("""
       select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
-             c.code as class_code,s.code as subject_code
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.active=true and c.code=? and s.code=? order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,classCode,subjectCode);
+             cc.code as class_code,s.code as subject_code,s.display_name as subject_name,
+             p.id as course_id,p.code as course_code,p.display_name as course_name
+      from curriculum_program p
+      join institution_course_assignment assignment on assignment.institution_id=?
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=p.id
+      join curriculum_program_subject cps on cps.program_id=p.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
+      join curriculum_class cc on cc.id=s.class_id and cc.active=true
+      join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+      join lesson l on l.chapter_id=ch.id and l.active=true
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        and (?='' or s.code=?)
+      order by cps.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
+      """,institutionId,courseId,selectedSubject,selectedSubject);
   }
 
   @GetMapping("/students")
   public Map<String,Object> students(
+      @RequestParam Long courseId,
       @RequestParam(required=false) String query,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=query==null?"":query.trim();
     if(term.length()>120)term=term.substring(0,120);
     String pattern="%"+term+"%";
+    String tenantSearch="""
+      and (?='' or coalesce(st.display_name,'') ilike ? or st.public_id::text ilike ?)
+      """;
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,st.environment,
-             st.active,st.created_at,count(distinct p.id) as completed_lessons
-      from student st left join student_lesson_progress p on p.student_id=st.id and p.status='COMPLETED'
+      select st.id,st.public_id,st.display_name,st.board,st.language,st.environment,
+             ((im.status='ACTIVE') and st.active) as active,st.active as student_account_active,
+             im.status as membership_status,st.created_at,
+             coalesce((select cp.display_name from student_program_enrollment spe
+               join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
+               join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
+               join institution_course_release r on r.id=a.course_release_id and r.program_id=cp.id
+               where spe.student_id=st.id and spe.institution_id=im.institution_id
+                 and spe.program_id=? and spe.status='ACTIVE' limit 1),'') as course_names,
+             coalesce((select count(distinct l.id) from student_program_enrollment spe
+               join curriculum_program cp on cp.id=spe.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
+               join institution_course_assignment a on a.institution_id=spe.institution_id and a.status='ASSIGNED'
+               join institution_course_release r on r.id=a.course_release_id and r.program_id=cp.id
+               join curriculum_program_subject cps on cps.program_id=cp.id
+               join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+                 and (s.program_id=cp.id or (s.program_id is null and cp.class_id=s.class_id))
+               join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+                 and ch.content_status='PUBLISHED'
+               join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+               join student_lesson_progress lp on lp.lesson_id=l.id and lp.student_id=st.id
+                 and lp.institution_id=spe.institution_id and lp.status='COMPLETED'
+               where spe.student_id=st.id and spe.institution_id=im.institution_id
+                 and spe.program_id=? and spe.status='ACTIVE'),0) as completed_lessons
+      from student st
+      join institution_membership im on im.student_id=st.id and im.institution_id=?
+        and im.status in ('ACTIVE','SUSPENDED')
       where st.environment='PRODUCTION'
-        and (?='' or coalesce(st.display_name,'') ilike ? or st.class_code ilike ? or st.public_id::text ilike ?)
-      group by st.id order by st.created_at desc,st.id desc limit ? offset ?
-      """,term,pattern,pattern,pattern,rowLimit,rowOffset);
+        and exists(select 1 from student_program_enrollment selected
+          where selected.student_id=st.id and selected.institution_id=im.institution_id
+            and selected.program_id=? and selected.status='ACTIVE')
+      """+tenantSearch+"""
+      order by st.created_at desc,st.id desc limit ? offset ?
+      """,courseId,courseId,institutionId,courseId,term,pattern,pattern,rowLimit,rowOffset);
     Long total=jdbc.queryForObject("""
-      select count(*) from student st where st.environment='PRODUCTION'
-        and (?='' or coalesce(st.display_name,'') ilike ? or st.class_code ilike ? or st.public_id::text ilike ?)
-      """,Long.class,term,pattern,pattern,pattern);
-    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+      select count(*) from student st
+      join institution_membership im on im.student_id=st.id and im.institution_id=?
+        and im.status in ('ACTIVE','SUSPENDED')
+      where st.environment='PRODUCTION'
+        and exists(select 1 from student_program_enrollment selected
+          where selected.student_id=st.id and selected.institution_id=im.institution_id
+            and selected.program_id=? and selected.status='ACTIVE')
+      """+tenantSearch,Long.class,institutionId,courseId,term,pattern,pattern);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,
+        "institutionId",institutionId);
   }
 
   @GetMapping("/action-log")
@@ -212,24 +302,81 @@ public class AdminController {
   }
 
   @GetMapping("/overview")
-  public Map<String,Object> overview(@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> overview(
+      @RequestParam Long courseId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     Map<String,Object> result=new LinkedHashMap<>();
+    result.put("courseId",courseId);
+    result.put("institutionId",institutionId);
     result.put("summary",jdbc.queryForMap("""
-      select
-        (select count(*) from curriculum_class where active=true) as classes,
-        (select count(*) from curriculum_chapter where active=true and content_status='PUBLISHED') as chapters,
-        (select count(*) from lesson where active=true and status='PUBLISHED') as published_lessons,
-        (select count(*) from question where active=true) as questions,
-        (select count(*) from student where active=true and environment='PRODUCTION') as students
-      """));
+      select count(distinct s.id) as classes,
+        count(distinct ch.id) filter(where ch.active=true) as chapters,
+        count(distinct l.id) filter(where l.active=true and l.status='PUBLISHED'
+          and ch.content_status='PUBLISHED') as published_lessons,
+        count(distinct q.id) as questions,
+        (select count(distinct spe.student_id)
+          from student_program_enrollment spe
+          join institution_membership im on im.student_id=spe.student_id
+            and im.institution_id=spe.institution_id and im.status='ACTIVE'
+          join student st on st.id=spe.student_id and st.active=true and st.environment='PRODUCTION'
+          where spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE') as students
+      from curriculum_program course
+      join institution_course_assignment assignment on assignment.institution_id=?
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=course.id
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+      left join lesson l on l.chapter_id=ch.id and l.active=true
+      left join question q on q.lesson_id=l.id and q.active=true
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      """,institutionId,courseId,institutionId,courseId));
     result.put("review",jdbc.queryForList("""
-      select coalesce(nullif(upper(review_status),''),'DRAFT') as review_status,active,count(*) as count
-      from question group by coalesce(nullif(upper(review_status),''),'DRAFT'),active
-      order by review_status,active desc
-      """));
-    result.put("sources",jdbc.queryForList("select source_kind,count(*) as count from question group by source_kind order by source_kind"));
-    result.put("assets",jdbc.queryForList("select asset_type,status,count(*) as count from content_asset group by asset_type,status order by asset_type,status"));
+      select coalesce(nullif(upper(q.review_status),''),'DRAFT') as review_status,
+             q.active,count(distinct q.id) as count
+      from curriculum_program course
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      join curriculum_chapter ch on ch.subject_id=s.id
+      join lesson l on l.chapter_id=ch.id
+      join question q on q.lesson_id=l.id
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      group by coalesce(nullif(upper(q.review_status),''),'DRAFT'),q.active
+      order by review_status,q.active desc
+      """,courseId));
+    result.put("sources",jdbc.queryForList("""
+      select coalesce(nullif(q.source_kind,''),'UNKNOWN') as source_kind,count(distinct q.id) as count
+      from curriculum_program course
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      join curriculum_chapter ch on ch.subject_id=s.id
+      join lesson l on l.chapter_id=ch.id
+      join question q on q.lesson_id=l.id
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      group by coalesce(nullif(q.source_kind,''),'UNKNOWN') order by source_kind
+      """,courseId));
+    result.put("assets",jdbc.queryForList("""
+      select ca.asset_type,ca.status,count(distinct ca.id) as count
+      from curriculum_program course
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      join curriculum_chapter ch on ch.subject_id=s.id
+      join lesson l on l.chapter_id=ch.id
+      join lesson_block lb on lb.lesson_id=l.id
+      join content_asset ca on ca.id=lb.asset_id
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      group by ca.asset_type,ca.status order by ca.asset_type,ca.status
+      """,courseId));
     return result;
   }
 
@@ -293,28 +440,50 @@ public class AdminController {
 
   @PutMapping("/lessons/{lessonId}/status")
   @Transactional
-  public Map<String,Object> updateLessonStatus(@PathVariable long lessonId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> updateLessonStatus(@PathVariable long lessonId,@RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     AuthContext admin=authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     String status=String.valueOf(body.getOrDefault("status","DRAFT"));
     if(!Set.of("DRAFT","REVIEW","PUBLISHED","ARCHIVED").contains(status)) {
       throw new IllegalArgumentException("Invalid lesson status");
     }
+    Long mapped=jdbc.query("""
+      select l.id from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+      join curriculum_subject s on s.id=ch.subject_id and s.active=true
+      join curriculum_program_subject cps on cps.subject_id=s.id and cps.program_id=?
+      join curriculum_program cp on cp.id=cps.program_id and cp.status='ACTIVE' and cp.code<>'GENERAL'
+      join institution_course_assignment a on a.institution_id=? and a.status='ASSIGNED'
+      join institution_course_release rel on rel.id=a.course_release_id and rel.program_id=cp.id
+      where l.id=? and l.active=true
+      limit 1
+      """,rs->rs.next()?rs.getLong(1):null,courseId,institutionId,lessonId);
+    if(mapped==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson is not part of the selected institution course.");
     if("PUBLISHED".equals(status)) {
-      contentController.publishLesson(lessonId,context);
-      log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-      return Map.of("updated",true,"lessonId",lessonId,"status",status);
+      contentController.publishLesson(lessonId,courseId,context,tenant);
+      log(admin,"LESSON_STATUS",String.valueOf(lessonId),"courseId="+courseId+";"+status);
+      return Map.of("updated",true,"lessonId",lessonId,"courseId",courseId,"status",status);
     }
     if("REVIEW".equals(status)) {
-      contentController.submitLessonForReview(lessonId,context);
-      log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-      return Map.of("updated",true,"lessonId",lessonId,"status",status);
+      contentController.submitLessonForReview(lessonId,courseId,context,tenant);
+      log(admin,"LESSON_STATUS",String.valueOf(lessonId),"courseId="+courseId+";"+status);
+      return Map.of("updated",true,"lessonId",lessonId,"courseId",courseId,"status",status);
     }
-    int changed=jdbc.update("update lesson set status=?,active=? where id=?",
-        status,!"ARCHIVED".equals(status),lessonId);
-    if(changed==0) throw new IllegalArgumentException("Lesson not found");
-    log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-    return Map.of("updated",true,"lessonId",lessonId,"status",status);
+    int changed=jdbc.update("""
+      update lesson l set status=?,active=? where l.id=? and exists(
+        select 1 from curriculum_chapter ch
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_program_subject cps on cps.subject_id=s.id and cps.program_id=?
+        where ch.id=l.chapter_id)
+      """,status,!"ARCHIVED".equals(status),lessonId,courseId);
+    if(changed==0) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson is not part of the selected course.");
+    log(admin,"LESSON_STATUS",String.valueOf(lessonId),"courseId="+courseId+";"+status);
+    return Map.of("updated",true,"lessonId",lessonId,"courseId",courseId,"status",status);
   }
 
   @PutMapping("/questions/{questionId}")
@@ -431,6 +600,29 @@ public class AdminController {
     }catch(JacksonException ex){
       throw new IllegalArgumentException("Invalid JSON content");
     }
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_assignment assignment
+        on assignment.institution_id=? and assignment.status='ASSIGNED'
+      join institution_course_release release
+        on release.id=assignment.course_release_id and release.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Selected course is not assigned and released to this institution.");
+    }
+  }
+
+  private long requireInstitution(InstitutionTenantContext tenant) {
+    if(tenant==null || tenant.institutionId()<1L) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400,"INSTITUTION_CONTEXT_REQUIRED","Select the institution before accessing administration data.");
+    }
+    return tenant.institutionId();
   }
 
   private void log(AuthContext admin,String action,String resource,String detail){

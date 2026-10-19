@@ -33,21 +33,23 @@ public class DiagnosticController {
   @GetMapping
   @Transactional
   public Map<String,Object> get(
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     long studentId=context.studentId();
+    requireEnrolledCourse(studentId,courseId,institutionId);
     List<Map<String,Object>> active=jdbc.queryForList("""
       select id,status,question_count,started_at from student_diagnostic_attempt
-      where student_id=? and institution_id=? and status='IN_PROGRESS'
+      where student_id=? and institution_id=? and course_id=? and status='IN_PROGRESS'
       order by started_at desc,id desc limit 1 for update
-      """,studentId,institutionId);
+      """,studentId,institutionId,courseId);
     if(active.isEmpty()) {
       Long submitted=jdbc.queryForObject(
-          "select count(*) from student_diagnostic_attempt where student_id=? and institution_id=? and status='SUBMITTED'",
-          Long.class,studentId,institutionId);
+          "select count(*) from student_diagnostic_attempt where student_id=? and institution_id=? and course_id=? and status='SUBMITTED'",
+          Long.class,studentId,institutionId,courseId);
       if(submitted!=null&&submitted>0) return Map.of("completed",true,"available",true,"questions",List.of());
       List<Map<String,Object>> candidates=jdbc.queryForList("""
         select q.id
@@ -56,23 +58,28 @@ public class DiagnosticController {
         join curriculum_chapter ch on ch.id=l.chapter_id
         join curriculum_subject s on s.id=ch.subject_id
         join curriculum_class c on c.id=s.class_id
-        join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id
-          and ste.institution_id=? and ste.status='ACTIVE'
+        join curriculum_program selected_course on selected_course.id=? and selected_course.status='ACTIVE'
+          and selected_course.code<>'GENERAL'
+        join curriculum_program_subject mapped on mapped.program_id=selected_course.id
+          and mapped.subject_id=s.id and mapped.class_id=s.class_id
+        join institution_course_assignment assignment on assignment.institution_id=? and assignment.status='ASSIGNED'
+        join institution_course_release release on release.id=assignment.course_release_id
+          and release.program_id=selected_course.id
         where q.active=true and q.review_status in ('APPROVED','PUBLISHED')
           and l.active=true and l.status='PUBLISHED'
           and ch.active=true and ch.content_status='PUBLISHED'
           and c.active=true and s.active=true
-          and c.code=(select class_code from student where id=? and active=true)
+          and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
           and q.question_type in ('MCQ','TRUE_FALSE')
         order by s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id
         limit 10
-        """,studentId,institutionId,studentId);
+        """,courseId,institutionId);
       List<Long> ids=candidates.stream().map(row->number(row.get("id"))).toList();
       if(ids.isEmpty()) return Map.of("completed",false,"available",false,"questions",List.of());
       Long attemptId=jdbc.queryForObject("""
-        insert into student_diagnostic_attempt(student_id,institution_id,status,question_count)
-        values(?,?,'IN_PROGRESS',?) returning id
-        """,Long.class,studentId,institutionId,ids.size());
+        insert into student_diagnostic_attempt(student_id,institution_id,course_id,status,question_count)
+        values(?,?,?,'IN_PROGRESS',?) returning id
+        """,Long.class,studentId,institutionId,courseId,ids.size());
       if(attemptId==null) throw new IllegalStateException("Diagnostic attempt could not be created.");
       int sequence=1;
       for(Long questionId:ids) {
@@ -107,7 +114,7 @@ public class DiagnosticController {
     }
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("completed",false);result.put("available",!questions.isEmpty());
-    result.put("attemptId",attemptId);result.put("status",attempt.get("status"));
+    result.put("attemptId",attemptId);result.put("status",attempt.get("status"));result.put("courseId",courseId);
     result.put("questionCount",questions.size());result.put("questions",questions);
     return result;
   }
@@ -115,20 +122,21 @@ public class DiagnosticController {
   @PostMapping("/attempts/{attemptId}/answers/{questionId}")
   @Transactional
   public Map<String,Object> answer(@PathVariable long attemptId,@PathVariable long questionId,
-      @RequestBody Map<String,Object> body,
+      @RequestParam Long courseId,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireEnrolledCourse(context.studentId(),courseId,institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select daq.lesson_id,daq.question_snapshot::text as question_snapshot,daq.answered_at
       from student_diagnostic_attempt_question daq
       join student_diagnostic_attempt da on da.id=daq.diagnostic_attempt_id
-      where da.id=? and da.student_id=? and da.institution_id=?
+      where da.id=? and da.student_id=? and da.institution_id=? and da.course_id=?
         and da.status='IN_PROGRESS' and daq.question_id=?
       for update of daq,da
-      """,attemptId,context.studentId(),institutionId,questionId);
+      """,attemptId,context.studentId(),institutionId,courseId,questionId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Diagnostic question was not found in this active attempt.");
     if(rows.getFirst().get("answered_at")!=null)
       throw new ResponseStatusException(HttpStatus.CONFLICT,"This diagnostic question has already been answered.");
@@ -147,7 +155,7 @@ public class DiagnosticController {
       where diagnostic_attempt_id=? and question_id=?
       """,serialized,evaluation.correct(),attemptId,questionId);
     learningState.recordAttempt(context.studentId(),questionId,number(rows.getFirst().get("lesson_id")),
-        String.valueOf(submitted),evaluation.autoGraded(),evaluation.correct(),null,"DIAGNOSTIC",institutionId);
+        String.valueOf(submitted),evaluation.autoGraded(),evaluation.correct(),null,"DIAGNOSTIC",institutionId,courseId);
     Map<String,Object> response=new LinkedHashMap<>();
     response.put("questionId",questionId);response.put("correct",evaluation.correct());
     response.put("graded",evaluation.autoGraded());
@@ -160,15 +168,17 @@ public class DiagnosticController {
   @PostMapping("/attempts/{attemptId}/submit")
   @Transactional
   public Map<String,Object> submit(@PathVariable long attemptId,
+      @RequestParam Long courseId,
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
+    requireEnrolledCourse(context.studentId(),courseId,institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,question_count,status from student_diagnostic_attempt
-      where id=? and student_id=? and institution_id=? for update
-      """,attemptId,context.studentId(),institutionId);
+      where id=? and student_id=? and institution_id=? and course_id=? for update
+      """,attemptId,context.studentId(),institutionId,courseId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Diagnostic attempt not found.");
     String status=String.valueOf(rows.getFirst().get("status"));
     if("SUBMITTED".equals(status)) return Map.of("submitted",true,"attemptId",attemptId,"status",status);
@@ -185,6 +195,26 @@ public class DiagnosticController {
       where id=? and student_id=? and institution_id=? and status='IN_PROGRESS'
       """,attemptId,context.studentId(),institutionId);
     return Map.of("submitted",true,"attemptId",attemptId,"status","SUBMITTED","answeredCount",answered);
+  }
+
+  private void requireEnrolledCourse(long studentId,Long courseId,long institutionId) {
+    if(courseId==null||courseId<=0L)throw new IllegalArgumentException("Select an enrolled course before starting a diagnostic.");
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(
+        select 1 from student_program_enrollment enrollment
+        join institution_membership membership on membership.student_id=enrollment.student_id
+          and membership.institution_id=enrollment.institution_id and membership.status='ACTIVE'
+        join curriculum_program course on course.id=enrollment.program_id
+          and course.status='ACTIVE' and course.code<>'GENERAL'
+        join institution_course_assignment assignment
+          on assignment.institution_id=enrollment.institution_id and assignment.status='ASSIGNED'
+        join institution_course_release release
+          on release.id=assignment.course_release_id and release.program_id=course.id
+        where enrollment.student_id=? and enrollment.institution_id=? and enrollment.program_id=?
+          and enrollment.status='ACTIVE'
+      )
+      """,Boolean.class,studentId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(allowed))throw new SecurityException("The diagnostic course is not enrolled in this institution.");
   }
 
   private long requireInstitution(InstitutionTenantContext tenant) {

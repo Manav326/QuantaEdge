@@ -291,8 +291,15 @@ public class AuthFilter extends OncePerRequestFilter {
               }
               Long targetChildId = guardianChildId(uri);
               if (targetChildId != null) {
-                institutionTenantContextService.assertGuardianChildMembership(
-                    context, tenantContext, targetChildId.longValue());
+                boolean restoringArchivedChild = "POST".equalsIgnoreCase(request.getMethod())
+                    && uri.matches("^/api/v1/guardians/children/[0-9]+/restore$");
+                if (restoringArchivedChild) {
+                  institutionTenantContextService.assertArchivedGuardianChildMembership(
+                      context, tenantContext, targetChildId.longValue());
+                } else {
+                  institutionTenantContextService.assertGuardianChildMembership(
+                      context, tenantContext, targetChildId.longValue());
+                }
               }
             } else {
               tenantContext = institutionTenantContextService.resolve(selectedInstitutionCode);

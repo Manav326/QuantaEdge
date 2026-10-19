@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 import StructuredLessonExperience from './StructuredLessonExperience';
 import AssignedLearningResources from './AssignedLearningResources';
 import type { QuestionResult, QuestionResponse } from './StructuredQuestionRenderer';
@@ -18,7 +19,8 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
   const searchParams = useSearchParams();
   const courseText = searchParams.get('courseId') || '';
   const requestedCourseId = /^\d+$/.test(courseText) && Number(courseText) > 0 ? Number(courseText) : null;
-  const { courses, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
+  const { courses, activeCourse, courseId, selectCourse, loadingCourses, courseError } = useStudentCourseScope(requestedCourseId);
+  const subjectCode = searchParams.get('subjectCode') || ''; 
   const { locale, learningLanguage } = useLocale();
   const [lesson, setLesson] = useState<StructuredLesson | null>(null);
   const [saved, setSaved] = useState<SavedResponses>({});
@@ -83,9 +85,27 @@ export default function StructuredLessonDetailClient({ artifactId }: { artifactI
     submitted[id] = value.status === 'correct' || value.status === 'pending_review';
   });
   return <main className="app-shell"><div className="app-layout"><section className="app-content">
-    <header className="content-heading"><PrimaryCoursePicker courses={courses} courseId={courseId} onChange={selectCourse} loading={loadingCourses} label={locale === 'english' ? 'Primary course' : 'मुख्य कोर्स'}/><Link href="/student/structured-lessons" className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
-      {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}</header>
-    {error ? <><p role="alert" className="error-message">{error}</p><Link href="/student/structured-lessons" className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
+    <header className="content-heading">
+      <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
+        onCourseChange={async value => {
+          await selectCourse(value);
+          router.push('/student/structured-lessons?courseId=' + encodeURIComponent(value));
+        }}
+        subjectCode={subjectCode || 'ALL'}
+        onSubjectChange={value => {
+          const params = new URLSearchParams();
+          if (courseId !== null) params.set('courseId', String(courseId));
+          if (value && value !== 'ALL') params.set('subjectCode', value);
+          router.push('/student/structured-lessons?' + params.toString());
+        }}
+        loading={loadingCourses} language={locale}
+        courseLabel={locale === 'english' ? 'Course' : 'कोर्स'}
+        subjectLabel={locale === 'english' ? 'Subject' : 'विषय'}
+        allSubjectsLabel={locale === 'english' ? 'All subjects' : 'सभी विषय'} />
+      <Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')} className="back-link">← {translateUi(locale, 'legacy.web.all.structured.lessons.5f389f55')}</Link>
+      {lesson && <p>{lesson.chapter.title_by_locale?.[learningLanguage] || ''}</p>}
+    </header>
+    {error ? <><p role="alert" className="error-message">{error}</p><Link href={'/student/structured-lessons' + (courseId !== null ? '?courseId=' + encodeURIComponent(String(courseId)) : '')} className="button button-dark">{translateUi(locale, 'legacy.web.go.back.f75fdd65')}</Link></> :
       busy || !lesson ? <p role="status" className="eyebrow">{translateUi(locale, 'legacy.web.loading.lesson.9e7c2f6c')}</p> :
       <>
         <StructuredLessonExperience key={artifactId} lesson={lesson} locale={learningLanguage} mode="student"

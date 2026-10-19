@@ -37,19 +37,26 @@ public class LearningMetricsService {
       from student where id=? and active=true
       """,studentId));
 
-    result.put("lessonStats",jdbc.queryForMap(tenantSql("""
+    String lessonTrackJoin = programId == null
+        ? "join student_track_enrollment ste on ste.student_id=st.id and ste.status='ACTIVE' __TENANT_STE__"
+        : "join curriculum_program_subject ste on ste.program_id=? and ste.subject_id=s.id and ste.class_id=s.class_id";
+    Object[] lessonArgs = programId == null
+        ? new Object[]{studentId}
+        : new Object[]{programId,studentId,programId};
+    String lessonSql = """
       select count(distinct l.id) as total_lessons,
              count(distinct l.id) filter(where p.status='COMPLETED') as completed_lessons,
              coalesce(round(100.0*count(distinct l.id) filter(where p.status='COMPLETED')/
                nullif(count(distinct l.id),0),1),0) as completion_percent
       from student st
-      join student_track_enrollment ste on ste.student_id=st.id and ste.status='ACTIVE' __TENANT_STE__
+      __TRACK_JOIN__
       join curriculum_subject s on s.id=ste.subject_id and s.active=true
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=st.id __TENANT_P__
       where st.id=? and st.active=true and __SUBJECT_SCOPE__
-      """.replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,scopedArgs(programId,studentId))));
+      """.replace("__TRACK_JOIN__",lessonTrackJoin).replace("__SUBJECT_SCOPE__",subjectScope);
+    result.put("lessonStats",jdbc.queryForMap(tenantSql(lessonSql,institutionId),tenantArgs(institutionId,lessonArgs)));
 
     result.put("questionStats",jdbc.queryForMap(tenantSql("""
       select count(*) as attempts,count(*) filter(where qa.correct=true) as correct,
@@ -68,10 +75,13 @@ public class LearningMetricsService {
     String curriculumClassScope = programId == null
         ? "c.code=(select class_code from student where id=? and active=true)"
         : "true";
+    String curriculumTrackJoin = programId == null
+        ? "join student_track_enrollment ste on ste.subject_id=s.id and ste.student_id=? and ste.status='ACTIVE' __TENANT_STE__"
+        : "join curriculum_program_subject ste on ste.program_id=? and ste.subject_id=s.id and ste.class_id=s.class_id";
     Object[] curriculumArgs = programId == null
         ? new Object[]{studentId,studentId,studentId}
-        : new Object[]{studentId,studentId,programId};
-    result.put("curriculum",jdbc.queryForList(tenantSql("""
+        : new Object[]{programId,studentId,programId};
+    String curriculumSql = """
       select c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              count(distinct ch.id) as chapters,count(distinct l.id) as lessons,
              count(distinct ch.id) filter(where l.id is not null) as content_ready_chapters,
@@ -80,15 +90,17 @@ public class LearningMetricsService {
                nullif(count(distinct l.id),0),1),0) as completion_percent
       from curriculum_class c
       join curriculum_subject s on s.class_id=c.id and s.active=true
-      join student_track_enrollment ste on ste.subject_id=s.id and ste.student_id=? and ste.status='ACTIVE' __TENANT_STE__
+      __TRACK_JOIN__
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=? __TENANT_P__
       where c.active=true and __CURRICULUM_CLASS_SCOPE__
         and __SUBJECT_SCOPE__
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
-      """.replace("__CURRICULUM_CLASS_SCOPE__",curriculumClassScope)
-         .replace("__SUBJECT_SCOPE__",subjectScope),institutionId), tenantArgs(institutionId,curriculumArgs)));
+      """.replace("__TRACK_JOIN__",curriculumTrackJoin)
+         .replace("__CURRICULUM_CLASS_SCOPE__",curriculumClassScope)
+         .replace("__SUBJECT_SCOPE__",subjectScope);
+    result.put("curriculum",jdbc.queryForList(tenantSql(curriculumSql,institutionId),tenantArgs(institutionId,curriculumArgs)));
 
     result.put("mastery",jdbc.queryForMap(tenantSql("""
       select count(*) as concepts,coalesce(round(avg(m.mastery_percent),1),0) as average_mastery,
@@ -164,15 +176,139 @@ public class LearningMetricsService {
 
     // Activity minutes and session counts are intentionally learner-wide; individual learning,
     // mastery and assessment metrics above are scoped to the selected program.
-    result.put("sessionStats",sessionStatsFor(studentId,institutionId));
+    result.put("sessionStats",sessionStatsFor(studentId,institutionId,programId));
     return result;
   }
 
   Map<String,Object> sessionStatsFor(long studentId) {
-    return sessionStatsFor(studentId,null);
+    return sessionStatsForUnscoped(studentId, null);
   }
 
   Map<String,Object> sessionStatsFor(long studentId, Long institutionId) {
+    return sessionStatsForUnscoped(studentId, institutionId);
+  }
+
+  /** Course-scoped activity totals; old generic sessions cannot be safely attributed to a course. */
+  Map<String,Object> sessionStatsFor(long studentId, Long institutionId, Long courseId) {
+    if (courseId == null || courseId < 1L) {
+      return sessionStatsForUnscoped(studentId, institutionId);
+    }
+    String courseSql = """
+      select
+        (
+          (select count(*) from student_practice_session ps
+           where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
+             and ps.created_at>=now()-interval '30 days'
+             and exists (
+               select 1
+               from jsonb_array_elements(coalesce(ps.topic_selections,'[]'::jsonb)) topic
+               join lesson l on l.id=case
+                 when (topic->>'sourceLessonId') ~ '^[0-9]+$' then (topic->>'sourceLessonId')::bigint
+                 else null end
+               join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+                 and ch.content_status='PUBLISHED'
+               join curriculum_subject s on s.id=ch.subject_id and s.active=true
+               join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
+                 and mapped.class_id=s.class_id
+               join curriculum_program selected_course on selected_course.id=mapped.program_id
+                 and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+               where s.program_id=selected_course.id
+                 or (s.program_id is null and selected_course.class_id=s.class_id)
+             ))
+          +(select count(*) from student_diagnostic_attempt da
+            where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
+              and da.started_at>=now()-interval '30 days'
+              and exists (
+                select 1 from student_diagnostic_attempt_question picked
+                join lesson l on l.id=picked.lesson_id
+                join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+                  and ch.content_status='PUBLISHED'
+                join curriculum_subject s on s.id=ch.subject_id and s.active=true
+                join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
+                  and mapped.class_id=s.class_id
+                join curriculum_program selected_course on selected_course.id=mapped.program_id
+                  and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+                where picked.diagnostic_attempt_id=da.id
+                  and (s.program_id=selected_course.id
+                    or (s.program_id is null and selected_course.class_id=s.class_id))
+              ))
+          +(select count(*) from student_assessment_attempt att
+            join assessment a on a.id=att.assessment_id
+            join curriculum_subject s on s.id=a.subject_id and s.active=true
+            join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
+              and mapped.class_id=s.class_id
+            join curriculum_program selected_course on selected_course.id=mapped.program_id
+              and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+            where att.student_id=? __TENANT_ATT__
+              and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
+              and att.started_at>=now()-interval '30 days'
+              and (s.program_id=selected_course.id
+                or (s.program_id is null and selected_course.class_id=s.class_id))
+          )
+        ) as sessions_30d,
+        (
+          (select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
+           from student_practice_session ps
+           where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED'
+             and ps.completed_at is not null and ps.created_at>=now()-interval '30 days'
+             and exists (
+               select 1
+               from jsonb_array_elements(coalesce(ps.topic_selections,'[]'::jsonb)) topic
+               join lesson l on l.id=case
+                 when (topic->>'sourceLessonId') ~ '^[0-9]+$' then (topic->>'sourceLessonId')::bigint
+                 else null end
+               join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+                 and ch.content_status='PUBLISHED'
+               join curriculum_subject s on s.id=ch.subject_id and s.active=true
+               join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
+                 and mapped.class_id=s.class_id
+               join curriculum_program selected_course on selected_course.id=mapped.program_id
+                 and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+               where s.program_id=selected_course.id
+                 or (s.program_id is null and selected_course.class_id=s.class_id)
+             ))
+          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
+            from student_diagnostic_attempt da
+            where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED'
+              and da.submitted_at is not null and da.started_at>=now()-interval '30 days'
+              and exists (
+                select 1 from student_diagnostic_attempt_question picked
+                join lesson l on l.id=picked.lesson_id
+                join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+                  and ch.content_status='PUBLISHED'
+                join curriculum_subject s on s.id=ch.subject_id and s.active=true
+                join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
+                  and mapped.class_id=s.class_id
+                join curriculum_program selected_course on selected_course.id=mapped.program_id
+                  and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+                where picked.diagnostic_attempt_id=da.id
+                  and (s.program_id=selected_course.id
+                    or (s.program_id is null and selected_course.class_id=s.class_id))
+              ))
+          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
+            from student_assessment_attempt att
+            join assessment a on a.id=att.assessment_id
+            join curriculum_subject s on s.id=a.subject_id and s.active=true
+            join curriculum_program_subject mapped on mapped.program_id=? and mapped.subject_id=s.id
+              and mapped.class_id=s.class_id
+            join curriculum_program selected_course on selected_course.id=mapped.program_id
+              and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+            where att.student_id=? __TENANT_ATT__
+              and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
+              and att.submitted_at is not null and att.started_at>=now()-interval '30 days'
+              and (s.program_id=selected_course.id
+                or (s.program_id is null and selected_course.class_id=s.class_id))
+          )
+        ) as minutes_30d
+      """;
+    Object[] scopedArgs = new Object[]{
+        studentId, courseId, studentId, courseId, courseId, studentId,
+        studentId, courseId, studentId, courseId, courseId, studentId
+    };
+    return jdbc.queryForMap(tenantSql(courseSql, institutionId), tenantArgs(institutionId, scopedArgs));
+  }
+
+  private Map<String,Object> sessionStatsForUnscoped(long studentId, Long institutionId) {
     String sql = """
       select
         ((select count(*) from learning_session ls where ls.student_id=? __TENANT_LS__ and ls.started_at>=now()-interval '30 days')
@@ -184,7 +320,8 @@ public class LearningMetricsService {
            from student_practice_session ps where ps.student_id=? __TENANT_PS__ and ps.status='COMPLETED' and ps.completed_at is not null
              and ps.created_at>=now()-interval '30 days')
          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
-           from student_diagnostic_attempt da where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED' and da.started_at>=now()-interval '30 days')
+           from student_diagnostic_attempt da where da.student_id=? __TENANT_DA__ and da.status='SUBMITTED' and da.submitted_at is not null
+             and da.started_at>=now()-interval '30 days')
          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
            from student_assessment_attempt att where att.student_id=? __TENANT_ATT__ and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
              and att.submitted_at is not null and att.started_at>=now()-interval '30 days')) as minutes_30d
