@@ -2619,7 +2619,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             val id = diagnostic.longAny("attemptId", "attempt_id")
             ApiClient.postObject("/api/v1/diagnostic/attempts/" + id + "/submit")
             diagnostic = ApiClient.getObject("/api/v1/diagnostic")
-            recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
+            recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next?courseId=" + currentCourseId) }.getOrDefault(JSONObject())
             status = "Diagnostic पूरा हुआ। आपकी अगली सीख सर्वर के डेटा के आधार पर दिखाई जाएगी।"
         }
     }
