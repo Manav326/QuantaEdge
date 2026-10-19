@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 808,
+    "assets_selected": 810,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 805,
-    "assets_remaining": 1486,
-    "assets_completion_percent": 35.1,
+    "assets_analyzed": 806,
+    "assets_remaining": 1485,
+    "assets_completion_percent": 35.2,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 803,
+    "assets_skipped_from_checkpoint": 805,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:27:27Z"
+      "checkpointed_at": "2026-10-19T05:32:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:28:16Z"
+      "checkpointed_at": "2026-10-19T05:33:07Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T05:28:54Z"
+      "checkpointed_at": "2026-10-19T05:33:45Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24988,6 +24988,111 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T05:31:10Z"
+    },
+    {
+      "asset_id": "41ffd259c1387dcf3c3af8a8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 38,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Food items",
+          "Rotting",
+          "Infected",
+          "Powdery or cotton-like growth"
+        ],
+        "context_relation": "Discussion about the presence of microorganisms in food items, specifically focusing on rotting fruits.",
+        "limitations": [
+          "The image does not show any visual representation of the discussion.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:34:18Z"
+    },
+    {
+      "asset_id": "c119ea9ad5c7c3ccb0b89f67",
+      "asset_sha256": "03b9909fcc729b399fb1e549153478ae3c0b29c3a16265e48914128fa4b6a2fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 38,
+      "asset_path": "page-0038.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e4a28484782dd9417e942bd0e3c6055801dd1ea46536696aed1d944aa22d86d4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the connection between microorganisms and their presence in various environments, including fruits and vegetables.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2.4 How Are We Connected to Microbes?",
+          "Can we find microorganisms in other places, too?",
+          "Let us have a discussion:",
+          "Have you ever seen a lemon, tomato, orange, or any other food item rot after being left outside for some time? If yes, you may have noticed a powdery or cotton-like growth on them (Fig. 2.9). This happens because they have been infected by microbes. But where did these microbes come from? How did th",
+          "This happens because microorganisms can be found everywhere, be it in water, soil, air, or even in some food items.",
+          "But why do microorganisms not infect the pickles and murabbas?",
+          "This is because you add many spices with salt or sugar to it which act as preservatives. High concentration of salt or sugar do not allow these organisms to grow on them.",
+          "You can use a microscope to explore surfaces of leaves, stems, roots, or any other part to see them. Like plants and animals, microorganisms also show great diversity. Some of them can even be found in extreme climatic conditions, such as hot water springs and snow cold zones as well as at moderate ",
+          "How does the diversity of microorganisms play a role in our daily life? How do they help clean the environment?",
+          "2.4.1 Key players in cleaning the environment",
+          "Let us attempt to understand this by doing an activity.",
+          "Activity 2.7: Let us do",
+          "Take an empty container and fill it halfway with garden soil.",
+          "Add some fruit and vegetable peels to the container. Thereafter, put a layer of soil on it and leave it aside."
+        ],
+        "concepts": [
+          "microorganisms",
+          "environment",
+          "microbes",
+          "lemon",
+          "tomato",
+          "orange",
+          "food items",
+          "water",
+          "soil",
+          "air",
+          "microscope",
+          "surfaces",
+          "leaves",
+          "stems",
+          "roots",
+          "plants",
+          "animals",
+          "diversity",
+          "extreme climatic conditions",
+          "hot water springs"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its page number.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T05:39:10Z"
     }
   ]
 }
