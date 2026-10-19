@@ -509,9 +509,10 @@ class CertificateControllerEligibilityTest {
   void adminRegisterWiresStatusAchievementTypeAndLanguageFiltersIntoBothRowsAndCount() {
     when(authorization.requireAdmin(student)).thenReturn(student);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(12L), eq(1L))).thenReturn(true);
     when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(0L);
 
-    controller.adminCertificates("ISSUED", "ASSESSMENT_PASS", "en", 50, 0, student);
+    controller.adminCertificates(12L, "ISSUED", "ASSESSMENT_PASS", "en", 50, 0, student, TEST_TENANT);
 
     ArgumentCaptor<String> rowSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<Object[]> rowArgs = ArgumentCaptor.forClass(Object[].class);
@@ -519,7 +520,9 @@ class CertificateControllerEligibilityTest {
     assertTrue(rowSql.getValue().contains("c.status=?"));
     assertTrue(rowSql.getValue().contains("c.achievement_type=?"));
     assertTrue(rowSql.getValue().contains("c.language=?"));
-    assertEquals(List.of("ISSUED", "ASSESSMENT_PASS", "en", 50, 0), List.of(rowArgs.getValue()));
+    assertTrue(rowSql.getValue().contains("c.institution_id=?"));
+    assertTrue(rowSql.getValue().contains("c.program_id=?"));
+    assertEquals(List.of(1L, 12L, "ISSUED", "ASSESSMENT_PASS", "en", 50, 0), List.of(rowArgs.getValue()));
 
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<Object[]> countArgs = ArgumentCaptor.forClass(Object[].class);
@@ -527,7 +530,9 @@ class CertificateControllerEligibilityTest {
     assertTrue(countSql.getValue().contains("c.status=?"));
     assertTrue(countSql.getValue().contains("c.achievement_type=?"));
     assertTrue(countSql.getValue().contains("c.language=?"));
-    assertEquals(List.of("ISSUED", "ASSESSMENT_PASS", "en"), List.of(countArgs.getValue()));
+    assertTrue(countSql.getValue().contains("c.institution_id=?"));
+    assertTrue(countSql.getValue().contains("c.program_id=?"));
+    assertEquals(List.of(1L, 12L, "ISSUED", "ASSESSMENT_PASS", "en"), List.of(countArgs.getValue()));
   }
 
   @SuppressWarnings("unchecked")
