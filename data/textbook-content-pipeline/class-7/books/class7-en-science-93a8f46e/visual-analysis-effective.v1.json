@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "97dc927a45b2808ae26832049df17f92c4dbd385f61abb9a57b7ec9b38562bef",
+  "raw_analysis_sha256": "6f18b9f2afcc2fe1ecab7f2705299d1e8119a2b95758116e88d71b4a3b8e672c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:26:26Z",
+      "checkpointed_at": "2026-10-19T03:32:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T03:26:54Z",
+      "checkpointed_at": "2026-10-19T03:32:52Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -77878,6 +77878,220 @@
         "context_relation": "The image is a diagram explaining how to insert an electric cell into a holder and connect wires to it.",
         "limitations": [
           "The image does not show the actual physical setup or the wires being connected to the cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "793b8a72175f572fe2a52cf0",
+      "asset_sha256": "7c8a1bceed9f0a857eb1fb8cfbee30d146df37b3773abffd00297b1bd783c8ec",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 48,
+      "asset_path": "page-0048.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of an electric cell holder with wires attached and connected to a lamp.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Spring",
+          "(a)",
+          "(b)",
+          "(c)",
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell",
+          "inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal",
+          "is towards the spring side of the holder (Fig. 3.7b). In case a",
+          "cell holder is not available, fix the two wires to the cell using",
+          "electrical tape (Fig. 3.7c).",
+          "Attach two wires to the screws of the lamp holder as shown",
+          "in Fig. 3.8a. Fix the lamp in the holder by turning it around in",
+          "the holder (Fig. 3.8b). In case a lamp holder is not available,",
+          "use electrical tape to attach two wires to the two ends of the",
+          "lamp (Fig. 3.8c).",
+          "(a)",
+          "(b)",
+          "(c)",
+          "Fig. 3.8: (a) An electric lamp holder with wires attached (b) An incandescent",
+          "lamp inside the lamp holder (c) Wires connected to incandescent torch lamp",
+          "with electrical tape",
+          "Now, we are ready to connect the cell to the lamp to make it glow.",
+          "We will conduct this activity in two parts—prediction and",
+          "observation. Some of the ways in which the lamp and the cell",
+          "can be connected are shown in Table 3.1.",
+          "Predict, for each arrangement, if the lamp will glow or",
+          "not and write your prediction in Table 3.1.",
+          "Now, connect the lamp and the cell, and observe if the",
+          "lamp glows or not. Note down your observation in Table",
+          "3.1. Also, for the lamps which glow, colour their glass"
+        ],
+        "concepts": [
+          "electric cell",
+          "electric cell holder",
+          "wires",
+          "lamp",
+          "prediction",
+          "observation",
+          "table"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:36:22Z",
+      "effective_analysis": {
+        "visual_summary": "Diagram of an electric cell holder with wires attached and connected to a lamp.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Spring",
+          "(a)",
+          "(b)",
+          "(c)",
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell",
+          "inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal",
+          "is towards the spring side of the holder (Fig. 3.7b). In case a",
+          "cell holder is not available, fix the two wires to the cell using",
+          "electrical tape (Fig. 3.7c).",
+          "Attach two wires to the screws of the lamp holder as shown",
+          "in Fig. 3.8a. Fix the lamp in the holder by turning it around in",
+          "the holder (Fig. 3.8b). In case a lamp holder is not available,",
+          "use electrical tape to attach two wires to the two ends of the",
+          "lamp (Fig. 3.8c).",
+          "(a)",
+          "(b)",
+          "(c)",
+          "Fig. 3.8: (a) An electric lamp holder with wires attached (b) An incandescent",
+          "lamp inside the lamp holder (c) Wires connected to incandescent torch lamp",
+          "with electrical tape",
+          "Now, we are ready to connect the cell to the lamp to make it glow.",
+          "We will conduct this activity in two parts—prediction and",
+          "observation. Some of the ways in which the lamp and the cell",
+          "can be connected are shown in Table 3.1.",
+          "Predict, for each arrangement, if the lamp will glow or",
+          "not and write your prediction in Table 3.1.",
+          "Now, connect the lamp and the cell, and observe if the",
+          "lamp glows or not. Note down your observation in Table",
+          "3.1. Also, for the lamps which glow, colour their glass"
+        ],
+        "concepts": [
+          "electric cell",
+          "electric cell holder",
+          "wires",
+          "lamp",
+          "prediction",
+          "observation",
+          "table"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "05ed6d9512673cd087d6cf40",
+      "asset_sha256": "5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/5501ce9732a99094eeaa379b76cb2ab924ddbe7f849abd95fd2116bedc273148.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:36:29Z",
+      "effective_analysis": {
+        "visual_summary": "A green paper airplane flying with a trail of smoke or vapor.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f700f7ccf7fd187bc9b2a11",
+      "asset_sha256": "9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/9a8cff75c3ecb8cc401c95c896a42608f63a3ddadcb1b4cd3f235642c7d5641e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a circuit or a symbol.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "circuit",
+          "symbol"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the actual circuit or the glowing lamp, only a symbol or a diagram of a circuit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T03:36:43Z",
+      "effective_analysis": {
+        "visual_summary": "A green dashed circle with two small circles inside it, possibly representing a circuit or a symbol.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp      Prediction         Observation  1."
+        ],
+        "concepts": [
+          "circuit",
+          "symbol"
+        ],
+        "context_relation": "The image is related to the content of Table 3.1 in the textbook, which discusses making a lamp glow in a circuit.",
+        "limitations": [
+          "The image does not show the actual circuit or the glowing lamp, only a symbol or a diagram of a circuit."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
