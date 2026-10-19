@@ -14,6 +14,7 @@ type Props = {
   loading?: boolean;
   language: 'english' | 'hinglish' | string;
   includeAllSubjects?: boolean;
+  showSubject?: boolean;
   courseLabel?: string;
   subjectLabel?: string;
   allSubjectsLabel?: string;
@@ -28,7 +29,7 @@ type Props = {
  */
 export default function InstitutionCourseSubjectScope({
   courses, activeCourse, courseId, onCourseChange, subjectCode, onSubjectChange,
-  loading = false, language, includeAllSubjects = true, courseLabel, subjectLabel,
+  loading = false, language, includeAllSubjects = true, showSubject = true, courseLabel, subjectLabel,
   allSubjectsLabel, className = '',
 }: Props) {
   const { brand, isResolving, institutionContextRequested } = useTenantBranding();
@@ -50,7 +51,7 @@ export default function InstitutionCourseSubjectScope({
   const selectedSubject = subjectIsValid ? subjectCode : (includeAllSubjects ? 'ALL' : '');
 
   return (
-    <div className={[styles.scope, 'qe-institution-course-subject-scope', className].filter(Boolean).join(' ')} data-course-id={courseId ?? ''}>
+    <div className={[styles.scope, !showSubject ? styles.scopeNoSubject : '', 'qe-institution-course-subject-scope', className].filter(Boolean).join(' ')} data-course-id={courseId ?? ''}>
       <div className={styles.institution} aria-label={institutionLabel}>
         <span>{institutionLabel}</span>
         <strong>{institutionName}</strong>
@@ -62,7 +63,7 @@ export default function InstitutionCourseSubjectScope({
         loading={loading}
         label={resolvedCourseLabel}
       />
-      <label className={styles.field}>
+      {showSubject && <label className={styles.field}>
         <span>{resolvedSubjectLabel}</span>
         <select
           value={selectedSubject || (includeAllSubjects ? 'ALL' : '')}
@@ -80,6 +81,7 @@ export default function InstitutionCourseSubjectScope({
           })}
         </select>
       </label>
+      </label>}
     </div>
   );
 }
