@@ -102,7 +102,7 @@ public final class InstitutionThemeTokens {
       accent = preset.accent();
     }
     String lightBackground = legacy && input.containsKey("background")
-        ? colorValue(input.get("background"), "#F7F8FC", "background") : "#F8FAFC";
+        ? colorValue(input.get("background"), "#F7F8FC", "background") : "#F5F7FB";
     String lightSurface = legacy && input.containsKey("surface")
         ? colorValue(input.get("surface"), "#FFFFFF", "surface") : "#FFFFFF";
     String lightText = legacy && input.containsKey("text")
@@ -149,7 +149,7 @@ public final class InstitutionThemeTokens {
     String elevated = darkMode ? "#243247" : "#FFFFFF";
     String text = darkMode ? "#F4F7FB" : "#172033";
     String muted = darkMode ? "#B6C2D2" : "#536176";
-    String border = darkMode ? "#66758B" : "#7B8798";
+    String border = darkMode ? "#8190A5" : "#7B8798";
     String borderSubtle = darkMode ? "#354156" : "#D7DEE8";
     String primaryContainer = mix(surface, brandPrimary, darkMode ? 0.12 : 0.10);
     String accentContainer = mix(surface, brandAccent, darkMode ? 0.12 : 0.10);
