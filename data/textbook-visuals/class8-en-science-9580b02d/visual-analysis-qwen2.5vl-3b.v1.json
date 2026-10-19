@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 794,
+    "assets_selected": 796,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 791,
-    "assets_remaining": 1500,
-    "assets_completion_percent": 34.5,
+    "assets_analyzed": 793,
+    "assets_remaining": 1498,
+    "assets_completion_percent": 34.6,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 789,
+    "assets_skipped_from_checkpoint": 791,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:45:57Z"
+      "checkpointed_at": "2026-10-19T04:51:52Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:46:46Z"
+      "checkpointed_at": "2026-10-19T04:52:41Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T04:47:25Z"
+      "checkpointed_at": "2026-10-19T04:53:20Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -24468,6 +24468,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T04:50:42Z"
+    },
+    {
+      "asset_id": "15a16a463fd87dffba43d008",
+      "asset_sha256": "2d9a1fd2c0ca2a00c81678a41366d20c8d027079317c997f21b1847086bd2d9b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/2d9a1fd2c0ca2a00c81678a41366d20c8d027079317c997f21b1847086bd2d9b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of fungi and algae in soil suspension.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "S.No. Bread mould (Fungi)",
+          "Branched filament without chlorophyll having sac-like structure",
+          "Mould (Fungi)",
+          "Branched filament without chlorophyll having brush-like structure",
+          "Algae",
+          "Spherical, presence of chlorophyll— a green"
+        ],
+        "concepts": [
+          "soil suspension",
+          "fungi",
+          "algae",
+          "spherical",
+          "chlorophyll",
+          "brush-like structure",
+          "sac-like structure"
+        ],
+        "context_relation": "The image is a visual representation of organisms present in soil suspension, specifically fungi and algae.",
+        "limitations": [
+          "The image does not provide specific details about the number of organisms or their exact locations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:55:01Z"
+    },
+    {
+      "asset_id": "1e2464efa7ffecea70c70258",
+      "asset_sha256": "2c97c23efba188b37db09df6e3d3a95b46a29c6d080fd0bee07869457d2f020c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 37,
+      "asset_path": "assets/2c97c23efba188b37db09df6e3d3a95b46a29c6d080fd0bee07869457d2f020c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d0c2e7b53132aa97efe4e0c63e5a7dd252d283d474b61b730cb99fb23f08bef0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a flower with six pink petals.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the description of a flower in Table 2.2 of the textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T04:56:34Z"
     }
   ]
 }
