@@ -1387,6 +1387,12 @@ public class CertificateController {
     return name.isBlank() ? code : name;
   }
 
+  private void requireCourseId(Long courseId) {
+    if (courseId == null || courseId < 1L) {
+      throw new IllegalArgumentException("Select an enrolled course before accessing certificates.");
+    }
+  }
+
   private void requireActiveCourseEnrollment(long studentId,long courseId,long institutionId) {
     Long active=jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
