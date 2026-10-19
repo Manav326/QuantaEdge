@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 999,
+    "assets_selected": 1002,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 997,
-    "assets_remaining": 1081,
-    "assets_completion_percent": 48.0,
+    "assets_analyzed": 1000,
+    "assets_remaining": 1078,
+    "assets_completion_percent": 48.1,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 994,
+    "assets_skipped_from_checkpoint": 997,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:58:25Z"
+      "checkpointed_at": "2026-10-19T13:05:37Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -23614,7 +23614,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
-      "checkpointed_at": "2026-10-19T12:59:26Z"
+      "checkpointed_at": "2026-10-19T13:06:39Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -32169,6 +32169,142 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219692476",
       "checkpointed_at": "2026-10-19T13:04:23Z"
+    },
+    {
+      "asset_id": "e89846ae7d32b8a757cd8201",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook about exploring magnets, featuring a story about a girl named Reshma living in Kerala and writing a story about sailors using stars for navigation.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring MagnetsChapter 4",
+          "Reshma lives in a coastal town of Kerala and is very fond of writing short stories. Her grandmother loves listening to her stories, so Reshma was writing a new story to share with her grandmother on her 60th birthday.",
+          "The story was based on a ship carrying spices from Kerala for trade in the olden days. Reshma was aware that in those days, the sailors used stars to find directions at night."
+        ],
+        "concepts": [
+          "Exploring Magnets",
+          "Storytelling",
+          "Coastal town",
+          "Kerala",
+          "Writing",
+          "Grandmother",
+          "60th birthday",
+          "Sailors",
+          "Spices",
+          "Trade",
+          "Olden days",
+          "Stars",
+          "Nights"
+        ],
+        "context_relation": "The story is a part of the textbook's content, focusing on the theme of exploring magnets and the historical context of navigation using stars.",
+        "limitations": [
+          "The image does not contain any visual elements related to magnets or navigation.",
+          "The visible text is a part of the textbook's content, not the image itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:07:24Z"
+    },
+    {
+      "asset_id": "9b7ee72de6a405590a9f8134",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coastal town of Kerala with a woman named Reshma writing a story about a ship carrying spices.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploring MagnetsChapter 4",
+          "Reshma lives in a coastal town of Kerala and is very fond of writing short stories. Her grandmother loves listening to her stories, so Reshma was writing a new story to share with her grandmother on her 60th birthday.",
+          "The story was based on a ship carrying spices from Kerala for trade in the olden days. Reshma was aware that in those days, the sailors used stars to find directions at night."
+        ],
+        "concepts": [
+          "coastal town",
+          "Kerala",
+          "writing",
+          "story",
+          "grandmother",
+          "60th birthday",
+          "ship",
+          "spices",
+          "trade",
+          "olden days",
+          "sailors",
+          "stars",
+          "directions",
+          "night"
+        ],
+        "context_relation": "The image shows a page from a textbook that is discussing a story about a coastal town in Kerala, where a woman named Reshma is writing a story about a ship carrying spices.",
+        "limitations": [
+          "The image does not show any visual elements related to magnets or the chapter title 'Exploring Magnets'.",
+          "The visible text does not provide any information about the visual elements or the chapter title."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:08:08Z"
+    },
+    {
+      "asset_id": "a6ff3c93b0f08aca5ca7f2a6",
+      "asset_sha256": "c8b6875817e2d763370cf305d91192f22463cad998669991964308b00f0c9682",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 79,
+      "asset_path": "page-0079.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9144cf73fb4c8d9f6392f2601cb414bad7e92e40dc14ecbf9202943e8bce4989",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook about exploring magnets, featuring a story about a girl named Reshma who is writing a story about sailors using stars to find directions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 4\nExploring Magnets",
+          "Reshma lives in a coastal town of\nKerala and is very fond of writing\nshort stories. Her grandmother\nloves listening to her stories, so\nReshma was writing a new story\nto share with her grandmother\non her 60th birthday.",
+          "The story was based on a ship\ncarrying spices from Kerala for\ntrade in the olden days. Reshma\nwas aware that in those days,\nthe sailors used stars to find\ndirections at night. But in her\nstory, a situation arose wherein\nthe sailors got caught in a storm\nwith an overcast sky and stars\nwere not visibl",
+          "She searched for information on the internet and her\nschool library. She learnt that the travellers used a device,\nknown as a magnetic compass, for finding\ndirections.",
+          "Reshma had seen pencil boxes and\npurses which had magnets to keep them\nclosed. A writing board in her school\nalso had a duster with a magnet. But\nshe had never looked at those carefully.\nShe now became curious to learn more\nabout magnets and magnetic compasses."
+        ],
+        "concepts": [
+          "magnets",
+          "magnetic compass",
+          "stars",
+          "sailors",
+          "navigation",
+          "information search"
+        ],
+        "context_relation": "The page is a continuation of a story about Reshma writing a story about sailors using stars for navigation, which leads to her learning about magnets and magnetic compasses.",
+        "limitations": [
+          "The page does not provide a clear visual representation of the magnetic compass or the sailors' use of stars for navigation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219692476",
+      "checkpointed_at": "2026-10-19T13:12:28Z"
     }
   ]
 }
