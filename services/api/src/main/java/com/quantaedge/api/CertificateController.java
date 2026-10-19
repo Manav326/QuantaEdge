@@ -241,45 +241,39 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
                s.display_name AS subject_name,cc.code AS class_code,
-               coalesce(s.program_id,p.id) AS course_id,p.display_name AS course_name,
+               selected_course.id AS course_id,selected_course.display_name AS course_name,
                round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
                existing.id AS certificate_id,existing.certificate_number,
                existing.status AS certificate_status
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
-        JOIN curriculum_subject s ON s.id=a.subject_id
-        JOIN curriculum_class cc ON cc.id=s.class_id
-        LEFT JOIN curriculum_program p ON p.id=s.program_id
-        OR (s.program_id IS NULL AND p.class_id=cc.id
-          AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
-          AND EXISTS(select 1 from curriculum_program_subject mapped_subject
-            where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
-              and mapped_subject.subject_id=s.id))
+        JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
+        JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         JOIN student st ON st.id=att.student_id AND st.active=true
+        JOIN institution_membership membership
+          ON membership.student_id=st.id AND membership.institution_id=att.institution_id
+             AND membership.status='ACTIVE'
+        JOIN student_program_enrollment enrollment
+          ON enrollment.student_id=st.id AND enrollment.institution_id=membership.institution_id
+             AND enrollment.program_id=? AND enrollment.status='ACTIVE'
+        JOIN curriculum_program selected_course
+          ON selected_course.id=enrollment.program_id AND selected_course.status='ACTIVE'
+             AND selected_course.code<>'GENERAL'
+        JOIN institution_course_assignment assignment
+          ON assignment.institution_id=membership.institution_id AND assignment.status='ASSIGNED'
+        JOIN institution_course_release release
+          ON release.id=assignment.course_release_id AND release.program_id=selected_course.id
+        JOIN curriculum_program_subject mapped
+          ON mapped.program_id=selected_course.id AND mapped.subject_id=s.id AND mapped.class_id=s.class_id
         LEFT JOIN LATERAL (
           SELECT cert.id,cert.certificate_number,cert.status
           FROM student_certificate cert
-          WHERE cert.student_id=att.student_id AND cert.institution_id=att.institution_id AND cert.assessment_attempt_id=att.id
-            AND cert.program_id=? AND cert.achievement_type='ASSESSMENT_PASS'
+          WHERE cert.student_id=att.student_id AND cert.institution_id=att.institution_id
+            AND cert.assessment_attempt_id=att.id AND cert.program_id=selected_course.id
+            AND cert.achievement_type='ASSESSMENT_PASS'
           ORDER BY cert.issued_at DESC,cert.id DESC LIMIT 1
         ) existing ON true
         WHERE att.student_id=? AND att.institution_id=?
-          AND EXISTS (
-            SELECT 1
-            FROM student_program_enrollment selected_enrollment
-            JOIN institution_course_assignment selected_assignment
-              ON selected_assignment.institution_id=selected_enrollment.institution_id
-                 AND selected_assignment.status='ASSIGNED'
-            JOIN institution_course_release selected_release
-              ON selected_release.id=selected_assignment.course_release_id
-                 AND selected_release.program_id=selected_enrollment.program_id
-            JOIN curriculum_program_subject selected_subject
-              ON selected_subject.program_id=selected_enrollment.program_id
-                 AND selected_subject.subject_id=s.id AND selected_subject.class_id=s.class_id
-            WHERE selected_enrollment.student_id=st.id
-              AND selected_enrollment.institution_id=att.institution_id
-              AND selected_enrollment.program_id=? AND selected_enrollment.status='ACTIVE'
-          )
           AND (
             existing.id IS NOT NULL
             OR (
@@ -287,33 +281,18 @@ public class CertificateController {
               AND att.final_score IS NOT NULL AND att.max_score>0
               AND 100.0*att.final_score/att.max_score >= ?
               AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
-              AND s.active=true AND cc.active=true
-              AND ((s.program_id is null and st.class_code=cc.code
-                and (cc.code not in ('6','7','8') or (p.id is not null and exists(
-                  SELECT 1 FROM student_program_enrollment spe
-                  WHERE spe.student_id=st.id AND spe.institution_id=att.institution_id AND spe.program_id=p.id AND spe.status='ACTIVE'
-                ))))
-                or (s.program_id is not null and exists(
-                  SELECT 1 FROM student_program_enrollment spe
-                  JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
-                  WHERE spe.student_id=st.id AND spe.institution_id=att.institution_id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
-                )))
-              AND EXISTS (
-                SELECT 1 FROM student_track_enrollment ste
-                WHERE ste.student_id=st.id AND ste.institution_id=att.institution_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
-              )
             )
           )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
-        """, courseId,context.studentId(),institutionId,courseId,minimumPassPercent);
+        """, courseId,context.studentId(),institutionId,minimumPassPercent);
     Map<String, Object> result = new LinkedHashMap<>();
+    result.put("courseId",courseId);
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
     result.put("rule", "ADMIN_CREATED_RELEASED_PASS");
     return result;
   }
-
   /**
    * Evaluates the exact result attempts currently displayed to a student. Attempt IDs are
    * always re-scoped to the authenticated student; client-supplied eligibility is never trusted.
@@ -569,19 +548,24 @@ public class CertificateController {
         String.valueOf(achievement.get("recipient_name")),title,summary,snapshot,institutionCode,institutionId);
   }
 
-  private Map<String, Object> issueAssessmentPass(long studentId, Map<String, Object> student,
-      long attemptId, Long requestedCourseId, String template, String language, String institutionCode,long institutionId) {
-    // Once issued, a certificate is a durable record. Reopening it must not depend on live
-    // attempt or enrollment filters. This lookup is always scoped to the authenticated student.
+    if(requestedCourseId==null || requestedCourseId<1L)
+      throw new IllegalArgumentException("Select an enrolled course before issuing a certificate.");
+    requireActiveCourseEnrollment(studentId,requestedCourseId,institutionId);
+
     String key = "ASSESSMENT_PASS:" + attemptId;
     Map<String, Object> existing = existingCertificate(studentId,key,institutionId);
-    if (existing == null) existing = existingAssessmentCertificate(studentId,attemptId,institutionId);
+    if (existing != null && number(existing.get("course_id")) != requestedCourseId) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This assessment certificate belongs to another course.");
+    }
+    if (existing == null) existing = existingAssessmentCertificate(studentId,attemptId,requestedCourseId,institutionId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
-               cc.code AS class_code,s.id AS subject_id,coalesce(s.program_id,p.id) AS program_id,p.display_name AS course_name,
-               s.code AS subject_code,s.display_name AS subject_name,
+               cc.code AS class_code,selected_course.id AS program_id,
+               selected_course.display_name AS course_name,
+               s.id AS subject_id,s.code AS subject_code,s.display_name AS subject_name,
                a.id AS assessment_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.id AS assessment_attempt_id,att.final_score,att.max_score,att.released_at,
                att.started_at AS assessment_date,creator.display_name AS assessment_creator_name,
@@ -589,37 +573,34 @@ public class CertificateController {
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
         LEFT JOIN staff_account creator ON creator.id=a.created_by_staff_id
-        JOIN curriculum_subject s ON s.id=a.subject_id
-        JOIN curriculum_class cc ON cc.id=s.class_id
-        LEFT JOIN curriculum_program p ON p.id=s.program_id
-        OR (s.program_id IS NULL AND p.class_id=cc.id
-          AND p.code='CLASS_' || cc.code AND p.curriculum_version='CURRENT' AND p.status='ACTIVE'
-          AND EXISTS(select 1 from curriculum_program_subject mapped_subject
-            where mapped_subject.program_id=p.id and mapped_subject.class_id=s.class_id
-              and mapped_subject.subject_id=s.id))
+        JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
+        JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         JOIN student st ON st.id=att.student_id AND st.active=true
-        WHERE st.id=? AND att.student_id=? AND att.id=? AND att.institution_id=? AND att.status='RELEASED'
-          AND att.final_score IS NOT NULL AND att.max_score>0
-          AND ((s.program_id is null and st.class_code=cc.code
-              and (cc.code not in ('6','7','8') or (p.id is not null and exists(
-                select 1 from student_program_enrollment spe
-                where spe.student_id=st.id and spe.program_id=p.id and spe.status='ACTIVE'
-              ))))
-            or (s.program_id is not null and exists(
-              select 1 from student_program_enrollment spe
-              join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-              where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
-            )))
-        """, studentId, studentId, attemptId,institutionId);
+        JOIN institution_membership membership
+          ON membership.student_id=st.id AND membership.institution_id=att.institution_id
+             AND membership.status='ACTIVE'
+        JOIN student_program_enrollment enrollment
+          ON enrollment.student_id=st.id AND enrollment.institution_id=membership.institution_id
+             AND enrollment.program_id=? AND enrollment.status='ACTIVE'
+        JOIN curriculum_program selected_course
+          ON selected_course.id=enrollment.program_id AND selected_course.status='ACTIVE'
+             AND selected_course.code<>'GENERAL'
+        JOIN institution_course_assignment assignment
+          ON assignment.institution_id=membership.institution_id AND assignment.status='ASSIGNED'
+        JOIN institution_course_release release
+          ON release.id=assignment.course_release_id AND release.program_id=selected_course.id
+        JOIN curriculum_program_subject mapped
+          ON mapped.program_id=selected_course.id AND mapped.subject_id=s.id AND mapped.class_id=s.class_id
+        WHERE st.id=? AND att.student_id=? AND att.id=? AND att.institution_id=?
+          AND att.status='RELEASED' AND att.final_score IS NOT NULL AND att.max_score>0
+          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
+          AND (s.program_id=selected_course.id OR s.program_id IS NULL)
+        """, requestedCourseId,studentId,studentId,attemptId,institutionId);
     if (achievement == null) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "Only your own released, graded assessment result from an active learning track can earn a certificate.");
     }
-    Long courseId=achievement.get("program_id")==null ? null : number(achievement.get("program_id"));
-    if(requestedCourseId!=null && !requestedCourseId.equals(courseId)) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,"The selected course does not match this assessment attempt.");
-    }
-    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId,institutionId);
+    Long courseId=requestedCourseId;
     if (!"ADMIN_CREATED".equals(clean(achievement.get("assessment_type")))
         || Boolean.TRUE.equals(achievement.get("is_generated"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -648,9 +629,7 @@ public class CertificateController {
     String subjectCode = clean(achievement.get("subject_code")).toLowerCase(Locale.ROOT);
     String subjectName = subjectNameAsStored(subjectCode, achievement.get("subject_name"));
     String courseName=clean(achievement.get("course_name"));
-    String title = safeText(courseId==null
-        ? (hindi ? "कक्षा " : "Class ") + classCode + " · " + subjectName
-        : courseName+" · "+subjectName, 240);
+    String title = safeText(courseName+" · "+subjectName, 240);
     String score = finalScore.stripTrailingZeros().toPlainString() + " / "
         + maxScore.stripTrailingZeros().toPlainString() + " (" + percent.toPlainString() + "%)";
     String summary = safeText((hindi ? "मूल्यांकन: " : "Assessment: ") + assessmentTitle + " — "
@@ -1329,11 +1308,11 @@ public class CertificateController {
   }
 
   /** Resolve legacy assessment records by student + attempt identity rather than achievement_key spelling. */
-  private Map<String, Object> existingAssessmentCertificate(long studentId,long attemptId,long institutionId) {
+  private Map<String, Object> existingAssessmentCertificate(long studentId,long attemptId,long courseId,long institutionId) {
     Map<String,Object> row=queryOptional(
-        "SELECT c.id FROM student_certificate c WHERE c.student_id=? AND c.institution_id=? AND c.assessment_attempt_id=? "+
+        "SELECT c.id FROM student_certificate c WHERE c.student_id=? AND c.institution_id=? AND c.assessment_attempt_id=? AND c.program_id=? "+
         "AND c.achievement_type='ASSESSMENT_PASS' ORDER BY c.issued_at DESC,c.id DESC LIMIT 1",
-        studentId,institutionId,attemptId);
+        studentId,institutionId,attemptId,courseId);
     if(row==null)return null;
     return publicCertificateById(number(row.get("id")),studentId,institutionId);
   }
