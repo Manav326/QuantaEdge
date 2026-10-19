@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1085,
+    "assets_selected": 1087,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1082,
-    "assets_remaining": 996,
-    "assets_completion_percent": 52.1,
+    "assets_analyzed": 1084,
+    "assets_remaining": 994,
+    "assets_completion_percent": 52.2,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1080,
+    "assets_skipped_from_checkpoint": 1082,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:32:47Z"
+      "checkpointed_at": "2026-10-19T17:35:18Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:33:26Z"
+      "checkpointed_at": "2026-10-19T17:35:58Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:34:18Z"
+      "checkpointed_at": "2026-10-19T17:36:50Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -35314,6 +35314,72 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
       "checkpointed_at": "2026-10-19T17:34:32Z"
+    },
+    {
+      "asset_id": "f0f0f71262d2023e6451483d",
+      "asset_sha256": "ca7418dd7a1bdb9b37db1d7d59dfd401c44849702814588deb031934e125a143",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "page-0090.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two figures showing steel balls in a maze and a paperclip in water, with a question about magnets and magnets facing each other.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Can we take the steel balls out of the maze by moving a\nmagnet below the cardboard tray? (Fig. 4.12)\n\nCan we pick out a steel\npaper clip fallen in water using\na magnet, without getting our\nfingers or the magnet wet?\n(Fig. 4.13)\n\nFig. 4.12: Steel balls in a maze          Fig. 4.13: Steel paperclip in",
+          "More to\nknow!"
+        ],
+        "concepts": [
+          "magnets",
+          "magnet poles",
+          "magnet attraction",
+          "magnet repulsion",
+          "magnet polarity"
+        ],
+        "context_relation": "The text is discussing the properties and behavior of magnets, specifically how they interact with each other and with objects.",
+        "limitations": [
+          "The text does not provide specific instructions or steps for the experiments described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:38:30Z"
+    },
+    {
+      "asset_id": "494d9f16cf7305e66d908b0a",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c184348ca081ae4c44722ba49a687c97ce5f4ad76b867e3bf4cbd478c1fd9d68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual aid for a text about keeping magnets safe.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image does not show any text or content related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:39:05Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "947f0c27fa038e22f82aec6c34bdf54393e7457f74f68f2d6eea8dcee786e02b",
+  "raw_analysis_sha256": "1e7760cb477d814fb3a88c56268c91659c252463e51c8b2413f3eb4db526e71d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:32:47Z",
+      "checkpointed_at": "2026-10-19T17:35:18Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:33:26Z",
+      "checkpointed_at": "2026-10-19T17:35:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T17:34:18Z",
+      "checkpointed_at": "2026-10-19T17:36:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -53039,6 +53039,106 @@
         "concepts": [],
         "context_relation": "unclear",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f0f0f71262d2023e6451483d",
+      "asset_sha256": "ca7418dd7a1bdb9b37db1d7d59dfd401c44849702814588deb031934e125a143",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 90,
+      "asset_path": "page-0090.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d3060f1fdc99e72d976800e86f810ec843dd25e70cdb4c2d36afe9185eea4106",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two figures showing steel balls in a maze and a paperclip in water, with a question about magnets and magnets facing each other.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Can we take the steel balls out of the maze by moving a\nmagnet below the cardboard tray? (Fig. 4.12)\n\nCan we pick out a steel\npaper clip fallen in water using\na magnet, without getting our\nfingers or the magnet wet?\n(Fig. 4.13)\n\nFig. 4.12: Steel balls in a maze          Fig. 4.13: Steel paperclip in",
+          "More to\nknow!"
+        ],
+        "concepts": [
+          "magnets",
+          "magnet poles",
+          "magnet attraction",
+          "magnet repulsion",
+          "magnet polarity"
+        ],
+        "context_relation": "The text is discussing the properties and behavior of magnets, specifically how they interact with each other and with objects.",
+        "limitations": [
+          "The text does not provide specific instructions or steps for the experiments described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:38:30Z",
+      "effective_analysis": {
+        "visual_summary": "Two figures showing steel balls in a maze and a paperclip in water, with a question about magnets and magnets facing each other.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Can we take the steel balls out of the maze by moving a\nmagnet below the cardboard tray? (Fig. 4.12)\n\nCan we pick out a steel\npaper clip fallen in water using\na magnet, without getting our\nfingers or the magnet wet?\n(Fig. 4.13)\n\nFig. 4.12: Steel balls in a maze          Fig. 4.13: Steel paperclip in",
+          "More to\nknow!"
+        ],
+        "concepts": [
+          "magnets",
+          "magnet poles",
+          "magnet attraction",
+          "magnet repulsion",
+          "magnet polarity"
+        ],
+        "context_relation": "The text is discussing the properties and behavior of magnets, specifically how they interact with each other and with objects.",
+        "limitations": [
+          "The text does not provide specific instructions or steps for the experiments described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "494d9f16cf7305e66d908b0a",
+      "asset_sha256": "58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/58551b8ee984aa94c13bcb88d3dc24109b59b652c2ef04cf31f71d7d40b36d02.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c184348ca081ae4c44722ba49a687c97ce5f4ad76b867e3bf4cbd478c1fd9d68",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual aid for a text about keeping magnets safe.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image does not show any text or content related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T17:39:05Z",
+      "effective_analysis": {
+        "visual_summary": "A green rectangular banner with a magnifying glass on the left side.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual aid for a text about keeping magnets safe.",
+        "limitations": [
+          "The image does not provide any specific information about the text.",
+          "The image does not show any text or content related to the text."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
