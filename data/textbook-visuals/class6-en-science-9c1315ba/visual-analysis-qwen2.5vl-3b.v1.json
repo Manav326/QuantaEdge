@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 881,
+    "assets_selected": 882,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 877,
-    "assets_remaining": 1201,
-    "assets_completion_percent": 42.2,
+    "assets_analyzed": 878,
+    "assets_remaining": 1200,
+    "assets_completion_percent": 42.3,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 876,
+    "assets_skipped_from_checkpoint": 877,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:13:24Z"
+      "checkpointed_at": "2026-10-19T04:18:17Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:14:07Z"
+      "checkpointed_at": "2026-10-19T04:19:00Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:15:02Z"
+      "checkpointed_at": "2026-10-19T04:19:55Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T04:15:43Z"
+      "checkpointed_at": "2026-10-19T04:20:36Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27777,6 +27777,42 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T04:17:28Z"
+    },
+    {
+      "asset_id": "e80988f6d14529e8f82215db",
+      "asset_sha256": "fcb4d4e5f704e1998b9226fc934c4bea40dfa1ee3978c668808f09c1173284c2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/fcb4d4e5f704e1998b9226fc934c4bea40dfa1ee3978c668808f09c1173284c2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "10f084c9dcf02adad2aa75e0417d8556a915cd05f20d611f122dc9899211fce5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a food festival with stalls for different regional cuisines.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "RAJASTHANI FOOD",
+          "GUJARATI FOOD",
+          "ASSAMESE FOOD"
+        ],
+        "concepts": [
+          "food festival",
+          "regional cuisines",
+          "food stalls"
+        ],
+        "context_relation": "The image represents a food festival where different regional cuisines are being showcased.",
+        "limitations": [
+          "The image does not provide specific details about the types of dishes or the cultural significance of the cuisines."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T04:21:17Z"
     }
   ]
 }
