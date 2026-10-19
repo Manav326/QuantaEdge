@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 755,
+    "assets_selected": 757,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 752,
-    "assets_remaining": 1539,
-    "assets_completion_percent": 32.8,
+    "assets_analyzed": 754,
+    "assets_remaining": 1537,
+    "assets_completion_percent": 32.9,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 750,
+    "assets_skipped_from_checkpoint": 752,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:40:00Z"
+      "checkpointed_at": "2026-10-19T02:45:47Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:40:48Z"
+      "checkpointed_at": "2026-10-19T02:46:35Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20041,7 +20041,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
-      "checkpointed_at": "2026-10-19T02:41:27Z"
+      "checkpointed_at": "2026-10-19T02:47:14Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22985,6 +22985,74 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178085104",
       "checkpointed_at": "2026-10-19T02:44:37Z"
+    },
+    {
+      "asset_id": "5c36cc1a560f10f6c46265f8",
+      "asset_sha256": "4f5548c7f4f9b7087d8a4ca84371b56fbccb520720e89854a1859a71537d888e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/4f5548c7f4f9b7087d8a4ca84371b56fbccb520720e89854a1859a71537d888e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a knife over a petri dish with a small amount of pink substance on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 2.3: (a) Removing",
+          "z Take an onion bulb from your kitchen or garden and wash it",
+          "z Cut the onion bulb vertically into pieces.",
+          "z Take one piece of onion and pull out the thin, transparent layer from its inner surface with the help of forceps. This layer is called the onion peel.",
+          "z Place the peel in a petri dish containing a few drops of"
+        ],
+        "concepts": [
+          "onion peel",
+          "petri dish",
+          "knife",
+          "pink substance"
+        ],
+        "context_relation": "The image is related to the activity of studying a cell, specifically the onion peel.",
+        "limitations": [
+          "The image does not show the actual cell structure or the pink substance being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:48:57Z"
+    },
+    {
+      "asset_id": "e88b75c031d0b30bd2cf97c7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 31,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e78c94903619b5499932531b3121350a3efae8156cb4ab7d14e2b8573693d2a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178085104",
+      "checkpointed_at": "2026-10-19T02:49:14Z"
     }
   ]
 }
