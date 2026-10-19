@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 930,
+    "assets_selected": 932,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 927,
-    "assets_remaining": 1364,
+    "assets_analyzed": 929,
+    "assets_remaining": 1362,
     "assets_completion_percent": 40.5,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 925,
+    "assets_skipped_from_checkpoint": 927,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:03:06Z"
+      "checkpointed_at": "2026-10-19T18:07:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:03:51Z"
+      "checkpointed_at": "2026-10-19T18:08:05Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:04:27Z"
+      "checkpointed_at": "2026-10-19T18:08:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -29510,6 +29510,74 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T18:06:12Z"
+    },
+    {
+      "asset_id": "156d74bd5b2687631ff0b26a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible context or information.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:08:54Z"
+    },
+    {
+      "asset_id": "f3deba28c313aa3e5313cc35",
+      "asset_sha256": "f46b7d8acf7ad32db5ff3992a2080ab933a17fb31aa5a6c0a3ad4fb6eb01ffef",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 54,
+      "asset_path": "page-0054.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c476e3110568c0fbbca2e60fba44d4ae496a395674ab5a13e1dfb50052537730",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a table summarizing the symptoms and prevention measures for various diseases spread through contaminated water and food.",
+        "visual_type": "table",
+        "visible_text": [
+          "Tuberculosis (TB)",
+          "Bacteria",
+          "Lungs",
+          "Cough, fever, fatigue, loss of appetite, night sweats",
+          "Avoiding close contact with TB-infected people, covering the mouth and nose, maintaining good hygiene, getting vaccinated"
+        ],
+        "concepts": [
+          "Tuberculosis",
+          "Bacteria",
+          "Lungs",
+          "Symptoms",
+          "Prevention measures"
+        ],
+        "context_relation": "The table provides information on the symptoms and prevention measures for Tuberculosis, which is spread through TB-infected people, covering the mouth and nose, maintaining good hygiene, and getting vaccinated.",
+        "limitations": [
+          "The table does not provide information on other diseases spread through contaminated water and food."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:12:47Z"
     }
   ]
 }

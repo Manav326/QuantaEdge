@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 944,
-    "successful_visual_analyses": 930,
-    "missing_visual_analyses": 1347,
+    "raw_analysis_result_rows": 946,
+    "successful_visual_analyses": 932,
+    "missing_visual_analyses": 1345,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1361,
+    "unresolved_count": 1359,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36126,9 +36126,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible context or information.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -36144,9 +36153,30 @@
       "asset_path": "page-0054.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a table summarizing the symptoms and prevention measures for various diseases spread through contaminated water and food.",
+        "visual_type": "table",
+        "visible_text": [
+          "Tuberculosis (TB)",
+          "Bacteria",
+          "Lungs",
+          "Cough, fever, fatigue, loss of appetite, night sweats",
+          "Avoiding close contact with TB-infected people, covering the mouth and nose, maintaining good hygiene, getting vaccinated"
+        ],
+        "concepts": [
+          "Tuberculosis",
+          "Bacteria",
+          "Lungs",
+          "Symptoms",
+          "Prevention measures"
+        ],
+        "context_relation": "The table provides information on the symptoms and prevention measures for Tuberculosis, which is spread through TB-infected people, covering the mouth and nose, maintaining good hygiene, and getting vaccinated.",
+        "limitations": [
+          "The table does not provide information on other diseases spread through contaminated water and food."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
