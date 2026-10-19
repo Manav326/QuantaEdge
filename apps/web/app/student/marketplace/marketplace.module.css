@@ -54,3 +54,91 @@
   .requestHistoryState{justify-items:start}
   .requestHistoryHeading{align-items:center}
 }
+
+
+/* Full dark-theme contract for this CSS-module route: neutral cards, quiet borders, semantic states. */
+html[data-qe-appearance="dark"] .page { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero {
+  background: radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--qe-color-primary) 12%, transparent), transparent 36%), var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="dark"] .eyebrow,
+html[data-qe-appearance="dark"] .price { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .hero h1,
+html[data-qe-appearance="dark"] .courseCard h2,
+html[data-qe-appearance="dark"] .requestHistoryHeading h2,
+html[data-qe-appearance="dark"] .requestHistoryRow strong { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero p,
+html[data-qe-appearance="dark"] .meta,
+html[data-qe-appearance="dark"] .description,
+html[data-qe-appearance="dark"] .stateCard p,
+html[data-qe-appearance="dark"] .verifyCard p,
+html[data-qe-appearance="dark"] .requestHistoryHeading p,
+html[data-qe-appearance="dark"] .requestHistoryRow span,
+html[data-qe-appearance="dark"] .requestHistoryState small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .primaryButton,
+html[data-qe-appearance="dark"] .verifyCard button,
+html[data-qe-appearance="dark"] .stateCard button {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .primaryButton:hover,
+html[data-qe-appearance="dark"] .verifyCard button:hover,
+html[data-qe-appearance="dark"] .stateCard button:hover { filter: brightness(1.06); }
+html[data-qe-appearance="dark"] .secondaryButton,
+html[data-qe-appearance="dark"] .iconButton,
+html[data-qe-appearance="dark"] .requestHistoryHeading button {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border: 1px solid var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .status,
+html[data-qe-appearance="dark"] .stateCard,
+html[data-qe-appearance="dark"] .requestHistory,
+html[data-qe-appearance="dark"] .courseCard {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .courseMark {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .subjects span {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .disabledButton {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+html[data-qe-appearance="dark"] .verifyCard {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .requestStatus {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .requestHistoryRow {
+  background: var(--qe-color-surface);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .requestPending {
+  background: var(--qe-color-warning-container);
+  color: var(--qe-color-on-warning-container) !important;
+}
+html[data-qe-appearance="dark"] .requestComplete {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container) !important;
+}
+html[data-qe-appearance="dark"] .requestOther {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text) !important;
+}
