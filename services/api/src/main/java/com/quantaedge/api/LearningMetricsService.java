@@ -39,7 +39,12 @@ public class LearningMetricsService {
 
     String lessonTrackJoin = programId == null
         ? "join student_track_enrollment ste on ste.student_id=st.id and ste.status='ACTIVE' __TENANT_STE__"
-        : "join curriculum_program_subject ste on ste.program_id=? and ste.subject_id=s.id and ste.class_id=s.class_id";
+        : "join curriculum_program_subject ste on ste.program_id=?";
+    // Course-scoped mapping must join before the subject row; referencing s from the
+    // mapping's ON clause before s is introduced produces PostgreSQL SQLSTATE 42P01.
+    String lessonSubjectJoin = programId == null
+        ? "join curriculum_subject s on s.id=ste.subject_id and s.active=true"
+        : "join curriculum_subject s on s.id=ste.subject_id and s.class_id=ste.class_id and s.active=true";
     Object[] lessonArgs = programId == null
         ? new Object[]{studentId}
         : new Object[]{programId,studentId,programId};
@@ -50,12 +55,12 @@ public class LearningMetricsService {
                nullif(count(distinct l.id),0),1),0) as completion_percent
       from student st
       __TRACK_JOIN__
-      join curriculum_subject s on s.id=ste.subject_id and s.active=true
+      __SUBJECT_JOIN__
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=st.id __TENANT_P__
       where st.id=? and st.active=true and __SUBJECT_SCOPE__
-      """.replace("__TRACK_JOIN__",lessonTrackJoin).replace("__SUBJECT_SCOPE__",subjectScope);
+      """.replace("__TRACK_JOIN__",lessonTrackJoin).replace("__SUBJECT_JOIN__",lessonSubjectJoin).replace("__SUBJECT_SCOPE__",subjectScope);
     result.put("lessonStats",jdbc.queryForMap(tenantSql(lessonSql,institutionId),tenantArgs(institutionId,lessonArgs)));
 
     result.put("questionStats",jdbc.queryForMap(tenantSql("""
