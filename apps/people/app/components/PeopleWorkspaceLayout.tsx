@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from './apiClient';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -100,7 +102,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
     }
 
     let active = true;
-    fetch('/api/v1/auth/me', {
+    apiFetch('/api/v1/auth/me', {
       headers: { 'X-QE-Workspace': 'HRMS' },
       credentials: 'same-origin',
       cache: 'no-store',
@@ -212,7 +214,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
     setLoggingOut(true);
     setMobileMenuOpen(false);
     try {
-      await fetch('/api/v1/auth/logout', {
+      await apiFetch('/api/v1/auth/logout', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'X-QE-Workspace': 'HRMS' },

@@ -1,4 +1,6 @@
 'use client';
+
+import { apiFetch } from '../components/apiClient';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
 import PasswordField from '../components/PasswordField';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
@@ -8,7 +10,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 async function api(path: string, body: Record<string, unknown>, statusMessage: (status: number) => string) {
-  const response = await fetch(path, {
+  const response = await apiFetch(path, {
     method: 'POST',
     credentials: 'same-origin',
     cache: 'no-store',
@@ -35,7 +37,7 @@ export default function PeopleLogin() {
     setError('');
     try {
       const session = await api('/api/v1/auth/hrms-login', { username: username.trim(), password }, status => t('people.auth.signInFailed', { status }));
-      const meResponse = await fetch('/api/v1/auth/me', {
+      const meResponse = await apiFetch('/api/v1/auth/me', {
         headers: { 'X-QE-Workspace': 'HRMS' },
         credentials: 'same-origin',
         cache: 'no-store',

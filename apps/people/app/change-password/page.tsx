@@ -1,4 +1,6 @@
 'use client';
+
+import { apiFetch } from '../components/apiClient';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
 import PasswordField from '../components/PasswordField';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
@@ -29,7 +31,7 @@ export default function ChangeHrmsPassword() {
     }
     setBusy(true);
     try {
-      const response = await fetch('/api/v1/auth/hrms/change-password', {
+      const response = await apiFetch('/api/v1/auth/hrms/change-password', {
         method: 'POST',
         credentials: 'same-origin',
         cache: 'no-store',

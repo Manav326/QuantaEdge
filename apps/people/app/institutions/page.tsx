@@ -1,5 +1,7 @@
 'use client';
 
+
+import { apiFetch } from '../components/apiClient';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Institutions.module.css';
@@ -36,7 +38,7 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   headers.set('X-QE-Workspace', 'HRMS');
   headers.set('Accept', 'application/json');
   if (init.body && !headers.has('Content-Type')) headers.set('Content-Type','application/json');
-  const response = await fetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});
+  const response = await apiFetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw = await response.text();
   let data: any = {};
   try { data = raw ? JSON.parse(raw) : {}; } catch { data = {message:raw}; }
@@ -231,7 +233,7 @@ export default function InstitutionsAdminPage() {
     try{
       const form=new FormData();form.set('file',file);
       const headers=new Headers({'X-QE-Workspace':'HRMS','Accept':'application/json'});
-      const response=await fetch('/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,{
+      const response=await apiFetch('/api/v1/hrms/platform/institutions/'+detail.id+'/branding/assets/'+assetType,{
         method:'POST',body:form,headers,credentials:'same-origin',cache:'no-store',
       });
       const raw=await response.text();
