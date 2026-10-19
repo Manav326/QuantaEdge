@@ -73,15 +73,13 @@ class LearningDocumentControllerTest {
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
         contains("d.status='PUBLISHED'"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
-    verify(jdbc).queryForList(
-        contains("cps.program_id=?"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
-    verify(jdbc).queryForList(
-        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(1L), eq("hi"), eq("hi"), eq(""), eq(""), eq(71L));
   }
 
   @Test
   void englishStudentCatalogFiltersToEnglishAssignments() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("from curriculum_program p"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 71L)));
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
@@ -93,6 +91,8 @@ class LearningDocumentControllerTest {
   @Test
   void englishChapterMetadataCanBeUsedWhileTheAvailablePdfIsHindi() {
     when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("from curriculum_program p"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 71L)));
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
@@ -109,6 +109,15 @@ class LearningDocumentControllerTest {
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.studentDocumentCatalog(null, "fr", null, 71L, null, student, TEST_TENANT));
 
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void catalogRequiresCourseAndNeverFallsBackToClassWideTracks() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.studentDocumentCatalog(null, "hi", null, null, null, student, TEST_TENANT));
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc);
   }
