@@ -190,7 +190,7 @@ class AssessmentControllerTest {
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.createAssessment(Map.of(
-            "title", "Fractions test", "classCode", "7", "subjectCode", "maths"), author));
+            "title", "Fractions test", "classCode", "7", "subjectCode", "maths"), author, TEST_TENANT));
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc);
