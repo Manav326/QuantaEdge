@@ -572,6 +572,10 @@ export default function TextbookLibraryPage() {
         ? subjectCode : (nextTracks.find(track => track.class_code === nextClassCode)?.subject_code || '');
       if (nextClassCode !== classCode) setClassCode(nextClassCode);
       if (nextSubjectCode !== subjectCode) setSubjectCode(nextSubjectCode);
+      // Reset upload scope when switching courses; don't retain Class 6 / Maths defaults.
+      setUploadClassCode(current => nextTracks.some(track => track.class_code === current) ? current : nextClassCode);
+      setUploadSubjectCode(current => nextTracks.some(track => track.class_code === nextClassCode && track.subject_code === current)
+        ? current : nextSubjectCode);
 
       // Fetch only the requested server-side page. Filter facets are computed by the API
       // across the matching inventory, not inferred from the currently visible page.
