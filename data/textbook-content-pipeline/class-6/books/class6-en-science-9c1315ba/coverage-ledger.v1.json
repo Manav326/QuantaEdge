@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 854,
-    "successful_visual_analyses": 843,
-    "missing_visual_analyses": 1224,
+    "raw_analysis_result_rows": 855,
+    "successful_visual_analyses": 844,
+    "missing_visual_analyses": 1223,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1235,
+    "unresolved_count": 1234,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -33335,9 +33335,24 @@
       "asset_path": "assets/113a4f3bd3c36e5509bdf009a8cce47817c17ade0fbd67998767ee1bf9beae4a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pile of wheat seeds scattered in a circular pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Wheat",
+          "Kidney beans"
+        ],
+        "concepts": [
+          "seeds",
+          "plants"
+        ],
+        "context_relation": "The image is related to the educational content about the differences between wheat and kidney bean seeds and their plants.",
+        "limitations": [
+          "The image does not provide specific details about the differences in roots and leaf venation between wheat and kidney bean plants."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

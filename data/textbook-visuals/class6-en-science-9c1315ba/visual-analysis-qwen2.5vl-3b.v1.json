@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 843,
+    "assets_selected": 844,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 839,
-    "assets_remaining": 1239,
+    "assets_analyzed": 840,
+    "assets_remaining": 1238,
     "assets_completion_percent": 40.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 838,
+    "assets_skipped_from_checkpoint": 839,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:47:44Z"
+      "checkpointed_at": "2026-10-19T01:51:29Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:48:26Z"
+      "checkpointed_at": "2026-10-19T01:52:11Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:49:21Z"
+      "checkpointed_at": "2026-10-19T01:53:05Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:50:02Z"
+      "checkpointed_at": "2026-10-19T01:53:45Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26344,6 +26344,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T01:50:38Z"
+    },
+    {
+      "asset_id": "80b24cf0c514e5afb954d10e",
+      "asset_sha256": "113a4f3bd3c36e5509bdf009a8cce47817c17ade0fbd67998767ee1bf9beae4a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/113a4f3bd3c36e5509bdf009a8cce47817c17ade0fbd67998767ee1bf9beae4a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d90ed97bfa1d25890acde79236cc96efba506f8730826d353da3612d6a311a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A pile of wheat seeds scattered in a circular pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Wheat",
+          "Kidney beans"
+        ],
+        "concepts": [
+          "seeds",
+          "plants"
+        ],
+        "context_relation": "The image is related to the educational content about the differences between wheat and kidney bean seeds and their plants.",
+        "limitations": [
+          "The image does not provide specific details about the differences in roots and leaf venation between wheat and kidney bean plants."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T01:54:23Z"
     }
   ]
 }
