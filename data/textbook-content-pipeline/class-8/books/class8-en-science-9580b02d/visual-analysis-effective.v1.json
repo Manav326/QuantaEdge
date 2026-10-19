@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "24afa98625866164a1ede331e7d029b743e25aa08b69e713009f9273d451f65c",
+  "raw_analysis_sha256": "3cf9a2802de30616b4857b4e6409138d26f26ed88b43db1df7c11e370e22ae83",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:48:09Z",
+      "checkpointed_at": "2026-10-19T18:51:06Z",
       "effective_analysis": {
         "visual_summary": "The text discusses the importance of open-ended questions in textbooks to encourage critical thinking and curiosity, and mentions the inclusion of safety precautions in activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -2657,7 +2657,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:48:54Z",
+      "checkpointed_at": "2026-10-19T18:51:52Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
         "visual_type": "page_with_multiple_visuals",
@@ -29357,7 +29357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T18:49:30Z",
+      "checkpointed_at": "2026-10-19T18:52:29Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook.",
         "visual_type": "uncertain",
@@ -44666,6 +44666,146 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "972225c88e280e43baabf7ae",
+      "asset_sha256": "7687355ea9ac18ac6bb9d50e490fdfdf47ecdced2364709cf004744019a4e4d1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 57,
+      "asset_path": "page-0057.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5fe62a6dc7923492ff8aded65ca3aaa85212b82dee7bece002dc630ca2ce771a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing health and prevention of diseases, featuring a photograph of Kamal Ranadive and a diagram of a microscope.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Be a scientist",
+          "Kamal Ranadive (1917–2001) was a pioneering biomedical researcher. She studied how hormones and certain viruses are linked to cancer, helping improve its treatment and prevention. Her work also showed how tobacco, diet, and pollution can raise the risk of cancer, highlighting the importance of a hea",
+          "3.5 How to Prevent and Control Diseases?",
+          "You might have heard the phrase 'Prevention is better than cure.' It is important to protect ourselves from both communicable and non-communicable diseases.",
+          "Activity 3.6: Let us read",
+          "Odisha — community-led sanitation campaign",
+          "In Bhadrak district, Odisha, a community sanitation campaign helped more people build and use toilets. This reduced open defecation significantly, and improved child health, with fewer cases of diarrhoea and infections.",
+          "What do you infer from this case study? Simple steps like good sanitation can greatly reduce the spread of communicable diseases. Find about such community campaigns held in your location. Share in your class and discuss with your peers about the impact of such initiatives.",
+          "Ability of the body to fight diseases",
+          "You would have noticed that some people get sick more frequently than others, although living in a similar environment. Do you know why? The natural ability of our body to fight diseases is known as immunity. Our body has a special system called the immune system that helps fight against diseases.",
+          "You might have taken some drops or injections in your childhood to protect yourself from certain diseases, such as polio, measles, tetanus, and hepatitis. These are vaccines that help prevent serious infections caused by viruses and bacteria.",
+          "A vaccine helps our body fight certain diseases by training the immune system to recognise and attack harmful germs, providing what is known as acquired immunity — protection developed after exposure to a pathogen or a vaccine. Vaccines can be made in different ways — from weakened or dead pathogens"
+        ],
+        "concepts": [
+          "health",
+          "prevention",
+          "communicable diseases",
+          "non-communicable diseases",
+          "community-led sanitation campaign",
+          "immunity",
+          "vaccines",
+          "immune system",
+          "acquired immunity"
+        ],
+        "context_relation": "The page discusses health and prevention of diseases, including a case study of a community sanitation campaign in Odisha.",
+        "limitations": [
+          "The page does not provide specific details about the community sanitation campaign in Odisha, only a general description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:57:07Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing health and prevention of diseases, featuring a photograph of Kamal Ranadive and a diagram of a microscope.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Be a scientist",
+          "Kamal Ranadive (1917–2001) was a pioneering biomedical researcher. She studied how hormones and certain viruses are linked to cancer, helping improve its treatment and prevention. Her work also showed how tobacco, diet, and pollution can raise the risk of cancer, highlighting the importance of a hea",
+          "3.5 How to Prevent and Control Diseases?",
+          "You might have heard the phrase 'Prevention is better than cure.' It is important to protect ourselves from both communicable and non-communicable diseases.",
+          "Activity 3.6: Let us read",
+          "Odisha — community-led sanitation campaign",
+          "In Bhadrak district, Odisha, a community sanitation campaign helped more people build and use toilets. This reduced open defecation significantly, and improved child health, with fewer cases of diarrhoea and infections.",
+          "What do you infer from this case study? Simple steps like good sanitation can greatly reduce the spread of communicable diseases. Find about such community campaigns held in your location. Share in your class and discuss with your peers about the impact of such initiatives.",
+          "Ability of the body to fight diseases",
+          "You would have noticed that some people get sick more frequently than others, although living in a similar environment. Do you know why? The natural ability of our body to fight diseases is known as immunity. Our body has a special system called the immune system that helps fight against diseases.",
+          "You might have taken some drops or injections in your childhood to protect yourself from certain diseases, such as polio, measles, tetanus, and hepatitis. These are vaccines that help prevent serious infections caused by viruses and bacteria.",
+          "A vaccine helps our body fight certain diseases by training the immune system to recognise and attack harmful germs, providing what is known as acquired immunity — protection developed after exposure to a pathogen or a vaccine. Vaccines can be made in different ways — from weakened or dead pathogens"
+        ],
+        "concepts": [
+          "health",
+          "prevention",
+          "communicable diseases",
+          "non-communicable diseases",
+          "community-led sanitation campaign",
+          "immunity",
+          "vaccines",
+          "immune system",
+          "acquired immunity"
+        ],
+        "context_relation": "The page discusses health and prevention of diseases, including a case study of a community sanitation campaign in Odisha.",
+        "limitations": [
+          "The page does not provide specific details about the community sanitation campaign in Odisha, only a general description."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "18095edc2bbfdecf897d40db",
+      "asset_sha256": "0d63dbd6526f219b3ff12aca5e34dafa3722f728840d64ac35cca6fc67c1af2b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 58,
+      "asset_path": "assets/0d63dbd6526f219b3ff12aca5e34dafa3722f728840d64ac35cca6fc67c1af2b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c76874f362f8bd60caa1570f25037ba6a888834e26f32e75accff5f63140c3a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "bookshelf",
+          "ladder",
+          "character",
+          "reaching",
+          "book"
+        ],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T18:58:41Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "cartoon",
+          "bookshelf",
+          "ladder",
+          "character",
+          "reaching",
+          "book"
+        ],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
