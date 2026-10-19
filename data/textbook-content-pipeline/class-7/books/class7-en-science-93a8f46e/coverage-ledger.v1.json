@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1397,
-    "successful_visual_analyses": 1374,
-    "missing_visual_analyses": 6091,
+    "raw_analysis_result_rows": 1400,
+    "successful_visual_analyses": 1377,
+    "missing_visual_analyses": 6088,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6114,
+    "unresolved_count": 6111,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -62538,9 +62538,20 @@
       "asset_path": "assets/6ff273ab3b89b4d0bbb105211e86ac1e8f459479f0ca4c838fe7d75cf2549216.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about electrical circuits or the arrangement of lamps.",
+        "limitations": [
+          "The image does not provide specific details about the electrical circuit or the arrangement of lamps.",
+          "The image is a cartoon and may not accurately represent real-world scenarios.",
+          "The image does not include any text or labels that could provide additional context or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62556,9 +62567,16 @@
       "asset_path": "assets/f8fc4f76700822ca5a5aa366bcd6309efba17e9282d89ef420a8fc91d136966b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll-like object with two pointed ends, possibly representing a scroll or a banner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook, specifically the section about electrical circuits.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -62574,9 +62592,28 @@
       "asset_path": "assets/5319ecf20fe21e1ec4f62f625a19ea99207ce09c6f8ab975fcae296d71463717.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A simple electrical circuit with a battery and a light bulb connected by wires.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows in the arrangements at S.No. 1 and 6 and does not glow in the remaining arrangements.",
+          "Now, carefully look at the arrangements in which the lamp glows. Compare these with those in which the lamp does not glow.",
+          "3.2.5 An electrical circuit",
+          "The lamp glows when one terminal of the lamp is connected to one terminal of the electric cell and the other terminal of the light bulb."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Light bulb",
+          "Battery",
+          "Wires"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the textbook.",
+        "limitations": [
+          "The image does not show the arrangement of the light bulb and battery in the remaining arrangements where the lamp does not glow."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1374,
+    "assets_selected": 1377,
     "assets_processed_this_run": 5,
     "assets_eligible": 7488,
-    "assets_analyzed": 1372,
-    "assets_remaining": 6116,
-    "assets_completion_percent": 18.3,
+    "assets_analyzed": 1375,
+    "assets_remaining": 6113,
+    "assets_completion_percent": 18.4,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1369,
+    "assets_skipped_from_checkpoint": 1372,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9847,7 +9847,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:12:57Z"
+      "checkpointed_at": "2026-10-19T05:18:34Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13313,7 +13313,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T05:13:25Z"
+      "checkpointed_at": "2026-10-19T05:19:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -52000,6 +52000,100 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
       "checkpointed_at": "2026-10-19T05:17:40Z"
+    },
+    {
+      "asset_id": "e664a90878da18f0b5cdd5c2",
+      "asset_sha256": "6ff273ab3b89b4d0bbb105211e86ac1e8f459479f0ca4c838fe7d75cf2549216",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/6ff273ab3b89b4d0bbb105211e86ac1e8f459479f0ca4c838fe7d75cf2549216.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about electrical circuits or the arrangement of lamps.",
+        "limitations": [
+          "The image does not provide specific details about the electrical circuit or the arrangement of lamps.",
+          "The image is a cartoon and may not accurately represent real-world scenarios.",
+          "The image does not include any text or labels that could provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:20:12Z"
+    },
+    {
+      "asset_id": "7ec761759ab613815ed9c48d",
+      "asset_sha256": "f8fc4f76700822ca5a5aa366bcd6309efba17e9282d89ef420a8fc91d136966b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/f8fc4f76700822ca5a5aa366bcd6309efba17e9282d89ef420a8fc91d136966b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll-like object with two pointed ends, possibly representing a scroll or a banner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the content of the textbook, specifically the section about electrical circuits.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:21:20Z"
+    },
+    {
+      "asset_id": "8d0fba07596433c50a71b02d",
+      "asset_sha256": "5319ecf20fe21e1ec4f62f625a19ea99207ce09c6f8ab975fcae296d71463717",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 50,
+      "asset_path": "assets/5319ecf20fe21e1ec4f62f625a19ea99207ce09c6f8ab975fcae296d71463717.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b999f43d9e5638fb651e1f17112edd939e88ccd2e012ba5dc8f6685bd7a7c617",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A simple electrical circuit with a battery and a light bulb connected by wires.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The lamp glows in the arrangements at S.No. 1 and 6 and does not glow in the remaining arrangements.",
+          "Now, carefully look at the arrangements in which the lamp glows. Compare these with those in which the lamp does not glow.",
+          "3.2.5 An electrical circuit",
+          "The lamp glows when one terminal of the lamp is connected to one terminal of the electric cell and the other terminal of the light bulb."
+        ],
+        "concepts": [
+          "Electrical circuit",
+          "Light bulb",
+          "Battery",
+          "Wires"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the textbook.",
+        "limitations": [
+          "The image does not show the arrangement of the light bulb and battery in the remaining arrangements where the lamp does not glow."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T05:22:40Z"
     }
   ]
 }
