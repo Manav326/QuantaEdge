@@ -108,7 +108,7 @@ assert(webStructuredCss.includes('var(--qe-color-surface-elevated)') && webStruc
 assert(webAssignedResourcesCss.includes('var(--qe-color-error-container)') && webAssignedResourcesCss.includes('var(--qe-color-success)'), 'Assigned learning resource states must be semantic.');
 assert(webVerifyCertificateCss.includes('html[data-qe-appearance="dark"] .card') && webVerifyCertificateCss.includes('var(--qe-color-border-subtle)'), 'Certificate verification must theme its page and form surfaces.');
 assert(webInstitutionScreen.includes('--institution-background:var(--qe-color-background)') && webInstitutionScreen.includes('var(--qe-color-border-subtle)'), 'Institution portal must consume the central palette rather than hard-coded page surfaces.');
-assert(webStudentProfile.includes('var(--qe-color-surface)') && webParentProfile.includes('var(--qe-color-surface)'), 'Student and parent profile pages must share neutral cards and inputs.');
+assert(webCss.includes('.student-profile-card{') && webCss.includes('.parent-profile-card{') && webCss.includes('background:var(--qe-color-surface)'), 'Student and parent profile pages must share neutral cards and inputs.');
 
 assert(webCss.includes('--qe-elevation-1:') && webCss.includes('--qe-elevation-3:'), 'Shared web surface elevation scale is required for calm layering.');
 assert(webCss.includes('background-color:var(--qe-color-surface);') && !webCss.includes('background-color:var(--qe-color-error-container);'), 'Ordinary cards and panels must never use error-container background in dark mode.');
