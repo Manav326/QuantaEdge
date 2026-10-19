@@ -11,9 +11,9 @@
     "assets_selected": 876,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 871,
-    "assets_remaining": 1207,
-    "assets_completion_percent": 41.9,
+    "assets_analyzed": 872,
+    "assets_remaining": 1206,
+    "assets_completion_percent": 42.0,
     "assets_failed": 12,
     "assets_skipped_from_checkpoint": 871,
     "batch_limit": 5,
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:51:37Z"
+      "checkpointed_at": "2026-10-19T03:55:21Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:52:18Z"
+      "checkpointed_at": "2026-10-19T03:56:03Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:53:13Z"
+      "checkpointed_at": "2026-10-19T03:56:58Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T03:53:53Z"
+      "checkpointed_at": "2026-10-19T03:57:40Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -27584,6 +27584,38 @@
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "fbd21fb7cd7051e49d8f4686",
+      "asset_sha256": "b75c88c0fb5a3f53a435a466c191db646ae484a43515c0a312ca5fb7ebf45f25",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/b75c88c0fb5a3f53a435a466c191db646ae484a43515c0a312ca5fb7ebf45f25.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d13f98c679357936a084cd6c3533cfdbe15ba242702a84c930f40da13477f830",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two gas burners on a stove with blue flames.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "gas burners",
+          "stove",
+          "blue flames"
+        ],
+        "context_relation": "The image shows a cooking setup, likely used for preparing food.",
+        "limitations": [
+          "No specific question or activity is depicted in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T03:58:18Z"
     }
   ]
 }
