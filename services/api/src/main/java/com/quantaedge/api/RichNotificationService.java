@@ -607,6 +607,12 @@ public class RichNotificationService {
       """,recipients.size(),writeJson(snapshot),campaignId);
   }
 
+  public String campaignScope(long campaignId) {
+    List<String> scopes=jdbc.queryForList("select scope from notification_campaign where id=?",String.class,campaignId);
+    if(scopes.isEmpty())throw new IllegalArgumentException("Notification campaign was not found.");
+    return scopes.getFirst();
+  }
+
   public Map<String,Object> campaignResult(long id,boolean idempotent) {
     Map<String,Object> row=jdbc.queryForMap("""
       select id,public_id,scope,institution_id,course_id,title,summary,status,
