@@ -834,6 +834,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
         courseProgress = progress
     }
+
+    fun structuredPublicCourseId(courseId: Long): String {
+        val publicId = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == courseId
+        }?.optString("public_id", "")?.trim()?.uppercase().orEmpty()
+        if (!Regex("^[A-Z]{3}[A-Z0-9]{5}$").matches(publicId)) {
+            throw IOException("The selected course has no valid public course ID. Refresh your course list.")
+        }
+        return publicId
+    }
+
     suspend fun refreshStudentTextbookDocuments() {
         if (currentCourseId <= 0L) {
             studentTextbookDocuments = emptyList()
@@ -1166,7 +1177,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             structuredSubjectFilter = ""
             currentSubject = ""
             structuredLessonMode = true
-            val params = "courseId=" + courseId + "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val params = "courseId=" + structuredPublicCourseId(courseId) + "&language=" + ApiClient.encodeQuery(learningLanguage)
             val lessonsArray = ApiClient.getArray("/api/v1/learning/structured-lessons?" + params)
             structuredLessons = (0 until lessonsArray.length()).mapNotNull { lessonsArray.optJSONObject(it) }
             route = AppRoute.SUBJECT_LESSONS
@@ -1198,7 +1209,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             structuredSubjectFilter = ""
             currentSubject = ""
             structuredLessonMode = true
-            val params = "courseId=" + courseId + "&language=" + ApiClient.encodeQuery(learningLanguage)
+            val params = "courseId=" + structuredPublicCourseId(courseId) + "&language=" + ApiClient.encodeQuery(learningLanguage)
             val array = ApiClient.getArray("/api/v1/learning/structured-lessons?" + params)
             structuredLessons = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
             route = AppRoute.SUBJECT_LESSONS
