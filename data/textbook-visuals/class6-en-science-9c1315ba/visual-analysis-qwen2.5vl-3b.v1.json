@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 894,
+    "assets_selected": 895,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 890,
-    "assets_remaining": 1188,
-    "assets_completion_percent": 42.8,
+    "assets_analyzed": 891,
+    "assets_remaining": 1187,
+    "assets_completion_percent": 42.9,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 889,
+    "assets_skipped_from_checkpoint": 890,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:09:06Z"
+      "checkpointed_at": "2026-10-19T05:12:37Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:09:46Z"
+      "checkpointed_at": "2026-10-19T05:13:16Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:10:38Z"
+      "checkpointed_at": "2026-10-19T05:14:07Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:11:15Z"
+      "checkpointed_at": "2026-10-19T05:14:45Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28273,6 +28273,43 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T05:11:50Z"
+    },
+    {
+      "asset_id": "1b7443313605775cef6f71c4",
+      "asset_sha256": "9e039903bc0cb1be4ad72b63107ca00844c9ae1e6065b14c8ce5fc2c89982573",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/9e039903bc0cb1be4ad72b63107ca00844c9ae1e6065b14c8ce5fc2c89982573.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a collection of various seeds and nuts, including sunflower seeds, pistachios, cashew nuts, sesame seeds, and groundnuts, arranged in a visually appealing manner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "seeds",
+          "nuts",
+          "sunflower seeds",
+          "pistachios",
+          "cashew nuts",
+          "sesame seeds",
+          "groundnuts"
+        ],
+        "context_relation": "The image is related to the topic of food sources of fats and carbohydrates.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of each seed or nut.",
+          "The image does not include any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:15:24Z"
     }
   ]
 }

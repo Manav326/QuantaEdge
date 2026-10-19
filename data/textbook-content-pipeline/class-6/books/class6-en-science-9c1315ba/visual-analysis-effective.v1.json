@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0ff719c39fd72f811d1b865cb4a6975984ff18e742ad79031a2fbe21357758c5",
+  "raw_analysis_sha256": "494a41e9522ccbf2a7f63b6dadf793f16bbc139bed44271dc4b82cfeddaf73bc",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:09:06Z",
+      "checkpointed_at": "2026-10-19T05:12:37Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:09:46Z",
+      "checkpointed_at": "2026-10-19T05:13:16Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:10:38Z",
+      "checkpointed_at": "2026-10-19T05:14:07Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -37928,7 +37928,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:11:15Z",
+      "checkpointed_at": "2026-10-19T05:14:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the adaptations of plants and animals in different regions and their habitats.",
         "visual_type": "uncertain",
@@ -42026,6 +42026,64 @@
         "context_relation": "The image is a visual representation of a polar bear, which is an animal.",
         "limitations": [
           "The image does not provide any specific information about the context or the educational content it is related to."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1b7443313605775cef6f71c4",
+      "asset_sha256": "9e039903bc0cb1be4ad72b63107ca00844c9ae1e6065b14c8ce5fc2c89982573",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 59,
+      "asset_path": "assets/9e039903bc0cb1be4ad72b63107ca00844c9ae1e6065b14c8ce5fc2c89982573.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fcf8db25f93192642504976d6af46ba0a102124c7824563ceea33f3abea83aea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image shows a collection of various seeds and nuts, including sunflower seeds, pistachios, cashew nuts, sesame seeds, and groundnuts, arranged in a visually appealing manner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "seeds",
+          "nuts",
+          "sunflower seeds",
+          "pistachios",
+          "cashew nuts",
+          "sesame seeds",
+          "groundnuts"
+        ],
+        "context_relation": "The image is related to the topic of food sources of fats and carbohydrates.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of each seed or nut.",
+          "The image does not include any text or labels that provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:15:24Z",
+      "effective_analysis": {
+        "visual_summary": "The image shows a collection of various seeds and nuts, including sunflower seeds, pistachios, cashew nuts, sesame seeds, and groundnuts, arranged in a visually appealing manner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "seeds",
+          "nuts",
+          "sunflower seeds",
+          "pistachios",
+          "cashew nuts",
+          "sesame seeds",
+          "groundnuts"
+        ],
+        "context_relation": "The image is related to the topic of food sources of fats and carbohydrates.",
+        "limitations": [
+          "The image does not provide specific information about the nutritional content of each seed or nut.",
+          "The image does not include any text or labels that provide additional context or information."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
