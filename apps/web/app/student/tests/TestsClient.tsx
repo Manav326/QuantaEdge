@@ -231,7 +231,7 @@ export default function TestsClient(){
       const eligibilityMap:Record<number,CertificateEligibility>={};
       if(attemptIds.length){
         try{
-          const eligibility=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+attemptIds.join(','));
+          const eligibility=await api('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+attemptIds.join(','));
           for(const item of Array.isArray(eligibility?.items)?eligibility.items:[]){
             const id=Number(item.attempt_id);
             if(Number.isSafeInteger(id)&&id>0)eligibilityMap[id]=item as CertificateEligibility;
@@ -371,7 +371,7 @@ export default function TestsClient(){
     const ids=[...new Set(attemptIds.filter(id=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
     if(!ids.length)return;
     try{
-      const response=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+ids.join(','));
+      const response=await api('/api/v1/students/me/certificates/assessment-eligibility?courseId='+encodeURIComponent(String(courseId))+'&attemptIds='+ids.join(','));
       const updates:Record<number,CertificateEligibility>={};
       for(const item of Array.isArray(response?.items)?response.items:[]){
         const id=Number(item.attempt_id);
