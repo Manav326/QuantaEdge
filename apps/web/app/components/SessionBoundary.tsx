@@ -112,7 +112,11 @@ function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request
   const path = window.location.pathname;
   const inferredWorkspace = path.startsWith('/institution')
     ? 'INSTITUTION'
-    : path.startsWith('/student') || path === '/login/student' ? 'STUDENT' : 'PARENT';
+    : path.startsWith('/admin') ? 'EDUCATION_ADMIN'
+    : path.startsWith('/hrms') ? 'HRMS'
+    : path.startsWith('/student') || path === '/login/student' || path === '/signup' ? 'STUDENT'
+    : path.startsWith('/parent') || path === '/login/parent' ? 'PARENT'
+    : explicitWorkspace || 'LEARNING';
   headers.set('X-QE-Workspace', explicitWorkspace || inferredWorkspace);
   const institutionCode = institutionCodeForRequest();
   if (institutionCode) headers.set('X-QE-Institution-Code', institutionCode);
