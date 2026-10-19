@@ -36,6 +36,9 @@ export default function ParentPage(){
   async function load(id?:number, requestedCourseId?:number){
     const switchingChild=id!==undefined && id!==selectedChildId;
     const switchingCourse=requestedCourseId!==undefined;
+    // A child/course switch clears the old report while fetching the new scope, so keep
+    // the loading boundary active until every early-return and error path has completed.
+    if(switchingChild || !selected || switchingCourse)setLoading(true);
     if(switchingChild || (!selected && !switchingCourse))setSwitchingChild(true);
     if(!selected || switchingChild || switchingCourse)setSelected(null);
     if(switchingChild){setSelectedCourseId(null);setChildCourses([]);setChildCertificates([]);}
@@ -103,6 +106,7 @@ export default function ParentPage(){
       setError(e?.message||'The parent report could not be loaded. Check the local services and retry.');
     }finally{
       setSwitchingChild(false);
+      setLoading(false);
     }
   }
 
