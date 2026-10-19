@@ -770,21 +770,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             }.getOrNull()?.let { progress[id] = it }
         }
         courseProgress = progress
-        val serverActive = programs.firstOrNull {
-            it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
-        }
-        if (serverActive != null) {
-            val serverActiveId = serverActive.longAny("id", "course_id")
-            if (serverActiveId > 0L) {
-                currentCourseId = serverActiveId
-                preferences.edit().putLong("activeCourseId", serverActiveId).apply()
-            }
-        } else if (currentCourseId > 0L && programs.none {
-                it.longAny("id", "course_id") == currentCourseId &&
-                    (it.optBoolean("paused") || it.optBoolean("is_enrolled", it.optBoolean("enrolled")))
+        // Primary course is a saved reporting focus, not the most recently enrolled
+        // server row. Preserve it while this institution still grants access to the course.
+        if (currentCourseId > 0L && ownedPrograms.none {
+                it.longAny("id", "course_id") == currentCourseId
             }) {
-            currentCourseId = 0L
-            preferences.edit().remove("activeCourseId").apply()
+            currentCourseId = ownedPrograms.firstOrNull {
+                it.optBoolean("is_enrolled", it.optBoolean("enrolled"))
+            }?.longAny("id", "course_id") ?: ownedPrograms.firstOrNull()?.longAny("id", "course_id") ?: 0L
+            if (currentCourseId > 0L) preferences.edit().putLong("activeCourseId", currentCourseId).apply()
+            else preferences.edit().remove("activeCourseId").apply()
         }
     }
 
@@ -1118,12 +1113,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             return
         }
         runTask {
-            // The server owns the active-course transition. This also pauses the
-            // previous course while preserving its enrollment and learning history.
-            ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
-            refreshStudentPrograms()
+            // Primary focus is independent of enrollment. Reactivate only a pre-migration
+            // paused course; the API no longer pauses other courses as a side effect.
+            if (!course.optBoolean("is_enrolled", course.optBoolean("enrolled"))) {
+                ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            }
             currentCourseId = courseId
             preferences.edit().putLong("activeCourseId", courseId).apply()
+            refreshStudentPrograms()
             studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + courseId)
             refreshStudentTextbookDocuments()
             route = AppRoute.STUDENT_HOME
@@ -1709,9 +1706,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     suspend fun loadAssessmentResultsData() {
+        if (currentCourseId <= 0L) throw IOException("Choose an enrolled course to view its results.")
         val resultResponse = ApiClient.getObject(
             "/api/v1/learning/assessment-results?language=" + learningContentLanguage +
-                "&limit=" + resultsPageSize + "&offset=" + resultsPageOffset
+                "&courseId=" + currentCourseId + "&limit=" + resultsPageSize + "&offset=" + resultsPageOffset
         )
         val loaded = resultResponse.optJSONArray("items").objectItems()
         assessmentResults = loaded
@@ -2814,7 +2812,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun openProgress() {
         route = AppRoute.PROGRESS
         runTask {
-            progressData = ApiClient.getObject("/api/v1/students/me")
+            if (currentCourseId <= 0L) refreshStudentPrograms()
+            if (currentCourseId <= 0L) throw IOException("Choose an enrolled course to view its report.")
+            progressData = ApiClient.getObject("/api/v1/students/me?courseId=" + currentCourseId)
             loadProgressCertificateData(progressData)
             route = AppRoute.PROGRESS
         }
