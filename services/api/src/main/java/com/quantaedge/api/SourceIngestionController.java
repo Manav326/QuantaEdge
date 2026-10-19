@@ -426,12 +426,17 @@ public class SourceIngestionController {
       previousEnd = end;
 
       List<Map<String,Object>> existingRows = jdbc.queryForList("""
-        select id as document_id,title,status,page_start,page_end
-        from learning_document
-        where pdf_asset_id=? and scope='CHAPTER_PDF' and chapter_id=? and language=?
-          and status<>'ARCHIVED'
-        order by id desc
-        """, assetId, chapterId, language);
+        select d.id as document_id,d.title,
+               coalesce(dca.status,'DRAFT') as status,dca.id as assignment_id,
+               d.page_start,d.page_end
+        from learning_document d
+        left join learning_document_course_assignment dca
+          on dca.learning_document_id=d.id and dca.institution_id=? and dca.course_id=?
+            and dca.subject_id=d.subject_id
+        where d.pdf_asset_id=? and d.scope='CHAPTER_PDF' and d.chapter_id=? and d.language=?
+          and (dca.id is null or dca.status<>'ARCHIVED')
+        order by d.updated_at desc,d.id desc
+        """, institutionId,courseId,assetId,chapterId,language);
       if (!existingRows.isEmpty()) {
         Map<String,Object> existing = existingRows.getFirst();
         boolean sameRange = ((Number) existing.get("page_start")).intValue() == start
@@ -440,7 +445,18 @@ public class SourceIngestionController {
           throw badRequest("An active resource already exists for chapter " + range.get("chapter_title")
               + " from this PDF with different page bounds. Review or archive that resource before creating another.");
         }
+        Long existingDocumentId=((Number)existing.get("document_id")).longValue();
+        if(existing.get("assignment_id")==null) {
+          // Reuse the shared PDF/document metadata, but create a distinct publication
+          // assignment for this exact institution and course.
+          jdbc.update("""
+            insert into learning_document_course_assignment(
+              institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+            ) values(?,?,?,?,'DRAFT',?)
+            """,institutionId,courseId,existingDocumentId,subjectId,context.staffId());
+        }
         Map<String,Object> output = new LinkedHashMap<>(existing);
+        output.put("status",existing.get("assignment_id")==null?"DRAFT":existing.get("status"));
         output.put("created", false);
         drafts.add(output);
         existingCount++;
@@ -456,6 +472,11 @@ public class SourceIngestionController {
         returning id
         """, Long.class, assetId, subjectId, chapterId, draftTitle, sourceTitle,
           sourceUrl, edition, language, start, end, context.staffId());
+      jdbc.update("""
+        insert into learning_document_course_assignment(
+          institution_id,course_id,learning_document_id,subject_id,status,created_by_staff_id
+        ) values(?,?,?,?,'DRAFT',?)
+        """,institutionId,courseId,documentId,subjectId,context.staffId());
       Map<String,Object> output = new LinkedHashMap<>();
       output.put("document_id", documentId);
       output.put("chapter_id", chapterId);
@@ -957,14 +978,18 @@ public class SourceIngestionController {
       join content_source src on src.id=cs.source_id
       join curriculum_chapter ch on ch.id=cs.chapter_id
       left join lateral (
-        select ld.id as document_id,ld.title as document_title,ld.status as document_status,
+        select ld.id as document_id,ld.title as document_title,ldca.status as document_status,
                ld.source_title as document_source_title,ld.source_url as document_source_url,
                a.id as pdf_asset_id,a.title as pdf_title,a.page_count as pdf_page_count,
                a.review_status as pdf_review_status,a.sha256 as pdf_sha256
         from learning_document ld
         join learning_pdf_asset a on a.id=ld.pdf_asset_id
+        join learning_document_course_assignment ldca
+          on ldca.learning_document_id=ld.id and ldca.subject_id=ld.subject_id
+            and ldca.institution_id=? and ldca.course_id=?
         where ld.chapter_id=cs.chapter_id and ld.scope='CHAPTER_PDF'
           and ld.language=case when lower(coalesce(src.language,'')) in ('en','english') then 'en' else 'hi' end
+          and ldca.status<>'ARCHIVED'
           and (
             (src.source_url is not null and ld.source_url=src.source_url)
             or ld.source_title=src.title
@@ -974,7 +999,7 @@ public class SourceIngestionController {
         order by case when a.source_content_id=src.id then 0
                       when src.source_url is not null and ld.source_url=src.source_url then 1
                       else 2 end,
-                 case when ld.status='PUBLISHED' then 0 when ld.status='DRAFT' then 1 else 2 end,
+                 case when ldca.status='PUBLISHED' then 0 when ldca.status='DRAFT' then 1 else 2 end,
                  ld.updated_at desc,ld.id desc
         limit 1
       ) d on true
@@ -991,7 +1016,7 @@ public class SourceIngestionController {
               or (mapped_subject.program_id is null and selected_course.class_id=mapped_subject.class_id))
         )
       order by ch.sort_order,ch.teaching_order,ch.id,cs.id
-      """, sourceId,courseId);
+      """, institutionId,courseId,sourceId,courseId);
   }
 
   @GetMapping("/jobs")
