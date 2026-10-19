@@ -28,8 +28,9 @@ function mediaEndpoint(surface: Surface, id: string) {
   return prefix + encodeURIComponent(id);
 }
 
-function Asset({ id, alt, kind, surface }: {
+function Asset({ id, alt, kind, surface, fit = 'contain', aspectRatio = 'auto', focalPoint = 'center' }: {
   id: unknown; alt?: string; kind: 'image' | 'video'; surface: Surface;
+  fit?: string; aspectRatio?: string; focalPoint?: string;
 }) {
   const assetId = typeof id === 'string' && /^[0-9a-f-]{36}$/i.test(id) ? id : '';
   const [url, setUrl] = useState('');
@@ -58,9 +59,16 @@ function Asset({ id, alt, kind, surface }: {
 
   if (failed) return <div className={styles.mediaFallback} role="status">Media is unavailable.</div>;
   if (!url) return <div className={styles.mediaSkeleton} aria-label="Loading media" />;
+  const ratios: Record<string, string> = { '16:9': '16 / 9', '4:3': '4 / 3', '1:1': '1 / 1', '3:4': '3 / 4' };
+  const positions: Record<string, string> = { center: 'center', top: 'center top', bottom: 'center bottom', left: 'left center', right: 'right center' };
+  const imageStyle: React.CSSProperties = {
+    objectFit: fit === 'cover' ? 'cover' : 'contain',
+    aspectRatio: ratios[aspectRatio] || 'auto',
+    objectPosition: positions[focalPoint] || 'center',
+  };
   return kind === 'video'
     ? <video className={styles.video} src={url} controls playsInline preload="metadata" aria-label={alt || 'Notification video'} />
-    : <img className={styles.image} src={url} alt={alt || ''} loading="lazy" />;
+    : <img className={styles.image} style={imageStyle} src={url} alt={alt || ''} loading="lazy" />;
 }
 
 function Destination({ target, label, surface, editMode = false }: { target: unknown; label: string; surface: Surface; editMode?: boolean }) {
@@ -84,7 +92,7 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
         {text('eyebrow') ? <p className={styles.eyebrow}>{text('eyebrow')}</p> : null}
         {text('title') ? <h3>{text('title')}</h3> : null}
         {text('subtitle') ? <p>{text('subtitle')}</p> : null}
-        {typeof assetId === 'string' ? <Asset id={assetId} alt={text('alt', text('title'))} kind="image" surface={surface} /> : null}
+        {typeof assetId === 'string' ? <Asset id={assetId} alt={text('alt', text('title'))} kind="image" surface={surface} fit={text('fit','cover')} aspectRatio={text('aspectRatio','16:9')} focalPoint={text('focalPoint','center')} /> : null}
       </section>;
     case 'richText':
       return <div className={styles.richText} key={index}>
@@ -92,7 +100,7 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
       </div>;
     case 'image':
       return <figure className={styles.figure} key={index}>
-        <Asset id={assetId} alt={Boolean(block.decorative) ? '' : text('alt')} kind="image" surface={surface} />
+        <Asset id={assetId} alt={Boolean(block.decorative) ? '' : text('alt')} kind="image" surface={surface} fit={text('fit','cover')} aspectRatio={text('aspectRatio','auto')} focalPoint={text('focalPoint','center')} />
         {text('caption') ? <figcaption>{text('caption')}</figcaption> : null}
       </figure>;
     case 'video':
