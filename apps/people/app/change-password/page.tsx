@@ -1,5 +1,6 @@
 'use client';
 import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
+import PasswordField from '../components/PasswordField';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import { useUiTranslation, PeopleLanguageSwitcher } from '../i18n/UiLocaleProvider';
 
@@ -67,11 +68,11 @@ export default function ChangeHrmsPassword() {
           {error && <PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
           <form onSubmit={submit}>
             <label htmlFor="current-password">{t('people.auth.currentPassword')}</label>
-            <input id="current-password" className="input" type="password" autoComplete="current-password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} required />
+            <PasswordField id="current-password" className="input" autoComplete="current-password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} required />
             <label htmlFor="new-password">{t('people.auth.newPassword')}</label>
-            <input id="new-password" className="input" type="password" autoComplete="new-password" minLength={12} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required />
+            <PasswordField id="new-password" className="input" autoComplete="new-password" minLength={12} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required />
             <label htmlFor="confirm-password">{t('people.auth.confirmNewPassword')}</label>
-            <input id="confirm-password" className="input" type="password" autoComplete="new-password" minLength={12} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
+            <PasswordField id="confirm-password" className="input" autoComplete="new-password" minLength={12} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
             <PeopleButton variant="primary" loading={busy} disabled={!currentPassword || newPassword.length < 12 || newPassword !== confirmPassword}>
               {busy ? t('people.auth.updatingPassword') : t('people.auth.changePassword')}
             </PeopleButton>
