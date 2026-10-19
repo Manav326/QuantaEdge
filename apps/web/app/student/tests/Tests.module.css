@@ -321,3 +321,295 @@
 .certificateIssueButton:disabled{opacity:.5;cursor:wait}
 .certificateEligibilityHint{display:block;max-width:215px;color:#8490a3;font-size:9px;line-height:1.45}
 @media(max-width:680px){.resultAttemptItem{width:100%;min-width:0}.certificateActionLinks{width:100%}.certificateActionLinks a{flex:1;justify-content:center}.certificateEligibilityHint{max-width:100%}}
+
+
+/* Assessment catalogue, active quiz, released results, and leaderboard use one shared surface system. */
+html[data-qe-appearance="dark"] .shell {
+  background: var(--qe-color-background);
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .header,
+html[data-qe-appearance="dark"] .tabs,
+html[data-qe-appearance="dark"] .testCard,
+html[data-qe-appearance="dark"] .resultCard,
+html[data-qe-appearance="dark"] .questionRail,
+html[data-qe-appearance="dark"] .questionPanel,
+html[data-qe-appearance="dark"] .resultAttemptButton,
+html[data-qe-appearance="dark"] .resultReviewItem,
+html[data-qe-appearance="dark"] .pendingResult,
+html[data-qe-appearance="dark"] .certificateResultPanel,
+html[data-qe-appearance="dark"] .resultHero,
+html[data-qe-appearance="dark"] .resultMetric,
+html[data-qe-appearance="dark"] .leaderboardMetrics>div,
+html[data-qe-appearance="dark"] .leaderboardPodiumCard,
+html[data-qe-appearance="dark"] .leaderboardMyStanding,
+html[data-qe-appearance="dark"] .leaderboardTableWrap {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-1);
+}
+html[data-qe-appearance="dark"] .brand { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .brand small { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .header nav a { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .header nav a:hover {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .hero {
+  background:
+    radial-gradient(circle at 90% 8%, color-mix(in srgb, var(--qe-color-primary) 13%, transparent), transparent 32%),
+    linear-gradient(118deg, #18243A 0%, #243247 100%);
+  color: var(--qe-color-text);
+  box-shadow: var(--qe-elevation-2);
+}
+html[data-qe-appearance="dark"] .hero h1 { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .hero p { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .eyebrow { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .error,
+html[data-qe-appearance="dark"] .leaderboardInlineError {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .notice {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .tabs button,
+html[data-qe-appearance="dark"] .toolbar>label,
+html[data-qe-appearance="dark"] .toolbar p,
+html[data-qe-appearance="dark"] .meta,
+html[data-qe-appearance="dark"] .testCard>p,
+html[data-qe-appearance="dark"] .muted,
+html[data-qe-appearance="dark"] .resultCard p,
+html[data-qe-appearance="dark"] .resultCard small,
+html[data-qe-appearance="dark"] .attemptTrack,
+html[data-qe-appearance="dark"] .resultAttemptPicker>span,
+html[data-qe-appearance="dark"] .resultAttemptPicker>span small,
+html[data-qe-appearance="dark"] .attemptTitle p,
+html[data-qe-appearance="dark"] .timerBox>span,
+html[data-qe-appearance="dark"] .questionFooter>span,
+html[data-qe-appearance="dark"] .resultDetailsHeading p,
+html[data-qe-appearance="dark"] .resultQuestionInfo>small,
+html[data-qe-appearance="dark"] .leaderboardHeading p,
+html[data-qe-appearance="dark"] .leaderboardMetrics>div>span,
+html[data-qe-appearance="dark"] .leaderboardTime,
+html[data-qe-appearance="dark"] .leaderboardFooter>span,
+html[data-qe-appearance="dark"] .leaderboardEmpty p,
+html[data-qe-appearance="dark"] .leaderboardLoading small,
+html[data-qe-appearance="dark"] .certificateResultPanel p {
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .tabs button span,
+html[data-qe-appearance="dark"] .subjectChip,
+html[data-qe-appearance="dark"] .cardMeta span,
+html[data-qe-appearance="dark"] .resultAttemptButton>b {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .tabs .activeTab,
+html[data-qe-appearance="dark"] .tabs .activeTab span,
+html[data-qe-appearance="dark"] .testSymbol,
+html[data-qe-appearance="dark"] .empty>span,
+html[data-qe-appearance="dark"] .resultAttemptButton:first-child>b,
+html[data-qe-appearance="dark"] .resultIcon {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .primaryButton,
+html[data-qe-appearance="dark"] .resultActions .primaryButton,
+html[data-qe-appearance="dark"] .certificateIssueButton {
+  background: var(--qe-color-primary);
+  color: var(--qe-color-on-primary);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .secondaryButton,
+html[data-qe-appearance="dark"] .resultOpen,
+html[data-qe-appearance="dark"] .backButton,
+html[data-qe-appearance="dark"] .leaderboardButton,
+html[data-qe-appearance="dark"] .leaderboardClose,
+html[data-qe-appearance="dark"] .leaderboardFooter button,
+html[data-qe-appearance="dark"] .certificateIssueButton:disabled {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .resultLink,
+html[data-qe-appearance="dark"] .backButton,
+html[data-qe-appearance="dark"] .resultAttemptPicker>span { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .toolbar select,
+html[data-qe-appearance="dark"] .answerField input,
+html[data-qe-appearance="dark"] .answerField textarea,
+html[data-qe-appearance="dark"] .resultAttemptPicker select {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border);
+}
+html[data-qe-appearance="dark"] .attemptTrack b,
+html[data-qe-appearance="dark"] .attemptTitle h1,
+html[data-qe-appearance="dark"] .timerBox>b,
+html[data-qe-appearance="dark"] .questionRail b,
+html[data-qe-appearance="dark"] .questionPanelTop>b,
+html[data-qe-appearance="dark"] .questionPanel>h2,
+html[data-qe-appearance="dark"] .resultCard h3,
+html[data-qe-appearance="dark"] .score>b,
+html[data-qe-appearance="dark"] .resultScorePrimary>strong,
+html[data-qe-appearance="dark"] .resultMetric strong,
+html[data-qe-appearance="dark"] .resultQuestionInfo>b,
+html[data-qe-appearance="dark"] .certificateResultPanel h3,
+html[data-qe-appearance="dark"] .leaderboardHeading h2,
+html[data-qe-appearance="dark"] .leaderboardStudentName,
+html[data-qe-appearance="dark"] .leaderboardPodiumScore,
+html[data-qe-appearance="dark"] .leaderboardTableScore {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .questionNumbers button,
+html[data-qe-appearance="dark"] .resultQuestionNav button {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .questionNumbers button.currentNumber {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .questionNumbers button.answeredNumber:not(.currentNumber) {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .questionRail>div:first-child,
+html[data-qe-appearance="dark"] .resultAttemptPicker,
+html[data-qe-appearance="dark"] .resultDetails,
+html[data-qe-appearance="dark"] .resultQuestionRow,
+html[data-qe-appearance="dark"] .leaderboardTable th,
+html[data-qe-appearance="dark"] .leaderboardTable td {
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .questionProgress,
+html[data-qe-appearance="dark"] .attemptBar,
+html[data-qe-appearance="dark"] .resultScoreProgress { background: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .questionProgress i,
+html[data-qe-appearance="dark"] .attemptBar i,
+html[data-qe-appearance="dark"] .resultScoreProgress i { background: linear-gradient(90deg, var(--qe-color-primary), var(--qe-color-accent)); }
+html[data-qe-appearance="dark"] .option {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .optionSelected {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .optionCorrect,
+html[data-qe-appearance="dark"] .correctAnswerBox,
+html[data-qe-appearance="dark"] .answerFieldCorrect input,
+html[data-qe-appearance="dark"] .answerFieldCorrect textarea,
+html[data-qe-appearance="dark"] .resultQuestionRowCorrect {
+  background: var(--qe-color-success-container);
+  color: var(--qe-color-on-success-container);
+  border-color: var(--qe-color-success);
+}
+html[data-qe-appearance="dark"] .optionIncorrect,
+html[data-qe-appearance="dark"] .answerFieldIncorrect input,
+html[data-qe-appearance="dark"] .answerFieldIncorrect textarea,
+html[data-qe-appearance="dark"] .resultQuestionRowIncorrect {
+  background: var(--qe-color-error-container);
+  color: var(--qe-color-on-error-container);
+  border-color: var(--qe-color-error);
+}
+html[data-qe-appearance="dark"] .optionNeutral,
+html[data-qe-appearance="dark"] .answerFieldNeutral input,
+html[data-qe-appearance="dark"] .answerFieldNeutral textarea,
+html[data-qe-appearance="dark"] .resultQuestionRowNeutral {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .optionOutcome,
+html[data-qe-appearance="dark"] .optionHintNeutral { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .optionHintCorrect,
+html[data-qe-appearance="dark"] .reviewCorrect,
+html[data-qe-appearance="dark"] .resultQuestionRowCorrect .resultQuestionNumber,
+html[data-qe-appearance="dark"] .resultQuestionRowCorrect>strong { color: var(--qe-color-success); }
+html[data-qe-appearance="dark"] .optionHintIncorrect,
+html[data-qe-appearance="dark"] .reviewIncorrect,
+html[data-qe-appearance="dark"] .resultQuestionRowIncorrect .resultQuestionNumber,
+html[data-qe-appearance="dark"] .resultQuestionRowIncorrect>strong { color: var(--qe-color-error); }
+html[data-qe-appearance="dark"] .reviewNeutral,
+html[data-qe-appearance="dark"] .resultQuestionRowNeutral .resultQuestionNumber { color: var(--qe-color-text-muted); }
+html[data-qe-appearance="dark"] .attemptState {
+  background: var(--qe-color-disabled-background);
+  color: var(--qe-color-disabled-text);
+}
+html[data-qe-appearance="dark"] .timerBox {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .timerBox>b.timeWarning { color: var(--qe-color-warning); }
+html[data-qe-appearance="dark"] .pendingResult>span { color: var(--qe-color-primary-text); }
+html[data-qe-appearance="dark"] .pendingResult h2 { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .confirmBackdrop,
+html[data-qe-appearance="dark"] .leaderboardBackdrop { background: rgb(3 8 18 / .78); }
+html[data-qe-appearance="dark"] .confirmModal,
+html[data-qe-appearance="dark"] .leaderboardModal {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+  box-shadow: var(--qe-elevation-3);
+}
+html[data-qe-appearance="dark"] .confirmModal h2,
+html[data-qe-appearance="dark"] .leaderboardHeading h2,
+html[data-qe-appearance="dark"] .leaderboardMetrics>div>b,
+html[data-qe-appearance="dark"] .leaderboardMyStanding>div>b,
+html[data-qe-appearance="dark"] .leaderboardMyStanding>strong { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .leaderboardHeader,
+html[data-qe-appearance="dark"] .leaderboardTable thead {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .leaderboardTable {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .leaderboardTable th {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+}
+html[data-qe-appearance="dark"] .leaderboardTable tbody tr:hover,
+html[data-qe-appearance="dark"] .leaderboardTableMine,
+html[data-qe-appearance="dark"] .leaderboardMine {
+  background: var(--qe-color-primary-container);
+  color: var(--qe-color-on-primary-container);
+}
+html[data-qe-appearance="dark"] .leaderboardFooter { color: var(--qe-color-text-muted); border-color: var(--qe-color-border-subtle); }
+html[data-qe-appearance="dark"] .leaderboardEmpty,
+html[data-qe-appearance="dark"] .leaderboardLoading {
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text-muted);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance="dark"] .leaderboardSpinner {
+  border-color: var(--qe-color-border-subtle);
+  border-top-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .certificateResultPanel h3 { color: var(--qe-color-text); }
+html[data-qe-appearance="dark"] .certificateActionLinks a,
+html[data-qe-appearance="dark"] .certificateIssueButton {
+  border-color: var(--qe-color-primary);
+}
+html[data-qe-appearance="dark"] .certificateEligibilityHint { color: var(--qe-color-text-muted); }
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance="dark"] .testCard,
+  html[data-qe-appearance="dark"] .resultCard,
+  html[data-qe-appearance="dark"] .questionPanel,
+  html[data-qe-appearance="dark"] .resultAttemptButton { transition: none; }
+}
