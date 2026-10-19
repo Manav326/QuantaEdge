@@ -42,8 +42,8 @@ class SourceIngestionControllerTest {
         .thenThrow(new SecurityException("Permission required: CONTENT_EDIT"));
 
     assertThrows(SecurityException.class, () -> controller.createDraftResourcesFromReviewedRanges(
-        44L, Map.of("sourceTitle", "Textbook", "sourceUrl", "https://scert.bihar.gov.in/textbooks",
-            "edition", "2026 edition"), reviewer));
+        44L, 100L, Map.of("sourceTitle", "Textbook", "sourceUrl", "https://scert.bihar.gov.in/textbooks",
+            "edition", "2026 edition"), reviewer, new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge")));
     verifyNoInteractions(jdbc, staffAudit, pdfOcrService);
   }
 
@@ -61,21 +61,25 @@ class SourceIngestionControllerTest {
     when(authorization.requirePermission(null, "CONTENT_REVIEW"))
         .thenThrow(new SecurityException("Permission required: CONTENT_REVIEW"));
 
-    assertThrows(SecurityException.class, () -> controller.updateJobMetadata(44L, Map.of(
+    assertThrows(SecurityException.class, () -> controller.updateJobMetadata(44L, 100L, Map.of(
         "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
-        "edition", "2025 reprint"), null));
+        "edition", "2025 reprint"), null, new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge")));
     verifyNoInteractions(jdbc);
   }
 
   @Test
   void verifiedEditionCannotBeUnverifiedBeforeDatabaseUpdate() {
     when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
+    InstitutionTenantContext tenant = new InstitutionTenantContext(1L, "QUANTA-EDGE", "QuantaEdge");
+    when(jdbc.queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L)))
+        .thenReturn(1L);
 
     assertThrows(org.springframework.web.server.ResponseStatusException.class,
-        () -> controller.updateJobMetadata(44L, Map.of(
+        () -> controller.updateJobMetadata(44L, 100L, Map.of(
             "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
-            "edition", "UNVERIFIED"), reviewer));
-    verifyNoInteractions(jdbc);
+            "edition", "UNVERIFIED"), reviewer, tenant));
+    verify(jdbc).queryForObject(contains("from source_ingestion_job j"), eq(Long.class), eq(44L), eq(1L), eq(100L));
+    verify(jdbc, org.mockito.Mockito.never()).update(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.any());
   }
 
   @Test
