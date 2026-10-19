@@ -1064,3 +1064,21 @@ html[data-qe-appearance="dark"] .qe-workspace-content :is(.testCard, .sessionCar
 html[data-qe-appearance="dark"] .qe-workspace-content :is(.recordingBody, .sectionHeading, .toolbar, .attemptTitle) p {
   color: var(--qe-color-text-muted);
 }
+
+
+/* One restrained elevation scale: cards gently lift from the canvas without looking pasted on. */
+html[data-qe-appearance] .qe-workspace-content [class*="card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-workspace-content [class*="Card"]:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-tenant-landing [class*="card"]:not([class*="success"]):not([class*="error"]):not([class*="warning"]) {
+  box-shadow: var(--qe-elevation-1);
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+html[data-qe-appearance] .qe-workspace-content [class*="card"]:hover:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]),
+html[data-qe-appearance] .qe-workspace-content [class*="Card"]:hover:not([class*="correct"]):not([class*="incorrect"]):not([class*="success"]):not([class*="error"]):not([class*="warning"]):not([class*="selected"]):not([class*="active"]) {
+  box-shadow: var(--qe-elevation-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] .qe-workspace-content [class*="card"],
+  html[data-qe-appearance] .qe-workspace-content [class*="Card"],
+  html[data-qe-appearance] .qe-tenant-landing [class*="card"] { transition: none; }
+}
