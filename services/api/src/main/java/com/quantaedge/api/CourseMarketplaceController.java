@@ -409,10 +409,7 @@ public class CourseMarketplaceController {
         where student_id=? and institution_id=? and program_id=? and status in ('ACTIVE','PAUSED')
         """, currentStudentId, institutionId, courseId);
     }
-    jdbc.update("""
-      update student_program_enrollment set status='PAUSED',updated_at=now()
-      where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-      """, targetStudentId, institutionId, courseId);
+    // Purchase/transfer activates access to this course without changing other enrollments.
     jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
@@ -882,10 +879,7 @@ public class CourseMarketplaceController {
 
     // Course membership is switched server-side. A parent's self-purchase stays owned
     // by that parent and is assigned to their personal learning profile until transferred.
-    jdbc.update("""
-        update student_program_enrollment set status='PAUSED',updated_at=now()
-        where student_id=? and institution_id=? and status='ACTIVE' and program_id<>?
-        """, targetStudentId, institutionId, courseId);
+    // Purchase/transfer activates access to this course without changing other enrollments.
     jdbc.update("""
         insert into student_program_enrollment(student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at)
         values(?,?,?,'ACTIVE',now(),null,now(),now())
