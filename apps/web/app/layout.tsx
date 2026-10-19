@@ -1,4 +1,5 @@
 import './globals.css';
+import GlobalNotificationHost from './components/GlobalNotificationHost';
 import { LanguageProvider } from './components/LanguageProvider';
 import SessionBoundary from './components/SessionBoundary';
 import WorkspaceLayout from './components/WorkspaceLayout';
@@ -20,5 +21,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="hi"><body><LanguageProvider><TenantBrandingProvider><ColorThemeProvider><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></ColorThemeProvider></TenantBrandingProvider></LanguageProvider></body></html>;
+  return <html lang="hi"><body><GlobalNotificationHost /><LanguageProvider><TenantBrandingProvider><ColorThemeProvider><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></ColorThemeProvider></TenantBrandingProvider></LanguageProvider></body></html>;
 }

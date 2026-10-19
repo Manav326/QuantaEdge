@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
-import GlobalNotificationHost from './GlobalNotificationHost';
 import { useUiTranslation } from '../i18n/UiLocaleProvider';
 
 type StaffSession = {
@@ -331,7 +330,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
             <span className="qe-people-header-user" title={displayName}>{displayName}</span>
           </div>
         </header>
-        <GlobalNotificationHost />
+
 
         <div className="qe-people-page-slot" id="main-content" tabIndex={-1}>
           {children}

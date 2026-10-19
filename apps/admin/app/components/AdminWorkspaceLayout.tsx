@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
-import GlobalNotificationHost from './GlobalNotificationHost';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import { getUiLocaleLanguage, resolveUiLocale, UI_LOCALE_OPTIONS, translateUi } from '../i18n/catalog';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
@@ -209,7 +208,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
             </label>
           </div>
         </header>
-        <GlobalNotificationHost />
+
         <div className="qe-admin-workspace-page-slot">{children}</div>
       </div>
 

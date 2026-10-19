@@ -1,4 +1,5 @@
 import './globals.css';
+import GlobalNotificationHost from './components/GlobalNotificationHost';
 import './people-design-system.css';
 import PeopleWorkspaceLayout from './components/PeopleWorkspaceLayout';
 import PeopleSessionBoundary from './components/PeopleSessionBoundary';
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="hi">
       <body>
+        <GlobalNotificationHost />
         <UiLocaleProvider>
           <PeopleSessionBoundary><PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout></PeopleSessionBoundary>
         </UiLocaleProvider>

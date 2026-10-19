@@ -490,3 +490,11 @@ On the next session: read this tracker first, inspect the latest main SHA and ne
 2. Continue the next highest-debt Admin route after reviewing the current matrix; `/structured-lesson-preview` and `/session` are candidates.
 3. Continue removing direct UI copy and hardcoded accessibility/helper text route by route, without translating curriculum content or raw server diagnostics.
 4. Keep the tracker and route-coverage matrix updated after each meaningful batch. Overall localization remains **IN PROGRESS — NOT PRODUCTION-COMPLETE**.
+
+## Global notification reliability (2026-10-19)
+
+- Each app mounts one notification host from its root layout, so it remains available across route changes and authentication pages.
+- Notifications render through a portal attached to `document.body`, fixed to the viewport with a high stacking order; scrolling and page layout cannot move them off-screen.
+- Failed API responses are inspected through a cloned response, preserving the response for existing callers. Explicit user-facing API messages take priority; localized HTTP-status and network messages are used as fallbacks. Aborted requests are ignored.
+- Up to three notifications remain visible; additional notices queue rather than overwriting prior API failures. Copy, dismiss, auto-dismiss and accessible alert/status semantics are retained.
+- Centralized keys added: `common.notifications.copy`, `common.notifications.dismiss`, `common.notifications.label`, `common.notifications.networkError`, and `common.notifications.requestFailed`. Web, Admin and People catalog copies are synchronized from `localization/catalogs`.

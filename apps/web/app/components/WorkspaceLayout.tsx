@@ -8,7 +8,6 @@ import { translateUi } from '../i18n/catalog';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
-import GlobalNotificationHost from './GlobalNotificationHost';
 import { AppearanceModeButton } from './ColorThemeProvider';
 import { useTenantBranding } from './TenantBrandingProvider';
 
@@ -223,7 +222,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     }
   }
 
-  if (!role) return <><GlobalNotificationHost />{children}</>;
+  if (!role) return <>{children}</>;
 
   const active = (item: Item) => item.href === '/parent'
     ? pathname === item.href || pathname === item.href + '/diagnostic'
@@ -292,7 +291,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
             : <ParentAccountMenu displayName={profile?.display_name || t('web.workspace.parentFallbackName')} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
         </div>
       </header>
-      <GlobalNotificationHost />
+
       {role === 'student' && enrollmentIssue ? (
         <section className="qe-enrollment-issue" role="alert" aria-live="assertive">
           <div className="qe-enrollment-issue-copy">
