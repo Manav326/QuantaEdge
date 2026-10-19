@@ -105,24 +105,24 @@ function blockPresentationStyle(block: Block): CSSProperties {
   return style;
 }
 
-function renderBlock(block: Block, index: number, surface: Surface, editMode = false): ReactNode {
+function renderBlock(block: Block, index: number, surface: Surface, editMode = false, presentationStyle?: CSSProperties): ReactNode {
   const type = String(block.type || '');
   const text = (key: string, fallback = '') => typeof block[key] === 'string' ? String(block[key]) : fallback;
   const assetId = block.assetId;
   switch (type) {
     case 'hero':
-      return <section className={styles.hero} key={index}>
+      return <section className={styles.hero} key={index} style={presentationStyle}>
         {text('eyebrow') ? <p className={styles.eyebrow}>{text('eyebrow')}</p> : null}
         {text('title') ? <h3>{text('title')}</h3> : null}
         {text('subtitle') ? <p>{text('subtitle')}</p> : null}
         {typeof assetId === 'string' ? <Asset id={assetId} alt={text('alt', text('title'))} kind="image" surface={surface} fit={text('fit','cover')} aspectRatio={text('aspectRatio','16:9')} focalPoint={text('focalPoint','center')} /> : null}
       </section>;
     case 'richText':
-      return <div className={styles.richText} key={index}>
+      return <div className={styles.richText} key={index} style={presentationStyle}>
         {text('text').split(/\n{2,}/).filter(Boolean).map((paragraph, part) => <p key={part}>{paragraph}</p>)}
       </div>;
     case 'image':
-      return <figure className={styles.figure} key={index}>
+      return <figure className={styles.figure} key={index} style={presentationStyle}>
         <Asset id={assetId} alt={Boolean(block.decorative) ? '' : text('alt')} kind="image" surface={surface} fit={text('fit','cover')} aspectRatio={text('aspectRatio','auto')} focalPoint={text('focalPoint','center')} />
         {text('caption') ? <figcaption>{text('caption')}</figcaption> : null}
       </figure>;
@@ -137,7 +137,7 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
         {text('caption') ? <figcaption>{text('caption')}</figcaption> : null}
       </figure>;
     case 'courseCard':
-      return <section className={styles.dataCard} key={index}>
+      return <section className={styles.dataCard} key={index} style={presentationStyle}>
         <div className={styles.cardKicker}>COURSE</div>
         <h4>{text('courseName', text('title', 'Course update'))}</h4>
         {text('description') ? <p>{text('description')}</p> : null}
@@ -152,28 +152,28 @@ function renderBlock(block: Block, index: number, surface: Surface, editMode = f
         <Destination target={block.target} label={text('buttonLabel', 'View details')} surface={surface} editMode={editMode} />
       </section>;
     case 'highlight':
-      return <section className={styles.highlight} key={index}>
+      return <section className={styles.highlight} key={index} style={presentationStyle}>
         <div><span>{text('label')}</span><strong>{text('value')}</strong></div>
         {text('description') ? <p>{text('description')}</p> : null}
       </section>;
     case 'badge':
-      return <span className={styles.badge} key={index}>{text('text', text('label'))}</span>;
+      return <span className={styles.badge} key={index} style={presentationStyle}>{text('text', text('label'))}</span>;
     case 'icon':
-      return <div className={styles.iconRow} key={index}><span aria-hidden="true">{text('symbol', '✦')}</span>{text('text')}</div>;
+      return <div className={styles.iconRow} key={index} style={presentationStyle}><span aria-hidden="true">{text('symbol', '✦')}</span>{text('text')}</div>;
     case 'divider':
-      return <hr className={styles.divider} key={index} />;
+      return <hr className={styles.divider} key={index} style={presentationStyle} />;
     case 'spacer':
-      return <div className={styles.spacer} key={index} aria-hidden="true" />;
+      return <div className={styles.spacer} key={index} style={presentationStyle} aria-hidden="true" />;
     case 'cta':
-      return <div className={styles.ctaRow} key={index}>
+      return <div className={styles.ctaRow} key={index} style={presentationStyle}>
         <Destination target={block.target} label={text('label', 'Open')} surface={surface} editMode={editMode} />
       </div>;
     case 'footer':
-      return <footer className={styles.footer} key={index}>{text('text')}</footer>;
+      return <footer className={styles.footer} key={index} style={presentationStyle}>{text('text')}</footer>;
     case 'container':
     case 'carousel': {
       const children = Array.isArray(block.children) ? block.children : Array.isArray(block.items) ? block.items : [];
-      return <div className={type === 'carousel' ? styles.carousel : styles.container} key={index}>
+      return <div className={type === 'carousel' ? styles.carousel : styles.container} key={index} style={presentationStyle}>
         {children.map((child, childIndex) => child && typeof child === 'object'
           ? renderBlock(child as Block, childIndex, surface, editMode) : null)}
       </div>;
@@ -205,12 +205,11 @@ export default function RichNotificationRenderer({
     {document.blocks.map((block, index) => {
       if (!block || typeof block !== 'object') return null;
       const presentationStyle = blockPresentationStyle(block);
-      if (!editMode) return <div key={index} style={presentationStyle}>{renderBlock(block, index, surface, false)}</div>;
+      if (!editMode) return <div key={index}>{renderBlock(block, index, surface, false, presentationStyle)}</div>;
       const selected = selectedBlockIndex === index;
       const over = dropIndex === index && dragIndex !== index;
       return <div key={index}
         className={styles.editorBlock + (selected ? ' ' + styles.selectedEditorBlock : '') + (over ? ' ' + styles.dropEditorBlock : '')}
-        style={presentationStyle}
         draggable
         tabIndex={0}
         role="group"
@@ -231,7 +230,7 @@ export default function RichNotificationRenderer({
           setDragIndex(null); setDropIndex(null);
         }}
         onDragEnd={() => { setDragIndex(null); setDropIndex(null); }}>
-        {renderBlock(block, index, surface, true)}
+        {renderBlock(block, index, surface, true, presentationStyle)}
         <span className={styles.editorBlockHandle} aria-hidden="true">⠿ {index + 1}</span>
       </div>;
     })}
