@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1041,
-    "successful_visual_analyses": 1031,
-    "missing_visual_analyses": 1037,
+    "raw_analysis_result_rows": 1043,
+    "successful_visual_analyses": 1033,
+    "missing_visual_analyses": 1035,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1047,
+    "unresolved_count": 1045,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -40093,9 +40093,32 @@
       "asset_path": "assets/f3ef0a3cdefc9eb8a74e7909d51db807217f575526d31580a7e2f7fa01cc42d8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table for recording observations about materials attracted by a magnet.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 4.1: Identifying the materials attracted by a magnet",
+          "Material which the object is made of",
+          "Attracted by the magnet (Yes/No)",
+          "Name of the object",
+          "Prediction",
+          "Observation",
+          "Pencil",
+          "Wood",
+          "Eraser",
+          "Rubber"
+        ],
+        "concepts": [
+          "Materials attracted by a magnet",
+          "Prediction and Observation"
+        ],
+        "context_relation": "The table is used to record observations about materials that are attracted by a magnet.",
+        "limitations": [
+          "The table does not include iron as a material that is attracted by a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -40111,9 +40134,22 @@
       "asset_path": "assets/d381871d75a35167149bc4319935ad8b4faa46f77e4f334d615b931c171f4cde.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A collection of nails of various lengths and orientations.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "nails",
+          "length",
+          "orientation"
+        ],
+        "context_relation": "The image shows nails, which are not directly related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide information about the properties of the materials attracted by a magnet."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
