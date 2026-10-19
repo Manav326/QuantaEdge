@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 846,
+    "assets_selected": 847,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 842,
-    "assets_remaining": 1236,
-    "assets_completion_percent": 40.5,
+    "assets_analyzed": 843,
+    "assets_remaining": 1235,
+    "assets_completion_percent": 40.6,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 841,
+    "assets_skipped_from_checkpoint": 842,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:58:46Z"
+      "checkpointed_at": "2026-10-19T02:02:00Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T01:59:27Z"
+      "checkpointed_at": "2026-10-19T02:02:41Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:00:19Z"
+      "checkpointed_at": "2026-10-19T02:03:33Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T02:00:58Z"
+      "checkpointed_at": "2026-10-19T02:04:12Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -26442,6 +26442,49 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T02:01:12Z"
+    },
+    {
+      "asset_id": "57c24e5112c139fe04206b18",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9d90ed97bfa1d25890acde79236cc96efba506f8730826d353da3612d6a311a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two types of seeds, wheat and kidney beans, are shown side by side.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. Here are two types of seeds. What differences do you find among the roots and leaf venation of their plants?",
+          "(a) Wheat",
+          "(b) Kidney beans",
+          "2. Names of some animals are given below. Group them based on their habitats. Write the names of aquatic animals in the area marked 'A' and terrestrial animals in the area marked 'B'. Enter the names of animals living in both habitats in part 'C'.",
+          "Horse, Dolphin, Frog, Sheep, Crocodile, Squirrel, Whale, Earthworm, Pigeon, Tortoise"
+        ],
+        "concepts": [
+          "Seeds",
+          "Roots",
+          "Leaf venation",
+          "Animals",
+          "Habitats"
+        ],
+        "context_relation": "The image is a visual representation of the textbook content, specifically the questions about seeds and animals.",
+        "limitations": [
+          "The image does not provide answers to the questions.",
+          "The image does not show the differences between the roots and leaf venation of the plants.",
+          "The image does not show the animals grouped based on their habitats."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T02:04:36Z"
     }
   ]
 }
