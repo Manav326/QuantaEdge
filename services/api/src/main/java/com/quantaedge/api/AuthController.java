@@ -349,27 +349,9 @@ public class AuthController {
   }
 
   @PostMapping("/switch-parent")
-  @org.springframework.transaction.annotation.Transactional
-  public ResponseEntity<Map<String,Object>> switchParent(
-      @RequestAttribute(value="authContext", required=false) AuthContext context,
-      @RequestHeader(value=InstitutionTenantContextService.HEADER_NAME,required=false) String institutionCode,
-      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
-    if (context == null || !context.isStudent() || context.studentId() == null) {
-      throw new SecurityException("A parent-owned personal learning session is required.");
-    }
-    InstitutionTenantContext tenant = requireTenant(institutionCode);
-    AuthContext parent = auth.openParentWorkspaceContext(context.studentId());
-    requireMembershipService().requireExistingMembership(parent, tenant);
-    boolean androidClient = isAndroidClient(clientHeader);
-    ResponseEntity<Map<String,Object>> session =
-        withCookie(auth.issueSession(parent, "PARENT", androidClient), "PARENT", androidClient);
-    ResponseCookie learningMode = expiredCookie("QE_PARENT_PERSONAL_LEARNING");
-    return ResponseEntity.status(session.getStatusCode())
-        .headers(headers -> {
-          headers.addAll(session.getHeaders());
-          headers.add("Set-Cookie", learningMode.toString());
-        })
-        .body(session.getBody());
+  public ResponseEntity<Map<String,Object>> switchParent() {
+    return ResponseEntity.status(403).body(Map.of(
+        "message","Parent and student accounts are separate. Sign out and sign in to the correct account."));
   }
 
   @GetMapping("/me")
