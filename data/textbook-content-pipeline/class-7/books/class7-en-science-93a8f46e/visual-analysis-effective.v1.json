@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f32e3dd043737ec8463986e5031f264d91fdeb2e16a5e9b180cb3493825cdade",
+  "raw_analysis_sha256": "2b179971d38b7c83bf3b1a0222b4a67f8e0af13d725c0648e466f98c792280c1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:35:30Z",
+      "checkpointed_at": "2026-10-19T13:38:43Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T13:35:52Z",
+      "checkpointed_at": "2026-10-19T13:39:06Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -99125,6 +99125,142 @@
           "The image does not provide any specific information or context related to the text.",
           "The image is a close-up of a twisted object, not a diagram or chart related to the text."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "604808876a40d7a9b093ca29",
+      "asset_sha256": "e463c8601593478e414e636f10b2d2fe7fa96ce1f33c9769cf41dacb4b0f560d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/e463c8601593478e414e636f10b2d2fe7fa96ce1f33c9769cf41dacb4b0f560d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative, and a lamp with a filament.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "In an incandescent electric lamp, there is a filament."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal",
+          "Incandescent electric lamp",
+          "Filament"
+        ],
+        "context_relation": "The image illustrates the components of an electric cell and an incandescent electric lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components of the electric cell or the incandescent lamp."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:39:48Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell with two terminals, one positive and one negative, and a lamp with a filament.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "An electric cell is a portable source of electrical energy.",
+          "An electric cell has two terminals; one is called positive (+ve) while the other is negative (–ve).",
+          "In an incandescent electric lamp, there is a filament."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Positive terminal",
+          "Negative terminal",
+          "Incandescent electric lamp",
+          "Filament"
+        ],
+        "context_relation": "The image illustrates the components of an electric cell and an incandescent electric lamp.",
+        "limitations": [
+          "The image does not provide specific details about the components of the electric cell or the incandescent lamp."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "67385d598a492583f51f28be",
+      "asset_sha256": "3de8a48298010d485dd990db3b78c77abfe7788428e2b1b997f433cac62c5c54",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/3de8a48298010d485dd990db3b78c77abfe7788428e2b1b997f433cac62c5c54.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a spiral or helix-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not clearly visible or identifiable. It may be a cropped figure or a full page. The text provided does not specify the context or the image's relevance to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:40:25Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a spiral or helix-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image is not clearly visible or identifiable. It may be a cropped figure or a full page. The text provided does not specify the context or the image's relevance to the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "62a4ae90acf75e050ac30c54",
+      "asset_sha256": "59d4435b2e20c45be6c5063ac6dae863ce3beb6cc639d2ca76cd88486a5f9c15",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 57,
+      "asset_path": "assets/59d4435b2e20c45be6c5063ac6dae863ce3beb6cc639d2ca76cd88486a5f9c15.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "94d252e01503f141dfdbd8da5ea317a668a8ce67ec8989510029478734eaeedf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue ring at the top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T13:40:59Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue ring at the top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
