@@ -288,24 +288,81 @@ public class AdminController {
   }
 
   @GetMapping("/overview")
-  public Map<String,Object> overview(@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> overview(
+      @RequestParam Long courseId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant){
     authorization.requireAdmin(context);
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
     Map<String,Object> result=new LinkedHashMap<>();
+    result.put("courseId",courseId);
+    result.put("institutionId",institutionId);
     result.put("summary",jdbc.queryForMap("""
-      select
-        (select count(*) from curriculum_class where active=true) as classes,
-        (select count(*) from curriculum_chapter where active=true and content_status='PUBLISHED') as chapters,
-        (select count(*) from lesson where active=true and status='PUBLISHED') as published_lessons,
-        (select count(*) from question where active=true) as questions,
-        (select count(*) from student where active=true and environment='PRODUCTION') as students
-      """));
+      select count(distinct s.id) as classes,
+        count(distinct ch.id) filter(where ch.active=true) as chapters,
+        count(distinct l.id) filter(where l.active=true and l.status='PUBLISHED'
+          and ch.content_status='PUBLISHED') as published_lessons,
+        count(distinct q.id) as questions,
+        (select count(distinct spe.student_id)
+          from student_program_enrollment spe
+          join institution_membership im on im.student_id=spe.student_id
+            and im.institution_id=spe.institution_id and im.status='ACTIVE'
+          join student st on st.id=spe.student_id and st.active=true and st.environment='PRODUCTION'
+          where spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE') as students
+      from curriculum_program course
+      join institution_course_assignment assignment on assignment.institution_id=?
+        and assignment.status='ASSIGNED'
+      join institution_course_release release on release.id=assignment.course_release_id
+        and release.program_id=course.id
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+      left join lesson l on l.chapter_id=ch.id and l.active=true
+      left join question q on q.lesson_id=l.id and q.active=true
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      """,institutionId,courseId,institutionId,courseId));
     result.put("review",jdbc.queryForList("""
-      select coalesce(nullif(upper(review_status),''),'DRAFT') as review_status,active,count(*) as count
-      from question group by coalesce(nullif(upper(review_status),''),'DRAFT'),active
-      order by review_status,active desc
-      """));
-    result.put("sources",jdbc.queryForList("select source_kind,count(*) as count from question group by source_kind order by source_kind"));
-    result.put("assets",jdbc.queryForList("select asset_type,status,count(*) as count from content_asset group by asset_type,status order by asset_type,status"));
+      select coalesce(nullif(upper(q.review_status),''),'DRAFT') as review_status,
+             q.active,count(distinct q.id) as count
+      from curriculum_program course
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      join curriculum_chapter ch on ch.subject_id=s.id
+      join lesson l on l.chapter_id=ch.id
+      join question q on q.lesson_id=l.id
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      group by coalesce(nullif(upper(q.review_status),''),'DRAFT'),q.active
+      order by review_status,q.active desc
+      """,courseId));
+    result.put("sources",jdbc.queryForList("""
+      select coalesce(nullif(q.source_kind,''),'UNKNOWN') as source_kind,count(distinct q.id) as count
+      from curriculum_program course
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      join curriculum_chapter ch on ch.subject_id=s.id
+      join lesson l on l.chapter_id=ch.id
+      join question q on q.lesson_id=l.id
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      group by coalesce(nullif(q.source_kind,''),'UNKNOWN') order by source_kind
+      """,courseId));
+    result.put("assets",jdbc.queryForList("""
+      select ca.asset_type,ca.status,count(distinct ca.id) as count
+      from curriculum_program course
+      join curriculum_program_subject cps on cps.program_id=course.id
+      join curriculum_subject s on s.id=cps.subject_id and s.class_id=cps.class_id and s.active=true
+        and (s.program_id=course.id or (s.program_id is null and course.class_id=s.class_id))
+      join curriculum_chapter ch on ch.subject_id=s.id
+      join lesson l on l.chapter_id=ch.id
+      join lesson_block lb on lb.lesson_id=l.id
+      join content_asset ca on ca.id=lb.asset_id
+      where course.id=? and course.status='ACTIVE' and course.code<>'GENERAL'
+      group by ca.asset_type,ca.status order by ca.asset_type,ca.status
+      """,courseId));
     return result;
   }
 
@@ -506,6 +563,21 @@ public class AdminController {
       return value instanceof String s ? s : mapper.writeValueAsString(value);
     }catch(JacksonException ex){
       throw new IllegalArgumentException("Invalid JSON content");
+    }
+  }
+
+  private void requireAssignedCourse(long courseId,long institutionId) {
+    Long allowed=jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join institution_course_assignment assignment
+        on assignment.institution_id=? and assignment.status='ASSIGNED'
+      join institution_course_release release
+        on release.id=assignment.course_release_id and release.program_id=p.id
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,institutionId,courseId);
+    if(allowed==null || allowed<1L) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "Selected course is not assigned and released to this institution.");
     }
   }
 
