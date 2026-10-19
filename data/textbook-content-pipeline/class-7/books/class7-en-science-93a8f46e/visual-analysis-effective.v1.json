@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2b842ad6a38868bad877e13351f3843387d203c8d937475522afaad2a45de1fc",
+  "raw_analysis_sha256": "eca98dc9263a9054ec599a074b8a6e7e8dd864ae3bc534bc8427a9e6e09c6c8c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:26:10Z",
+      "checkpointed_at": "2026-10-19T12:28:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219695642",
-      "checkpointed_at": "2026-10-19T12:26:31Z",
+      "checkpointed_at": "2026-10-19T12:29:01Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -95334,6 +95334,168 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d5e962540d54af1540b6ec8c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images that can be analyzed for educational content editing. The page is completely black and does not provide any visual or textual information. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relati"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:29:16Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images that can be analyzed for educational content editing. The page is completely black and does not provide any visual or textual information. The page may be a full page, not a cropped figure. Do not guess illegible labels, formulas, quantities, or relati"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "36f8adff66f806a46b201fa5",
+      "asset_sha256": "080986d0443bc352d12db4189667352313af5366ce9c4f9ec6fa1328c84ab50d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 55,
+      "asset_path": "page-0055.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f043e8c08d1f121ccce88b2f884bf56aaa6b95703997c85731933070e0de2f05",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity 3.11: Identifying Conductors and Insulators",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Identifying Conductors and Insulators",
+          "S.No. | Object | Material it is made up of | Lamp glows (Yes/No) | Conclusion (Conductor/Insulator)",
+          "1. | Stick | Wood | No |",
+          "2. | Scale | Plastic |",
+          "3. | Bangle | Glass |",
+          "4. | Paper strip | Paper |",
+          "5. | Candle | Wax |",
+          "6. | Key | Metal |",
+          "7. | Eraser | Rubber |",
+          "8. |",
+          "9. |"
+        ],
+        "concepts": [
+          "Identifying Conductors and Insulators",
+          "Electricity: Circuits and their Components"
+        ],
+        "context_relation": "Activity 3.11: Let us identify",
+        "limitations": [
+          "The table is incomplete and requires additional data to be filled in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:30:47Z",
+      "effective_analysis": {
+        "visual_summary": "Activity 3.11: Identifying Conductors and Insulators",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 3.3: Identifying Conductors and Insulators",
+          "S.No. | Object | Material it is made up of | Lamp glows (Yes/No) | Conclusion (Conductor/Insulator)",
+          "1. | Stick | Wood | No |",
+          "2. | Scale | Plastic |",
+          "3. | Bangle | Glass |",
+          "4. | Paper strip | Paper |",
+          "5. | Candle | Wax |",
+          "6. | Key | Metal |",
+          "7. | Eraser | Rubber |",
+          "8. |",
+          "9. |"
+        ],
+        "concepts": [
+          "Identifying Conductors and Insulators",
+          "Electricity: Circuits and their Components"
+        ],
+        "context_relation": "Activity 3.11: Let us identify",
+        "limitations": [
+          "The table is incomplete and requires additional data to be filled in."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b6b906ed1da1bbb26926a07",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 56,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6a7edf9746317031e123eccaa4c9533719dd061057aca625141d16731008fee6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a wave or energy.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "energy",
+          "wave"
+        ],
+        "context_relation": "The image is related to the concept of electric current and its behavior in different materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the context of the electric current."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219695642",
+      "checkpointed_at": "2026-10-19T12:31:25Z",
+      "effective_analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a wave or energy.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "electric current",
+          "good conductors",
+          "insulators",
+          "energy",
+          "wave"
+        ],
+        "context_relation": "The image is related to the concept of electric current and its behavior in different materials.",
+        "limitations": [
+          "The image does not provide specific details about the materials or the context of the electric current."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
