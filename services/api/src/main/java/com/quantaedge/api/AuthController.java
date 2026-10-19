@@ -73,9 +73,12 @@ public class AuthController {
     boolean androidClient = isAndroidClient(clientHeader);
     ResponseEntity<Map<String,Object>> session =
         withCookie(auth.issueSession(learner, "STUDENT", androidClient), "STUDENT", androidClient);
+    Duration learningModeLifetime = androidClient
+        ? Duration.ofDays(auth.getLearningSessionDays())
+        : Duration.ofHours(auth.getSessionHours());
     ResponseCookie learningMode = ResponseCookie.from("QE_PARENT_PERSONAL_LEARNING", "1")
         .httpOnly(false).secure(secureCookies).sameSite("Strict").path("/")
-        .maxAge(Duration.ofHours(12)).build();
+        .maxAge(learningModeLifetime).build();
     return ResponseEntity.status(session.getStatusCode())
         .headers(headers -> {
           headers.addAll(session.getHeaders());
