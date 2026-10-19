@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
-import { PrimaryCoursePicker, useStudentCourseScope } from '../CourseScope';
+import { useStudentCourseScope } from '../CourseScope';
+import InstitutionCourseSubjectScope from '../InstitutionCourseSubjectScope';
 
 type PracticeTopic = {
   artifactId: string;
@@ -98,14 +99,10 @@ export default function PracticeClient() {
         <p>{tx('Choose an institution course first, then a subject. Practice is available inside each approved structured lesson.', 'पहले संस्थान का कोर्स चुनें, फिर विषय। अभ्यास प्रत्येक स्वीकृत structured lesson के अंदर उपलब्ध है।')}</p>
       </div>
       <div className="qe-course-page-actions">
-        <PrimaryCoursePicker courses={courses} courseId={courseId} onChange={value => void changeCourse(value)} loading={loadingCourses} label={tx('Course', 'कोर्स')} />
-        <label>{tx('Subject', 'विषय')}<select value={subjectCode} onChange={event => changeSubject(event.target.value)} disabled={loadingCourses || courseId === null}>
-          <option value="ALL">{tx('All subjects', 'सभी विषय')}</option>
-          {(activeCourse?.subjects || []).map(subject => {
-            const code = String(subject.subject_code || subject.code || '');
-            return code ? <option key={code} value={code}>{String(subject.subject_name || subject.display_name || code)}</option> : null;
-          })}
-        </select></label>
+        <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
+          onCourseChange={value => void changeCourse(value)} subjectCode={subjectCode} onSubjectChange={changeSubject}
+          loading={loadingCourses} language={locale} courseLabel={tx('Course', 'कोर्स')} subjectLabel={tx('Subject', 'विषय')}
+          allSubjectsLabel={tx('All subjects', 'सभी विषय')} />
       </div>
     </header>
     {courseError && !loadingCourses && <p role="alert" className="error-message">{courseError}</p>}
