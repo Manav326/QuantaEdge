@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 902,
+    "assets_selected": 903,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 898,
-    "assets_remaining": 1180,
-    "assets_completion_percent": 43.2,
+    "assets_analyzed": 899,
+    "assets_remaining": 1179,
+    "assets_completion_percent": 43.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 897,
+    "assets_skipped_from_checkpoint": 898,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:38:27Z"
+      "checkpointed_at": "2026-10-19T05:42:05Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -1028,7 +1028,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:39:07Z"
+      "checkpointed_at": "2026-10-19T05:42:46Z"
     },
     {
       "asset_id": "3057f0483a7a0b6f1ecaacc2",
@@ -20099,7 +20099,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:39:59Z"
+      "checkpointed_at": "2026-10-19T05:43:38Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -25669,7 +25669,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
-      "checkpointed_at": "2026-10-19T05:40:38Z"
+      "checkpointed_at": "2026-10-19T05:44:17Z"
     },
     {
       "asset_id": "2c18e633fa3c8cc15c56decc",
@@ -28607,6 +28607,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178082336",
       "checkpointed_at": "2026-10-19T05:41:17Z"
+    },
+    {
+      "asset_id": "fc0610ab9782168538722028",
+      "asset_sha256": "20e139feacad0720ed2420feef19dbd7a1a381a33f5c1cb2579877e9164df65b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 60,
+      "asset_path": "assets/20e139feacad0720ed2420feef19dbd7a1a381a33f5c1cb2579877e9164df65b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "03f400d89d89592a4468f46a9846ab19d9f6880c015e4c333c4a8b36b43a028b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, horizontal yellow brushstroke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178082336",
+      "checkpointed_at": "2026-10-19T05:44:51Z"
     }
   ]
 }
