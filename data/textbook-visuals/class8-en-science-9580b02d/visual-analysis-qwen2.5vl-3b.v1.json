@@ -11,9 +11,9 @@
     "assets_selected": 834,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 829,
-    "assets_remaining": 1462,
-    "assets_completion_percent": 36.2,
+    "assets_analyzed": 831,
+    "assets_remaining": 1460,
+    "assets_completion_percent": 36.3,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 829,
     "batch_limit": 5,
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:35:19Z"
+      "checkpointed_at": "2026-10-19T10:47:03Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1770,7 +1770,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:36:38Z"
+      "checkpointed_at": "2026-10-19T10:48:22Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20172,7 +20172,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T10:37:31Z"
+      "checkpointed_at": "2026-10-19T10:49:12Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25870,6 +25870,62 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "415962019cb5a35ac6a0fdcd",
+      "asset_sha256": "637a03b7588123ce04e8712b0ee16660b350ac7fb0987c215702e159fac872df",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/637a03b7588123ce04e8712b0ee16660b350ac7fb0987c215702e159fac872df.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards with one finger and holding their hand to their ear, possibly indicating a whisper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not provide any specific information about the steps for growing Spirulina as mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:50:25Z"
+    },
+    {
+      "asset_id": "6c44590e83b5bdb6251a474a",
+      "asset_sha256": "9292c716701588b2541621998fedf46b0a6d41087f70b3424e389091c68f44f6",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 43,
+      "asset_path": "assets/9292c716701588b2541621998fedf46b0a6d41087f70b3424e389091c68f44f6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f238e7ca85279f854a2f7611017288149b867d38655ace5e2101dafb933ec3ba",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green chalkboard on a wooden desk.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:51:27Z"
     }
   ]
 }
