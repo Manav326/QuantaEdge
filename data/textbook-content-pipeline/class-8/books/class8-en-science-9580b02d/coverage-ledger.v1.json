@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 831,
-    "successful_visual_analyses": 825,
-    "missing_visual_analyses": 1460,
+    "raw_analysis_result_rows": 833,
+    "successful_visual_analyses": 827,
+    "missing_visual_analyses": 1458,
     "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1466,
+    "unresolved_count": 1464,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -32274,9 +32274,26 @@
       "asset_path": "assets/9971212780366fe7a8276b645da71db6dfec2d1f694e75bf010369a8bd797d7d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bowl of liquid with a metal rim, possibly containing a mixture of gases.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "biogas",
+          "microorganisms",
+          "decomposition",
+          "oxygen-free environment",
+          "plant and animal waste",
+          "household wastewater",
+          "gases"
+        ],
+        "context_relation": "The image represents a mixture of gases released by microorganisms during decomposition, which is a concept related to biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of gases or the microorganisms involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -32292,9 +32309,32 @@
       "asset_path": "assets/fb935dbca5ea6c1e9776af22a58b1d1e0284c89337646c21227e2d529d38cd69.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass bowl with a piece of cabbage inside.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily comp",
+          "A glass bowl with a piece of cabbage inside."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Biogas",
+          "Oxygen-free environment",
+          "Decomposition",
+          "Plant and animal waste",
+          "Household wastewater",
+          "Gases"
+        ],
+        "context_relation": "The image is not directly related to the text, but it could be used to illustrate the concept of biogas production by microorganisms in an oxygen-free environment.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or the process of biogas production."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

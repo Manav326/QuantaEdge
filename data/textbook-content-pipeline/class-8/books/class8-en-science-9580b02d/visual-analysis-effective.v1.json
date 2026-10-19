@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9e92466df608084aefe811e96ad1cd0fb727ab48f403c4d997b664e44bfda12e",
+  "raw_analysis_sha256": "967e35eac79f19285dffb69aa9c45d090b399b145a5a716ebbe6a024be6c0826",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:54:55Z",
+      "checkpointed_at": "2026-10-19T10:00:58Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -2662,7 +2662,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:56:13Z",
+      "checkpointed_at": "2026-10-19T10:02:17Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook, likely related to science education, featuring sections on 'Our scientific heritage', 'Think like a scientist', and 'Be a scientist'. It includes text and images related to scientific contributions and activities.",
         "visual_type": "page_with_multiple_visuals",
@@ -29365,7 +29365,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39219698568",
-      "checkpointed_at": "2026-10-19T09:57:05Z",
+      "checkpointed_at": "2026-10-19T10:03:10Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and editors.",
         "visual_type": "uncertain",
@@ -37805,6 +37805,130 @@
         "concepts": [],
         "context_relation": "The image is a black and white illustration of a person wearing glasses and a suit.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16d204202977720b1285f29b",
+      "asset_sha256": "9971212780366fe7a8276b645da71db6dfec2d1f694e75bf010369a8bd797d7d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/9971212780366fe7a8276b645da71db6dfec2d1f694e75bf010369a8bd797d7d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bowl of liquid with a metal rim, possibly containing a mixture of gases.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "biogas",
+          "microorganisms",
+          "decomposition",
+          "oxygen-free environment",
+          "plant and animal waste",
+          "household wastewater",
+          "gases"
+        ],
+        "context_relation": "The image represents a mixture of gases released by microorganisms during decomposition, which is a concept related to biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of gases or the microorganisms involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:04:24Z",
+      "effective_analysis": {
+        "visual_summary": "A bowl of liquid with a metal rim, possibly containing a mixture of gases.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "biogas",
+          "microorganisms",
+          "decomposition",
+          "oxygen-free environment",
+          "plant and animal waste",
+          "household wastewater",
+          "gases"
+        ],
+        "context_relation": "The image represents a mixture of gases released by microorganisms during decomposition, which is a concept related to biogas production.",
+        "limitations": [
+          "The image does not provide specific details about the types of gases or the microorganisms involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b39c97d9a7892e349a59d3f5",
+      "asset_sha256": "fb935dbca5ea6c1e9776af22a58b1d1e0284c89337646c21227e2d529d38cd69",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 40,
+      "asset_path": "assets/fb935dbca5ea6c1e9776af22a58b1d1e0284c89337646c21227e2d529d38cd69.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A glass bowl with a piece of cabbage inside.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily comp",
+          "A glass bowl with a piece of cabbage inside."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Biogas",
+          "Oxygen-free environment",
+          "Decomposition",
+          "Plant and animal waste",
+          "Household wastewater",
+          "Gases"
+        ],
+        "context_relation": "The image is not directly related to the text, but it could be used to illustrate the concept of biogas production by microorganisms in an oxygen-free environment.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or the process of biogas production."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39219698568",
+      "checkpointed_at": "2026-10-19T10:05:56Z",
+      "effective_analysis": {
+        "visual_summary": "A glass bowl with a piece of cabbage inside.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily comp",
+          "A glass bowl with a piece of cabbage inside."
+        ],
+        "concepts": [
+          "Microorganisms",
+          "Biogas",
+          "Oxygen-free environment",
+          "Decomposition",
+          "Plant and animal waste",
+          "Household wastewater",
+          "Gases"
+        ],
+        "context_relation": "The image is not directly related to the text, but it could be used to illustrate the concept of biogas production by microorganisms in an oxygen-free environment.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms or the process of biogas production."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
