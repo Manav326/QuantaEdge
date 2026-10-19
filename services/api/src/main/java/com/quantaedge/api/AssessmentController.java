@@ -252,9 +252,10 @@ public class AssessmentController {
       subjectId = jdbc.query("""
         select s.id from curriculum_subject s
         join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
+        join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
         join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
-        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
+        where c.code=? and s.code=? and c.active=true and s.active=true
+          and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
         """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
     }
     if (subjectId == null) throw badRequest("Choose a valid active class and subject.");
@@ -461,11 +462,10 @@ public class AssessmentController {
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireGrader(context);
-    if (courseId == null || courseId < 1L) throw badRequest("Select a course before reviewing assessment attempts.");
-    Long activeCourse=jdbc.queryForObject("select count(*) from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'",Long.class,courseId);
-    if(activeCourse==null || activeCourse==0L) throw badRequest("Choose an active course.");
+    requireAssignedCourse(courseId, tenant);
     String statusFilter=safeText(status,24).toUpperCase(Locale.ROOT);
     if(statusFilter.isEmpty())statusFilter="AWAITING_REVIEW";
     if(!Set.of("ALL","AWAITING_REVIEW","GRADED","RELEASED").contains(statusFilter))throw badRequest("Choose a valid test review status.");
