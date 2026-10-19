@@ -393,7 +393,7 @@ export default function TextbooksClient() {
                 await selectCourse(value);
                 const params = new URLSearchParams(searchParams.toString());
                 params.set('courseId', value); params.delete('subjectCode'); params.delete('documentId'); params.delete('returnTo');
-                router.replace('/student/textbooks?' + params.toString(), { scroll: false });
+                window.history.replaceState(null, '', '/student/textbooks?' + params.toString());
                 setSubjectFilter('ALL'); setExpandedSubject(''); setChapterPageBySubject({});
               }}
               subjectCode={subjectFilter} onSubjectChange={changeSubjectFilter} loading={loadingCourses}

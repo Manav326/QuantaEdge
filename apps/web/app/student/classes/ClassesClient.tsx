@@ -108,7 +108,7 @@ export default function StudentClassesClient(){
     await selectCourse(value);
     const params=new URLSearchParams(searchParams.toString());
     params.set('courseId',value);params.delete('subjectCode');
-    router.replace('/student/classes?'+params.toString());
+    window.history.replaceState(null, '', '/student/classes?'+params.toString());
     setSubjectFilter('ALL');setLivePage(0);setRecordingPage(0);
   }
   function changeSubject(value:string){
@@ -116,7 +116,7 @@ export default function StudentClassesClient(){
     const params=new URLSearchParams(searchParams.toString());
     if(activeCourseId!==null)params.set('courseId',String(activeCourseId));
     if(value==='ALL')params.delete('subjectCode');else params.set('subjectCode',value);
-    router.replace('/student/classes?'+params.toString());
+    window.history.replaceState(null, '', '/student/classes?'+params.toString());
   }
   useEffect(()=>{void load();},[load]);
 

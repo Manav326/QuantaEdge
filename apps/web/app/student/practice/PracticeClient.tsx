@@ -115,7 +115,7 @@ export default function PracticeClient() {
       </section> :
       <div className="task-list">{topics.map(item => <article className="task-card" key={item.artifactId}>
         <div>
-          <span className="eyebrow">{activeCourse?.display_name || tx('Selected course', 'चुना गया कोर्स')} · {subjectName(item.subjectCode)}</span>
+          <span className="qe-course-subject-context">{activeCourse?.display_name || tx('Selected course', 'चुना गया कोर्स')} · {subjectName(item.subjectCode)}</span>
           <h2>{item.title}</h2>
           <p>{tx('Chapter', 'अध्याय')} {item.chapterNumber}: {item.chapterTitle} · {tx('Topic', 'विषय')} {item.topicNumber}</p>
           {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {tx('min', 'मिनट')}</small>}

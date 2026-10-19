@@ -66,6 +66,7 @@ export default function InstitutionCourseSubjectScope({
       {showSubject && <label className={styles.field}>
         <span>{resolvedSubjectLabel}</span>
         <select
+          data-selected={selectedSubject !== 'ALL' && selectedSubject !== ''}
           value={selectedSubject || (includeAllSubjects ? 'ALL' : '')}
           disabled={loading || courseId === null || subjects.length === 0}
           onChange={event => onSubjectChange(event.target.value)}

@@ -223,7 +223,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     }
   }
 
-  if (!role) return <>{children}</>;
+  if (!role) return <><GlobalNotificationHost />{children}</>;
 
   const active = (item: Item) => item.href === '/parent'
     ? pathname === item.href || pathname === item.href + '/diagnostic'

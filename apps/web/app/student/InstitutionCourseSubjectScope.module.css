@@ -96,3 +96,11 @@
 @media (max-width: 420px) {
   .scopeNoSubject { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* Selected subject alone receives primary emphasis; neutral/all-subject state stays quiet. */
+.field select[data-selected="true"] {
+  border-color: var(--qe-color-focus, var(--qe-brand-primary, #f97316));
+  background: var(--qe-color-primary-container, var(--qe-control-surface, #fff));
+  color: var(--qe-color-primary-text, var(--qe-text, #202939));
+}

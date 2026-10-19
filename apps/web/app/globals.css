@@ -1161,3 +1161,12 @@ html[data-qe-appearance="dark"] .student-account-menu__icon,
 html[data-qe-appearance="dark"] .parent-account__icon {
   background:var(--qe-color-surface-elevated); border-color:var(--qe-color-border); color:var(--qe-color-text-muted);
 }
+
+
+/* Course + subject labels describe list context; they are not selected-state highlights. */
+.qe-course-subject-context {
+  display:inline-flex; align-items:center; gap:5px; max-width:100%;
+  padding:5px 8px; border:1px solid var(--qe-color-border-subtle);
+  border-radius:999px; background:var(--qe-color-surface-elevated);
+  color:var(--qe-color-text-muted); font-size:10px; font-weight:650; line-height:1.4;
+}

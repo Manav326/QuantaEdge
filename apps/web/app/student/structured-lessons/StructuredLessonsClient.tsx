@@ -82,7 +82,7 @@ export default function StructuredLessonsClient() {
         <Link href={'/student/courses' + (courseId !== null ? '?focus=' + encodeURIComponent(String(courseId)) : '')} className="button button-dark">{locale === 'english' ? 'Review your course' : 'अपना कोर्स देखें'}</Link>
       </section> :
       <div className="task-list">{items.map(item => <article className="task-card" key={item.artifactId}>
-        <div><span className="eyebrow">{activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')} · {(activeCourse?.subjects || []).find(subject => String(subject.subject_code || subject.code || '') === item.subjectCode)?.subject_name || item.subjectCode}</span>
+        <div><span className="qe-course-subject-context">{activeCourse?.display_name || (locale === 'english' ? 'Selected course' : 'चुना गया कोर्स')} · {(activeCourse?.subjects || []).find(subject => String(subject.subject_code || subject.code || '') === item.subjectCode)?.subject_name || item.subjectCode}</span>
           <h2>{item.title}</h2><p>{translateUi(locale, 'legacy.web.chapter.0a3bff81')} {item.chapterNumber}: {item.chapterTitle} · {translateUi(locale, 'legacy.web.topic.1a9696fe')} {item.topicNumber}</p>
           {item.estimatedMinutes > 0 && <small>{item.estimatedMinutes} {translateUi(locale, 'legacy.web.min.72242533')}</small>}</div>
         <Link href={'/student/structured-lessons/' + encodeURIComponent(item.artifactId) + '?courseId=' + encodeURIComponent(String(courseId || '')) + '&subjectCode=' + encodeURIComponent(item.subjectCode)} className="button button-dark">{translateUi(locale, 'legacy.web.open.lesson.bca8f87b')}</Link>

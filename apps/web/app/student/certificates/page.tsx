@@ -386,13 +386,13 @@ function StudentCertificatesContent() {
           onCourseChange={async value => {
             await selectCourse(value);
             setSubjectFilter('ALL'); setSelectedTrackKey(''); setAttemptId('');
-            router.replace('/student/certificates?courseId=' + encodeURIComponent(value));
+            window.history.replaceState(null, '', '/student/certificates?courseId=' + encodeURIComponent(value));
           }}
           subjectCode={subjectFilter} onSubjectChange={value => {
             setSubjectFilter(value);
             const params = new URLSearchParams(); if (courseId !== null) params.set('courseId', String(courseId));
             if (value !== 'ALL') params.set('subjectCode', value);
-            router.replace('/student/certificates' + (params.size ? '?' + params.toString() : ''));
+            window.history.replaceState(null, '', '/student/certificates' + (params.size ? '?' + params.toString() : ''));
           }}
           loading={loadingCourses} language={locale} courseLabel={t('Course', 'कोर्स')}
           subjectLabel={t('Subject', 'विषय')} allSubjectsLabel={t('All subjects', 'सभी विषय')} />

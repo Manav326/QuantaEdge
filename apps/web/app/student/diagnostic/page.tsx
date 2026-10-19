@@ -116,7 +116,7 @@ export default function DiagnosticPage(){
     <header className="lesson-header"><Link href={'/student'+(courseId!==null?'?courseId='+encodeURIComponent(String(courseId)):'')} className="back"><UiText message="legacy.web.today.1a73c870" /></Link><span><UiText message="legacy.web.initial.diagnostic.a2e9a619" /> {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
-        onCourseChange={value=>{void selectCourse(value).then(()=>router.replace('/student/diagnostic?courseId='+encodeURIComponent(value)));}}
+        onCourseChange={value=>{void selectCourse(value).then(()=>window.history.replaceState(null, '', '/student/diagnostic?courseId='+encodeURIComponent(value)));}}
         subjectCode="ALL" onSubjectChange={()=>{}}
         showSubject={false} loading={loadingCourses} language={locale}
         courseLabel={locale==='english'?'Course':'कोर्स'} />
