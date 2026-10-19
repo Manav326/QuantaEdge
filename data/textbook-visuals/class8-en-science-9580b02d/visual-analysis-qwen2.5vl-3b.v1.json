@@ -8,14 +8,14 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 919,
+    "assets_selected": 921,
     "assets_processed_this_run": 5,
     "assets_eligible": 2291,
-    "assets_analyzed": 916,
-    "assets_remaining": 1375,
-    "assets_completion_percent": 40.0,
+    "assets_analyzed": 918,
+    "assets_remaining": 1373,
+    "assets_completion_percent": 40.1,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 914,
+    "assets_skipped_from_checkpoint": 916,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1222,7 +1222,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:26:54Z"
+      "checkpointed_at": "2026-10-19T17:33:41Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1765,7 +1765,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:27:40Z"
+      "checkpointed_at": "2026-10-19T17:34:28Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20169,7 +20169,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
-      "checkpointed_at": "2026-10-19T17:28:15Z"
+      "checkpointed_at": "2026-10-19T17:35:04Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -29124,6 +29124,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39260167363",
       "checkpointed_at": "2026-10-19T17:32:33Z"
+    },
+    {
+      "asset_id": "7ad555f64f228f3404d453f3",
+      "asset_sha256": "e9d3b6c464bb6786d4bb6c94a72d07e5d0506f0716902c94eccb206025c47e54",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/e9d3b6c464bb6786d4bb6c94a72d07e5d0506f0716902c94eccb206025c47e54.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91b9b904b3214e11619915d4525daafd1a397a12b157efa200697b7f92e3f90d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person sneezing into a tissue.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "communicable diseases",
+          "vectors",
+          "prevention",
+          "sneezing",
+          "tissue"
+        ],
+        "context_relation": "The image is related to the topic of communicable diseases and their prevention.",
+        "limitations": [
+          "The image does not provide specific details about the communicable diseases or their prevention methods."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:36:40Z"
+    },
+    {
+      "asset_id": "41874115fb1a7cccc92314b6",
+      "asset_sha256": "469083cc0f079cef84e55e6a8e7db7534b5a7b60eae6cd294c98924fd76e7747",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 53,
+      "asset_path": "assets/469083cc0f079cef84e55e6a8e7db7534b5a7b60eae6cd294c98924fd76e7747.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "91b9b904b3214e11619915d4525daafd1a397a12b157efa200697b7f92e3f90d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a yellow shirt with rolled-up sleeves, possibly depicting a medical or health-related context.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "communicable diseases",
+          "vectors",
+          "health protection",
+          "prevention"
+        ],
+        "context_relation": "The image is related to the educational content about communicable diseases and their prevention.",
+        "limitations": [
+          "The image does not provide specific details about the communicable diseases or their prevention methods."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39260167363",
+      "checkpointed_at": "2026-10-19T17:38:16Z"
     }
   ]
 }
