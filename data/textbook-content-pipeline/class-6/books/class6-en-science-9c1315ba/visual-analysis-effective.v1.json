@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "be2ced242b85d60d503b57a6fea46a96e527ae764fa70f3f3872928d0fd98e9b",
+  "raw_analysis_sha256": "ce7e36acbdb08441888b1f4ed6b8670999165621a3322fb053fe70cc56ee330c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:49:59Z",
+      "checkpointed_at": "2026-10-19T18:53:43Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -1556,7 +1556,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:50:41Z",
+      "checkpointed_at": "2026-10-19T18:54:24Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the concept of learning and the importance of preparing for activities that require both teachers and learners.",
         "visual_type": "uncertain",
@@ -29393,7 +29393,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39270469423",
-      "checkpointed_at": "2026-10-19T18:51:35Z",
+      "checkpointed_at": "2026-10-19T18:55:17Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -55179,6 +55179,72 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5a2b4321413c064f83b21bb4",
+      "asset_sha256": "fedadbd11dc0afcce36cfbb055475eb7d4f5e26765a6e05f73f3d15b810dccb2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/fedadbd11dc0afcce36cfbb055475eb7d4f5e26765a6e05f73f3d15b810dccb2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cylindrical magnet divided into two halves, one red and one blue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "cylinder",
+          "red",
+          "blue"
+        ],
+        "context_relation": "The image illustrates a cylindrical magnet divided into two halves, one red and one blue.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "checkpointed_at": "2026-10-19T18:55:55Z",
+      "effective_analysis": {
+        "visual_summary": "A cylindrical magnet divided into two halves, one red and one blue.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "magnet",
+          "cylinder",
+          "red",
+          "blue"
+        ],
+        "context_relation": "The image illustrates a cylindrical magnet divided into two halves, one red and one blue.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "071b9ffb6e11765d8d17e2bf",
+      "asset_sha256": "e899d5e9310d3210a19e53fc2a2556c8d79dd54c7fe0cebf9e78fb8987140b45",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/e899d5e9310d3210a19e53fc2a2556c8d79dd54c7fe0cebf9e78fb8987140b45.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39270469423",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
