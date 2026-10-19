@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 1358,
-    "successful_visual_analyses": 1335,
-    "missing_visual_analyses": 6130,
+    "raw_analysis_result_rows": 1361,
+    "successful_visual_analyses": 1338,
+    "missing_visual_analyses": 6127,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6153,
+    "unresolved_count": 6150,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -61154,9 +61154,24 @@
       "asset_path": "assets/991a137ffb64e62b1e83d069dd6ceb949ecd3942a24d56b5db4e6e521221b381.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red laser pointer is pointing towards a black object with a golden emblem.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "laser pointer",
+          "black object",
+          "golden emblem"
+        ],
+        "context_relation": "The image is related to the content of the textbook page about making a lamp glow.",
+        "limitations": [
+          "The image does not show the actual lamp or circuitry, only a laser pointer pointing at an object. The text in the image is incomplete and does not provide specific details about the experiment or the object being pointed at."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61172,9 +61187,18 @@
       "asset_path": "assets/340eca0a9afb9e0ee7d4bc166fa8c9b9a5eeab26394fde7d1f70f1dff44a5b7d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red object with a white plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a red object with a white plus sign on it.",
+        "limitations": [
+          "The image is a close-up and may not show the full context of the table or the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -61190,9 +61214,31 @@
       "asset_path": "assets/d68b059299a630e37a153a2ed921c8009d20f9eff9735e06effa1144df75d3cc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red lamp with a black wire connected to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamp",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image is blurry and lacks clarity.",
+          "The text is partially visible and incomplete."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

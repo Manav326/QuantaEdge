@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6c7bd5d806141c3969ba2c5caa1c5e4d7d1ff0132623f5f7ca5a408ffd722cc2",
+  "raw_analysis_sha256": "9e225fc1c27b5869456d93ff9e15decb3a18ac5f40adfd4f39ec7bfddba9be32",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -14796,7 +14796,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:10:07Z",
+      "checkpointed_at": "2026-10-19T04:14:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
         "visual_type": "page_with_multiple_visuals",
@@ -19927,7 +19927,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39178083731",
-      "checkpointed_at": "2026-10-19T04:10:35Z",
+      "checkpointed_at": "2026-10-19T04:15:26Z",
       "effective_analysis": {
         "visual_summary": "Two images showing a solar eclipse and a diagram of Earth's rotation.",
         "visual_type": "diagram",
@@ -79438,6 +79438,164 @@
         "context_relation": "The image is related to the content of Table 3.1 in the textbook.",
         "limitations": [
           "The image does not show the lamps glowing in any circuit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "94447cb827324edc8a6f2f17",
+      "asset_sha256": "991a137ffb64e62b1e83d069dd6ceb949ecd3942a24d56b5db4e6e521221b381",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/991a137ffb64e62b1e83d069dd6ceb949ecd3942a24d56b5db4e6e521221b381.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red laser pointer is pointing towards a black object with a golden emblem.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "laser pointer",
+          "black object",
+          "golden emblem"
+        ],
+        "context_relation": "The image is related to the content of the textbook page about making a lamp glow.",
+        "limitations": [
+          "The image does not show the actual lamp or circuitry, only a laser pointer pointing at an object. The text in the image is incomplete and does not provide specific details about the experiment or the object being pointed at."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:16:35Z",
+      "effective_analysis": {
+        "visual_summary": "A red laser pointer is pointing towards a black object with a golden emblem.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "laser pointer",
+          "black object",
+          "golden emblem"
+        ],
+        "context_relation": "The image is related to the content of the textbook page about making a lamp glow.",
+        "limitations": [
+          "The image does not show the actual lamp or circuitry, only a laser pointer pointing at an object. The text in the image is incomplete and does not provide specific details about the experiment or the object being pointed at."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ac352caa8350dd82188b3125",
+      "asset_sha256": "340eca0a9afb9e0ee7d4bc166fa8c9b9a5eeab26394fde7d1f70f1dff44a5b7d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/340eca0a9afb9e0ee7d4bc166fa8c9b9a5eeab26394fde7d1f70f1dff44a5b7d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red object with a white plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a red object with a white plus sign on it.",
+        "limitations": [
+          "The image is a close-up and may not show the full context of the table or the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:17:42Z",
+      "effective_analysis": {
+        "visual_summary": "A red object with a white plus sign on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a red object with a white plus sign on it.",
+        "limitations": [
+          "The image is a close-up and may not show the full context of the table or the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5e42870fb0e20be408840863",
+      "asset_sha256": "d68b059299a630e37a153a2ed921c8009d20f9eff9735e06effa1144df75d3cc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 49,
+      "asset_path": "assets/d68b059299a630e37a153a2ed921c8009d20f9eff9735e06effa1144df75d3cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "73d09f4e885b24845982ce1d20b81096d48fba1c2af81d231da564267debdcdf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a red lamp with a black wire connected to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamp",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image is blurry and lacks clarity.",
+          "The text is partially visible and incomplete."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39178083731",
+      "checkpointed_at": "2026-10-19T04:18:53Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a red lamp with a black wire connected to it.",
+        "visual_type": "photo",
+        "visible_text": [
+          "29",
+          "Table 3.1: Trying to make the lamp glow",
+          "Note: The lamps are not shown glowing in any circuit",
+          "S.No.  Arrangement of Cell and Lamp",
+          "Prediction",
+          "Observation",
+          "1."
+        ],
+        "concepts": [
+          "electric circuit",
+          "lamp",
+          "cell"
+        ],
+        "context_relation": "The image is related to the educational content about making a lamp glow in an electric circuit.",
+        "limitations": [
+          "The image is blurry and lacks clarity.",
+          "The text is partially visible and incomplete."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
