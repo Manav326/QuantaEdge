@@ -224,8 +224,9 @@ assert.ok(courseScope.includes('Number(course.id || course.course_id)') &&
   courseScope.includes('qe:student:activeCourseId'), 'Course scope must normalize IDs, reject unavailable explicit IDs and persist primary course focus.');
 assert.ok(androidAllCourses.includes('onOpenSubject(code, id)') &&
   androidApp.includes('Selected structured course opened.') &&
-  androidApp.includes('"/api/v1/learning/structured-lessons?courseId=" + courseId'),
-  'Android course cards must route into the structured catalogue bound to that course ID.');
+  androidApp.includes('"/api/v1/learning/structured-lessons?" + params') &&
+  androidApp.includes('"courseId=" + courseId + "&language="'),
+  'Android course cards must route into the structured catalogue with the selected course ID.');
 assert.ok(parentPage.includes('/programs') && parentPage.includes('/report?courseId=') &&
   parentPage.includes('childCourses.length>1') && parentPage.includes('Select an enrolled course'),
   'Parent reports must require explicit course selection for multi-course children.');
